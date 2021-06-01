@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Integrated-Data-Intelligence-Suite.iml" filepath="$PROJECT_DIR$/.idea/Integrated-Data-Intelligence-Suite.iml" />
       <module fileurl="file://$PROJECT_DIR$/backend/IntegratedDataIntelligenceSuite.iml" filepath="$PROJECT_DIR$/backend/IntegratedDataIntelligenceSuite.iml" />
       <module fileurl="file://$PROJECT_DIR$/backend/backend.iml" filepath="$PROJECT_DIR$/backend/backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
     </modules>
   </component>
 </project>
