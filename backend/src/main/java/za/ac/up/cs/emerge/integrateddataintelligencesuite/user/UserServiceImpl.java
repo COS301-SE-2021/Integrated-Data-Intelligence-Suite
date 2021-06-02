@@ -2,7 +2,7 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.repositories.UserRepository;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.user.repositories.UserRepository;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.user.request.GetCurrentUserRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.user.request.RegisterUserRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.user.request.VerifyAccoundRequest;
