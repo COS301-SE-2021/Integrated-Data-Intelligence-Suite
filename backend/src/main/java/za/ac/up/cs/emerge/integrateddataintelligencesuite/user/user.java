@@ -1,12 +1,9 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name="user")
 public class user {
 
     @Id
@@ -14,13 +11,15 @@ public class user {
     private Long id;
     private String firstName;
     private String lastName;
-    private String permission;
+
+    @Enumerated(EnumType.STRING)
+    private Permissions permission;
 
     public user(){
 
     }
 
-    public user(String firstName, String lastName, String permission) {
+    public user(String firstName, String lastName, Permissions permission) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.permission = permission;
@@ -38,7 +37,7 @@ public class user {
         return lastName;
     }
 
-    public String getPermission() {
+    public Permissions getPermission() {
         return permission;
     }
 }
