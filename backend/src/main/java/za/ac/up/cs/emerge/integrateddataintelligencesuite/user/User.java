@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="user")
-public class user {
+public class User {
 
     @Id
     @GeneratedValue
@@ -15,11 +15,11 @@ public class user {
     @Enumerated(EnumType.STRING)
     private Permissions permission;
 
-    public user(){
+    public User(){
 
     }
 
-    public user(String firstName, String lastName, Permissions permission) {
+    public User(String firstName, String lastName, Permissions permission) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.permission = permission;

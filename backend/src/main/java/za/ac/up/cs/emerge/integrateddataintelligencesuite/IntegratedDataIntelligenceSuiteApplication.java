@@ -10,5 +10,4 @@ public class IntegratedDataIntelligenceSuiteApplication {
         //initial commit
         SpringApplication.run(IntegratedDataIntelligenceSuiteApplication.class, args);
     }
-
 }

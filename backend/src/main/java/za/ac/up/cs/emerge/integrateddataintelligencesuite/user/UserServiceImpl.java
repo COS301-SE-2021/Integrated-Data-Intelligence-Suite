@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService{
 
     public RegisterUserResponse createUser(RegisterUserRequest request){
 
-        user u = new user("wandile", "makhubele", Permissions.USER);
+        User u = new User("wandile", "makhubele", Permissions.USER);
         userRepository.save(u);
         return new RegisterUserResponse(u.getId());
     }

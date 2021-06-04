@@ -1,4 +1,4 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.user.response;
 
-public class userLoginResponse {
+public class UserLoginResponse {
 }
