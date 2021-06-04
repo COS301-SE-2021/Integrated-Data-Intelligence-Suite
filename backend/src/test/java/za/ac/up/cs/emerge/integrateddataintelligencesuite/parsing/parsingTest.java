@@ -1,4 +1,6 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parsing;
 
-public class ParsingServiceImpl implements ParsingService{
+import org.junit.jupiter.api.Test;
+
+public class parsingTest {
 }
