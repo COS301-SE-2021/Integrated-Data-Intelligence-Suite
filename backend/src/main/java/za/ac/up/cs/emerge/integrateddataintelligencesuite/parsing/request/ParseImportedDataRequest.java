@@ -10,4 +10,20 @@ public class ParseImportedDataRequest {
         this.type = type;
         this.jsonString = jsonString;
     }
+
+    public DataSource getType() {
+        return type;
+    }
+
+    public void setType(DataSource type) {
+        this.type = type;
+    }
+
+    public String getJsonString() {
+        return jsonString;
+    }
+
+    public void setJsonString(String jsonString) {
+        this.jsonString = jsonString;
+    }
 }
