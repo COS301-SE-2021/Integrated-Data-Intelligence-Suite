@@ -22,7 +22,11 @@ public class ParsingServiceImpl implements ParsingService{
             throw new InvalidRequestException("Imported type is null");
         }
 
+        int numTweets = 0;
         if (request.getType() == DataSource.TWITTER){
+            for (int i=0; i < numTweets; i++){
+
+            }
 
         }
 
