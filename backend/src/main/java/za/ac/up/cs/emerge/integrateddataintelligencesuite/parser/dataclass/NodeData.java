@@ -5,7 +5,7 @@ public class NodeData {
     private String textMessage;
     private String[] mention;
     private String date;
-
+    
     public NodeData() {
         
     }
