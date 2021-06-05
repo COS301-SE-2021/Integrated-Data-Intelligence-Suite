@@ -1,5 +1,6 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclasses.NodeData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
@@ -13,14 +14,17 @@ public class ParsingServiceImpl implements ParsingService{
         if (request == null) {
             throw new InvalidRequestException("ParseImportedDataRequest Object is null");
         }
+        else{
+            if (request.getJsonString() == null){
+                throw new InvalidRequestException("Imported string is null");
+            }
 
-        if (request.getJsonString() == null){
-            throw new InvalidRequestException("Imported string is null");
+            if (request.getType() == null){
+                throw new InvalidRequestException("Imported type is null");
+            }
         }
 
-        if (request.getType() == null){
-            throw new InvalidRequestException("Imported type is null");
-        }
+
 
         int numTweets = 0;
         if (request.getType() == DataSource.TWITTER){
@@ -30,7 +34,8 @@ public class ParsingServiceImpl implements ParsingService{
 
         }
 
+        ArrayList<NodeData> newList = new ArrayList<>();
 
-        return new ParseImportedDataResponse();
+        return new ParseImportedDataResponse(newList);
     }
 }
