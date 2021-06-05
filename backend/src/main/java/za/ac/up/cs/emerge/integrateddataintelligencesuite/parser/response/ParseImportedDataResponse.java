@@ -1,6 +1,6 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response;
 
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclasses.NodeData;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.NodeData;
 
 import java.util.ArrayList;
 

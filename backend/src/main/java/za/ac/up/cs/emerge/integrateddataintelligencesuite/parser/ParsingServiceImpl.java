@@ -1,6 +1,6 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclasses.NodeData;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.NodeData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
@@ -34,8 +34,10 @@ public class ParsingServiceImpl implements ParsingService{
 
         }
 
+
         ArrayList<NodeData> newList = new ArrayList<>();
 
         return new ParseImportedDataResponse(newList);
+
     }
 }
