@@ -53,7 +53,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <table>
 <tr>
   <td style="width: 25%;">
-    <img alt="Team Leader" src="" width="200pt" height = "250pt">
+    <img alt="Shrey" src="https://i.imgur.com/sX6JNYi.jpg" width="200pt" height = "250pt">
   </td>
   <td style="width: 25%;">
     <img alt="Dev 1" src="" width="200pt" height = "250pt">
@@ -71,8 +71,10 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <tr>
   <td style="width: 25%;">
-    <h3>Team Leader</h3>
-    <p><em>Something about them</em></p>
+    <h3>Shrey Mandalia</h3>
+    <p><em>I am a Computer Science student studying at University of Pretoria.
+I'm skilled in data structures, design patterns, Java, C++, HTML, CSS, JavaScript
+I enjoy programming and learning new things. I'm love gaming, playing/watching soccer, and occasionally reading.</em></p>
   </td>
 
    <td style="width: 25%;">
@@ -100,7 +102,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <tr>
   <td>
     <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
+      <a href="https://www.linkedin.com/in/shrey-mandalia-5b9a961b8/">
         <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
