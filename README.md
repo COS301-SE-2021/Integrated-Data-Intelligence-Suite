@@ -36,7 +36,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 * Tool 3
 
 <a name="about-members"></a>
-## Meet the Team 
+## About the Team
 
 <!-- <h2 align="center">Contact on</h2> -->
 
