@@ -33,7 +33,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 ## Project Management Tools
 * Tool 1
 * Tool 2
-* Tool 3
+* [Github Project Board](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/projects/8)
 
 <a name="about-members"></a>
 ## About the Team
