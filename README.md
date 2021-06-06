@@ -72,7 +72,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
     <img alt="Myron" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt" height = "250pt">
   </td>
   <td style="width: 25%;">
-    <img alt="Dev 4" src="" width="200pt" height = "250pt">
+    <img alt="Steve" src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt" height = "250pt">
   </td>
 </tr>
 
@@ -98,7 +98,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   </td>
 
   <td style="width: 25%;">
-    <h3>Rhuli Nghondzweni</h3>
+    <h3>Steve Mbuguje</h3>
     <p><em>Data Analysis And Machine Learning</em></p>
   </td>
 
@@ -155,11 +155,11 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   
   <td>
     <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
+      <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
         <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/dev-akshat">
+      <a href="https://github.com/u18008390">
         <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p></p>
