@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jpa.h2.model;
+package za.ac.up.cs.emerge.integrateddataintelligencesuite.model;
 
 import javax.persistence.*;
 

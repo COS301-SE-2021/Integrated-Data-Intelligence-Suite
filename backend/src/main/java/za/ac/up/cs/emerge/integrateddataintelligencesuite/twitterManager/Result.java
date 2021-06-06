@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jpa.h2.twitterManager;
+package za.ac.up.cs.emerge.integrateddataintelligencesuite.twitterManager;
 
 import java.util.List;
 

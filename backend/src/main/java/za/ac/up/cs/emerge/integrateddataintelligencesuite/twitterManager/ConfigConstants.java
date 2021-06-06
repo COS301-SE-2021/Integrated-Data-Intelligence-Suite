@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jpa.h2.twitterManager;
+package za.ac.up.cs.emerge.integrateddataintelligencesuite.twitterManager;
 
 public class ConfigConstants {
     public static final String CHARSET = "ISO-8859-1";

@@ -61,12 +61,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
     
-      <dependency>
-        <groupId>com.guokr</groupId>
-        <artifactId>stan-cn-com</artifactId>
-        <version>0.0.4</version>
-      </dependency>
+
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.guokr</groupId>
+            <artifactId>stan-cn-com</artifactId>
+            <version>0.0.4</version>
         </dependency>
 
         <dependency>
