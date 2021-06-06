@@ -51,11 +51,6 @@ public class ParsingServiceImpl implements ParsingService{
                 //GetDateResponse dateResponse = parser.getDate(dateRequest);
                 parsedData.setDate(mocks.getDate());
 
-                //setDate
-                //GetDateRequest dateRequest = new GetDateRequest(theArr[i]);
-                //GetDateResponse dateResponse = parser.getDate(dateRequest);
-                parsedData.setMention(mocks.getMention());
-
                 newList.add(parsedData);
             }
         }
