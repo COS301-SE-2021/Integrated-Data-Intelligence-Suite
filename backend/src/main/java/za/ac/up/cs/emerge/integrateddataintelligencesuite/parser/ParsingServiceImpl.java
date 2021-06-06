@@ -2,6 +2,7 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.NodeData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
@@ -28,8 +29,8 @@ public class ParsingServiceImpl implements ParsingService{
                 throw new InvalidRequestException("Imported type is null");
             }
         }
-
-        JSONArray jsonArray = new JSONArray(request.getJsonString());
+        JSONObject obj = new JSONObject(request.getJsonString());
+        JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<NodeData> newList = new ArrayList<>();
 
         Mock mocks = new Mock();
