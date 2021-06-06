@@ -1,17 +1,10 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.importer;
 
-import org.hibernate.tool.hbm2ddl.ImportScriptException;
-import twitter4j.Status;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.ImporterException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportTwitterRequest;
-
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ImportService {
-    String ImportTwitterData(ImportTwitterRequest request)throws ImporterException;
 
-    List<Status> getTwitterData() throws ImporterException;
+    ArrayList<ImportedData> importData(String keyword, int limit) throws Exception;
 
-    String getTwitterDataJson() throws Exception;
+    String getTwitterDataJson(String keyword, int limit) throws Exception;
 }
