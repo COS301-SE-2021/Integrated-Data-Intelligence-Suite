@@ -27,7 +27,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <a name="srs"></a>
 ## Functional Requirements
-* [SRS Document]()
+* [SRS Document](https://www.overleaf.com/project/60b1594ea3ccda5dc1cce901)
 
 <a name="project-board"></a>
 ## Project Management Tools
