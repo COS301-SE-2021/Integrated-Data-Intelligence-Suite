@@ -1,14 +1,14 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response;
 
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.NodeData;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 
 import java.util.ArrayList;
 
 public class ParseImportedDataResponse {
 
-    ArrayList<NodeData> dataList;
+    ArrayList<ParsedData> dataList;
 
-    public ParseImportedDataResponse(ArrayList<NodeData> dataList){
+    public ParseImportedDataResponse(ArrayList<ParsedData> dataList){
         this.dataList = dataList;
     }
 }

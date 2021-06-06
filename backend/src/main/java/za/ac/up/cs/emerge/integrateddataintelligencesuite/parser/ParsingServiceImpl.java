@@ -3,7 +3,7 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.NodeData;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
@@ -31,32 +31,32 @@ public class ParsingServiceImpl implements ParsingService{
         }
         JSONObject obj = new JSONObject(request.getJsonString());
         JSONArray jsonArray = obj.getJSONArray("statuses");;
-        ArrayList<NodeData> newList = new ArrayList<>();
+        ArrayList<ParsedData> newList = new ArrayList<>();
 
         Mock mocks = new Mock();
 
         if (request.getType() == DataSource.TWITTER){
             for (int i=0; i < jsonArray.length()-1; i++){
                 //create and set node
-                NodeData nodeData = new NodeData();
+                ParsedData parsedData = new ParsedData();
                 TwitterParser parser = new TwitterParser();
 
                 //setText
                 //GetTextMessageRequest textRequest = new GetTextMessageRequest(theArr[i]);
                 //GetTextMessageResponse textResponse = parser.getText(textRequest);
-                nodeData.setTextMessage(mocks.getText());
+                parsedData.setTextMessage(mocks.getText());
 
                 //setDate
                 //GetDateRequest dateRequest = new GetDateRequest(theArr[i]);
                 //GetDateResponse dateResponse = parser.getDate(dateRequest);
-                nodeData.setDate(mocks.getDate());
+                parsedData.setDate(mocks.getDate());
 
                 //setDate
                 //GetDateRequest dateRequest = new GetDateRequest(theArr[i]);
                 //GetDateResponse dateResponse = parser.getDate(dateRequest);
-                nodeData.setMention(mocks.getMention());
+                parsedData.setMention(mocks.getMention());
 
-                newList.add(nodeData);
+                newList.add(parsedData);
             }
         }
 
