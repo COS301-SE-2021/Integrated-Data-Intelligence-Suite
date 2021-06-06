@@ -37,9 +37,9 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <a name="branching strategy"></a>
 ## Branching Strategy
-**master**
-&nbsp;&nbsp;&nbsp; - **develop**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - **develop**-*subsystem*
+**master** <br>
+&nbsp;&nbsp;&nbsp; - **develop** <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - **develop**-*subsystem* <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-*subsystem*-name
 
 <a name="about-members"></a>
