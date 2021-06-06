@@ -36,8 +36,11 @@ public class ParsingServiceImpl implements ParsingService{
         Mock mocks = new Mock();
 
         if (request.getType() == DataSource.TWITTER){
-            for (int i=0; i < jsonArray.length()-1; i++){
+            for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
+                //System.out.println(jsonArray.get(i).toString());
+                //System.out.println(" _________________________________________________________________________________________");
+
                 ParsedData parsedData = new ParsedData();
                 TwitterParser parser = new TwitterParser();
 
