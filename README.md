@@ -1,6 +1,6 @@
 <div align="center"> <h1> Integrated Data Intelligence Suite </h1> </div>
 
-[![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite?branch=master) ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2021/Integrated-Data-Intelligence-Suite) &nbsp; [![Bugs](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Integrated-Data-Intelligence-Suite)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Integrated-Data-Intelligence-Suite)
+[![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite?branch=master) ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2021/Integrated-Data-Intelligence-Suite) &nbsp;[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Integrated-Data-Intelligence-Suite&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Integrated-Data-Intelligence-Suite)
 
 
 
