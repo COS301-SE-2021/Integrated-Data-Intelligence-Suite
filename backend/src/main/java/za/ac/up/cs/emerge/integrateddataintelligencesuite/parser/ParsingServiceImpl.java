@@ -29,6 +29,7 @@ public class ParsingServiceImpl implements ParsingService{
                 throw new InvalidRequestException("Imported type is null");
             }
         }
+
         JSONObject obj = new JSONObject(request.getJsonString());
         JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<ParsedData> newList = new ArrayList<>();
