@@ -1,10 +1,15 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.importer;
 
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportTwitterRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.responses.ImportDataResponse;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.responses.ImportTwitterResponse;
+
 import java.util.ArrayList;
 
 public interface ImportService {
 
-    ArrayList<ImportedData> importData(String keyword, int limit) throws Exception;
+    ImportDataResponse importData(ImportDataRequest request) throws Exception;
 
-    String getTwitterDataJson(String keyword, int limit) throws Exception;
+    ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception ;
 }
