@@ -36,10 +36,10 @@ public class ApiController {
 	// ApiRepository tutorialRepository; Will be Used Later for Database Interaction
 
 
-	static String consumer_key = "wulC8hLdeLHOATirofBWDamBa"; 
-	static String consumer_secret = "YTavYmMC9FPsZ6xKuutJfMYrMKXFxblLV5C85mPHlPLKHx9ym7";
-	static String access_token = "1151792878278053888-F374YruS90kXPKblatGnmkHVqWmfRs"; 
-	static String access_token_secret = "vdUA6ceXzT2wwk0PPYFGWwZ5HGdrW7gS9XINCYDVSjSyD";
+	static String consumer_key = ""; 
+	static String consumer_secret ="" ;
+	static String access_token = ""; 
+	static String access_token_secret = "";
 
 	@GetMapping("tutorials/search/{searchKeywords}")
 	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException{
