@@ -60,7 +60,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <table>
 <tr>
   <td style="width: 25%;">
-    <img alt="Shrey" src="https://i.imgur.com/sX6JNYi.jpg" width="200pt" height = "250pt">
+    <img alt="Shrey" src="https://i.imgur.com/sX6JNYi.jpg" width="200pt">
   </td>
   <td style="width: 25%;">
     <img alt="Rhuli" src="https://media-exp3.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1628726400&v=beta&t=EfToBL0VX5o8tmkDrypVcaeCgjrO8rbTugAvmRIavTg" width="200pt">
@@ -69,10 +69,10 @@ It aims to enhance the fluidity at which data can be imported and processed, the
     <img alt="Wandile" src="https://media-exp1.licdn.com/dms/image/C4D03AQF9xmaPIT4sGA/profile-displayphoto-shrink_800_800/0/1613066923973?e=1628121600&v=beta&t=pI14hAWqRKAxs6mTpmSy6wBnAYdCtkxFk4sMss2SSts" width="200pt" >
   </td>
   <td style="width: 25%;">
-    <img alt="Myron" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt" height = "250pt">
+    <img alt="Myron" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt">
   </td>
   <td style="width: 25%;">
-    <img alt="Steve" src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt" height = "250pt">
+    <img alt="Steve" src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
   </td>
 </tr>
 
