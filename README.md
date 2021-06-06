@@ -34,9 +34,9 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <a name="project-board"></a>
 ## Project Management Tools
-* [Google Meets]()
+* [Meetings: Google Meets]()
 * [Inter-Communication: Discord]()
-* [Github Project Board](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/projects/8)
+* [Scrum : Github Project Board](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/projects/8)
 
 <a name="branching strategy"></a>
 ## Branching Strategy
