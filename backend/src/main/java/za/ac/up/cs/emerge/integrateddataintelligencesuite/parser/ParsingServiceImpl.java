@@ -9,7 +9,7 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterParser;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterExtractor;
 
 import java.util.*;
 
@@ -43,7 +43,7 @@ public class ParsingServiceImpl implements ParsingService{
                 //System.out.println(" _________________________________________________________________________________________");
 
                 ParsedData parsedData = new ParsedData();
-                TwitterParser parser = new TwitterParser();
+                TwitterExtractor parser = new TwitterExtractor();
 
                 //setText
                 //GetTextMessageRequest textRequest = new GetTextMessageRequest(theArr[i]);
