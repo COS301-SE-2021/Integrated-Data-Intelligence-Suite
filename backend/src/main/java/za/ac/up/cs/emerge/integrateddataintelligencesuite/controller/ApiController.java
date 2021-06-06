@@ -34,43 +34,34 @@ public class ApiController {
 	@GetMapping("tutorials/search/{searchKeywords}")
 	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, JSONException, InvalidRequestException {
 
+		//Initialise Objects
 	    SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
-
 	    // Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 		//Pre-Condition
         if (searchKeywords == null || searchKeywords.length() == 0) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-		//Wandi function
-
-		//parser Import Data
-
-		//Steve And Rhuli
 		
+
+
+		//Fetch Parsed Tweet nodes
 		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, "must get from wandi") ;
-		
 		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
-
-
 		ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
 		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
 
-			List<TweetWithSentiment> sentiments = new ArrayList<>();
-		for (Status status : statuses) {
-			TweetWithSentiment tweetWithSentiment = sentimentAnalyzer.findSentiment(status.getText());
+		//Extract Tweet Sentiment
+		List<TweetWithSentiment> sentiments = new ArrayList<>();
+		for (ParsedData parsed_data_node : list_of_tweet_nodes) {
+			TweetWithSentiment tweetWithSentiment = sentimentAnalyzer.findSentiment(parsed_data_node.getTextMessage());
 			if (tweetWithSentiment != null) {
 				sentiments.add(tweetWithSentiment);
 			}
 		}
 
-
 		return new ResponseEntity< List<TweetWithSentiment>>(sentiments, HttpStatus.OK);
-
-
-
-
-
 	}
 
 
