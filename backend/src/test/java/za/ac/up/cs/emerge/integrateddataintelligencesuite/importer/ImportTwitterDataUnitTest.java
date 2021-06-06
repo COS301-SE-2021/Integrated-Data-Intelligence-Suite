@@ -17,14 +17,15 @@ public class ImportTwitterDataUnitTest {
     private ImportServiceImpl importService;
 
     @Test
-    @Description("Giiven valid keyword")
-    void TEST_SHOULD_RETURN_TWITTER_DATA(){
+    public void displayTweets (){
+
+        importService = new ImportServiceImpl();
+
         try {
-            String data = importService.ImportTwitterData(new ImportTwitterRequest("trending"));
+            System.out.println(importService.getTwitterDataJson());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }
