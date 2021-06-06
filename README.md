@@ -1,7 +1,10 @@
 <div align="center"> <h1> Integrated Data Intelligence Suite </h1> </div>
 
 [![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite?branch=master)
-[![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/Integrated-Data-Intelligence_Suite.svg)](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/issues)
+![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2021/Integrated-Data-Intelligence-Suite) &nbsp;
+
+[![Build Status](https://travis-ci.com/COS301-SE-2021/Crypto-Market-Analysis.svg?branch=master)](https://travis-ci.com/COS301-SE-2021/Crypto-Market-Analysis) &nbsp; [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Crypto-Market-Analysis&metric=coverage)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Crypto-Market-Analysis) &nbsp; [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Crypto-Market-Analysis&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Crypto-Market-Analysis) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2021/Crypto-Market-Analysis) &nbsp; ![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m788320564-5cdf04f0d1344570bd765b7f) &nbsp; ![Requires.io](https://img.shields.io/requires/github/COS301-SE-2021/Crypto-Market-Analysis)
+
 
 <h3>By E-Merge</h3>
 
