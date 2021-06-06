@@ -32,7 +32,7 @@ public class ApiController {
 	// ApiRepository tutorialRepository; Will be Used Later for Database Interaction
 
 	@GetMapping("tutorials/search/{searchKeywords}")
-	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException{
+	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, JSONException, InvalidRequestException {
 
 	    SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
 
@@ -52,14 +52,9 @@ public class ApiController {
 		
 		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
 
-			try {
-				ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
-				ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
-			} catch (InvalidRequestException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+
+		ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
+		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
 
 			List<TweetWithSentiment> sentiments = new ArrayList<>();
 		for (Status status : statuses) {
