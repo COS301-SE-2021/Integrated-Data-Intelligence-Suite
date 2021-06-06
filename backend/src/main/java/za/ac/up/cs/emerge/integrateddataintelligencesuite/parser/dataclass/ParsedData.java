@@ -1,12 +1,12 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass;
 
-public class NodeData {
+public class ParsedData {
 
     private String textMessage;
     private String[] mention;
     private String date;
     
-    public NodeData() {
+    public ParsedData() {
         
     }
 
