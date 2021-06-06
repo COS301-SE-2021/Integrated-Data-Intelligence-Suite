@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.analyzer.SentimentAnalyzer;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.ImportService;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.ImportServiceImpl;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.ImportedData;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.responses.ImportDataResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.ParsingServiceImpl;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
@@ -43,11 +48,29 @@ public class ApiController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		
+
+		ImportService importService = new ImportServiceImpl();
+		ImportDataResponse importDataResponse = null;
+		try {
+			importDataResponse = importService.importData(new ImportDataRequest(searchKeywords, 10));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		if(importDataResponse == null){
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		ArrayList<ImportedData> importedDataArrayList = importDataResponse.getList();
+		if(importedDataArrayList==null || importedDataArrayList.size() < 1){
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		ImportedData data = importedDataArrayList.get(0);
 
 
 		//Fetch Parsed Tweet nodes
-		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, "must get from wandi") ;
+		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, data.getData()) ;
 		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
 		ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
 		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
