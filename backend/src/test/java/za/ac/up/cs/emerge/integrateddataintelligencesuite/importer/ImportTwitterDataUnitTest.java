@@ -16,16 +16,5 @@ public class ImportTwitterDataUnitTest {
     @InjectMocks
     private ImportServiceImpl importService;
 
-    @Test
-    public void displayTweets (){
-
-        importService = new ImportServiceImpl();
-
-        try {
-            System.out.println(importService.getTwitterDataJson());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 }
