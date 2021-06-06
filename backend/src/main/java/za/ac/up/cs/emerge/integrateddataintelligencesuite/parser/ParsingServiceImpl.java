@@ -6,7 +6,11 @@ import org.json.JSONObject;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetTextRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetDateResponse;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTextResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterExtractor;
@@ -34,7 +38,7 @@ public class ParsingServiceImpl implements ParsingService{
         JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<ParsedData> newList = new ArrayList<>();
 
-        Mock mocks = new Mock();
+        //Mock mocks = new Mock();
 
         if (request.getType() == DataSource.TWITTER){
             for (int i=0; i < jsonArray.length(); i++){
@@ -43,18 +47,21 @@ public class ParsingServiceImpl implements ParsingService{
                 //System.out.println(" _________________________________________________________________________________________");
 
                 ParsedData parsedData = new ParsedData();
-                TwitterExtractor parser = new TwitterExtractor();
+                TwitterExtractor extractor = new TwitterExtractor();
 
                 //setText
-                //GetTextMessageRequest textRequest = new GetTextMessageRequest(theArr[i]);
-                //GetTextMessageResponse textResponse = parser.getText(textRequest);
-                parsedData.setTextMessage(mocks.getText());
+                GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString());
+                GetTextResponse textResponse = extractor.getText(textRequest);
+                parsedData.setTextMessage(textResponse.getText());
 
                 //setDate
-                //GetDateRequest dateRequest = new GetDateRequest(theArr[i]);
-                //GetDateResponse dateResponse = parser.getDate(dateRequest);
-                parsedData.setDate(mocks.getDate());
+                GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString());
+                GetDateResponse dateResponse = extractor.getDate(dateRequest);
+                parsedData.setDate(dateResponse.getDate());
 
+                //System.out.println(parsedData.getDate());
+                //System.out.println(parsedData.getTextMessage());
+                //System.out.println(" _________________________________________________________________________________________");
                 newList.add(parsedData);
             }
         }
