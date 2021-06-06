@@ -136,7 +136,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
   <td>
     <p><p align="center">
-      <a href="www.linkedin.com/in/myron-lopes">
+      <a href="https://www.linkedin.com/in/myron-lopes/">
         <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
