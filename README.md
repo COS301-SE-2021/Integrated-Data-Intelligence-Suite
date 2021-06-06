@@ -72,29 +72,27 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <tr>
   <td style="width: 25%;">
     <h3>Shrey Mandalia</h3>
-    <p><em>I am a Computer Science student studying at University of Pretoria.
-I'm skilled in data structures, design patterns, Java, C++, HTML, CSS, JavaScript
-I enjoy programming and learning new things. I'm love gaming, playing/watching soccer, and occasionally reading.</em></p>
+    <p><em>Front-End and Data Analysis</em></p>
   </td>
 
    <td style="width: 25%;">
-    <h3>Person 1</h3>
-    <p><em>Something about them </em></p>
+    <h3>Steve</h3>
+    <p><em>Data Analysis and Machine Learning</em></p>
   </td>
 
   <td style="width: 25%;">
     <h3>Wandile Makhubele</h3>
-    <p><em>Something about them</em></p>
+    <p><em>Deployment and Back-End</em></p>
   </td>
   
   <td style="width: 25%">
     <h3>Myron Lopes</h3>
-    <p><em>Something about them</em></p>
+    <p><em>Front-End and Data Analysis</em></p>
   </td>
 
   <td style="width: 25%;">
-    <h3>Person 4</h3>
-    <p><em>Something about them</em></p>
+    <h3>Rhuli</h3>
+    <p><em>Data Analysis And Machine Learning</em></p>
   </td>
 
 </tr>
@@ -138,11 +136,11 @@ I enjoy programming and learning new things. I'm love gaming, playing/watching s
 
   <td>
     <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
+      <a href="www.linkedin.com/in/myron-lopes">
         <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/dev-akshat">
+      <a href="https://github.com/myronlopes-tuks">
         <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p></p>
