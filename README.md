@@ -83,8 +83,8 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   </td>
 
    <td style="width: 25%;">
-    <h3>Steve</h3>
-    <p><em>Data Analysis and Machine Learning</em></p>
+    <h3>Rhuli Nghondzweni</h3>
+    <p><em>Back-end and Machine Learning</em></p>
   </td>
 
   <td style="width: 25%;">
