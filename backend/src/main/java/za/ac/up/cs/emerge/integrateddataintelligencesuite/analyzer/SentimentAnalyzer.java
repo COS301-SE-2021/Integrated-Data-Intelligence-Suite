@@ -1,16 +1,14 @@
-package com.bezkoder.spring.jpa.h2.analyzer;
+package za.ac.up.cs.emerge.integrateddataintelligencesuite.analyzer;
 
 import java.util.Properties;
 
-import com.bezkoder.spring.jpa.h2.twitterManager.TweetWithSentiment;
-
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
-import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.twitterManager.TweetWithSentiment;
 
 public class SentimentAnalyzer {
 
