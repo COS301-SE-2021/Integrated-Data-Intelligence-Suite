@@ -35,6 +35,12 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 * Tool 2
 * [Github Project Board](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/projects/8)
 
+##Branching Strategy
+**master**
+> **develop**
+> > **develop**-*subsystem*
+> > > ***feature***-*subsystem*-name
+
 <a name="about-members"></a>
 ## About the Team
 
