@@ -11,4 +11,8 @@ public class ParseImportedDataResponse {
     public ParseImportedDataResponse(ArrayList<ParsedData> dataList){
         this.dataList = dataList;
     }
+
+    public ArrayList<ParsedData> getDataList(){
+        return dataList;
+    }
 }

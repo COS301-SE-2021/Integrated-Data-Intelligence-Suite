@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.analyzer.SentimentAnalyzer;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.ParsingServiceImpl;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.twitterManager.TweetWithSentiment;
@@ -44,13 +48,20 @@ public class ApiController {
 
 		//Steve And Rhuli
 		
-		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(type, jsonString) ; 
+		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, "must get from wandi") ;
 		
-		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl(); 
-		
-		ParseImportedDataResponse list_of_tweet_nodes = ; 
-				
-		List<TweetWithSentiment> sentiments = new ArrayList<>();
+		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
+
+			try {
+				ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
+				ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
+			} catch (InvalidRequestException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			List<TweetWithSentiment> sentiments = new ArrayList<>();
 		for (Status status : statuses) {
 			TweetWithSentiment tweetWithSentiment = sentimentAnalyzer.findSentiment(status.getText());
 			if (tweetWithSentiment != null) {
