@@ -115,11 +115,11 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   <td>
     <p align="center">
       <a href="https://www.linkedin.com/in/shrey-mandalia-5b9a961b8/">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/dev-akshat">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
   </td>
@@ -127,11 +127,11 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   <td>
     <p align="center">
       <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/u18003517-Rhuli">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
   </td>
@@ -139,11 +139,11 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   <td>
     <p align="center">
       <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/abDivergent">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
   </td>
@@ -151,11 +151,11 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   <td>
     <p align="center">
       <a href="https://www.linkedin.com/in/myron-lopes/">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/myronlopes-tuks">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
   </td>
