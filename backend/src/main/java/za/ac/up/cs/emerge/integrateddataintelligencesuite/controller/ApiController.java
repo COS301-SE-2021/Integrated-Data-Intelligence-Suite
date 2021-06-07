@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,7 +36,7 @@ public class ApiController {
 	// ApiRepository tutorialRepository; Will be Used Later for Database Interaction
 
 	@GetMapping("tutorials/search/{searchKeywords}")
-	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, JSONException, InvalidRequestException {
+	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, InvalidRequestException {
 
 		//Initialise Objects
 	    SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
