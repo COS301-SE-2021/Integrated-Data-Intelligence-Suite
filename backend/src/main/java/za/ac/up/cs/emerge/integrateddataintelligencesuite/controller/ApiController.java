@@ -35,7 +35,7 @@ public class ApiController {
 	// @Autowired
 	// ApiRepository tutorialRepository; Will be Used Later for Database Interaction
 
-	@GetMapping("tutorials/search/{searchKeywords}")
+	@GetMapping("search/{searchKeywords}")
 	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, InvalidRequestException {
 
 		//Initialise Objects
