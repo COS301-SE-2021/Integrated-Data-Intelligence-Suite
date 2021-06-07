@@ -17,8 +17,7 @@ public class ImportServiceImpl implements ImportService{
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception {
 
         if(req == null) throw new InvalidTwitterRequestException("request cannot be null");
-        if(req.getKeyword().equals("")) throw new InvalidTwitterRequestException("Search string cannot be null");
-
+        if(req.getKeyword().length() >250 || req.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
         String keyword = req.getKeyword();
         int limit = req.getLimit();
         OkHttpClient client = new OkHttpClient().newBuilder()
