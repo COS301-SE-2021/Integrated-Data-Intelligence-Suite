@@ -2,6 +2,7 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -24,6 +25,7 @@ public class parsingTest {
     }*/
 
     @Test
+    @DisplayName("When the request object is null")
     public void testParsingImportedDataNUll(){
         //parsingServiceTest = new ParsingServiceImpl();
         Assert.assertThrows(InvalidRequestException.class, ()->parsingServiceTest.parseImportedData(null));
