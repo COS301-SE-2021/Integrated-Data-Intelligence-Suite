@@ -73,7 +73,7 @@ public class ApiController {
 		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, data.getData()) ;
 		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
 		ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
-		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList(
+		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
 
 
 
