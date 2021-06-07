@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 //@RunWith(MockitoJUnitRunner.class)
-public class parsingTest {
+public class ParserTest {
     //private TwitterExtractor twitterMock;
     private ParsingServiceImpl parsingServiceTest= new ParsingServiceImpl();
 
