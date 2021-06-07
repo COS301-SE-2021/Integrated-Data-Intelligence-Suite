@@ -3,10 +3,7 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.importer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.ImporterException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidImporterRequestException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidKeywordException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidLimitException;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.*;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportTwitterRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.responses.ImportDataResponse;
@@ -18,6 +15,9 @@ import java.util.Objects;
 public class ImportServiceImpl implements ImportService{
 
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception {
+
+        if(req == null) throw new InvalidTwitterRequestException("request cannot be null");
+        if(req.getKeyword().equals("")) throw new InvalidTwitterRequestException("Search string cannot be null");
 
         String keyword = req.getKeyword();
         int limit = req.getLimit();
@@ -33,11 +33,12 @@ public class ImportServiceImpl implements ImportService{
     }
 
     public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
+        if(request == null) throw new InvalidImporterRequestException("Request object cannot be null");
+
+        if(request.getKeyword().equals("")) throw new InvalidImporterRequestException("Keyword cannot be null");
+        if(request.getLimit() <1) throw new InvalidImporterRequestException("Limit cannot be less than 1");
         String keyword = request.getKeyword();
         int limit = request.getLimit();
-        if(keyword.equals("")) throw new InvalidImporterRequestException("Keyword cannot be null");
-        if(limit <1) throw new InvalidImporterRequestException("Limit cannot be less than 1");
-
         ArrayList<ImportedData> list = new ArrayList<>();
 
         try {
