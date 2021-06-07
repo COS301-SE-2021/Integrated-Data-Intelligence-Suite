@@ -10,7 +10,7 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.In
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportTwitterRequest;
 
-public class getTeitterDataTest {
+public class getTwitterDataTest {
 
     ImportService importService = new ImportServiceImpl();
 
