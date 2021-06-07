@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class parsingTest {
-    private TwitterExtractor twitterMock;
+    //private TwitterExtractor twitterMock;
     private ParsingServiceImpl parsingServiceTest= new ParsingServiceImpl();
 
     //@Before
