@@ -14,11 +14,6 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseIm
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
 
 //import org.springframework.util.Assert;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
-
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterExtractor;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
