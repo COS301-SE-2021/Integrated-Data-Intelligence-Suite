@@ -3,6 +3,8 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.importer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.ImporterException;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidImporterRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidKeywordException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidLimitException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
@@ -30,11 +32,11 @@ public class ImportServiceImpl implements ImportService{
         return  new ImportTwitterResponse(Objects.requireNonNull(response.body()).string());
     }
 
-    public ImportDataResponse importData(ImportDataRequest request) throws Exception {
+    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
         String keyword = request.getKeyword();
         int limit = request.getLimit();
-        if(keyword.equals("")) throw new InvalidKeywordException("Keyword cannot be null");
-        if(limit <1) throw new InvalidLimitException("Limit cannot be less than 1");
+        if(keyword.equals("")) throw new InvalidImporterRequestException("Keyword cannot be null");
+        if(limit <1) throw new InvalidImporterRequestException("Limit cannot be less than 1");
 
         ArrayList<ImportedData> list = new ArrayList<>();
 
@@ -42,7 +44,7 @@ public class ImportServiceImpl implements ImportService{
             String twitterData = getTwitterDataJson(new ImportTwitterRequest(keyword, limit)).getJsonData();
             list.add(new ImportedData(DataSource.TWITTER, twitterData));
         } catch (Exception e){
-
+            throw new ImporterException("Error while collecting twitter data");
         }
 
         return new ImportDataResponse(list);
