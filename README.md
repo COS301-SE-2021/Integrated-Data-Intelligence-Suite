@@ -1,7 +1,6 @@
 <div align="center"> <h1> Integrated Data Intelligence Suite </h1> </div>
 
-[![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite?branch=master)
-[![Build Status](https://img.shields.io/github/issues/COS301-SE-2021/Integrated-Data-Intelligence_Suite.svg)](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/issues)
+[![Coverage Status](https://coveralls.io/repos/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite/badge.svg?branch=master)](https://coveralls.io/github/COS301-SE-2021/Integrated-Data-Intelligence-Suite?branch=master) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2021/Integrated-Data-Intelligence-Suite) &nbsp;[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Integrated-Data-Intelligence-Suite&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Integrated-Data-Intelligence-Suite) &nbsp; ![Requires.io](https://img.shields.io/requires/github/COS301-SE-2021/Integrated-Data-Intelligence-Suit/requirements)
 
 <h3>By E-Merge</h3>
 
@@ -20,20 +19,28 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <a name="demo-video-links"></a>
 ## Demos
-* [Demo 1](https://drive.google.com/drive/folders/1lFnGthxIPIuZHPTG4wG-Ffy6VKT2yWHK?usp=sharing)
+* [Demo 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
 * [Demo 2]()
 * [Demo 3]()
 * [Demo 4]()
 
 <a name="srs"></a>
-## Functional Requirements
-* [SRS Document]()
+## Documentation
+* [SRS Document](https://www.overleaf.com/read/wqrzstnshqpt)
 
 <a name="project-board"></a>
 ## Project Management Tools
-* Tool 1
-* Tool 2
-* [Github Project Board](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/projects/8)
+* [Meetings: Google Meets]()
+* [Inter-Communication: Discord]()
+* [Scrum : Github Project Board](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/projects/8)
+
+<a name="branching strategy"></a>
+## Branching Strategy
+**master** <br>
+&nbsp;&nbsp;&nbsp; - **develop** <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - **develop**-*subsystem* <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-*subsystem*-name
+
 
 <a name="about-members"></a>
 ## About the Team
@@ -53,113 +60,119 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <table>
 <tr>
   <td style="width: 25%;">
-    <img alt="Team Leader" src="" width="200pt" height = "250pt">
+    <img alt="Shrey" src="https://i.imgur.com/sX6JNYi.jpg" width="200pt">
   </td>
+  
   <td style="width: 25%;">
-    <img alt="Dev 1" src="" width="200pt" height = "250pt">
+    <img alt="Rhuli" src="https://media-exp3.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1628726400&v=beta&t=EfToBL0VX5o8tmkDrypVcaeCgjrO8rbTugAvmRIavTg" width="200pt">
   </td>
+  
   <td style="width: 25%;">
     <img alt="Wandile" src="https://media-exp1.licdn.com/dms/image/C4D03AQF9xmaPIT4sGA/profile-displayphoto-shrink_800_800/0/1613066923973?e=1628121600&v=beta&t=pI14hAWqRKAxs6mTpmSy6wBnAYdCtkxFk4sMss2SSts" width="200pt" >
   </td>
+  
   <td style="width: 25%;">
-    <img alt="Myron" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt" height = "250pt">
+    <img alt="Myron" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt">
   </td>
+  
   <td style="width: 25%;">
-    <img alt="Dev 4" src="" width="200pt" height = "250pt">
+    <img alt="Steve" src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
   </td>
 </tr>
 
 <tr>
-  <td style="width: 25%;">
-    <h3>Team Leader</h3>
-    <p><em>Something about them</em></p>
+   <td style="width: 25%;">
+    <h3>Shrey Mandalia</h3>
+    <p><em>Front-End and Data Analysis</em></p>
   </td>
 
    <td style="width: 25%;">
-    <h3>Person 1</h3>
-    <p><em>Something about them </em></p>
+    <h3>Rhuli Nghondzweni</h3>
+    <p><em>Back-end and Machine Learning</em></p>
+
   </td>
 
   <td style="width: 25%;">
     <h3>Wandile Makhubele</h3>
-    <p><em>Something about them</em></p>
+    <p><em>Deployment and Back-End</em></p>
+
   </td>
   
   <td style="width: 25%">
     <h3>Myron Lopes</h3>
-    <p><em>Something about them</em></p>
+    <p><em>Front-End and Data Analysis</em></p>
   </td>
 
   <td style="width: 25%;">
-    <h3>Person 4</h3>
-    <p><em>Something about them</em></p>
+    <h3>Steve Mbuguje</h3>
+    <p><em>Data Analysis And Machine Learning</em></p>
+
   </td>
 
 </tr>
 
 <tr>
   <td>
-    <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+    <p align="center">
+      <a href="https://www.linkedin.com/in/shrey-mandalia-5b9a961b8/">
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/dev-akshat">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
-    </p></p>
+    </p>
   </td>
 
   <td>
-    <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+    <p align="center">
+      <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/dev-akshat">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+      <a href="https://github.com/u18003517-Rhuli">
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
-    </p></p>
+    </p>
   </td>
 
   <td>
-    <p><p align="center">
+    <p align="center">
       <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/abDivergent">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
-    </p></p>
+    </p>
   </td>
 
   <td>
-    <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+    <p align="center">
+      <a href="https://www.linkedin.com/in/myron-lopes/">
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/dev-akshat">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+      <a href="https://github.com/myronlopes-tuks">
+        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
-    </p></p>
+    </p>
   </td>
   
   <td>
-    <p><p align="center">
-      <a href="https://www.linkedin.com/in/akshat-tamrakar">
+    <p align="center">
+      <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
         <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/dev-akshat">
+      <a href="https://github.com/u18008390">
         <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
-    </p></p>
+    </p>
   </td>
 
 </tr>
 
 
 </table>
-

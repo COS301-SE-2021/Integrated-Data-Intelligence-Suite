@@ -3,8 +3,7 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.importer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidKeywordException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.InvalidLimitException;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.exceptions.*;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportTwitterRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.responses.ImportDataResponse;
@@ -17,6 +16,8 @@ public class ImportServiceImpl implements ImportService{
 
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception {
 
+        if(req == null) throw new InvalidTwitterRequestException("request cannot be null");
+        if(req.getKeyword().length() >250 || req.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
         String keyword = req.getKeyword();
         int limit = req.getLimit();
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -30,19 +31,20 @@ public class ImportServiceImpl implements ImportService{
         return  new ImportTwitterResponse(Objects.requireNonNull(response.body()).string());
     }
 
-    public ImportDataResponse importData(ImportDataRequest request) throws Exception {
+    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
+        if(request == null) throw new InvalidImporterRequestException("Request object cannot be null");
+
+        if(request.getKeyword().equals("")) throw new InvalidImporterRequestException("Keyword cannot be null");
+        if(request.getLimit() <1) throw new InvalidImporterRequestException("Limit cannot be less than 1");
         String keyword = request.getKeyword();
         int limit = request.getLimit();
-        if(keyword.equals("")) throw new InvalidKeywordException("Keyword cannot be null");
-        if(limit <1) throw new InvalidLimitException("Limit cannot be less than 1");
-
         ArrayList<ImportedData> list = new ArrayList<>();
 
         try {
             String twitterData = getTwitterDataJson(new ImportTwitterRequest(keyword, limit)).getJsonData();
             list.add(new ImportedData(DataSource.TWITTER, twitterData));
         } catch (Exception e){
-
+            throw new ImporterException("Error while collecting twitter data");
         }
 
         return new ImportDataResponse(list);

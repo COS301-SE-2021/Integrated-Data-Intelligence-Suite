@@ -1,15 +1,19 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetTextRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetDateResponse;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTextResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterParser;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterExtractor;
 
 import java.util.*;
 
@@ -29,30 +33,26 @@ public class ParsingServiceImpl implements ParsingService{
                 throw new InvalidRequestException("Imported type is null");
             }
         }
+
         JSONObject obj = new JSONObject(request.getJsonString());
         JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<ParsedData> newList = new ArrayList<>();
 
-        Mock mocks = new Mock();
-
         if (request.getType() == DataSource.TWITTER){
             for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
-                //System.out.println(jsonArray.get(i).toString());
-                //System.out.println(" _________________________________________________________________________________________");
-
                 ParsedData parsedData = new ParsedData();
-                TwitterParser parser = new TwitterParser();
+                TwitterExtractor extractor = new TwitterExtractor();
 
                 //setText
-                //GetTextMessageRequest textRequest = new GetTextMessageRequest(theArr[i]);
-                //GetTextMessageResponse textResponse = parser.getText(textRequest);
-                parsedData.setTextMessage(mocks.getText());
+                GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString());
+                GetTextResponse textResponse = extractor.getText(textRequest);
+                parsedData.setTextMessage(textResponse.getText());
 
                 //setDate
-                //GetDateRequest dateRequest = new GetDateRequest(theArr[i]);
-                //GetDateResponse dateResponse = parser.getDate(dateRequest);
-                parsedData.setDate(mocks.getDate());
+                GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString());
+                GetDateResponse dateResponse = extractor.getDate(dateRequest);
+                parsedData.setDate(dateResponse.getDate());
 
                 newList.add(parsedData);
             }

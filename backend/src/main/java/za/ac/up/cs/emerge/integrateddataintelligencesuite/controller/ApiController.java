@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,8 +35,8 @@ public class ApiController {
 	// @Autowired
 	// ApiRepository tutorialRepository; Will be Used Later for Database Interaction
 
-	@GetMapping("tutorials/search/{searchKeywords}")
-	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, JSONException, InvalidRequestException {
+	@GetMapping("search/{searchKeywords}")
+	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, InvalidRequestException {
 
 		//Initialise Objects
 	    SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
@@ -47,6 +46,7 @@ public class ApiController {
         if (searchKeywords == null || searchKeywords.length() == 0) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 
 		ImportService importService = new ImportServiceImpl();
 		ImportDataResponse importDataResponse = null;
@@ -68,12 +68,13 @@ public class ApiController {
 		ImportedData data = importedDataArrayList.get(0);
 
 
-
 		//Fetch Parsed Tweet nodes
 		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, data.getData()) ;
 		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
 		ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
 		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
+
+
 
 		//Extract Tweet Sentiment
 		List<TweetWithSentiment> sentiments = new ArrayList<>();
