@@ -38,14 +38,9 @@ public class ParsingServiceImpl implements ParsingService{
         JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<ParsedData> newList = new ArrayList<>();
 
-        //Mock mocks = new Mock();
-
         if (request.getType() == DataSource.TWITTER){
             for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
-                //System.out.println(jsonArray.get(i).toString());
-                //System.out.println(" _________________________________________________________________________________________");
-
                 ParsedData parsedData = new ParsedData();
                 TwitterExtractor extractor = new TwitterExtractor();
 
@@ -59,9 +54,6 @@ public class ParsingServiceImpl implements ParsingService{
                 GetDateResponse dateResponse = extractor.getDate(dateRequest);
                 parsedData.setDate(dateResponse.getDate());
 
-                //System.out.println(parsedData.getDate());
-                //System.out.println(parsedData.getTextMessage());
-                //System.out.println(" _________________________________________________________________________________________");
                 newList.add(parsedData);
             }
         }
