@@ -41,8 +41,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 ## Branching Strategy
 **master** <br>
 &nbsp;&nbsp;&nbsp; - **develop** <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - **develop**-*subsystem* <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-*subsystem*-name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-name
 
 
 <a name="about-members"></a>
