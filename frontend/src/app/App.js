@@ -153,7 +153,7 @@ class App extends Component {
             i18n.changeLanguage('en');
         }*/
         window.scrollTo(0, 0);
-        const fullPageLayoutRoutes = ['/pages/Login', '/pages/Register', '/functions/ValidateLogin'];
+        const fullPageLayoutRoutes = ['/pages/Login', '/pages/Register', '/functions/ValidateLogin', '/functions/ValidateRegister'];
         for ( let i = 0; i < fullPageLayoutRoutes.length; i++ ) {
             if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
                 this.setState({
