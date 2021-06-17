@@ -1,0 +1,53 @@
+server:
+  post: 9000
+
+spring:
+  application:
+    name: Gateway-Service
+  cloud:
+    gateway:
+      routes:
+        - id: Import_Service
+          uri: lb://Import-Service
+          predicates:
+            - path=/import/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: Import-Service
+                fallbackuri: forward:/ImportServiceFallback
+
+        - id: Analyse_Service
+          uri: lb://Analyse-Service
+          predicates:
+            - path=/analyse/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: Analyse-Service
+                fallbackuri: forward:/AnalyseServiceFallback
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15000;
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: hystrix.stream
+
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost

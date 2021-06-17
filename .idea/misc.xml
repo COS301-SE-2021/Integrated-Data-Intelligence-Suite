@@ -4,6 +4,11 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/backend/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Analyse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Gateway_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Import_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Parse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Registry_Service/pom.xml" />
       </list>
     </option>
   </component>
