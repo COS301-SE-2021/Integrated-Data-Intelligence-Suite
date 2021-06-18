@@ -6,12 +6,8 @@ import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@Service
-@FeignClient(name = "Import-Service")
 public interface ImportService {
 
-    ImportDataResponse importData(ImportDataRequest request) throws Exception;
-
-    ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception ;
 }
