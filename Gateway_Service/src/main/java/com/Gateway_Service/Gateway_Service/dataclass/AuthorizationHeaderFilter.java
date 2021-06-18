@@ -1,4 +1,4 @@
-package com.Gateway_Service.Gateway_Service;
+package com.Gateway_Service.Gateway_Service.dataclass;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;

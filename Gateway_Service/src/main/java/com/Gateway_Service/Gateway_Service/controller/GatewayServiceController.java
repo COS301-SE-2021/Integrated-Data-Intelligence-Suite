@@ -2,69 +2,71 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
+import com.Gateway_Service.Gateway_Service.service.AnalyseService;
+import com.Gateway_Service.Gateway_Service.service.ImportService;
+import com.Gateway_Service.Gateway_Service.service.ParseService;
+import com.Import_Service.Import_Service.request.ImportTwitterRequest;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
+import com.Parse_Service.Parse_Service.dataclass.DataSource;
+import com.Parse_Service.Parse_Service.request.ParseImportedDataRequest;
 import com.Parse_Service.Parse_Service.response.ParseImportedDataResponse;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 
-@FeignClient("Import-Service")
-interface ImportClient {
-
-    @GetMapping("/{key}")
-    @CrossOrigin
-    ImportTwitterResponse getTwitterDataJson(@PathVariable String key);
-}
-
-
-@FeignClient("Parse-Service")
-interface ParseClient {
-
-    @GetMapping("/")
-    @CrossOrigin
-    ParseImportedDataResponse parseImportedData(String jsonString);
-}
-
-
-@FeignClient("Analyse-Service")
-interface AnalyseClient {
-
-    @GetMapping("/")
-    @CrossOrigin
-    TweetWithSentiment findSentiment(String line);
-}
-
-
 @RestController
+@RequestMapping("/")
 public class GatewayServiceController {
-    private final ImportClient importClient;
-    private final ParseClient parseClient;
-    private final AnalyseClient analyseClient;
 
-    GatewayServiceController(ImportClient importClient, ParseClient parseClient, AnalyseClient analyseClient){
-        this.importClient = importClient;
-        this.parseClient = parseClient;
-        this.analyseClient = analyseClient;
-    }
+    @Qualifier("com.Gateway_Service.Gateway_Service.service.ImportService")
+    @Autowired
+    private ImportService importClient;
+
+    @Qualifier("com.Gateway_Service.Gateway_Service.service.ParseService")
+    @Autowired
+    private ParseService parseClient;
+
+    @Qualifier("com.Gateway_Service.Gateway_Service.service.AnalyseService")
+    @Autowired
+    private AnalyseService analyseClient;
+
+    //GatewayServiceController(){ }
 
     @GetMapping(value = "/{key}", produces = "application/json")
-    @CrossOrigin
-    @HystrixCommand(fallbackMethod = "fallback")
-    public Collection<String> init(@PathVariable String key) {
-
-        ImportTwitterResponse ImportRes = importClient.getTwitterDataJson(key);
-        ParseImportedDataResponse ParseRes = parseClient.parseImportedData(ImportRes.getJsonData());
+    //@CrossOrigin
+    //@HystrixCommand(fallbackMethod = "fallback")
+    public Collection<String> init(@PathVariable String key) throws Exception {
 
         ArrayList <String> Data = new ArrayList<>();
+
+        ImportTwitterRequest importReq = new ImportTwitterRequest(key,10);
+        ImportTwitterResponse ImportRes = importClient.getTwitterDataJson(importReq);
+
+        if (ImportRes == null) {
+            Data.add("Import Service Fail");
+            return Data;
+        }
+
+        ParseImportedDataRequest parseReq = new ParseImportedDataRequest(DataSource.TWITTER,ImportRes.getJsonData());
+        ParseImportedDataResponse ParseRes = parseClient.parseImportedData(parseReq);
+
+        if (ParseRes == null) {
+            Data.add("Import Service Fail");
+            return Data;
+        }
+
+
         for(int i = 0 ; i < ParseRes.getDataList().size(); i++) {
             TweetWithSentiment sentiment = analyseClient.findSentiment(ParseRes.getDataList().get(i).getTextMessage());
+            if (sentiment == null) {
+                Data.add("Analyse-sentiment Service Fail");
+                return Data;
+            }
+
             Data.add(sentiment.toString());
         }
 

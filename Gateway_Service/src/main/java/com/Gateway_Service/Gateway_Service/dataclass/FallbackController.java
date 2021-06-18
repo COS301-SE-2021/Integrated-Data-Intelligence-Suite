@@ -1,4 +1,4 @@
-package com.Gateway_Service.Gateway_Service;
+package com.Gateway_Service.Gateway_Service.dataclass;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
