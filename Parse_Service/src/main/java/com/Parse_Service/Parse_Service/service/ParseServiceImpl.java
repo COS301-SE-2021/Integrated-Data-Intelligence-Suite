@@ -19,9 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class ParseServiceImpl implements ParseService{
+public class ParseServiceImpl {
 
-    @Override
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws InvalidRequestException, JSONException {
         if (request == null) {
             throw new InvalidRequestException("ParseImportedDataRequest Object is null");
