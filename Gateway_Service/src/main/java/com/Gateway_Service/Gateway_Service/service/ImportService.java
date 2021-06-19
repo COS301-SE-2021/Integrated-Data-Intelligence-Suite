@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Service
-@FeignClient(value = "Import-Service" , url = "localhost/Import:9001" , fallback = ImportServiceFallback.class)
+@FeignClient(value = "Import-Service" , url = "localhost:9001/Import" , fallback = ImportServiceFallback.class)
 public interface ImportService {
 
     @GetMapping(value = "/importData")
