@@ -1,5 +1,6 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri;
 
+import org.json.JSONArray;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLocationRequest;
@@ -21,7 +22,6 @@ public class TwitterExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        //JSONObject dataObj = obj.getJSONObject("text");
         String responseText = obj.getString("text");
         GetTextResponse response = new GetTextResponse(responseText);
         return response;
@@ -38,7 +38,6 @@ public class TwitterExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        //JSONObject dataObj = obj.getJSONObject("statuses");
         String[] dateTimeInfo = obj.getString("created_at").split("T");
         String responseDate = dateTimeInfo[0];
 
@@ -47,7 +46,21 @@ public class TwitterExtractor implements Extractor {
     }
 
     @Override
-    public GetLocationResponse getLocation(GetLocationRequest jsonString) throws InvalidRequestException {
-        return null;
+    public GetLocationResponse getLocation(GetLocationRequest request) throws InvalidRequestException {
+        if (request == null || request.getJsonString() == null) {
+            throw new InvalidRequestException(("The request object is null"));
+        }
+        String coordinates = "null";
+
+        String jsonString = request.getJsonString();
+        JSONObject obj = new JSONObject(jsonString);
+        JSONObject geoLocation = obj.getJSONObject("geo");
+
+        if(geoLocation != null) {
+            JSONArray coord = geoLocation.getJSONArray("coordinates");
+            coordinates = coord.getString(0) + "," + coord.getString(1);
+        }
+
+        return new GetLocationResponse(coordinates);
     }
 }

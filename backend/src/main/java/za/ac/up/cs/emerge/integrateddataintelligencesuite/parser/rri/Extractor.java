@@ -10,8 +10,10 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTex
 
 
 public interface Extractor {
-    public GetTextResponse getText(GetTextRequest jsonString) throws InvalidRequestException;
-    public GetDateResponse getDate(GetDateRequest jsonString) throws InvalidRequestException;
-    public GetLocationResponse getLocation(GetLocationRequest jsonString) throws InvalidRequestException;
+    GetTextResponse getText(GetTextRequest jsonString) throws InvalidRequestException;
+    GetDateResponse getDate(GetDateRequest jsonString) throws InvalidRequestException;
+    GetLocationResponse getLocation(GetLocationRequest jsonString) throws InvalidRequestException;
+
+
 }
 
