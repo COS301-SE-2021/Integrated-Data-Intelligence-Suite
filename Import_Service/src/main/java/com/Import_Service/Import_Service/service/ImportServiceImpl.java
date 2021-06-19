@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Service
 public class ImportServiceImpl {
-    public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception {
+    public ImportTwitterResponse getTwitterDataJsonx(ImportTwitterRequest req) throws Exception {
 
         if(req == null) throw new InvalidTwitterRequestException("request cannot be null");
         if(req.getKeyword().length() >250 || req.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
@@ -36,7 +36,7 @@ public class ImportServiceImpl {
         return  new ImportTwitterResponse(Objects.requireNonNull(response.body()).string());
     }
 
-    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
+    public ImportDataResponse importDatax(ImportDataRequest request) throws ImporterException {
         if(request == null) throw new InvalidImporterRequestException("Request object cannot be null");
 
         if(request.getKeyword().equals("")) throw new InvalidImporterRequestException("Keyword cannot be null");
@@ -46,7 +46,7 @@ public class ImportServiceImpl {
         ArrayList<ImportedData> list = new ArrayList<>();
 
         try {
-            String twitterData = getTwitterDataJson(new ImportTwitterRequest(keyword, limit)).getJsonData();
+            String twitterData = getTwitterDataJsonx(new ImportTwitterRequest(keyword, limit)).getJsonData();
             list.add(new ImportedData(DataSource.TWITTER, twitterData));
         } catch (Exception e){
             throw new ImporterException("Error while collecting twitter data");
