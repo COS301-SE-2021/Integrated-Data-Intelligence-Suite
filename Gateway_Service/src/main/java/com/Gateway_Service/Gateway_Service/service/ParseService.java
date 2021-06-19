@@ -1,6 +1,6 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
+
 import com.Parse_Service.Parse_Service.request.ParseImportedDataRequest;
 import com.Parse_Service.Parse_Service.response.ParseImportedDataResponse;
 import org.springframework.cloud.openfeign.FeignClient;
