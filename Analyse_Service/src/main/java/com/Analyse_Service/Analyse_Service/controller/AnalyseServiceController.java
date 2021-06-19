@@ -1,6 +1,7 @@
 package com.Analyse_Service.Analyse_Service.controller;
 
 import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
+import com.Analyse_Service.Analyse_Service.response.AnalyseDataResponse;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,8 +18,9 @@ public class AnalyseServiceController {
     private AnalyseServiceImpl service;
 
     @GetMapping("/findSentiment")
-    public TweetWithSentiment findSentiment(@RequestParam("line") String line) throws Exception {
-        return service.findSentiment(line);
+    public AnalyseDataResponse findSentiment(@RequestParam("line") String line) throws Exception {
+        TweetWithSentiment sentiment = service.findSentiment(line);
+        return new AnalyseDataResponse(sentiment);
     }
 
 
