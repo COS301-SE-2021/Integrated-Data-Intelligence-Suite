@@ -7,9 +7,11 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.Parse
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLocationRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetTextRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetDateResponse;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetLocationResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTextResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.ParseImportedDataResponse;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
@@ -44,15 +46,20 @@ public class ParsingServiceImpl implements ParsingService{
                 ParsedData parsedData = new ParsedData();
                 TwitterExtractor extractor = new TwitterExtractor();
 
-                //setText
+                //parse text data from post
                 GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString());
                 GetTextResponse textResponse = extractor.getText(textRequest);
                 parsedData.setTextMessage(textResponse.getText());
 
-                //setDate
+                //parse date data from post
                 GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString());
                 GetDateResponse dateResponse = extractor.getDate(dateRequest);
                 parsedData.setDate(dateResponse.getDate());
+
+                //parse location data from post
+                GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString());
+                GetLocationResponse locationResponse = extractor.getLocation(locationRequest);
+                parsedData.setLocation(locationResponse.getLocation());
 
                 newList.add(parsedData);
             }
