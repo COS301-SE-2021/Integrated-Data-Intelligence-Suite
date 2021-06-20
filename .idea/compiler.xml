@@ -7,12 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spring-boot-jpa-h2" />
         <module name="Analyse_Service" />
         <module name="IntegratedDataIntelligenceSuite" />
         <module name="Import_Service" />
         <module name="Registry_Service" />
-        <module name="backend" />
         <module name="Gateway_Service" />
         <module name="Parse_Service" />
       </profile>

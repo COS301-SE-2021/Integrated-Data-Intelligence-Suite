@@ -21,7 +21,7 @@ public class AnalyseService {
 
 
 
-    @HystrixCommand(fallbackMethod = "findSentimentFallback")
+    //@HystrixCommand(fallbackMethod = "findSentimentFallback")
     public AnalyseDataResponse findSentiment(String line) {
 
         String url = "http://Analyse-Service/Analyse/findSentiment";

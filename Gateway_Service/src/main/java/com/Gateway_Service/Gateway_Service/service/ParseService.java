@@ -19,7 +19,7 @@ public class ParseService {
 
 
 
-    @HystrixCommand(fallbackMethod = "parseImportedDataFallback")
+    //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) {
 
 

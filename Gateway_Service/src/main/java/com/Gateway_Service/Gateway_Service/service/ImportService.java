@@ -31,7 +31,7 @@ public class ImportService {
 
 
 
-    @HystrixCommand(fallbackMethod = "getTwitterDataJsonFallback")
+    //@HystrixCommand(fallbackMethod = "getTwitterDataJsonFallback")
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest) {
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -47,7 +47,7 @@ public class ImportService {
 
 
 
-    @HystrixCommand(fallbackMethod = "importDataFallback")
+    //@HystrixCommand(fallbackMethod = "importDataFallback")
     public ImportDataResponse importData(ImportDataRequest importRequest) {
 
         HttpHeaders requestHeaders = new HttpHeaders();
