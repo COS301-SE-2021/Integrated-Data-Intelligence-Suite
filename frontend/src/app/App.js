@@ -10,6 +10,7 @@ import './App.scss';
 import LineGraph from './components/LineGraph';
 import NetworkGraph from './components/NetworkGraph';
 import MapGraph from './components/MapGraph';
+import TimelineGraph from './components/TimelineGraph';
 
 
 /*function App() {
@@ -122,7 +123,7 @@ class App extends Component {
         let linegraph_component = !this.state.isFullPageLayout ? <LineGraph/> : '';
         let network_graph_component = !this.state.isFullPageLayout ? <NetworkGraph/> : '';
         let map_graph_component = !this.state.isFullPageLayout ? <MapGraph/> : '';
-
+        let timeline_graph_component = !this.state.isFullPageLayout ? <TimelineGraph/> :'';
 
         //let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel/> : '';
         let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
@@ -137,6 +138,7 @@ class App extends Component {
                             {linegraph_component}
                             {network_graph_component}
                             {map_graph_component}
+                            {timeline_graph_component}
                         </div>
                         {footerComponent}
                     </div>

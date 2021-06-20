@@ -3,6 +3,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 require('highcharts/modules/networkgraph')(Highcharts);
+require('highcharts/modules/exporting')(Highcharts);
 
 //Network Graph
 Highcharts.addEvent(
