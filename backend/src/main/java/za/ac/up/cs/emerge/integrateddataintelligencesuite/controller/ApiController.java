@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +20,7 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.ImportService
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.ImportedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.requests.ImportDataRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.responses.ImportDataResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.ParsingServiceImpl;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.ParsingService;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.ParseImportedDataRequest;
@@ -34,6 +35,8 @@ public class ApiController {
 
 	// @Autowired
 	// ApiRepository tutorialRepository; Will be Used Later for Database Interaction
+	@Autowired
+	ParsingService parsingService;
 
 	@GetMapping("search/{searchKeywords}")
 	public ResponseEntity< List<TweetWithSentiment>> fetch_tweets(@PathVariable String searchKeywords) throws InterruptedException, IOException, InvalidRequestException {
@@ -57,21 +60,20 @@ public class ApiController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		if(importDataResponse == null){
+		if (importDataResponse == null){
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		ArrayList<ImportedData> importedDataArrayList = importDataResponse.getList();
-		if(importedDataArrayList==null || importedDataArrayList.size() < 1){
+		if (importedDataArrayList==null || importedDataArrayList.size() < 1){
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		ImportedData data = importedDataArrayList.get(0);
 
-
 		//Fetch Parsed Tweet nodes
-		ParseImportedDataRequest parse_request = new ParseImportedDataRequest(DataSource.TWITTER, data.getData()) ;
-		ParsingServiceImpl parsing_service_impl = new ParsingServiceImpl();
-		ParseImportedDataResponse  parse_response= parsing_service_impl.parseImportedData(parse_request);
+		ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, data.getData()) ;
+
+		ParseImportedDataResponse  parse_response= parsingService.parseImportedData(parseRequest);
 		ArrayList<ParsedData> list_of_tweet_nodes = parse_response.getDataList();
 
 

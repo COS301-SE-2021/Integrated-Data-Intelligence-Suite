@@ -1,6 +1,7 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri;
 
 import org.json.JSONArray;
+import org.json.JSONString;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLikesRequest;
@@ -52,16 +53,12 @@ public class TwitterExtractor implements Extractor {
         if (request == null || request.getJsonString() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
-        String coordinates = "null";
+        String coordinates = "not available";
 
         String jsonString = request.getJsonString();
+        //System.out.println(jsonString);
         JSONObject obj = new JSONObject(jsonString);
-        JSONObject geoLocation = obj.getJSONObject("geo");
-
-        if (geoLocation != null) {
-            JSONArray coord = geoLocation.getJSONArray("coordinates");
-            coordinates = coord.getString(0) + "," + coord.getString(1);
-        }
+        //Double c = obj.getJSONArray("geo").getDouble(1);
 
         return new GetLocationResponse(coordinates);
     }

@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
@@ -15,10 +16,15 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterExtr
 
 import java.util.*;
 
+@Service
 public class ParsingServiceImpl implements ParsingService{
 
     @Autowired
     private ParsedDataRepository parsedDataRepository;
+
+    public ParsingServiceImpl() {
+
+    }
 
     @Override
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws InvalidRequestException, JSONException {
@@ -67,7 +73,6 @@ public class ParsingServiceImpl implements ParsingService{
                 parsedData.setLikes(likesResponse.getLikes());
 
                 parsedList.add(parsedData);
-
             }
         }
 
