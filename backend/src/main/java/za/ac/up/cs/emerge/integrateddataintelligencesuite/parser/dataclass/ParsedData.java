@@ -1,16 +1,29 @@
 package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass;
 
-public class ParsedData {
+import javax.persistence.*;
 
+@Entity
+@Table
+public class ParsedData {
+    @Id
+    @SequenceGenerator(
+            name = "parsedData_sequence",
+            sequenceName = "parsedData_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "parsedData_sequence"
+    )
+    private Long id;
     private String textMessage;
     private String date;
     private String location;
     private Integer likes;
     
     public ParsedData() {
-        
-    }
 
+    }
 
     public String getTextMessage() {
         return textMessage;
@@ -42,5 +55,14 @@ public class ParsedData {
 
     public void setLikes(Integer likes) {
         this.likes = likes;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
