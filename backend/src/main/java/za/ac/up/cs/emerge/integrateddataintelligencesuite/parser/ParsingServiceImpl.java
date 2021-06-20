@@ -26,6 +26,18 @@ public class ParsingServiceImpl implements ParsingService{
 
     }
 
+    /**
+     * This method is used to structure the JSON string sent from the import-service.
+     * This method also calls the Extractor inferface to extract data based on the source
+     * of the data.
+     *
+     * @param request This is the request object that contains the JSON string.
+     * @return ParseImportedDataResponse This class contains structured data after parsing.
+     * @throws InvalidRequestException This is thrown if the request or any of it's attributes
+     *         are null
+     * @throws JSONException This is thrown if the JSONObject or JSONArray does not exist
+     *         for a specific key.
+     */
     @Override
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws InvalidRequestException, JSONException {
         if (request == null) {
@@ -46,7 +58,7 @@ public class ParsingServiceImpl implements ParsingService{
         JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<ParsedData> parsedList = new ArrayList<>();
 
-        if (request.getType() == DataSource.TWITTER){
+        if (request.getType() == DataSource.TWITTER) {
             for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
                 ParsedData parsedData = new ParsedData();
