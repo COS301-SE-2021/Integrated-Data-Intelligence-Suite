@@ -4,11 +4,11 @@
 // import MapGraph from './components/MapGraph';
 // import TimelineGraph from './components/TimelineGraph';
 
-import SearchBar from './SearchBar';
-import LineGraph from './LineGraph';
 
-import { Alert, Button, Badge } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
+import LineGraph from './LineGraph';
+import NetworkGraph from './NetworkGraph';
+
 
 let linegraph_options = {
 	chart: {
@@ -57,39 +57,115 @@ let linegraph_options = {
         marker: {
             symbol: 'square'
         },
-        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {
-            y: 0,
-          
-        }, 23.3, 18.3, 13.9, 9.6]
+        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {y: 0,}, 23.3, 18.3, 13.9, 9.6]
 
     }, {
         name: 'Negative',
         marker: {
             symbol: 'circle'
         },
-        data: [{
-            y: 0,
-
-        }, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        data: [{y: 0,}, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
     }]
 	
 };
+
+let network_graph_options = {
+	chart: {
+        type: 'networkgraph'
+    },
+
+    plotOptions: {
+        networkgraph: {
+            layoutAlgorithm: {
+                enableSimulation: true
+            }
+        }
+    },
+
+    series: [{
+        link: {
+            width: 5
+        },
+        dataLabels: {
+            enabled: true
+        },
+        data: [{
+            from: 'Europe',
+            to: 'UK'
+        }, {
+            from: 'Europe',
+            to: 'Poland',
+            color: 'red',
+            width: 10,
+            /* dashStyle: 'dot' */
+        }, {
+            from: 'Europe',
+            to: 'Italy'
+        }, {
+            from: 'UK',
+            to: 'London'
+        }, {
+            from: 'UK',
+            to: 'Bristol'
+        }, {
+            from: 'London',
+            to: 'London Centre'
+        }, {
+            from: 'Poland',
+            to: 'Warsaw'
+        }, {
+            from: 'Poland',
+            to: 'Krakow',
+            color: 'green'
+        }, {
+            from: 'Italy',
+            to: 'Roma'
+        }, {
+            from: 'Italy',
+            to: 'Piza'
+        }],
+        nodes: [{
+            id: 'Krakow',
+            color: 'yellow'
+        }, {
+            id: 'Italy',
+            color: 'pink'
+        }]
+    }]
+
+
+};
+
+
+
+
+
+
 
 
 class GraphList extends React.Component {
 	constructor(props){
 		super(props);
 		this.lineGraphElement = React.createRef();
+		this.networkGraphElement = React.createRef();
 	}
 
-	updateLineGraph = () =>{
+	updateAllGraphs = () =>{
+		this.updateLineGraph();
+		this.updateNetworkGraph();
+	}
+
+	updateLineGraph = () => {
 		this.lineGraphElement.current.changeChartOptions(linegraph_options);
+	}
+
+	updateNetworkGraph = () =>{
+		this.networkGraphElement.current.changeChartOptions(network_graph_options);
 	}
 
 
 	render(){
 		return (
-	
 			<div>
 
 				<div id='search_bar_div'>
@@ -109,22 +185,22 @@ class GraphList extends React.Component {
 							name="" 
 						/>
 						<button 
+						id="search_btn"
 						type="submit"
-						onClick={this.updateLineGraph}
+						onClick={this.updateAllGraphs}
 						>Search</button>
 					</form>
 				</div>
 
-				
-
 				<LineGraph ref = {this.lineGraphElement}/>
 
-				<button onClick={this.updateLineGraph}>ME</button>
+				<NetworkGraph ref = {this.networkGraphElement}/>
 
-	
-	
-				
-	
+
+
+
+
+
 			</div>
 	
 	
