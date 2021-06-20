@@ -9,6 +9,7 @@ import './App.scss';
 
 import LineGraph from './components/LineGraph';
 import NetworkGraph from './components/NetworkGraph';
+import MapGraph from './components/MapGraph';
 
 
 /*function App() {
@@ -120,7 +121,9 @@ class App extends Component {
         let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar/> : '';
         let linegraph_component = !this.state.isFullPageLayout ? <LineGraph/> : '';
         let network_graph_component = !this.state.isFullPageLayout ? <NetworkGraph/> : '';
-        
+        let map_graph_component = !this.state.isFullPageLayout ? <MapGraph/> : '';
+
+
         //let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel/> : '';
         let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
         return (
@@ -133,6 +136,7 @@ class App extends Component {
                             <AppRouter/>
                             {linegraph_component}
                             {network_graph_component}
+                            {map_graph_component}
                         </div>
                         {footerComponent}
                     </div>
