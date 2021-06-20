@@ -8,8 +8,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableDiscoveryClient
-@EnableFeignClients
 public class AnalyseServiceApplication {
 
 	public static void main(String[] args) {

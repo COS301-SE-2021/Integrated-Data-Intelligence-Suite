@@ -11,6 +11,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableFeignClients
 @EnableCircuitBreaker
-@EnableDiscoveryClient
-@EnableZuulProxy
+@EnableEurekaClient
+//@EnableDiscoveryClient
+//@EnableFeignClients
+//@EnableZuulProxy
 public class GatewayServiceApplication {
 
 	public static void main(String[] args) {
@@ -31,6 +33,8 @@ public class GatewayServiceApplication {
 	@Bean
 	@LoadBalanced
 	public RestTemplate getTemplate(){
+		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		clientHttpRequestFactory.setConnectTimeout(90000); // 1 min 30 secs Timeout
 		return new RestTemplate();
 	}
 
