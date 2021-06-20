@@ -9,6 +9,11 @@ public class ImportedData {
         this.data = data;
     }
 
+    public ImportedData() {
+        source = DataSource.FACEBOOK;
+        data="{good :job}";
+    }
+
     public DataSource getSource() {
         return source;
     }

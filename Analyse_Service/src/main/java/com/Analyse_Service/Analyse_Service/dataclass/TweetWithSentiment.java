@@ -10,6 +10,8 @@ public class TweetWithSentiment {
         this.tweet_sentiment = tweet_sentiment;
     }
 
+    public TweetWithSentiment() {
+    }
 
     public String getLine() {
         return line;

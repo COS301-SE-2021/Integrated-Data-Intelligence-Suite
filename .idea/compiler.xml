@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Analyse_Service" />
-        <module name="IntegratedDataIntelligenceSuite" />
         <module name="Import_Service" />
         <module name="Registry_Service" />
         <module name="Gateway_Service" />

@@ -36,10 +36,7 @@ import javax.net.ssl.SSLContext;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @RestController
@@ -98,7 +95,6 @@ public class GatewayServiceController {
     }
 
 
-
     @GetMapping(value = "/man/{key}", produces = "application/json")
     //@CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
@@ -112,6 +108,7 @@ public class GatewayServiceController {
 
         //String url = "http://Import-Service/Import/importData";
         //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
+
         ImportDataRequest importRequest = new ImportDataRequest(key,10);
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
@@ -119,6 +116,8 @@ public class GatewayServiceController {
             outputData.add(importResponse.getFallbackMessage());
             return outputData;
         }
+
+
 
         /*********************PARSE*************************/
 
@@ -139,6 +138,9 @@ public class GatewayServiceController {
             String line = parseResponse.getDataList().get(i).getTextMessage();
             AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
 
+            if(analyseResponse.getSentiment() == null)
+                System.out.println("\n\n\n\n\n\n\n\n wandile \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
             if(analyseResponse.getFallback() == true) {
                 outputData.add(analyseResponse.getFallbackMessage());
                 return outputData;
@@ -147,6 +149,8 @@ public class GatewayServiceController {
                 outputData.add(analyseResponse.getSentiment().getLine());
             }
         }
+
+
 
 
         return outputData;

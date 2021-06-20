@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 public interface ImportService {
-    ImportTwitterResponse getTwitterDataJsonx(ImportTwitterRequest req) throws Exception;
 
-    ImportDataResponse importDatax(ImportDataRequest request) throws ImporterException;
 
 }

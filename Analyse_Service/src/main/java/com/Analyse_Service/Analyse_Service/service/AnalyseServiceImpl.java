@@ -42,6 +42,7 @@ public class AnalyseServiceImpl {
             return null;
         }
         TweetWithSentiment tweetWithSentiment = new TweetWithSentiment(line, toCss(mainSentiment));
+        System.out.println(tweetWithSentiment.toString());
         return tweetWithSentiment;
     }
 
