@@ -7,6 +7,8 @@ import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import './App.scss';
 
+import LineGraph from './components/LineGraph';
+
 
 /*function App() {
   /*return (
@@ -115,17 +117,18 @@ class App extends Component {
     render() {
         let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
         let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar/> : '';
+        let linegraph_component = !this.state.isFullPageLayout ? <LineGraph/> : '';
         //let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel/> : '';
         let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
         return (
             <div className="container-scroller">
                 {navbarComponent}
                 <div className="container-fluid page-body-wrapper">
-                    {sidebarComponent}
+                    {/* {sidebarComponent} */}
                     <div className="main-panel">
                         <div className="content-wrapper">
                             <AppRouter/>
-                            {/*SettingsPanelComponent*/}
+                            {linegraph_component}
                         </div>
                         {footerComponent}
                     </div>
