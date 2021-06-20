@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import './App.scss';
 
 import LineGraph from './components/LineGraph';
+import NetworkGraph from './components/NetworkGraph';
 
 
 /*function App() {
@@ -118,6 +119,8 @@ class App extends Component {
         let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
         let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar/> : '';
         let linegraph_component = !this.state.isFullPageLayout ? <LineGraph/> : '';
+        let network_graph_component = !this.state.isFullPageLayout ? <NetworkGraph/> : '';
+        
         //let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel/> : '';
         let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
         return (
@@ -129,6 +132,7 @@ class App extends Component {
                         <div className="content-wrapper">
                             <AppRouter/>
                             {linegraph_component}
+                            {network_graph_component}
                         </div>
                         {footerComponent}
                     </div>

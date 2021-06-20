@@ -72,7 +72,7 @@ let linegraph_options = {
 class LineGraph extends Component {
     render () {
         return (
-			<div id = 'line_graph_id'>
+			<div id = 'line_graph_div'>
 				<HighchartsReact highcharts={Highcharts} options={linegraph_options} />
 			</div>
         );
