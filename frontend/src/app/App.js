@@ -12,6 +12,10 @@ import NetworkGraph from './components/NetworkGraph';
 import MapGraph from './components/MapGraph';
 import TimelineGraph from './components/TimelineGraph';
 
+import SearchBar from './components/SearchBar';
+
+import GraphList from './components/GraphList';
+
 
 /*function App() {
   /*return (
@@ -120,25 +124,28 @@ class App extends Component {
     render() {
         let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
         let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar/> : '';
+        
         let linegraph_component = !this.state.isFullPageLayout ? <LineGraph/> : '';
         let network_graph_component = !this.state.isFullPageLayout ? <NetworkGraph/> : '';
         let map_graph_component = !this.state.isFullPageLayout ? <MapGraph/> : '';
         let timeline_graph_component = !this.state.isFullPageLayout ? <TimelineGraph/> :'';
 
-        //let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel/> : '';
+        let search_bar_component = !this.state.isFullPageLayout? <SearchBar/> : '' ; 
         let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
+
+        let graph_list_component = !this.state.isFullPageLayout ? <GraphList/> : '';
+
+
         return (
             <div className="container-scroller">
                 {navbarComponent}
                 <div className="container-fluid page-body-wrapper">
-                    {/* {sidebarComponent} */}
+                   
                     <div className="main-panel">
                         <div className="content-wrapper">
                             <AppRouter/>
-                            {linegraph_component}
-                            {network_graph_component}
-                            {map_graph_component}
-                            {timeline_graph_component}
+                            {graph_list_component}
+
                         </div>
                         {footerComponent}
                     </div>
@@ -183,25 +190,25 @@ class App extends Component {
         }
     }
 
-    w3_open() {
-        let mySidebar = document.getElementById("mySidebar");
-        let overlayBg = document.getElementById("myOverlay");
-        if (mySidebar.style.display === 'block') {
-            mySidebar.style.display = 'none';
-            overlayBg.style.display = "none";
-        } else {
-            mySidebar.style.display = 'block';
-            overlayBg.style.display = "block";
-        }
-    }
+    // w3_open() {
+    //     let mySidebar = document.getElementById("mySidebar");
+    //     let overlayBg = document.getElementById("myOverlay");
+    //     if (mySidebar.style.display === 'block') {
+    //         mySidebar.style.display = 'none';
+    //         overlayBg.style.display = "none";
+    //     } else {
+    //         mySidebar.style.display = 'block';
+    //         overlayBg.style.display = "block";
+    //     }
+    // }
 
     // Close the sidebar with the close button
-    w3_close() {
-        let mySidebar = document.getElementById("mySidebar");
-        let overlayBg = document.getElementById("myOverlay");
-        mySidebar.style.display = "none";
-        overlayBg.style.display = "none";
-    }
+    // w3_close() {
+    //     let mySidebar = document.getElementById("mySidebar");
+    //     let overlayBg = document.getElementById("myOverlay");
+    //     mySidebar.style.display = "none";
+    //     overlayBg.style.display = "none";
+    // }
 
 
 
