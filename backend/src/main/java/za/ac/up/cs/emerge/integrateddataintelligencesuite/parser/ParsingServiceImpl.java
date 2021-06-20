@@ -3,9 +3,11 @@ package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
+import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.repository.ParsedDataRepository;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.*;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.*;
 import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
@@ -15,13 +17,16 @@ import java.util.*;
 
 public class ParsingServiceImpl implements ParsingService{
 
+    @Autowired
+    private ParsedDataRepository parsedDataRepository;
+
     @Override
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws InvalidRequestException, JSONException {
         if (request == null) {
-            throw new InvalidRequestException("ParseImportedDataRequest Object is null");
+            throw new InvalidRequestException("Request object is null");
         }
         else{
-            if (request.getJsonString() == null){
+            if (request.getJsonString() == null || request.getJsonString().isEmpty()){
                 throw new InvalidRequestException("Imported string is null");
             }
 
@@ -30,9 +35,10 @@ public class ParsingServiceImpl implements ParsingService{
             }
         }
 
+        System.out.println(request.getJsonString());
         JSONObject obj = new JSONObject(request.getJsonString());
         JSONArray jsonArray = obj.getJSONArray("statuses");;
-        ArrayList<ParsedData> newList = new ArrayList<>();
+        ArrayList<ParsedData> parsedList = new ArrayList<>();
 
         if (request.getType() == DataSource.TWITTER){
             for (int i=0; i < jsonArray.length(); i++){
@@ -60,10 +66,12 @@ public class ParsingServiceImpl implements ParsingService{
                 GetLikesResponse likesResponse = extractor.getLikes(likesRequest);
                 parsedData.setLikes(likesResponse.getLikes());
 
-                newList.add(parsedData);
+                parsedList.add(parsedData);
+
             }
         }
 
-        return new ParseImportedDataResponse(newList);
+        parsedDataRepository.saveAll(parsedList);
+        return new ParseImportedDataResponse(parsedList);
     }
 }
