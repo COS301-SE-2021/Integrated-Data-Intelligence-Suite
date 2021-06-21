@@ -59,6 +59,12 @@ public class GatewayServiceController {
         public ArrayList<String> data  = new ArrayList<>();
     }
 
+    public static class NetworkGraph extends Graph{
+        public String From;
+        public ArrayList<String> to = new ArrayList<>();
+    }
+
+ 
 
     public static class ErrorGraph extends Graph{
         public String Error;
@@ -240,6 +246,20 @@ public class GatewayServiceController {
         LineGraphArray.add(net);
         LineGraphArray.add(neg);
         LineGraphArray.add(vneg);
+
+        /*************NETWORK**********/
+
+        NetworkGraph temp;
+        ArrayList<ArrayList> pdata = analyseResponse.getPattenList();
+        ArrayList<Graph> NetworkGraphArray = new ArrayList<>();
+        for (int i = 0; i < pdata.size(); i++) {
+            temp =  new NetworkGraph();
+            temp.From = pdata.get(i).get(pdata.get(i).size()-3).toString();
+            for (int j = 0; j < pdata.get(i).size()-2; j++) {
+                temp.to.add(pdata.get(i).get(j).toString());
+            }
+            NetworkGraphArray.add(temp);
+        }
 
 
 
