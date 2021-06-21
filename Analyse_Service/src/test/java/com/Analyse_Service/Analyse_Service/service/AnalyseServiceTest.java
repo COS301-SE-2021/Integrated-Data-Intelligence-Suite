@@ -104,5 +104,74 @@ public class AnalyseServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
     }
 
-   
+    @Test
+    @DisplayName("When the data list is Valid")
+    public void findRelationshipValidRequest() throws InvalidRequestException {
+        ArrayList<String> TestList = new ArrayList<>();
+        String row1 = "Neuatral testi testii 20";
+        String row2 = "Neuatral testi testii 20";
+        String row3 = "Neuatral testi testii 20";
+
+        TestList.add(row1);
+        TestList.add(row2);
+        TestList.add(row3);
+
+        FindRelationshipsRequest test = new FindRelationshipsRequest(TestList);
+        FindRelationshipsResponse testResults = service.findRelationship(test);
+        Assertions.assertNotNull(testResults);
+    }
+
+    @Test
+    @DisplayName("When getPredictionNullRequest is Null")
+    public void getPredictionNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.getPredictions(null));
+    }
+
+    @Test
+    @DisplayName("When the data list is Null")
+    public void getPredictionDataNullList(){
+        GetPredictionRequest test = new GetPredictionRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.getPredictions(test));
+    }
+
+    @Test
+    @DisplayName("When the data list is Valid")
+    public void getPredictionValidRequest() throws InvalidRequestException {
+        ArrayList<String> TestList = new ArrayList<>();
+        String row1 = "Neuatral testi testii 20";
+        String row2 = "Neuatral testi testii 20";
+        String row3 = "Neuatral testi testii 20";
+
+        TestList.add(row1);
+        TestList.add(row2);
+        TestList.add(row3);
+
+        GetPredictionRequest test = new GetPredictionRequest(TestList);
+        GetPredictionResponse testResults = service.getPredictions(test);
+        Assertions.assertNotNull(testResults);
+    }
+
+    @Test
+    @DisplayName("When findSentimentRequest is Null")
+    public void findSentimentRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findSentiment(null));
+    }
+
+    @Test
+    @DisplayName("When the text is Null")
+    public void findSentimentDataNullList(){
+        FindSentimentRequest test = new FindSentimentRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findSentiment(test));
+    }
+
+    @Test
+    @DisplayName("When the text is Valid")
+    public void findSentimentValidRequest() throws InvalidRequestException {
+        String text = "test text for function";
+        FindSentimentRequest test = new FindSentimentRequest(text);
+        FindSentimentResponse testResults = service.findSentiment(test);
+        Assertions.assertNotNull(testResults);
+    }
+
+
 }
