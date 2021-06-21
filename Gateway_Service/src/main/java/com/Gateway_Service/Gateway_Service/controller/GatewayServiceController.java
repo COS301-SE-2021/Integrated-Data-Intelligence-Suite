@@ -64,7 +64,12 @@ public class GatewayServiceController {
         public ArrayList<String> to = new ArrayList<>();
     }
 
- 
+
+
+    public static class mapGraph extends Graph{
+        ArrayList<ArrayList> map = new ArrayList<>();
+
+    }
 
     public static class ErrorGraph extends Graph{
         public String Error;
@@ -260,6 +265,62 @@ public class GatewayServiceController {
             }
             NetworkGraphArray.add(temp);
         }
+
+
+
+        /************MAP**********/
+        ArrayList<Graph> mapArray = new ArrayList<>();
+        ArrayList<String> coordinates;
+        mapGraph mapG = new mapGraph();
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-ec");
+        coordinates.add("100");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-np");
+        coordinates.add("102");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-nl");
+        coordinates.add("120");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-wc");
+        coordinates.add("300");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-nc");
+        coordinates.add("106");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-nw");
+        coordinates.add("90");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-fs");
+        coordinates.add("130");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-gt");
+        coordinates.add("130");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-mp");
+        coordinates.add("134");
+        mapG.map.add(coordinates);
+
+        mapArray.add(mapG);
+
+
 
 
 
