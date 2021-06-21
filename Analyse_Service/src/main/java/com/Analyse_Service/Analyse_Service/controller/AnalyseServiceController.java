@@ -1,14 +1,11 @@
 package com.Analyse_Service.Analyse_Service.controller;
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
-import com.Analyse_Service.Analyse_Service.response.AnalyseDataResponse;
+import com.Analyse_Service.Analyse_Service.request.*;
+import com.Analyse_Service.Analyse_Service.response.*;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.RequestEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/Analyse")
@@ -17,14 +14,20 @@ public class AnalyseServiceController {
     @Autowired
     private AnalyseServiceImpl service;
 
-    @GetMapping("/findSentiment")
-    public AnalyseDataResponse findSentiment(@RequestParam("line") String line) throws Exception {
+    /*@GetMapping("/findSentiment")
+    public AnalyzeDataResponse findSentiment(@RequestParam("line") String line) throws Exception {
         TweetWithSentiment sentiment = service.findSentiment(line);
 
         if(sentiment != null)
             System.out.println("CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
 
-        return new AnalyseDataResponse(sentiment);
+        return new AnalyzeDataResponse(sentiment);
+    }*/
+
+    @PostMapping("/analyzeData")
+    public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{
+        AnalyseDataRequest request = requestEntity.getBody();
+        return service.analyzeData(request);
     }
 
 

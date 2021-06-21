@@ -2,7 +2,6 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import com.Gateway_Service.Gateway_Service.dataclass.*;
 
 
@@ -16,27 +15,13 @@ import com.Gateway_Service.Gateway_Service.service.ParseService;
 
 //import com.netflix.discovery.DiscoveryClient;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.net.ssl.SSLContext;
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -64,6 +49,39 @@ public class GatewayServiceController {
         return this.discoveryClient.getInstances(serviceName).get(0).getUri().toString();
     }
 
+    public static class Graph{
+        Graph(){}
+    }
+
+    public static class LineGraph extends Graph{
+        public String name;
+        public ArrayList<String> marker = new ArrayList<>();
+        public ArrayList<String> data  = new ArrayList<>();
+    }
+
+    public static class NetworkGraph extends Graph{
+        public String From;
+        public ArrayList<String> to = new ArrayList<>();
+    }
+
+    public static class TimelineGraph extends Graph{
+        public String x;
+        public String name;
+        public String label;
+        public String description;
+
+    }
+
+
+    public static class mapGraph extends Graph{
+        ArrayList<ArrayList> map = new ArrayList<>();
+
+    }
+
+    public static class ErrorGraph extends Graph{
+        public String Error;
+    }
+
 
     //TEST FUNCTION
     @GetMapping(value ="/{key}", produces = "application/json")
@@ -81,7 +99,7 @@ public class GatewayServiceController {
         return output;
     }
 
-    @GetMapping(value ="test/{line}", produces = "application/json")
+    /*@GetMapping(value ="test/{line}", produces = "application/json")
     public String testNothing2(@PathVariable String line) {
 
         String output = "";
@@ -94,16 +112,16 @@ public class GatewayServiceController {
         }
 
         return output;
-    }
+    }*/
 
 
     @GetMapping(value = "/man/{key}", produces = "application/json")
     //@CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
-    public Collection<String> init(@PathVariable String key) throws Exception {
+    public ArrayList<ArrayList<Graph>> init(@PathVariable String key) throws Exception {
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
-
-        ArrayList <String> outputData = new ArrayList<>();
+        //ArrayList <String> outputData = new ArrayList<>();
         HttpHeaders requestHeaders;
 
         /*********************IMPORT*************************/
@@ -115,7 +133,17 @@ public class GatewayServiceController {
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
         if(importResponse.getFallback() == true) {
-            outputData.add(importResponse.getFallbackMessage());
+            //outputData.add(importResponse.getFallbackMessage());
+            //return new ArrayList<>();//outputData;
+
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = importResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
             return outputData;
         }
 
@@ -130,7 +158,16 @@ public class GatewayServiceController {
 
 
         if(parseResponse.getFallback() == true) {
-            outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add();
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = parseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
             return outputData;
         }
 
@@ -140,29 +177,202 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        for(int i =0; i < parseResponse.getDataList().size();i++){
-
-            String line = parseResponse.getDataList().get(0).getTextMessage();
-
-            System.out.println("*****************" + line + "****************");
-
-            AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(parseResponse.getDataList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
 
 
-            if(analyseResponse.getFallback() == true) {
-                outputData.add(analyseResponse.getFallbackMessage());
-                return outputData;
-            }
-            else{
-                outputData.add(analyseResponse.getSentiment().toString());
-            }
+        if(analyseResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return outputData;
         }
+
+
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
 
 
-        return outputData;
+        /*********************VISUALISE**********************/
 
+        /*************LINE**********/
+        ArrayList<Graph> LineGraphArray = createTimelineGraph(analyseResponse.getPattenList());
+
+
+        /*************NETWORK**********/
+        ArrayList<Graph> NetworkGraphArray =  createNetworkGraph( analyseResponse.getPattenList());
+
+
+        /************MAP**********/
+        ArrayList<Graph> mapArray = createMapGraph();
+
+
+        /************TIMELINE**********/
+        ArrayList<Graph> TimelineArray = createTimelineGraph();
+
+        outputData.add(LineGraphArray);
+        outputData.add(NetworkGraphArray );
+        //outputData.add(mapArray);
+        outputData.add(TimelineArray);
+
+        return  outputData;
+
+    }
+
+    private ArrayList<Graph> createTimelineGraph(ArrayList<ArrayList> list){
+        LineGraph vpos = new LineGraph();
+        vpos.name = "Very Positive";
+        vpos.marker.add("square");
+
+        LineGraph pos = new LineGraph();
+        pos.name = "Positive";
+        pos.marker.add("square");
+
+        LineGraph net = new LineGraph();
+        net.name = "Neutral";
+        net.marker.add("square");
+
+
+        LineGraph neg = new LineGraph();
+        neg.name = "Negative";
+        neg.marker.add("square");
+
+
+        LineGraph vneg = new LineGraph();
+        vneg.name = "Very Negative";
+        vneg.marker.add("square");
+
+
+
+
+        ArrayList<ArrayList> rela = list;
+        for(int i = 0; i < rela.size(); i++) {
+            for (int j = 0;j< rela.get(i).size(); j++){
+                if (rela.get(i).get(j).toString().equals("Very_Negative")){
+                    int index = rela.get(i).size()-1;
+                    vneg.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString().equals("Negative")){
+                    int index = rela.get(i).size()-1;
+                    neg.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString().equals("Neutral")){
+                    int index = rela.get(i).size()-1;
+                    net.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString().equals("Positive")){
+                    int index = rela.get(i).size()-1;
+                    pos.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString().equals("Very_Positive")){
+                    int index = rela.get(i).size()-1;
+                    vpos.data.add(rela.get(i).get(index).toString());
+                }
+            }
+
+        }
+
+        ArrayList<Graph> lineGraphArray = new ArrayList<>();
+        lineGraphArray.add(vpos);
+        lineGraphArray.add(pos);
+        lineGraphArray.add(net);
+        lineGraphArray.add(neg);
+        lineGraphArray.add(vneg);
+
+        return  lineGraphArray;
+    }
+
+
+    private ArrayList<Graph> createNetworkGraph(ArrayList<ArrayList> list){
+        NetworkGraph temp;
+        ArrayList<ArrayList> pdata = list;
+        ArrayList<Graph> NetworkGraphArray = new ArrayList<>();
+        for (int i = 0; i < pdata.size(); i++) {
+            temp =  new NetworkGraph();
+            temp.From = pdata.get(i).get(pdata.get(i).size()-3).toString();
+            for (int j = 0; j < pdata.get(i).size()-2; j++) {
+                temp.to.add(pdata.get(i).get(j).toString());
+            }
+            NetworkGraphArray.add(temp);
+        }
+
+        return NetworkGraphArray;
+    }
+
+    private ArrayList<Graph> createMapGraph(){
+        ArrayList<Graph> mapArray = new ArrayList<>();
+        ArrayList<String> coordinates;
+        mapGraph mapG = new mapGraph();
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-ec");
+        coordinates.add("100");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-np");
+        coordinates.add("102");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-nl");
+        coordinates.add("120");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-wc");
+        coordinates.add("300");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-nc");
+        coordinates.add("106");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-nw");
+        coordinates.add("90");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-fs");
+        coordinates.add("130");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-gt");
+        coordinates.add("130");
+        mapG.map.add(coordinates);
+
+        coordinates = new ArrayList<>();
+        coordinates.add("za-mp");
+        coordinates.add("134");
+        mapG.map.add(coordinates);
+
+        mapArray.add(mapG);
+
+        return mapArray;
+    }
+
+
+
+    private ArrayList<Graph> createTimelineGraph(){
+        ArrayList<Graph> timelineArray = new ArrayList<>();
+        for (int i = 1; i < 13; i++) {
+            TimelineGraph timel = new TimelineGraph();
+            timel.x = "2021,"+ Integer.toString(i) + ",11";
+            timel.label = "MOCK";
+            timel.name = "MOCK";
+            timel.description = "MOCK";
+
+            timelineArray.add(timel);
+        }
+        return timelineArray;
     }
 
 

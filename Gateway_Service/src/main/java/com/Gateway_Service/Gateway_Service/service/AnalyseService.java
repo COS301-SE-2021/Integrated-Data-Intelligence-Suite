@@ -1,14 +1,9 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import com.Gateway_Service.Gateway_Service.dataclass.*;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,7 +17,7 @@ public class AnalyseService {
 
 
     //@HystrixCommand(fallbackMethod = "findSentimentFallback")
-    public AnalyseDataResponse findSentiment(String line) {
+    /*public AnalyseDataResponse findSentiment(String line) {
 
         String url = "http://Analyse-Service/Analyse/findSentiment";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("line",line);
@@ -38,6 +33,29 @@ public class AnalyseService {
         AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null);
         analyseDataResponse.setFallback(true);
         analyseDataResponse.setFallbackMessage("{Failed to get findSentiment data}");
+        return analyseDataResponse;
+    }*/
+
+
+    //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
+    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) {
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<AnalyseDataRequest> requestEntity =new HttpEntity<>(analyseRequest,requestHeaders);
+
+        ResponseEntity<AnalyseDataResponse > responseEntity = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",  HttpMethod.POST, requestEntity,AnalyseDataResponse.class);
+        AnalyseDataResponse analyseResponse= responseEntity.getBody();
+
+        return analyseResponse;
+    }
+
+
+    public AnalyseDataResponse analyzeDataFallback(String line){
+        AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null, null, null);
+        analyseDataResponse.setFallback(true);
+        analyseDataResponse.setFallbackMessage("{Failed to get analyzeData's data}");
         return analyseDataResponse;
     }
 

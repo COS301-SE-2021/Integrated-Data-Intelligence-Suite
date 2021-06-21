@@ -5,13 +5,33 @@ import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import java.util.ArrayList;
 
 public class AnalyseDataResponse {
-    TweetWithSentiment sentiment;
+    ArrayList<ArrayList> pattenList;
+    ArrayList<ArrayList> relationshipList;
+    ArrayList<ArrayList> predictionList;
 
-    public AnalyseDataResponse(TweetWithSentiment sentiment){
-        this.sentiment = sentiment;
+
+    public AnalyseDataResponse(){
+
     }
 
-    public TweetWithSentiment getSentiment(){
-        return this.sentiment;
+    public AnalyseDataResponse(ArrayList<ArrayList> pattenList,
+                               ArrayList<ArrayList> relationshipList,
+                               ArrayList<ArrayList> predictionList){
+        this.pattenList = pattenList;
+        this.relationshipList = relationshipList;
+        this.predictionList = predictionList;
+    }
+
+
+    public ArrayList<ArrayList> getPattenList(){
+        return pattenList;
+    }
+
+    public ArrayList<ArrayList> getRelationshipList(){
+        return relationshipList;
+    }
+
+    public ArrayList<ArrayList> getPredictionList(){
+        return predictionList;
     }
 }
