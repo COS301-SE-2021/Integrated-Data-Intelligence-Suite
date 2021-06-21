@@ -74,8 +74,7 @@ public class GatewayServiceController {
 
 
     public static class mapGraph extends Graph{
-        ArrayList<ArrayList> map = new ArrayList<>();
-
+        public ArrayList<ArrayList> map = new ArrayList<>();
     }
 
     public static class ErrorGraph extends Graph{
@@ -129,7 +128,7 @@ public class GatewayServiceController {
         //String url = "http://Import-Service/Import/importData";
         //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
 
-        ImportDataRequest importRequest = new ImportDataRequest(key,10);
+        ImportDataRequest importRequest = new ImportDataRequest(key,100);
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
         if(importResponse.getFallback() == true) {
@@ -201,7 +200,7 @@ public class GatewayServiceController {
         /*********************VISUALISE**********************/
 
         /*************LINE**********/
-        ArrayList<Graph> LineGraphArray = createTimelineGraph(analyseResponse.getPattenList());
+        ArrayList<Graph> LineGraphArray = createTimelineGraph(analyseResponse.getRelationshipList());
 
 
         /*************NETWORK**********/
@@ -217,7 +216,7 @@ public class GatewayServiceController {
 
         outputData.add(LineGraphArray);
         outputData.add(NetworkGraphArray );
-        //outputData.add(mapArray);
+        outputData.add(mapArray);
         outputData.add(TimelineArray);
 
         return  outputData;
@@ -257,6 +256,7 @@ public class GatewayServiceController {
                     int index = rela.get(i).size()-1;
                     vneg.data.add(rela.get(i).get(index).toString());
                 }
+
                 if (rela.get(i).get(j).toString().equals("Negative")){
                     int index = rela.get(i).size()-1;
                     neg.data.add(rela.get(i).get(index).toString());

@@ -55,7 +55,7 @@ public class AnalyseServiceImpl {
             String location = dataList.get(i).getLocation();
             String date = dataList.get(i).getDate();
             System.out.println("HERE IS THE DATE1 _______________________________ : " + date);
-            date = date.replaceAll("\\s+","|");
+            date = date.replaceAll("\\s+","/");
 
             System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
             String likes = String.valueOf(dataList.get(i).getLikes());
@@ -129,10 +129,10 @@ public class AnalyseServiceImpl {
         LogManager.getRootLogger().setLevel(Level.OFF);
 
 
-        model.freqItemsets().show();
+        //model.freqItemsets().show();
 
         // Display generated association rules.
-        model.associationRules().show();
+        //model.associationRules().show();
 
         List<Row> Adata = model.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
         //Double  oi = (Double) Adata.get(0).get(2);
@@ -155,7 +155,7 @@ public class AnalyseServiceImpl {
 
         // transform examines the input items against all the association rules and summarize the
         // consequents as prediction
-        model.transform(itemsDF).show();
+        //model.transform(itemsDF).show();
         // $example off$
 
         spark.stop();
@@ -286,7 +286,7 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> Results = model.transform(itemsDF);
 
-        Results.show();
+        //Results.show();
 
         List<Row> Pdata = Results.collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
