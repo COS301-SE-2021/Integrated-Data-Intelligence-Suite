@@ -4,13 +4,13 @@ public class TweetWithSentiment {
     private String line;
     private String tweet_sentiment;
 
+    public TweetWithSentiment() {
+    }
+
     public TweetWithSentiment(String line, String tweet_sentiment) {
         super();
         this.line = line;
         this.tweet_sentiment = tweet_sentiment;
-    }
-
-    public TweetWithSentiment() {
     }
 
     public String getLine() {

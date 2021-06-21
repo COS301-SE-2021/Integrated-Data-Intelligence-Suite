@@ -38,13 +38,12 @@ public class AnalyseServiceImpl {
                 }
             }
         }
-        if (mainSentiment == 2 || mainSentiment > 4 || mainSentiment < 0) {
-            return null;
-        }
+
         TweetWithSentiment tweetWithSentiment = new TweetWithSentiment(line, toCss(mainSentiment));
-        System.out.println(tweetWithSentiment.toString());
+        //System.out.println(tweetWithSentiment.toString());
         return tweetWithSentiment;
     }
+
 
     private String toCss(int sentiment) {
         switch (sentiment) {
