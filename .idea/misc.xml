@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/Parse_Service/pom.xml" />
         <option value="$PROJECT_DIR$/Registry_Service/pom.xml" />
         <option value="$PROJECT_DIR$/Analyse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/pom.xml" />
       </list>
     </option>
   </component>

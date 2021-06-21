@@ -1,4 +1,4 @@
-package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass;
+package com.Parse_Service.Parse_Service.dataclass;
 
 import javax.persistence.*;
 

@@ -1,16 +1,11 @@
-package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri;
+package com.Parse_Service.Parse_Service.rri;
 
+import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import org.json.JSONArray;
 import org.json.JSONString;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLikesRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLocationRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetTextRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetDateResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetLikesResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetLocationResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTextResponse;
+import com.Parse_Service.Parse_Service.request.*;
+import com.Parse_Service.Parse_Service.response.*;
+import com.Parse_Service.Parse_Service.dataclass.*;
 import org.json.JSONObject;
 
 public class TwitterExtractor implements Extractor {
@@ -23,7 +18,6 @@ public class TwitterExtractor implements Extractor {
      * @throws InvalidRequestException This is thrown if the request or if any of
      *                                 the attributes of the request is null.
      */
-    @Override
     public GetTextResponse getText(GetTextRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("GetTextRequest Object is null");
@@ -48,7 +42,6 @@ public class TwitterExtractor implements Extractor {
      * @throws InvalidRequestException This is thrown if the request or if any of
      *                                 the attributes of the request is null.
      */
-    @Override
     public GetDateResponse getDate(GetDateRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("GetDateRequest Object is null");
@@ -75,12 +68,11 @@ public class TwitterExtractor implements Extractor {
      * @throws InvalidRequestException This is thrown if the request or if any of
      *                                 the attributes of the request is null.
      */
-    @Override
     public GetLocationResponse getLocation(GetLocationRequest request) throws InvalidRequestException {
         if (request == null || request.getJsonString() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
-        String coordinates = "not available";
+        String coordinates = "null";
 
         String jsonString = request.getJsonString();
         //System.out.println(jsonString);

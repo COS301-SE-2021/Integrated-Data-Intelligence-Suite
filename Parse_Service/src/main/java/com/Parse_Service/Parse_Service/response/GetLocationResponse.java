@@ -1,4 +1,4 @@
-package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response;
+package com.Parse_Service.Parse_Service.response;
 
 public class GetLocationResponse {
     private String location;

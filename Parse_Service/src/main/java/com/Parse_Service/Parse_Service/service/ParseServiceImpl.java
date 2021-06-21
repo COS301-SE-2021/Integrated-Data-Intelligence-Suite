@@ -1,28 +1,26 @@
-package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser;
+package com.Parse_Service.Parse_Service.service;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.dataclass.ParsedData;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.mocks.Mock;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.repository.ParsedDataRepository;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.*;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.*;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.importer.DataSource;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri.TwitterExtractor;
+import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
+import com.Parse_Service.Parse_Service.repository.ParsedDataRepository;
+import com.Parse_Service.Parse_Service.request.*;
+import com.Parse_Service.Parse_Service.response.*;
+import com.Parse_Service.Parse_Service.dataclass.*;
+import com.Parse_Service.Parse_Service.rri.TwitterExtractor;
 
 import java.util.*;
 
 @Service
-public class ParsingServiceImpl implements ParsingService{
+public class ParseServiceImpl {
 
     @Autowired
     private ParsedDataRepository parsedDataRepository;
 
-    public ParsingServiceImpl() {
+    public ParseServiceImpl() {
 
     }
 
@@ -38,7 +36,6 @@ public class ParsingServiceImpl implements ParsingService{
      * @throws JSONException This is thrown if the JSONObject or JSONArray does not exist
      *         for a specific key.
      */
-    @Override
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws InvalidRequestException, JSONException {
         if (request == null) {
             throw new InvalidRequestException("Request object is null");

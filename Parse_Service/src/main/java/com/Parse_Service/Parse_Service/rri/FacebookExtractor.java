@@ -1,14 +1,8 @@
-package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.rri;
+package com.Parse_Service.Parse_Service.rri;
 
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.exceptions.InvalidRequestException;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetDateRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLikesRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetLocationRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request.GetTextRequest;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetDateResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetLikesResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetLocationResponse;
-import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTextResponse;
+import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
+import com.Parse_Service.Parse_Service.request.*;
+import com.Parse_Service.Parse_Service.response.*;
 
 public class FacebookExtractor implements Extractor{
     @Override
