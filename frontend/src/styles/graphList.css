@@ -3,3 +3,10 @@
 	border-color: blueviolet;
 	border-style: solid;
 }
+
+
+#graph_list_div{
+	border: 1em;
+	border-color:orange;
+	border-style: solid;
+}

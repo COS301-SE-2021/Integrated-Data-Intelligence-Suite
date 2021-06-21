@@ -478,7 +478,7 @@ class GraphList extends React.Component {
 
 	render(){
 		return (
-			<div>
+			<div id = "graph_list_div">
 
 				<div id='search_bar_div'>
 					<form
