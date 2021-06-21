@@ -21,7 +21,7 @@ let linegraph_options = {
 	},
 
 	title: {
-	  text: 'Timeline Showing change in Public sentiment over 12 Month Period'
+	  text: 'Timeline Showing Trend in Public sentiment over 12 Month Period'
 	},
 
 	xAxis: {
@@ -172,11 +172,11 @@ let timeline_graph_options = {
     },
 
     title: {
-        text: 'Timeline of Space Exploration'
+        text: 'Timeline of patterns found on each day'
     },
 
     subtitle: {
-        text: ''
+        text: 'Capped over a 7 Day period'
     },
 
     colors: [
@@ -413,7 +413,7 @@ class GraphList extends React.Component {
 			},
 		
 			title: {
-				text: 'Source Map showing Sentiment over each province'
+				text: 'Map showing General Sentiment in each province'
 			},
 		
 			subtitle: {
