@@ -482,7 +482,8 @@ class GraphList extends React.Component {
 
 				<div class='search_bar' id='search_bar_div'>
 					<form
-						class ='search-form'
+						className ='search-form'
+						id = 'input_keyword_form'
 						name="form-keyword"
 						onSubmit={e => {
 						e.preventDefault();
