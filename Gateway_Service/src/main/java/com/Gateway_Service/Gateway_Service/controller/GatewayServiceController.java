@@ -53,6 +53,11 @@ public class GatewayServiceController {
         Graph(){}
     }
 
+    public static class LineGraph extends Graph{
+        public String name;
+        public ArrayList<String> marker = new ArrayList<>();
+        public ArrayList<String> data  = new ArrayList<>();
+    }
 
 
     public static class ErrorGraph extends Graph{
@@ -177,7 +182,68 @@ public class GatewayServiceController {
 
         /*********************VISUALISE**********************/
 
-        return outputData;
+        /*************LINE**********/
+        LineGraph vpos = new LineGraph();
+        vpos.name = "Very Positive";
+        vpos.marker.add("square");
+
+        LineGraph pos = new LineGraph();
+        pos.name = "Positive";
+        pos.marker.add("square");
+
+        LineGraph net = new LineGraph();
+        net.name = "Neutral";
+        net.marker.add("square");
+
+
+        LineGraph neg = new LineGraph();
+        neg.name = "Negative";
+        neg.marker.add("square");
+
+
+        LineGraph vneg = new LineGraph();
+        vneg.name = "Very Negative";
+        vneg.marker.add("square");
+
+
+
+
+        ArrayList<ArrayList> rela = analyseResponse.getRelationshipList();
+        for(int i = 0; i < rela.size(); i++) {
+            for (int j = 0;j< rela.get(i).size(); j++){
+                if (rela.get(i).get(j).toString() == "Very_Negative"){
+                    int index = rela.get(i).size()-1;
+                    vneg.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString() == "Negative"){
+                    int index = rela.get(i).size()-1;
+                    neg.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString() == "Neutral"){
+                    int index = rela.get(i).size()-1;
+                    net.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString() == "Positive"){
+                    int index = rela.get(i).size()-1;
+                    pos.data.add(rela.get(i).get(index).toString());
+                }
+                if (rela.get(i).get(j).toString() == "Very_Positive"){
+                    int index = rela.get(i).size()-1;
+                    vpos.data.add(rela.get(i).get(index).toString());
+                }
+            }
+        }
+
+        ArrayList<Graph> LineGraphArray = new ArrayList<>();
+        LineGraphArray.add(vpos);
+        LineGraphArray.add(pos);
+        LineGraphArray.add(net);
+        LineGraphArray.add(neg);
+        LineGraphArray.add(vneg);
+
+
+
+        return  outputData;
 
     }
 
