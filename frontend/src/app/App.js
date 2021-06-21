@@ -174,26 +174,6 @@ class App extends Component {
         }
     }
 
-    // w3_open() {
-    //     let mySidebar = document.getElementById("mySidebar");
-    //     let overlayBg = document.getElementById("myOverlay");
-    //     if (mySidebar.style.display === 'block') {
-    //         mySidebar.style.display = 'none';
-    //         overlayBg.style.display = "none";
-    //     } else {
-    //         mySidebar.style.display = 'block';
-    //         overlayBg.style.display = "block";
-    //     }
-    // }
-
-    // Close the sidebar with the close button
-    // w3_close() {
-    //     let mySidebar = document.getElementById("mySidebar");
-    //     let overlayBg = document.getElementById("myOverlay");
-    //     mySidebar.style.display = "none";
-    //     overlayBg.style.display = "none";
-    // }
-
 
 
 }
