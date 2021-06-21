@@ -201,6 +201,30 @@ public class GatewayServiceController {
         /*********************VISUALISE**********************/
 
         /*************LINE**********/
+        ArrayList<Graph> LineGraphArray = createTimelineGraph(analyseResponse.getPattenList());
+
+
+        /*************NETWORK**********/
+        ArrayList<Graph> NetworkGraphArray =  createNetworkGraph( analyseResponse.getPattenList());
+
+
+        /************MAP**********/
+        ArrayList<Graph> mapArray = createMapGraph();
+
+
+        /************TIMELINE**********/
+        ArrayList<Graph> TimelineArray = createTimelineGraph();
+
+        outputData.add(LineGraphArray);
+        outputData.add(NetworkGraphArray );
+        //outputData.add(mapArray);
+        //outputData.add(TimelineArray);
+
+        return  outputData;
+
+    }
+
+    private ArrayList<Graph> createTimelineGraph(ArrayList<ArrayList> list){
         LineGraph vpos = new LineGraph();
         vpos.name = "Very Positive";
         vpos.marker.add("square");
@@ -226,7 +250,7 @@ public class GatewayServiceController {
 
 
 
-        ArrayList<ArrayList> rela = analyseResponse.getRelationshipList();
+        ArrayList<ArrayList> rela = list;
         for(int i = 0; i < rela.size(); i++) {
             for (int j = 0;j< rela.get(i).size(); j++){
                 if (rela.get(i).get(j).toString() == "Very_Negative"){
@@ -252,17 +276,20 @@ public class GatewayServiceController {
             }
         }
 
-        ArrayList<Graph> LineGraphArray = new ArrayList<>();
-        LineGraphArray.add(vpos);
-        LineGraphArray.add(pos);
-        LineGraphArray.add(net);
-        LineGraphArray.add(neg);
-        LineGraphArray.add(vneg);
+        ArrayList<Graph> lineGraphArray = new ArrayList<>();
+        lineGraphArray.add(vpos);
+        lineGraphArray.add(pos);
+        lineGraphArray.add(net);
+        lineGraphArray.add(neg);
+        lineGraphArray.add(vneg);
 
-        /*************NETWORK**********/
+        return  lineGraphArray;
+    }
 
+
+    private ArrayList<Graph> createNetworkGraph(ArrayList<ArrayList> list){
         NetworkGraph temp;
-        ArrayList<ArrayList> pdata = analyseResponse.getPattenList();
+        ArrayList<ArrayList> pdata = list;
         ArrayList<Graph> NetworkGraphArray = new ArrayList<>();
         for (int i = 0; i < pdata.size(); i++) {
             temp =  new NetworkGraph();
@@ -273,9 +300,10 @@ public class GatewayServiceController {
             NetworkGraphArray.add(temp);
         }
 
+        return NetworkGraphArray;
+    }
 
-
-        /************MAP**********/
+    private ArrayList<Graph> createMapGraph(){
         ArrayList<Graph> mapArray = new ArrayList<>();
         ArrayList<String> coordinates;
         mapGraph mapG = new mapGraph();
@@ -327,10 +355,13 @@ public class GatewayServiceController {
 
         mapArray.add(mapG);
 
+        return mapArray;
+    }
 
 
-        /************TIMELINE**********/
-        ArrayList<Graph> TimelineArray = new ArrayList<>();
+
+    private ArrayList<Graph> createTimelineGraph(){
+        ArrayList<Graph> timelineArray = new ArrayList<>();
         for (int i = 1; i < 13; i++) {
             TimelineGraph timel = new TimelineGraph();
             timel.x = "2021,"+ Integer.toString(i) + ",11";
@@ -338,16 +369,9 @@ public class GatewayServiceController {
             timel.name = "MOCK";
             timel.description = "MOCK";
 
-            TimelineArray.add(timel);
+            timelineArray.add(timel);
         }
-
-        outputData.add(LineGraphArray);
-        outputData.add(NetworkGraphArray );
-        //outputData.add(mapArray);
-        //outputData.add(TimelineArray);
-
-        return  outputData;
-
+        return timelineArray;
     }
 
 
