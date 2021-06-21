@@ -11,12 +11,9 @@ import NetworkGraph from './NetworkGraph';
 import TimelineGraph from './TimelineGraph';
 import MapGraph from './MapGraph';
 import mapDataSouthAfrica from './mapDataSouthAfrica';
+import { data } from 'browserslist';
 
 	
-
-
-
-
 
 let linegraph_options = {
 	chart: {
@@ -38,7 +35,7 @@ let linegraph_options = {
 		},
 		labels: {
 			formatter: function(){
-				return this.value + 'xxxx'; 
+				return this.value + ''; 
 			}
 		}
 	},
@@ -94,9 +91,11 @@ let network_graph_options = {
         link: {
             width: 5
         },
+
         dataLabels: {
             enabled: true
         },
+
         data: [{
             from: 'Europe',
             to: 'UK'
@@ -132,13 +131,15 @@ let network_graph_options = {
             from: 'Italy',
             to: 'Piza'
         }],
-        nodes: [{
-            id: 'Krakow',
-            color: 'yellow'
-        }, {
-            id: 'Italy',
-            color: 'pink'
-        }]
+
+
+        // nodes: [{
+        //     id: 'Krakow',
+        //     color: 'yellow'
+        // }, {
+        //     id: 'Italy',
+        //     color: 'pink'
+        // }]
     }]
 
 
@@ -148,6 +149,7 @@ let timeline_graph_options = {
 	chart: {
         type: 'timeline'
     },
+
     accessibility: {
         screenReaderSection: {
             beforeChartFormat: '<h5>{chartTitle}</h5>' +
@@ -160,6 +162,7 @@ let timeline_graph_options = {
             valueDescriptionFormat: '{index}. {point.label}. {point.description}.'
         }
     },
+
     xAxis: {
         visible: false
     },
@@ -173,7 +176,7 @@ let timeline_graph_options = {
     },
 
     subtitle: {
-        text: 'Info source: <a href="https://en.wikipedia.org/wiki/Timeline_of_space_exploration">www.wikipedia.org</a>'
+        text: ''
     },
 
     colors: [
@@ -184,33 +187,84 @@ let timeline_graph_options = {
         '#3B4A68',
         '#363C46'
     ],
-    series: [{
-        data: [{
-            name: 'First dogs',
-            label: '1999: First dogs in space',
-            description: '22 July 1951 First dogs in space (Dezik and Tsygan) '
-        }, {
-            name: 'Sputnik 1',
-            label: '1957: First artificial satellite',
-            description: '4 October 1957 First artificial satellite. First signals from space.'
-        }, {
-            name: 'First human spaceflight',
-            label: '1961: First human spaceflight (Yuri Gagarin)',
-            description: 'First human spaceflight (Yuri Gagarin), and the first human-crewed orbital flight'
-        }, {
-            name: 'First human on the Moon',
-            label: '1969: First human on the Moon',
-            description: 'First human on the Moon, and first space launch from a celestial body other than the Earth. First sample return from the Moon'
-        }, {
-            name: 'First space station',
-            label: '1971: First space station',
-            description: 'Salyut 1 was the first space station of any kind, launched into low Earth orbit by the Soviet Union on April 19, 1971.'
-        }, {
-            name: 'Apollo–Soyuz Test Project',
-            label: '1975: First multinational manned mission',
-            description: 'The mission included both joint and separate scientific experiments, and provided useful engineering experience for future joint US–Russian space flights, such as the Shuttle–Mir Program and the International Space Station.'
-        }]
-    }]
+
+
+	series: [{
+		dataLabels: {
+		  allowOverlap: false,
+		  format: '<span style="color:{point.color}">● </span><span style="font-weight: bold;" > ' +
+			'{point.x:%d %b %Y}</span><br/>{point.label}'
+		},
+		marker: {
+		  symbol: 'circle'
+		},
+		data: [{
+		  x: Date.UTC(2021,11 , 22),
+		  name: 'Name 1',
+		  label: 'Label 1',
+		  description: "description 1"
+		}, {
+		  x: Date.UTC(2021, 10, 4),
+		  name: 'Name 2',
+		  label: 'Label 2',
+		  description: "Description 2"
+		}, {
+		  x: Date.UTC(2021, 1, 4),
+		  name: 'Name 3',
+		  label: 'Label 3',
+		  description: "orbit."
+		}, {
+		  x: Date.UTC(2021, 2, 12),
+		  name: 'Name 4',
+		  label: 'Label 4',
+		  description: "r sp61."
+		}, {
+		  x: Date.UTC(2021, 1, 3),
+		  name: 'Name 5',
+		  label: 'First soft landing on the Moon',
+		  description: "Yuri Gahie Earth on 12 April 1961."
+		}, {
+		  x: Date.UTC(2021, 7, 20),
+		  name: 'First human on the Moon',
+		  label: 'First human on the Moon',
+		  description: "Apollo modully 20, 1969, at 20:17 UTC."
+		}, {
+		  x: Date.UTC(2021, 9, 19),
+		  name: 'First space station',
+		  label: 'First space station',
+		  description: "stations."
+		}, {
+		  x: Date.UTC(2021, 11, 2),
+		  name: 'First soft Mars landing',
+		  label: 'First soft Mars landing',
+		  description: "Marn 1960 s an attached lander."
+		}, {
+		  x: Date.UTC(2021, 3, 17),
+		  name: 'Closest flyby of the Sun',
+		  label: 'Closest flyby of the Sun',
+		  description: "Helios-A  into heliWest Air Force Station, Florida."
+		}, {
+		  x: Date.UTC(2021, 11, 4),
+		  name: 'First orbital exploration of Venus',
+		  label: 'First orbital exploration of Venus',
+		  description: "Thharat data until October 1992."
+		}, {
+		  x: Date.UTC(2021, 1, 19),
+		  name: 'First inhabited space station',
+		  label: 'First inhabited space station',
+		  description: "was r bad a greaspacecraft."
+		}, {
+		  x: Date.UTC(2021, 7, 8),
+		  name: 'First astrometric satellite',
+		  label: 'First astrometric satellite',
+		  description: "Hiptilthe sky."
+		}, {
+		  x: Date.UTC(2020, 10, 20),
+		  name: 'First multinational space station',
+		  label: 'First multinational space station',
+		  description: " 0.[7] It has been inhabited continuously since that date."
+		}]
+	  }]
 
 };
 
@@ -234,10 +288,13 @@ function getData(userKeyword){
 				console.log("connection opened");
 			}
 
+			//Data received from Server
 			eventSource.onmessage = (event) => {
 				console.log("result", event.data);
+				return data;
 			}
 
+			//Data
 			eventSource.onerror = (event) => {
 				console.log(event.target.readyState)
 				if (event.target.readyState === EventSource.CLOSED) {
@@ -285,6 +342,27 @@ class GraphList extends React.Component {
 	updateLineGraph = () => {
 
 		//Process Data Received from Backend
+		//Replace with Data 
+		linegraph_options.series =  [{
+											name: 'Positive',
+											marker: {
+												symbol: 'square'
+											},
+											data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {y: 0,}, 23.3, 18.3, 13.9, 9.6]
+									
+										}, {
+											name: 'Negative',
+											marker: {
+												symbol: 'circle'
+											},
+											data: [{y: 0,}, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+										},{
+											name: 'Neutral',
+											marker: {
+												symbol: 'circle'
+											},
+											data: [{y: 27,}, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+										}];
 
 		this.lineGraphElement.current.changeChartOptions(linegraph_options);
 	}
@@ -292,12 +370,30 @@ class GraphList extends React.Component {
 	updateNetworkGraph = () =>{
 		//process Data Received from Backend
 
+		//Data from backend server
+		network_graph_options.series[0].data = [{
+            from: 'consequent',
+            to: 'antecedent'
+        }, {
+            from: 'consequent',
+            to: 'something else',
+            color: 'red',
+           
+            /* dashStyle: 'dot' */
+        }];
+
 		this.networkGraphElement.current.changeChartOptions(network_graph_options);
 	}
 
-	updateTimelineGraph = () =>{
-		//process Data Received from Backend
+	updateTimelineGraph = (/**Data received from backend */) =>{
+		timeline_graph_options.series[0].data = [{
+			x: Date.UTC(2021,11 , 22),
+			name: 'Name 1',
+			label: 'Label 1',
+			description: "description 1"
+		  }];
 
+		//process Data Received from Backend
 		this.timelineGraphElement.current.changeChartOptions(timeline_graph_options);
 	}
 
