@@ -45,5 +45,24 @@ public class AnalyseServiceControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
- 
+    @Test
+    @DisplayName("When analyzeRequest is Null")
+    public void analyzeDataNullRequest() throws Exception {
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        AnalyseDataRequest analyseRequest = null;
+        HttpEntity<AnalyseDataRequest> instance =new HttpEntity<>(analyseRequest,requestHeaders);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(instance);;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
+                .contentType(MediaType.APPLICATION_JSON).content(json)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof InvalidRequestException));
+                //.andExpect(result -> Assertions.assertEquals("resource not found", result.getResolvedException().getMessage()));
+    }
 }
