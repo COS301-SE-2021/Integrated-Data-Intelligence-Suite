@@ -12,6 +12,9 @@ import TimelineGraph from './TimelineGraph';
 import MapGraph from './MapGraph';
 import mapDataSouthAfrica from './mapDataSouthAfrica';
 
+	
+
+
 
 
 
@@ -212,6 +215,45 @@ let timeline_graph_options = {
 };
 
 
+function getData(userKeyword){
+			console.log('inside here');
+
+			//Send Request to server
+			let requestUrl = 'http://localhost:9000/search/' + userKeyword;  
+			let eventSource = undefined;		
+			
+			try {
+				
+				eventSource = new EventSource(requestUrl);
+			} catch (error) {
+				console.log("Error found");
+			}
+
+
+			eventSource.onopen = (event) => {
+				console.log("connection opened");
+			}
+
+			eventSource.onmessage = (event) => {
+				console.log("result", event.data);
+			}
+
+			eventSource.onerror = (event) => {
+				console.log(event.target.readyState)
+				if (event.target.readyState === EventSource.CLOSED) {
+					console.log('eventsource closed (' + event.target.readyState + ')')
+				}
+
+				//close the connection
+				eventSource.close();
+			}
+	
+			return () => {
+				eventSource.close();
+				console.log("eventsource closed")
+			}
+}
+
 class GraphList extends React.Component {
 	constructor(props){
 		super(props);
@@ -222,14 +264,13 @@ class GraphList extends React.Component {
 		this.mapGraphElement = React.createRef();
 	}
 
-	updateAllGraphs = (/*User entered keyword*/) =>{
-		
-		//Sending SSE to backend server
+	updateAllGraphs = (/*keyword*/) =>{
+		let userKeyword =  document.getElementById('header-search').value; 
+		// console.log("==============================");
+		// console.log("Keyword:" + document.getElementById('header-search').value);
+		// console.log("==============================");
 
-		// this.eventSource = new EventSource("http://localhost:5000/search")
-
-
-
+		var data_from_backend = getData(userKeyword);
 
 
 		this.updateLineGraph(/*Data Received from Backend*/);
@@ -325,6 +366,10 @@ class GraphList extends React.Component {
 		map_graph_options.series[0].data = [
 			["za-ec",2],["za-np",2],["za-nl",2],["za-wc",2],["za-nc",2],["za-nw",2],["za-fs",2],["za-gt",2],["za-mp",2]]
 		;
+		
+		//map_graph_options.series[0].data = data_from_backend.mapData;
+
+
 
 		//Json Structure for Backend
 		//Json String Version:[["za-ec",2],["za-np",2],["za-nl",2],["za-wc",2],["za-nc",2],["za-nw",2],["za-fs",2],["za-gt",2],["za-mp",2]]
@@ -341,6 +386,7 @@ class GraphList extends React.Component {
 
 				<div id='search_bar_div'>
 					<form
+						name="form-keyword"
 						onSubmit={e => {
 						e.preventDefault();
 						}}
@@ -353,7 +399,7 @@ class GraphList extends React.Component {
 							type="text"
 							id="header-search"
 							placeholder="Enter Search keyword"
-							name="" 
+							name="input-keyword" 
 						/>
 						<button 
 						id="search_btn"
