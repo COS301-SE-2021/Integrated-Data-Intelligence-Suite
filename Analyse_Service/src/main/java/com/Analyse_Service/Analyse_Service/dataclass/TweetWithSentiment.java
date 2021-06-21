@@ -5,6 +5,7 @@ public class TweetWithSentiment {
     private String tweet_sentiment;
 
     public TweetWithSentiment() {
+
     }
 
     public TweetWithSentiment(String line, String tweet_sentiment) {
@@ -12,6 +13,7 @@ public class TweetWithSentiment {
         this.line = line;
         this.tweet_sentiment = tweet_sentiment;
     }
+
 
     public String getLine() {
         return line;
