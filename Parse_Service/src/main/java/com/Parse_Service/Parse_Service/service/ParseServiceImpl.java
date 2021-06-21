@@ -3,10 +3,8 @@ package com.Parse_Service.Parse_Service.service;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
-import com.Parse_Service.Parse_Service.repository.ParsedDataRepository;
 import com.Parse_Service.Parse_Service.request.*;
 import com.Parse_Service.Parse_Service.response.*;
 import com.Parse_Service.Parse_Service.dataclass.*;
@@ -16,9 +14,6 @@ import java.util.*;
 
 @Service
 public class ParseServiceImpl {
-
-    @Autowired
-    private ParsedDataRepository parsedDataRepository;
 
     public ParseServiceImpl() {
 
@@ -85,7 +80,6 @@ public class ParseServiceImpl {
             }
         }
 
-        parsedDataRepository.saveAll(parsedList);
         return new ParseImportedDataResponse(parsedList);
     }
 }

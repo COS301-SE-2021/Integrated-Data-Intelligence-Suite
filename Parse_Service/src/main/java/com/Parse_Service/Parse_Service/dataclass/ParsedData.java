@@ -1,21 +1,6 @@
 package com.Parse_Service.Parse_Service.dataclass;
 
-import javax.persistence.*;
-
-@Entity
-@Table
 public class ParsedData {
-    @Id
-    @SequenceGenerator(
-            name = "parsedData_sequence",
-            sequenceName = "parsedData_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "parsedData_sequence"
-    )
-    private Long id;
     private String textMessage;
     private String date;
     private String location;
@@ -41,14 +26,6 @@ public class ParsedData {
         this.date = date;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Integer getLikes() {
         return likes;
     }
@@ -57,12 +34,11 @@ public class ParsedData {
         this.likes = likes;
     }
 
-
-    public Long getId() {
-        return id;
+    public String getLocation() {
+        return location;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
