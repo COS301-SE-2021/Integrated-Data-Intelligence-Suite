@@ -64,6 +64,13 @@ public class GatewayServiceController {
         public ArrayList<String> to = new ArrayList<>();
     }
 
+    public static class TimelineGraph extends Graph{
+        public String x;
+        public String name;
+        public String label;
+        public String description;
+
+    }
 
 
     public static class mapGraph extends Graph{
@@ -322,7 +329,22 @@ public class GatewayServiceController {
 
 
 
+        /************TIMELINE**********/
+        ArrayList<Graph> TimelineArray = new ArrayList<>();
+        for (int i = 1; i < 13; i++) {
+            TimelineGraph timel = new TimelineGraph();
+            timel.x = "2021,"+ Integer.toString(i) + ",11";
+            timel.label = "MOCK";
+            timel.name = "MOCK";
+            timel.description = "MOCK";
 
+            TimelineArray.add(timel);
+        }
+
+        outputData.add(LineGraphArray);
+        outputData.add(NetworkGraphArray );
+        //outputData.add(mapArray);
+        //outputData.add(TimelineArray);
 
         return  outputData;
 
