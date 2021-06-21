@@ -26,7 +26,7 @@ let mapgraph_sa_options = {
     },
 
     title: {
-        text: 'Highmaps basic demo'
+        text: 'Source Map showing Sentiment over each province'
     },
 
     subtitle: {
@@ -47,7 +47,7 @@ let mapgraph_sa_options = {
     series: [{
 		mapData: mapDataSouthAfrica,
         data: south_africa_data,
-        name: 'Random data',
+        name: 'Sentiment',
         states: {
             hover: {
                 color: '#BADA55'
@@ -61,16 +61,66 @@ let mapgraph_sa_options = {
 };
 
 class MapGraph extends React.Component{
+    //Define the initial State
+    state = {
+        chartOptions:{
+            chart: {
+                map: 'countries/za/za-all'
+            },
+        
+            title: {
+                text: 'Source Map showing Sentiment over each province'
+            },
+        
+            subtitle: {
+                text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/za/za-all.js">South Africa</a>'
+            },
+        
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+        
+            colorAxis: {
+                min: 0
+            },
+        
+            series: [{
+                mapData: mapDataSouthAfrica,
+                data: south_africa_data,
+                name: 'Sentiment',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }]
+        }
+    };
+
+    //
+    changeChartOptions = (newChartOption) => {
+        this.setState({
+            chartOptions: newChartOption
+        });
+    }
+
+
+
 	render(){
 		return (
 			<div id='map_div'>
-				<h1>Demos</h1>
-		
-				<h2>Highmaps</h2>
+				<h2>Map</h2>
 				<HighchartsReact
-				options={mapgraph_sa_options}
-				constructorType={'mapChart'}
-				highcharts={Highcharts}
+                    options={this.state.chartOptions}
+                    constructorType={'mapChart'}
+                    highcharts={Highcharts}
 				/>
 			</div>
 		);

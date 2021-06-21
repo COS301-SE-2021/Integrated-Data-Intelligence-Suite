@@ -3,16 +3,9 @@ import { withRouter } from 'react-router-dom';
 import AppRouter from './AppRouter';
 
 import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+
 import Footer from './components/Footer';
 import './App.scss';
-
-import LineGraph from './components/LineGraph';
-import NetworkGraph from './components/NetworkGraph';
-import MapGraph from './components/MapGraph';
-import TimelineGraph from './components/TimelineGraph';
-
-import SearchBar from './components/SearchBar';
 
 import GraphList from './components/GraphList';
 
