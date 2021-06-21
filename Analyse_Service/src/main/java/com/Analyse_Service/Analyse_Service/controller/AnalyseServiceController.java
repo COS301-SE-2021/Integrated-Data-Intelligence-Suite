@@ -20,6 +20,10 @@ public class AnalyseServiceController {
     @GetMapping("/findSentiment")
     public AnalyseDataResponse findSentiment(@RequestParam("line") String line) throws Exception {
         TweetWithSentiment sentiment = service.findSentiment(line);
+
+        if(sentiment != null)
+            System.out.println("CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+
         return new AnalyseDataResponse(sentiment);
     }
 
