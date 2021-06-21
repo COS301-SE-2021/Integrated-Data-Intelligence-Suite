@@ -61,7 +61,7 @@ public class GatewayServiceController {
 
     public static class NetworkGraph extends Graph{
         public String From;
-        public ArrayList<String> to = new ArrayList<>();
+        public String to;
     }
 
     public static class TimelineGraph extends Graph{
@@ -74,7 +74,8 @@ public class GatewayServiceController {
 
 
     public static class mapGraph extends Graph{
-        public ArrayList<ArrayList> map = new ArrayList<>();
+        ArrayList<ArrayList> map = new ArrayList<>();
+
     }
 
     public static class ErrorGraph extends Graph{
@@ -128,7 +129,7 @@ public class GatewayServiceController {
         //String url = "http://Import-Service/Import/importData";
         //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
 
-        ImportDataRequest importRequest = new ImportDataRequest(key,100);
+        ImportDataRequest importRequest = new ImportDataRequest(key,50);
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
         if(importResponse.getFallback() == true) {
@@ -200,7 +201,7 @@ public class GatewayServiceController {
         /*********************VISUALISE**********************/
 
         /*************LINE**********/
-        ArrayList<Graph> LineGraphArray = createTimelineGraph(analyseResponse.getRelationshipList());
+        ArrayList<Graph> LineGraphArray = createlineGraph(analyseResponse.getPattenList());
 
 
         /*************NETWORK**********/
@@ -216,14 +217,14 @@ public class GatewayServiceController {
 
         outputData.add(LineGraphArray);
         outputData.add(NetworkGraphArray );
-        outputData.add(mapArray);
+        //outputData.add(mapArray);
         outputData.add(TimelineArray);
 
         return  outputData;
 
     }
 
-    private ArrayList<Graph> createTimelineGraph(ArrayList<ArrayList> list){
+    private ArrayList<Graph> createlineGraph(ArrayList<ArrayList> list){
         LineGraph vpos = new LineGraph();
         vpos.name = "Very Positive";
         vpos.marker.add("square");
@@ -257,19 +258,21 @@ public class GatewayServiceController {
                     vneg.data.add(rela.get(i).get(index).toString());
                 }
 
-                if (rela.get(i).get(j).toString().equals("Negative")){
+
+
+                else if (rela.get(i).get(j).toString().equals("Negative")){
                     int index = rela.get(i).size()-1;
                     neg.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString().equals("Neutral")){
+                else if (rela.get(i).get(j).toString().equals("Neutral")){
                     int index = rela.get(i).size()-1;
                     net.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString().equals("Positive")){
+                else if (rela.get(i).get(j).toString().equals("Positive")){
                     int index = rela.get(i).size()-1;
                     pos.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString().equals("Very_Positive")){
+                else if (rela.get(i).get(j).toString().equals("Very_Positive")){
                     int index = rela.get(i).size()-1;
                     vpos.data.add(rela.get(i).get(index).toString());
                 }
@@ -292,17 +295,24 @@ public class GatewayServiceController {
         NetworkGraph temp;
         ArrayList<ArrayList> pdata = list;
         ArrayList<Graph> NetworkGraphArray = new ArrayList<>();
+
+
+
+
+
         for (int i = 0; i < pdata.size(); i++) {
             temp =  new NetworkGraph();
             temp.From = pdata.get(i).get(pdata.get(i).size()-3).toString();
+            temp.to = "";
             for (int j = 0; j < pdata.get(i).size()-2; j++) {
-                temp.to.add(pdata.get(i).get(j).toString());
+                temp.to += pdata.get(i).get(j).toString() + ", ";
             }
             NetworkGraphArray.add(temp);
         }
 
         return NetworkGraphArray;
     }
+
 
     private ArrayList<Graph> createMapGraph(){
         ArrayList<Graph> mapArray = new ArrayList<>();
