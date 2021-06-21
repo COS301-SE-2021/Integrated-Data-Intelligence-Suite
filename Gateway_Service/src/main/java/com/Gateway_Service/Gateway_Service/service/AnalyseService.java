@@ -28,9 +28,6 @@ public class AnalyseService {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("line",line);
 
         ResponseEntity<AnalyseDataResponse> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, AnalyseDataResponse.class);
-        if (responseEntity.getBody() == null)
-            System.out.println("\n\n\n\n\n\n\n\n Rhuli \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
         AnalyseDataResponse analyseResponse = responseEntity.getBody();
 
         return analyseResponse;

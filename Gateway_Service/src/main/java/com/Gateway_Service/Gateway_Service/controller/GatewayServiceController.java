@@ -2,6 +2,7 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
+import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import com.Gateway_Service.Gateway_Service.dataclass.*;
 
 
@@ -88,8 +89,9 @@ public class GatewayServiceController {
 
         if(analyseResponse.getFallback() == true)
             output = analyseResponse.getFallbackMessage();
-        else
+        else {
             output = analyseResponse.getSentiment().getCssClass();
+        }
 
         return output;
     }
@@ -117,6 +119,8 @@ public class GatewayServiceController {
             return outputData;
         }
 
+        System.out.println("***********************IMPORT HAS BEEN DONE*************************");
+
 
 
         /*********************PARSE*************************/
@@ -130,27 +134,28 @@ public class GatewayServiceController {
             return outputData;
         }
 
+        System.out.println("***********************PARSE HAS BEEN DONE*************************");
+
+
 
         /*********************ANALYSE*************************/
 
         for(int i =0; i < parseResponse.getDataList().size();i++){
 
-            String line = parseResponse.getDataList().get(i).getTextMessage();
+            String line = parseResponse.getDataList().get(0).getTextMessage();
             AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
 
-            if(analyseResponse.getSentiment() == null)
-                System.out.println("\n\n\n\n\n\n\n\n wandile \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
             if(analyseResponse.getFallback() == true) {
                 outputData.add(analyseResponse.getFallbackMessage());
                 return outputData;
             }
             else{
-                outputData.add(analyseResponse.getSentiment().getLine());
+                outputData.add(analyseResponse.getSentiment().toString());
             }
         }
 
-
+        System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
 
 
         return outputData;
