@@ -2,7 +2,6 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import com.Gateway_Service.Gateway_Service.dataclass.*;
 
 
@@ -16,27 +15,13 @@ import com.Gateway_Service.Gateway_Service.service.ParseService;
 
 //import com.netflix.discovery.DiscoveryClient;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.net.ssl.SSLContext;
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -64,6 +49,16 @@ public class GatewayServiceController {
         return this.discoveryClient.getInstances(serviceName).get(0).getUri().toString();
     }
 
+    public static class Graph{
+        Graph(){}
+    }
+
+
+
+    public static class ErrorGraph extends Graph{
+        public String Error;
+    }
+
 
     //TEST FUNCTION
     @GetMapping(value ="/{key}", produces = "application/json")
@@ -81,7 +76,7 @@ public class GatewayServiceController {
         return output;
     }
 
-    @GetMapping(value ="test/{line}", produces = "application/json")
+    /*@GetMapping(value ="test/{line}", produces = "application/json")
     public String testNothing2(@PathVariable String line) {
 
         String output = "";
@@ -94,16 +89,16 @@ public class GatewayServiceController {
         }
 
         return output;
-    }
+    }*/
 
 
     @GetMapping(value = "/man/{key}", produces = "application/json")
     //@CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
-    public Collection<String> init(@PathVariable String key) throws Exception {
+    public ArrayList<ArrayList<Graph>> init(@PathVariable String key) throws Exception {
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
-
-        ArrayList <String> outputData = new ArrayList<>();
+        //ArrayList <String> outputData = new ArrayList<>();
         HttpHeaders requestHeaders;
 
         /*********************IMPORT*************************/
@@ -115,7 +110,17 @@ public class GatewayServiceController {
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
         if(importResponse.getFallback() == true) {
-            outputData.add(importResponse.getFallbackMessage());
+            //outputData.add(importResponse.getFallbackMessage());
+            //return new ArrayList<>();//outputData;
+
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = importResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
             return outputData;
         }
 
@@ -130,7 +135,16 @@ public class GatewayServiceController {
 
 
         if(parseResponse.getFallback() == true) {
-            outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add();
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = parseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
             return outputData;
         }
 
@@ -140,26 +154,28 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        for(int i =0; i < parseResponse.getDataList().size();i++){
-
-            String line = parseResponse.getDataList().get(0).getTextMessage();
-
-            System.out.println("*****************" + line + "****************");
-
-            AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(parseResponse.getDataList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
 
 
-            if(analyseResponse.getFallback() == true) {
-                outputData.add(analyseResponse.getFallbackMessage());
-                return outputData;
-            }
-            else{
-                outputData.add(analyseResponse.getSentiment().toString());
-            }
+        if(analyseResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return outputData;
         }
+
+
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
 
+
+        /*********************VISUALISE**********************/
 
         return outputData;
 
