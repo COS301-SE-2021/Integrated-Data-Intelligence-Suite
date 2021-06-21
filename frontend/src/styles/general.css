@@ -7,26 +7,18 @@ div.graph_list{
     grid-template: repeat(1, 1fr)/ 100px 90px;
 
 }
+
 body{
     margin: 0;
     padding: 0;
     background: #efefef;
 }
 
-input#header-search{
-    border-radius: 5px;
-    /*margin-left: 5px;*/
-    /*margin-right: 5px;*/
-}
 
 form.search-form{
     background: inherit;
 }
-form.search-form button{
-    border-radius: 5px;
-    /*margin-left: 5px;*/
-    /*margin-right: 5px;*/
-}
+
 
 div.graph_list div{
     background: white;
@@ -61,4 +53,29 @@ div.search_bar{
     grid-area: 3/ 7 / span 1 / span 4;
     /*border: 1px solid green;*/
     width: 100%;
+}
+
+
+input#header-search {
+    border-radius: 5px;
+    margin-left: 5px;
+    /* margin-right: 5px; */
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+form.search-form button {
+    border-radius: 5px;
+    /* margin-left: 5px; */
+    /* margin-right: 5px; */
+    width: 20%;
+}
+
+input[type=text], input[type=password] {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
