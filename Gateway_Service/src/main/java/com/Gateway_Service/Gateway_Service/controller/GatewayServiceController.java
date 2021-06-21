@@ -218,7 +218,7 @@ public class GatewayServiceController {
         outputData.add(LineGraphArray);
         outputData.add(NetworkGraphArray );
         //outputData.add(mapArray);
-        //outputData.add(TimelineArray);
+        outputData.add(TimelineArray);
 
         return  outputData;
 
@@ -253,27 +253,28 @@ public class GatewayServiceController {
         ArrayList<ArrayList> rela = list;
         for(int i = 0; i < rela.size(); i++) {
             for (int j = 0;j< rela.get(i).size(); j++){
-                if (rela.get(i).get(j).toString() == "Very_Negative"){
+                if (rela.get(i).get(j).toString().equals("Very_Negative")){
                     int index = rela.get(i).size()-1;
                     vneg.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString() == "Negative"){
+                if (rela.get(i).get(j).toString().equals("Negative")){
                     int index = rela.get(i).size()-1;
                     neg.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString() == "Neutral"){
+                if (rela.get(i).get(j).toString().equals("Neutral")){
                     int index = rela.get(i).size()-1;
                     net.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString() == "Positive"){
+                if (rela.get(i).get(j).toString().equals("Positive")){
                     int index = rela.get(i).size()-1;
                     pos.data.add(rela.get(i).get(index).toString());
                 }
-                if (rela.get(i).get(j).toString() == "Very_Positive"){
+                if (rela.get(i).get(j).toString().equals("Very_Positive")){
                     int index = rela.get(i).size()-1;
                     vpos.data.add(rela.get(i).get(index).toString());
                 }
             }
+
         }
 
         ArrayList<Graph> lineGraphArray = new ArrayList<>();
