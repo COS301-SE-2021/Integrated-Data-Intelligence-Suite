@@ -20,16 +20,19 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <a name="demo-video-links"></a>
 ## Demos
 * [Demo 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
-* [Demo 2]()
+* [Demo 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [Demo 3]()
 * [Demo 4]()
 
 <a name="srs"></a>
 ## Documentation
-* [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
-* [Version 2]()
-* [Version 3]()
-* [Version 4]()
+* SRS
+  * [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
+  * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+  * [Version 3]()
+  * [Version 4]()
+* [Coding Standards PDF](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+* [Architectural Document](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools
