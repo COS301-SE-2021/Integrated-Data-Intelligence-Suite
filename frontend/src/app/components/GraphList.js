@@ -9,6 +9,9 @@ import React, { useState, useEffect } from 'react';
 import LineGraph from './LineGraph';
 import NetworkGraph from './NetworkGraph';
 import TimelineGraph from './TimelineGraph';
+import MapGraph from './MapGraph';
+import mapDataSouthAfrica from './mapDataSouthAfrica';
+
 
 
 
@@ -215,14 +218,27 @@ class GraphList extends React.Component {
 		this.lineGraphElement = React.createRef();
 		this.networkGraphElement = React.createRef();
 		this.timelineGraphElement = React.createRef();
+
+		this.mapGraphElement = React.createRef();
 	}
 
-	updateAllGraphs = (/*Data Received from Backend*/) =>{
+	updateAllGraphs = (/*User entered keyword*/) =>{
+		
+		//Sending SSE to backend server
+
+		// this.eventSource = new EventSource("http://localhost:5000/search")
+
+
+
+
+
 		this.updateLineGraph(/*Data Received from Backend*/);
 
 		this.updateNetworkGraph(/*Data Received from Backend*/);
 
 		this.updateTimelineGraph(/*Data Received from Backend*/);
+
+		this.updateMapGraph(/*Data Received from Backend */)
 	}
 
 	updateLineGraph = () => {
@@ -244,6 +260,80 @@ class GraphList extends React.Component {
 		this.timelineGraphElement.current.changeChartOptions(timeline_graph_options);
 	}
 
+	updateMapGraph = (/**Data Received from backend */) =>{
+		//Extract Map data from data_received_from_backend
+
+		let map_graph_options = {
+			chart: {
+				map: 'countries/za/za-all'
+			},
+		
+			title: {
+				text: 'Source Map showing Sentiment over each province'
+			},
+		
+			subtitle: {
+				text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/za/za-all.js">South Africa</a>'
+			},
+		
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+		
+			colorAxis: {
+				min: 0
+			},
+		
+			series: [{
+				mapData: mapDataSouthAfrica,
+
+				data: [
+					['za-ec', 8],
+					['za-np', 8],
+					['za-nl', 8],
+					['za-wc', 8],
+					['za-nc', 8],
+					['za-nw', 8],
+					['za-fs', 8],
+					['za-gt', 1],
+					['za-mp', 8]
+				],
+				
+				name: 'Sentiment',
+				
+				states: {
+					hover: {
+						color: '#BADA55'
+					}
+				},
+				
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}'
+				}
+			}]
+	
+		};
+
+		console.log(map_graph_options.series[0]);// Returns the entire array
+		console.log(map_graph_options.series[0].data); //returns an array
+		
+		//How to Assign Data Received from Rhuli
+		map_graph_options.series[0].data = [
+			["za-ec",2],["za-np",2],["za-nl",2],["za-wc",2],["za-nc",2],["za-nw",2],["za-fs",2],["za-gt",2],["za-mp",2]]
+		;
+
+		//Json Structure for Backend
+		//Json String Version:[["za-ec",2],["za-np",2],["za-nl",2],["za-wc",2],["za-nc",2],["za-nw",2],["za-fs",2],["za-gt",2],["za-mp",2]]
+		//Gets converted to JSON OBJ
+
+
+		this.mapGraphElement.current.changeChartOptions(map_graph_options);
+
+	}
 
 	render(){
 		return (
@@ -279,18 +369,9 @@ class GraphList extends React.Component {
 
 				<TimelineGraph ref = {this.timelineGraphElement}/>
 
-				
-
-
-
-
-
-
-
+				<MapGraph ref = {this.mapGraphElement}/>
 
 			</div>
-	
-	
 	
 		);
 

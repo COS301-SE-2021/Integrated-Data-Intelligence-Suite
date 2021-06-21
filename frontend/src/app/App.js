@@ -123,16 +123,7 @@ class App extends Component {
 
     render() {
         let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
-        let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar/> : '';
-        
-        let linegraph_component = !this.state.isFullPageLayout ? <LineGraph/> : '';
-        let network_graph_component = !this.state.isFullPageLayout ? <NetworkGraph/> : '';
-        let map_graph_component = !this.state.isFullPageLayout ? <MapGraph/> : '';
-        let timeline_graph_component = !this.state.isFullPageLayout ? <TimelineGraph/> :'';
-
-        let search_bar_component = !this.state.isFullPageLayout? <SearchBar/> : '' ; 
         let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
-
         let graph_list_component = !this.state.isFullPageLayout ? <GraphList/> : '';
 
 
