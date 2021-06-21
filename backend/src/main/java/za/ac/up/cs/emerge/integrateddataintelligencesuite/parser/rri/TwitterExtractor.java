@@ -14,6 +14,15 @@ import za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.response.GetTex
 import org.json.JSONObject;
 
 public class TwitterExtractor implements Extractor {
+    /**
+     * This method is used to extract the text of a given tweet.
+     * @param request This is the request class which contains the JSON string
+     *                for a particular tweet.
+     * @return GetTextResponse This is the response that contains the text of the
+     *                         tweet.
+     * @throws InvalidRequestException This is thrown if the request or if any of
+     *                                 the attributes of the request is null.
+     */
     @Override
     public GetTextResponse getText(GetTextRequest request) throws InvalidRequestException {
         if (request == null) {
@@ -30,6 +39,15 @@ public class TwitterExtractor implements Extractor {
         return response;
     }
 
+    /**
+     * This method is used to extract the date of a given tweet object.
+     * @param request This is the request class which contains the JSON string
+     *                for a particular tweet.
+     * @return GetTextResponse This is the response object that contains the date
+     *                         of the given tweet.
+     * @throws InvalidRequestException This is thrown if the request or if any of
+     *                                 the attributes of the request is null.
+     */
     @Override
     public GetDateResponse getDate(GetDateRequest request) throws InvalidRequestException {
         if (request == null) {
@@ -48,6 +66,15 @@ public class TwitterExtractor implements Extractor {
         return response;
     }
 
+    /**
+     * This method is used to extract the location of a given tweet object.
+     * @param request This is the request class which contains the JSON string
+     *                for a particular tweet.
+     * @return GetTextResponse This is the response object that contains the date
+     *                         of the given tweet.
+     * @throws InvalidRequestException This is thrown if the request or if any of
+     *                                 the attributes of the request is null.
+     */
     @Override
     public GetLocationResponse getLocation(GetLocationRequest request) throws InvalidRequestException {
         if (request == null || request.getJsonString() == null) {
@@ -63,6 +90,15 @@ public class TwitterExtractor implements Extractor {
         return new GetLocationResponse(coordinates);
     }
 
+    /**
+     * This method is used to extract the likes of a given tweet object.
+     * @param request This is the request class which contains the JSON string
+     *                for a particular tweet.
+     * @return GetTextResponse This is the response object that contains the likes
+     *                         of the given tweet.
+     * @throws InvalidRequestException This is thrown if the request or if any of
+     *                                 the attributes of the request is null.
+     */
     @Override
     public GetLikesResponse getLikes(GetLikesRequest request) throws InvalidRequestException {
         if (request == null || request.getJsonString() == null) {
