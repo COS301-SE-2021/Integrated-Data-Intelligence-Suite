@@ -47,6 +47,7 @@ div.search_bar{
     /*border: 1px solid orange;*/
 
 }
+
 #network_graph_div{
     /*border-style: solid;*/
     /*border-color: red;*/
@@ -56,26 +57,45 @@ div.search_bar{
 }
 
 
-input#header-search {
+form.search-form button {
+    border-radius: 5px;
+    /* margin-left: 5px; */
+    /* margin-right: 5px; */
+    width: 10%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+
+#header-search{
     border-radius: 5px;
     margin-left: 5px;
     /* margin-right: 5px; */
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-}
 
-form.search-form button {
-    border-radius: 5px;
-    /* margin-left: 5px; */
-    /* margin-right: 5px; */
-    width: 20%;
-}
-
-input[type=text], input[type=password] {
     width: 70%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+}
+
+
+#search_btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 13px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+
+    width: 10%;
+
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
