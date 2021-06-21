@@ -143,6 +143,9 @@ public class GatewayServiceController {
         for(int i =0; i < parseResponse.getDataList().size();i++){
 
             String line = parseResponse.getDataList().get(0).getTextMessage();
+
+            System.out.println("*****************" + line + "****************");
+
             AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
 
 
