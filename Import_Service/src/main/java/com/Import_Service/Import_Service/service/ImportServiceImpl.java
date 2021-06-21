@@ -28,7 +28,7 @@ public class ImportServiceImpl {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .addHeader("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANh%2FQQEAAAAANS6TbVoUzgmqxVrqaZWkzMFwMNY%3Da4A9xvQms5KGWo5k880uJcbGXWC9Ef8ESqxB9mU7BpwJvuqma2")
+                .addHeader("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANh%2FQQEAAAAAVr4WLviUZsSsjKQdYp5%2BUbVVMXQ%3D6BmOGAk60QOl9dMxl4toje8BzHNFbVmAOWKAh2qTTK3w1d8Ks4")
                 .url("https://api.twitter.com/1.1/search/tweets.json?q="+keyword+"&count="+limit)
                 .method("GET", null)
                 .build();
