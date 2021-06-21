@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/backend/IntegratedDataIntelligenceSuite.iml" filepath="$PROJECT_DIR$/backend/IntegratedDataIntelligenceSuite.iml" />
       <module fileurl="file://$PROJECT_DIR$/backend/backend.iml" filepath="$PROJECT_DIR$/backend/backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/spring-boot-jpa-h2.iml" filepath="$PROJECT_DIR$/backend/spring-boot-jpa-h2.iml" />
     </modules>
   </component>
 </project>

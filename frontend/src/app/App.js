@@ -115,23 +115,23 @@ class App extends Component {
     }
 
     render() {
-        let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
-        let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
+        // let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
+        // let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
         let graph_list_component = !this.state.isFullPageLayout ? <GraphList/> : '';
 
 
         return (
             <div className="container-scroller">
-                {navbarComponent}
+                {/*{navbarComponent}*/}
                 <div className="container-fluid page-body-wrapper">
                    
                     <div className="main-panel">
-                        <div className="content-wrapper">
+                        <div className="content-wrapper" >
                             <AppRouter/>
                             {graph_list_component}
 
                         </div>
-                        {footerComponent}
+                        {/*{footerComponent}*/}
                     </div>
                 </div>
             </div>

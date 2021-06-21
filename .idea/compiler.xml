@@ -9,17 +9,20 @@
         <outputRelativeToContentRoot value="true" />
         <module name="backend" />
         <module name="IntegratedDataIntelligenceSuite" />
+        <module name="spring-boot-jpa-h2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="backend" target="11" />
       <module name="IntegratedDataIntelligenceSuite" target="11" />
+      <module name="spring-boot-jpa-h2" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="IntegratedDataIntelligenceSuite" options="-parameters" />
       <module name="backend" options="-parameters" />
+      <module name="spring-boot-jpa-h2" options="-parameters" />
     </option>
   </component>
 </project>

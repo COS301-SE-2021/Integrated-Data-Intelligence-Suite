@@ -1,12 +1,26 @@
 #search_bar_div{
-	border: 1em;
-	border-color: blueviolet;
-	border-style: solid;
+	border: none;
+	/*border-color: black;*/
+	/*border-style: solid;*/
+
 }
 
-
 #graph_list_div{
-	border: 1em;
-	border-color:orange;
-	border-style: solid;
+	border: none
+
+}
+
+#line_graph_div{
+
+
+	/*border: 1px solid red;*/
+
+}
+
+#map_div{
+	/*border-style : solid;*/
+	/*border-color :green;*/
+	/*border-width : 1em;*/
+
+
 }

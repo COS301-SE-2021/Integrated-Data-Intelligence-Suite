@@ -4,7 +4,7 @@ import { Switch, Route, Redirect, Link, useLocation } from 'react-router-dom';
 import Spinner from '../app/components/Spinner';
 
 
-const Dashboard = lazy(() => import('./dashboard/Dashboard'));
+// const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 
 
 
@@ -20,7 +20,7 @@ class AppRoutes extends Component {
         return (
             <Suspense fallback={<Spinner/>}>
                 <Switch>
-                    <Route exact path="/dashboard" component={ Dashboard } />
+                    {/*<Route exact path="/dashboard" component={ Dashboard } />*/}
 
                     <Route path="/pages/Login" component={ Login } />
                     <Route path="/pages/Register" component={ Register1 } />
@@ -29,7 +29,7 @@ class AppRoutes extends Component {
                     <Route path="/functions/ValidateRegister" component={ VRegister} />}
 
 
-                    <Redirect to="/dashboard" />
+                    {/*<Redirect to="/dashboard" />*/}
                 </Switch>
             </Suspense>
         );

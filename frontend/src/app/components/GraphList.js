@@ -478,10 +478,11 @@ class GraphList extends React.Component {
 
 	render(){
 		return (
-			<div id = "graph_list_div">
+			<div class='graph_list' id = "graph_list_div">
 
-				<div id='search_bar_div'>
+				<div class='search_bar' id='search_bar_div'>
 					<form
+						class ='search-form'
 						name="form-keyword"
 						onSubmit={e => {
 						e.preventDefault();
@@ -489,7 +490,7 @@ class GraphList extends React.Component {
 						method = 'get'
 					>
 						<label htmlFor="header-search">
-							<span className="visually-hidden">Search blog posts</span>
+							{/*<span className="visually-hidden">Search blog posts</span>*/}
 						</label>
 						<input
 							type="text"

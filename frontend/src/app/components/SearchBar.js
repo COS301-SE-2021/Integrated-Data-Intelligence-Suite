@@ -10,7 +10,7 @@ class SearchBar extends Component{
 		// let { tweets } = state;
 		return(
 	
-				<div id='search_bar_div'>
+				<div class='graph' id='search_bar_div'>
 					<form
 						onSubmit={e => {
 						e.preventDefault();
@@ -18,7 +18,7 @@ class SearchBar extends Component{
 						method = 'get'
 					>
 						<label htmlFor="header-search">
-							<span className="visually-hidden">Search blog posts</span>
+							{/*<span className="visually-hidden">Search blog posts</span>*/}
 						</label>
 						<input
 							type="text"

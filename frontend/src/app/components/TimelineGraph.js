@@ -326,7 +326,7 @@ class TimelineGraph extends Component{
 
 	render(){
 		return(
-			<div id = 'timeline_div'>
+			<div class='graph' id = 'timeline_div'>
 				<HighchartsReact highcharts={Highcharts} options={this.state.chartOptions}/>
 			</div>
 		);

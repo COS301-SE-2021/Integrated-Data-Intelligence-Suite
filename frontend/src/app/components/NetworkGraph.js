@@ -144,7 +144,7 @@ class NetworkGraph extends Component {
 
     render () {
         return (
-			<div id = 'network_graph_div'>
+			<div class='graph' id = 'network_graph_div'>
 				<HighchartsReact highcharts={Highcharts} options={this.state.chartOptions} />
 			</div>
         );

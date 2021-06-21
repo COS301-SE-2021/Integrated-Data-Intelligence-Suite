@@ -115,8 +115,8 @@ class MapGraph extends React.Component{
 
 	render(){
 		return (
-			<div id='map_div'>
-				<h2>Map</h2>
+			<div class='graph' id='map_div'>
+				{/*<h2>Map</h2>*/}
 				<HighchartsReact
                     options={this.state.chartOptions}
                     constructorType={'mapChart'}

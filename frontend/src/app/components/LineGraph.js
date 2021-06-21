@@ -150,7 +150,7 @@ class LineGraph extends Component {
     
     render () {
         return (
-			<div id = 'line_graph_div'>
+			<div class='graph' id = 'line_graph_div'>
 				<HighchartsReact highcharts={Highcharts} options={this.state.chartOptions} />
 			</div>
         );
