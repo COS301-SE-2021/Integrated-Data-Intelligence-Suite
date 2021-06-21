@@ -321,6 +321,8 @@ class GraphList extends React.Component {
 		this.mapGraphElement = React.createRef();
 	}
 
+
+
 	updateAllGraphs = (/*keyword*/) =>{
 		let userKeyword =  document.getElementById('header-search').value; 
 		// console.log("==============================");
@@ -391,6 +393,11 @@ class GraphList extends React.Component {
 			name: 'Name 1',
 			label: 'Label 1',
 			description: "description 1"
+		  },{
+			x: Date.UTC(2021, 10, 4),
+			name: 'Name 2',
+			label: 'Label 2',
+			description: "Description 2"
 		  }];
 
 		//process Data Received from Backend
