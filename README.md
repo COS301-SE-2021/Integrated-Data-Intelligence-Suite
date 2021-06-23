@@ -88,7 +88,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <tr>
    <td style="width: 25%;">
     <h3>Shrey Mandalia</h3>
-    <p><em>Front-End and Data Analysis</em></p>
+    <p><em>Data parsing and Data Importing</em></p>
   </td>
 
    <td style="width: 25%;">
