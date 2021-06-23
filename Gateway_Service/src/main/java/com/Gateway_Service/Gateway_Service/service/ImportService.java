@@ -5,6 +5,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.ImportDataResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.ImportTwitterRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.ImportTwitterResponse;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.*;
@@ -29,9 +30,13 @@ public class ImportService {
     @Autowired
     private RestTemplate restTemplate;
 
+    //            commandProperties = {
+    //                @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE"),
+    //                @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "90000") },
 
+    @HystrixCommand(
 
-    //@HystrixCommand(fallbackMethod = "getTwitterDataJsonFallback")
+            fallbackMethod = "getTwitterDataJsonFallback")
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest) {
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -39,8 +44,8 @@ public class ImportService {
 
         HttpEntity<ImportTwitterRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
 
-        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST, requestEntity, ImportTwitterResponse.class);
-        ImportTwitterResponse importResponse = responseEntity.getBody();
+        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST,null, ImportTwitterResponse.class);
+        ImportTwitterResponse importResponse = new ImportTwitterResponse("hello world"); // responseEntity.getBody();
 
         return importResponse;
     }
