@@ -270,45 +270,68 @@ let timeline_graph_options = {
 
 
 function getData(userKeyword){
-			console.log('inside here');
-
-			//Send Request to server
-			let requestUrl = 'http://localhost:9000/search/' + userKeyword;  
-			let eventSource = undefined;		
-			
-			try {
-				
-				eventSource = new EventSource(requestUrl);
-			} catch (error) {
-				console.log("Error found");
-			}
+	console.log('inside here');
 
 
-			eventSource.onopen = (event) => {
-				console.log("connection opened");
-			}
+	/******************RHULI CHANGES HERE**************/
 
-			//Data received from Server
-			eventSource.onmessage = (event) => {
-				console.log("result", event.data);
-				return data;
-			}
+	let httpRequest = new XMLHttpRequest();
 
-			//Data
-			eventSource.onerror = (event) => {
-				console.log(event.target.readyState)
-				if (event.target.readyState === EventSource.CLOSED) {
-					console.log('eventsource closed (' + event.target.readyState + ')')
-				}
+	httpRequest.onreadystatechange = function() { // supports older browsers //TODO: But we can use a wrapper i.e jquery, to solve any potential future issues;
+		if (this.readyState == 4 && this.status == 200) {
+			alert(JSON.parse(this.responseText));
+			console.log(JSON.parse(this.responseText));
+			//TODO: we can prosses here when things are loaded
+		}
+	};
+	httpRequest.open("GET", "http://localhost:9000/main/" + userKeyword);
+	httpRequest.send();
 
-				//close the connection
-				eventSource.close();
-			}
-	
-			return () => {
-				eventSource.close();
-				console.log("eventsource closed")
-			}
+	/*httpRequest.onload = function (){ // supports newer browsers
+		alert(JSON.parse(this.responseText));
+		console.log(JSON.parse(this.responseText));
+	}*/
+
+
+	/******************RHULI CHANGES HERE**************/
+
+		//Send Request to server
+	let requestUrl = 'http://localhost:9000/main/' + userKeyword;  //
+	let eventSource = undefined;
+
+	try {
+
+		eventSource = new EventSource(requestUrl);
+	} catch (error) {
+		console.log("Error found");
+	}
+
+
+	eventSource.onopen = (event) => {
+		console.log("connection opened");
+	}
+
+	//Data received from Server
+	eventSource.onmessage = (event) => {
+		console.log("result", event.data);
+		return data;
+	}
+
+	//Data
+	eventSource.onerror = (event) => {
+		console.log(event.target.readyState)
+		if (event.target.readyState === EventSource.CLOSED) {
+			console.log('eventsource closed (' + event.target.readyState + ')')
+		}
+
+		//close the connection
+		eventSource.close();
+	}
+
+	return () => {
+		eventSource.close();
+		console.log("eventsource closed")
+	}
 }
 
 class GraphList extends React.Component {
