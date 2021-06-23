@@ -88,13 +88,13 @@ public class GatewayServiceController {
     public String testNothing(@PathVariable String key) {
         String output = "";
 
-        ImportTwitterRequest importReq = new ImportTwitterRequest(key,10);
-        ImportTwitterResponse importRes = importClient.getTwitterDataJson(importReq);
+        ImportTwitterRequest importRequest = new ImportTwitterRequest(key,10);
+        ImportTwitterResponse importResponse = importClient.getTwitterDataJson(importRequest);
 
-        if(importRes.getFallback() == true)
-            output = importRes.getFallbackMessage();
+        if(importResponse.getFallback() == true)
+            output = importResponse.getFallbackMessage();
         else
-            output = importRes.getJsonData();
+            output = importResponse.getJsonData();
 
         return output;
     }
@@ -115,10 +115,10 @@ public class GatewayServiceController {
     }*/
 
 
-    @GetMapping(value = "/man/{key}", produces = "application/json")
-    //@CrossOrigin
+    @GetMapping(value = "/main/{key}", produces = "application/json")
+    @CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
-    public ArrayList<ArrayList<Graph>> init(@PathVariable String key) throws Exception {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key) throws Exception {
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
         //ArrayList <String> outputData = new ArrayList<>();
@@ -144,7 +144,7 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return outputData;
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         System.out.println("***********************IMPORT HAS BEEN DONE*************************");
@@ -168,7 +168,7 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return outputData;
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         System.out.println("***********************PARSE HAS BEEN DONE*************************");
@@ -190,7 +190,7 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return outputData;
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
 
@@ -220,7 +220,7 @@ public class GatewayServiceController {
         //outputData.add(mapArray);
         outputData.add(TimelineArray);
 
-        return  outputData;
+        return new ResponseEntity<>(outputData,HttpStatus.OK);
 
     }
 
