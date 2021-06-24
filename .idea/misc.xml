@@ -16,6 +16,8 @@
         <option value="$PROJECT_DIR$/backend/pom.xml" />
         <option value="$PROJECT_DIR$/../Visualize_Service/pom.xml" />
         <option value="$PROJECT_DIR$/Visualize_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../User_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/User_Service/pom.xml" />
       </list>
     </option>
   </component>
