@@ -8,7 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Integrated-Data-Intelligence-Suite.iml" filepath="$PROJECT_DIR$/.idea/Integrated-Data-Intelligence-Suite.iml" />
       <module fileurl="file://$PROJECT_DIR$/Parse_Service/Parse_Service.iml" filepath="$PROJECT_DIR$/Parse_Service/Parse_Service.iml" />
       <module fileurl="file://$PROJECT_DIR$/Registry_Service/Registry_Service.iml" filepath="$PROJECT_DIR$/Registry_Service/Registry_Service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Visualize_Service/Visualize_Service.iml" filepath="$PROJECT_DIR$/../Visualize_Service/Visualize_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Visualize_Service/Visualize_Service.iml" filepath="$PROJECT_DIR$/Visualize_Service/Visualize_Service.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
     </modules>
   </component>
