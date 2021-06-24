@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Alert, Button, Badge } from "react-bootstrap";
-import Moment from "react-moment";
 
 class SearchBar extends Component{
 
 	render(){
-		// let { tweets } = state;
+
 		return(
 	
 				<div class='graph' id='search_bar_div'>
@@ -18,7 +14,6 @@ class SearchBar extends Component{
 						method = 'get'
 					>
 						<label htmlFor="header-search">
-							{/*<span className="visually-hidden">Search blog posts</span>*/}
 						</label>
 						<input
 							type="text"

@@ -1,5 +1,6 @@
 #network_graph_div{
-	/*border-style: solid;*/
-	/*border-color: red;*/
 
+    grid-area: 3/ 7 / span 1 / span 4;
+
+    width: 100%;
 }

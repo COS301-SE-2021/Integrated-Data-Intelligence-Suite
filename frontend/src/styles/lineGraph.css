@@ -1,8 +1,5 @@
+
 #line_graph_div{
-
-	/*border-style: solid;*/
-	/*border-color: blue;*/
-	/*max-width: 800px;*/
-
+    grid-area: 2/1 / span 1 / span 5;
 
 }

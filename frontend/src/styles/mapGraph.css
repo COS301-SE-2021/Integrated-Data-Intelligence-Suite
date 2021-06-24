@@ -1,7 +1,4 @@
 #map_div{
-	/*border-style : solid;*/
-	/*border-color :green;*/
-	/*border-width : 1em;*/
-
+    grid-area: 2 / 6 / span 1 / span 5;
 
 }

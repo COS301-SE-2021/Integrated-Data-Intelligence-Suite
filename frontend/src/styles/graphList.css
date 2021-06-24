@@ -1,7 +1,9 @@
-#search_bar_div{
-	/* border: none;
-	border-color: black;
-	border-style: solid; */
+div.graph_list{
+	display: grid;
+	height: 100vh;
+	padding: 10px;
+	grid-gap: 20px;
+	grid-template: repeat(1, 1fr)/ 100px 90px;
 
 }
 
@@ -10,16 +12,8 @@
 
 }
 
-#line_graph_div{
-
-
-	/*border: 1px solid red;*/
-
-}
-
-#map_div{
-	/*border-style : solid;*/
-	/*border-color :green;*/
-	/*border-width : 1em;*/
-
+div.graph_list div{
+	background: white;
+	border: none;
+	border-radius: 5px;
 }

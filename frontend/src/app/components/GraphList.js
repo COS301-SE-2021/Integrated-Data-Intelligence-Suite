@@ -278,7 +278,7 @@ function getData(userKeyword){
 	let httpRequest = new XMLHttpRequest();
 
 	httpRequest.onreadystatechange = function() { // supports older browsers //TODO: But we can use a wrapper i.e jquery, to solve any potential future issues;
-		if (this.readyState == 4 && this.status == 200) {
+		if (this.readyState === 4 && this.status === 200) {
 			alert(JSON.parse(this.responseText));
 			console.log(JSON.parse(this.responseText));
 			//TODO: we can prosses here when things are loaded
@@ -286,11 +286,6 @@ function getData(userKeyword){
 	};
 	httpRequest.open("GET", "http://localhost:9000/main/" + userKeyword);
 	httpRequest.send();
-
-	/*httpRequest.onload = function (){ // supports newer browsers
-		alert(JSON.parse(this.responseText));
-		console.log(JSON.parse(this.responseText));
-	}*/
 
 
 	/******************RHULI CHANGES HERE**************/
@@ -352,7 +347,7 @@ class GraphList extends React.Component {
 		// console.log("Keyword:" + document.getElementById('header-search').value);
 		// console.log("==============================");
 
-		var data_from_backend = getData(userKeyword);
+		let data_from_backend = getData(userKeyword);
 
 
 		this.updateLineGraph(/*Data Received from Backend*/);
