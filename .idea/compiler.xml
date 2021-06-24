@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Visualize_Service" />
         <module name="Registry_Service" />
         <module name="Analyse_Service" />
         <module name="Gateway_Service" />
@@ -23,6 +24,7 @@
       <module name="Parse_Service" target="11" />
       <module name="Registry_Service" target="11" />
       <module name="spring-boot-jpa-h2" target="11" />
+      <module name="Visualize_Service" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -33,6 +35,7 @@
       <module name="IntegratedDataIntelligenceSuite" options="-parameters" />
       <module name="Parse_Service" options="-parameters" />
       <module name="Registry_Service" options="-parameters" />
+      <module name="Visualize_Service" options="-parameters" />
       <module name="backend" options="-parameters" />
       <module name="spring-boot-jpa-h2" options="-parameters" />
     </option>
