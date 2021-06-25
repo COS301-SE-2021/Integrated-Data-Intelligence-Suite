@@ -1,9 +1,12 @@
-const { app, BrowserWindow } = require('electron')
+  const { app, BrowserWindow } = require('electron')
 
 const path = require('path')
 const isDev = require('electron-is-dev')
 
 require('@electron/remote/main').initialize()
+
+
+const mainMenTemplate = [{label:'File'}];
 
 function createWindow() {
     // Create the browser window.
@@ -21,7 +24,16 @@ function createWindow() {
             ? 'http://localhost:3000'
             : `file://${path.join(__dirname, '../build/index.html')}`
     )
+
+    //CREATE APP MENU //TODO: Future reference
+    //build menu
+    //const mainMenu = Menu.buildFromTemplate(mainMenTemplate);
+
+    //insert menu
+    //Menu.setApplicationMenu(mainMenu)
 }
+
+
 
 app.on('ready', createWindow)
 

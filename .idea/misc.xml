@@ -3,11 +3,25 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Analyse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Gateway_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Import_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Parse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Registry_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Gateway_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Import_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Parse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Registry_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Analyse_Service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/pom.xml" />
+        <option value="$PROJECT_DIR$/../Visualize_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Visualize_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/../User_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/User_Service/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="corretto-11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
