@@ -1,9 +1,6 @@
 package com.User_Service.User_Service.service;
 
-import com.User_Service.User_Service.request.GetCurrentUserRequest;
-import com.User_Service.User_Service.request.LoginRequest;
-import com.User_Service.User_Service.request.ResetPasswordRequest;
-import com.User_Service.User_Service.request.VerifyAccountRequest;
+import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +54,16 @@ public class UserServiceImpl {
      * @return This class will contain the current user logged on.
      */
     public GetCurrentUserResponse getCurrentUser(GetCurrentUserRequest request) {
+        return null;
+    }
+
+    /**
+     * This function will allow the admin to manage permissions of users registered
+     * to the system.
+     * @param request This is the request for the managePermissions use case***
+     * @return This is the response for the managePermissions use case***
+     */
+    public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) {
         return null;
     }
 }
