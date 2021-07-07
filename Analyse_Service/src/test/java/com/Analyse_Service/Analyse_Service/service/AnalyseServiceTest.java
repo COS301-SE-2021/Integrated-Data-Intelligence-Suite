@@ -4,18 +4,26 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
-import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
+
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
 public class AnalyseServiceTest {
     @InjectMocks
-    AnalyseServiceImpl service ;
+    private AnalyseServiceImpl service ;
+
+    @BeforeEach
+    public void setup(){
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     @DisplayName("When analyzeRequest is Null")
