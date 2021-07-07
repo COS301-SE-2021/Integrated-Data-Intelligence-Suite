@@ -10,9 +10,6 @@ import com.Gateway_Service.Gateway_Service.service.ImportService;
 import com.Gateway_Service.Gateway_Service.service.ParseService;
 
 
-
-
-
 //import com.netflix.discovery.DiscoveryClient;
 
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -28,6 +25,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/")
 public class GatewayServiceController {
+
     @Autowired
     private ImportService importClient;
 
@@ -37,53 +35,26 @@ public class GatewayServiceController {
     @Autowired
     private AnalyseService analyseClient;
 
-
     @Autowired
     private DiscoveryClient discoveryClient;
 
     @Autowired
     private RestTemplate restTemplate;
 
-
+    /**
+     * This method is used the map/convert the name os a service to its respective url on a specific host
+     * @param serviceName This is string value of a service's name identity
+     * @return String This is string value that would represent a url of a service
+     */
     private String getServiceURL(String serviceName){
         return this.discoveryClient.getInstances(serviceName).get(0).getUri().toString();
     }
 
-    public static class Graph{
-        Graph(){}
-    }
-
-    public static class LineGraph extends Graph{
-        public String name;
-        public ArrayList<String> marker = new ArrayList<>();
-        public ArrayList<String> data  = new ArrayList<>();
-    }
-
-    public static class NetworkGraph extends Graph{
-        public String From;
-        public String to;
-    }
-
-    public static class TimelineGraph extends Graph{
-        public String x;
-        public String name;
-        public String label;
-        public String description;
-
-    }
-
-
-    public static class mapGraph extends Graph{
-        ArrayList<ArrayList> map = new ArrayList<>();
-
-    }
-
-    public static class ErrorGraph extends Graph{
-        public String Error;
-    }
-
-
-    //TEST FUNCTION
+    /**
+     * Test function, this methoe is used to test the service
+     * @param key This is a path variable of string value
+     * @return String This is a string value of a json test
+     */
     @GetMapping(value ="/{key}", produces = "application/json")
     public String testNothing(@PathVariable String key) {
         String output = "";
@@ -99,22 +70,15 @@ public class GatewayServiceController {
         return output;
     }
 
-    /*@GetMapping(value ="test/{line}", produces = "application/json")
-    public String testNothing2(@PathVariable String line) {
 
-        String output = "";
-        AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
-
-        if(analyseResponse.getFallback() == true)
-            output = analyseResponse.getFallbackMessage();
-        else {
-            output = analyseResponse.getSentiment().getCssClass();
-        }
-
-        return output;
-    }*/
-
-
+    /**
+     * This method is used to facilitate communication to all the Services.
+     * Outputs data related to a topic/key.
+     * @param key This is a path variable of string value
+     * @return ResponseEntity<ArrayList<ArrayList<Graph>>>
+     *     This object contains data representing a response from all the services combined.
+     * @throws Exception This is thrown if exception caught in any of the Services.
+     */
     @GetMapping(value = "/main/{key}", produces = "application/json")
     @CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
@@ -224,6 +188,43 @@ public class GatewayServiceController {
 
     }
 
+
+
+
+    public static class Graph{
+        Graph(){}
+    }
+
+    public static class LineGraph extends Graph{
+        public String name;
+        public ArrayList<String> marker = new ArrayList<>();
+        public ArrayList<String> data  = new ArrayList<>();
+    }
+
+    public static class NetworkGraph extends Graph{
+        public String From;
+        public String to;
+    }
+
+    public static class TimelineGraph extends Graph{
+        public String x;
+        public String name;
+        public String label;
+        public String description;
+
+    }
+
+    public static class mapGraph extends Graph{
+        ArrayList<ArrayList> map = new ArrayList<>();
+
+    }
+
+    public static class ErrorGraph extends Graph{
+        public String Error;
+    }
+
+
+
     private ArrayList<Graph> createlineGraph(ArrayList<ArrayList> list){
         LineGraph vpos = new LineGraph();
         vpos.name = "Very Positive";
@@ -289,6 +290,7 @@ public class GatewayServiceController {
 
         return  lineGraphArray;
     }
+
 
 
     private ArrayList<Graph> createNetworkGraph(ArrayList<ArrayList> list){
@@ -368,7 +370,6 @@ public class GatewayServiceController {
 
         return mapArray;
     }
-
 
 
     private ArrayList<Graph> createTimelineGraph(){
