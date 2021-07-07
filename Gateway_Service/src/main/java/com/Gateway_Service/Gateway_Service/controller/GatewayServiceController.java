@@ -38,8 +38,7 @@ public class GatewayServiceController {
     @Autowired
     private DiscoveryClient discoveryClient;
 
-    @Autowired
-    private RestTemplate restTemplate;
+
 
     /**
      * This method is used the map/convert the name os a service to its respective url on a specific host
