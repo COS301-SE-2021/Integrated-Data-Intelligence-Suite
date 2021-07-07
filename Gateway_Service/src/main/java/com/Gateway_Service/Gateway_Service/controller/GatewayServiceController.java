@@ -224,7 +224,11 @@ public class GatewayServiceController {
     }
 
 
-
+    /**
+     * This method is used to convert data into data representable as a line graph.
+     * @param list This is an object that contains data that is going to be structured.
+     * @return ArrayList<Graph> This object contains structured data for a line graph.
+     */
     private ArrayList<Graph> createlineGraph(ArrayList<ArrayList> list){
         LineGraph vpos = new LineGraph();
         vpos.name = "Very Positive";
@@ -292,7 +296,11 @@ public class GatewayServiceController {
     }
 
 
-
+    /**
+     * This method is used to convert data into data representable as a network graph.
+     * @param list This is an object that contains data that is going to be structured.
+     * @return ArrayList<Graph> This object contains structured data for a network graph.
+     */
     private ArrayList<Graph> createNetworkGraph(ArrayList<ArrayList> list){
         NetworkGraph temp;
         ArrayList<ArrayList> pdata = list;
@@ -315,7 +323,10 @@ public class GatewayServiceController {
         return NetworkGraphArray;
     }
 
-
+    /**
+     * This method is used to convert data into data representable as a map graph.
+     * @return ArrayList<Graph> This object contains structured data for a map graph.
+     */
     private ArrayList<Graph> createMapGraph(){
         ArrayList<Graph> mapArray = new ArrayList<>();
         ArrayList<String> coordinates;
@@ -371,7 +382,10 @@ public class GatewayServiceController {
         return mapArray;
     }
 
-
+    /**
+     * This method is used to convert data into data representable as a timeline graph.
+     * @return ArrayList<Graph> This object contains structured data for a timeline graph.
+     */
     private ArrayList<Graph> createTimelineGraph(){
         ArrayList<Graph> timelineArray = new ArrayList<>();
         for (int i = 1; i < 13; i++) {
