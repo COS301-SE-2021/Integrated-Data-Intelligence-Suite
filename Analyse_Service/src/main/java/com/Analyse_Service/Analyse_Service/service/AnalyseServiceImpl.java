@@ -31,6 +31,12 @@ import java.util.Properties;
 @Service
 public class AnalyseServiceImpl {
 
+    /**
+     * This method used to analyse data which has been parsed by Parse-Service.
+     * @param request This is a request object which contains data required to be analysed.
+     * @return AnalyseDataResponse This object contains analysed data which has been processed.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
     public AnalyseDataResponse analyzeData(AnalyseDataRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
@@ -83,6 +89,12 @@ public class AnalyseServiceImpl {
     }
 
 
+    /**
+     * This method used to find a pattern(s) within a given data
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindPatternResponse This object contains data of the patterns found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
     public FindPatternResponse findPattern(FindPatternRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
@@ -164,6 +176,12 @@ public class AnalyseServiceImpl {
     }
 
 
+    /**
+     * This method used to find a relationship(s) within a given data
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
     public FindRelationshipsResponse findRelationship(FindRelationshipsRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
@@ -230,7 +248,12 @@ public class AnalyseServiceImpl {
         return new FindRelationshipsResponse(results);
     }
 
-
+    /**
+     * This method used to find a predictions(s) within a given data
+     * @param request This is a request object which contains data required to be analysed.
+     * @return GetPredictionResponse This object contains data of the predictions found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
     public GetPredictionResponse getPredictions(GetPredictionRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("GetPredictionRequest Object is null");
@@ -313,6 +336,12 @@ public class AnalyseServiceImpl {
         return new GetPredictionResponse(results);
     }
 
+    /**
+     * This method used to find a sentiment of a statement
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindSentimentResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
     public FindSentimentResponse findSentiment(FindSentimentRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindSentimentRequest Object is null");
@@ -349,8 +378,12 @@ public class AnalyseServiceImpl {
         return new FindSentimentResponse(tweetWithSentiment);
     }
 
-    /******HELPER FUNCTIONS******/
 
+    /**
+     * Helper function, this method used to map sentiments
+     * @param sentiment This is a int value which represent a sentiment.
+     * @return String This is a String value which represents a sentiment.
+     */
     private String toCss(int sentiment) {
         switch (sentiment) {
             case 0:
@@ -368,9 +401,6 @@ public class AnalyseServiceImpl {
         }
     }
 
-    private void removeSpaces(String line){
-
-    }
 
 }
 
