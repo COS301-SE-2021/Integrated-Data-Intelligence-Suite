@@ -21,7 +21,7 @@ let linegraph_options = {
 	},
 
 	title: {
-	  text: 'Timeline Showing change in Public sentiment over 12 Month Period'
+	  text: 'Timeline Showing Trend in Public sentiment over 12 Month Period'
 	},
 
 	xAxis: {
@@ -172,11 +172,11 @@ let timeline_graph_options = {
     },
 
     title: {
-        text: 'Timeline of Space Exploration'
+        text: 'Timeline of patterns found on each day'
     },
 
     subtitle: {
-        text: ''
+        text: 'Capped over a 7 Day period'
     },
 
     colors: [
@@ -270,45 +270,63 @@ let timeline_graph_options = {
 
 
 function getData(userKeyword){
-			console.log('inside here');
-
-			//Send Request to server
-			let requestUrl = 'http://localhost:9000/search/' + userKeyword;  
-			let eventSource = undefined;		
-			
-			try {
-				
-				eventSource = new EventSource(requestUrl);
-			} catch (error) {
-				console.log("Error found");
-			}
+	console.log('inside here');
 
 
-			eventSource.onopen = (event) => {
-				console.log("connection opened");
-			}
+	/******************RHULI CHANGES HERE**************/
 
-			//Data received from Server
-			eventSource.onmessage = (event) => {
-				console.log("result", event.data);
-				return data;
-			}
+	let httpRequest = new XMLHttpRequest();
 
-			//Data
-			eventSource.onerror = (event) => {
-				console.log(event.target.readyState)
-				if (event.target.readyState === EventSource.CLOSED) {
-					console.log('eventsource closed (' + event.target.readyState + ')')
-				}
+	httpRequest.onreadystatechange = function() { // supports older browsers //TODO: But we can use a wrapper i.e jquery, to solve any potential future issues;
+		if (this.readyState === 4 && this.status === 200) {
+			alert(JSON.parse(this.responseText));
+			console.log(JSON.parse(this.responseText));
+			//TODO: we can prosses here when things are loaded
+		}
+	};
+	httpRequest.open("GET", "http://localhost:9000/main/" + userKeyword);
+	httpRequest.send();
 
-				//close the connection
-				eventSource.close();
-			}
-	
-			return () => {
-				eventSource.close();
-				console.log("eventsource closed")
-			}
+
+	/******************RHULI CHANGES HERE**************/
+
+		//Send Request to server
+	let requestUrl = 'http://localhost:9000/main/' + userKeyword;  //
+	let eventSource = undefined;
+
+	try {
+
+		eventSource = new EventSource(requestUrl);
+	} catch (error) {
+		console.log("Error found");
+	}
+
+
+	eventSource.onopen = (event) => {
+		console.log("connection opened");
+	}
+
+	//Data received from Server
+	eventSource.onmessage = (event) => {
+		console.log("result", event.data);
+		return data;
+	}
+
+	//Data
+	eventSource.onerror = (event) => {
+		console.log(event.target.readyState)
+		if (event.target.readyState === EventSource.CLOSED) {
+			console.log('eventsource closed (' + event.target.readyState + ')')
+		}
+
+		//close the connection
+		eventSource.close();
+	}
+
+	return () => {
+		eventSource.close();
+		console.log("eventsource closed")
+	}
 }
 
 class GraphList extends React.Component {
@@ -321,13 +339,15 @@ class GraphList extends React.Component {
 		this.mapGraphElement = React.createRef();
 	}
 
+
+
 	updateAllGraphs = (/*keyword*/) =>{
 		let userKeyword =  document.getElementById('header-search').value; 
 		// console.log("==============================");
 		// console.log("Keyword:" + document.getElementById('header-search').value);
 		// console.log("==============================");
 
-		var data_from_backend = getData(userKeyword);
+		let data_from_backend = getData(userKeyword);
 
 
 		this.updateLineGraph(/*Data Received from Backend*/);
@@ -391,6 +411,11 @@ class GraphList extends React.Component {
 			name: 'Name 1',
 			label: 'Label 1',
 			description: "description 1"
+		  },{
+			x: Date.UTC(2021, 10, 4),
+			name: 'Name 2',
+			label: 'Label 2',
+			description: "Description 2"
 		  }];
 
 		//process Data Received from Backend
@@ -406,7 +431,7 @@ class GraphList extends React.Component {
 			},
 		
 			title: {
-				text: 'Source Map showing Sentiment over each province'
+				text: 'Map showing General Sentiment in each province'
 			},
 		
 			subtitle: {

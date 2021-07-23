@@ -20,13 +20,19 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <a name="demo-video-links"></a>
 ## Demos
 * [Demo 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
-* [Demo 2]()
+* [Demo 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [Demo 3]()
 * [Demo 4]()
 
 <a name="srs"></a>
 ## Documentation
-* [SRS Document](https://www.overleaf.com/read/wqrzstnshqpt)
+* SRS
+  * [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
+  * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+  * [Version 3]()
+  * [Version 4]()
+* [Coding Standards PDF](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+* [Architectural Document](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools
@@ -38,8 +44,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 ## Branching Strategy
 **master** <br>
 &nbsp;&nbsp;&nbsp; - **develop** <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - **develop**-*subsystem* <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-*subsystem*-name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-name
 
 
 <a name="about-members"></a>
@@ -83,7 +88,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <tr>
    <td style="width: 25%;">
     <h3>Shrey Mandalia</h3>
-    <p><em>Front-End and Data Analysis</em></p>
+    <p><em>Data parsing and Data Importing</em></p>
   </td>
 
    <td style="width: 25%;">

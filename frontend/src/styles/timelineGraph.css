@@ -1,4 +1,4 @@
 #timeline_div{
-	/*border: none;*/
+    grid-area: 3 / 1 / span 1 / span 6 ;
 
 }

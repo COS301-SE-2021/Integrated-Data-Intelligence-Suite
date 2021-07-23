@@ -55,10 +55,10 @@ let network_graph_options = {
         height: '100%'
     },
     title: {
-        text: 'The Indo-European Language Tree'
+        text: 'Force-Directed Network Graph between Relationships in Tweets '
     },
     subtitle: {
-        text: 'A Force-Directed Network Graph in Highcharts'
+        text: ''
     },
     plotOptions: {
         networkgraph: {
@@ -98,7 +98,7 @@ class NetworkGraph extends Component {
             },
 
             title: {
-                text: 'The Indo-European Language Tree'
+                text: 'Relationships Between Consequents and Antecedent in Tweets '
             },
 
             subtitle: {
