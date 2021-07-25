@@ -1,14 +1,29 @@
 package com.User_Service.User_Service.dataclass;
 
+import com.User_Service.User_Service.rri.Permission;
+
 import java.util.UUID;
 
 public class User {
+    UUID id;
     String firstName;
     String lastName;
     String username;
     String email;
     String password;
-    UUID id;
+    Boolean isAdmin;
+    Permission permission;
+
+
+    public User(String firstName, String lastName, String username, String email, String password, Permission permission) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = false;
+        this.permission = permission;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -48,6 +63,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 
     public UUID getId() {

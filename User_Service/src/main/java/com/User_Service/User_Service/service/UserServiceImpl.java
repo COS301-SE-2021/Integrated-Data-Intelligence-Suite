@@ -1,8 +1,16 @@
 package com.User_Service.User_Service.service;
 
+import com.User_Service.User_Service.dataclass.User;
+import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import org.springframework.stereotype.Service;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.SecretKeyFactory;
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 @Service
 public class UserServiceImpl {
@@ -21,12 +29,56 @@ public class UserServiceImpl {
     }
 
     /**
-     * This function registers the user to the platform.
-     * @param request This class contains the information to store the user within the system.
-     * @return This returns a response containing the exit code**
+     * This function registers the user to the platform. It creates a new user and stores that user class to the
+     * database using persistence. Advanced password security using PBKDF2WithHmacSHA1 algorithm.
+     * @param request This class contains the user information to store the user within the system.
+     * @return This returns a response contains if the registration of the user was successful.
      */
-    public RegisterResponse register(RegisterResponse request) {
+    public RegisterResponse register(RegisterRequest request) throws InvalidRequestException, InvalidKeySpecException, NoSuchAlgorithmException {
+        if(request == null) {
+            throw new InvalidRequestException("The register request is null.");
+        }
+        if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
+            throw new InvalidRequestException("One or more attributes of the register request is null.");
+        }
+        String password = request.getPassword();
+        String hashedPass;
+        //Hashing the password
+        int iterations = 1000;
+        char[] chars = password.toCharArray();
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+
+        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] hash = skf.generateSecret(spec).getEncoded();
+        hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
+
+        //Creating User
+        User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, request.getPermission());
+        //Storing the user in the database
+        //
         return null;
+    }
+
+    /**
+     * This is an internal function converts a byte array to a hex string.
+     * @param array This is the byte array that will be converted to a hex string.
+     * @return This is the converted byte array in a string format.
+     * @throws NoSuchAlgorithmException Thrown if the algorithm does not exist.
+     */
+    private static String toHex(byte[] array) throws NoSuchAlgorithmException
+    {
+        BigInteger bi = new BigInteger(1, array);
+        String hex = bi.toString(16);
+        int paddingLength = (array.length * 2) - hex.length();
+        if(paddingLength > 0)
+        {
+            return String.format("%0"  +paddingLength + "d", 0) + hex;
+        }else{
+            return hex;
+        }
     }
 
     /**
