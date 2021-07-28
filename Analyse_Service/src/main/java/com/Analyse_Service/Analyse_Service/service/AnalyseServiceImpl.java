@@ -422,7 +422,23 @@ public class AnalyseServiceImpl {
      * Fix/update the analysing of data by A.I
      */
 
+    private void test(){
+        List<Integer> inputList = new ArrayList<>();
+        inputList.add(1);
+        inputList.add(1);
+        inputList.add(1);
+        inputList.add(1);
+        inputList.add(1);
 
+        Logger.getLogger("org.apache").setLevel(Level.ERROR); //Level.OFF
+
+        SparkConf sparkConf = new SparkConf().setAppName("Test").setMaster("local[*]"); //session. replace
+        JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
+
+        JavaRDD<Integer > javaRDD = javaSparkContext.parallelize(inputList);
+
+        javaSparkContext.close();
+    }
 
 }
 
