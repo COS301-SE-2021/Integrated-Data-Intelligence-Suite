@@ -14,6 +14,10 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.sql.Dataset;
@@ -103,17 +107,27 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
+        /*******************SETUP SPARK*****************/
+
         SparkSession spark = SparkSession
                 .builder()
                 .appName("JavaFPGrowthExample")
                 .master("local")
                 .getOrCreate();
 
-        /*List<Row> data = Arrays.asList(
+        spark.sparkContext().setLogLevel("OFF");
+
+        /*******************SETUP DATA*****************/
+
+         /*List<Row> data = Arrays.asList(
                 RowFactory.create(Arrays.asList("Hatflied good popular".split(" "))),
                 RowFactory.create(Arrays.asList("Hatflied good red popular".split(" "))),
                 RowFactory.create(Arrays.asList("Hatflied good".split(" ")))
-        );*/
+        );
+
+        List<Row> test  = new ArrayList<>();
+        test.add(RowFactory.create(Arrays.asList("1 2 5".split(" "))));
+        System.out.println(test.get(0).toString()); */
 
         ArrayList<String> reqData = request.getDataList();
         List<Row> data = new ArrayList<>();
@@ -122,53 +136,53 @@ public class AnalyseServiceImpl {
             data.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }
 
-        spark.sparkContext().setLogLevel("OFF");
 
-        List<Row> test  = new ArrayList<>();
-        test.add(RowFactory.create(Arrays.asList("1 2 5".split(" "))));
-        System.out.println(test.get(0).toString());
+        /*******************SETUP MODEL*****************/
 
         StructType schema = new StructType(new StructField[]{ new StructField(
                 "items", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
         });
         Dataset<Row> itemsDF = spark.createDataFrame(data, schema);
 
-        FPGrowthModel model = new FPGrowth()
+        FPGrowthModel model = new FPGrowth() //pipeline/estimator-model , [can use transformers too]-dataframe,
                 .setItemsCol("items")
                 .setMinSupport(0.5)
                 .setMinConfidence(0.6)
                 .fit(itemsDF);
-        LogManager.getRootLogger().setLevel(Level.OFF);
+        LogManager.getRootLogger().setLevel(Level.OFF); //what this?
 
 
-        //model.freqItemsets().show();
+        /*******************READ MODEL OUTPUT*****************/
 
-        // Display generated association rules.
-        //model.associationRules().show();
+        /*model.freqItemsets().show();
+
+        //Display generated association rules.
+        model.associationRules().show();
+
+        Double  oi = (Double) Adata.get(0).get(2);
+        System.out.println(Adata.get(0).getList(0).toString());*/
+
+        /* transform examines the input items against all the association rules and summarize the consequent as a prediction
+        model.transform(itemsDF).show();*/
 
         List<Row> Adata = model.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
-        //Double  oi = (Double) Adata.get(0).get(2);
-        //System.out.println(Adata.get(0).getList(0).toString());
+
         ArrayList<String> row;
         ArrayList<ArrayList> results = new ArrayList<>();
         for (int i = 0; i < Adata.size(); i++) {
             row = new ArrayList<>();
-            for (int j = 0; j < Adata.get(i).getList(0).size(); j++){
-                row.add(Adata.get(i).getList(0).get(j).toString());
-            }
-            for (int k = 0; k < Adata.get(i).getList(1).size(); k++){
-                row.add(Adata.get(i).getList(1).get(k).toString());
-            }
-            row.add(Adata.get(i).get(2).toString());
-            row.add(Adata.get(i).get(3).toString());
+
+            for (int j = 0; j < Adata.get(i).getList(0).size(); j++)
+                row.add(Adata.get(i).getList(0).get(j).toString()); //1) antecedent, feq
+
+            for (int k = 0; k < Adata.get(i).getList(1).size(); k++)
+                row.add(Adata.get(i).getList(1).get(k).toString()); //2) consequent
+
+            row.add(Adata.get(i).get(2).toString()); //3) confidence
+            row.add(Adata.get(i).get(3).toString()); //4) support
             results.add(row);
         }
         System.out.println(results.toString());
-
-        // transform examines the input items against all the association rules and summarize the
-        // consequents as prediction
-        //model.transform(itemsDF).show();
-        // $example off$
 
         spark.stop();
 
@@ -210,6 +224,7 @@ public class AnalyseServiceImpl {
             }
             relationshipData.add(RowFactory.create(attempt));
         }*/
+
         ArrayList<String> reqData = request.getDataList();
 
         for(int i=0; i < reqData.size(); i++){
@@ -402,9 +417,11 @@ public class AnalyseServiceImpl {
     }
 
 
+
     /**TODO
      * Fix/update the analysing of data by A.I
      */
+
 
 
 }
