@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findUserByUsername(String username);
 
     @Modifying
-    @Query("UPDATE users u SET u.permission = :perm WHERE u.id = ?1")
-    int updatePermission(UUID userID, @Param("perm")Permission perm);
+    @Query("UPDATE users u SET u.permission = :perm WHERE u.id = :id")
+    int updatePermission(@Param("id")UUID userID, @Param("perm")Permission perm);
 }

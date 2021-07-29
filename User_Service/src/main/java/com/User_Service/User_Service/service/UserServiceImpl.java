@@ -7,6 +7,8 @@ import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
 import java.math.BigInteger;
@@ -40,6 +42,7 @@ public class UserServiceImpl {
      * @param request This class contains the user information to store the user within the system.
      * @return This returns a response contains if the registration of the user was successful.
      */
+    @Transactional
     public RegisterResponse register(RegisterRequest request) throws InvalidRequestException, InvalidKeySpecException, NoSuchAlgorithmException {
         if(request == null) {
             throw new InvalidRequestException("The register request is null.");
@@ -122,6 +125,7 @@ public class UserServiceImpl {
      * @param request This is the request for the managePermissions use case***
      * @return This is the response for the managePermissions use case***
      */
+    @Transactional
     public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
         if(request == null) {
             throw new InvalidRequestException("The register request is null.");
