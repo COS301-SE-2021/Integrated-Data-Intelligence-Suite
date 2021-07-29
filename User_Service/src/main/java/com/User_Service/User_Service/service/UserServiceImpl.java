@@ -2,8 +2,10 @@ package com.User_Service.User_Service.service;
 
 import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.exception.InvalidRequestException;
+import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
@@ -11,9 +13,13 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl {
+
+    @Autowired
+    private UserRepository repository;
 
     public UserServiceImpl() {
 
@@ -41,6 +47,7 @@ public class UserServiceImpl {
         if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
+
         String password = request.getPassword();
         String hashedPass;
         //Hashing the password
@@ -58,8 +65,9 @@ public class UserServiceImpl {
         //Creating User
         User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, request.getPermission());
         //Storing the user in the database
-        //
-        return null;
+        repository.save(newUser);
+
+        return new RegisterResponse(true, "Registration successful");
     }
 
     /**
@@ -68,8 +76,7 @@ public class UserServiceImpl {
      * @return This is the converted byte array in a string format.
      * @throws NoSuchAlgorithmException Thrown if the algorithm does not exist.
      */
-    private static String toHex(byte[] array) throws NoSuchAlgorithmException
-    {
+    private static String toHex(byte[] array) throws NoSuchAlgorithmException {
         BigInteger bi = new BigInteger(1, array);
         String hex = bi.toString(16);
         int paddingLength = (array.length * 2) - hex.length();
@@ -110,12 +117,31 @@ public class UserServiceImpl {
     }
 
     /**
-     * This function will allow the admin to manage permissions of users registered
+     * This function will allow an admin to manage permissions of users registered
      * to the system.
      * @param request This is the request for the managePermissions use case***
      * @return This is the response for the managePermissions use case***
      */
-    public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) {
-        return null;
+    public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
+        if(request == null) {
+            throw new InvalidRequestException("The register request is null.");
+        }
+        if(request.getUsername() == null  || request.getNewPermission() == null) {
+            throw new InvalidRequestException("One or more attributes of the register request is null.");
+        }
+        Optional<User> users = repository.findUserByUsername(request.getUsername());
+        if(users.isEmpty()) {
+            return new ManagePersmissionsResponse("User does not exist.", false);
+        }
+        else {
+            User user = users.get();
+            int count = repository.updatePermission(user.getId(), request.getNewPermission());
+            if(count == 0) {
+                return new ManagePersmissionsResponse("Permission for user not updated", false);
+            }
+            else {
+                return new ManagePersmissionsResponse("Permission updated", true);
+            }
+        }
     }
 }
