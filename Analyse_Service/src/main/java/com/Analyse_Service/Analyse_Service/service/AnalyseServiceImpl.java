@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.sql.Dataset;
@@ -94,7 +95,8 @@ public class AnalyseServiceImpl {
 
 
     /**
-     * This method used to find a pattern(s) within a given data
+     * This method used to find a pattern(s) within a given data,
+     * A pattern is found when there's a relation,trend, anamaly etc found as a patten; [relationship,trend,number_of_likes]
      * @param request This is a request object which contains data required to be analysed.
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -192,6 +194,7 @@ public class AnalyseServiceImpl {
 
     /**
      * This method used to find a relationship(s) within a given data
+     * A relationship is when topics are related, x is found when y is present, e.g when elon musk name pops, (bitcoin is present as-well | spacex is present as-well) [topic]
      * @param request This is a request object which contains data required to be analysed.
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -420,6 +423,8 @@ public class AnalyseServiceImpl {
 
     /**TODO
      * Fix/update the analysing of data by A.I
+     * Trends, A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic]
+     * Anomaly, A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date
      */
 
     private void test(){
