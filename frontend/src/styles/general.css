@@ -111,20 +111,41 @@ body {
 }
 
 #sidebar_menu {
-    background: black;
+    background: transparent;
     color: white;
+    border: 0;
 }
 
 #sidebar_menu > li {
     padding-left: 24px;
-    border: 2px solid red;
+    /*border: 2px solid red;*/
     width: 174px;
-    margin-left: 8px;
-    margin-right: 4px;
-    margin-bottom: 8px;
+    margin-left: 12px;
+    margin-right: 0px;
+    margin-bottom: 14px;
     margin-top: 8px;
     padding-right: 24px;
     border-radius: 6px;
+    padding-bottom: 11px;
+    padding-top: 10px;
+    height: 45px;
+    background: transparent;
+}
+
+/*When a Sidebar Menu item when it has been selected(clicked)*/
+#sidebar_menu > li.ant-menu-item-selected {
+    border: 0;
+    background: #f44336;
+}
+
+/*When a Sidebar Menu item when it has been Hovered over*/
+#sidebar_menu > li.ant-menu-item-active {
+    border: 0;
+    background: #f44336;
+}
+
+#sidebar_menu > li.ant-menu-item::after{
+    border:0;
 }
 
 
@@ -132,15 +153,23 @@ body {
 /********************* User Avatar  Card ***************************/
 /************Found in the top right corner********************/
 #user_avatar_card {
-    bottom: -59vh;
+    bottom: -50vh;
     height: 11%;
-    /*color: black;*/
+    /* color: black; */
     background: #04AA6D;
-    border: 0;
+    /* border: 0; */
+    border: 2px solid red;
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 6px;
+
 }
 
 #user_avatar_card > .ant-card-body {
     padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
 }
 
 #user_avatar_pic {
@@ -148,27 +177,29 @@ body {
     color: white;
     background: orange;
     float: left;
-    width: 45px;
-    height: 45px;
+    width: 39px;
+    height: 39px;
     line-height: 1.5715;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 12%;
     margin-left: 4px;
 }
 
 #meta_id {
-    /*border: 2px solid red;*/
+    /* border: 2px solid red; */
     float: left;
-    width: 83%;
+    width: 78%;
     height: 100%;
-    background: #04AA6D;
+    background: #04aa6d00;
+    border: 0;
 
 }
 
 .ant-card-meta {
     /*border: 2px solid blue;*/
     margin: 0;
-    background: #04AA6D;
+    background: transparent;
+    border: 0;
 
 }
 
@@ -177,7 +208,8 @@ body {
     float: left;
     padding-right: 8px;
     margin-top: 18px;
-    background: #04AA6D;
+    background: transparent;
+    border: 0;
 }
 
 /*The div for the users Name and a description*/
@@ -185,7 +217,8 @@ body {
     float: left;
     justify-content: left;
     /*margin-top: 19px;*/
-    background: #04AA6D;
+    background: transparent;
+    border: 0;
 
 }
 
@@ -193,11 +226,12 @@ body {
 #meta_id > .ant-card-meta-detail > .ant-card-meta-title {
     color: white;
     border: 0;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     margin-bottom: 0;
     margin-top: 25px;
-    background: #04AA6D;
+    background: transparent;
+    border: 0;
 
 }
 
@@ -225,12 +259,12 @@ body {
     width: 31px;
     height: 23px;
     padding: 0 0;
-    background: #04AA6D;
+    background: transparent;
 }
 
 #exit_menu_button > .exit_menu_ellipsis_icon > svg {
     color: white;
-    background: #04AA6D;
+    background: transparent;
 
 }
 
@@ -290,6 +324,11 @@ body {
     border: 0;
     border-radius: 12%;
     /*--antd-wave-shadow-color: none;*/
+}
+
+
+#root {
+    background: white;
 }
 
 
