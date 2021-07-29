@@ -95,7 +95,7 @@ class UserInfoCard extends React.Component {
                             //Image/profile Picture
                             avatar={
                                 <Avatar id={'user_avatar_pic'}
-                                        // size={28}
+                                    // size={28}
                                         shape={'square'}>
                                     M
                                 </Avatar>
@@ -138,16 +138,15 @@ class App extends Component {
 
         return (
             <>
-
                 <Layout id={'outer_layout'}>
                     <SiderDemo></SiderDemo>
                     <Layout>
                         <Header id={'top_bar'}>
                             {/*<Avatar id={'user_avatar'}>M</Avatar>*/}
                             <Search id={'search_input'}
-                                    placeholder="input search text"
-                                    allowClear
-                                    style={{width: 200}}/>
+                                    placeholder="Looking for something?"
+                                    allowClear={false}
+                            />
                         </Header>
                         <Content id={'content_section'}>Content</Content>
                         <Footer id={'footer_section'}>Footer</Footer>

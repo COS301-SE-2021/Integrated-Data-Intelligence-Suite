@@ -95,6 +95,17 @@ body {
     /*border: 3px solid #f44336;*/
 }
 
+[data-theme="dark"] .ant-layout-header {
+    background: #107bcb;
+}
+
+[data-theme="dark"] .ant-layout-footer {
+    background: #6aa0c7;
+}
+
+/*************************************************************/
+/********************* Sidebar  ***************************/
+/************Found in the top right corner********************/
 #sidebar_div {
     background: black;
 }
@@ -104,12 +115,16 @@ body {
     color: white;
 }
 
-[data-theme="dark"] .ant-layout-header {
-    background: #107bcb;
-}
-
-[data-theme="dark"] .ant-layout-footer {
-    background: #6aa0c7;
+#sidebar_menu > li {
+    padding-left: 24px;
+    border: 2px solid red;
+    width: 174px;
+    margin-left: 8px;
+    margin-right: 4px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    padding-right: 24px;
+    border-radius: 6px;
 }
 
 
@@ -120,7 +135,7 @@ body {
     bottom: -59vh;
     height: 11%;
     /*color: black;*/
-    background: black;
+    background: #04AA6D;
     border: 0;
 }
 
@@ -131,7 +146,7 @@ body {
 #user_avatar_pic {
     /*border: 2px solid black;*/
     color: white;
-    background: springgreen;
+    background: orange;
     float: left;
     width: 45px;
     height: 45px;
@@ -146,34 +161,44 @@ body {
     float: left;
     width: 83%;
     height: 100%;
+    background: #04AA6D;
+
 }
 
 .ant-card-meta {
     /*border: 2px solid blue;*/
     margin: 0;
+    background: #04AA6D;
+
 }
 
-
+/*The div wrapping the users avatar*/
 #meta_id > .ant-card-meta-avatar {
     float: left;
     padding-right: 8px;
     margin-top: 18px;
+    background: #04AA6D;
 }
 
+/*The div for the users Name and a description*/
 #meta_id > .ant-card-meta-detail {
     float: left;
     justify-content: left;
     /*margin-top: 19px;*/
+    background: #04AA6D;
+
 }
 
 /*The users' Name*/
 #meta_id > .ant-card-meta-detail > .ant-card-meta-title {
-    color: springgreen;
+    color: white;
     border: 0;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 0;
     margin-top: 25px;
+    background: #04AA6D;
+
 }
 
 /*The grey out section underneath the name*/
@@ -182,13 +207,15 @@ body {
     height: 17px;
     width: 12px;
     color: #9c9494;
+    background: #04AA6D;
+
 
 }
 
-
+/*The ellipsis button*/
 #exit_menu_button {
     /*border: 1px solid green;*/
-    border:0;
+    border: 0;
     font-size: 0;
     float: right;
     transform: rotate(
@@ -198,20 +225,71 @@ body {
     width: 31px;
     height: 23px;
     padding: 0 0;
-    background: black   ;
+    background: #04AA6D;
 }
 
-#exit_menu_button > .exit_menu_ellipsis_icon > svg{
+#exit_menu_button > .exit_menu_ellipsis_icon > svg {
     color: white;
-    background: black;
+    background: #04AA6D;
 
 }
 
 
 /*************************************************************/
 /********************* Search Bar ***************************/
-/************Found in header********************/
+/********************* Found in header ********************/
 #search_input {
-    border: 3px solid red;
+    /*border-bottom: 1px solid red;*/
+    padding: 5px;
+    padding-left: 6px;
+    margin: 0;
+    border: 0;
 }
+
+#search_input ::selection {
+    color: #fff;
+    background: springgreen;
+}
+
+
+#search_input:focus {
+    box-shadow: none;
+}
+
+
+#top_bar > .ant-input-search {
+    /*border: 2px solid black;*/
+    border: 0;
+    width: 300px;
+    float: right;
+    margin-top: 15px;
+}
+
+#top_bar > .ant-input-search > .ant-input-group {
+    border: 2px solid green;
+    padding: 5px;
+    border-radius: 11px;
+}
+
+#top_bar > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {
+    border: 2px solid blue;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+/*The div that contains the search Button i.e its parent*/
+#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {
+    /*BORDER: 2PX SOLID YELLOW;*/
+    border: 0;
+    left: 0;
+}
+
+/* The button that contains the search icon*/
+#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {
+    /*border-bottom: 1px solid red;*/
+    border: 0;
+    border-radius: 12%;
+    /*--antd-wave-shadow-color: none;*/
+}
+
 
