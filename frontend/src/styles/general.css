@@ -107,7 +107,7 @@ body {
 /********************* Sidebar  ***************************/
 /************Found in the top right corner********************/
 #sidebar_div {
-    background: black;
+    background: #A4E0C1;
 }
 
 #sidebar_menu {
@@ -135,17 +135,28 @@ body {
 /*When a Sidebar Menu item when it has been selected(clicked)*/
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
-    background: #f44336;
+    background: #15B761;
+    color: white;
 }
 
 /*When a Sidebar Menu item when it has been Hovered over*/
 #sidebar_menu > li.ant-menu-item-active {
     border: 0;
-    background: #f44336;
+    color: #15B761;
+}
+/*Hovering over a menu item that has been selected*/
+#sidebar_menu > li.ant-menu-item-active.ant-menu-item-selected {
+    border: 0;
+    color: white;
 }
 
+
+
+
+/**/
 #sidebar_menu > li.ant-menu-item::after{
     border:0;
+    color: white;
 }
 
 
@@ -156,9 +167,9 @@ body {
     bottom: -50vh;
     height: 11%;
     /* color: black; */
-    background: #04AA6D;
-    /* border: 0; */
-    border: 2px solid red;
+    background: #15B761;
+     border: 0;
+    /*border: 2px solid red;*/
     margin-left: 8px;
     margin-right: 8px;
     border-radius: 6px;
