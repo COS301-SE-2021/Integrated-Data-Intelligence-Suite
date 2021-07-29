@@ -1,16 +1,15 @@
 
-body{
+body {
     margin: 0;
     padding: 0;
     background: #efefef;
 }
 
-div.search_bar{
+div.search_bar {
     grid-area: 1/1 /span 1 / span 10;
 }
 
 form.search-form button {
-
     width: 10%;
     border-radius: 0 5px 5px 0;
     padding-left: 3%;
@@ -23,7 +22,7 @@ form {
 }
 
 
-#header-search{
+#header-search {
     width: 88%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -46,4 +45,10 @@ form {
     width: 10%;
 
     border-radius: 0 5px 5px 0;
+}
+
+.content-wrapper{
+    border: 3px solid red;
+    box-sizing: border-box;
+    border-radius: 5px 0 0 5px;
 }
