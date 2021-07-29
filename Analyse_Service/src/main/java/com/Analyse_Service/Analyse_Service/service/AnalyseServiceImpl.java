@@ -111,13 +111,13 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP SPARK*****************/
 
-        SparkSession spark = SparkSession
+        SparkSession sparkPatterns = SparkSession
                 .builder()
                 .appName("JavaFPGrowthExample")
                 .master("local")
                 .getOrCreate();
 
-        spark.sparkContext().setLogLevel("OFF");
+        sparkPatterns.sparkContext().setLogLevel("OFF");
 
         /*******************SETUP DATA*****************/
 
@@ -132,27 +132,25 @@ public class AnalyseServiceImpl {
         System.out.println(test.get(0).toString()); */
 
         ArrayList<String> reqData = request.getDataList();
-        List<Row> data = new ArrayList<>();
+        List<Row> patternData = new ArrayList<>();
 
         for(int i=0; i < reqData.size(); i++){
-            data.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
+            patternData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }
-
 
         /*******************SETUP MODEL*****************/
 
         StructType schema = new StructType(new StructField[]{ new StructField(
                 "items", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
         });
-        Dataset<Row> itemsDF = spark.createDataFrame(data, schema);
+        Dataset<Row> itemsDF = sparkPatterns.createDataFrame(patternData, schema);
 
         FPGrowthModel model = new FPGrowth() //pipeline/estimator-model , [can use transformers too]-dataframe,
                 .setItemsCol("items")
                 .setMinSupport(0.5)
                 .setMinConfidence(0.6)
                 .fit(itemsDF);
-        LogManager.getRootLogger().setLevel(Level.OFF); //what this?
-
+        LogManager.getRootLogger().setLevel(Level.OFF); //TODO: what this for?
 
         /*******************READ MODEL OUTPUT*****************/
 
@@ -167,26 +165,25 @@ public class AnalyseServiceImpl {
         /* transform examines the input items against all the association rules and summarize the consequent as a prediction
         model.transform(itemsDF).show();*/
 
-        List<Row> Adata = model.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
-
-        ArrayList<String> row;
+        List<Row> pData = model.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < Adata.size(); i++) {
-            row = new ArrayList<>();
 
-            for (int j = 0; j < Adata.get(i).getList(0).size(); j++)
-                row.add(Adata.get(i).getList(0).get(j).toString()); //1) antecedent, feq
+        for (int i = 0; i < pData.size(); i++) {
+            ArrayList<String> row = new ArrayList<>();
 
-            for (int k = 0; k < Adata.get(i).getList(1).size(); k++)
-                row.add(Adata.get(i).getList(1).get(k).toString()); //2) consequent
+            for (int j = 0; j < pData.get(i).getList(0).size(); j++)
+                row.add(pData.get(i).getList(0).get(j).toString()); //1) antecedent, feq
 
-            row.add(Adata.get(i).get(2).toString()); //3) confidence
-            row.add(Adata.get(i).get(3).toString()); //4) support
+            for (int k = 0; k < pData.get(i).getList(1).size(); k++)
+                row.add(pData.get(i).getList(1).get(k).toString()); //2) consequent
+
+            row.add(pData.get(i).get(2).toString()); //3) confidence
+            row.add(pData.get(i).get(3).toString()); //4) support
             results.add(row);
         }
         System.out.println(results.toString());
 
-        spark.stop();
+        sparkPatterns.stop();
 
         return new FindPatternResponse(results);
     }
@@ -207,6 +204,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
+        /*******************SETUP SPARK*****************/
 
         SparkSession sparkRelationships = SparkSession
                 .builder()
@@ -214,7 +212,8 @@ public class AnalyseServiceImpl {
                 .master("local")
                 .getOrCreate();
 
-        List<Row> relationshipData  = new ArrayList<>();
+        /*******************SETUP DATA*****************/
+
         /*for (int i = 0; i < 100; i++) {
             //MOCK DATASET WITH 5 "features"
             ArrayList<String> attempt = new ArrayList<>();
@@ -228,12 +227,14 @@ public class AnalyseServiceImpl {
             relationshipData.add(RowFactory.create(attempt));
         }*/
 
+        List<Row> relationshipData  = new ArrayList<>();
         ArrayList<String> reqData = request.getDataList();
 
         for(int i=0; i < reqData.size(); i++){
             relationshipData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }
 
+        /*******************SETUP MODEL*****************/
 
         StructType schema = new StructType(new StructField[]{ new StructField(
                 "Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
@@ -247,16 +248,19 @@ public class AnalyseServiceImpl {
                 .setMinConfidence(0.6)
                 .fit(itemsDF);
 
-        model.freqItemsets().show();
-        List<Row> Rdata = model.freqItemsets().collectAsList();
+        /*******************READ MODEL OUTPUT*****************/
 
+        model.freqItemsets().show(); //TODO: what this for?
+        List<Row> rData = model.freqItemsets().collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < Rdata.size(); i++) {
+
+        for (int i = 0; i < rData.size(); i++) {
             ArrayList<String> row = new ArrayList<>();
-            for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
-                row.add(Rdata.get(i).getList(0).get(j).toString());
-            }
-            row.add(Rdata.get(i).get(1).toString());
+
+            for (int j = 0; j < rData.get(i).getList(0).size(); j++)
+                row.add(rData.get(i).getList(0).get(j).toString());
+
+            row.add(rData.get(i).get(1).toString());
             results.add(row);
         }
         System.out.println(results.toString());
@@ -280,13 +284,16 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
+        /*******************SETUP SPARK*****************/
+
         SparkSession sparkPredictions = SparkSession
                 .builder()
                 .appName("Predictions")
                 .master("local")
                 .getOrCreate();
 
-        List<Row> PredictionsData  = new ArrayList<>();
+        /*******************SETUP DATA*****************/
+
         /*for (int i = 0; i < 100; i++) {
             //MOCK DATASET WITH 5 "features"
             ArrayList<String> attempt = new ArrayList<>();
@@ -299,18 +306,31 @@ public class AnalyseServiceImpl {
             }
             PredictionsData.add(RowFactory.create(attempt));
         }*/
+
+        List<Row> predictionsData  = new ArrayList<>();
         ArrayList<String> reqData = request.getDataList();
 
         for(int i=0; i < reqData.size(); i++){
-            PredictionsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
+            predictionsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }
 
+        /*******************SETUP MODEL*****************/
+
+        /*MOCK DATA USED TO MAKE Prediction
+        List<Row> testData = Arrays.asList(
+                RowFactory.create(Arrays.asList("1 2i 3ii".split(" ")))
+        );
+
+        //Dataset<Row> tesRes = sparkPredictions.createDataFrame(testData,schema);
+        //Dataset<Row> Results = model.transform(itemsDF);
+
+        //Results.show();*/
 
         StructType schema = new StructType(new StructField[]{
                 new StructField("Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
         });
 
-        Dataset<Row> itemsDF = sparkPredictions.createDataFrame(PredictionsData, schema);
+        Dataset<Row> itemsDF = sparkPredictions.createDataFrame(predictionsData, schema);
         itemsDF.show();
         FPGrowthModel model = new FPGrowth()
                 .setItemsCol("Tweets")
@@ -318,30 +338,22 @@ public class AnalyseServiceImpl {
                 .setMinConfidence(0.6)
                 .fit(itemsDF);
 
-        //MOCK DATA USED TO MAKE Prediction
-        List<Row> testData = Arrays.asList(
-                RowFactory.create(Arrays.asList("1 2i 3ii".split(" ")))
-        );
+        /*******************READ MODEL OUTPUT*****************/
 
-        Dataset<Row> tesRes = sparkPredictions.createDataFrame(testData,schema);
-
-        Dataset<Row> Results = model.transform(itemsDF);
-
-        //Results.show();
-
-        List<Row> Pdata = Results.collectAsList();
+        List<Row> pData = model.transform(itemsDF).collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < Pdata.size(); i++) {
+
+        for (int i = 0; i < pData.size(); i++) {
             ArrayList<ArrayList> row = new ArrayList<>();
             ArrayList<String> col1 = new ArrayList<>();
             ArrayList<String> col2 = new ArrayList<>();
-            for (int j = 0; j < Pdata.get(i).getList(0).size(); j++){
-                col1.add(Pdata.get(i).getList(0).get(j).toString());
-            }
-            for (int j = 0; j < Pdata.get(i).getList(1).size(); j++){
 
-                col1.add(Pdata.get(i).getList(1).get(j).toString());
-            }
+            for (int j = 0; j < pData.get(i).getList(0).size(); j++)
+                col1.add(pData.get(i).getList(0).get(j).toString());
+
+            for (int j = 0; j < pData.get(i).getList(1).size(); j++)
+                col1.add(pData.get(i).getList(1).get(j).toString());
+
             row.add(col1);
             row.add(col2);
 
@@ -394,6 +406,65 @@ public class AnalyseServiceImpl {
 
         TweetWithSentiment tweetWithSentiment = new TweetWithSentiment(line, toCss(mainSentiment));
         return new FindSentimentResponse(tweetWithSentiment);
+    }
+
+    public FindTrendsResponse findTrends(FindTrendsRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> trendsData  = new ArrayList<>();
+
+        /*******************SETUP MODEL*****************/
+
+        /*******************READ MODEL OUTPUT*****************/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+
+        return new FindTrendsResponse(results);
+    }
+
+
+    public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("findAnomalies Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkAnomalies = SparkSession
+                .builder()
+                .appName("Anomalies")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> anomaliesData  = new ArrayList<>();
+
+        /*******************SETUP MODEL*****************/
+
+        /*******************READ MODEL OUTPUT*****************/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+
+        return new FindAnomaliesResponse(results);
     }
 
 
