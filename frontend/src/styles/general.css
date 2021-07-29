@@ -1,3 +1,4 @@
+@import '~antd/dist/antd.css';
 
 body {
     margin: 0;
@@ -5,50 +6,188 @@ body {
     background: #efefef;
 }
 
-div.search_bar {
-    grid-area: 1/1 /span 1 / span 10;
-}
 
-form.search-form button {
-    width: 10%;
-    border-radius: 0 5px 5px 0;
-    padding-left: 3%;
-}
-
-form {
-    border: 3px solid #f1f1f1;
-    padding-left: 3%;
-    border-radius: 5px;
-}
-
-
-#header-search {
-    width: 88%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 5px 0 0 5px;
-}
-
-
-#search_btn {
-    background-color: #04AA6D;
-    color: white;
-    padding: 13px 20px;
-
-    margin: 8px 0 8px -3%;
-    border: none;
-    cursor: pointer;
-
-    width: 10%;
-
-    border-radius: 0 5px 5px 0;
-}
-
-.content-wrapper{
+.content-wrapper {
     border: 3px solid red;
     box-sizing: border-box;
     border-radius: 5px 0 0 5px;
 }
+
+
+.code-box-demo {
+    text-align: center;
+}
+
+/*Header*/
+.ant-layout-header {
+    background: white;
+    height: 206px;
+    padding: 0 1%;
+}
+
+
+/*Footer*/
+.ant-layout-footer {
+    line-height: 1.5;
+    color: black;
+    background: #7dbcea;
+
+}
+
+.ant-layout-sider {
+    color: #fff;
+    line-height: 120px;
+    /*background: #3ba0e9;*/
+}
+
+
+.ant-layout-content {
+    min-height: 120px;
+    color: #fff;
+    line-height: 120px;
+    background: #107bcb;
+}
+
+> .code-box-demo > .ant-layout + .ant-layout {
+    margin-top: 48px;
+}
+
+/*Color of a Menu Item When Selected*/
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: deeppink;
+}
+
+
+/*************************************************************/
+/****************** Dark Theme Settings **********************/
+/*************************************************************/
+/*Color of the menu items(The drop Down menu Items)*/
+.ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub, .ant-menu.ant-menu-dark .ant-menu-sub {
+    color: rgb(252, 0, 64);
+    background: black;
+}
+
+[data-theme="dark"] .ant-layout-sider {
+    /*background: #3499ec;*/
+
+}
+
+[data-theme="dark"] .ant-layout-content {
+    background: #107bcb;
+}
+
+
+/* The Collapse/Expand Trigger(arrow) at the bottom of the SideBar*/
+.ant-layout-sider-trigger {
+    background: black;
+}
+
+#outer_layout {
+    min-height: 100vh;
+    background: black;
+}
+
+#logo {
+    height: 32px;
+    margin: 16px;
+    background: rgb(252, 0, 64);
+    line-height: 3px;
+    /*border: 3px solid #f44336;*/
+}
+
+#sidebar_div {
+    background: black;
+}
+
+#sidebar_menu {
+    background: black;
+    color: white;
+}
+
+[data-theme="dark"] .ant-layout-header {
+    background: #107bcb;
+}
+
+[data-theme="dark"] .ant-layout-footer {
+    background: #6aa0c7;
+}
+
+
+/*************************************************************/
+/********************* User Avatar  Card ***************************/
+/************Found in the top right corner********************/
+#user_avatar_card {
+    bottom: -59vh;
+    height: 11%;
+
+}
+
+#user_avatar_card > .ant-card-body {
+    padding: 0;
+
+}
+
+#user_avatar_pic {
+    float: left;
+    color: white;
+    background: springgreen;
+    width: 45px;
+    height: 45px;
+    line-height: 1.5715;
+    font-size: 18px;
+    border-radius: 12%;
+    border: 2px solid black;
+}
+
+#meta_id {
+    border: 2px solid red;
+    float: left;
+    width: 83%;
+    height: 100%;
+}
+
+.ant-card-meta {
+    margin: 0;
+    border: 2px solid blue;
+}
+
+
+#meta_id > .ant-card-meta-avatar {
+    float: left;
+    padding-right: 8px;
+}
+
+#meta_id > .ant-card-meta-detail {
+    float: left;
+    justify-content: left;
+    margin-top:19px;
+}
+
+/*The users' Name*/
+#meta_id > .ant-card-meta-title {
+    color: #f44336;
+    border: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+#meta_id > .ant-card-meta-description{
+    font-size: 10px;
+}
+
+
+#exit_menu_button {
+    border: 1px solid green;
+    font-size: 0;
+    float: right;
+    transform: rotate(90deg); /* Makes the ellipsis Vertical instead of horizontal*/
+    margin-top: 19px;
+}
+
+
+/*************************************************************/
+/********************* Search Bar ***************************/
+/************Found in header********************/
+#search_input {
+    border: 3px solid red;
+}
+
