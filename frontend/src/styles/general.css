@@ -124,7 +124,6 @@ body {
 
 #user_avatar_card > .ant-card-body {
     padding: 0;
-
 }
 
 #user_avatar_pic {
@@ -155,23 +154,30 @@ body {
 #meta_id > .ant-card-meta-avatar {
     float: left;
     padding-right: 8px;
+    margin-top: 18px;
 }
 
 #meta_id > .ant-card-meta-detail {
     float: left;
     justify-content: left;
-    margin-top:19px;
+    margin-top: 19px;
 }
 
 /*The users' Name*/
-#meta_id > .ant-card-meta-title {
+#meta_id > .ant-card-meta-detail > .ant-card-meta-title {
     color: #f44336;
     border: 0;
     font-size: 14px;
     font-weight: 600;
+    margin-bottom: 0;
 }
-#meta_id > .ant-card-meta-description{
-    font-size: 10px;
+
+/*The grey out section underneath the name*/
+#meta_id > .ant-card-meta-detail > .ant-card-meta-description {
+    font-size: 11px;
+    height: 17px;
+    width: 12px;
+
 }
 
 
@@ -179,8 +185,13 @@ body {
     border: 1px solid green;
     font-size: 0;
     float: right;
-    transform: rotate(90deg); /* Makes the ellipsis Vertical instead of horizontal*/
+    transform: rotate(
+            90deg
+    );
     margin-top: 19px;
+    width: 31px;
+    height: 23px;
+    padding: 0 0;
 }
 
 
