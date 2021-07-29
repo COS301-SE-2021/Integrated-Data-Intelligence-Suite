@@ -119,7 +119,9 @@ body {
 #user_avatar_card {
     bottom: -59vh;
     height: 11%;
-
+    /*color: black;*/
+    background: black;
+    border: 0;
 }
 
 #user_avatar_card > .ant-card-body {
@@ -127,27 +129,28 @@ body {
 }
 
 #user_avatar_pic {
-    float: left;
+    /*border: 2px solid black;*/
     color: white;
     background: springgreen;
+    float: left;
     width: 45px;
     height: 45px;
     line-height: 1.5715;
     font-size: 18px;
     border-radius: 12%;
-    border: 2px solid black;
+    margin-left: 4px;
 }
 
 #meta_id {
-    border: 2px solid red;
+    /*border: 2px solid red;*/
     float: left;
     width: 83%;
     height: 100%;
 }
 
 .ant-card-meta {
+    /*border: 2px solid blue;*/
     margin: 0;
-    border: 2px solid blue;
 }
 
 
@@ -160,16 +163,17 @@ body {
 #meta_id > .ant-card-meta-detail {
     float: left;
     justify-content: left;
-    margin-top: 19px;
+    /*margin-top: 19px;*/
 }
 
 /*The users' Name*/
 #meta_id > .ant-card-meta-detail > .ant-card-meta-title {
-    color: #f44336;
+    color: springgreen;
     border: 0;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 0;
+    margin-top: 25px;
 }
 
 /*The grey out section underneath the name*/
@@ -177,21 +181,30 @@ body {
     font-size: 11px;
     height: 17px;
     width: 12px;
+    color: #9c9494;
 
 }
 
 
 #exit_menu_button {
-    border: 1px solid green;
+    /*border: 1px solid green;*/
+    border:0;
     font-size: 0;
     float: right;
     transform: rotate(
             90deg
     );
-    margin-top: 19px;
+    margin-top: 24px;
     width: 31px;
     height: 23px;
     padding: 0 0;
+    background: black   ;
+}
+
+#exit_menu_button > .exit_menu_ellipsis_icon > svg{
+    color: white;
+    background: black;
+
 }
 
 

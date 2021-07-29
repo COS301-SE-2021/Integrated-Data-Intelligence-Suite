@@ -89,8 +89,8 @@ class UserInfoCard extends React.Component {
                         <Meta
                             id={'meta_id'}
                             className={'user_meta_card'}
-                            title="Myron Lopes"
-                            description="youremail@host.com"
+                            title="Cecilie Montoeli"
+                            // description="youremail@host.com"
 
                             //Image/profile Picture
                             avatar={
