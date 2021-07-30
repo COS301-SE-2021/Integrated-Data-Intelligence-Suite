@@ -23,6 +23,10 @@ import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
+import org.apache.spark.mllib.clustering.KMeans;
+import org.apache.spark.mllib.clustering.KMeansModel;
+import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
@@ -520,11 +524,47 @@ public class AnalyseServiceImpl {
                 .master("local")
                 .getOrCreate();
 
+        JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
+
         /*******************SETUP DATA*****************/
 
         List<Row> anomaliesData  = new ArrayList<>();
 
         /*******************SETUP MODEL*****************/
+
+        // Load and parse data
+        String data = "mllib/kmeans/data.txt"; //TODO: default
+        JavaRDD<String> rddData = anomaliesSparkContext.textFile(data);
+        JavaRDD<Vector> parsedData =  rddData.map(s -> {
+            String[] sarray = s.split(" ");
+            double[] values = new double[sarray.length];
+            for (int i = 0; i < sarray.length; i++) {
+                values[i] = Double.parseDouble(sarray[i]);
+            }
+            return Vectors.dense(values);
+        });
+        parsedData.cache();
+
+        // Cluster the data into two classes using KMeans
+        int numClusters = 2;
+        int numIterations = 20;
+        KMeansModel clusters = KMeans.train(parsedData.rdd(), numClusters, numIterations);
+
+        System.out.println("Cluster centers:");
+        for (Vector center: clusters.clusterCenters()) {
+            System.out.println(" " + center);
+        }
+        double cost = clusters.computeCost(parsedData.rdd());
+        System.out.println("Cost: " + cost);
+
+        // Evaluate clustering by computing Within Set Sum of Squared Errors
+        double WSSSE = clusters.computeCost(parsedData.rdd());
+        System.out.println("Within Set Sum of Squared Errors = " + WSSSE);
+
+        // Save and load model
+        clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
+        KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
+                "target/org/apache/spark/JavaKMeansExample/KMeansModel");
 
         /*******************READ MODEL OUTPUT*****************/
 
