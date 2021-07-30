@@ -19,6 +19,9 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
+import org.apache.spark.ml.classification.BinaryLogisticRegressionTrainingSummary;
+import org.apache.spark.ml.classification.LogisticRegression;
+import org.apache.spark.ml.classification.LogisticRegressionModel;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.sql.Dataset;
@@ -26,7 +29,9 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.*;
+import org.apache.spark.sql.functions;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,7 +118,7 @@ public class AnalyseServiceImpl {
 
         SparkSession sparkPatterns = SparkSession
                 .builder()
-                .appName("JavaFPGrowthExample")
+                .appName("Pattern")
                 .master("local")
                 .getOrCreate();
 
@@ -236,7 +241,7 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP MODEL*****************/
 
-        StructType schema = new StructType(new StructField[]{ new StructField(
+        /*StructType schema = new StructType(new StructField[]{ new StructField(
                 "Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
         });
 
@@ -246,12 +251,65 @@ public class AnalyseServiceImpl {
                 .setItemsCol("Tweets")
                 .setMinSupport(0.15)
                 .setMinConfidence(0.6)
-                .fit(itemsDF);
+                .fit(itemsDF);*/
+
+
+        Dataset<Row> training = sparkRelationships.read().parquet("..."); //TODO: default
+
+        LogisticRegression lr = new LogisticRegression()
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8);
+
+        // Fit the model
+        LogisticRegressionModel lrModel = lr.fit(training);
+
+        // Print the coefficients and intercept for logistic regression
+        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
+
+        // We can also use the multinomial family for binary classification
+        LogisticRegression mlr = new LogisticRegression()
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8)
+                .setFamily("multinomial");
+
+        // Fit the model
+        LogisticRegressionModel mlrModel = mlr.fit(training);
+
+        // Print the coefficients and intercepts for logistic regression with multinomial family
+        System.out.println("Multinomial coefficients: " + lrModel.coefficientMatrix()
+                + "\nMultinomial intercepts: " + mlrModel.interceptVector());
+
+
+        /******************Analyse Model Accuracy**************/
+
+        BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
+
+        // Obtain the loss per iteration.
+        double[] objectiveHistory = trainingSummary.objectiveHistory();
+        for (double lossPerIteration : objectiveHistory) {
+            System.out.println(lossPerIteration);
+        }
+
+        // Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
+        Dataset<Row> roc = trainingSummary.roc();
+        roc.show();
+        roc.select("FPR").show();
+        System.out.println(trainingSummary.areaUnderROC());
+
+        // Get the threshold corresponding to the maximum F-Measure and rerun LogisticRegression with this selected threshold.
+        Dataset<Row> fMeasure = trainingSummary.fMeasureByThreshold();
+        double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
+        double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
+                .select("threshold").head().getDouble(0);
+        lrModel.setThreshold(bestThreshold);
 
         /*******************READ MODEL OUTPUT*****************/
 
-        model.freqItemsets().show(); //TODO: what this for?
-        List<Row> rData = model.freqItemsets().collectAsList();
+        //model.freqItemsets().show();
+        //List<Row> rData = model.freqItemsets().collectAsList();
+        List<Row> rData =new ArrayList<>(); //TODO: default
         ArrayList<ArrayList> results = new ArrayList<>();
 
         for (int i = 0; i < rData.size(); i++) {
@@ -271,7 +329,46 @@ public class AnalyseServiceImpl {
     }
 
     /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindTrendsResponse findTrends(FindTrendsRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> trendsData  = new ArrayList<>();
+
+        /*******************SETUP MODEL*****************/
+
+
+
+        /*******************READ MODEL OUTPUT*****************/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+
+        return new FindTrendsResponse(results);
+    }
+
+    /**
      * This method used to find a predictions(s) within a given data
+     * A prediction is a prediction...
      * @param request This is a request object which contains data required to be analysed.
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -367,6 +464,44 @@ public class AnalyseServiceImpl {
     }
 
     /**
+     * This method used to find a anomalies(s) within a given data.
+     * A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date.
+     * @param request This is a request object which contains data required to be analysed.
+     * @return findAnomaliesResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("findAnomalies Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkAnomalies = SparkSession
+                .builder()
+                .appName("Anomalies")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> anomaliesData  = new ArrayList<>();
+
+        /*******************SETUP MODEL*****************/
+
+        /*******************READ MODEL OUTPUT*****************/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+
+        return new FindAnomaliesResponse(results);
+    }
+
+    /**************************************************************/
+
+    /**
      * This method used to find a sentiment of a statement
      * @param request This is a request object which contains data required to be analysed.
      * @return FindSentimentResponse This object contains data of the sentiment found within the input data.
@@ -408,65 +543,6 @@ public class AnalyseServiceImpl {
         return new FindSentimentResponse(tweetWithSentiment);
     }
 
-    public FindTrendsResponse findTrends(FindTrendsRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FindTrendsRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList is null");
-        }
-
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                .getOrCreate();
-
-        /*******************SETUP DATA*****************/
-
-        List<Row> trendsData  = new ArrayList<>();
-
-        /*******************SETUP MODEL*****************/
-
-        /*******************READ MODEL OUTPUT*****************/
-
-        ArrayList<ArrayList> results = new ArrayList<>();
-
-        return new FindTrendsResponse(results);
-    }
-
-
-    public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("findAnomalies Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList is null");
-        }
-
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkAnomalies = SparkSession
-                .builder()
-                .appName("Anomalies")
-                .master("local")
-                .getOrCreate();
-
-        /*******************SETUP DATA*****************/
-
-        List<Row> anomaliesData  = new ArrayList<>();
-
-        /*******************SETUP MODEL*****************/
-
-        /*******************READ MODEL OUTPUT*****************/
-
-        ArrayList<ArrayList> results = new ArrayList<>();
-
-        return new FindAnomaliesResponse(results);
-    }
-
 
     /**
      * Helper function, this method used to map sentiments
@@ -490,13 +566,6 @@ public class AnalyseServiceImpl {
         }
     }
 
-
-
-    /**TODO
-     * Fix/update the analysing of data by A.I
-     * Trends, A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic]
-     * Anomaly, A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date
-     */
 
     private void test(){
         List<Integer> inputList = new ArrayList<>();
