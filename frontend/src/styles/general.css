@@ -18,19 +18,28 @@ body {
     text-align: center;
 }
 
-/*Header*/
+/*************************************************************/
+/************************ Header *****************************/
+/*************************************************************/
 .ant-layout-header {
-    background: white;
+    background: lightgrey;
     height: 206px;
     padding: 0 1%;
+    border: 1px solid red;
 }
 
+.ant-layout-content {
+    min-height: 120px;
+    color: #fff;
+    line-height: 120px;
+    background: lightgrey;
+}
 
 /*Footer*/
 .ant-layout-footer {
     line-height: 1.5;
     color: black;
-    background: #7dbcea;
+    background: lightgrey;
 
 }
 
@@ -40,13 +49,6 @@ body {
     /*background: #3ba0e9;*/
 }
 
-
-.ant-layout-content {
-    min-height: 120px;
-    color: #fff;
-    line-height: 120px;
-    background: #107bcb;
-}
 
 > .code-box-demo > .ant-layout + .ant-layout {
     margin-top: 48px;
@@ -90,7 +92,8 @@ body {
 #logo {
     height: 32px;
     margin: 16px;
-    background: rgb(252, 0, 64);
+    /*background: rgb(252, 0, 64);*/
+    background: transparent;
     line-height: 3px;
     /*border: 3px solid #f44336;*/
 }
@@ -107,7 +110,7 @@ body {
 /********************* Sidebar  ***************************/
 /************Found in the top right corner********************/
 #sidebar_div {
-    background: #A4E0C1;
+    background: #95DBB6;
 }
 
 #sidebar_menu {
@@ -144,6 +147,7 @@ body {
     border: 0;
     color: #15B761;
 }
+
 /*Hovering over a menu item that has been selected*/
 #sidebar_menu > li.ant-menu-item-active.ant-menu-item-selected {
     border: 0;
@@ -151,11 +155,9 @@ body {
 }
 
 
-
-
 /**/
-#sidebar_menu > li.ant-menu-item::after{
-    border:0;
+#sidebar_menu > li.ant-menu-item::after {
+    border: 0;
     color: white;
 }
 
@@ -168,7 +170,7 @@ body {
     height: 11%;
     /* color: black; */
     background: #15B761;
-     border: 0;
+    border: 0;
     /*border: 2px solid red;*/
     margin-left: 8px;
     margin-right: 8px;
@@ -288,8 +290,26 @@ body {
     padding: 5px;
     padding-left: 6px;
     margin: 0;
-    border: 0;
+    border: 2px solid transparent;
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
 }
+
+#search_input:hover{
+    border-left: 2px solid #15B761;
+    border-bottom: 2px solid #15B761;
+    border-top: 2px solid #15B761;
+    border-right: 2px solid transparent;
+}
+
+/* While the search Input is still with the cursor in it*/
+#search_input:focus{
+    border-left: 2px solid #15B761;
+    border-bottom: 2px solid #15B761;
+    border-top: 2px solid #15B761;
+    border-right: 2px solid transparent;
+}
+
 
 #search_input ::selection {
     color: #fff;
@@ -311,13 +331,15 @@ body {
 }
 
 #top_bar > .ant-input-search > .ant-input-group {
-    border: 2px solid green;
+    border: 2px solid lightgrey;
+    /*border: 0;*/
     padding: 5px;
     border-radius: 11px;
 }
 
+
 #top_bar > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {
-    border: 2px solid blue;
+    border: 3px solid blue;
     padding-right: 4px;
     padding-left: 4px;
 }
@@ -327,6 +349,20 @@ body {
     /*BORDER: 2PX SOLID YELLOW;*/
     border: 0;
     left: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border: 2px solid transparent;
+}
+/*When Hovering over The div that contains the search Button i.e its parent*/
+#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon:hover {
+    /*BORDER: 2PX SOLID YELLOW;*/
+    border: 0;
+    left: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom: 2px solid #15B761;
+    border-top: 2px solid #15B761;
+    border-right: 2px solid #15B761;
 }
 
 /* The button that contains the search icon*/
@@ -339,7 +375,7 @@ body {
 
 
 #root {
-    background: white;
+    background: lightgrey;
 }
 
 

@@ -5,12 +5,14 @@ import {
 import {
     HomeOutlined, BarChartOutlined, SettingOutlined, LockOutlined, PoweroffOutlined, EllipsisOutlined
 } from '@ant-design/icons';
+import { Typography } from 'antd';
+import './App.scss';
 import {Route} from 'react-router-dom';
 import TopNavBar from "./components/TopNavBar";
-import './App.scss';
 import GraphList from './components/GraphList';
 import Login from './pages/Login';
 
+const { Title, Text } = Typography;
 const {Search} = Input;
 const {Header, Footer, Sider, Content} = Layout;
 const {Meta} = Card;
@@ -89,7 +91,7 @@ class UserInfoCard extends React.Component {
                         <Meta
                             id={'meta_id'}
                             className={'user_meta_card'}
-                            title="Cecilie"
+                            title="Wandile"
                             // description="youremail@host.com"
 
                             //Image/profile Picture
@@ -128,6 +130,20 @@ class UserInfoCard extends React.Component {
 class App extends Component {
     state = {}
 
+    changeColorToGreen() {
+        // console.log('here');
+        // if(document.getElementById('top_bar') != null){
+        //
+        //     let search_button = document.getElementById('top_bar').childNodes[0].childNodes[1];
+        //     search_button.style.borderTop = ' 2px solid #15B761';
+        //     search_button.style.borderRight = ' 2px solid #15B761';
+        //     search_button.style.borderLeft = ' 2px solid #15B761';
+        // }else{
+        //     console.log('bug');
+        //
+        // }
+    }
+
 
     // componentDidMount() {
     //     this.onRouteChanged();
@@ -146,7 +162,15 @@ class App extends Component {
                             <Search id={'search_input'}
                                     placeholder="Looking for something?"
                                     allowClear={false}
+                                    onMouseEnter={this.changeColorToGreen()}
+                                    onFocus={this.changeColorToGreen()}
                             />
+
+                            <Title level={1}>Hi Wandile</Title>
+                            <Title level={3} italic>Catchup on the latest changes</Title>
+                            <Text level={5} italic>last updated: July 30, 06:00</Text>
+
+
                         </Header>
                         <Content id={'content_section'}>Content</Content>
                         <Footer id={'footer_section'}>Footer</Footer>
