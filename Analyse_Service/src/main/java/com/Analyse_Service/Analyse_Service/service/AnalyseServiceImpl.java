@@ -19,9 +19,8 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
-import org.apache.spark.ml.classification.BinaryLogisticRegressionTrainingSummary;
-import org.apache.spark.ml.classification.LogisticRegression;
-import org.apache.spark.ml.classification.LogisticRegressionModel;
+import org.apache.spark.ml.classification.*;
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.sql.Dataset;
@@ -423,7 +422,7 @@ public class AnalyseServiceImpl {
 
         //Results.show();*/
 
-        StructType schema = new StructType(new StructField[]{
+        /*StructType schema = new StructType(new StructField[]{
                 new StructField("Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
         });
 
@@ -433,11 +432,46 @@ public class AnalyseServiceImpl {
                 .setItemsCol("Tweets")
                 .setMinSupport(0.15)
                 .setMinConfidence(0.6)
-                .fit(itemsDF);
+                .fit(itemsDF);*/
+
+
+        String data = "mllib/layers/data.txt"; //TODO: default
+        Dataset<Row> dataFrame = sparkPredictions.read().format("libsvm").load(data);
+
+        // Split the data into train and test
+        Dataset<Row>[] splits = dataFrame.randomSplit(new double[]{0.6, 0.4}, 1234L);
+        Dataset<Row> train = splits[0];
+        Dataset<Row> test = splits[1];
+
+        // specify layers for the neural network:
+        // input layer of size 4 (features), two intermediate of size 5 and 4
+        // and output of size 3 (classes)
+        int[] layers = new int[] {4, 5, 4, 3};
+
+        // create the trainer and set its parameters
+        MultilayerPerceptronClassifier trainer = new MultilayerPerceptronClassifier()
+                .setLayers(layers)
+                .setBlockSize(128)
+                .setSeed(1234L)
+                .setMaxIter(100);
+
+        // train the model
+        MultilayerPerceptronClassificationModel model = trainer.fit(train);
+
+        /******************Analyse Model Accuracy**************/
+
+        // compute accuracy on the test set
+        Dataset<Row> result = model.transform(test);
+        Dataset<Row> predictionAndLabels = result.select("prediction", "label");
+        MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
+                .setMetricName("accuracy");
+
+        System.out.println("Test set accuracy = " + evaluator.evaluate(predictionAndLabels));
 
         /*******************READ MODEL OUTPUT*****************/
 
-        List<Row> pData = model.transform(itemsDF).collectAsList();
+        //List<Row> pData = model.transform(itemsDF).collectAsList();
+        List<Row> pData = new ArrayList<>(); //TODO: default
         ArrayList<ArrayList> results = new ArrayList<>();
 
         for (int i = 0; i < pData.size(); i++) {
