@@ -8,10 +8,15 @@
 @import url("../styles/Header/Header.css");
 @import url("../styles/Header/SearchBar.css");
 
+//Content Section and all its child components
+@import url("../styles/ContentSection/ContentSection.css");
+
+//Footer and all its child components
+@import url("../styles/Footer/Footer.css");
+
+
 
 @import "../styles/login.css";
-@import "../styles/general.css";
-
 @import "../styles/network_graph.css";
 @import "../styles/line_graph.css";
 @import "../styles/map_graph.css";
@@ -19,9 +24,9 @@
 @import url("../styles/timeline_graph.css");
 
 @import url("../styles/graph_list.css");
-@import url("../styles/top_nav_bar.css");
 
-
+//Miscellaneous
+@import "../styles/general.css";
 
 
 
