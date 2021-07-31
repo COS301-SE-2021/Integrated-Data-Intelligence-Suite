@@ -1,3 +1,14 @@
+@import '~antd/dist/antd.css';
+
+//Side Bar and its child Components
+@import url("../styles/SideBar/SideBar.css");
+@import url("../styles/SideBar/UserInfoCard.css");
+
+//Header and all its child components
+@import url("../styles/Header/Header.css");
+@import url("../styles/Header/SearchBar.css");
+
+
 @import "../styles/login.css";
 @import "../styles/general.css";
 
@@ -6,9 +17,13 @@
 @import "../styles/map_graph.css";
 
 @import url("../styles/timeline_graph.css");
-// @import url("../styles/search_bar.css");
 
 @import url("../styles/graph_list.css");
 @import url("../styles/top_nav_bar.css");
+
+
+
+
+
 
 

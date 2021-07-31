@@ -21,7 +21,16 @@ const {Meta} = Card;
 const {SubMenu} = Menu;
 
 
-
+const exit_menu = (
+    <Menu>
+        <Menu.Item key="1" icon={<LockOutlined/>}>
+            Lock
+        </Menu.Item>
+        <Menu.Item key="2" icon={<PoweroffOutlined/>}>
+            Logout
+        </Menu.Item>
+    </Menu>
+);
 
 
 class App extends Component {
@@ -52,7 +61,7 @@ class App extends Component {
         return (
             <>
                 <Layout id={'outer_layout'}>
-                    <Sidebar></Sidebar>
+                    <Sidebar/>
                     <Layout>
                         <Header id={'top_bar'}>
                             {/*<Avatar id={'user_avatar'}>M</Avatar>*/}

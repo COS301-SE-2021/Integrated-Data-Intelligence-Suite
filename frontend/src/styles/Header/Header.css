@@ -1,0 +1,15 @@
+/*************************************************************/
+/************************ Header *****************************/
+/*************************************************************/
+.ant-layout-header {
+    background: lightgrey;
+    height: 206px;
+    padding: 0 1%;
+    border: 1px solid red;
+}
+
+.content-wrapper {
+    border: 3px solid red;
+    box-sizing: border-box;
+    border-radius: 5px 0 0 5px;
+}

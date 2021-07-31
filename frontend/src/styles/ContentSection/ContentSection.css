@@ -1,0 +1,9 @@
+@import '~antd/dist/antd.css';
+
+
+ant-layout-content {
+    min-height: 120px;
+    color: #fff;
+    line-height: 120px;
+    background: lightgrey;
+}
