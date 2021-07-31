@@ -10,23 +10,21 @@
 
 //Content Section and all its child components
 @import url("../styles/ContentSection/ContentSection.css");
+@import "../styles/line_graph.css";
+@import "../styles/map_graph.css";
+@import "../styles/network_graph.css";
+@import url("../styles/timeline_graph.css");
+@import url("../styles/graph_list.css");
 
 //Footer and all its child components
 @import url("../styles/Footer/Footer.css");
 
-
-
+//Pages
 @import "../styles/login.css";
-@import "../styles/network_graph.css";
-@import "../styles/line_graph.css";
-@import "../styles/map_graph.css";
 
-@import url("../styles/timeline_graph.css");
-
-@import url("../styles/graph_list.css");
 
 //Miscellaneous
-@import "../styles/general.css";
+@import "../index.css";
 
 
 

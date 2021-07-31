@@ -1,9 +1,9 @@
 import {Button, Card, Dropdown, Menu, Skeleton} from "antd";
 import Meta from "antd/es/card/Meta";
 import Avatar from "antd/es/avatar/avatar";
-import {EllipsisOutlined, LockOutlined, PoweroffOutlined} from "@ant-design/icons";
+import {EllipsisOutlined} from "@ant-design/icons";
 import React, {Component} from 'react';
-import ExitMenuOverlay from "./ExitMenuOverlay";
+import ExitMenuTooltip from "./ExitMenuTooltip";
 
 class UserInfoCard extends React.Component {
     state = {
@@ -34,7 +34,7 @@ class UserInfoCard extends React.Component {
                             }
                         />
                         <Dropdown
-                            overlay={<ExitMenuOverlay/>}
+                            overlay={<ExitMenuTooltip/>}
                             placement="topCenter"
                             arrow={true}
                             trigger={'click'}

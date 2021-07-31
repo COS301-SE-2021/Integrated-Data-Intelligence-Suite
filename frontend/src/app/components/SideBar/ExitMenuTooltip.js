@@ -2,10 +2,10 @@ import React, {Component}  from "react";
 import {Menu} from "antd";
 import {LockOutlined, PoweroffOutlined} from "@ant-design/icons";
 
-class ExitMenuOverlay extends React.Component{
+class ExitMenuTooltip extends React.Component{
     render() {
         return (
-            <Menu>
+            <Menu id={'exit_menu'}>
                 <Menu.Item key="1" icon={<LockOutlined/>}>
                     Lock
                 </Menu.Item>
@@ -17,4 +17,4 @@ class ExitMenuOverlay extends React.Component{
     }
 }
 
-export default ExitMenuOverlay;
+export default ExitMenuTooltip;
