@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Route, Switch} from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import HomePage from "./pages/HomePage";
+import ChartPage from "./pages/ChartPage";
 
 class App extends Component {
     state = {}
@@ -18,6 +19,11 @@ class App extends Component {
                     <Route exact path='/login'>
                         <LoginPage/>
                     </Route>
+
+                    <Route exact path='/chart'>
+                        <ChartPage/>
+                    </Route>
+
                 </Switch>
             </>
         );

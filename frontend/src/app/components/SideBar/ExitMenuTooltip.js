@@ -21,7 +21,7 @@ class ExitMenuTooltip extends React.Component {
                         Lock
                     </Menu.Item>
                     <Menu.Item key="2" icon={<PoweroffOutlined/>}>
-                                <Link to="/login">logout</Link>
+                        <Link to="/login">logout</Link>
                     </Menu.Item>
                 </Menu>
             </>

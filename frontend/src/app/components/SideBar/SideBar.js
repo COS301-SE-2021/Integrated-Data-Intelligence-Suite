@@ -28,6 +28,7 @@ class SideBar extends React.Component {
                     </Menu.Item>
                     <Menu.Item key="2" icon={<BarChartOutlined/>}>
                         Charts
+                        <Link to='/chart'/>
                     </Menu.Item>
                     {/*<SubMenu key="sub1" icon={<UserOutlined/>} title="User">*/}
                     {/*    <Menu.Item key="3">User 1</Menu.Item>*/}
