@@ -3,7 +3,10 @@ import React, {Component} from 'react';
 class Login extends Component {
     render() {
         return (
-            <div> This is a Login Page</div>
+            <div style={{width: 200,
+                height:200, backgroundColor: "red", position: "absolute", zIndex:10}}>
+                This is the Login Page
+            </div>
         );
     }
 }

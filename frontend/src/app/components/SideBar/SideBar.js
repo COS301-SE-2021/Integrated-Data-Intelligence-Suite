@@ -3,6 +3,7 @@ import {Menu} from "antd";
 import {BarChartOutlined, HomeOutlined, SettingOutlined} from "@ant-design/icons";
 import UserInfoCard from "./UserInfoCard";
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 
 
 class SideBar extends React.Component {
@@ -23,6 +24,7 @@ class SideBar extends React.Component {
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" id={'sidebar_menu'}>
                     <Menu.Item key="1" icon={<HomeOutlined/>}>
                         Home
+                        <Link to='/'/>
                     </Menu.Item>
                     <Menu.Item key="2" icon={<BarChartOutlined/>}>
                         Charts
