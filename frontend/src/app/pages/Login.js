@@ -20,7 +20,7 @@ class Login extends Component {
                         backgroundColor: 'yellow'
                     }}
                 >
-                    <Link to="/">Go back home</Link>
+                    <Link to="/">Come back home son.</Link>
                 </span>
             </>
         );

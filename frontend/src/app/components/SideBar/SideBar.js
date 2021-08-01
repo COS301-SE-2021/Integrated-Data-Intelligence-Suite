@@ -19,7 +19,7 @@ class SideBar extends React.Component {
     render() {
         const {collapsed} = this.state;
         return (
-            <Sider collapsible={false} collapsed={collapsed} onCollapse={this.onCollapse} id={'sidebar_div'}>
+            <Sider collapsible={true} collapsed={collapsed} onCollapse={this.onCollapse} id={'sidebar_div'}>
                 <div id="logo"/>
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" id={'sidebar_menu'}>
                     <Menu.Item key="1" icon={<HomeOutlined/>}>

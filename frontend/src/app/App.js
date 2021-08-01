@@ -18,13 +18,7 @@ const {Header, Footer, Sider, Content} = Layout;
 class App extends Component {
     state = {}
 
-
-    // componentDidMount() {
-    //     this.onRouteChanged();
-    // }
-
     render() {
-        // let graph_list_component = !this.state.isFullPageLayout ? <GraphList/> : '';
         return (
             <>
                 <Switch>
@@ -33,7 +27,7 @@ class App extends Component {
                             <SideBar/>
                             <Layout>
                                 <Header id={'top_bar'}>
-                                    <SearchBar/>
+                                    {/*<SearchBar/>*/}
                                     <Title level={1}>Home</Title>
                                     <Title level={3} italic>Summary of Changes</Title>
                                     <Text level={5} italic>last updated: July 30, 06:00</Text>
