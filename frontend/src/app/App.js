@@ -27,26 +27,26 @@ class App extends Component {
         // let graph_list_component = !this.state.isFullPageLayout ? <GraphList/> : '';
         return (
             <>
-                <Layout id={'outer_layout'}>
-                    <SideBar/>
-                    <Layout>
-                        <Header id={'top_bar'}>
-                            {/*<Avatar id={'user_avatar'}>M</Avatar>*/}
-                            <SearchBar/>
-                            <Title level={1}>Home</Title>
-                            <Title level={3} italic>Summary of Changes</Title>
-                            <Text level={5} italic>last updated: July 30, 06:00</Text>
-                        </Header>
-                        <Content id={'content_section'}>Content</Content>
-                        <Footer id={'footer_section'}>Footer</Footer>
-                    </Layout>
-                </Layout>
-
-
-
                 <Switch>
-                    <Route exact path='/' component={Login}/>
-                    <Route exact path='/login' component={GraphList}/>
+                    <Route exact path='/'>
+                        <Layout id={'outer_layout'}>
+                            <SideBar/>
+                            <Layout>
+                                <Header id={'top_bar'}>
+                                    <SearchBar/>
+                                    <Title level={1}>Home</Title>
+                                    <Title level={3} italic>Summary of Changes</Title>
+                                    <Text level={5} italic>last updated: July 30, 06:00</Text>
+                                </Header>
+                                <Content id={'content_section'}>Content</Content>
+                                <Footer id={'footer_section'}>Footer</Footer>
+                            </Layout>
+                        </Layout>
+                    </Route>
+
+                    <Route exact path='/login'>
+                        <Login/>
+                    </Route>
                 </Switch>
 
             </>
