@@ -8,7 +8,7 @@ import Spinner from './components/ContentSection/Spinner';
 
 
 
-const Login = lazy(() => import('./pages/Login'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
 const Register1 = lazy(() => import('./pages/Register'));
 
 const ValidateLogin = lazy(() => import('./functions/ValidateLogin'));
@@ -22,7 +22,7 @@ class AppRoutes extends Component {
                 <Switch>
                     {/*<Route exact path="/dashboard" component={ Dashboard } />*/}
 
-                    <Route path="/pages/Login" component={ Login } />
+                    <Route path="/pages/LoginPage" component={ Login } />
                     <Route path="/pages/Register" component={ Register1 } />
 
                     <Route path="/functions/ValidateLogin" component={ VLogin} />}

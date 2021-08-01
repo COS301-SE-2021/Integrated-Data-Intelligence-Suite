@@ -1,17 +1,8 @@
 import './App.scss';
 import React, {Component} from 'react';
-import {
-    Input, Layout
-} from 'antd';
-import {Typography} from 'antd';
-import Login from './pages/Login';
 import {Route, Switch} from "react-router-dom";
-import Register from "./pages/Register";
+import LoginPage from './pages/LoginPage';
 import HomePage from "./pages/HomePage";
-
-const {Title, Text} = Typography;
-const {Header, Footer, Sider, Content} = Layout;
-
 
 class App extends Component {
     state = {}
@@ -25,10 +16,9 @@ class App extends Component {
                     </Route>
 
                     <Route exact path='/login'>
-                        <Login/>
+                        <LoginPage/>
                     </Route>
                 </Switch>
-
             </>
         );
     }
