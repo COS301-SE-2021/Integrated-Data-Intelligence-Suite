@@ -1,6 +1,6 @@
 import React, { Component }from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/login.css';
+import '../../styles/LoginPage/login.css';
 
 class Register extends  Component{
 
