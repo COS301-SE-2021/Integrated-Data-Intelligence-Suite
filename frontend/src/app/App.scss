@@ -1,3 +1,4 @@
+//Ant.d components
 @import '~antd/dist/antd.css';
 
 //Side Bar and its child Components
@@ -22,9 +23,12 @@
 //Pages
 @import "../styles/login.css";
 
-
 //Miscellaneous
 @import "../index.css";
+
+//Leaflet-Map
+@import '~leaflet/dist/leaflet.css';
+//@import '../styles/leaflet_v0.7.7.css';
 
 
 

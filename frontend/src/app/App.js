@@ -5,6 +5,9 @@ import LoginPage from './pages/LoginPage';
 import HomePage from "./pages/HomePage";
 import ChartPage from "./pages/ChartPage";
 
+
+
+
 class App extends Component {
     state = {}
 
