@@ -99,3 +99,8 @@
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background-color: deeppink;
 }
+
+[data-theme="dark"] .ant-layout-sider {
+    background: #3499ec;
+}
+
