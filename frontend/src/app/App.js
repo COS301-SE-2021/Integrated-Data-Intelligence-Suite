@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Route, Switch} from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import HomePage from "./pages/HomePage";
-import ChartPage from "./pages/ChartPage";
+import ChartPage from "./pages/ChartPage/ChartPage";
 
 
 
