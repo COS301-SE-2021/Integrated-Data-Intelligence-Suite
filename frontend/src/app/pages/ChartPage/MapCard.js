@@ -9,20 +9,18 @@ class MapCard extends React.Component {
     render() {
         return (
             <>
-                <Card title="Default size card"
-                      extra={<p>Tooltip</p>}
-                      id={'map_card'}
+                <Card
+                    title="Default size card"
+                    extra={<p>Tooltip</p>}
+                    id={'map_card'}
                 >
                     <p>Card content</p>
                     <MapContainer
+                        id={'map_container_div'}
                         center={[51.505, -0.09]}
                         zoom={13}
                         scrollWheelZoom={false}
-                        style={{
-                            height: 300,
-                            width: 300,
-                            border: '3px solid yellow'
-                        }}
+                        style={{}}
                     >
                         <TileLayer
                             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

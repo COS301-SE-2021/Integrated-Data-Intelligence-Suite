@@ -11,11 +11,11 @@
 
 //Content Section and all its child components
 @import url("../styles/ContentSection/ContentSection.css");
-@import "../styles/line_graph.css";
-@import "../styles/map_graph.css";
-@import "../styles/network_graph.css";
-@import url("../styles/timeline_graph.css");
-@import url("../styles/graph_list.css");
+@import "../styles/Demo2/line_graph.css";
+@import "../styles/Demo2/map_graph.css";
+@import "../styles/Demo2/network_graph.css";
+@import url("../styles/Demo2/timeline_graph.css");
+@import url("../styles/Demo2/graph_list.css");
 
 //Footer and all its child components
 @import url("../styles/Footer/Footer.css");
@@ -28,8 +28,12 @@
 
 //Chart Page and Leaflet Map
 @import '~leaflet/dist/leaflet.css';
-@import '../styles/ChartPage/ChartPage.css';
 //@import '../styles/leaflet_v0.7.7.css';
+@import '../styles/ChartPage/ChartPage.css';
+@import '../styles/ChartPage/MapCardSidebar.css';
+@import '../styles/ChartPage/MapCard.css';
+@import '../styles/ChartPage/DetailsCard.css';
+
 
 
 

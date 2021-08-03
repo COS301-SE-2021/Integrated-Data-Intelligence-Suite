@@ -10,6 +10,7 @@ import {Route, Switch} from "react-router-dom";
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import MapCard from "./MapCard";
+import DetailsCard from "./DetailsCard";
 
 
 const {Title, Text} = Typography;
@@ -36,20 +37,23 @@ class ChartPage extends Component {
 
                                 <Content id={'content_section'}>
                                     <Layout
-                                        id={'map_card_layout_div'}
+                                        id={'map_card_content_layout_div'}
                                         className={'map_card'}
                                     >
-                                        <Sider
-                                            id={'map_card_sidebar'}
-                                            className={'map_card'}
-                                        />
                                         <Content
                                             id={'map_card_content'}
                                             className={'map_card'}
                                         >
                                             <MapCard/>
-
                                         </Content>
+
+                                        <Sider
+                                            id={'map_card_sidebar'}
+                                            className={'map_card'}
+                                        >
+                                            <DetailsCard/>
+
+                                        </Sider>
                                     </Layout>
                                 </Content>
                             </Layout>
