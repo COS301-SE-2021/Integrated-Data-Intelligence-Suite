@@ -50,6 +50,7 @@ class ChartPage extends Component {
                                         <Sider
                                             id={'map_card_sidebar'}
                                             className={'map_card'}
+                                            style={{width: '26%', flex: '0'}}
                                         >
                                             <DetailsCard/>
 
