@@ -10,9 +10,9 @@ class MapCard extends React.Component {
         return (
             <>
                 <Card
-                    title="Default size card"
-                    extra={<p>Tooltip</p>}
                     id={'map_card'}
+                    title="Map Card Title"
+                    extra={<p></p>}
                 >
                     {/*<p>Card content</p>*/}
                     <MapContainer

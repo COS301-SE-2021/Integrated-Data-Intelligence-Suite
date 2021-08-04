@@ -7,9 +7,6 @@ import ChartPage from "./pages/ChartPage/ChartPage";
 import Permissions from "./pages/PermissionsPage/Permissions";
 import UserPermissions from "./pages/UserPermissionsPage/UserPermissions";
 
-
-
-
 class App extends Component {
     state = {}
 
