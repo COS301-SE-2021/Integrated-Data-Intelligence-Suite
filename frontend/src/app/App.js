@@ -4,6 +4,7 @@ import {Route, Switch} from "react-router-dom";
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from "./pages/HomePage/HomePage";
 import ChartPage from "./pages/ChartPage/ChartPage";
+import Permissions from "./pages/PermissionsPage/Permissions";
 
 
 
@@ -25,6 +26,10 @@ class App extends Component {
 
                     <Route exact path='/chart'>
                         <ChartPage/>
+                    </Route>
+
+                    <Route exact path="/permissions">
+                        <Permissions/>
                     </Route>
 
                 </Switch>

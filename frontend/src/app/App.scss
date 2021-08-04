@@ -17,11 +17,18 @@
 @import url("../styles/Demo2/timeline_graph.css");
 @import url("../styles/Demo2/graph_list.css");
 
+/*TODO
+   not sure if i should add a css file for userList component
+   Include it in Permissions.css
+*/
 //Footer and all its child components
 @import url("../styles/Footer/Footer.css");
 
 //Pages
 @import "../styles/LoginPage/login.css";
+
+@import "../styles/Permissions/Permissions.css";
+//@import "../styles/UserPermissions/UserPermissions.css";
 
 //Miscellaneous
 @import "../index.css";

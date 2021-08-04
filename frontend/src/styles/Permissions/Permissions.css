@@ -1,0 +1,39 @@
+.user-preview{
+    padding: 10px 10px;
+    margin-bottom: 10px;
+    border: 1px solid #95dbb6;
+    border-radius: 5px;
+    line-height: normal;
+    display: flex;
+    background: #95dbb6;
+}
+
+.user-preview:hover{
+    border-color: #15B761;
+
+}
+
+
+.user-preview .admin-tag{
+    color: #f1356d;
+}
+
+.user-preview a{
+    /*padding: 0;*/
+    display: flex;
+    align-items: center;
+    /*margin: 0 10px;*/
+    min-height: 50px;
+    text-decoration: none;
+}
+.user-preview p{
+    margin-right: 0;
+    margin-left: auto;
+    display: flex;
+}
+.user-preview p select{
+    margin: 10px;
+    background: #15B761;
+    border: none;
+    border-radius: 5px;
+}

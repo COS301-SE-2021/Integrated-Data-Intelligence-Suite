@@ -41,6 +41,10 @@ class SideBar extends React.Component {
                     <Menu.Item key="9" icon={<SettingOutlined/>}>
                         Settings
                     </Menu.Item>
+                    <Menu.Item key="10">
+                        Permissions
+                        <Link to="/permissions/"/>
+                    </Menu.Item>
                 </Menu>
                 <UserInfoCard/>
             </Sider>
