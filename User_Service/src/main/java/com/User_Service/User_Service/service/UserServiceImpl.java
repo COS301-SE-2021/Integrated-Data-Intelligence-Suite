@@ -51,6 +51,11 @@ public class UserServiceImpl {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
 
+        Optional<User> users = repository.findUserByUsername(request.getUsername());
+        if(users.isEmpty()) {
+            return new RegisterResponse(false, "User does not exist.");
+        }
+
         String password = request.getPassword();
         String hashedPass;
         //Hashing the password
@@ -147,5 +152,10 @@ public class UserServiceImpl {
                 return new ManagePersmissionsResponse("Permission updated", true);
             }
         }
+    }
+
+    @Transactional
+    public void getAllUsers() {
+
     }
 }
