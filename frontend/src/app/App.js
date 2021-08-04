@@ -1,6 +1,6 @@
 import './App.scss';
 import React, {Component} from 'react';
-import {Route, Switch} from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from "./pages/HomePage/HomePage";
 import ChartPage from "./pages/ChartPage/ChartPage";
@@ -37,6 +37,12 @@ class App extends Component {
                         <UserPermissions/>
                     </Route>
 
+                    <Route path="*">
+                        <div>
+                            <h2>Page not Fount</h2>
+                            <Link to="/"> back to home page</Link>
+                        </div>
+                    </Route>
 
                 </Switch>
             </>
