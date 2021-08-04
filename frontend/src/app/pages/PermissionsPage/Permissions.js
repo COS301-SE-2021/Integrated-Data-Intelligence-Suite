@@ -24,7 +24,7 @@ const Permissions = () => {
                 <div className={"permissions"}>
                     { error && <div>{ error }</div> }
                     { isPending && <div>Loading...</div> }
-                    {/*{ users && <UserList users={ users }/> }*/}
+                    { users && <UserList users={ users }/> }
                 </div>
             </Content>
             <Footer id={'footer_section'}>Footer</Footer>
