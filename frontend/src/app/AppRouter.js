@@ -8,8 +8,8 @@ import Spinner from './components/ContentSection/Spinner';
 
 
 
-const LoginPage = lazy(() => import('./pages/LoginPage'));
-const Register1 = lazy(() => import('./pages/Register'));
+const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
+const Register1 = lazy(() => import('./pages/RegisterPage/Register'));
 
 const ValidateLogin = lazy(() => import('./functions/ValidateLogin'));
 const ValidateRegister = lazy(() => import('./functions/ValidateRegister'));

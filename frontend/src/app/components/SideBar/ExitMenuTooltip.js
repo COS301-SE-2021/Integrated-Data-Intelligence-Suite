@@ -6,9 +6,9 @@ import {
     Switch,
     Route, Link
 } from "react-router-dom";
-import LoginPage from "../../pages/LoginPage";
+import LoginPage from "../../pages/LoginPage/LoginPage";
 import GraphList from "../ContentSection/GraphList";
-import Register from "../../pages/Register";
+import Register from "../../pages/RegisterPage/Register";
 
 // import {Link} from "react-router-dom";
 

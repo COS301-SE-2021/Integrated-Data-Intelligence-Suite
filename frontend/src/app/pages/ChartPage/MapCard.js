@@ -14,7 +14,7 @@ class MapCard extends React.Component {
                     extra={<p>Tooltip</p>}
                     id={'map_card'}
                 >
-                    <p>Card content</p>
+                    {/*<p>Card content</p>*/}
                     <MapContainer
                         id={'map_container_div'}
                         center={[51.505, -0.09]}

@@ -1,8 +1,8 @@
 import './App.scss';
 import React, {Component} from 'react';
 import {Route, Switch} from "react-router-dom";
-import LoginPage from './pages/LoginPage';
-import HomePage from "./pages/HomePage";
+import LoginPage from './pages/LoginPage/LoginPage';
+import HomePage from "./pages/HomePage/HomePage";
 import ChartPage from "./pages/ChartPage/ChartPage";
 
 

@@ -1,13 +1,31 @@
-/*Map Card*/
-#map_card{
+/*Map Card
+*
+*/
+#map_card {
     border: 3px solid green;
     height: 700px;
     /*width: 700px;*/
     width: 100%;
+    padding: 0;
+    margin: 0;
 }
-
-#map_container_div{
+/*
+* The div contains the Actual Map component
+*
+*/
+#map_container_div {
     height: 300px;
     width: 100%;
     border: 3px solid yellow;
+    padding: 0;
 }
+
+/*
+* The body of the Map Card
+* Map Card = Green Border
+*/
+#map_card > .ant-card-body{
+    padding: 0;
+}
+
+
