@@ -6,10 +6,14 @@ import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.CoreDocument;
+import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
+import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.log4j.Level;
@@ -603,7 +607,7 @@ public class AnalyseServiceImpl {
             int longest = 0;
             Annotation annotation = stanfordCoreNLP.process(line);
             for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-                Tree tree = sentence.get(SentimentCoreAnnotations.AnnotatedTree.class);
+                Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
                 int sentiment = RNNCoreAnnotations.getPredictedClass(tree);
                 String partText = sentence.toString();
                 if (partText.length() > longest) {
@@ -616,6 +620,8 @@ public class AnalyseServiceImpl {
         TweetWithSentiment tweetWithSentiment = new TweetWithSentiment(line, toCss(mainSentiment));
         return new FindSentimentResponse(tweetWithSentiment);
     }
+
+
 
 
     /**
@@ -657,6 +663,39 @@ public class AnalyseServiceImpl {
         JavaRDD<Integer > javaRDD = javaSparkContext.parallelize(inputList);
 
         javaSparkContext.close();
+    }
+
+    private void test2(){
+        Properties properties = new Properties();
+
+        String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
+        pipelineProperties = "tokenize, ssplit, parse, sentiment";
+        properties.setProperty("annotators", pipelineProperties);
+        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
+
+
+        String text = "This is a test text. lets goo!";
+
+        CoreDocument coreDocument = new CoreDocument(text);
+
+        stanfordCoreNLP.annotate(coreDocument);
+
+        List<CoreSentence> coreSentences = coreDocument.sentences();
+        List<CoreLabel> coreLabels = coreDocument.tokens();
+
+
+        for (CoreSentence sentence : coreSentences ){
+            String sentiment = sentence.sentiment(); //sentiment
+            System.out.println("SENTENCE : " + sentence.toString() + " - " + sentiment);
+        }
+
+        for (CoreLabel label : coreLabels){
+            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
+            String lemma = label.lemma();//lemmanation
+            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
+            System.out.println("TOKEN : " + label.originalText());
+        }
+
     }
 
 }
