@@ -40,6 +40,16 @@ public class UserServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
     }
 
+    @Test
+    @DisplayName("If_RegisterRequest_Is_Null")
+    public void registerNullRequest() {
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(null));
+    }
+
+
+
+
+
 
 
 
