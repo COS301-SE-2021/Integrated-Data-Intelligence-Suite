@@ -17,7 +17,7 @@ class MapCard extends React.Component {
                     {/*<p>Card content</p>*/}
                     <MapContainer
                         id={'map_container_div'}
-                        center={[51.505, -0.09]}
+                        center={[ -25.731340, 28.218370]}
                         zoom={13}
                         scrollWheelZoom={false}
                         style={{}}

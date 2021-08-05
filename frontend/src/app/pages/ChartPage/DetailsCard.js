@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
     Card,
     Descriptions
-
 } from "antd";
 
 
@@ -19,15 +18,34 @@ class DetailsCard extends React.Component {
                     extra={<p></p>}
                 >
 
-                    <Descriptions title="User Info" layout="vertical">
-                        <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-                        <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-                        <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-                        <Descriptions.Item label="Address" span={2}>
-                            No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+                    <Descriptions
+                        // className={'descriptions_div'}
+                        layout="vertical"
+                        column={1}
+                        bordered={false}
+                        colon={false}
+                    >
+                        <Descriptions.Item
+                            className={'map_1'}
+                            label="Statistic 1"
+                        >
+                            89%
                         </Descriptions.Item>
-                        <Descriptions.Item label="Remark">empty</Descriptions.Item>
-                    </Descriptions>,
+
+                        <Descriptions.Item
+                            className={'map_1'}
+                            label="Statistic 2"
+                        >
+                            1810K
+                        </Descriptions.Item>
+
+                        <Descriptions.Item
+                            className={'map_1'}
+                            label="Statistic 3"
+                        >
+                            Pretoria, Hatfield
+                        </Descriptions.Item>
+                    </Descriptions>
 
                 </Card>
             </>

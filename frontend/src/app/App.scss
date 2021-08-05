@@ -24,18 +24,18 @@
 //Footer and all its child components
 @import url("../styles/Footer/Footer.css");
 
-//Pages
+//Login Page
 @import "../styles/LoginPage/login.css";
 
+//Permissions Page
 @import "../styles/Permissions/Permissions.css";
 //@import "../styles/UserPermissions/UserPermissions.css";
 
 //Miscellaneous
 @import "../index.css";
 
-//Chart Page and Leaflet Map
+//Chart Page and all its child components
 @import '~leaflet/dist/leaflet.css';
-//@import '../styles/leaflet_v0.7.7.css';
 @import '../styles/ChartPage/ChartPage.css';
 @import '../styles/ChartPage/MapCardSidebar.css';
 @import '../styles/ChartPage/MapCard.css';

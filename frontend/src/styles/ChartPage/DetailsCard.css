@@ -4,3 +4,17 @@
     /*width: ;*/
 }
 
+/*The Label/Title of each description */
+th.ant-descriptions-item.map_1 > div.ant-descriptions-item-container > span.ant-descriptions-item-label{
+    background-color: #fafafa !important;
+    font-weight: 800 !important;
+    font-size: 35px !important;
+    border: 3px solid black;
+}
+
+/*The actual statistic / number value underneath the Label Title*/
+td.ant-descriptions-item.map_1 > div.ant-descriptions-item-container > span.ant-descriptions-item-content{
+    font-size: 20px;
+    border: 3px solid orange;
+}
+

@@ -7,7 +7,7 @@ import {
     Typography
 } from 'antd';
 import {Route, Switch} from "react-router-dom";
-import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
+import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import MapCard from "./MapCard";
 import DetailsCard from "./DetailsCard";
@@ -50,7 +50,7 @@ class ChartPage extends Component {
                                         <Sider
                                             id={'map_card_sidebar'}
                                             className={'map_card'}
-                                            style={{width: '26%', flex: '0'}}
+
                                         >
                                             <DetailsCard/>
 
