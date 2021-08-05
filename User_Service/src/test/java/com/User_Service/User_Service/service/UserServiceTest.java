@@ -78,6 +78,48 @@ public class UserServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
+    @Test
+    @DisplayName("If_RegisterRequest_Username_Field_Is_Null")
+    public void registerRequestUsernameNull() {
+        RegisterRequest request = new RegisterRequest(null, "firstname", "lastname", "password", "email", Permission.IMPORTING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
+    }
+
+    @Test
+    @DisplayName("If_RegisterRequest_FirstName_Field_Is_Null")
+    public void registerRequestFirstNameNull() {
+        RegisterRequest request = new RegisterRequest("username", null, "lastname", "password", "email", Permission.IMPORTING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
+    }
+
+    @Test
+    @DisplayName("If_RegisterRequest_LastName_Field_Is_Null")
+    public void registerRequestLastNameNull() {
+        RegisterRequest request = new RegisterRequest("username", "firstname", null, "password", "email", Permission.IMPORTING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
+    }
+
+    @Test
+    @DisplayName("If_RegisterRequest_Password_Field_Is_Null")
+    public void registerRequestPasswordNull() {
+        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", null, "email", Permission.IMPORTING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
+    }
+
+    @Test
+    @DisplayName("If_RegisterRequest_Email_Field_Is_Null")
+    public void registerRequestEmailNull() {
+        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", "password", null, Permission.IMPORTING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
+    }
+
+    @Test
+    @DisplayName("If_RegisterRequest_Permission_Field_Is_Null")
+    public void registerRequestPermissionNull() {
+        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", "password", "email", null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
+    }
+
 
 
 
