@@ -1,7 +1,9 @@
 package com.User_Service.User_Service.controller;
 
 
+import com.User_Service.User_Service.request.GetAllUsersRequest;
 import com.User_Service.User_Service.request.ManagePermissionsRequest;
+import com.User_Service.User_Service.response.GetAllUsersResponse;
 import com.User_Service.User_Service.response.ManagePersmissionsResponse;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +28,11 @@ public class UserServiceController {
     public ManagePersmissionsResponse managePermissions(RequestEntity<ManagePermissionsRequest> requestEntity) throws Exception {
         ManagePermissionsRequest request = requestEntity.getBody();
         return service.managePermissions(request);
+    }
+
+    @PostMapping(value = "/allusers")
+    public GetAllUsersResponse getAllUsers(RequestEntity<GetAllUsersRequest> requestEntity) throws Exception {
+        GetAllUsersRequest request = requestEntity.getBody();
+        return service.getAllUsers(request);
     }
 }
