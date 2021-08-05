@@ -120,6 +120,15 @@ public class UserServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
+    @Test
+    @DisplayName("If_New_User_Username_Already_Taken")
+    public void registerUsernameTaken() throws Exception {
+        RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "email", Permission.IMPORTING);
+        String expectedMessage = "Username taken";
+        RegisterResponse response = service.register(request);
+        Assertions.assertEquals(response.getMessage(), expectedMessage);
+    }
+
 
 
 
