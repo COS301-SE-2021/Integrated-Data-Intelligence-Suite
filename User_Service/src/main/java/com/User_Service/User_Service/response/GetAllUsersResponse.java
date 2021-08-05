@@ -9,7 +9,7 @@ public class GetAllUsersResponse {
     private boolean success;
     private String message;
 
-    public GetAllUsersResponse(boolean success, String message, List<User> users) {
+    public GetAllUsersResponse(String message, boolean success, List<User> users) {
         this.success = success;
         this.message = message;
         this.users = users;
