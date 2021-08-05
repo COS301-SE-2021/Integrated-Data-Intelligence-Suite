@@ -18,6 +18,19 @@ public class UserServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(null));
     }
 
+    @Test
+    @DisplayName("If_Both_ManagePermissionsRequest_Attributes_are null")
+    public void mangePermissionsRequestNullAttribs() {
+        ManagePermissionsRequest request = new ManagePermissionsRequest(null, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+    }
+
+
+
+
+
+
+
 
 
 
