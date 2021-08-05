@@ -124,7 +124,16 @@ public class UserServiceTest {
     @DisplayName("If_New_User_Username_Already_Taken")
     public void registerUsernameTaken() throws Exception {
         RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "email", Permission.IMPORTING);
-        String expectedMessage = "Username taken";
+        String expectedMessage = "Username has been taken";
+        RegisterResponse response = service.register(request);
+        Assertions.assertEquals(response.getMessage(), expectedMessage);
+    }
+
+    @Test
+    @DisplayName("If_New_User_Email_Already_Taken")
+    public void registerEmailTaken() throws Exception {
+        RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "takenEmail@gmail.com", Permission.IMPORTING);
+        String expectedMessage = "Email has been taken";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(response.getMessage(), expectedMessage);
     }
