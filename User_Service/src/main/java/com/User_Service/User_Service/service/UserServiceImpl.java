@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,7 @@ public class UserServiceImpl {
     public LoginResponse login(LoginRequest request) {
         return null;
     }
+
 
     /**
      * This function registers the user to the platform. It creates a new user and stores that user class to the
@@ -154,8 +156,31 @@ public class UserServiceImpl {
         }
     }
 
+    /**
+     * The purpose of this function is to return a list of all users currently
+     * registered to the system.
+     * @param request This is the request of the use case.
+     * @return This is the response class. It contains a list of all the users
+     *         returned from the repository
+     * @throws InvalidRequestException This is thrown if the request is null
+     *         or if any of its attributes are null.
+     */
     @Transactional
-    public void getAllUsers() {
-
+    public GetAllUsersResponse getAllUsers(GetAllUsersRequest request) throws InvalidRequestException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        boolean success;
+        String message;
+        List<User> users = repository.findAll();
+        if(users.isEmpty()) {
+            message = "There are no registered users";
+            success = false;
+        }
+        else {
+            message = "Returned list of users.";
+            success = true;
+        }
+        return new GetAllUsersResponse(message, success, users);
     }
 }
