@@ -50,6 +50,15 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Does_Not_Exist")
+    public void managePermissionsValidRequestUserNotExists() throws Exception {
+        ManagePermissionsRequest request = new ManagePermissionsRequest("nonExistantUser", Permission.VIEWING);
+        String expectedMessage = "User does not exist";
+        ManagePersmissionsResponse response = service.managePermissions(request);
+        Assertions.assertEquals(response.getMessage(),expectedMessage);
+    }
+
+    @Test
     @DisplayName("If_RegisterRequest_Is_Null")
     public void registerNullRequest() {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(null));
