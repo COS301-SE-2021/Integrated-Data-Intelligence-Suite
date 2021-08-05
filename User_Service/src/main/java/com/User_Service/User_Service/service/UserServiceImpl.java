@@ -54,8 +54,8 @@ public class UserServiceImpl {
         }
 
         Optional<User> users = repository.findUserByUsername(request.getUsername());
-        if(users.isEmpty()) {
-            return new RegisterResponse(false, "User does not exist.");
+        if(users.isPresent()) {
+            return new RegisterResponse(false, "Username has been taken");
         }
 
         String password = request.getPassword();
@@ -135,14 +135,14 @@ public class UserServiceImpl {
     @Transactional
     public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
         if(request == null) {
-            throw new InvalidRequestException("The register request is null.");
+            throw new InvalidRequestException("The register request is null");
         }
         if(request.getUsername() == null  || request.getNewPermission() == null) {
-            throw new InvalidRequestException("One or more attributes of the register request is null.");
+            throw new InvalidRequestException("One or more attributes of the register request is null");
         }
         Optional<User> users = repository.findUserByUsername(request.getUsername());
         if(users.isEmpty()) {
-            return new ManagePersmissionsResponse("User does not exist.", false);
+            return new ManagePersmissionsResponse("User does not exist", false);
         }
         else {
             User user = users.get();

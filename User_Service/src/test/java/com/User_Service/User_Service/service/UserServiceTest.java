@@ -132,7 +132,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_New_User_Email_Already_Taken")
     public void registerEmailTaken() throws Exception {
-        RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "takenEmail@gmail.com", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("newUser3", "firstname", "lastname", "password", "takenEmail@gmail.com", Permission.IMPORTING);
         String expectedMessage = "Email has been taken";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(response.getMessage(), expectedMessage);
