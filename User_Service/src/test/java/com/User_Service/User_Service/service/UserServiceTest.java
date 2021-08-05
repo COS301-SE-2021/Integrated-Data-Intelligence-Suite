@@ -12,6 +12,9 @@ import org.mockito.InjectMocks;
 public class UserServiceTest {
     @InjectMocks
     UserServiceImpl service = new UserServiceImpl();
+    /*
+    ============================ManagePermissions tests============================
+    */
 
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Null")
@@ -46,7 +49,7 @@ public class UserServiceTest {
         ManagePermissionsRequest request = new ManagePermissionsRequest("testUser", Permission.VIEWING);
         String expectedMessage = "Permission updated";
         ManagePersmissionsResponse response = service.managePermissions(request);
-        Assertions.assertEquals(response.getMessage(),expectedMessage);
+        Assertions.assertEquals(response.getMessage(), expectedMessage);
     }
 
     @Test
@@ -55,13 +58,24 @@ public class UserServiceTest {
         ManagePermissionsRequest request = new ManagePermissionsRequest("nonExistantUser", Permission.VIEWING);
         String expectedMessage = "User does not exist";
         ManagePersmissionsResponse response = service.managePermissions(request);
-        Assertions.assertEquals(response.getMessage(),expectedMessage);
+        Assertions.assertEquals(response.getMessage(), expectedMessage);
     }
+
+    /*
+    ============================Register tests============================
+    */
 
     @Test
     @DisplayName("If_RegisterRequest_Is_Null")
     public void registerNullRequest() {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(null));
+    }
+
+    @Test
+    @DisplayName("If_All_RegisterRequest_Attributes_Are_Null")
+    public void registerRequestAllAttribNull() {
+        RegisterRequest request = new RegisterRequest(null, null, null, null, null, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
 
