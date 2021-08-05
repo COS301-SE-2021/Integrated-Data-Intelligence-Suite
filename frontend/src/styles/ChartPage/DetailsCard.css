@@ -1,6 +1,12 @@
+/*The div of the Entire details card
+* The Parent div of all the components inside the details card
+    including the card 'head' and 'body'
+*
+*/
 #details_card{
     border: 3px solid blue;
-    height: 400px;
+    /*height: 400px;*/
+    height: 100%;
     /*width: ;*/
 }
 
