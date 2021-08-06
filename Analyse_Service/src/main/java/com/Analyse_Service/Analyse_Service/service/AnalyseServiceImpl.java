@@ -698,6 +698,17 @@ public class AnalyseServiceImpl {
 
     }
 
+    public FindEntitiesResponse findEntities(FindEntitiesRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindSentimentRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+        FindEntitiesResponse result = new FindEntitiesResponse(null);
+        return result;
+    }
+
 }
 
 
