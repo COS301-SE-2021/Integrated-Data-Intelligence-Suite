@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SideBar from "../../components/SideBar/SideBar";
+import SideBar from "../../../components/SideBar/SideBar";
 import {
     Input,
     Layout,
