@@ -57,18 +57,20 @@ const UserPermissions = () => {
                     {/*<SearchBar/>*/}
                     <Title level={1}>Permission Management</Title>
                 </Header>
-                <Content id={'content_section'}>
+                <Content className={"permissions-content-section"}>
                     <div className={"permissions"}>
-                        <div>
+                        <div className={"user-info"}>
                             { isPending && <div>loading </div>}
                             { error && <div>{error}</div>}
                             {user && permission===null && setPermission(user.permission)}
                             {user && (
                                 <div>
-                                    <h3>{user.firstName}</h3>
-                                    <p>{user.username}</p>
-                                    <p>current permission : {user.permission}</p>
+                                    <h2>{user.firstName}</h2>
+
                                     <form onSubmit={submitChanges}>
+                                        <label>Username</label><br/>
+                                        {<input type={"text"} value={user.username}/>}
+                                        <label>Permission</label><br/>
                                         <select
                                             value={permission}
                                             onChange={(e) => enableSubmit(e.target.value)}
@@ -77,8 +79,10 @@ const UserPermissions = () => {
                                             <option value={"IMPORTING"}>IMPORTING</option>
                                         </select>
                                         <br/>
-                                        {!submit && <button disabled>submit</button>}
-                                        {submit && <button>submit</button>}
+
+                                            {!submit && <button disabled  className={"disabled"}>submit</button>}
+                                            {submit && <button>submit</button>}
+
                                     </form>
                                 </div>
                             )}
