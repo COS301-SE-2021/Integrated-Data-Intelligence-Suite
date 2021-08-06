@@ -188,4 +188,10 @@ public class AnalyseServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(null));
     }
 
+    @Test
+    @DisplayName("When the data list is Null")
+    public void findTrendsDataNullList(){
+        FindTrendsRequest test = new FindTrendsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(test));
+    }
 }
