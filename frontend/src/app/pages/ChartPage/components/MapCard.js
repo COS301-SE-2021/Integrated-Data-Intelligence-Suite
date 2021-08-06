@@ -8,14 +8,17 @@ import {
     FeatureGroup,
     LayerGroup,
     Rectangle,
-    Circle
+    Circle,
+    Tooltip
 } from 'react-leaflet'
 import ScriptTag from 'react-script-tag';
 
 //Do not Change the order of these lines
 //The Css MUST be loaded before the js
 import '../../../components/leaflet/leaflet.css';
-import { showBlueCircleData} from "../functions/showBlueCircleData";
+import {showBlueCircleData} from "../functions/showBlueCircleData";
+import {showRedCircleData} from "../functions/showRedCircleData";
+import {showGreenCircleData} from "../functions/showGreenCircleData";
 
 const Demo = props => (
     <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
@@ -61,11 +64,11 @@ class MapCard extends React.Component {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
-                        <Marker position={pretoria_position}>
-                            <Popup>
-                                A pretty CSS3 popup. <br/> Easily customizable.
-                            </Popup>
-                        </Marker>
+                        {/*<Marker position={pretoria_position}>*/}
+                        {/*    <Popup>*/}
+                        {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
+                        {/*    </Popup>*/}
+                        {/*</Marker>*/}
 
                         {/**/}
                         <LayerGroup>
@@ -80,7 +83,11 @@ class MapCard extends React.Component {
                                     click: showBlueCircleData,
 
                                 }}
-                            />
+                            >
+                                <Tooltip>clickedText</Tooltip>
+
+                            </Circle>
+
 
                             <Circle
                                 center={pretoria_position}
@@ -88,31 +95,45 @@ class MapCard extends React.Component {
                                 radius={10000}
                                 stroke={false}
                                 children={null}
-                                prefixCls={null}
-                                progressStatus={null}
-                            />
+                                eventHandlers={{
+                                    click: showRedCircleData,
+
+                                }}
+                            >
+                                <Tooltip>clickedTex</Tooltip>
+
+                            </Circle>
+
 
                             <LayerGroup>
                                 <Circle
+
                                     center={[-26.001340, 28.018370]}
                                     pathOptions={greenOptions}
                                     radius={10000}
                                     children={null}
                                     prefixCls={null}
                                     progressStatus={null}
-                                />
+                                    eventHandlers={{
+                                        click: showGreenCircleData,
+
+                                    }}
+                                >
+                                    <Tooltip>clickedText</Tooltip>
+
+                                </Circle>
                             </LayerGroup>
                         </LayerGroup>
 
                         {/**/}
-                        <FeatureGroup pathOptions={purpleOptions}>
-                            <Popup>Popup in FeatureGroup</Popup>
-                            {/*<Circle */}
-                            {/*    center={pretoria_position} */}
-                            {/*    radius={200}*/}
-                            {/*/>*/}
-                            <Rectangle bounds={rectangle}/>
-                        </FeatureGroup>
+                        {/*<FeatureGroup pathOptions={purpleOptions}>*/}
+                        {/*    <Popup>Popup in FeatureGroup</Popup>*/}
+                        {/*    /!*<Circle *!/*/}
+                        {/*    /!*    center={pretoria_position} *!/*/}
+                        {/*    /!*    radius={200}*!/*/}
+                        {/*    />*/}
+                        {/*    <Rectangle bounds={rectangle}/>*/}
+                        {/*</FeatureGroup>*/}
 
                     </MapContainer>
                 </Card>

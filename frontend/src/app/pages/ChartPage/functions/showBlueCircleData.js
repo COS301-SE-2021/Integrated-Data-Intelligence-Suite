@@ -7,7 +7,7 @@ export function showBlueCircleData() {
     console.log("X-brooo:" + x);
 
     //Changing the Value of each Statistic
-    x[0].innerHTML='bro';
-    x[1].innerHTML='did this';
-    x[2].innerHTML='work?';
+    x[0].innerHTML='blue';
+    x[1].innerHTML='circle';
+    x[2].innerHTML='data';
 }
