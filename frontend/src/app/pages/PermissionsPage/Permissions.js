@@ -20,7 +20,7 @@ const Permissions = () => {
                 {/*<SearchBar/>*/}
                 <Title level={1}>Permission Management</Title>
             </Header>
-            <Content id={'content_section'}>
+            <Content className={"permissions-content-section"}>
                 <div className={"permissions"}>
                     { error && <div>{ error }</div> }
                     { isPending && <div>Loading...</div> }
