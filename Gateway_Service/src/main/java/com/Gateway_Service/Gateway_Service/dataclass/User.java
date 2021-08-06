@@ -1,39 +1,23 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
 import com.Gateway_Service.Gateway_Service.rri.Permission;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.util.UUID;
 
-@Entity(name = "users")
-@Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(
-            generator = "user_sequence"
-    )
-    @GenericGenerator(
-            name = "user_sequence",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     UUID id;
 
     String firstName;
 
     String lastName;
 
-    @Column(unique = true)
     String username;
 
-    @Column(unique = true)
     String email;
 
     String password;
 
     Boolean isAdmin;
 
-    @Enumerated(EnumType.STRING)
     Permission permission;
 
     public User() {
