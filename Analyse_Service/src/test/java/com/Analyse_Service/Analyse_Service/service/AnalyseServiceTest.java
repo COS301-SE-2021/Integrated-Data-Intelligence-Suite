@@ -196,8 +196,15 @@ public class AnalyseServiceTest {
     }
 
     @Test
-    @DisplayName("When findTrendsNullRequest is Null")
+    @DisplayName("When findEntitiesNullRequest is Null")
     public void findEntitiesNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findEntities(null));
+    }
+
+    @Test
+    @DisplayName("When the data list is Null")
+    public void findEntitiesDataNullList(){
+        FindEntitiesRequest test = new FindEntitiesRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findEntities(test));
     }
 }
