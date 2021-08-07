@@ -705,6 +705,14 @@ public class AnalyseServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
+
+        Properties properties = new Properties();
+
+        String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
+        pipelineProperties = "tokenize, ssplit, parse, sentiment";
+        properties.setProperty("annotators", pipelineProperties);
+        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
+
         FindEntitiesResponse result = new FindEntitiesResponse(null);
         return result;
     }
