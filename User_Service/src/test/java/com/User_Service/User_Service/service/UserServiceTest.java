@@ -74,56 +74,49 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_All_RegisterRequest_Attributes_Are_Null")
     public void registerRequestAllAttribNull() {
-        RegisterRequest request = new RegisterRequest(null, null, null, null, null, null);
+        RegisterRequest request = new RegisterRequest(null, null, null, null, null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
     @Test
     @DisplayName("If_RegisterRequest_Username_Field_Is_Null")
     public void registerRequestUsernameNull() {
-        RegisterRequest request = new RegisterRequest(null, "firstname", "lastname", "password", "email", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest(null, "firstname", "lastname", "password", "email");
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
     @Test
     @DisplayName("If_RegisterRequest_FirstName_Field_Is_Null")
     public void registerRequestFirstNameNull() {
-        RegisterRequest request = new RegisterRequest("username", null, "lastname", "password", "email", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("username", null, "lastname", "password", "email");
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
     @Test
     @DisplayName("If_RegisterRequest_LastName_Field_Is_Null")
     public void registerRequestLastNameNull() {
-        RegisterRequest request = new RegisterRequest("username", "firstname", null, "password", "email", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("username", "firstname", null, "password", "email");
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
     @Test
     @DisplayName("If_RegisterRequest_Password_Field_Is_Null")
     public void registerRequestPasswordNull() {
-        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", null, "email", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", null, "email");
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
     @Test
     @DisplayName("If_RegisterRequest_Email_Field_Is_Null")
     public void registerRequestEmailNull() {
-        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", "password", null, Permission.IMPORTING);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
-    }
-
-    @Test
-    @DisplayName("If_RegisterRequest_Permission_Field_Is_Null")
-    public void registerRequestPermissionNull() {
-        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", "password", "email", null);
+        RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", "password", null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
 
     @Test
     @DisplayName("If_New_User_Username_Already_Taken")
     public void registerUsernameTaken() throws Exception {
-        RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "email", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "email");
         String expectedMessage = "Username has been taken";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(response.getMessage(), expectedMessage);
@@ -132,7 +125,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_New_User_Email_Already_Taken")
     public void registerEmailTaken() throws Exception {
-        RegisterRequest request = new RegisterRequest("newUser3", "firstname", "lastname", "password", "takenEmail@gmail.com", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("newUser3", "firstname", "lastname", "password", "takenEmail@gmail.com");
         String expectedMessage = "Email has been taken";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(response.getMessage(), expectedMessage);
@@ -141,7 +134,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
-        RegisterRequest request = new RegisterRequest("newUser", "firstname", "lastname", "password", "newEmail", Permission.IMPORTING);
+        RegisterRequest request = new RegisterRequest("newUser", "firstname", "lastname", "password", "newEmail");
         String expectedMessage = "Registration successful";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(response.getMessage(), expectedMessage);
