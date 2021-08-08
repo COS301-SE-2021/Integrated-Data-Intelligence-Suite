@@ -33,10 +33,9 @@ public class UserServiceImpl {
      * @param request This class contains the user information for login.
      * @return This returns a response contains the exit code**
      */
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) throws NoSuchAlgorithmException, InvalidRequestException, InvalidKeySpecException {
         return null;
     }
-
 
     /**
      * This function registers the user to the platform. It creates a new user and stores that user class to the
@@ -53,9 +52,14 @@ public class UserServiceImpl {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
 
-        Optional<User> users = repository.findUserByUsername(request.getUsername());
-        if(users.isPresent()) {
+        Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
+        if(usersByUsername.isPresent()) {
             return new RegisterResponse(false, "Username has been taken");
+        }
+
+        Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
+        if(usersByEmail.isPresent()) {
+            return new RegisterResponse(false, "This email has already been registered");
         }
 
         String password = request.getPassword();
