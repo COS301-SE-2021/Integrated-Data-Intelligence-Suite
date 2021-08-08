@@ -12,7 +12,7 @@ class SideBar extends React.Component {
     };
 
     onCollapse = collapsed => {
-        console.log(collapsed);
+        console.log("IsCOllapsed: " + collapsed);
         this.setState({collapsed});
     };
 
@@ -46,7 +46,7 @@ class SideBar extends React.Component {
                         <Link to="/permissions/"/>
                     </Menu.Item>
                 </Menu>
-                <UserInfoCard/>
+                <UserInfoCard collapsed={collapsed} />
             </Sider>
         );
     }

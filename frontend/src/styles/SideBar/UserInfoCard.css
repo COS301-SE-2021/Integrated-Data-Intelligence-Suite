@@ -1,8 +1,11 @@
 /*************************************************************/
 /********************* User Avatar  Card ***************************/
 /************Found in the Bottom Left corner********************/
+
+/* The div that holds the entire user_avatar card*/
 #user_avatar_card {
-    bottom: -50vh;
+    /*bottom: -50vh;*/
+    bottom:0;
     height: 11%;
     /* color: black; */
     background: #15B761;
@@ -99,9 +102,9 @@
     border: 0;
     font-size: 0;
     float: right;
-    transform: rotate(
-            90deg
-    );
+    /*transform: rotate(*/
+    /*        90deg*/
+    /*);*/
     margin-top: 24px;
     width: 31px;
     height: 23px;

@@ -1,18 +1,23 @@
 import {Button, Card, Dropdown, Menu, Skeleton} from "antd";
 import Meta from "antd/es/card/Meta";
 import Avatar from "antd/es/avatar/avatar";
-import {EllipsisOutlined} from "@ant-design/icons";
+import {UpOutlined} from "@ant-design/icons";
 import React, {Component} from 'react';
 import ExitMenuTooltip from "./ExitMenuTooltip";
 
 class UserInfoCard extends React.Component {
     state = {
         loading: true,
+        collapsed: false,
     };
 
     onChange = checked => {
         this.setState({loading: !checked});
     };
+
+    onCollapse (collapsed){
+
+    }
 
     render() {
         const {loading} = this.state;
@@ -25,7 +30,7 @@ class UserInfoCard extends React.Component {
                         <Meta
                             id={'meta_id'}
                             className={'user_meta_card'}
-                            title="Myron Lopes"
+                            title=""
                             avatar={
                                 <Avatar id={'user_avatar_pic'}
                                         shape={'round'}>
@@ -39,13 +44,13 @@ class UserInfoCard extends React.Component {
                             arrow={true}
                             trigger={'click'}
                         >
-                            <Button id={'exit_menu_button'}
-                                    icon={
-                                        <EllipsisOutlined
-                                            className={'exit_menu_ellipsis_icon'}
-                                            // style={{fontSize: '25px'}}
-                                        />
-                                    }
+                            <Button
+                                id={'exit_menu_button'}
+                                icon={
+                                    <UpOutlined
+                                        className={'exit_menu_ellipsis_icon'}
+                                    />
+                                }
                             >
                             </Button>
                         </Dropdown>
