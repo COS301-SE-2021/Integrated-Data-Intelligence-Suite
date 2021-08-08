@@ -15,6 +15,7 @@ import com.Gateway_Service.Gateway_Service.service.ParseService;
 
 //import com.netflix.discovery.DiscoveryClient;
 
+import com.Gateway_Service.Gateway_Service.service.UserService;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,11 @@ public class GatewayServiceController {
     @Autowired
     private AnalyseService analyseClient;
 
-
     @Autowired
     private DiscoveryClient discoveryClient;
+
+    @Autowired
+    private UserService userClient;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -114,6 +117,15 @@ public class GatewayServiceController {
         return output;
     }*/
 
+    @PostMapping(value = "/register",
+    consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+    produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @CrossOrigin
+    public ResponseEntity<RegisterResponse> register(@RequestBody User newUser) {
+        RegisterRequest registerRequest = new RegisterRequest(newUser.getUsername(), newUser.getFirstName(), newUser.getLastName(), newUser.getPassword(), newUser.getEmail());
+        RegisterResponse registerResponse = userClient.register(registerRequest);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
 
     @GetMapping(value = "/main/{key}", produces = "application/json")
     @CrossOrigin
