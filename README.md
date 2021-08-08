@@ -292,17 +292,16 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Steve Mbuguje</h1>
 
-<p align="right"> Frontend & Data Visualisation</p>
+<p align="right"> <em>Frontend & Data Visualisation</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
-
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
      <a href="https://github.com/u18008390">
         <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
-    </p>
+</p>
 
 <br>
 
@@ -318,7 +317,7 @@ Wow thats a lot of stuff!<br>
 
  
 <!-- --------------------- -->
-<!--  Myron Lopes------------>
+<!--  Myron------------------>
 <!-- --------------------- -->
 <tr>
 <td>
