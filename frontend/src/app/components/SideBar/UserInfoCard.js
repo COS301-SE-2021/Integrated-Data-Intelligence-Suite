@@ -27,17 +27,9 @@ class UserInfoCard extends React.Component {
                 {/*<Switch checked={!loading} onChange={this.onChange} style={{width: 40}}/>*/}
                 <Card id={'user_avatar_card'}>
                     <Skeleton loading={false} avatar active>
-                        <Meta
-                            id={'meta_id'}
-                            className={'user_meta_card'}
-                            title=""
-                            avatar={
-                                <Avatar id={'user_avatar_pic'}
-                                        shape={'round'}>
-                                    M
-                                </Avatar>
-                            }
-                        />
+
+
+                        {/*The drop down menu that allows the user to log out or lock the app*/}
                         <Dropdown
                             overlay={<ExitMenuTooltip/>}
                             placement="topCenter"
@@ -54,6 +46,21 @@ class UserInfoCard extends React.Component {
                             >
                             </Button>
                         </Dropdown>
+
+                        {/*The user Avatar Image*/}
+                        <Meta
+                            id={'meta_id'}
+                            className={'user_meta_card'}
+                            title=""
+                            avatar={
+                                <Avatar
+                                    id={'user_avatar_pic'}
+                                    shape={'round'}
+                                >
+                                    {this.props.name}
+                                </Avatar>
+                            }
+                        />
                     </Skeleton>
                 </Card>
             </>

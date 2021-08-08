@@ -9,7 +9,7 @@
     color: white;
     /*border: 0;*/
     border: 3px solid red;
-    height:85%;
+    height:87%;
 }
 
 #sidebar_menu > li {
@@ -78,8 +78,9 @@
 }
 
 #logo {
-    height: 32px;
-    margin: 16px;
+    height: 10%;
+    /*margin: 16px;*/
+    margin: 0;
     /*background: rgb(252, 0, 64);*/
     background: transparent;
     line-height: 3px;
