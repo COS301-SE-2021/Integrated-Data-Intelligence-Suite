@@ -9,7 +9,7 @@ import Spinner from './components/ContentSection/Spinner';
 
 
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
-const Register1 = lazy(() => import('./pages/RegisterPage/Register'));
+const Register1 = lazy(() => import('./pages/RegisterPage/RegisterPage'));
 
 const ValidateLogin = lazy(() => import('./functions/ValidateLogin'));
 const ValidateRegister = lazy(() => import('./functions/ValidateRegister'));
@@ -23,7 +23,7 @@ class AppRoutes extends Component {
                     {/*<Route exact path="/dashboard" component={ Dashboard } />*/}
 
                     <Route path="/pages/LoginPage" component={ Login } />
-                    <Route path="/pages/Register" component={ Register1 } />
+                    <Route path="/pages/RegisterPage" component={ Register1 } />
 
                     <Route path="/functions/ValidateLogin" component={ VLogin} />}
                     <Route path="/functions/ValidateRegister" component={ VRegister} />}

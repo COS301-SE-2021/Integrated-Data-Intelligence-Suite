@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 import GraphList from "../ContentSection/GraphList";
-import Register from "../../pages/RegisterPage/Register";
+import RegisterPage from "../../pages/RegisterPage/RegisterPage";
 
 // import {Link} from "react-router-dom";
 

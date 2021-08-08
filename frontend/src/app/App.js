@@ -4,8 +4,9 @@ import {Link, Route, Switch} from "react-router-dom";
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from "./pages/HomePage/HomePage";
 import ChartPage from "./pages/ChartPage/components/ChartPage";
-import Permissions from "./pages/PermissionsPage/Permissions";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserPermissions from "./pages/UserPermissionsPage/UserPermissions";
+import Permissions from "./pages/PermissionsPage/Permissions";
 
 class App extends Component {
     state = {}
@@ -21,6 +22,11 @@ class App extends Component {
                     <Route exact path='/login'>
                         <LoginPage/>
                     </Route>
+
+                    <Route exact path='/register'>
+                        <RegisterPage/>
+                    </Route>
+
 
                     <Route exact path='/chart'>
                         <ChartPage/>

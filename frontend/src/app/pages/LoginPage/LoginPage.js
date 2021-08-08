@@ -85,7 +85,9 @@ class LoginPage extends React.Component {
                         </Divider>
 
                         <Form.Item>
-                            <a href="#">register now!</a>
+                            <Link to={"/register"}>
+                                <a className={"register_link"} href="#">register now!</a>
+                            </Link>
 
                         </Form.Item>
 

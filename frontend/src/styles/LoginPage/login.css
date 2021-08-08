@@ -107,6 +107,7 @@
 
 .forgot_password_link{
     color: deeppink;
+    float: right;
 }
 
 .ant-divider-horizontal.ant-divider-with-text {
@@ -119,6 +120,11 @@
     text-align: center;
     border-top: 0;
     border-top-color: rgb(0 0 0);
+}
+
+.register_link{
+    color: deeppink;
+    float: right;
 }
 
 
