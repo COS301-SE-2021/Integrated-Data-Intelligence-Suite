@@ -64,7 +64,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <h1 align="right">Shrey Mandalia</h1>
 
-<p align="right"><em>Data parsing and Data Importing</em></p>
+<p align="right"><em>Data parsing & Data Importing</em></p>
  <p align="right">
       <a href="https://www.linkedin.com/in/shrey-mandalia-5b9a961b8/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -98,7 +98,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Rhuli Nghondzweni</h1>
 
-<p align="right"><em>Back-end and Machine Learning</em></p>
+<p align="right"><em>Back-end & Machine Learning</em></p>
  <p align="right">
      <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -134,7 +134,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Wandile Makhubele</h1>
 
-<p align="right"> <em>Deployment and Back-End</em></p>
+<p align="right"> <em>Deployment & Back-End</em></p>
 
 </p>
  <p align="right">
@@ -172,7 +172,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Steve Mbuguje</h1>
 
-<p align="right"><em>Data Analysis And Machine Learning</em></p>
+<p align="right"><em>Data Analysis & Machine Learning</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -209,7 +209,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Myron Lopes</h1>
 
-<p align="right"> Frontend & Data Visualisation</p>
+<p align="right"><em>Frontend & Data Visualisation</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/myron-lopes/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
