@@ -117,6 +117,11 @@ public class GatewayServiceController {
         return output;
     }*/
 
+    /**
+     * This the endpoint for registering the user.
+     * @param newUser This is the body sent by POST
+     * @return This is the response http entity.
+     */
     @PostMapping(value = "/register",
     consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
     produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -125,6 +130,22 @@ public class GatewayServiceController {
         RegisterRequest registerRequest = new RegisterRequest(newUser.getUsername(), newUser.getFirstName(), newUser.getLastName(), newUser.getPassword(), newUser.getEmail());
         RegisterResponse registerResponse = userClient.register(registerRequest);
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/changePermission",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ManagePermissionsResponse> managePermissions(@RequestBody ManagePermissionsRequest request) {
+        ManagePermissionsResponse response = userClient.managePermissions(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getAll", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAllUsersResponse> getAllUsers(@RequestBody GetAllUsersRequest request) {
+        GetAllUsersResponse response = userClient.getAllUsers(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/main/{key}", produces = "application/json")
