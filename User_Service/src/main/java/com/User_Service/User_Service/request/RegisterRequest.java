@@ -10,13 +10,13 @@ public class RegisterRequest {
     String email;
     Permission permission;
 
-    public RegisterRequest(String username, String firstName, String lastName, String password, String email, Permission permission) {
+    public RegisterRequest(String username, String firstName, String lastName, String password, String email) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.permission = permission;
+        this.permission = Permission.VIEWING;
     }
 
     public String getUsername() {
