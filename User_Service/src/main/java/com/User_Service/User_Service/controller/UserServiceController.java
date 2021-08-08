@@ -3,8 +3,10 @@ package com.User_Service.User_Service.controller;
 
 import com.User_Service.User_Service.request.GetAllUsersRequest;
 import com.User_Service.User_Service.request.ManagePermissionsRequest;
+import com.User_Service.User_Service.request.RegisterRequest;
 import com.User_Service.User_Service.response.GetAllUsersResponse;
 import com.User_Service.User_Service.response.ManagePersmissionsResponse;
+import com.User_Service.User_Service.response.RegisterResponse;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
@@ -34,5 +36,11 @@ public class UserServiceController {
     public GetAllUsersResponse getAllUsers(RequestEntity<GetAllUsersRequest> requestEntity) throws Exception {
         GetAllUsersRequest request = requestEntity.getBody();
         return service.getAllUsers(request);
+    }
+
+    @PostMapping(value = "/register")
+    public RegisterResponse register(RequestEntity<RegisterRequest> requestEntity) throws Exception {
+        RegisterRequest request = requestEntity.getBody();
+        return service.register(request);
     }
 }
