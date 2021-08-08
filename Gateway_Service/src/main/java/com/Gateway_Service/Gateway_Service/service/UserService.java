@@ -36,7 +36,7 @@ public class UserService {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<GetAllUsersRequest> requestEntity = new HttpEntity<GetAllUsersRequest>(request, requestHeaders);
-        ResponseEntity<GetAllUsersResponse> responseEntity = restTemplate.exchange("http://User-Service/User/allusers", HttpMethod.POST, requestEntity, GetAllUsersResponse.class);
+        ResponseEntity<GetAllUsersResponse> responseEntity = restTemplate.exchange("http://User-Service/User/getAll", HttpMethod.GET, requestEntity, GetAllUsersResponse.class);
         return responseEntity.getBody();
     }
 

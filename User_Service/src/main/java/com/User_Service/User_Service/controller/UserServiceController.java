@@ -10,6 +10,7 @@ import com.User_Service.User_Service.response.RegisterResponse;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class UserServiceController {
         return service.managePermissions(request);
     }
 
-    @PostMapping(value = "/allusers")
+    @GetMapping(value = "/allusers")
     public GetAllUsersResponse getAllUsers(RequestEntity<GetAllUsersRequest> requestEntity) throws Exception {
         GetAllUsersRequest request = requestEntity.getBody();
         return service.getAllUsers(request);
