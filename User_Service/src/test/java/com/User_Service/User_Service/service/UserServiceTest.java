@@ -140,6 +140,42 @@ public class UserServiceTest {
         Assertions.assertEquals(response.getMessage(), expectedMessage);
     }
 
+    @Test
+    @DisplayName("If_LoginRequest_Is_Null")
+    public void loginRequestNull() {
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.login(null));
+    }
+
+    @Test
+    @DisplayName("If_LoginRequest_All_Attrib_Are_Null")
+    public void loginRequestAttribAllNull() {
+        LoginRequest request = new LoginRequest(null, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.login(request));
+    }
+
+    @Test
+    @DisplayName("If_LoginRequest_Email_Null")
+    public void loginRequestEmailNull() {
+        LoginRequest request = new LoginRequest(null, "password");
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.login(request));
+    }
+
+    @Test
+    @DisplayName("If_LoginRequest_Password_Null")
+    public void loginRequestPasswordNull() {
+        LoginRequest request = new LoginRequest("test@email.com", null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.login(request));
+    }
+
+    @Test
+    @DisplayName("Login_If_Email_Does_Not_Exist")
+    public void loginEmailNotExist() throws Exception {
+        LoginRequest request = new LoginRequest("missingEmail@notexist.com", "password");
+        String expected = "The email does not exist";
+        LoginResponse response = service.login(request);
+        Assertions.assertEquals(response.getMessage(), expected);
+    }
+
 
 
 
