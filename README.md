@@ -191,7 +191,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/abDivergent">
+     <a href="https://github.com/dev-akshat">
         <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
@@ -221,11 +221,11 @@ Wow thats a lot of stuff!<br>
 
 <p align="right"> Frontend & Data Visualisation</p>
  <p align="right">
-      <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
+     <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/abDivergent">
+      <a href="https://github.com/u18003517-Rhuli">
         <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
@@ -294,11 +294,12 @@ Wow thats a lot of stuff!<br>
 
 <p align="right"> Frontend & Data Visualisation</p>
  <p align="right">
-      <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
+       <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
+
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/abDivergent">
+     <a href="https://github.com/u18008390">
         <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
@@ -332,11 +333,11 @@ Wow thats a lot of stuff!<br>
 
 <p align="right"> Frontend & Data Visualisation</p>
  <p align="right">
-      <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
+       <a href="https://www.linkedin.com/in/myron-lopes/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/abDivergent">
+       <a href="https://github.com/myronlopes-tuks">
         <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
       </a>
     </p>
