@@ -5,8 +5,10 @@ import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
 import com.Import_Service.Import_Service.request.ImportDataRequest;
+import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
 import com.Import_Service.Import_Service.request.ImportTwitterRequest;
 import com.Import_Service.Import_Service.response.ImportDataResponse;
+import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,8 @@ public class ImportServiceController {
         ImportTwitterRequest request = requestEntity.getBody();
         return service.getTwitterDataJson(request);
     }
+
+
 
 
 }
