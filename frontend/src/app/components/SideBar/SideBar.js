@@ -7,9 +7,14 @@ import {Link} from "react-router-dom";
 
 
 class SideBar extends React.Component {
-    state = {
-        collapsed: false,
-    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            collapsed: false,
+        };
+    }
 
     onCollapse = collapsed => {
         console.log("IsCOllapsed: " + collapsed);
@@ -21,7 +26,12 @@ class SideBar extends React.Component {
         return (
             <Sider collapsible={true} collapsed={collapsed} onCollapse={this.onCollapse} id={'sidebar_div'}>
                 <div id="logo"/>
-                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" id={'sidebar_menu'}>
+                <Menu
+                    id={'sidebar_menu'}
+                    theme="light"
+                    defaultSelectedKeys={['1']}
+                    mode="inline"
+                >
                     <Menu.Item key="1" icon={<HomeOutlined/>}>
                         Home
                         <Link to='/'/>
@@ -46,7 +56,10 @@ class SideBar extends React.Component {
                         <Link to="/permissions/"/>
                     </Menu.Item>
                 </Menu>
-                <UserInfoCard collapsed={collapsed} />
+                <UserInfoCard
+                    collapsed={collapsed}
+                    name="s"
+                />
             </Sider>
         );
     }

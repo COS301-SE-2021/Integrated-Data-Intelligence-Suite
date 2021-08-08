@@ -6,16 +6,25 @@ import React, {Component} from 'react';
 import ExitMenuTooltip from "./ExitMenuTooltip";
 
 class UserInfoCard extends React.Component {
-    state = {
-        loading: true,
-        collapsed: false,
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true,
+            collapsed: false,
+        };
+    }
+
 
     onChange = checked => {
         this.setState({loading: !checked});
     };
 
-    onCollapse (collapsed){
+    onCollapse(collapsed) {
+        if (this.state.collapsed) {
+
+
+        }
 
     }
 
