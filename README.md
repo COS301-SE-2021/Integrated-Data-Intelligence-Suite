@@ -172,8 +172,6 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 </table>
 
 <table>
-
- 
 <!-- --------------------- -->
 <!--  Shrey ----------------->
 <!-- --------------------- -->
@@ -187,7 +185,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <h1 align="right">Shrey Mandalia</h1>
 
-<p> align="right"<em>Data parsing and Data Importing</em></p>
+<p align="right"><em>Data parsing and Data Importing</em></p>
  <p align="right">
       <a href="https://www.linkedin.com/in/shrey-mandalia-5b9a961b8/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -218,7 +216,6 @@ Wow thats a lot of stuff!<br>
     <img align='left' alt="Rhuli" src="https://media-exp3.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1628726400&v=beta&t=EfToBL0VX5o8tmkDrypVcaeCgjrO8rbTugAvmRIavTg" width="200pt">
 
   </div>
-
 
 <h1 align="right">Rhuli Nghondzweni</h1>
 
