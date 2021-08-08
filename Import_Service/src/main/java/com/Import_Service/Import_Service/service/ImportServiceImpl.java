@@ -49,20 +49,17 @@ public class ImportServiceImpl {
         if(request == null) throw new InvalidTwitterRequestException("request cannot be null");
 
         String keyword = request.getKeyword().strip();
-        String token = request.getToken().strip();
         int limit = request.getLimit();
 
         if(keyword.length() >250 || keyword.length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
 
         if(limit > 100 || limit < 1) throw new InvalidTwitterRequestException("Invalid limit value: limit can only be between 1 and 100");
 
-        if(token.equals("")) throw new InvalidTwitterRequestException("Invalid token: token cannot be empty string ");
-
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request req = new Request.Builder()
-                .addHeader("Authorization", "Bearer "+token)
+                .addHeader("Authorization", "Bearer "+bearer)
                 .url("https://api.twitter.com/1.1/search/tweets.json?q="+keyword+"&count="+limit)
                 .method("GET", null)
                 .build();

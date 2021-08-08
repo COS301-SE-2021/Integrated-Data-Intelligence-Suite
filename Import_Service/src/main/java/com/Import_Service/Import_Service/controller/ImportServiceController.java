@@ -27,6 +27,7 @@ public class ImportServiceController {
 
     /**
      * This method is used to facilitate communication to the Import-Service.
+     *
      * @param requestEntity This is a request entity which contains a ImportDataRequest object.
      * @return ImportDataResponse This object contains imported data which has been processed by Import-Service.
      * @throws Exception This is thrown if exception caught in Import-Service.
@@ -39,18 +40,88 @@ public class ImportServiceController {
 
     /**
      * This method is used to facilitate communication to the Import-Service.
+     *
      * @param requestEntity This is a request entity which contains a ImportTwitterRequest object.
      * @return ImportTwitterResponse This object contains imported data which has been processed by Import-Service.
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
     @PostMapping(value = "/getTwitterDataJson")
     public ImportTwitterResponse getTwitterDataJson(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
-        //ImportTwitterRequest req = new ImportTwitterRequest(key);
+
         ImportTwitterRequest request = requestEntity.getBody();
         return service.getTwitterDataJson(request);
     }
 
+    /**
+     * Used to test twitter data retrieval
+     *
+     * @param key keyword used to search for posts
+     * @return a list of posts as a Json string
+     */
+    @GetMapping(value = "test/twitter/{key}")
+    public String testTwitter(@PathVariable String key){
+        ImportTwitterResponse res = null;
+        try{
+            res = service.getTwitterDataJson(new ImportTwitterRequest(key));
+        } catch (Exception e) {
+            return "{\"data\": \"Import failed.\"}";
+        }
+        if(res == null) return "{\"data\": \"No data found.\"}";
 
+        return res.getJsonData();
+    }
+
+    /**
+     * Used to test newsAPI data retrieval
+     *
+     * @param key keyword used to search for articles
+     * @return a list of articles as a Json string
+     */
+    @GetMapping(value="test/news/{key}")
+    public String testNewsAPI(@PathVariable String key){
+        ImportNewsDataResponse res = null;
+        try {
+            res = service.importNewsData(new ImportNewsDataRequest(key));
+        } catch (Exception e) {
+
+            return "{\"data\": \"Import failed.\"}";
+        }
+        if(res == null) return "{\"data\": \"No data found.\"}";
+
+
+        return res.getData();
+    }
+
+    /**
+     * Used to test all data sources at the same time
+     *
+     * @param key keyword used to search multiple data sources
+     * @return a list of articles from different data sources related to
+     *         search key as a json string
+     */
+    @GetMapping(value="test/all/{key}")
+    public  String searchData(@PathVariable String key){
+        ImportDataResponse res = null;
+        String retString = "";
+        try{
+            res = service.importData(new ImportDataRequest("bitcoin", 10));
+
+        } catch (ImporterException e) {
+
+            return "{\"data\": \"Import failed.\"}";
+        }
+        if(res == null) return "{\"data\": \"No data found.\"}";
+
+        ArrayList<String> lst = new ArrayList<>();
+
+
+        for (ImportedData str : res.getList()) {
+
+            lst.add(str.getData());
+
+        }
+        return lst.toString();
+    }
 
 
 }
