@@ -71,7 +71,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
       </a>
       &nbsp&nbsp&nbsp&nbsp
      <a href="https://github.com/dev-akshat">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
 
@@ -105,7 +105,7 @@ Wow thats a lot of stuff!<br>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/u18003517-Rhuli">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
 
@@ -143,7 +143,7 @@ Wow thats a lot of stuff!<br>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/abDivergent">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
 
@@ -179,7 +179,7 @@ Wow thats a lot of stuff!<br>
       </a>
       &nbsp&nbsp&nbsp&nbsp
      <a href="https://github.com/u18008390">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
 </p>
 
@@ -216,7 +216,7 @@ Wow thats a lot of stuff!<br>
       </a>
       &nbsp&nbsp&nbsp&nbsp
        <a href="https://github.com/myronlopes-tuks">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
 
