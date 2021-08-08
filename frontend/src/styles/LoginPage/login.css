@@ -1,74 +1,124 @@
-.Login {
-    text-align: center;
+/*.Login {*/
+/*    text-align: center;*/
+/*}*/
+
+/*form {*/
+/*    border: 3px solid #f1f1f1;*/
+/*}*/
+
+/*!* Full-width inputs *!*/
+/*input[type=text], input[type=password] {*/
+/*    width: 100%;*/
+/*    padding: 12px 20px;*/
+/*    margin: 8px 0;*/
+/*    display: inline-block;*/
+/*    border: 1px solid #ccc;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+/*!* Set a style for all buttons *!*/
+/*button {*/
+/*    background-color: #04AA6D;*/
+/*    color: white;*/
+/*    padding: 14px 20px;*/
+/*    margin: 8px 0;*/
+/*    border: none;*/
+/*    cursor: pointer;*/
+/*    width: 100%;*/
+/*}*/
+
+/*!* Add a hover effect for buttons *!*/
+/*button:hover {*/
+/*    opacity: 0.8;*/
+/*}*/
+
+/*!* Extra style for the cancel button (red) *!*/
+/*.cancelbtn {*/
+/*    width: auto;*/
+/*    padding: 10px 18px;*/
+/*    background-color: #f44336;*/
+/*}*/
+
+/*!* Center the avatar image inside this container *!*/
+/*.imgcontainer {*/
+/*    text-align: center;*/
+/*    margin: 24px 0 12px 0;*/
+/*}*/
+
+/*!* Avatar image *!*/
+/*img.avatar {*/
+/*    width: 40%;*/
+/*    border-radius: 50%;*/
+/*}*/
+
+/*!* Add padding to containers *!*/
+/*.container {*/
+/*    padding: 16px;*/
+/*}*/
+
+/*!* The "Forgot password" text *!*/
+/*span.psw {*/
+/*    float: right;*/
+/*    padding-top: 16px;*/
+/*}*/
+
+/*!* Change styles for span and cancel button on extra small screens *!*/
+/*@media screen and (max-width: 300px) {*/
+/*    span.psw {*/
+/*        display: block;*/
+/*        float: none;*/
+/*    }*/
+/*    .cancelbtn {*/
+/*        width: 100%;*/
+/*    }*/
+/*}*/
+
+#components-form-demo-normal-login .login-form {
+}
+#components-form-demo-normal-login .login-form-forgot {
+  float: right;
+}
+#components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
+  float: left;
+}
+#components-form-demo-normal-login .login-form-button {
+  width: 100%;
 }
 
-form {
-    border: 3px solid #f1f1f1;
+#login_card{
+      border: 3px solid deeppink;
+    /* align-self: center; */
+
+    /*Aligning it Horizontally in the Center*/
+    margin: auto;
+    width: 24%;
+    max-width: 300px;
+
+    /* Aligning it Vertically in the center  */
+    height: 50%;
+    /*top:50%;*/
 }
 
-/* Full-width inputs */
-input[type=text], input[type=password] {
+.login_button{
+    background: deeppink;
+    border-color: deeppink;
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
 }
 
-/* Set a style for all buttons */
-button {
-    background-color: #04AA6D;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
+.forgot_password_link{
+    color: deeppink;
 }
 
-/* Add a hover effect for buttons */
-button:hover {
-    opacity: 0.8;
-}
-
-/* Extra style for the cancel button (red) */
-.cancelbtn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: #f44336;
-}
-
-/* Center the avatar image inside this container */
-.imgcontainer {
+.ant-divider-horizontal.ant-divider-with-text {
+    display: flex;
+    margin: 16px 0;
+    color: rgb(0 0 0);
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
     text-align: center;
-    margin: 24px 0 12px 0;
+    border-top: 0;
+    border-top-color: rgb(0 0 0);
 }
 
-/* Avatar image */
-img.avatar {
-    width: 40%;
-    border-radius: 50%;
-}
 
-/* Add padding to containers */
-.container {
-    padding: 16px;
-}
-
-/* The "Forgot password" text */
-span.psw {
-    float: right;
-    padding-top: 16px;
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-    span.psw {
-        display: block;
-        float: none;
-    }
-    .cancelbtn {
-        width: 100%;
-    }
-}
