@@ -176,16 +176,21 @@ public class UserServiceTest {
         Assertions.assertEquals(response.getMessage(), expected);
     }
 
+    @Test
+    @DisplayName("Login_Existing_Email_Wrong_Password")
+    public void loginWrongPassword() throws Exception {
+        LoginRequest request = new LoginRequest("existingEmail@exist.com", "wrongpass");
+        String expected = "Incorrect password";
+        LoginResponse response = service.login(request);
+        Assertions.assertEquals(response.getMessage(), expected);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    @Test
+    @DisplayName("Login_Successful")
+    public void loginSuccessful() throws Exception {
+        LoginRequest request = new LoginRequest("existingEmail@exist.com", "correctpass");
+        String expected = "Successfully logged in";
+        LoginResponse response = service.login(request);
+        Assertions.assertEquals(response.getMessage(), expected);
+    }
 }
