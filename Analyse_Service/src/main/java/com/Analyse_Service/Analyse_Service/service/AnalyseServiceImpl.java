@@ -699,6 +699,16 @@ public class AnalyseServiceImpl {
     }
 
     private void test3(){
+        /**initialise**/
+        SparkConf conf = new SparkConf().setAppName("Test3").setMaster("local[*]"); //session. replace
+        JavaSparkContext sc = new JavaSparkContext(conf);
+
+        /**paralising data**/
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> distData = sc.parallelize(data);
+        JavaRDD<Integer> distData2 = sc.parallelize(data,10); // add 10 as a slice (no. of partitions), 2-4 the norm
+
+
 
     }
 
