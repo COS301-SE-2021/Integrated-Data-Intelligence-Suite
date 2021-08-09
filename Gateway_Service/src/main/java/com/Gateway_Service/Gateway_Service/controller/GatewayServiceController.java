@@ -132,6 +132,25 @@ public class GatewayServiceController {
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 
+    /**
+     * This the endpoint for changing the permission of a user
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/login",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @CrossOrigin
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = userClient.login(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for changing the permission of a user
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
     @PostMapping(value = "/changePermission",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -141,6 +160,11 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param request This is the body send by a GET request
+     * @return This is the response http entity. It contains all the users.
+     */
     @GetMapping(value = "/getAll", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<GetAllUsersResponse> getAllUsers(@RequestBody GetAllUsersRequest request) {
