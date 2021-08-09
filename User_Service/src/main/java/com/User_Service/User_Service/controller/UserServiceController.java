@@ -2,9 +2,11 @@ package com.User_Service.User_Service.controller;
 
 
 import com.User_Service.User_Service.request.GetAllUsersRequest;
+import com.User_Service.User_Service.request.LoginRequest;
 import com.User_Service.User_Service.request.ManagePermissionsRequest;
 import com.User_Service.User_Service.request.RegisterRequest;
 import com.User_Service.User_Service.response.GetAllUsersResponse;
+import com.User_Service.User_Service.response.LoginResponse;
 import com.User_Service.User_Service.response.ManagePersmissionsResponse;
 import com.User_Service.User_Service.response.RegisterResponse;
 import com.User_Service.User_Service.service.UserServiceImpl;
@@ -43,5 +45,11 @@ public class UserServiceController {
     public RegisterResponse register(RequestEntity<RegisterRequest> requestEntity) throws Exception {
         RegisterRequest request = requestEntity.getBody();
         return service.register(request);
+    }
+
+    @PostMapping(value = "/login")
+    public LoginResponse login(RequestEntity<LoginRequest> requestEntity) throws Exception {
+        LoginRequest request = requestEntity.getBody();
+        return service.login(request);
     }
 }
