@@ -73,47 +73,40 @@
 /*    }*/
 /*}*/
 
-#components-form-demo-normal-login .login-form {
-}
-#components-form-demo-normal-login .login-form-forgot {
-  float: right;
-}
-#components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
-  float: left;
-}
-#components-form-demo-normal-login .login-form-button {
-  width: 100%;
-}
 
-#login_card{
-      border: 3px solid deeppink;
+#login_card {
+    border: 3px solid deeppink;
     /* align-self: center; */
 
     /*Aligning it Horizontally in the Center*/
-    margin: auto;
     width: 24%;
     max-width: 300px;
 
     /* Aligning it Vertically in the center  */
-    height: 50%;
-    /*top:50%;*/
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)
 }
 
-.login_button{
+.login_button {
     background: deeppink;
     border-color: deeppink;
     width: 100%;
 }
 
-.forgot_password_link{
+.forgot_password_link {
     color: deeppink;
     float: right;
 }
 
+/*The  Lines in between the word OR*/
 .ant-divider-horizontal.ant-divider-with-text {
     display: flex;
     margin: 16px 0;
-    color: rgb(0 0 0);
+    color: black;
     font-weight: 500;
     font-size: 16px;
     white-space: nowrap;
@@ -122,9 +115,18 @@
     border-top-color: rgb(0 0 0);
 }
 
-.register_link{
+.register_link {
     color: deeppink;
     float: right;
+}
+
+/* The root div. Its encompasses all the elements/components */
+#root {
+    border: 3px solid red;
+    height: 100vh;
+    position: relative;
+    margin:auto;
+    /*width: 100vw;*/
 }
 
 

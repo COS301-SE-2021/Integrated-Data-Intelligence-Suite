@@ -57,15 +57,6 @@ class LoginPage extends React.Component {
                         </Form.Item>
 
 
-                        <Form.Item>
-                            {/*<Form.Item name="remember" valuePropName="checked" noStyle>*/}
-                            {/*    <Checkbox>Remember me</Checkbox>*/}
-                            {/*</Form.Item>*/}
-
-                            <a className="forgot_password_link" href="">
-                                Forgot password
-                            </a>
-                        </Form.Item>
 
 
                         <Form.Item>
@@ -85,6 +76,17 @@ class LoginPage extends React.Component {
                         </Divider>
 
                         <Form.Item>
+                            {/*<Form.Item name="remember" valuePropName="checked" noStyle>*/}
+                            {/*    <Checkbox>Remember me</Checkbox>*/}
+                            {/*</Form.Item>*/}
+
+                            <a className="forgot_password_link" href="">
+                                Forgot password
+                            </a>
+                        </Form.Item>
+
+                        <Form.Item>
+                            Don't have an account?
                             <Link to={"/register"}>
                                 <a className={"register_link"} href="#">register now!</a>
                             </Link>
