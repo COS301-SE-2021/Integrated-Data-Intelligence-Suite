@@ -698,6 +698,13 @@ public class AnalyseServiceImpl {
 
     }
 
+    private void test3(){
+
+    }
+
+
+
+
     public FindEntitiesResponse findEntities(FindEntitiesRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindSentimentRequest Object is null");
