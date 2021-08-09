@@ -23,6 +23,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
@@ -40,6 +41,7 @@ import org.apache.spark.sql.types.*;
 import org.apache.spark.sql.functions;
 import org.apache.spark.storage.StorageLevel;
 import org.springframework.stereotype.Service;
+import scala.Tuple2;
 
 
 import java.util.ArrayList;
@@ -701,11 +703,12 @@ public class AnalyseServiceImpl {
     }
 
     private void test3(){
-        /**initialise**/
+        /**Initialise**/
         SparkConf conf = new SparkConf().setAppName("Test3").setMaster("local[*]"); //session. replace
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        /**paralising data**/
+
+        /**Paralising data**/
         List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
         JavaRDD<Integer> distData = sc.parallelize(data);
         JavaRDD<Integer> distData2 = sc.parallelize(data,10); // add 10 as a slice (no. of partitions), 2-4 the norm
@@ -715,18 +718,42 @@ public class AnalyseServiceImpl {
         JavaRDD<String> distFile2 = sc.textFile("url", 10); //no. of partitions
         JavaPairRDD<String,String> distFile3 = sc.wholeTextFiles("url"); // takes multiple files
 
+        //working with key-value pairs - example
+        JavaRDD<String> lines = sc.textFile("data.txt");
+        JavaPairRDD<String, Integer> pairs = lines.mapToPair(s -> new Tuple2(s, 1)); //uses scala
+        JavaPairRDD<String, Integer> counts = pairs.reduceByKey((a, b) -> a + b);
+
         //save rdd
         distFile.saveAsObjectFile("url");
 
-        /**Operations to data**/
-        //transformations and reduce
+
+        /**Operations to data {transformation and reduce} **/
 
         //example [reduce]
-        JavaRDD<String> lines = sc.textFile("data.txt"); //pointer
-        JavaRDD<Integer> lineLengths = lines.map(s -> s.length()); //pointer
+        JavaRDD<String> lines2 = sc.textFile("data.txt"); //pointer
+        JavaRDD<Integer> lineLengths = lines2.map(s -> s.length()); //pointer
 
         lineLengths.persist(StorageLevel.MEMORY_ONLY()); //[Optional] saves rdd to memory to be reused, after running
         int totalLength = lineLengths.reduce((a, b) -> a + b); //only here is the rdd ran. [return to driver program.]
+
+
+        /**NOTE**/
+        //passing with function [Spark’s API relies heavily on passing functions in the driver program]
+        JavaRDD<String> lines3 = sc.textFile("data.txt");
+        JavaRDD<Integer> lineLengths3 = lines3.map(new Function<String, Integer>() {
+            public Integer call(String s) { return s.length(); }
+        });
+
+        /*int totalLength2 = lineLengths2.reduce(new Function2<Integer, Integer, Integer>() {
+            public Integer call(Integer a, Integer b) { return a + b; }
+        });*/
+
+        /**NOTE**/
+        distData.foreach(x -> x += x); //this has a change to not work. locally is okay, distributed is not okay.
+
+    }
+
+    private void test4(){
 
 
     }
