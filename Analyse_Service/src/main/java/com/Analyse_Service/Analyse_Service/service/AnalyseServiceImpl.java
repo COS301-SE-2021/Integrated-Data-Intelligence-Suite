@@ -754,6 +754,20 @@ public class AnalyseServiceImpl {
     }
 
     private void test4(){
+        SparkSession spark = SparkSession
+                .builder()
+                .appName("test 4")
+                .master("local")
+                .getOrCreate();
+
+        //A dataframe, like rdd but with scheme like table of database, collection of partitions
+
+        Dataset<Row> df = spark.read().json("examples/src/main/resources/people.json");
+
+        // Displays the content of the DataFrame to stdout
+        df.show();
+
+
 
 
     }
