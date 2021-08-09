@@ -45,13 +45,27 @@ public class UserService {
      * to the system. It sends a request to the user controller and send the request
      * class to user service.
      * @param request This class contains all the information of the user to be saved.
-     * @return This class contians the information if the saving of the user was successful.
+     * @return This class contains the information if the saving of the user was successful.
      */
     public RegisterResponse register(RegisterRequest request) {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RegisterRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/allusers", HttpMethod.POST, requestEntity, RegisterResponse.class);
+        ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/register", HttpMethod.POST, requestEntity, RegisterResponse.class);
+        return responseEntity.getBody();
+    }
+    /**
+     * This function is used to connect to the user service to allow the user to login
+     * to the system. It sends a request to the user controller and send the request
+     * class to user service.
+     * @param request This class contains the email and password of the user to login.
+     * @return This class contains the information if the logging process was successful.
+     */
+    public LoginResponse login(LoginRequest request) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<LoginRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
+        ResponseEntity<LoginResponse> responseEntity = restTemplate.exchange("http://User-Service/User/login", HttpMethod.POST, requestEntity, LoginResponse.class);
         return responseEntity.getBody();
     }
 }
