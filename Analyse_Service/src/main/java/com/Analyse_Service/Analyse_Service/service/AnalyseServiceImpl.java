@@ -38,6 +38,7 @@ import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.*;
 import org.apache.spark.sql.functions;
+import org.apache.spark.storage.StorageLevel;
 import org.springframework.stereotype.Service;
 
 
@@ -716,6 +717,17 @@ public class AnalyseServiceImpl {
 
         //save rdd
         distFile.saveAsObjectFile("url");
+
+        /**Operations to data**/
+        //transformations and reduce
+
+        //example [reduce]
+        JavaRDD<String> lines = sc.textFile("data.txt"); //pointer
+        JavaRDD<Integer> lineLengths = lines.map(s -> s.length()); //pointer
+
+        lineLengths.persist(StorageLevel.MEMORY_ONLY()); //[Optional] saves rdd to memory to be reused, after running
+        int totalLength = lineLengths.reduce((a, b) -> a + b); //only here is the rdd ran. [return to driver program.]
+
 
     }
 
