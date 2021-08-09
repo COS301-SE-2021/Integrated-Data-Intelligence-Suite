@@ -33,12 +33,10 @@ import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
-import org.apache.spark.sql.functions;
+
+import static org.apache.spark.sql.functions.col;
 import org.apache.spark.storage.StorageLevel;
 import org.springframework.stereotype.Service;
 import scala.Tuple2;
@@ -703,6 +701,7 @@ public class AnalyseServiceImpl {
     }
 
     private void test3(){
+        /**RDD's**/
         /**Initialise**/
         SparkConf conf = new SparkConf().setAppName("Test3").setMaster("local[*]"); //session. replace
         JavaSparkContext sc = new JavaSparkContext(conf);
@@ -754,6 +753,8 @@ public class AnalyseServiceImpl {
     }
 
     private void test4(){
+        /**DATAFRAMES or DATASET**/
+        /**Initialise and create**/
         SparkSession spark = SparkSession
                 .builder()
                 .appName("test 4")
@@ -762,10 +763,51 @@ public class AnalyseServiceImpl {
 
         //A dataframe, like rdd but with scheme like table of database, collection of partitions
 
-        Dataset<Row> df = spark.read().json("examples/src/main/resources/people.json");
+        Dataset<Row> df = spark.read().json("url");
 
         // Displays the content of the DataFrame to stdout
         df.show();
+
+        /**Opertaion to data
+         * assume...
+         *  | age|   name|
+         *  ______________
+         *  |null|Michael|
+         *  |  30|   Andy|
+         * **/
+
+        // Print the schema in a tree format
+        df.printSchema();
+
+        // Select only the "name" column
+        df.select("name").show();
+
+        // Select everybody, but increment the age by 1
+        df.select(col("name"), col("age").plus(1)).show(); // df.col() works, but using static import here [better?]
+
+        // Select people older than 21
+        df.filter(col("age").gt(21)).show();
+
+        // Count people by age
+        df.groupBy("age").count().show();
+
+        /**Convert to sql querying**/
+
+        df.createOrReplaceTempView("sqlpeople");
+
+        Dataset<Row> sqlDF = null;
+        //sqlDF = spark.sql("SELECT * FROM sqlpeople");
+        sqlDF.show();
+
+        try { //to persist the sql query among sessions
+            df.createGlobalTempView("people");
+            // Global temporary view is tied to a system preserved database `global_temp`
+            //spark.sql("SELECT * FROM global_temp.people").show();
+        } catch (AnalysisException e) {
+            e.printStackTrace();
+        }
+
+
 
 
 
