@@ -20,6 +20,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
@@ -708,7 +709,13 @@ public class AnalyseServiceImpl {
         JavaRDD<Integer> distData = sc.parallelize(data);
         JavaRDD<Integer> distData2 = sc.parallelize(data,10); // add 10 as a slice (no. of partitions), 2-4 the norm
 
+        //external data
+        JavaRDD<String> distFile = sc.textFile("url"); //return one record per line in "each" file [using the spark context, i.e hadoop]
+        JavaRDD<String> distFile2 = sc.textFile("url", 10); //no. of partitions
+        JavaPairRDD<String,String> distFile3 = sc.wholeTextFiles("url"); // takes multiple files
 
+        //save rdd
+        distFile.saveAsObjectFile("url");
 
     }
 
