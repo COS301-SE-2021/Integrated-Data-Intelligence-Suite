@@ -3,13 +3,13 @@ package com.Analyse_Service.Analyse_Service.response;
 import java.util.ArrayList;
 
 public class FindEntitiesResponse {
-    ArrayList<ArrayList> entitiesList;
+    ArrayList<String> entitiesList;
 
-    public FindEntitiesResponse(ArrayList<ArrayList> entitiesList){
+    public FindEntitiesResponse(ArrayList<String> entitiesList){
         this.entitiesList = entitiesList;
     }
 
-    public ArrayList<ArrayList> getEntitiesList(){
+    public ArrayList<String> getEntitiesList(){
         return this.entitiesList;
     }
 }
