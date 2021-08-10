@@ -1,70 +1,114 @@
-import React, { Component }from 'react';
-import { Link } from 'react-router-dom';
-import '../../../styles/LoginPage/login.css';
+import React, {Component} from 'react';
+import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
+import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import {Link, useHistory} from "react-router-dom";
+import LoginButton from "./LoginButton";
+import {useFormik} from 'formik';
 
-class RegisterPage extends  Component{
 
+//Validation Function
+const validate = (values) => {
+    const errors = {};
 
-    constructor() {
-        super();
-        this.state = {
-            userName : "",
-            userPassword: "",
-            userPasswordRepeat: ""
-        }
+    if (!values.email) {
+        errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
     }
 
-
-    componentDidMount () {
-        let sbutton = document.getElementById("submitButton");
-        //sbutton.disabled = true;
-    }
-
-    render() {
-        return (
-            <div className="Login">
-                <form action="" method="post">
-                    <div className="container">
-                        <label htmlFor="uname"><b>Username</b></label>
-                        <input type="text" placeholder="Enter Username" id="uname" required/>
-
-                        <label htmlFor="uname"><b>Nickname</b></label>
-                        <input type="text" placeholder="Enter Nickname" id="nname" required/>
-
-                        <label htmlFor="psw"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" id="upassword" required/>
-
-                        <label htmlFor="psw"><b>Password repeat</b></label>
-                        <input type="password" placeholder="Re-Enter Password" id="upasswordR" required/>
-
-                        <Link to={{
-                            pathname: "/functions/ValidateRegister",
-                            state: this.state
-                        }}>
-                            <button type="submit"  onClick={() =>{this.checkUserCreds()}} > Register</button>
-                        </Link>
-                    </div>
-
-                </form>
-            </div>
-        );
-    }
-
-    checkUserCreds(object) {
-        //console.log(object)
-        console.log(document.getElementById("uname"));
-        console.log(document.getElementById("upassword"));
-
-
-        this.state.userPassword = document.getElementById("upassword").value;
-        this.state.userName = document.getElementById("uname").value;
-        this.state.userPasswordRepeat = document.getElementById("upasswordR").value;
-
-
-        console.log("user name : " + this.state.userName);
-        console.log("user password : " + this.state.userPassword);
-    }
-
+    return errors;
 }
+
+
+const RegisterPage = () => {
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+
+        onSubmit: values => {
+            alert(JSON.stringify(values, null, 2));
+
+            //Make Get Request
+
+            //Update Client if get request Unsuccesfull
+
+            //else, redirect to home page
+        },
+    });
+
+    return (
+        <Card
+            id={"login_card"}
+            className={"loginCard"}
+            title="Register"
+        >
+            <form onSubmit={formik.handleSubmit}>
+
+                <Form.Item
+                    // label="email"
+                >
+                    <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="email"
+                        // onChange={formik.handleChange}
+                        // onBlur={formik.handleBlur}
+                        value={formik.values.email}
+                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    // label="password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Password!',
+                        },
+                    ]}
+                >
+                    <Input.Password
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        prefix={<LockOutlined className="site-form-item-icon"/>}
+                    />
+                    {formik.touched.email && formik.errors.email ? (
+                        <div>{formik.errors.email}</div>) : null}
+                </Form.Item>
+
+                <Form.Item>
+                    <LoginButton/>
+                </Form.Item>
+
+                <Divider className={'or_divider'}>
+                    OR
+                </Divider>
+
+                <Form.Item>
+                    Don't have an account?
+                    <Link to={"/register"}>
+                        <a className={"register_link"} href="#">register now!</a>
+                    </Link>
+                </Form.Item>
+
+                <Form.Item>
+                    <a className="forgot_password_link" href="">
+                        Forgot password
+                    </a>
+                </Form.Item>
+            </form>
+        </Card>
+    );
+};
+
 
 export default RegisterPage;
