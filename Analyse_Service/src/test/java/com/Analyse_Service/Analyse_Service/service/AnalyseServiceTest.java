@@ -207,4 +207,13 @@ public class AnalyseServiceTest {
         FindEntitiesRequest test = new FindEntitiesRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findEntities(test));
     }
+
+    @Test
+    @DisplayName("When the text is Valid")
+    public void findEntitiesValidRequest() throws InvalidRequestException {
+        String text = "test text for function";
+        FindEntitiesRequest test = new FindEntitiesRequest(text);
+        FindEntitiesResponse testResults = service.findEntities(test);
+        Assertions.assertNotNull(testResults);
+    }
 }
