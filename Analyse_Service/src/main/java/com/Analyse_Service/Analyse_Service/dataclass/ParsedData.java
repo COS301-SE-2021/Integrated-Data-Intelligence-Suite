@@ -1,7 +1,15 @@
 package com.Analyse_Service.Analyse_Service.dataclass;
 
+import javax.persistence.*;
+
+@Entity(name = "ParsedData")
+@Table(name = "ParsedData")
 public class ParsedData {
+    @Id
+    @GeneratedValue(generator = "")
     private Long id;
+
+
     private String textMessage;
     private String date;
     private String location;
