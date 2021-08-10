@@ -364,8 +364,71 @@ public class AnalyseServiceImpl {
 
         List<Row> trendsData  = new ArrayList<>();
 
+        ArrayList<String> reqData = request.getDataList();
+
+        for(int i=0; i < reqData.size(); i++){
+            trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
+        }
+
+        /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(new StructField[]{ new StructField(
+                "Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
+        });
+
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema); // .read().parquet("...");
+        itemsDF.show();
+
         /*******************SETUP MODEL*****************/
 
+        LogisticRegression lr = new LogisticRegression()
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8);
+
+        // Fit the model
+        LogisticRegressionModel lrModel = lr.fit(itemsDF);
+
+        // Print the coefficients and intercept for logistic regression
+        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
+
+        /*//We can also use the multinomial family for binary classification
+        LogisticRegression mlr = new LogisticRegression()
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8)
+                .setFamily("multinomial");
+
+        // Fit the model
+        LogisticRegressionModel mlrModel = mlr.fit(itemsDF);
+
+        // Print the coefficients and intercepts for logistic regression with multinomial family
+        System.out.println("Multinomial coefficients: " + lrModel.coefficientMatrix()
+                + "\nMultinomial intercepts: " + mlrModel.interceptVector());*/
+
+
+        /******************Analyse Model Accuracy**************/
+
+        BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
+
+        // Obtain the loss per iteration.
+        double[] objectiveHistory = trainingSummary.objectiveHistory();
+        for (double lossPerIteration : objectiveHistory) {
+            System.out.println(lossPerIteration);
+        }
+
+        // Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
+        Dataset<Row> roc = trainingSummary.roc();
+        roc.show();
+        roc.select("FPR").show();
+        System.out.println(trainingSummary.areaUnderROC());
+
+        // Get the threshold corresponding to the maximum F-Measure and rerun LogisticRegression with this selected threshold.
+        Dataset<Row> fMeasure = trainingSummary.fMeasureByThreshold();
+        double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
+        double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
+                .select("threshold").head().getDouble(0);
+        lrModel.setThreshold(bestThreshold);
 
 
         /*******************READ MODEL OUTPUT*****************/
