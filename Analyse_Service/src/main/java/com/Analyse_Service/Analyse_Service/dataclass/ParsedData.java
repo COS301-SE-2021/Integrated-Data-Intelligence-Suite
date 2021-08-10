@@ -19,6 +19,14 @@ public class ParsedData {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTextMessage() {
         return textMessage;
     }
@@ -51,12 +59,4 @@ public class ParsedData {
         this.likes = likes;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
