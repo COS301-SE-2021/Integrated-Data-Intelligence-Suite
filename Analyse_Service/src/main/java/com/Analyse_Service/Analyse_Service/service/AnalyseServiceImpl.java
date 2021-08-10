@@ -25,8 +25,12 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.Pipeline;
+import org.apache.spark.ml.PipelineModel;
+import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
+import org.apache.spark.ml.feature.HashingTF;
+import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.mllib.clustering.KMeans;
@@ -379,36 +383,50 @@ public class AnalyseServiceImpl {
         Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema); // .read().parquet("...");
         itemsDF.show();
 
-        /*******************SETUP MODEL*****************/
 
-        LogisticRegression lr = new LogisticRegression()
+        /*******************SETUP PIPELINE*****************/
+        /*******************SETUP MODEL*****************/
+        //features
+        Tokenizer tokenizer = new Tokenizer()
+                .setInputCol("text")
+                .setOutputCol("words");
+
+        HashingTF hashingTF = new HashingTF()
+                .setNumFeatures(1000)
+                .setInputCol(tokenizer.getOutputCol())
+                .setOutputCol("features");
+
+
+        //model
+        LogisticRegression lr = new LogisticRegression() //estimator
                 .setMaxIter(10)
                 .setRegParam(0.3)
                 .setElasticNetParam(0.8);
 
         // Fit the model
         LogisticRegressionModel lrModel = lr.fit(itemsDF);
-
         // Print the coefficients and intercept for logistic regression
         System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
 
-        /*//We can also use the multinomial family for binary classification
-        LogisticRegression mlr = new LogisticRegression()
-                .setMaxIter(10)
-                .setRegParam(0.3)
-                .setElasticNetParam(0.8)
-                .setFamily("multinomial");
 
-        // Fit the model
-        LogisticRegressionModel mlrModel = mlr.fit(itemsDF);
+        //pipeline
+        Pipeline pipeline = new Pipeline()
+                .setStages(new PipelineStage[] {tokenizer, hashingTF, lr});
 
-        // Print the coefficients and intercepts for logistic regression with multinomial family
-        System.out.println("Multinomial coefficients: " + lrModel.coefficientMatrix()
-                + "\nMultinomial intercepts: " + mlrModel.interceptVector());*/
+        // Fit the pipeline to training documents.
+        PipelineModel model = pipeline.fit(itemsDF);
 
 
         /******************Analyse Model Accuracy**************/
+        //test
+        Dataset<Row> test = null;
 
+        Dataset<Row> predictions = model.transform(test);
+        for (Row r : predictions.select("isTrending").collectAsList())
+            System.out.println("Trending -> " + r.get(0));
+
+
+        //summaries
         BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
 
         // Obtain the loss per iteration.
