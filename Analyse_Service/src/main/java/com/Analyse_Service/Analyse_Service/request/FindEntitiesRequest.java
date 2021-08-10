@@ -3,14 +3,14 @@ package com.Analyse_Service.Analyse_Service.request;
 import java.util.ArrayList;
 
 public class FindEntitiesRequest {
-    ArrayList<String> dataList;
+    String text;
 
-    public FindEntitiesRequest(ArrayList<String> dataList){
-        this.dataList = dataList;
+    public FindEntitiesRequest(String text){
+        this.text = text;
     }
 
-    public ArrayList<String> getDataList(){
-        return dataList;
+    public String getDataList(){
+        return text;
     }
 
 }
