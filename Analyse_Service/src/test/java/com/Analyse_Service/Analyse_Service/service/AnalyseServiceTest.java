@@ -202,8 +202,8 @@ public class AnalyseServiceTest {
     }
 
     @Test
-    @DisplayName("When the data list is Null")
-    public void findEntitiesDataNullList(){
+    @DisplayName("When the text is Null")
+    public void findEntitiesTextNull(){
         FindEntitiesRequest test = new FindEntitiesRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findEntities(test));
     }
