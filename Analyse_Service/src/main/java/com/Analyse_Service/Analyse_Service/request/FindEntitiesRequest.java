@@ -9,7 +9,7 @@ public class FindEntitiesRequest {
         this.text = text;
     }
 
-    public String getDataList(){
+    public String getText(){
         return text;
     }
 
