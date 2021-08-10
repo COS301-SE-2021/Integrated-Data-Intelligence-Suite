@@ -902,8 +902,8 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindSentimentRequest Object is null");
         }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList is null");
+        if (request.getText() == null){
+            throw new InvalidRequestException("text is null");
         }
 
         Properties properties = new Properties();
