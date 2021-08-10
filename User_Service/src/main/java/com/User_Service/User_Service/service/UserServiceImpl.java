@@ -28,6 +28,10 @@ public class UserServiceImpl {
 
     }
 
+    @Autowired
+    public void setRepository(UserRepository repository) {
+        this.repository = repository;
+    }
     /**
      * This function logs the user in.
      * @param request This class contains the user information for login.
@@ -87,7 +91,9 @@ public class UserServiceImpl {
         if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
-
+        if(repository == null) {
+            System.out.println("repository is null");
+        }
         Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
         if(usersByUsername.isPresent()) {
             return new RegisterResponse(false, "Username has been taken");

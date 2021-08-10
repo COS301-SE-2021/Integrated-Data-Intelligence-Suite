@@ -1,17 +1,37 @@
 package com.User_Service.User_Service.service;
 
 import com.User_Service.User_Service.exception.InvalidRequestException;
+import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UserServiceTest {
+
     @InjectMocks
-    UserServiceImpl service = new UserServiceImpl();
+    private UserServiceImpl service;
+
+    @Mock
+    private UserRepository repository;
+
+    @Before
+    public void initMocks() {
+        MockitoAnnotations.initMocks(this);
+    }
     /*
     ============================ManagePermissions tests============================
     */
@@ -128,7 +148,7 @@ public class UserServiceTest {
         RegisterRequest request = new RegisterRequest("newUser3", "firstname", "lastname", "password", "takenEmail@gmail.com");
         String expectedMessage = "Email has been taken";
         RegisterResponse response = service.register(request);
-        Assertions.assertEquals(response.getMessage(), expectedMessage);
+        Assertions.assertEquals(expectedMessage, response.getMessage());
     }
 
     @Test
@@ -173,7 +193,7 @@ public class UserServiceTest {
         LoginRequest request = new LoginRequest("missingEmail@notexist.com", "password");
         String expected = "The email does not exist";
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(response.getMessage(), expected);
+        Assertions.assertEquals(expected, response.getMessage());
     }
 
     @Test
