@@ -909,7 +909,7 @@ public class AnalyseServiceImpl {
         Properties properties = new Properties();
 
         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
-        pipelineProperties = "tokenize, ssplit, parse, sentiment";
+       //pipelineProperties = "tokenize, ssplit, parse, sentiment";
         properties.setProperty("annotators", pipelineProperties);
         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
 
