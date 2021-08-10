@@ -913,7 +913,23 @@ public class AnalyseServiceImpl {
         properties.setProperty("annotators", pipelineProperties);
         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
 
-        FindEntitiesResponse result = new FindEntitiesResponse(null);
+        CoreDocument coreDocument = new CoreDocument(request.getText());
+
+        stanfordCoreNLP.annotate(coreDocument);
+
+        //List<CoreSentence> coreSentences = coreDocument.sentences();
+        List<CoreLabel> coreLabels = coreDocument.tokens();
+
+        ArrayList<String> Entities = new ArrayList<>();
+
+        for (CoreLabel label : coreLabels){
+            //String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
+            //String lemma = label.lemma();//lemmanation
+            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
+            Entities.add(ner);
+        }
+
+        FindEntitiesResponse result = new FindEntitiesResponse(Entities);
         return result;
     }
 
