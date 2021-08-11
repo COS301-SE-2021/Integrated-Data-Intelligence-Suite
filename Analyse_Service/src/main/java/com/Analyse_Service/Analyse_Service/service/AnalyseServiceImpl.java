@@ -959,7 +959,7 @@ public class AnalyseServiceImpl {
     }
 
     //adds one entity into database
-    public ParsedData testdb(){
+    public ParsedData testdbAdd(){
         if ( repository.count() <= 0) {
             ParsedData newData = new ParsedData();
             Date date = new Date();
@@ -973,6 +973,19 @@ public class AnalyseServiceImpl {
             return repository.findAll().get(0);
         }
         return null;
+    }
+
+    //adds one entity into database
+    public int testdbDelete(){
+        if ( repository.count() == 1) {
+
+            ParsedData data = repository.findAll().get(0);
+            repository.delete(data);
+
+
+            return (int) repository.count();
+        }
+        return -1;
     }
 
 

@@ -218,16 +218,19 @@ public class AnalyseServiceTest {
         Assertions.assertNotNull(testResults);
     }
 
-
-
-
     @Test
-    @DisplayName("fetch first data from database")
+    @DisplayName("Fetch first data from database")
     public void fetchFirstDataFromDatabase() throws AnalyzerException {
-        ParsedData testResults = service.testdb();
+        ParsedData testResults = service.testdbAdd();
         Assertions.assertNotNull(testResults);
     }
 
+    @Test
+    @DisplayName("Delete first data from database")
+    public void deleteFirstDataFromDatabase() throws AnalyzerException {
+        int testResults = service.testdbDelete();
+        Assertions.assertNotEquals(-1, testResults);
+    }
 
     @Test
     @DisplayName("fetch parsedData from database")
