@@ -48,10 +48,7 @@ import org.springframework.stereotype.Service;
 import scala.Tuple2;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Service
 public class AnalyseServiceImpl {
@@ -666,11 +663,12 @@ public class AnalyseServiceImpl {
         return new FindAnomaliesResponse(results);
     }
 
-    /**************************************************************
-     * ************************************************************
-     * ************************************************************
-     * ************************************************************
-     * ************************************************************
+
+    /*******************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
      */
 
 
@@ -713,6 +711,17 @@ public class AnalyseServiceImpl {
 
         FindEntitiesResponse result = new FindEntitiesResponse(Entities);
         return result;
+    }
+
+    /**
+     * This method used to fetch the parsed data from the database
+     * @param request This is a request object which contains data required to be fetched.
+     * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request) throws InvalidRequestException {
+        ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
+        return new FetchParsedDataResponse(list );
     }
 
 
@@ -758,18 +767,6 @@ public class AnalyseServiceImpl {
         return new FindSentimentResponse(tweetWithSentiment);
     }
 
-    /**
-     * This method used to fetch the parsed data from the database
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request) throws InvalidRequestException {
-
-        ArrayList<ParsedData> list = new ArrayList<>();
-
-        return new FetchParsedDataResponse(list );
-    }
-
-
 
     /**
      * Helper function, this method used to map sentiments
@@ -792,6 +789,14 @@ public class AnalyseServiceImpl {
                 return "";
         }
     }
+
+
+    /*******************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     */
 
 
     private void test(){
@@ -951,6 +956,23 @@ public class AnalyseServiceImpl {
         } catch (AnalysisException e) {
             e.printStackTrace();
         }
+    }
+
+    //adds one entity into database
+    public ParsedData testdb(){
+        if ( repository.count() <= 0) {
+            ParsedData newData = new ParsedData();
+            Date date = new Date();
+            newData.setDate(date.toString());
+            newData.setTextMessage("This is a test/demo text message.");
+            newData.setLikes(100);
+            newData.setLocation("Default Location");
+            repository.save(newData);
+
+
+            return repository.findAll().get(0);
+        }
+        return null;
     }
 
 

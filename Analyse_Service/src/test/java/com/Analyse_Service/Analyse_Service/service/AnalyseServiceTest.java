@@ -219,16 +219,13 @@ public class AnalyseServiceTest {
     }
 
 
-    @Test
-    @DisplayName("test database connection")
-    public void testDatabaseConnection() throws AnalyzerException {
 
-    }
 
     @Test
     @DisplayName("fetch first data from database")
     public void fetchFirstDataFromDatabase() throws AnalyzerException {
-
+        ParsedData testResults = service.testdb();
+        Assertions.assertNotNull(testResults);
     }
 
 
