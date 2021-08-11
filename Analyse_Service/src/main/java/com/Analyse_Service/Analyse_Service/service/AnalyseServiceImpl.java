@@ -9,10 +9,7 @@ import com.Analyse_Service.Analyse_Service.response.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.CoreDocument;
-import edu.stanford.nlp.pipeline.CoreSentence;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
@@ -698,15 +695,13 @@ public class AnalyseServiceImpl {
         stanfordCoreNLP.annotate(coreDocument);
 
         //List<CoreSentence> coreSentences = coreDocument.sentences();
-        List<CoreLabel> coreLabels = coreDocument.tokens();
 
-        ArrayList<String> Entities = new ArrayList<>();
-
-        for (CoreLabel label : coreLabels){
-            //String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
-            //String lemma = label.lemma();//lemmanation
-            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
-            Entities.add(ner);
+        ArrayList<ArrayList> Entities = new ArrayList<>();
+        ArrayList<String> row = new ArrayList<>();
+        for (CoreEntityMention em : coreDocument.entityMentions()){
+            row.add(em.text());
+            row.add(em.entityType());
+            Entities.add(row);
         }
 
         FindEntitiesResponse result = new FindEntitiesResponse(Entities);
