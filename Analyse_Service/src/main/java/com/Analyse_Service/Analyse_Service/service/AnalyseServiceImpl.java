@@ -699,6 +699,7 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> Entities = new ArrayList<>();
         ArrayList<String> row = new ArrayList<>();
         for (CoreEntityMention em : coreDocument.entityMentions()){
+            row = new ArrayList<>();
             row.add(em.text());
             row.add(em.entityType());
             Entities.add(row);
