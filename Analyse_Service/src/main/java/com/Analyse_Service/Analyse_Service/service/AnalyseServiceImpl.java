@@ -720,6 +720,18 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FetchParsedDataRequest Object is null");
+        }
+        if (request.getDataType() == null){
+            throw new InvalidRequestException("Datatype is null");
+        }
+
+        if(request.getDataType() != "ParsedData") {
+            return null;
+        }
+
+
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
         return new FetchParsedDataResponse(list );
     }
