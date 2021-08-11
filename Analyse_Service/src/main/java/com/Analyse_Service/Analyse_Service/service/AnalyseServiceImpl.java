@@ -764,7 +764,9 @@ public class AnalyseServiceImpl {
      */
     public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request) throws InvalidRequestException {
 
-        return new FetchParsedDataResponse();
+        ArrayList<ParsedData> list = new ArrayList<>();
+
+        return new FetchParsedDataResponse(list );
     }
 
 

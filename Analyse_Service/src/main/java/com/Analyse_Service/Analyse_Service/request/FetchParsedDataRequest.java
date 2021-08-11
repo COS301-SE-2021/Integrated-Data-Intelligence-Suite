@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class FetchParsedDataRequest {
     String dataType ;
 
-    FetchParsedDataRequest(String dataType){
+    public FetchParsedDataRequest(String dataType){
         this.dataType = dataType;
     }
 

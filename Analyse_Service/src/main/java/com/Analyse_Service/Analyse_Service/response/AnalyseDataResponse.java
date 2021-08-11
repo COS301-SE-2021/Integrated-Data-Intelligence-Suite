@@ -9,11 +9,6 @@ public class AnalyseDataResponse {
     ArrayList<ArrayList> relationshipList;
     ArrayList<ArrayList> predictionList;
 
-
-    public AnalyseDataResponse(){
-
-    }
-
     public AnalyseDataResponse(ArrayList<ArrayList> pattenList,
                                ArrayList<ArrayList> relationshipList,
                                ArrayList<ArrayList> predictionList){
@@ -21,7 +16,6 @@ public class AnalyseDataResponse {
         this.relationshipList = relationshipList;
         this.predictionList = predictionList;
     }
-
 
     public ArrayList<ArrayList> getPattenList(){
         return pattenList;
