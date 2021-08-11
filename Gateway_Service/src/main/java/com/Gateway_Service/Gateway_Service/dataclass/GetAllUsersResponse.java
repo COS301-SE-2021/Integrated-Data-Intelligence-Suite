@@ -9,6 +9,10 @@ public class GetAllUsersResponse {
     private boolean success;
     private String message;
 
+    public GetAllUsersResponse() {
+
+    }
+
     public GetAllUsersResponse(String message, boolean success, List<User> users) {
         this.success = success;
         this.message = message;

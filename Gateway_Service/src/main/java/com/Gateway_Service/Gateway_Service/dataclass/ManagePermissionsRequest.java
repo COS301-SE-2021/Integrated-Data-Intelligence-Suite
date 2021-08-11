@@ -6,6 +6,10 @@ public class ManagePermissionsRequest {
     private String username;
     private Permission newPermission;
 
+    public ManagePermissionsRequest() {
+
+    }
+
     public ManagePermissionsRequest(String username, Permission newPermission) {
         this.username = username;
         this.newPermission = newPermission;
