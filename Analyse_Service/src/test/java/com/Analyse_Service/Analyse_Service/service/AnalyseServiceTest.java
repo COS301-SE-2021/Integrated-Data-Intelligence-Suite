@@ -1,6 +1,7 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -215,5 +216,25 @@ public class AnalyseServiceTest {
         FindEntitiesRequest test = new FindEntitiesRequest(text);
         FindEntitiesResponse testResults = service.findEntities(test);
         Assertions.assertNotNull(testResults);
+    }
+
+
+    @Test
+    @DisplayName("test database connection")
+    public void testDatabaseConnection() throws AnalyzerException {
+
+    }
+
+    @Test
+    @DisplayName("fetch first data from database")
+    public void fetchFirstDataFromDatabase() throws AnalyzerException {
+
+    }
+
+
+    @Test
+    @DisplayName("fetch parsedData from database")
+    public void fetchParsedDataFromDatabase() throws AnalyzerException {
+
     }
 }
