@@ -7,9 +7,6 @@ import java.util.ArrayList;
 public class AnalyseDataRequest {
     ArrayList<ParsedData> dataList;
 
-    public AnalyseDataRequest(){
-    }
-
     public AnalyseDataRequest(ArrayList<ParsedData> dataList){
         this.dataList = dataList;
     }
