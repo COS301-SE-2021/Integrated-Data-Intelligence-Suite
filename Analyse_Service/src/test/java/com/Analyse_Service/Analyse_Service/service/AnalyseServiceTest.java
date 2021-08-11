@@ -235,6 +235,8 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("fetch parsedData from database")
     public void fetchParsedDataFromDatabase() throws AnalyzerException {
-
+        FetchParsedDataRequest request = new FetchParsedDataRequest("ParsedData");
+        FetchParsedDataResponse testResults = service.fetchParsedData(request);
+        Assertions.assertNotNull(testResults);
     }
 }
