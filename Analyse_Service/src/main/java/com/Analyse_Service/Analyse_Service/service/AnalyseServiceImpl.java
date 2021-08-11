@@ -71,6 +71,7 @@ public class AnalyseServiceImpl {
         ArrayList<ParsedData> dataList =  request.getDataList();
 
         //set data
+        ArrayList<ArrayList> trendDatalist = new ArrayList<>();
 
         /*******************Find pattern******************/
 
@@ -94,6 +95,13 @@ public class AnalyseServiceImpl {
 
 
             row = sentimentResponse.getSentiment().getCssClass() + " " + date + " "+ likes;
+            ArrayList<String> rowforTrends = new ArrayList<>();
+            rowforTrends.add(text);
+            rowforTrends.add(location);
+            rowforTrends.add(date);
+            rowforTrends.add(sentimentResponse.getSentiment().getCssClass());
+
+            trendDatalist.add(rowforTrends);
 
             dataSendList.add(row);
         }
@@ -107,6 +115,8 @@ public class AnalyseServiceImpl {
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(dataSendList);
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(trendDatalist);
+        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
         return new AnalyseDataResponse(findPatternResponse.getPattenList(), findRelationshipsResponse.getPattenList(), getPredictionResponse.getPattenList());
     }
@@ -366,13 +376,16 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
+
+
         List<Row> trendsData  = new ArrayList<>();
 
-        ArrayList<String> reqData = request.getDataList();
+        ArrayList<ArrayList> reqData = request.getDataList();
 
-        for(int i=0; i < reqData.size(); i++){
+
+        /*for(int i=0; i < reqData.size(); i++){
             trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
-        }
+        }*/
 
         /*******************SETUP DATAFRAME*****************/
 
