@@ -119,16 +119,22 @@ public class GatewayServiceController {
 
     /**
      * This the endpoint for registering the user.
-     * @param newUser This is the body sent by POST
+     * @param form This is the body sent by POST
      * @return This is the response http entity.
      */
-    @PostMapping(value = "/register",
-    consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-    produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PostMapping(value = "/user/register",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<RegisterResponse> register(@RequestBody User newUser) {
-        RegisterRequest registerRequest = new RegisterRequest(newUser.getUsername(), newUser.getFirstName(), newUser.getLastName(), newUser.getPassword(), newUser.getEmail());
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
+        System.out.println("Registration has begun");
+        System.out.println(form.getUsername());
+        System.out.println(form.getFirstName());
+        System.out.println(form.getLastName());
+        System.out.println(form.getPassword());
+        System.out.println(form.getEmail());
+        RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
         RegisterResponse registerResponse = userClient.register(registerRequest);
+        //RegisterResponse registerResponse = new RegisterResponse(false, "test");
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 
@@ -138,8 +144,7 @@ public class GatewayServiceController {
      * @return This is the response http entity
      */
     @PostMapping(value = "/login",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = userClient.login(request);
@@ -152,8 +157,7 @@ public class GatewayServiceController {
      * @return This is the response http entity
      */
     @PostMapping(value = "/changePermission",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ManagePermissionsResponse> managePermissions(@RequestBody ManagePermissionsRequest request) {
         ManagePermissionsResponse response = userClient.managePermissions(request);

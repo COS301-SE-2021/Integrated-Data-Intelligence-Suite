@@ -5,6 +5,7 @@ import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
+import com.User_Service.User_Service.rri.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,6 +95,7 @@ public class UserServiceImpl {
         if(repository == null) {
             System.out.println("repository is null");
         }
+        System.out.println(request.getUsername());
         Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
         if(usersByUsername.isPresent()) {
             return new RegisterResponse(false, "Username has been taken");
@@ -119,7 +121,7 @@ public class UserServiceImpl {
         hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
 
         //Creating User
-        User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, request.getPermission());
+        User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, Permission.VIEWING);
         //Storing the user in the database
         repository.save(newUser);
 

@@ -1,5 +1,6 @@
 package com.User_Service.User_Service.service;
 
+import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
@@ -18,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class UserServiceTest {
 
     @InjectMocks
@@ -84,6 +83,18 @@ public class UserServiceTest {
     /*
     ============================Register tests============================
     */
+
+    /*
+    Saving using repository only
+     */
+
+    @Test
+    @DisplayName("Saving_Repository_Test")
+    public void savingRepository() {
+        User user = new User("testuser", "testUserlast", "usertestname", "test22@gmail.com", "password", Permission.VIEWING);
+
+        repository.save(user);
+    }
 
     @Test
     @DisplayName("If_RegisterRequest_Is_Null")

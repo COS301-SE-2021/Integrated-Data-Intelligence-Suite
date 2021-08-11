@@ -8,7 +8,10 @@ public class RegisterRequest {
     String lastName;
     String password;
     String email;
-    Permission permission;
+
+    public RegisterRequest() {
+
+    }
 
     public RegisterRequest(String username, String firstName, String lastName, String password, String email) {
         this.username = username;
@@ -16,7 +19,6 @@ public class RegisterRequest {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.permission = Permission.VIEWING;
     }
 
     public String getUsername() {
@@ -59,11 +61,11 @@ public class RegisterRequest {
         this.email = email;
     }
 
-    public Permission getPermission() {
-        return permission;
-    }
-
-    public void setPermission(Permission permission) {
-        this.permission = permission;
-    }
+//    public Permission getPermission() {
+//        return permission;
+//    }
+//
+//    public void setPermission(Permission permission) {
+//        this.permission = permission;
+//    }
 }
