@@ -126,15 +126,8 @@ public class GatewayServiceController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
-        System.out.println("Registration has begun");
-        System.out.println(form.getUsername());
-        System.out.println(form.getFirstName());
-        System.out.println(form.getLastName());
-        System.out.println(form.getPassword());
-        System.out.println(form.getEmail());
         RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
         RegisterResponse registerResponse = userClient.register(registerRequest);
-        //RegisterResponse registerResponse = new RegisterResponse(false, "test");
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 
