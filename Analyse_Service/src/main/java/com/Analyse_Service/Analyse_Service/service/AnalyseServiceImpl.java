@@ -3,6 +3,7 @@ package com.Analyse_Service.Analyse_Service.service;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
+import com.Analyse_Service.Analyse_Service.repository.AnalyseRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -42,6 +43,7 @@ import org.apache.spark.sql.types.*;
 
 import static org.apache.spark.sql.functions.col;
 import org.apache.spark.storage.StorageLevel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.Tuple2;
 
@@ -53,6 +55,10 @@ import java.util.Properties;
 
 @Service
 public class AnalyseServiceImpl {
+
+
+    @Autowired
+    private AnalyseRepository repository;
 
     /**
      * This method used to analyse data which has been parsed by Parse-Service.
@@ -660,7 +666,55 @@ public class AnalyseServiceImpl {
         return new FindAnomaliesResponse(results);
     }
 
-    /**************************************************************/
+    /**************************************************************
+     * ************************************************************
+     * ************************************************************
+     * ************************************************************
+     * ************************************************************
+     */
+
+
+    /**
+     * This method used to find an entity of a statement i.e sentiments/parts of speech
+     * @param request This is a request object which contains data required to be processed.
+     * @return FindEntitiesResponse This object contains data of the entities found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindEntitiesResponse findEntities(FindEntitiesRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindEntitiesRequest Object is null");
+        }
+        if (request.getText() == null){
+            throw new InvalidRequestException("Text is null");
+        }
+
+        Properties properties = new Properties();
+
+        String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
+        //pipelineProperties = "tokenize, ssplit, parse, sentiment";
+        properties.setProperty("annotators", pipelineProperties);
+        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
+
+        CoreDocument coreDocument = new CoreDocument(request.getText());
+
+        stanfordCoreNLP.annotate(coreDocument);
+
+        //List<CoreSentence> coreSentences = coreDocument.sentences();
+        List<CoreLabel> coreLabels = coreDocument.tokens();
+
+        ArrayList<String> Entities = new ArrayList<>();
+
+        for (CoreLabel label : coreLabels){
+            //String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
+            //String lemma = label.lemma();//lemmanation
+            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
+            Entities.add(ner);
+        }
+
+        FindEntitiesResponse result = new FindEntitiesResponse(Entities);
+        return result;
+    }
+
 
     /**
      * This method used to find a sentiment of a statement
@@ -704,6 +758,14 @@ public class AnalyseServiceImpl {
         return new FindSentimentResponse(tweetWithSentiment);
     }
 
+    /**
+     * This method used to fetch the parsed data from the database
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request) throws InvalidRequestException {
+
+        return new FetchParsedDataResponse();
+    }
 
 
 
@@ -887,51 +949,12 @@ public class AnalyseServiceImpl {
         } catch (AnalysisException e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
     }
 
 
 
 
-    public FindEntitiesResponse findEntities(FindEntitiesRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FindSentimentRequest Object is null");
-        }
-        if (request.getText() == null){
-            throw new InvalidRequestException("text is null");
-        }
 
-        Properties properties = new Properties();
-
-        String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
-       //pipelineProperties = "tokenize, ssplit, parse, sentiment";
-        properties.setProperty("annotators", pipelineProperties);
-        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-
-        CoreDocument coreDocument = new CoreDocument(request.getText());
-
-        stanfordCoreNLP.annotate(coreDocument);
-
-        //List<CoreSentence> coreSentences = coreDocument.sentences();
-        List<CoreLabel> coreLabels = coreDocument.tokens();
-
-        ArrayList<String> Entities = new ArrayList<>();
-
-        for (CoreLabel label : coreLabels){
-            //String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
-            //String lemma = label.lemma();//lemmanation
-            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
-            Entities.add(ner);
-        }
-
-        FindEntitiesResponse result = new FindEntitiesResponse(Entities);
-        return result;
-    }
 
 }
 
