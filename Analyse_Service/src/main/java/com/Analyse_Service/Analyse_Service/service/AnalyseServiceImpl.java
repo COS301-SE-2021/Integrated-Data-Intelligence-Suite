@@ -99,6 +99,7 @@ public class AnalyseServiceImpl {
             rowforTrends.add(text);
             rowforTrends.add(location);
             rowforTrends.add(date);
+            rowforTrends.add(dataList.get(i).getLikes().toString());
             rowforTrends.add(sentimentResponse.getSentiment().getCssClass());
 
             trendDatalist.add(rowforTrends);
@@ -386,6 +387,25 @@ public class AnalyseServiceImpl {
         /*for(int i=0; i < reqData.size(); i++){
             trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }*/
+        ArrayList<ArrayList> formatedData = new ArrayList<>();
+
+
+        for(int i=0; i < reqData.size(); i++){
+            ArrayList<String> r = new ArrayList<>();
+            FindEntitiesRequest en = new FindEntitiesRequest(reqData.get(i).get(0).toString());
+            FindEntitiesResponse enr = this.findEntities(en);
+            for (int j=0; j< enr.getEntitiesList().size(); j++){
+                r.add(enr.getEntitiesList().get(j).get(0).toString());
+                r.add(enr.getEntitiesList().get(j).get(1).toString());
+                r.add(reqData.get(i).get(1).toString());
+                r.add(reqData.get(i).get(2).toString());
+                r.add(reqData.get(i).get(3).toString());
+                r.add(reqData.get(i).get(4).toString());
+                formatedData.add(r);
+            }
+        }
+
+
 
         /*******************SETUP DATAFRAME*****************/
 
