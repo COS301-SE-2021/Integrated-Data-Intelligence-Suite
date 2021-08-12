@@ -1,9 +1,11 @@
 package com.Parse_Service.Parse_Service.service;
 
+import com.Parse_Service.Parse_Service.repository.DataRepository;
 import com.Parse_Service.Parse_Service.rri.ArticleExtractor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import com.Parse_Service.Parse_Service.request.*;
@@ -15,6 +17,9 @@ import java.util.*;
 
 @Service
 public class ParseServiceImpl {
+
+    @Autowired
+    private DataRepository repository;
 
     public ParseServiceImpl() {
 
@@ -80,6 +85,8 @@ public class ParseServiceImpl {
 
                 parsedList.add(parsedData);
             }
+
+            repository.saveAll(parsedList);
         }
         else if(request.getType() == DataSource.NEWSARTICLE) {
             JSONArray jsonArray = obj.getJSONArray("articles");
