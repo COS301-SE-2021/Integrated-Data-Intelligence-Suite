@@ -57,7 +57,7 @@ public class ParseServiceImpl {
         ArrayList<ParsedArticle> parsedArticlesList = new ArrayList<>();
 
         if (request.getType() == DataSource.TWITTER) {
-            JSONArray jsonArray = obj.getJSONArray("statuses");;
+            JSONArray jsonArray = obj.getJSONArray("results");;
             for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
                 ParsedData parsedData = new ParsedData();
