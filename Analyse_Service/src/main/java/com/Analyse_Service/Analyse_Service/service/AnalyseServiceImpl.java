@@ -11,7 +11,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
-import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.log4j.Level;
@@ -390,7 +389,7 @@ public class AnalyseServiceImpl {
         for(int i=0; i < requestData.size(); i++){
             ArrayList<String> row = new ArrayList<>();
             FindEntitiesRequest findEntitiesRequest = new FindEntitiesRequest(requestData.get(i).get(0).toString());
-            FindEntitiesResponse findEntitiesResponse = this.findEntities(findEntitiesRequest);
+            FindEntitiesResponse findEntitiesResponse = this.findNlpProperties(findEntitiesRequest);
 
             String sentiment = findEntitiesResponse.getSentiment();
             ArrayList<ArrayList> partsOfSpeech = findEntitiesResponse.getPartsOfSpeech();
@@ -819,7 +818,7 @@ public class AnalyseServiceImpl {
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindEntitiesResponse findEntities(FindEntitiesRequest request) throws InvalidRequestException {
+    public FindEntitiesResponse findNlpProperties(FindEntitiesRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
