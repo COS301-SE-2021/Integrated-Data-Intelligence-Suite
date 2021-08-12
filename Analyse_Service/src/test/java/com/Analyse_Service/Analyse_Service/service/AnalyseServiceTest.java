@@ -203,7 +203,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the text is Null")
     public void findEntitiesTextNull(){
-        FindEntitiesRequest test = new FindEntitiesRequest(null);
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(test));
     }
 
@@ -211,7 +211,7 @@ public class AnalyseServiceTest {
     @DisplayName("When the text is Valid")
     public void findEntitiesValidRequest() throws InvalidRequestException {
         String text = "test text for function";
-        FindEntitiesRequest test = new FindEntitiesRequest(text);
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
         FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
