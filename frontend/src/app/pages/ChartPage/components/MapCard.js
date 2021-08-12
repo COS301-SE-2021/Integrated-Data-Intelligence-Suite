@@ -11,6 +11,8 @@ import {
     Circle,
     Tooltip, useMapEvent
 } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css';
+
 
 
 import ScriptTag from 'react-script-tag';
@@ -129,15 +131,6 @@ function MapCard() {
                         </LayerGroup>
                     </LayerGroup>
 
-                    {/**/}
-                    {/*<FeatureGroup pathOptions={purpleOptions}>*/}
-                    {/*    <Popup>Popup in FeatureGroup</Popup>*/}
-                    {/*    /!*<Circle *!/*/}
-                    {/*    /!*    center={pretoria_position} *!/*/}
-                    {/*    /!*    radius={200}*!/*/}
-                    {/*    />*/}
-                    {/*    <Rectangle bounds={rectangle}/>*/}
-                    {/*</FeatureGroup>*/}
                     <SetViewOnClick animateRef={animateRef}/>
                 </MapContainer>
             </Card>

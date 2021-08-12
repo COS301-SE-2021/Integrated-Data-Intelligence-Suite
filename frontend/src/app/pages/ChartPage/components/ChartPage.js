@@ -7,7 +7,6 @@ import {
     Typography
 } from 'antd';
 import {Route, Switch} from "react-router-dom";
-import 'leaflet/dist/leaflet.css';
 import MapCard from "./MapCard";
 import DetailsCard from "./DetailsCard";
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
