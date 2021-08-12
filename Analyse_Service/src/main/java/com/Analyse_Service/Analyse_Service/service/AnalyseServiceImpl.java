@@ -378,32 +378,31 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-
-
         List<Row> trendsData  = new ArrayList<>();
-
-        ArrayList<ArrayList> reqData = request.getDataList();
-
+        ArrayList<ArrayList> requestData = request.getDataList();
 
         /*for(int i=0; i < reqData.size(); i++){
             trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }*/
-        ArrayList<ArrayList> formatedData = new ArrayList<>();
 
+        //ArrayList<ArrayList> formatedData = new ArrayList<>();
 
-        for(int i=0; i < reqData.size(); i++){
-            ArrayList<String> r = new ArrayList<>();
-            FindEntitiesRequest en = new FindEntitiesRequest(reqData.get(i).get(0).toString());
-            FindEntitiesResponse enr = this.findEntities(en);
-            /*for (int j=0; j< enr.getEntitiesList().size(); j++){
-                r.add(enr.getEntitiesList().get(j).get(0).toString());
-                r.add(enr.getEntitiesList().get(j).get(1).toString());
-                r.add(reqData.get(i).get(1).toString());
-                r.add(reqData.get(i).get(2).toString());
-                r.add(reqData.get(i).get(3).toString());
-                r.add(reqData.get(i).get(4).toString());
-                formatedData.add(r);
-            }*/
+        for(int i=0; i < requestData.size(); i++){
+            ArrayList<String> row = new ArrayList<>();
+            FindEntitiesRequest findEntitiesRequest = new FindEntitiesRequest(requestData.get(i).get(0).toString());
+            FindEntitiesResponse findEntitiesResponse = this.findEntities(findEntitiesRequest);
+            for (int j=0; j< findEntitiesResponse.getNamedEntities().size(); j++){
+                row.add(findEntitiesResponse.getNamedEntities().get(j).get(0).toString());
+                row.add(findEntitiesResponse.getNamedEntities().get(j).get(1).toString());
+
+                row.add(requestData.get(i).get(1).toString());
+                row.add(requestData.get(i).get(2).toString());
+                row.add(requestData.get(i).get(3).toString());
+                row.add(requestData.get(i).get(4).toString());
+
+                Row newRow = (Row) row;
+                trendsData.add(newRow);
+            }
         }
 
 
