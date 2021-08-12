@@ -6,14 +6,12 @@ import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
@@ -199,14 +197,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When findEntitiesNullRequest is Null")
     public void findEntitiesNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findEntities(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(null));
     }
 
     @Test
     @DisplayName("When the text is Null")
     public void findEntitiesTextNull(){
         FindEntitiesRequest test = new FindEntitiesRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findEntities(test));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(test));
     }
 
     @Test
@@ -214,7 +212,7 @@ public class AnalyseServiceTest {
     public void findEntitiesValidRequest() throws InvalidRequestException {
         String text = "test text for function";
         FindEntitiesRequest test = new FindEntitiesRequest(text);
-        FindEntitiesResponse testResults = service.findEntities(test);
+        FindEntitiesResponse testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 
