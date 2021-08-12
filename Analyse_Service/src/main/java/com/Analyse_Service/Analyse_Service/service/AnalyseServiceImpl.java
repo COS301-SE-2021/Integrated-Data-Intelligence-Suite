@@ -389,11 +389,11 @@ public class AnalyseServiceImpl {
         for(int i=0; i < requestData.size(); i++){
             ArrayList<String> row = new ArrayList<>();
             FindEntitiesRequest findEntitiesRequest = new FindEntitiesRequest(requestData.get(i).get(0).toString());
-            FindEntitiesResponse findEntitiesResponse = this.findNlpProperties(findEntitiesRequest);
+            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findEntitiesRequest);
 
-            String sentiment = findEntitiesResponse.getSentiment();
-            ArrayList<ArrayList> partsOfSpeech = findEntitiesResponse.getPartsOfSpeech();
-            ArrayList<ArrayList> namedEntities = findEntitiesResponse.getNamedEntities();
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
             for (int j=0; j< namedEntities.size(); j++){
                 //row.add(isTrending)
@@ -818,7 +818,7 @@ public class AnalyseServiceImpl {
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindEntitiesResponse findNlpProperties(FindEntitiesRequest request) throws InvalidRequestException {
+    public FindNlpPropertiesResponse findNlpProperties(FindEntitiesRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -879,7 +879,7 @@ public class AnalyseServiceImpl {
             nameEntities.add(row);
         }
 
-        FindEntitiesResponse response = new FindEntitiesResponse(sentiment, partOfSpeech, nameEntities);
+        FindNlpPropertiesResponse response = new FindNlpPropertiesResponse(sentiment, partOfSpeech, nameEntities);
         return response;
     }
 
