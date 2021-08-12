@@ -751,7 +751,18 @@ public class AnalyseServiceImpl {
 
         sentiment = maxEntry.getKey();
 
+        //get parts of speech
+        ArrayList<ArrayList> PartOfSpeech = new ArrayList<>();
+        for (CoreLabel label : coreLabels){
+            //String lemma = label.lemma();//lemmanation
+            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
+            row = new ArrayList<>();
+            row.add(label.toString());
+            row.add(pos);
 
+            //System.out.println("TOKEN : " + label.originalText());
+            //String lemma = label.lemma();//lemmanation
+        }
 
         //get parts of named entity
         ArrayList<ArrayList> NameEntities = new ArrayList<>();
@@ -762,7 +773,7 @@ public class AnalyseServiceImpl {
             NameEntities.add(row);
         }
 
-        FindEntitiesResponse result = new FindEntitiesResponse(NameEntities);
+        FindEntitiesResponse result = new FindEntitiesResponse(sentiment, PartOfSpeech, NameEntities);
         return result;
     }
 
