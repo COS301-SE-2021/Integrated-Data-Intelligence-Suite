@@ -396,7 +396,7 @@ public class AnalyseServiceImpl {
             ArrayList<String> r = new ArrayList<>();
             FindEntitiesRequest en = new FindEntitiesRequest(reqData.get(i).get(0).toString());
             FindEntitiesResponse enr = this.findEntities(en);
-            for (int j=0; j< enr.getEntitiesList().size(); j++){
+            /*for (int j=0; j< enr.getEntitiesList().size(); j++){
                 r.add(enr.getEntitiesList().get(j).get(0).toString());
                 r.add(enr.getEntitiesList().get(j).get(1).toString());
                 r.add(reqData.get(i).get(1).toString());
@@ -404,7 +404,7 @@ public class AnalyseServiceImpl {
                 r.add(reqData.get(i).get(3).toString());
                 r.add(reqData.get(i).get(4).toString());
                 formatedData.add(r);
-            }
+            }*/
         }
 
 
@@ -737,44 +737,42 @@ public class AnalyseServiceImpl {
         String sentiment;
         ArrayList<String> sentiments = new ArrayList<>();
         for (CoreSentence sentence : coreSentences )
-            sentiments.add(sentence.sentiment()); //sentiment
+            sentiments.add(sentence.sentiment());
 
         Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
         Map.Entry<String, Long> maxEntry = null;
-
         for (Map.Entry<String, Long> entry : occurrences.entrySet()) {
             if (maxEntry == null || entry.getValue()
                     .compareTo(maxEntry.getValue()) > 0) {
                 maxEntry = entry;
             }
         }
-
         sentiment = maxEntry.getKey();
 
         //get parts of speech
-        ArrayList<ArrayList> PartOfSpeech = new ArrayList<>();
+        ArrayList<ArrayList> partOfSpeech = new ArrayList<>();
         for (CoreLabel label : coreLabels){
             //String lemma = label.lemma();//lemmanation
             String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
             row = new ArrayList<>();
             row.add(label.toString());
             row.add(pos);
+            partOfSpeech.add(row);
 
             //System.out.println("TOKEN : " + label.originalText());
-            //String lemma = label.lemma();//lemmanation
         }
 
         //get parts of named entity
-        ArrayList<ArrayList> NameEntities = new ArrayList<>();
+        ArrayList<ArrayList> nameEntities = new ArrayList<>();
         for (CoreEntityMention em : coreDocument.entityMentions()){
             row = new ArrayList<>();
             row.add(em.text());
             row.add(em.entityType());
-            NameEntities.add(row);
+            nameEntities.add(row);
         }
 
-        FindEntitiesResponse result = new FindEntitiesResponse(sentiment, PartOfSpeech, NameEntities);
-        return result;
+        FindEntitiesResponse response = new FindEntitiesResponse(sentiment, partOfSpeech, nameEntities);
+        return response;
     }
 
     /**

@@ -7,51 +7,39 @@ import edu.stanford.nlp.pipeline.CoreSentence;
 import java.util.ArrayList;
 
 public class FindEntitiesResponse {
-    ArrayList<ArrayList> entitiesList;
-
     String sentiment ;
-    ArrayList<String> partsOfSpeech;
-    ArrayList<String> lemmanation;
+    ArrayList<ArrayList> partsOfSpeech;
     ArrayList<ArrayList> namedEntities;
-
+    //ArrayList<ArrayList> lemmanation;
 
     public FindEntitiesResponse(String sentiment, ArrayList<ArrayList> partsOfSpeech, ArrayList<ArrayList> namedEntities){
-        this.entitiesList = entitiesList;
+        this.sentiment = sentiment;
+        this.partsOfSpeech = partsOfSpeech;
+        this.namedEntities = namedEntities;
     }
 
-    public ArrayList<ArrayList> getEntitiesList(){
-        return this.entitiesList;
-    }
 
     String getSentiment(){
-        return "";
+        return sentiment;
     }
 
-    ArrayList<String> getPartsOfSpeech(){
-        return new ArrayList<String>();
-    }
-
-    ArrayList<String> getLemmanation(){
-        return new ArrayList<String>();
+    ArrayList<ArrayList>getPartsOfSpeech(){
+        return partsOfSpeech;
     }
 
     ArrayList<ArrayList> getNamedEntities(){
-        return new ArrayList<ArrayList>();
+        return namedEntities;
     }
 
-    void setSentiment(){
-        sentiment = "";
+    void setSentiment(String sentiment){
+        this.sentiment = sentiment;
     }
 
-    void setPartsOfSpeech(){
-        partsOfSpeech =  new ArrayList<String>();
+    void setPartsOfSpeech(ArrayList<ArrayList> partsOfSpeech){
+        this.partsOfSpeech = partsOfSpeech;
     }
 
-    void setLemmanation(){
-        lemmanation =  new ArrayList<String>();
-    }
-
-    void setNamedEntities(){
-        namedEntities = new ArrayList<ArrayList>();
+    void setNamedEntities(ArrayList<ArrayList> namedEntities){
+        this.namedEntities = namedEntities;
     }
 }
