@@ -54,6 +54,14 @@ public class ImportServiceController {
         return service.getTwitterDataJson(request);
     }
 
+    //TODO add comments
+    @PostMapping(value = "/TwitterData")
+    public ImportTwitterResponse getTwitterData(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
+
+        ImportTwitterRequest request = requestEntity.getBody();
+        return service.getTwitterData(request);
+    }
+
     /**
      * Used to test twitter data retrieval
      *
@@ -73,6 +81,7 @@ public class ImportServiceController {
         return res.getJsonData();
     }
 
+    //TODO ad comments
     @GetMapping(value = "test/twitter/{key}/{from}/{to}")
     public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
         ImportTwitterResponse res = null;
