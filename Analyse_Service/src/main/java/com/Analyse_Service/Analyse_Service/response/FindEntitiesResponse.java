@@ -18,28 +18,29 @@ public class FindEntitiesResponse {
         this.namedEntities = namedEntities;
     }
 
-
-    String getSentiment(){
-        return sentiment;
-    }
-
-    ArrayList<ArrayList>getPartsOfSpeech(){
-        return partsOfSpeech;
-    }
-
-    ArrayList<ArrayList> getNamedEntities(){
-        return namedEntities;
-    }
-
-    void setSentiment(String sentiment){
+    public void setSentiment(String sentiment){
         this.sentiment = sentiment;
     }
 
-    void setPartsOfSpeech(ArrayList<ArrayList> partsOfSpeech){
+    public void setPartsOfSpeech(ArrayList<ArrayList> partsOfSpeech){
         this.partsOfSpeech = partsOfSpeech;
     }
 
-    void setNamedEntities(ArrayList<ArrayList> namedEntities){
+    public void setNamedEntities(ArrayList<ArrayList> namedEntities){
         this.namedEntities = namedEntities;
     }
+
+    public String getSentiment(){
+        return sentiment;
+    }
+
+    public ArrayList<ArrayList>getPartsOfSpeech(){
+        return partsOfSpeech;
+    }
+
+    public ArrayList<ArrayList> getNamedEntities(){
+        return namedEntities;
+    }
+
+
 }

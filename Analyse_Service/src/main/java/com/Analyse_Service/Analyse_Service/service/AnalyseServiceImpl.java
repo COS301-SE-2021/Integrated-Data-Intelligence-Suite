@@ -391,7 +391,6 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> formatedData = new ArrayList<>();
 
 
-
         for(int i=0; i < reqData.size(); i++){
             ArrayList<String> r = new ArrayList<>();
             FindEntitiesRequest en = new FindEntitiesRequest(reqData.get(i).get(0).toString());
