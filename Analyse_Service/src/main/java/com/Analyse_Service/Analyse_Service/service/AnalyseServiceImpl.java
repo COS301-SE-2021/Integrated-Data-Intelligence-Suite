@@ -398,19 +398,116 @@ public class AnalyseServiceImpl {
 
             for (int j=0; j< namedEntities.size(); j++){
                 //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
 
-                row.add(namedEntities.get(j).get(0).toString()); //name
-                row.add(namedEntities.get(j).get(1).toString()); //entity
-
-                row.add(requestData.get(i).get(1).toString());
-                row.add(requestData.get(i).get(2).toString());
-                row.add(requestData.get(i).get(3).toString());
-                row.add(requestData.get(i).get(4).toString());
+                row.add(requestData.get(i).get(1).toString());//location
+                row.add(requestData.get(i).get(2).toString());//date
+                row.add(requestData.get(i).get(3).toString());//likes
+                row.add(sentiment);//sentiment
+               // row.add(sentiment);//PoS
 
                 Row trendRow = (Row) row;
                 trendsData.add(trendRow);
             }
         }
+        //System.out.println(trendsData);
+        /*Example of input ArrayList of Tweets
+
+        * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
+        * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
+        * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
+        * [Google is a great place, hatfield, 20/05/20201, 45644],
+        * [i like Microsoft, hatfield, 20/05/20201, 34]
+        *
+        *
+        * */
+        /* Example output of trendsData
+            [[Elon Musk, PERSON, hatfield, 20/05/20201, 456, Neutral],
+            [Google, ORGANIZATION, hatfield, 20/05/20201, 456, Neutral],
+            [Elon Musk, PERSON, hatfield, 20/05/20201, 44, Neutral],
+            [Amazon, ORGANIZATION, hatfield, 20/05/20201, 44, Neutral],
+            [Elon Musk, PERSON, hatfield, 20/05/20201, 22, Positive],
+            [Google, ORGANIZATION, hatfield, 20/05/20201, 45644, Positive],
+            [Microsoft, ORGANIZATION, hatfield, 20/05/20201, 34, Neutral]]
+        */
+
+        ArrayList<ArrayList> structureData = new ArrayList<>();
+        ArrayList<String> FoundEntities = new ArrayList<>();
+        ArrayList<Float> Totallikes = new ArrayList<>();
+        for (int k = 0; k < trendsData.size(); k++){
+            ArrayList<String> r = new ArrayList<>();
+            String en = trendsData.get(k).get(0).toString();//Entity name eg. Elon Musk
+            Float likes = Float.parseFloat(trendsData.get(k).get(4).toString()); // geting Number of likes
+            if (structureData.isEmpty()){
+                FoundEntities.add(en);//Registering Enitiy eg. Elon Musk
+                Totallikes.add(likes);
+                r.add("0");// is Trending
+                r.add(trendsData.get(k).get(1).toString());//Entity type
+                r.add("1");//Frequency of Enitity in dataset
+                r.add("1");// Rate of tweets per hour
+                r.add(Float.toString(likes));// average likes
+                structureData.add(r);
+            }else{
+                boolean found = false;
+                int pos = 0;
+                /********Check if Entity is in the list of registerd enitities **********/
+                for (int x = 0; x < FoundEntities.size(); x++){
+                    if (en.equals(FoundEntities.get(x))){
+                        found = true;
+                        pos = FoundEntities.indexOf(en);
+                        break;
+                    }
+                }
+                if (found){
+                    ArrayList<String> temp = structureData.get(pos);
+                    int freq = Integer.parseInt(temp.get(2));
+                    freq++;
+                    temp.set(2,Integer.toString(freq));   ///increasing frequecy
+
+                    float avglikes = Totallikes.get(pos) + likes;
+                    Totallikes.set(pos,avglikes);
+                    avglikes = avglikes/freq;
+                    temp.set(4,Float.toString(avglikes));///changing average
+
+                    structureData.set(pos,temp);
+                }else {
+                    FoundEntities.add(en); //Registering Enitiy eg. Elon Musk
+                    Totallikes.add(likes);
+                    r.add("0");// is Trending
+                    r.add(trendsData.get(k).get(1).toString());//Entity type
+                    r.add("1");//Frequency of Enitity in dataset
+                    r.add("1");// Rate of tweets per hour
+                    r.add(Float.toString(likes));// average likes
+                    structureData.add(r);
+                }
+            }
+        }
+        /*System.out.println(FoundEntities);
+        System.out.println(Totallikes);
+        System.out.println(structureData);*/
+
+        /*Example output of Found Enities , Total Likes  structureData
+            Found Enities
+            1.Elon Musk,
+            2.Google,
+            3.Amazon,
+            4.Microsoft
+
+            Total Likes
+            1) 522.0,
+            2) 46100.0,
+            3) 44.0,
+            4) 34.0
+
+            structureData
+            1. [0, PERSON, 3, 1, 174.0],
+            2. [0, ORGANIZATION, 2, 1, 23050.0],
+            3. [0, ORGANIZATION, 1, 1, 44.0],
+            4. [0, ORGANIZATION, 1, 1, 34.0]]
+
+         */
 
 
 
