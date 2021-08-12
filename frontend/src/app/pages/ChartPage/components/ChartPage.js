@@ -18,6 +18,12 @@ const {Header, Footer, Sider, Content} = Layout;
 
 
 class ChartPage extends Component {
+
+
+
+
+
+
     state = {}
 
     render() {

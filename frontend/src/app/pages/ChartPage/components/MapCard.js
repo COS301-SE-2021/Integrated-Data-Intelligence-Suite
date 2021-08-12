@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
 import {Card} from "antd";
 import {
     MapContainer,
@@ -9,8 +9,10 @@ import {
     LayerGroup,
     Rectangle,
     Circle,
-    Tooltip
+    Tooltip, useMapEvent
 } from 'react-leaflet'
+
+
 import ScriptTag from 'react-script-tag';
 
 //Do not Change the order of these lines
@@ -38,109 +40,110 @@ const purpleOptions = {color: 'purple'}
 
 let pretoria_position = [-25.731340, 28.218370];
 
-class MapCard extends React.Component {
-    state = {}
+function SetViewOnClick({animateRef}) {
+    const map = useMapEvent('click', (e) => {
+        map.setView(e.latlng, map.getZoom(), {
+            animate: animateRef.current || false,
+        })
+    })
 
-    //Mocks
+    return null
+}
 
-    render() {
-        return (
-            <>
-                <Card
-                    id={'map_card'}
-                    title="Map Card Title"
-                    extra={<p></p>}
+
+function MapCard() {
+    const animateRef = useRef(true)
+
+    return (
+        <>
+            <Card
+                id={'map_card'}
+                title="Map Card Title"
+                extra={<p></p>}
+            >
+                {/*<p>Card content</p>*/}
+                <MapContainer
+                    id={'map_container_div'}
+                    center={pretoria_position}
+                    zoom={9}
+                    scrollWheelZoom={false}
+                    style={{}}
                 >
-                    {/*<p>Card content</p>*/}
-                    <MapContainer
-                        id={'map_container_div'}
-                        center={pretoria_position}
-                        zoom={9}
-                        scrollWheelZoom={false}
-                        style={{}}
-                    >
-                        <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
+                    <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
 
-                        {/*<Marker position={pretoria_position}>*/}
-                        {/*    <Popup>*/}
-                        {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
-                        {/*    </Popup>*/}
-                        {/*</Marker>*/}
 
-                        {/**/}
+                    <LayerGroup>
+                        <Circle
+                            center={[-26.031340, 28.50000]}
+                            pathOptions={fillBlueOptions}
+                            radius={10000}
+                            children={null}
+                            prefixCls={null}
+                            progressStatus={null}
+                            eventHandlers={{
+                                click: showBlueCircleData,
+
+                            }}
+                        >
+                            <Tooltip>clickedText</Tooltip>
+
+                        </Circle>
+
+
+                        <Circle
+                            center={pretoria_position}
+                            pathOptions={fillRedOptions}
+                            radius={10000}
+                            stroke={false}
+                            children={null}
+                            eventHandlers={{
+                                click: showRedCircleData,
+
+                            }}
+                        >
+                            <Tooltip>clickedTex</Tooltip>
+
+                        </Circle>
+
+
                         <LayerGroup>
                             <Circle
-                                center={[-26.031340, 28.50000]}
-                                pathOptions={fillBlueOptions}
+
+                                center={[-26.001340, 28.018370]}
+                                pathOptions={greenOptions}
                                 radius={10000}
                                 children={null}
                                 prefixCls={null}
                                 progressStatus={null}
                                 eventHandlers={{
-                                    click: showBlueCircleData,
+                                    click: showGreenCircleData,
 
                                 }}
                             >
                                 <Tooltip>clickedText</Tooltip>
 
                             </Circle>
-
-
-                            <Circle
-                                center={pretoria_position}
-                                pathOptions={fillRedOptions}
-                                radius={10000}
-                                stroke={false}
-                                children={null}
-                                eventHandlers={{
-                                    click: showRedCircleData,
-
-                                }}
-                            >
-                                <Tooltip>clickedTex</Tooltip>
-
-                            </Circle>
-
-
-                            <LayerGroup>
-                                <Circle
-
-                                    center={[-26.001340, 28.018370]}
-                                    pathOptions={greenOptions}
-                                    radius={10000}
-                                    children={null}
-                                    prefixCls={null}
-                                    progressStatus={null}
-                                    eventHandlers={{
-                                        click: showGreenCircleData,
-
-                                    }}
-                                >
-                                    <Tooltip>clickedText</Tooltip>
-
-                                </Circle>
-                            </LayerGroup>
                         </LayerGroup>
+                    </LayerGroup>
 
-                        {/**/}
-                        {/*<FeatureGroup pathOptions={purpleOptions}>*/}
-                        {/*    <Popup>Popup in FeatureGroup</Popup>*/}
-                        {/*    /!*<Circle *!/*/}
-                        {/*    /!*    center={pretoria_position} *!/*/}
-                        {/*    /!*    radius={200}*!/*/}
-                        {/*    />*/}
-                        {/*    <Rectangle bounds={rectangle}/>*/}
-                        {/*</FeatureGroup>*/}
+                    {/**/}
+                    {/*<FeatureGroup pathOptions={purpleOptions}>*/}
+                    {/*    <Popup>Popup in FeatureGroup</Popup>*/}
+                    {/*    /!*<Circle *!/*/}
+                    {/*    /!*    center={pretoria_position} *!/*/}
+                    {/*    /!*    radius={200}*!/*/}
+                    {/*    />*/}
+                    {/*    <Rectangle bounds={rectangle}/>*/}
+                    {/*</FeatureGroup>*/}
+                    <SetViewOnClick animateRef={animateRef}/>
+                </MapContainer>
+            </Card>
 
-                    </MapContainer>
-                </Card>
-
-            </>
-        );
-    }
+        </>
+    );
 }
 
 export default MapCard;
