@@ -212,7 +212,7 @@ public class AnalyseServiceTest {
     public void findEntitiesValidRequest() throws InvalidRequestException {
         String text = "test text for function";
         FindEntitiesRequest test = new FindEntitiesRequest(text);
-        FindEntitiesResponse testResults = service.findNlpProperties(test);
+        FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 
