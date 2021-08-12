@@ -6,13 +6,13 @@ import edu.stanford.nlp.pipeline.CoreSentence;
 
 import java.util.ArrayList;
 
-public class FindEntitiesResponse {
+public class FindNlpPropertiesResponse {
     String sentiment ;
     ArrayList<ArrayList> partsOfSpeech;
     ArrayList<ArrayList> namedEntities;
     //ArrayList<ArrayList> lemmanation;
 
-    public FindEntitiesResponse(String sentiment, ArrayList<ArrayList> partsOfSpeech, ArrayList<ArrayList> namedEntities){
+    public FindNlpPropertiesResponse(String sentiment, ArrayList<ArrayList> partsOfSpeech, ArrayList<ArrayList> namedEntities){
         this.sentiment = sentiment;
         this.partsOfSpeech = partsOfSpeech;
         this.namedEntities = namedEntities;
