@@ -19,7 +19,9 @@ const validate = (values) => {
     }
 
     //password validation
-
+    if (!values.password) {
+        errors.password = 'required'
+    }
     return errors;
 }
 
@@ -34,17 +36,16 @@ const LoginPage = () => {
         validate,
         onSubmit: values => {
             alert(JSON.stringify(values, null, 2));
-            history.push('/') ;
+            history.push('/');
 
             /*
                 Some ASync Function
 
+                Make Get Request
 
-            Make Get Request
+                Update Client if get request Unsuccesfull
 
-            Update Client if get request Unsuccesfull
-
-            else, redirect to home page
+                else, redirect to home page
              */
         },
     });
@@ -58,7 +59,7 @@ const LoginPage = () => {
             <form onSubmit={formik.handleSubmit}>
 
                 <Form.Item
-                     name="email"
+                    name="email"
                 >
                     <Input
                         id="email"
@@ -87,6 +88,9 @@ const LoginPage = () => {
                         onBlur={formik.handleBlur} //When the user leaves the form
                         prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
+                    {formik.touched.password && formik.errors.password ? (
+                        <p>{formik.errors.password}</p>) : null}
+
                 </Form.Item>
 
                 <Form.Item>
