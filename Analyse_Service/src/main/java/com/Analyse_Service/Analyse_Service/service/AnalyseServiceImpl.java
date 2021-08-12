@@ -416,12 +416,18 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATAFRAME*****************/
 
-        StructType schema = new StructType(new StructField[]{ new StructField(
-                "Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Topic", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Likes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Text", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
         });
 
         Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema); // .read().parquet("...");
         itemsDF.show();
+
+        /*******************MANIPULATE DATAFRAME*****************/
 
 
         /*******************SETUP PIPELINE*****************/
