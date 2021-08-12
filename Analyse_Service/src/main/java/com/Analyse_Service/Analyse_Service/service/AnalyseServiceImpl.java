@@ -381,7 +381,7 @@ public class AnalyseServiceImpl {
         List<Row> trendsData  = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
-        /*for(int i=0; i < reqData.size(); i++){
+        /*for(int i=0; i < requestData.size(); i++){
             trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
         }*/
 
@@ -391,17 +391,24 @@ public class AnalyseServiceImpl {
             ArrayList<String> row = new ArrayList<>();
             FindEntitiesRequest findEntitiesRequest = new FindEntitiesRequest(requestData.get(i).get(0).toString());
             FindEntitiesResponse findEntitiesResponse = this.findEntities(findEntitiesRequest);
-            for (int j=0; j< findEntitiesResponse.getNamedEntities().size(); j++){
-                row.add(findEntitiesResponse.getNamedEntities().get(j).get(0).toString());
-                row.add(findEntitiesResponse.getNamedEntities().get(j).get(1).toString());
+
+            String sentiment = findEntitiesResponse.getSentiment();
+            ArrayList<ArrayList> partsOfSpeech = findEntitiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findEntitiesResponse.getNamedEntities();
+
+            for (int j=0; j< namedEntities.size(); j++){
+                //row.add(isTrending)
+
+                row.add(namedEntities.get(j).get(0).toString()); //name
+                row.add(namedEntities.get(j).get(1).toString()); //entity
 
                 row.add(requestData.get(i).get(1).toString());
                 row.add(requestData.get(i).get(2).toString());
                 row.add(requestData.get(i).get(3).toString());
                 row.add(requestData.get(i).get(4).toString());
 
-                Row newRow = (Row) row;
-                trendsData.add(newRow);
+                Row trendRow = (Row) row;
+                trendsData.add(trendRow);
             }
         }
 
