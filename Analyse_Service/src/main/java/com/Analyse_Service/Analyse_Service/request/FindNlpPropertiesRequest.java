@@ -2,10 +2,10 @@ package com.Analyse_Service.Analyse_Service.request;
 
 import java.util.ArrayList;
 
-public class FindEntitiesRequest {
+public class FindNlpPropertiesRequest {
     String text;
 
-    public FindEntitiesRequest(String text){
+    public FindNlpPropertiesRequest(String text){
         this.text = text;
     }
 
