@@ -390,6 +390,7 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> formatedData = new ArrayList<>();
 
 
+
         for(int i=0; i < reqData.size(); i++){
             ArrayList<String> r = new ArrayList<>();
             FindEntitiesRequest en = new FindEntitiesRequest(reqData.get(i).get(0).toString());
@@ -716,18 +717,33 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("Text is null");
         }
 
+        /**setup analyser**/
         Properties properties = new Properties();
-
         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
-        //pipelineProperties = "tokenize, ssplit, parse, sentiment";
         properties.setProperty("annotators", pipelineProperties);
         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-
         CoreDocument coreDocument = new CoreDocument(request.getText());
-
         stanfordCoreNLP.annotate(coreDocument);
 
         //List<CoreSentence> coreSentences = coreDocument.sentences();
+
+        /**output of analyser**/
+        List<CoreSentence> coreSentences = coreDocument.sentences();
+        List<CoreLabel> coreLabels = coreDocument.tokens();
+
+        //get sentiment of text
+        for (CoreSentence sentence : coreSentences ){
+            String sentiment = sentence.sentiment(); //sentiment
+            System.out.println("SENTENCE : " + sentence.toString() + " - " + sentiment);
+        }
+
+        //get other properties
+        for (CoreLabel label : coreLabels){
+            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
+            String lemma = label.lemma();//lemmanation
+            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
+            System.out.println("TOKEN : " + label.originalText());
+        }
 
         ArrayList<ArrayList> Entities = new ArrayList<>();
         ArrayList<String> row = new ArrayList<>();
