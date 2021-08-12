@@ -46,6 +46,7 @@ import scala.Tuple2;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AnalyseServiceImpl {
@@ -730,31 +731,38 @@ public class AnalyseServiceImpl {
         /**output of analyser**/
         List<CoreSentence> coreSentences = coreDocument.sentences();
         List<CoreLabel> coreLabels = coreDocument.tokens();
+        ArrayList<String> row = new ArrayList<>();
 
         //get sentiment of text
-        for (CoreSentence sentence : coreSentences ){
-            String sentiment = sentence.sentiment(); //sentiment
-            System.out.println("SENTENCE : " + sentence.toString() + " - " + sentiment);
+        String sentiment;
+        ArrayList<String> sentiments = new ArrayList<>();
+        for (CoreSentence sentence : coreSentences )
+            sentiments.add(sentence.sentiment()); //sentiment
+
+        Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
+        Map.Entry<String, Long> maxEntry = null;
+
+        for (Map.Entry<String, Long> entry : occurrences.entrySet()) {
+            if (maxEntry == null || entry.getValue()
+                    .compareTo(maxEntry.getValue()) > 0) {
+                maxEntry = entry;
+            }
         }
 
-        //get other properties
-        for (CoreLabel label : coreLabels){
-            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
-            String lemma = label.lemma();//lemmanation
-            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
-            System.out.println("TOKEN : " + label.originalText());
-        }
+        sentiment = maxEntry.getKey();
 
-        ArrayList<ArrayList> Entities = new ArrayList<>();
-        ArrayList<String> row = new ArrayList<>();
+
+
+        //get parts of named entity
+        ArrayList<ArrayList> NameEntities = new ArrayList<>();
         for (CoreEntityMention em : coreDocument.entityMentions()){
             row = new ArrayList<>();
             row.add(em.text());
             row.add(em.entityType());
-            Entities.add(row);
+            NameEntities.add(row);
         }
 
-        FindEntitiesResponse result = new FindEntitiesResponse(Entities);
+        FindEntitiesResponse result = new FindEntitiesResponse(NameEntities);
         return result;
     }
 
