@@ -2,7 +2,7 @@ import {Button} from 'antd';
 import React, {Component} from 'react';
 // import {validateLoginDetails} from "./functions/validateLoginDetails";
 
-class LoginButton extends React.Component {
+class RegisterButton extends React.Component {
     constructor() {
         super();
     }
@@ -54,4 +54,4 @@ class LoginButton extends React.Component {
     }
 }
 
-export default LoginButton;
+export default RegisterButton;

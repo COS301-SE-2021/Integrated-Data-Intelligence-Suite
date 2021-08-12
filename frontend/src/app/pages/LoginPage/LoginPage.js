@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
-import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
-import {UserOutlined, LockOutlined} from '@ant-design/icons';
-import {Link, useHistory} from "react-router-dom";
-import {validateLoginDetails} from "./functions/validateLoginDetails";
-import LoginButton from "./LoginButton";
 import {useFormik} from 'formik';
+import React, {Component} from 'react';
+import LoginButton from "./LoginButton";
+import {Link, useHistory} from "react-router-dom";
+import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
 
 
 //Validation Function

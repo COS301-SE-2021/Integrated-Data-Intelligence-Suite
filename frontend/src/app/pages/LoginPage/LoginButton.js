@@ -1,10 +1,9 @@
 import {Button} from 'antd';
 import React, {Component} from 'react';
-import {validateLoginDetails} from "./functions/validateLoginDetails";
 
 class LoginButton extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
 
     state = {
