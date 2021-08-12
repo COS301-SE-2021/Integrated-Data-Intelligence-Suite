@@ -10,10 +10,9 @@ public class FindEntitiesResponse {
     ArrayList<ArrayList> entitiesList;
 
     String sentiment ;
-    String[] parts_of_speech;
-    String[] lemmanation;
+    ArrayList<String> parts_of_speech;
+    ArrayList<String> lemmanation;
     ArrayList<ArrayList> named_entities;
-
 
 
     public FindEntitiesResponse(ArrayList<ArrayList> entitiesList){
@@ -22,5 +21,37 @@ public class FindEntitiesResponse {
 
     public ArrayList<ArrayList> getEntitiesList(){
         return this.entitiesList;
+    }
+
+    String getSentiment(){
+        return "";
+    }
+
+    ArrayList<String> getPartsOfSpeech(){
+        return new ArrayList<String>();
+    }
+
+    ArrayList<String> getLemmanation(){
+        return new ArrayList<String>();
+    }
+
+    ArrayList<ArrayList> getNamedEntities(){
+        return new ArrayList<ArrayList>();
+    }
+
+    void setSentiment(){
+        sentiment = "";
+    }
+
+    void setPartsOfSpeech(){
+        parts_of_speech =  new ArrayList<String>();
+    }
+
+    void setLemmanation(){
+        lemmanation =  new ArrayList<String>();
+    }
+
+    void setNamedEntities(){
+        named_entities = new ArrayList<ArrayList>();
     }
 }
