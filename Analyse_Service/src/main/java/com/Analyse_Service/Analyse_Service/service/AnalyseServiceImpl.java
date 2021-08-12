@@ -378,7 +378,7 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-        List<Row> trendsData  = new ArrayList<>();
+        ArrayList<ArrayList> trendsData  = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
         /*for(int i=0; i < requestData.size(); i++){
@@ -408,8 +408,8 @@ public class AnalyseServiceImpl {
                 row.add(sentiment);//sentiment
                // row.add(sentiment);//PoS
 
-                Row trendRow = (Row) row;
-                trendsData.add(trendRow);
+                //Row trendRow = (Row) row;
+                trendsData.add(row);
             }
         }
         //System.out.println(trendsData);
@@ -516,12 +516,13 @@ public class AnalyseServiceImpl {
         StructType schema = new StructType(
                 new StructField[]{
                         new StructField("IsTrending", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Topic", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Likes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Text", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("EntityType", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Frequency", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("AverageLikes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
         });
-
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema); // .read().parquet("...");
+        List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(strData, schema); // .read().parquet("...");
         itemsDF.show();
 
         /*******************MANIPULATE DATAFRAME*****************/
