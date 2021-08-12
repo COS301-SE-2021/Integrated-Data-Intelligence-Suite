@@ -16,6 +16,8 @@ import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -69,18 +71,38 @@ public class ImportServiceImpl {
         return  new ImportTwitterResponse(Objects.requireNonNull(response.body()).string());
     }
 
+
+
     public ImportTwitterResponse getTwitterData(ImportTwitterRequest request) throws Exception {
 
         if(request == null) throw new InvalidTwitterRequestException("request cannot be null");
 
         if(request.getKeyword().strip().length() >250 || request.getKeyword().strip().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
 
+        if(request.getFrom() == null) throw new InvalidTwitterRequestException("\"from\" date not specified");
+
+        if(request.getTo() == null) throw new InvalidTwitterRequestException("\"to\" date not specified ");
+
+        LocalDate from = request.getFrom();
+
+        LocalDate to = request.getTo();
+
+        if(from.isAfter(to)) throw new InvalidTwitterRequestException("\"from\" must be earlier than \"to\" date");
+
+        if(from.getYear() < 2006 ) throw new InvalidTwitterRequestException("\"from\" date cannot be earlier than 2006");
+
+        if(to.isAfter(LocalDate.now())) throw new InvalidTwitterRequestException("\"to\" date cannot be in the future");
+
+        if(from.isAfter(LocalDate.now())) throw new InvalidTwitterRequestException("\"from\" date cannot be in the future");
+
         String keyword = request.getKeyword().strip();
+
+        System.out.println("{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\""+from.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\", \r\n  \"toDate\":\""+ to.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\"\r\n}");
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\"200901020000\", \r\n  \"toDate\":\"200908090000\"\r\n}");
+        RequestBody body = RequestBody.create(mediaType, "{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\""+from.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\", \r\n  \"toDate\":\""+ to.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\"\r\n}");
         Request req = new Request.Builder()
                 .url("https://api.twitter.com/1.1/tweets/search/fullarchive/IDIS.json")
                 .method("POST", body)
@@ -164,7 +186,7 @@ public class ImportServiceImpl {
         int limit = request.getLimit();
 
         try {
-            ImportTwitterRequest twitterRequest = new ImportTwitterRequest(keyword, bearer, limit);
+            ImportTwitterRequest twitterRequest = new ImportTwitterRequest(keyword, limit);
             ImportTwitterResponse twitterResponse= getTwitterDataJson(twitterRequest);
 
             String twitterData = twitterResponse.getJsonData();
