@@ -12,9 +12,7 @@ import com.Import_Service.Import_Service.request.ImportTwitterRequest;
 import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +69,32 @@ public class ImportServiceImpl {
         return  new ImportTwitterResponse(Objects.requireNonNull(response.body()).string());
     }
 
+    public ImportTwitterResponse getTwitterData(ImportTwitterRequest request) throws Exception {
+
+        if(request == null) throw new InvalidTwitterRequestException("request cannot be null");
+
+        if(request.getKeyword().strip().length() >250 || request.getKeyword().strip().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
+
+        String keyword = request.getKeyword().strip();
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\"200901020000\", \r\n  \"toDate\":\"200908090000\"\r\n}");
+        Request req = new Request.Builder()
+                .url("https://api.twitter.com/1.1/tweets/search/fullarchive/IDIS.json")
+                .method("POST", body)
+                .addHeader("Authorization", "Bearer "+bearer)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        Response res = client.newCall(req).execute();
+        if(!res.isSuccessful()){
+
+            throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(res.body()).string());
+        }
+        return  new ImportTwitterResponse(Objects.requireNonNull(res.body()).string());
+    }
+
     /**
      *
      * @param request a request object specifying the parameters to create a request to newsAPi
@@ -98,13 +122,18 @@ public class ImportServiceImpl {
                 .build();
         Response response = client.newCall(req).execute();
 
+        System.out.println(response.isSuccessful());
+        System.out.println(response.body().string());
         if(!response.isSuccessful()){
             throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(response.body()).string());
+
         }
 
         if(response.body() == null){
             throw new ImporterException("Could not import news data");
         }
+
+//        System.out.println(Objects.requireNonNull(response.body()).string());
 
         return new ImportNewsDataResponse(Objects.requireNonNull(response.body()).string());
     }
@@ -165,4 +194,7 @@ public class ImportServiceImpl {
         return new ImportDataResponse(list);
 
     }
+
+
+
 }

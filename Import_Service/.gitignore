@@ -34,4 +34,4 @@ build/
 
 
 ### Importer ###
-/src/main/resources/
+src/main/resources/application.properties
