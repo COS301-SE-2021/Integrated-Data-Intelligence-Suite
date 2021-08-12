@@ -388,8 +388,8 @@ public class AnalyseServiceImpl {
 
         for(int i=0; i < requestData.size(); i++){
             ArrayList<String> row = new ArrayList<>();
-            FindEntitiesRequest findEntitiesRequest = new FindEntitiesRequest(requestData.get(i).get(0).toString());
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findEntitiesRequest);
+            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
             ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
@@ -818,7 +818,7 @@ public class AnalyseServiceImpl {
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindNlpPropertiesResponse findNlpProperties(FindEntitiesRequest request) throws InvalidRequestException {
+    public FindNlpPropertiesResponse findNlpProperties(FindNlpPropertiesRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
