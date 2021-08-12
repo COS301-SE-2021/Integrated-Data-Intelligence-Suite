@@ -11,10 +11,12 @@ import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -65,6 +67,21 @@ public class ImportServiceController {
             res = service.getTwitterDataJson(new ImportTwitterRequest(key));
         } catch (Exception e) {
             return "{\"data\": \"Import failed.\"}";
+        }
+        if(res == null) return "{\"data\": \"No data found.\"}";
+
+        return res.getJsonData();
+    }
+
+    @GetMapping(value = "test/twitter/{key}/{from}/{to}")
+    public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
+        ImportTwitterResponse res = null;
+        try{
+            LocalDate fromDate = LocalDate.parse(from);
+            LocalDate toDate = LocalDate.parse(to);
+            res = service.getTwitterData(new ImportTwitterRequest(key, fromDate, toDate));
+        } catch (Exception e) {
+            return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
         if(res == null) return "{\"data\": \"No data found.\"}";
 
