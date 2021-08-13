@@ -377,7 +377,7 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-        ArrayList<ArrayList> trendsData  = new ArrayList<>();
+        List<Row> trendsData = null; // new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
         /*for(int i=0; i < requestData.size(); i++){
@@ -407,8 +407,8 @@ public class AnalyseServiceImpl {
                 row.add(sentiment);//sentiment
                // row.add(sentiment);//PoS
 
-                //Row trendRow = (Row) row;
-                trendsData.add(row);
+                Row trendRow = RowFactory.create(row);
+                trendsData.add(trendRow );
             }
         }
         //System.out.println(trendsData);
@@ -433,12 +433,15 @@ public class AnalyseServiceImpl {
         */
 
         ArrayList<ArrayList> structureData = new ArrayList<>();
+
         ArrayList<String> FoundEntities = new ArrayList<>();
         ArrayList<Float> Totallikes = new ArrayList<>();
+
         for (int k = 0; k < trendsData.size(); k++){
             ArrayList<String> r = new ArrayList<>();
             String en = trendsData.get(k).get(0).toString();//Entity name eg. Elon Musk
             Float likes = Float.parseFloat(trendsData.get(k).get(4).toString()); // geting Number of likes
+
             if (structureData.isEmpty()){
                 FoundEntities.add(en);//Registering Enitiy eg. Elon Musk
                 Totallikes.add(likes);
@@ -459,6 +462,7 @@ public class AnalyseServiceImpl {
                         break;
                     }
                 }
+
                 if (found){
                     ArrayList<String> temp = structureData.get(pos);
                     int freq = Integer.parseInt(temp.get(2));
@@ -520,11 +524,23 @@ public class AnalyseServiceImpl {
                         new StructField("FrequencyRatePerHour", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
                         new StructField("AverageLikes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
         });
-        List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(strData, schema); // .read().parquet("...");
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("EntityName", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("EntityType", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Location", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Date", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Likes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                });
+
+        //List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
         itemsDF.show();
 
         /*******************MANIPULATE DATAFRAME*****************/
+
+        //group named entity
 
 
         /*******************SETUP PIPELINE*****************/
