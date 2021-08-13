@@ -62,9 +62,12 @@ L.Icon.Default.mergeOptions({
     shadowUrl:
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
 });
+
 function MapCard() {
     const [mapLayers, setMapLayers] = useState([]);
-
+    /*
+       * runs when a polygon/marker/polyline is being Created
+    */
     const _onCreate = (e) => {
         console.log(e);
 
@@ -79,9 +82,13 @@ function MapCard() {
         }
 
         //output
-        console.log(JSON.stringify(mapLayers, 0, 2));
+        console.log('on create');
+        console.log(JSON.stringify(mapLayers));
     };
 
+    /*
+       * runs when a polygon/marker/polyline is being edited
+     */
     const _onEdited = (e) => {
         console.log(e);
         const {
@@ -98,10 +105,14 @@ function MapCard() {
             );
 
             //output
-            console.log(JSON.stringify(mapLayers, 0, 2));
+            console.log('on Edit');
+            console.log(JSON.stringify(mapLayers));
         });
     };
 
+    /*
+        * Runs when a polygon/marker/polyline is being deleted
+    */
     const _onDeleted = (e) => {
         console.log(e);
         const {
@@ -113,7 +124,8 @@ function MapCard() {
         });
 
         //output
-        console.log(JSON.stringify(mapLayers, 0, 2));
+        console.log('on Delete');
+        console.log(JSON.stringify(mapLayers));
     };
 
 
@@ -161,13 +173,14 @@ function MapCard() {
                             }}
                         >
                             <Tooltip>clickedText</Tooltip>
-
                         </Circle>
 
                     </LayerGroup>
 
                     {/*<SetViewOnClick animateRef={animateRef}/>*/}
                 </Map>
+
+                <pre className="text-left">{JSON.stringify(mapLayers)}</pre>
             </Card>
 
         </>
