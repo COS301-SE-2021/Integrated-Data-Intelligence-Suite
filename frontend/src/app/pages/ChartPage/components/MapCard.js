@@ -1,4 +1,4 @@
-import React, {Component, useRef} from 'react';
+import React, {Component, useRef, useState} from 'react';
 import {Card} from "antd";
 import {
     Map,
@@ -53,8 +53,70 @@ let pretoria_position = [-25.731340, 28.218370];
 //     return null
 // }
 
-
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png",
+    iconUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png",
+    shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
+});
 function MapCard() {
+    const [mapLayers, setMapLayers] = useState([]);
+
+    const _onCreate = (e) => {
+        console.log(e);
+
+        const {layerType, layer} = e;
+        if (layerType === "polygon") {
+            const {_leaflet_id} = layer;
+
+            setMapLayers((layers) => [
+                ...layers,
+                {id: _leaflet_id, latlngs: layer.getLatLngs()[0]},
+            ]);
+        }
+
+        //output
+        console.log(JSON.stringify(mapLayers, 0, 2));
+    };
+
+    const _onEdited = (e) => {
+        console.log(e);
+        const {
+            layers: {_layers},
+        } = e;
+
+        Object.values(_layers).map(({_leaflet_id, editing}) => {
+            setMapLayers((layers) =>
+                layers.map((l) =>
+                    l.id === _leaflet_id
+                        ? {...l, latlngs: {...editing.latlngs[0]}}
+                        : l
+                )
+            );
+
+            //output
+            console.log(JSON.stringify(mapLayers, 0, 2));
+        });
+    };
+
+    const _onDeleted = (e) => {
+        console.log(e);
+        const {
+            layers: {_layers},
+        } = e;
+
+        Object.values(_layers).map(({_leaflet_id}) => {
+            setMapLayers((layers) => layers.filter((l) => l.id !== _leaflet_id));
+        });
+
+        //output
+        console.log(JSON.stringify(mapLayers, 0, 2));
+    };
+
+
     const animateRef = useRef(true)
     return (
         <>
@@ -73,10 +135,10 @@ function MapCard() {
                     <FeatureGroup>
                         <EditControl
                             position="topright"
-                            // onCreated={_created}
-                            draw={
-                                {}
-                            }
+                            onCreated={_onCreate}
+                            onEdited={_onEdited}
+                            onDeleted={_onDeleted}
+                            draw={{}}
                         />
                     </FeatureGroup>
 
@@ -102,41 +164,6 @@ function MapCard() {
 
                         </Circle>
 
-
-                        <Circle
-                            center={pretoria_position}
-                            pathOptions={fillRedOptions}
-                            radius={10000}
-                            stroke={false}
-                            children={null}
-                            eventHandlers={{
-                                click: showRedCircleData,
-
-                            }}
-                        >
-                            <Tooltip>clickedTex</Tooltip>
-
-                        </Circle>
-
-
-                        <LayerGroup>
-                            <Circle
-
-                                center={[-26.001340, 28.018370]}
-                                pathOptions={greenOptions}
-                                radius={10000}
-                                children={null}
-                                prefixCls={null}
-                                progressStatus={null}
-                                eventHandlers={{
-                                    click: showGreenCircleData,
-
-                                }}
-                            >
-                                <Tooltip>clickedText</Tooltip>
-
-                            </Circle>
-                        </LayerGroup>
                     </LayerGroup>
 
                     {/*<SetViewOnClick animateRef={animateRef}/>*/}
