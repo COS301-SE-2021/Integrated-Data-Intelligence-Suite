@@ -162,7 +162,6 @@ const RegisterPage = () => {
                 >
                     <Input.Password
                         id="password"
-
                         name="password"
                         type="password"
                         placeholder="Password"
@@ -181,8 +180,8 @@ const RegisterPage = () => {
                     label={'Confirm password'}
                 >
                     <Input.Password
-                        id="confirmpassword"
-                        name="confirmpassword"
+                        id="confirmedpassword"
+                        name="confirmedpassword"
                         type="password"
                         placeholder="rewrite the password"
                         value={formik.values.confirmedpassword}
