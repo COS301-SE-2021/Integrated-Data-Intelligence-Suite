@@ -2,6 +2,7 @@ package com.Visualize_Service.Visualize_Service.service;
 
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
 import com.Visualize_Service.Visualize_Service.request.CreateLineGraphRequest;
+import com.Visualize_Service.Visualize_Service.request.CreateNetworkGraphRequest;
 import com.Visualize_Service.Visualize_Service.request.VisualizeDataRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,5 +79,12 @@ public class VisualizeServiceTest {
     @DisplayName("When createNetworkGraphRequest is Null")
     public void createNetworkGraphNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createNetworkGraph(null));
+    }
+
+    @Test
+    @DisplayName("When the DataList is Null")
+    public void createNetworkGraphDataListNull(){
+        CreateNetworkGraphRequest test = new CreateNetworkGraphRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createNetworkGraph(test));
     }
 }
