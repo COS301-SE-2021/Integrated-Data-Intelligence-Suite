@@ -27,7 +27,7 @@ public class VisualizeServiceTest {
     }
 
     @Test
-    @DisplayName("When findTrendsNullRequest is Null")
+    @DisplayName("When visualizeDataRequest is Null")
     public void visualizeDataNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(null));
     }
@@ -57,5 +57,11 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
+    }
+
+    @Test
+    @DisplayName("When createlineGraphRequest is Null")
+    public void vcreatelineGraphNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createlineGraph(null));
     }
 }
