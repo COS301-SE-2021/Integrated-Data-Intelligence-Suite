@@ -1,10 +1,12 @@
 package com.Import_Service.Import_Service.request;
 
+import java.time.LocalDate;
+
 public class ImportTwitterRequest {
     String keyword;
     int limit;
-    String from;
-    String to;
+    LocalDate from;
+    LocalDate to;
 
 
 
@@ -24,7 +26,7 @@ public class ImportTwitterRequest {
 
 
 
-    public ImportTwitterRequest(String keyword, String from, String to) {
+    public ImportTwitterRequest(String keyword, LocalDate from, LocalDate to) {
         this.keyword = keyword;
         this.from = from;
         this.to = to;
@@ -38,11 +40,11 @@ public class ImportTwitterRequest {
 
     public String getKeyword() {return keyword; }
 
-    public String getFrom() {
+    public LocalDate getFrom() {
         return from;
     }
 
-    public String getTo() {
+    public LocalDate getTo() {
         return to;
     }
 }
