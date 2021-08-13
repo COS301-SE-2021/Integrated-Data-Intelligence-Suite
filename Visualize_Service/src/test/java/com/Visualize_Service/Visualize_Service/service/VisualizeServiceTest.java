@@ -66,7 +66,7 @@ public class VisualizeServiceTest {
     }
 
     @Test
-    @DisplayName("When the DataList is Null")
+    @DisplayName("When the DataList of Line graph is Null")
     public void createlineGraphDataListNull(){
         CreateLineGraphRequest test = new CreateLineGraphRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createlineGraph(test));
@@ -80,7 +80,7 @@ public class VisualizeServiceTest {
     }
 
     @Test
-    @DisplayName("When the DataList is Null")
+    @DisplayName("When the DataList of Network graph is Null")
     public void createNetworkGraphDataListNull(){
         CreateNetworkGraphRequest test = new CreateNetworkGraphRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createNetworkGraph(test));
@@ -93,12 +93,12 @@ public class VisualizeServiceTest {
     }
 
     @Test
-    @DisplayName("When the DataList is Null")
+    @DisplayName("When the DataList Timeline graph of  is Null")
     public void createTimelineGraphDataListNull(){
         CreateTimelineGraphRequest test = new CreateTimelineGraphRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createTimelineGraph(test));
     }
-    
+
     @Test
     @DisplayName("When createMapGraphRequest is Null")
     public void createMapGraphNullRequest(){
@@ -106,7 +106,7 @@ public class VisualizeServiceTest {
     }
 
     @Test
-    @DisplayName("When the DataList is Null")
+    @DisplayName("When the DataList of map graph is Null")
     public void createMapGraphDataListNull(){
         CreateMapGraphRequest test = new CreateMapGraphRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createMapGraph(test));
