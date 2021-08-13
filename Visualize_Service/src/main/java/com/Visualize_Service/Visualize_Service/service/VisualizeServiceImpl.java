@@ -7,14 +7,12 @@ import com.Visualize_Service.Visualize_Service.request.CreateNetworkGraphRequest
 import com.Visualize_Service.Visualize_Service.request.VisualizeDataRequest;
 import com.Visualize_Service.Visualize_Service.response.CreateLineGraphResponse;
 import com.Visualize_Service.Visualize_Service.response.CreateNetworkGraphResponse;
-import com.Visualize_Service.Visualize_Service.response.VisualizeAnalyseDataResponse;
+import com.Visualize_Service.Visualize_Service.response.VisualizeDataResponse;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class VisualizeServiceImpl {
-    public VisualizeAnalyseDataResponse visualizeData(VisualizeDataRequest request) throws InvalidRequestException {
+    public VisualizeDataResponse visualizeData(VisualizeDataRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -28,7 +26,7 @@ public class VisualizeServiceImpl {
             throw new InvalidRequestException("Arraylist is null");
         }
 
-        return new VisualizeAnalyseDataResponse(null);
+        return new VisualizeDataResponse(null);
     }
 
 
