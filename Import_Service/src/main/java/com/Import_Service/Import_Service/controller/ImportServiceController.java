@@ -55,12 +55,20 @@ public class ImportServiceController {
     }
 
     //TODO add comments
-    @PostMapping(value = "/TwitterData")
-    public ImportTwitterResponse getTwitterData(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
+    @PostMapping(value = "/importDatedData")
+    public ImportTwitterResponse importDatedData(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
 
         ImportTwitterRequest request = requestEntity.getBody();
-        return service.getTwitterData(request);
+        return new ImportTwitterResponse("{\"data\" : \"returned ok\"}");
     }
+
+    //TODO add comments
+//    @PostMapping(value = "/TwitterData")
+//    public ImportTwitterResponse getTwitterData(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
+//
+//        ImportTwitterRequest request = requestEntity.getBody();
+//        return service.importDatedData(request);
+//    }
 
     /**
      * Used to test twitter data retrieval
@@ -86,9 +94,7 @@ public class ImportServiceController {
     public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
         ImportTwitterResponse res = null;
         try{
-            LocalDate fromDate = LocalDate.parse(from);
-            LocalDate toDate = LocalDate.parse(to);
-            res = service.getTwitterData(new ImportTwitterRequest(key, fromDate, toDate));
+            res = service.importDatedData(new ImportTwitterRequest(key, from, to));
         } catch (Exception e) {
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
