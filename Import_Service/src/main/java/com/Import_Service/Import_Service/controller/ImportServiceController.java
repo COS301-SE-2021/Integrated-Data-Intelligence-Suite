@@ -89,12 +89,20 @@ public class ImportServiceController {
         return res.getJsonData();
     }
 
-    //TODO ad comments
+    /**
+     *
+     * @param key a phrase or sentence used as a search query
+     * @param from the date at which the search should start. Date is in the form YYYY-MM-DD
+     * @param to the date at which the search should end. Date is in the form YYYY-MM-DD
+     * @return a jason string of tweets related to the search key and within the two specified dates
+     */
     @GetMapping(value = "test/twitter/{key}/{from}/{to}")
     public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
         ImportTwitterResponse res = null;
         try{
-            res = service.importDatedData(new ImportTwitterRequest(key, from, to));
+            LocalDate fromDate = LocalDate.parse(from);
+            LocalDate toDate = LocalDate.parse(to);
+            res = service.importDatedData(new ImportTwitterRequest(key, fromDate, toDate));
         } catch (Exception e) {
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
