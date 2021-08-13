@@ -61,7 +61,13 @@ public class VisualizeServiceTest {
 
     @Test
     @DisplayName("When createlineGraphRequest is Null")
-    public void vcreatelineGraphNullRequest(){
+    public void createlineGraphNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createlineGraph(null));
+    }
+
+    @Test
+    @DisplayName("When createNetworkGraphRequest is Null")
+    public void createNetworkGraphNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createNetworkGraph(null));
     }
 }
