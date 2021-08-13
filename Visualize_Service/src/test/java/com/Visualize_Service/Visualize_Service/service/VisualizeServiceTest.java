@@ -32,4 +32,12 @@ public class VisualizeServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(null));
     }
 
+    @Test
+    @DisplayName("When the PatternList is Null")
+    public void visualizeDataPatternListNull(){
+        ArrayList<ArrayList> testlist1 = new ArrayList<>();
+        ArrayList<ArrayList> testlist2 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
+    }
 }
