@@ -73,7 +73,7 @@ public class ImportServiceImpl {
 
 
 
-    public ImportTwitterResponse getTwitterData(ImportTwitterRequest request) throws Exception {
+    public ImportTwitterResponse importDatedData(ImportTwitterRequest request) throws Exception {
 
         if(request == null) throw new InvalidTwitterRequestException("request cannot be null");
 
@@ -200,19 +200,19 @@ public class ImportServiceImpl {
 
         //NewsAPI request
 
-        try{
-            ImportNewsDataRequest newsRequest = new ImportNewsDataRequest(keyword);
-            ImportNewsDataResponse newsResponse = importNewsData(newsRequest);
-
-            String newsData = newsResponse.getData();
-
-            list.add(new ImportedData(DataSource.NEWSSCOURCE, newsData));
-
-        } catch (Exception e) {
-
-            throw new ImporterException("Error while collecting news data");
-        }
-
+//        try{
+//            ImportNewsDataRequest newsRequest = new ImportNewsDataRequest(keyword);
+//            ImportNewsDataResponse newsResponse = importNewsData(newsRequest);
+//
+//            String newsData = newsResponse.getData();
+//
+//            list.add(new ImportedData(DataSource.NEWSSCOURCE, newsData));
+//
+//        } catch (Exception e) {
+//
+//            throw new ImporterException("Error while collecting news data");
+//        }
+        System.out.println(list.get(0).getData());
         return new ImportDataResponse(list);
 
     }
