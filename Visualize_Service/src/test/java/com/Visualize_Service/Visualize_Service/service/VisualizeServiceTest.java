@@ -1,9 +1,7 @@
 package com.Visualize_Service.Visualize_Service.service;
 
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
-import com.Visualize_Service.Visualize_Service.request.CreateLineGraphRequest;
-import com.Visualize_Service.Visualize_Service.request.CreateNetworkGraphRequest;
-import com.Visualize_Service.Visualize_Service.request.VisualizeDataRequest;
+import com.Visualize_Service.Visualize_Service.request.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,9 +87,23 @@ public class VisualizeServiceTest {
     }
 
     @Test
-    @DisplayName("When createlineGraphRequest is Null")
+    @DisplayName("When createTimelineGraphRequest is Null")
     public void createTimelineGraphNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createlineGraph(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createTimelineGraph(null));
+    }
+
+    @Test
+    @DisplayName("When the DataList is Null")
+    public void createTimelineGraphDataListNull(){
+        CreateTimelineGraphRequest test = new CreateTimelineGraphRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createTimelineGraph(test));
+    }
+
+
+    @Test
+    @DisplayName("When createMapGraphRequest is Null")
+    public void createMapGraphNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createMapGraph(null));
     }
 
 
