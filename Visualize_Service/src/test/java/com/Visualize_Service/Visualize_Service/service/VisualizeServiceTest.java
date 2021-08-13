@@ -98,12 +98,18 @@ public class VisualizeServiceTest {
         CreateTimelineGraphRequest test = new CreateTimelineGraphRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createTimelineGraph(test));
     }
-
-
+    
     @Test
     @DisplayName("When createMapGraphRequest is Null")
     public void createMapGraphNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.createMapGraph(null));
+    }
+
+    @Test
+    @DisplayName("When the DataList is Null")
+    public void createMapGraphDataListNull(){
+        CreateMapGraphRequest test = new CreateMapGraphRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createMapGraph(test));
     }
 
 
