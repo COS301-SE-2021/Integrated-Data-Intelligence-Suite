@@ -1,78 +1,56 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import AppRouter from './AppRouter';
-
-import Navbar from './components/Navbar';
-
-import Footer from './components/Footer';
 import './App.scss';
-
-import GraphList from './components/GraphList';
-
-
-
+import React, {Component} from 'react';
+import {Link, Route, Switch} from "react-router-dom";
+import LoginPage from './pages/LoginPage/LoginPage';
+import HomePage from "./pages/HomePage/HomePage";
+import ChartPage from "./pages/ChartPage/components/ChartPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import UserPermissions from "./pages/UserPermissionsPage/UserPermissions";
+import Permissions from "./pages/PermissionsPage/Permissions";
 
 class App extends Component {
     state = {}
 
-    componentDidMount() {
-        this.onRouteChanged();
-    }
-
     render() {
-
-        let graph_list_component = !this.state.isFullPageLayout ? <GraphList/> : '';
-
-
         return (
-            <div className="container-scroller">
+            <>
+                <Switch>
+                    <Route exact path='/'>
+                        <HomePage/>
+                    </Route>
+
+                    <Route exact path='/login'>
+                        <LoginPage/>
+                    </Route>
+
+                    <Route exact path='/register'>
+                        <RegisterPage/>
+                    </Route>
 
 
-                <div className="container-fluid page-body-wrapper">
-                   
-                    <div className="main-panel">
-                        <div className="content-wrapper" >
-                            <AppRouter/>
-                            {graph_list_component}
+                    <Route exact path='/chart'>
+                        <ChartPage/>
+                    </Route>
 
+                    <Route exact path="/permissions">
+                        <Permissions/>
+                    </Route>
+
+                    <Route path={"/permissions/user/:id"}>
+                        <UserPermissions/>
+                    </Route>
+
+                    <Route path="*">
+                        <div>
+                            <h2>Page not Fount</h2>
+                            <Link to="/"> back to home page</Link>
                         </div>
-                        {/*{footerComponent}*/}
-                    </div>
-                </div>
-            </div>
+                    </Route>
+
+                </Switch>
+            </>
         );
     }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
-            this.onRouteChanged();
-        }
-    }
-
-    onRouteChanged() {
-        // console.log("ROUTE CHANGED");
-
-        window.scrollTo(0, 0);
-        const fullPageLayoutRoutes = ['/pages/Login', '/pages/Register', '/functions/ValidateLogin', '/functions/ValidateRegister'];
-        for ( let i = 0; i < fullPageLayoutRoutes.length; i++ ) {
-            if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
-                this.setState({
-                    isFullPageLayout: true
-                })
-                document.querySelector('.page-body-wrapper').classList.add('full-page-wrapper');
-                break;
-            } else {
-                this.setState({
-                    isFullPageLayout: false
-                })
-                document.querySelector('.page-body-wrapper').classList.remove('full-page-wrapper');
-            }
-        }
-    }
-
-
-
 }
 
-
-export default withRouter(App);
+export default App;

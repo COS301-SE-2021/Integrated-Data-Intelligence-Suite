@@ -1,0 +1,25 @@
+/******************
+* The Footer Component as denoted by <Footer> tag
+*
+*
+*
+*
+*
+*
+*
+******************************/
+
+
+/*Footer*/
+.ant-layout-footer {
+    line-height: 1.5;
+    color: black;
+    background: lightgrey;
+}
+
+[data-theme="dark"] .ant-layout-footer {
+  background: #6aa0c7;
+}
+.ant-layout-footer {
+  line-height: 1.5;
+}
