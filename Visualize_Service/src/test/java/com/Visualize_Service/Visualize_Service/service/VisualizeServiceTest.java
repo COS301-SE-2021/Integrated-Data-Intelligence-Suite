@@ -40,4 +40,13 @@ public class VisualizeServiceTest {
         VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
+
+    @Test
+    @DisplayName("When the RelationshipList is Null")
+    public void visualizeDataRelationshipListNull(){
+        ArrayList<ArrayList> testlist1 = new ArrayList<>();
+        ArrayList<ArrayList> testlist2 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,null,testlist2);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
+    }
 }
