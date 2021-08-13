@@ -1,7 +1,7 @@
 import React, {Component, useRef} from 'react';
 import {Card} from "antd";
 import {
-    MapContainer,
+    Map,
     TileLayer,
     Marker,
     Popup,
@@ -12,10 +12,11 @@ import {
     Tooltip, useMapEvent
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
-
-
-
 import ScriptTag from 'react-script-tag';
+import L from "leaflet";
+import {EditControl} from "react-leaflet-draw";
+import "leaflet/dist/leaflet.css";
+import "leaflet-draw/dist/leaflet.draw.css";
 
 //Do not Change the order of these lines
 //The Css MUST be loaded before the js
@@ -42,20 +43,19 @@ const purpleOptions = {color: 'purple'}
 
 let pretoria_position = [-25.731340, 28.218370];
 
-function SetViewOnClick({animateRef}) {
-    const map = useMapEvent('click', (e) => {
-        map.setView(e.latlng, map.getZoom(), {
-            animate: animateRef.current || false,
-        })
-    })
-
-    return null
-}
+// function SetViewOnClick({animateRef}) {
+//     const map = useMapEvent('click', (e) => {
+//         map.setView(e.latlng, map.getZoom(), {
+//             animate: animateRef.current || false,
+//         })
+//     })
+//
+//     return null
+// }
 
 
 function MapCard() {
     const animateRef = useRef(true)
-
     return (
         <>
             <Card
@@ -64,13 +64,22 @@ function MapCard() {
                 extra={<p></p>}
             >
                 {/*<p>Card content</p>*/}
-                <MapContainer
+                <Map
                     id={'map_container_div'}
                     center={pretoria_position}
                     zoom={9}
                     scrollWheelZoom={false}
-                    style={{}}
                 >
+                    <FeatureGroup>
+                        <EditControl
+                            position="topright"
+                            // onCreated={_created}
+                            draw={
+                                {}
+                            }
+                        />
+                    </FeatureGroup>
+
                     <TileLayer
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -87,7 +96,6 @@ function MapCard() {
                             progressStatus={null}
                             eventHandlers={{
                                 click: showBlueCircleData,
-
                             }}
                         >
                             <Tooltip>clickedText</Tooltip>
@@ -131,8 +139,8 @@ function MapCard() {
                         </LayerGroup>
                     </LayerGroup>
 
-                    <SetViewOnClick animateRef={animateRef}/>
-                </MapContainer>
+                    {/*<SetViewOnClick animateRef={animateRef}/>*/}
+                </Map>
             </Card>
 
         </>

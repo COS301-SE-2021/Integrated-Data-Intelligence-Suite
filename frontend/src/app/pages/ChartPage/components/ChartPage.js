@@ -9,20 +9,12 @@ import {
 import {Route, Switch} from "react-router-dom";
 import MapCard from "./MapCard";
 import DetailsCard from "./DetailsCard";
-import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
 
 
 class ChartPage extends Component {
-
-
-
-
-
-
     state = {}
 
     render() {

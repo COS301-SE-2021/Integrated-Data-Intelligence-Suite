@@ -6,7 +6,6 @@ import {
 
 
 class DetailsCard extends React.Component {
-
     state = {}
 
     render() {
