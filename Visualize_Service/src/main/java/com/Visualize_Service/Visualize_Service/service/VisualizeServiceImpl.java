@@ -51,7 +51,7 @@ public class VisualizeServiceImpl {
     }
 
 
-    private CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
+    public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateMapGraphRequest Object is null");
         }
@@ -64,7 +64,7 @@ public class VisualizeServiceImpl {
 
 
 
-    private CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
+    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
