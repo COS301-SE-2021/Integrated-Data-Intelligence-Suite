@@ -542,6 +542,10 @@ public class AnalyseServiceImpl {
 
         //group named entity
 
+        Dataset<Row> temp = itemsDF.groupBy("EntityName").count(); //frequency
+        Dataset<Row> temp2 = itemsDF.groupBy("EntityName").avg("Likes"); //averagelikes of topic
+
+        //need display to test.
 
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
