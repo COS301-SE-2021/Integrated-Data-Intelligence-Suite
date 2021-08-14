@@ -35,7 +35,7 @@ public class UserServiceController {
         return service.managePermissions(request);
     }
 
-    @GetMapping(value = "/allusers")
+    @GetMapping(value = "/getAll")
     public GetAllUsersResponse getAllUsers(RequestEntity<GetAllUsersRequest> requestEntity) throws Exception {
         GetAllUsersRequest request = requestEntity.getBody();
         return service.getAllUsers(request);

@@ -18,6 +18,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl {
@@ -143,8 +144,43 @@ public class UserServiceImpl {
      * @param request This class will contain the new password of the user.
      * @return This class will contain if the password reset process was successful.
      */
-    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
-        return null;
+    @Transactional
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) throws InvalidRequestException, InvalidKeySpecException, NoSuchAlgorithmException {
+        if(request == null) {
+            throw new InvalidRequestException("The resetPassword request is null");
+        }
+        if(request.getEmail() == null || request.getNewPassword() == null) {
+            throw new InvalidRequestException("Reset password request contains null");
+        }
+
+        //check if the emails exists
+        Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
+        if(usersByEmail.isEmpty()) {
+            return new ResetPasswordResponse(false, "Email does not exist");
+        }
+        else {
+            String newPassword = request.getNewPassword();
+            UUID id = usersByEmail.get().getId();
+            //hash new password
+            String hashedPass;
+            int iterations = 1000;
+            char[] chars = newPassword.toCharArray();
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            byte[] salt = new byte[16];
+            sr.nextBytes(salt);
+
+            PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = skf.generateSecret(spec).getEncoded();
+            hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
+            int passUpdate = repository.updatePassword(id, hashedPass);
+            if(passUpdate == 0) {
+                return new ResetPasswordResponse(false, "Password not updated");
+            }
+            else {
+                return new ResetPasswordResponse(true, "Password successfully updated.");
+            }
+        }
     }
 
     /**
@@ -197,9 +233,9 @@ public class UserServiceImpl {
      */
     @Transactional
     public GetAllUsersResponse getAllUsers(GetAllUsersRequest request) throws InvalidRequestException {
-        if(request == null) {
-            throw new InvalidRequestException("The request is null");
-        }
+//        if(request == null) {
+//            throw new InvalidRequestException("The request is null");
+//        }
         boolean success;
         String message;
         List<User> users = repository.findAll();

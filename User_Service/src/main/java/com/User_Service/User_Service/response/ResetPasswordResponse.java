@@ -8,7 +8,7 @@ public class ResetPasswordResponse {
 
     }
 
-    public ResetPasswordResponse(String message, boolean success) {
+    public ResetPasswordResponse(boolean success, String message) {
         this.message = message;
         this.success = success;
     }
