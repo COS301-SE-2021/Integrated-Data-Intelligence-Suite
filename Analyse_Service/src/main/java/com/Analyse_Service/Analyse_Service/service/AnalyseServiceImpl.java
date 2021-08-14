@@ -390,6 +390,7 @@ public class AnalyseServiceImpl {
         }*/
 
         //ArrayList<ArrayList> formatedData = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
@@ -400,11 +401,24 @@ public class AnalyseServiceImpl {
             ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
+
             for (int j=0; j< namedEntities.size(); j++){
                 //row.add(isTrending)
                 row = new ArrayList<>();
                 row.add(namedEntities.get(j).get(0).toString()); //entity-name
                 row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()){// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                }else {
+                    if (types.contains(namedEntities.get(j).get(1).toString()))
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    else{
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
 
                 row.add(requestData.get(i).get(1).toString());//location
                 row.add(requestData.get(i).get(2).toString());//date
@@ -526,6 +540,7 @@ public class AnalyseServiceImpl {
                         new StructField("IsTrending",  DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Frequency", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
@@ -535,6 +550,7 @@ public class AnalyseServiceImpl {
                 new StructField[]{
                         new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Location",DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
@@ -549,10 +565,11 @@ public class AnalyseServiceImpl {
 
         //group named entity
 
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ).count().collectAsList(); //frequency
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
         namedEntities.get(0); /*name entity*/
         namedEntities.get(1); /*name type*/
-        namedEntities.get(2); /*name frequency*/
+        namedEntities.get(2); /*name type-number*/
+        namedEntities.get(3); /*name frequency*/
 
         List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
         averageLikes.get(1); //average likes
@@ -568,6 +585,7 @@ public class AnalyseServiceImpl {
                     namedEntities.get(i).get(0).toString(),
                     namedEntities.get(i).get(1).toString(),
                     Integer.parseInt(namedEntities.get(i).get(2).toString()),
+                    Integer.parseInt(namedEntities.get(i).get(3).toString()),
                     rate.get(i).get(1).toString(),
                     Float.parseFloat(averageLikes.get(i).get(1).toString())
             );
@@ -600,7 +618,7 @@ public class AnalyseServiceImpl {
                 .setOutputCol("features");
 
         VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"Frequency", "AverageLikes"})
+                .setInputCols(new String[]{"EntityTypeNumber","Frequency", "AverageLikes"})
                 .setOutputCol("features");
 
         Dataset<Row> testDF = assembler.transform(trainSetDF);
@@ -680,9 +698,26 @@ public class AnalyseServiceImpl {
 
 
         /*******************READ MODEL OUTPUT*****************/
+        Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
+
+        Dataset<Row> res = lrModel.transform(input);
+
+        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();
+
+        System.out.println("/*******************Outputs begin*****************/");
+        System.out.println(rawResults.toString());
+        System.out.println("/*******************Outputs begin*****************/");
+
 
         ArrayList<ArrayList> results = new ArrayList<>();
+        for (int i = 0; i < rawResults.size(); i++) {
+            ArrayList<Object> r = new ArrayList<>();
+            r.add(rawResults.get(i).get(0).toString());
+            r.add(Double.parseDouble(rawResults.get(i).get(1).toString()));
+            results.add(r);
+        }
 
+        ArrayList<ArrayList> results2 = new ArrayList<>();
         return new FindTrendsResponse(results);
     }
 
