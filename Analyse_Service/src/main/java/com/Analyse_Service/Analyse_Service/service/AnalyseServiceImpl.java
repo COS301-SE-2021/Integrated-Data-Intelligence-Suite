@@ -27,7 +27,9 @@ import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.feature.HashingTF;
+import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.Tokenizer;
+import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.mllib.clustering.KMeans;
@@ -38,6 +40,8 @@ import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
 import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.struct;
+
 import org.apache.spark.storage.StorageLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -559,7 +563,7 @@ public class AnalyseServiceImpl {
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < namedEntities.size(); i++){
             Row trainRow = RowFactory.create(
-                    0,
+                    (int)Math.round(Math.random()),
                     namedEntities.get(i).get(0).toString(),
                     namedEntities.get(i).get(1).toString(),
                     Integer.parseInt(namedEntities.get(i).get(2).toString()),
@@ -569,15 +573,23 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); // .read().parquet("...");
+        Dataset<Row> [] split = trainingDF.randomSplit((new double[]{0.7, 0.3}),5043);
+
+        Dataset<Row> trainSetDF = split[0];
+        Dataset<Row> testSetDF = split[1];
+
 
         //display
         itemsDF.show();
-        trainingDF.show();
+        System.out.println("/*******************Train Set*****************/");
+        trainSetDF.show();
+        System.out.println("/*******************Test Set*****************/");
+        testSetDF.show();
 
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
         //features
-        Tokenizer tokenizer = new Tokenizer()
+         Tokenizer tokenizer = new Tokenizer()
                 .setInputCol("text")
                 .setOutputCol("words");
 
@@ -586,6 +598,19 @@ public class AnalyseServiceImpl {
                 .setInputCol(tokenizer.getOutputCol())
                 .setOutputCol("features");
 
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"Frequency", "AverageLikes"})
+                .setOutputCol("features");
+
+        Dataset<Row> testDF = assembler.transform(trainSetDF);
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
+
+        indexed.show();
 
         //model
         LogisticRegression lr = new LogisticRegression() //estimator
@@ -594,22 +619,23 @@ public class AnalyseServiceImpl {
                 .setElasticNetParam(0.8);
 
         // Fit the model
-        LogisticRegressionModel lrModel = lr.fit(trainingDF);
+        LogisticRegressionModel lrModel = lr.fit(indexed);
         // Print the coefficients and intercept for logistic regression
         System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
 
 
         //pipeline
         Pipeline pipeline = new Pipeline()
-                .setStages(new PipelineStage[] {lr});
+                .setStages(new PipelineStage[] {assembler,indexer,lr});
 
         // Fit the pipeline to training documents.
-        PipelineModel model = pipeline.fit(itemsDF);
+        PipelineModel model = pipeline.fit(trainSetDF);
+
 
 
         /******************Analyse Model Accuracy**************/
         //test
-        Dataset<Row> test = null;
+         Dataset<Row> test = null;
 
         Dataset<Row> predictions = model.transform(test);
         for (Row r : predictions.select("isTrending").collectAsList())
