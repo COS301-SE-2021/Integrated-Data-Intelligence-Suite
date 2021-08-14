@@ -59,17 +59,6 @@ const RegisterPage = () => {
         validate,
         onSubmit: values => {
             alert(JSON.stringify(values, null, 2));
-
-            /*
-                Some ASync Function
-
-                Make Get Request
-
-                Update Client if get request Unsuccesfull
-
-                else, redirect to home page
-             */
-            alert("Register");
             const requestOptions = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
