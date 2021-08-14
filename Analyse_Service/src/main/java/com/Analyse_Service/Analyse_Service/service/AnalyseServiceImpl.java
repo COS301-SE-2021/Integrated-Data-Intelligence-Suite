@@ -179,7 +179,7 @@ public class AnalyseServiceImpl {
                 .setMinSupport(0.5)
                 .setMinConfidence(0.6)
                 .fit(itemsDF);
-        LogManager.getRootLogger().setLevel(Level.OFF); //TODO: what this for?
+        //LogManager.getRootLogger().setLevel(Level.OFF); //TODO: what this for?
 
         /*******************READ MODEL OUTPUT*****************/
 
@@ -387,7 +387,7 @@ public class AnalyseServiceImpl {
         //ArrayList<ArrayList> formatedData = new ArrayList<>();
 
         for(int i=0; i < requestData.size(); i++){
-            ArrayList<String> row = new ArrayList<>();
+            List<Object> row = new ArrayList<>();
             FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
             FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
@@ -403,11 +403,11 @@ public class AnalyseServiceImpl {
 
                 row.add(requestData.get(i).get(1).toString());//location
                 row.add(requestData.get(i).get(2).toString());//date
-                row.add(requestData.get(i).get(3).toString());//likes
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
                 row.add(sentiment);//sentiment
                // row.add(sentiment);//PoS
 
-                Row trendRow = RowFactory.create(row);
+                Row trendRow = RowFactory.create(row.toArray());
                 trendsData.add(trendRow );
             }
         }
@@ -432,7 +432,7 @@ public class AnalyseServiceImpl {
             [Microsoft, ORGANIZATION, hatfield, 20/05/20201, 34, Neutral]]
         */
 
-        ArrayList<ArrayList> structureData = new ArrayList<>();
+        /*ArrayList<ArrayList> structureData = new ArrayList<>();
 
         ArrayList<String> FoundEntities = new ArrayList<>();
         ArrayList<Float> Totallikes = new ArrayList<>();
@@ -455,7 +455,7 @@ public class AnalyseServiceImpl {
                 boolean found = false;
                 int pos = 0;
                 /********Check if Entity is in the list of registerd enitities **********/
-                for (int x = 0; x < FoundEntities.size(); x++){
+                /*for (int x = 0; x < FoundEntities.size(); x++){
                     if (en.equals(FoundEntities.get(x))){
                         found = true;
                         pos = FoundEntities.indexOf(en);
@@ -518,25 +518,27 @@ public class AnalyseServiceImpl {
 
         StructType schema = new StructType(
                 new StructField[]{
-                        new StructField("IsTrending", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("EntityType", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Frequency", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("FrequencyRatePerHour", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("AverageLikes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("IsTrending",  DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
         });
 
         StructType schema2 = new StructType(
                 new StructField[]{
-                        new StructField("EntityName", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("EntityType", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Location", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Date", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Likes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
         //List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
         Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
-        itemsDF.show();
+
 
         /*******************MANIPULATE DATAFRAME*****************/
 
@@ -556,12 +558,20 @@ public class AnalyseServiceImpl {
         //training set
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < namedEntities.size(); i++){
-            Row trainRow = RowFactory.create(0 ,namedEntities.get(1), namedEntities.get(2), averageLikes.get(1), rate);
+            Row trainRow = RowFactory.create(
+                    0,
+                    namedEntities.get(i).get(0).toString(),
+                    namedEntities.get(i).get(1).toString(),
+                    Integer.parseInt(namedEntities.get(i).get(2).toString()),
+                    rate.get(i).get(1).toString(),
+                    Float.parseFloat(averageLikes.get(i).get(1).toString())
+            );
             trainSet.add(trainRow);
         }
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trendsData, schema); // .read().parquet("...");
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); // .read().parquet("...");
 
         //display
+        itemsDF.show();
         trainingDF.show();
 
         /*******************SETUP PIPELINE*****************/
@@ -584,14 +594,14 @@ public class AnalyseServiceImpl {
                 .setElasticNetParam(0.8);
 
         // Fit the model
-        LogisticRegressionModel lrModel = lr.fit(itemsDF);
+        LogisticRegressionModel lrModel = lr.fit(trainingDF);
         // Print the coefficients and intercept for logistic regression
         System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
 
 
         //pipeline
         Pipeline pipeline = new Pipeline()
-                .setStages(new PipelineStage[] {tokenizer, hashingTF, lr});
+                .setStages(new PipelineStage[] {lr});
 
         // Fit the pipeline to training documents.
         PipelineModel model = pipeline.fit(itemsDF);
@@ -1026,7 +1036,7 @@ public class AnalyseServiceImpl {
         inputList.add(1);
         inputList.add(1);
 
-        Logger.getLogger("org.apache").setLevel(Level.ERROR); //Level.OFF
+        //Logger.getLogger("org.apache").setLevel(Level.ERROR); //Level.OFF
 
         SparkConf sparkConf = new SparkConf().setAppName("Test").setMaster("local[*]"); //session. replace
         JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
