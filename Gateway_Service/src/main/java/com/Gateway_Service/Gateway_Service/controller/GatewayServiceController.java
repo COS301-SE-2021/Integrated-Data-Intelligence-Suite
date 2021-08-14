@@ -163,9 +163,11 @@ public class GatewayServiceController {
      * @param request This is the body send by a GET request
      * @return This is the response http entity. It contains all the users.
      */
-    @GetMapping(value = "/getAll", produces = "application/json")
+    @GetMapping(value = "/user/getAll", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<GetAllUsersResponse> getAllUsers(@RequestBody GetAllUsersRequest request) {
+        System.out.println("Getting all users from the database");
+        System.out.println(request.getMessage());
         GetAllUsersResponse response = userClient.getAllUsers(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
