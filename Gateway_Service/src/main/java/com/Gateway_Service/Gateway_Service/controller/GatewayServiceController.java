@@ -136,11 +136,12 @@ public class GatewayServiceController {
      * @param request This is the body send by POST
      * @return This is the response http entity
      */
-    @PostMapping(value = "/login",
+    @PostMapping(value = "/user/login",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = userClient.login(request);
+        System.out.println(response.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
