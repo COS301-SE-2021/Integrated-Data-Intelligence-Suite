@@ -65,10 +65,17 @@ const RegisterPage = () => {
                 body: JSON.stringify(values)
             };
             fetch('/user/register', requestOptions)
-                .then(response => response.json());
+                .then(response => {
+                    return response.json()
+                }).then(json => {
+                    alert(json.message);
+                    if(json.success) {
+                        history.push('/');
+                    }
+                });
 
             //use this to go to another page after successful validation server-side
-            history.push('/');
+
         },
     });
 
