@@ -18,13 +18,13 @@ const validate = (values) => {
     }
 
     //firstname validation
-    if (!values.firstname) {
-        errors.firstname = 'Required';
+    if (!values.firstName) {
+        errors.firstName = 'Required';
     }
 
     //lastname validation
-    if (!values.lastname) {
-        errors.lastname = 'Required';
+    if (!values.lastName) {
+        errors.lastName = 'Required';
 
     }
 
@@ -51,11 +51,10 @@ const RegisterPage = () => {
     const formik = useFormik({
         initialValues: {
             email: '',
-            lastname: '',
+            lastName: '',
             username: '',
             password: '',
-            firstname: '',
-            confirmedpassword: '',
+            firstName: ''
         },
         validate,
         onSubmit: values => {
@@ -70,6 +69,14 @@ const RegisterPage = () => {
 
                 else, redirect to home page
              */
+            alert("Register");
+            const requestOptions = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(values)
+            };
+            fetch('/user/register', requestOptions)
+                .then(response => response.json());
 
             //use this to go to another page after successful validation server-side
             history.push('/');
@@ -85,39 +92,39 @@ const RegisterPage = () => {
             <form onSubmit={formik.handleSubmit}>
 
                 <Form.Item
-                    name="firstname"
+                    name="firstName"
                     label={'First Name'}
                 >
                     <Input
-                        id="firstname"
-                        name="firstname"
+                        id="firstName"
+                        name="firstName"
                         type="text"
                         placeholder="first name"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.firstname}
+                        value={formik.values.firstName}
                         prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
-                    {formik.touched.firstname && formik.errors.firstname ? (
-                        <p>{formik.errors.firstname}</p>) : null}
+                    {formik.touched.firstName && formik.errors.firstName ? (
+                        <p>{formik.errors.firstName}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
-                    name="lastname"
+                    name="lastName"
                     label={'Last Name'}
                 >
                     <Input
-                        id="lastname"
-                        name="lastname"
+                        id="lastName"
+                        name="lastName"
                         type="text"
                         placeholder="last name"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.lastname}
+                        value={formik.values.lastName}
                         prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
-                    {formik.touched.lastname && formik.errors.lastname ? (
-                        <p>{formik.errors.lastname}</p>) : null}
+                    {formik.touched.lastName && formik.errors.lastName ? (
+                        <p>{formik.errors.lastName}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
@@ -181,8 +188,8 @@ const RegisterPage = () => {
                     label={'Confirm password'}
                 >
                     <Input.Password
-                        id="confirmpassword"
-                        name="confirmpassword"
+                        id="confirmedpassword"
+                        name="confirmedpassword"
                         type="password"
                         placeholder="rewrite the password"
                         value={formik.values.confirmedpassword}
