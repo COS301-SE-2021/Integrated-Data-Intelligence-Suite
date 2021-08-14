@@ -377,7 +377,7 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-        List<Row> trendsData = null; // new ArrayList<>();
+        List<Row> trendsData = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
         /*for(int i=0; i < requestData.size(); i++){
@@ -542,8 +542,14 @@ public class AnalyseServiceImpl {
 
         //group named entity
 
-        Dataset<Row> temp = itemsDF.groupBy("EntityName").count(); //frequency
-        Dataset<Row> temp2 = itemsDF.groupBy("EntityName").avg("Likes"); //averagelikes of topic
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ).count().collectAsList(); //frequency
+        namedEntities.get(0); //name entity
+        namedEntities.get(1); //name type
+        namedEntities.get(2); //name frequency
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        averageLikes.get(1); //average likes
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        averageLikes.get(1); //rate
 
         //need display to test.
 
