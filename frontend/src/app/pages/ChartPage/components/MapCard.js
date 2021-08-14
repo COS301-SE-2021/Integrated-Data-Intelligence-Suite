@@ -9,14 +9,16 @@ import {
     LayerGroup,
     Rectangle,
     Circle,
-    Tooltip, useMapEvent
+    Tooltip,
+    ScaleControl
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import ScriptTag from 'react-script-tag';
-import L from "leaflet";
+import L, {map} from "leaflet";
 import {EditControl} from "react-leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
+import cities from "../resources/cities.json";
 
 //Do not Change the order of these lines
 //The Css MUST be loaded before the js
@@ -24,6 +26,7 @@ import '../../../components/leaflet/leaflet.css';
 import {showBlueCircleData} from "../functions/showBlueCircleData";
 import {showRedCircleData} from "../functions/showRedCircleData";
 import {showGreenCircleData} from "../functions/showGreenCircleData";
+
 
 const Demo = props => (
     <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
@@ -39,20 +42,12 @@ const fillBlueOptions = {fillColor: 'blue'}
 const fillRedOptions = {fillColor: 'red'}
 const greenOptions = {color: 'green', fillColor: 'green'}
 const purpleOptions = {color: 'purple'}
-
-
 let pretoria_position = [-25.731340, 28.218370];
 
-// function SetViewOnClick({animateRef}) {
-//     const map = useMapEvent('click', (e) => {
-//         map.setView(e.latlng, map.getZoom(), {
-//             animate: animateRef.current || false,
-//         })
-//     })
-//
-//     return null
-// }
 
+/*
+* updating the default map marker icons in the leaflet library
+* */
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl:
@@ -63,8 +58,17 @@ L.Icon.Default.mergeOptions({
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
 });
 
+const markerIcon = new L.Icon({
+  iconUrl: require("../resources/images/marker.png"),
+  iconSize: [24, 24],
+  iconAnchor: [17, 46], //[left/right, top/bottom]
+  popupAnchor: [0, -46], //[left/right, top/bottom]
+});
+
 function MapCard() {
     const [mapLayers, setMapLayers] = useState([]);
+
+
     /*
        * runs when a polygon/marker/polyline is being Created
     */
@@ -87,8 +91,8 @@ function MapCard() {
     };
 
     /*
-       * runs when a polygon/marker/polyline is being edited
-     */
+    * runs when a polygon/marker/polyline is being edited
+    */
     const _onEdited = (e) => {
         console.log(e);
         const {
@@ -111,7 +115,7 @@ function MapCard() {
     };
 
     /*
-        * Runs when a polygon/marker/polyline is being deleted
+    * Runs when a polygon/marker/polyline is being deleted
     */
     const _onDeleted = (e) => {
         console.log(e);
@@ -142,11 +146,17 @@ function MapCard() {
                     id={'map_container_div'}
                     center={pretoria_position}
                     zoom={9}
-                    scrollWheelZoom={false}
+                    scrollWheelZoom={true}
                 >
+                    <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+
+                    <ScaleControl position={"bottomleft"}/>
                     <FeatureGroup>
                         <EditControl
-                            position="topright"
+                            position="topleft"
                             onCreated={_onCreate}
                             onEdited={_onEdited}
                             onDeleted={_onDeleted}
@@ -154,30 +164,19 @@ function MapCard() {
                         />
                     </FeatureGroup>
 
-                    <TileLayer
-                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-
-
-                    <LayerGroup>
-                        <Circle
-                            center={[-26.031340, 28.50000]}
-                            pathOptions={fillBlueOptions}
-                            radius={10000}
-                            children={null}
-                            prefixCls={null}
-                            progressStatus={null}
-                            eventHandlers={{
-                                click: showBlueCircleData,
-                            }}
+                    {cities.map((city, idx) => (
+                        <Marker
+                            position={[city.lat, city.lng]}
+                            icon={markerIcon}
+                            key={idx}
                         >
-                            <Tooltip>clickedText</Tooltip>
-                        </Circle>
-
-                    </LayerGroup>
-
-                    {/*<SetViewOnClick animateRef={animateRef}/>*/}
+                            <Popup>
+                                <b>
+                                    {city.city}, {city.country}
+                                </b>
+                            </Popup>
+                        </Marker>
+                    ))}
                 </Map>
 
                 <pre className="text-left">{JSON.stringify(mapLayers)}</pre>
