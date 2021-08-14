@@ -25,6 +25,7 @@ import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.*;
+import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.StringIndexer;
@@ -637,22 +638,35 @@ public class AnalyseServiceImpl {
         //test
          Dataset<Row> test = null;
 
-        Dataset<Row> predictions = model.transform(test);
+        Dataset<Row> predictions = model.transform(testSetDF);
+        predictions.show();
+        System.out.println("/*******************Predictions*****************/");
+
+
         for (Row r : predictions.select("isTrending").collectAsList())
             System.out.println("Trending -> " + r.get(0));
 
 
+        BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+        double accuracy = evaluator.evaluate(predictions);
+        System.out.println("/**********************    Accuracy: "+ Double.toString(accuracy));
+
+
         //summaries
-        BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
+       /* BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
 
         // Obtain the loss per iteration.
         double[] objectiveHistory = trainingSummary.objectiveHistory();
         for (double lossPerIteration : objectiveHistory) {
             System.out.println(lossPerIteration);
         }
+        //System.out.println("/*******************SomeStuff*****************/
 
         // Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
-        Dataset<Row> roc = trainingSummary.roc();
+       /* Dataset<Row> roc = trainingSummary.roc();
         roc.show();
         roc.select("FPR").show();
         System.out.println(trainingSummary.areaUnderROC());
