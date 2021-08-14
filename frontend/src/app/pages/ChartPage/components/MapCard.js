@@ -7,11 +7,13 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import '../../../components/leaflet/leaflet.css';
 import 'leaflet-snap/leaflet.snap.js';
 import datapoints from "../resources/datapoints.json"
+import {showCircleData} from "../functions/showCircleData";
 
 //Do not Change the order of these lines
 //The Css MUST be loaded before the js
 import "leaflet-geometryutil/src/leaflet.geometryutil.js";
 import "leaflet-draw/dist/leaflet.draw.js";
+
 const Demo = props => (
     <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
     // <ScriptTag type="text/javascript" src="../../"/>
@@ -157,7 +159,9 @@ function MapCard() {
             edit: {
                 featureGroup: layer_with_drawn_items
             },
-            delete: {featureGroup: layer_with_drawn_items}
+            delete: {
+                featureGroup: layer_with_drawn_items
+            }
         });
         map.addControl(drawControl);
 
@@ -232,14 +236,16 @@ function MapCard() {
         });
 
 
-
         /*
             * Retrieving data from a datapoint.json file and
                 displaying those data points on the map
         */
         function createCircle(datapoint) {
             console.log("some datapoint value:" + datapoint.lat);
-            return L.circleMarker(L.latLng(datapoint.lat, datapoint.lng));
+            return L.circleMarker(L.latLng(datapoint.lat, datapoint.lng), {
+                className: datapoint.classname,
+                id: "broski"
+            });
         }
 
         function addCircleLayer(some_circle_layer) {
@@ -250,6 +256,21 @@ function MapCard() {
         var array_of_circle_markers = datapoints.map(createCircle);
         console.log(array_of_circle_markers);
         array_of_circle_markers.forEach(addCircleLayer)
+
+
+        /*
+        * Updating statistics based on circle click
+        *
+         */
+
+        layer_with_drawn_items.on("click", function (e) {
+            var clickedCircle = e.layer; // e.target is the group itself.
+            console.log(clickedCircle.options.className);
+            console.log();
+            console.log(e);
+            alert("circle clicked");
+            showCircleData(clickedCircle.options.className);
+        });
     })
 
     return (
