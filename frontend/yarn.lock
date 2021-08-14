@@ -7944,10 +7944,37 @@ leaflet-draw@1.0.4:
   resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-1.0.4.tgz#45be92f378ed253e7202fdeda1fcc71885198d46"
   integrity sha512-rsQ6saQO5ST5Aj6XRFylr5zvarWgzWnrg46zQ1MEOEIHsppdC/8hnN8qMoFvACsPvTioAuysya/TVtog15tyAQ==
 
-leaflet@1.7.1:
+leaflet-draw@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.3.2.tgz#717ee8fed4c2a9679c12162e1f922d2da503d109"
+  integrity sha1-cX7o/tTCqWecEhYuH5ItLaUD0Qk=
+
+leaflet-geometryutil@*:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/leaflet-geometryutil/-/leaflet-geometryutil-0.10.0.tgz#0693d64517ac96f0e101d4a3e6e0377fc71316d1"
+  integrity sha512-4OGu2OnpHLx+7QpOY6NatrAiSWWrP/Z3HOM9ZsmQ0JWIzAytFS6SLUnKHVjwpgRzPUpV/6w0b4Fh24pVIgqFHw==
+  dependencies:
+    leaflet "^1.6.0"
+
+leaflet-snap@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/leaflet-snap/-/leaflet-snap-0.0.4.tgz#fddf938cb4eab04a1ec709f875916a487abfbf7d"
+  integrity sha1-/d+TjLTqsEoexwn4dZFqSHq/v30=
+  dependencies:
+    leaflet "^0.7.7"
+    leaflet-geometryutil "*"
+  optionalDependencies:
+    leaflet-draw "^0.3.2"
+
+leaflet@1.7.1, leaflet@^1.6.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
   integrity sha512-/xwPEBidtg69Q3HlqPdU3DnrXQOvQU/CCHA1tcDQVzOwm91YMYaILjNp7L4Eaw5Z4sOYdbBz6koWyibppd8Zqw==
+
+leaflet@^0.7.7:
+  version "0.7.7"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-0.7.7.tgz#1e352ba54e63d076451fa363c900890cb2cf75ee"
+  integrity sha1-HjUrpU5j0HZFH6NjyQCJDLLPde4=
 
 leven@^3.1.0:
   version "3.1.0"

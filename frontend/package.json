@@ -23,6 +23,7 @@
     "is-svg": "^4.2.2",
     "leaflet": "1.7.1",
     "leaflet-draw": "1.0.4",
+    "leaflet-snap": "^0.0.4",
     "postcss": "^8.2.10",
     "prop-types": "15.7.2",
     "react": "16.13.1",
