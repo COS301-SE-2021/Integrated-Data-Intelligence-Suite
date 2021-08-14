@@ -58,7 +58,7 @@ const RegisterPage = () => {
         },
         validate,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            //alert(JSON.stringify(values, null, 2));
             const requestOptions = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
