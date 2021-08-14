@@ -543,15 +543,26 @@ public class AnalyseServiceImpl {
         //group named entity
 
         List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ).count().collectAsList(); //frequency
-        namedEntities.get(0); //name entity
-        namedEntities.get(1); //name type
-        namedEntities.get(2); //name frequency
+        namedEntities.get(0); /*name entity*/
+        namedEntities.get(1); /*name type*/
+        namedEntities.get(2); /*name frequency*/
+
         List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
         averageLikes.get(1); //average likes
-        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
-        averageLikes.get(1); //rate
 
-        //need display to test.
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        rate.get(1); //rate ???
+
+        //training set
+        List<Row> trainSet = new ArrayList<>();
+        for(int i=0; i < namedEntities.size(); i++){
+            Row trainRow = RowFactory.create(0 ,namedEntities.get(1), namedEntities.get(2), averageLikes.get(1), rate);
+            trainSet.add(trainRow);
+        }
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trendsData, schema); // .read().parquet("...");
+
+        //display
+        trainingDF.show();
 
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
