@@ -1,0 +1,26 @@
+[
+  {
+    "selector": "#n0",
+    "style": {
+      "background-color": "red",
+      "label": "data(id)"
+    }
+  },
+  {
+    "selector": "#n1",
+    "style": {
+      "background-color": "pink",
+      "label": "data(id)"
+    }
+  },
+  {
+    "selector": "edge",
+    "style": {
+      "width": 3,
+      "line-color": "yellow",
+      "target-arrow-color": "#ccc",
+      "target-arrow-shape": "triangle",
+      "curve-style": "bezier"
+    }
+  }
+]
