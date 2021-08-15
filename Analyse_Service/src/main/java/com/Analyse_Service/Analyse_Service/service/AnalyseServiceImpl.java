@@ -118,7 +118,7 @@ public class AnalyseServiceImpl {
         FindPatternRequest findPatternRequest = new FindPatternRequest(dataSendList);
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(dataSendList);
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(trendDatalist);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(dataSendList);
@@ -265,92 +265,56 @@ public class AnalyseServiceImpl {
         }*/
 
         List<Row> relationshipData  = new ArrayList<>();
-        ArrayList<String> reqData = request.getDataList();
+        ArrayList<ArrayList> requestData = request.getDataList();
 
-        for(int i=0; i < reqData.size(); i++){
-            relationshipData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
+        for(int i=0; i < requestData.size(); i++){
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+            row = new ArrayList<>();
+            for (int j=0; j< namedEntities.size(); j++){
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+
+            }
+            if (!row.isEmpty()) {
+                Row relationshipRow = RowFactory.create(row);
+                relationshipData.add(relationshipRow);
+            }
         }
 
-        /*******************SETUP MODEL*****************/
+        System.out.println(relationshipData);
 
-        /*StructType schema = new StructType(new StructField[]{ new StructField(
-                "Tweets", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
+        StructType schema = new StructType(new StructField[]{ new StructField(
+                "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
         Dataset<Row> itemsDF = sparkRelationships.createDataFrame(relationshipData, schema);
         itemsDF.show();
+
+        /*******************SETUP MODEL*****************/
+
         FPGrowthModel model = new FPGrowth()
                 .setItemsCol("Tweets")
-                .setMinSupport(0.15)
+                .setMinSupport(0.10)
                 .setMinConfidence(0.6)
-                .fit(itemsDF);*/
+                .fit(itemsDF);
 
-
-        Dataset<Row> training = sparkRelationships.read().parquet("..."); //TODO: default
-
-        LogisticRegression lr = new LogisticRegression()
-                .setMaxIter(10)
-                .setRegParam(0.3)
-                .setElasticNetParam(0.8);
-
-        // Fit the model
-        LogisticRegressionModel lrModel = lr.fit(training);
-
-        // Print the coefficients and intercept for logistic regression
-        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
-
-        // We can also use the multinomial family for binary classification
-        LogisticRegression mlr = new LogisticRegression()
-                .setMaxIter(10)
-                .setRegParam(0.3)
-                .setElasticNetParam(0.8)
-                .setFamily("multinomial");
-
-        // Fit the model
-        LogisticRegressionModel mlrModel = mlr.fit(training);
-
-        // Print the coefficients and intercepts for logistic regression with multinomial family
-        System.out.println("Multinomial coefficients: " + lrModel.coefficientMatrix()
-                + "\nMultinomial intercepts: " + mlrModel.interceptVector());
-
-
-        /******************Analyse Model Accuracy**************/
-
-        BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
-
-        // Obtain the loss per iteration.
-        double[] objectiveHistory = trainingSummary.objectiveHistory();
-        for (double lossPerIteration : objectiveHistory) {
-            System.out.println(lossPerIteration);
-        }
-
-        // Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
-        Dataset<Row> roc = trainingSummary.roc();
-        roc.show();
-        roc.select("FPR").show();
-        System.out.println(trainingSummary.areaUnderROC());
-
-        // Get the threshold corresponding to the maximum F-Measure and rerun LogisticRegression with this selected threshold.
-        Dataset<Row> fMeasure = trainingSummary.fMeasureByThreshold();
-        double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
-        double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
-                .select("threshold").head().getDouble(0);
-        lrModel.setThreshold(bestThreshold);
+        model.freqItemsets().show();
 
         /*******************READ MODEL OUTPUT*****************/
 
-        //model.freqItemsets().show();
-        //List<Row> rData = model.freqItemsets().collectAsList();
-        List<Row> rData =new ArrayList<>(); //TODO: default
+        List<Row> Rdata = model.freqItemsets().collectAsList();
+
+
         ArrayList<ArrayList> results = new ArrayList<>();
-
-        for (int i = 0; i < rData.size(); i++) {
+        for (int i = 0; i < Rdata.size(); i++) {
             ArrayList<String> row = new ArrayList<>();
-
-            for (int j = 0; j < rData.get(i).getList(0).size(); j++)
-                row.add(rData.get(i).getList(0).get(j).toString());
-
-            row.add(rData.get(i).get(1).toString());
+            for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
+                row.add(Rdata.get(i).getList(0).get(j).toString());
+            }
+            row.add(Rdata.get(i).get(1).toString());
             results.add(row);
         }
         System.out.println(results.toString());

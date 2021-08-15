@@ -123,7 +123,7 @@ public class AnalyseServiceTest {
         TestList.add(row2);
         TestList.add(row3);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(TestList);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
