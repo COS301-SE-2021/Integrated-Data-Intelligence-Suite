@@ -5,8 +5,10 @@
 /* The div that holds the entire user_avatar card*/
 #user_avatar_card {
     /*bottom: -50vh;*/
-    bottom:0;
-    height: 10%;
+    /*bottom:0;*/
+    float: right;
+    height: 100%;
+    width: 20%;
     /* color: black; */
     /*background: #15B761;*/
     background: transparent;
@@ -76,15 +78,17 @@
 
 }
 
-/*The users' Name*/
+/*The users' Name
+* AKA the title in the JS code
+*/
 #meta_id > .ant-card-meta-detail > .ant-card-meta-title {
-    color: white;
+    color: black;
     border: 0;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0;
     margin-top: 25px;
-    background: transparent;
+    /*background: black;*/
     border: 0;
 
 }
@@ -104,18 +108,21 @@
     border: 0;
     font-size: 0;
     float: right;
-    /*transform: rotate(*/
-    /*        90deg*/
-    /*);*/
+    transform: rotate(
+            180deg
+    );
     margin-top: 24px;
     width: 31px;
     height: 23px;
     padding: 0;
     background: transparent;
+    color: black;
 }
-
+/*The actual Image Icon
+* Currently its a ">" icon facing upwards
+*/
 #exit_menu_button > .exit_menu_ellipsis_icon > svg {
-    color: white;
+    color: black;
     background: transparent;
 }
 

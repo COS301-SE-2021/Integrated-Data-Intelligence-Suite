@@ -31,15 +31,43 @@ function NetworkGraphCard() {
                 // ],
 
                 ready: function () {
-                    // let layoutUtilities = layoutUtilities({
+                    // let layoutUtilities = this.layout{
                     //     desiredAspectRatio: this.width() / this.height()
                     // });
+
                     this.nodes().forEach(function (node) {
                         let size = Math.random() * 120 + 30;
                         node.css("width", size);
                         node.css("height", size);
                     });
                     this.layout({name: 'fcose'}).run();
+
+                    const layout = this.layout({
+                        name: 'fcose',
+                        incremental: false,
+                        quality: "default",
+                        randomize: false,
+                        animate: true,
+                        animationEasing: 'ease-out',
+                        uniformNodeDimensions: false,
+                        packComponents: true,
+                        tile: true,
+                        nodeRepulsion: 4500,
+                        idealEdgeLength: 50,
+                        edgeElasticity: 0.45,
+                        nestingFactor: 0.1,
+                        gravity: 0.25,
+                        gravityRange: 3.8,
+                        gravityCompound: 1.0,
+                        gravityRangeCompound: 1.5,
+                        numIter: 2500,
+                        tilingPaddingVertical: 10,
+                        tilingPaddingHorizontal: 10,
+                        initialEnergyOnIncremental: 0.3,
+                        step: "all"
+                    });
+
+                    layout.run();
                 },
 
                 style: [
@@ -444,34 +472,34 @@ function NetworkGraphCard() {
             //     layout.run();
             // });
 
-            document.getElementById("fcoseButton").addEventListener("click", function () {
-                let qualityItem = "default";
-                const layout = cy.layout({
-                    name: 'fcose',
-                    quality: "default",
-                    randomize: false,
-                    animate: true,
-                    animationEasing: 'ease-out',
-                    uniformNodeDimensions: false,
-                    packComponents: false,
-                    tile: true,
-                    nodeRepulsion: 4500,
-                    idealEdgeLength: 50,
-                    edgeElasticity: 0.45,
-                    nestingFactor: 0.1,
-                    gravity: 0.25,
-                    gravityRange: 3.8,
-                    gravityCompound: 1.0,
-                    gravityRangeCompound: 1.5,
-                    numIter: 2500,
-                    tilingPaddingVertical: 10,
-                    tilingPaddingHorizontal: 10,
-                    initialEnergyOnIncremental: 0.3,
-                    step: "all"
-                });
-
-                layout.run();
-            });
+            // document.getElementById("fcoseButton").addEventListener("click", function () {
+            //     let qualityItem = "default";
+            //     const layout = cy.layout({
+            //         name: 'fcose',
+            //         quality: "default",
+            //         randomize: false,
+            //         animate: true,
+            //         animationEasing: 'ease-out',
+            //         uniformNodeDimensions: false,
+            //         packComponents: false,
+            //         tile: true,
+            //         nodeRepulsion: 4500,
+            //         idealEdgeLength: 50,
+            //         edgeElasticity: 0.45,
+            //         nestingFactor: 0.1,
+            //         gravity: 0.25,
+            //         gravityRange: 3.8,
+            //         gravityCompound: 1.0,
+            //         gravityRangeCompound: 1.5,
+            //         numIter: 2500,
+            //         tilingPaddingVertical: 10,
+            //         tilingPaddingHorizontal: 10,
+            //         initialEnergyOnIncremental: 0.3,
+            //         step: "all"
+            //     });
+            //
+            //     layout.run();
+            // });
 
             // //Adding nodes to the layout
             // cy.add(timelineNodes);
@@ -481,14 +509,14 @@ function NetworkGraphCard() {
         }
     )
 
-    return (
-    //     <div id="mySidepanel" class="sidepanel">
-    //         <button id="randomizeButton" class="btn btn-primary btn-sm mb-2 ml-2">Randomize</button>
-            <button id="fcoseButton" class="btn btn-primary btn-sm mb-2">fCoSE</button>
-    //     </div>
-    )
+    // return (
+        //     <div id="mySidepanel" class="sidepanel">
+        //         <button id="randomizeButton" class="btn btn-primary btn-sm mb-2 ml-2">Randomize</button>
+        // <button id="fcoseButton" class="btn btn-primary btn-sm mb-2">fCoSE</button>
+        //     </div>
+    // )
 
-    // return null;
+    return null;
 }
 
 

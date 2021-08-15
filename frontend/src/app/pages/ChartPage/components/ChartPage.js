@@ -11,6 +11,8 @@ import MapCard from "./MapCard";
 import DetailsCard from "./DetailsCard";
 import NetworkGraphCard from "./NetworkGraphCard";
 import "../styles/NetworkGraph.css";
+import UserInfoCard from "../../../components/SideBar/UserInfoCard";
+import SearchBar from "../../../components/SearchBar/SearchBar";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -30,7 +32,11 @@ class ChartPage extends Component {
                             <SideBar/>
                             <Layout id={'inner_layout_div'}>
                                 <Header id={'top_bar'}>
-                                    <Title level={1}>Chart Page Title</Title>
+                                    {/*<Title level={1}>Chart Page Title</Title>*/}
+                                    <SearchBar/>
+                                    <UserInfoCard
+                                        name="s"
+                                    />
                                 </Header>
 
                                 {/*The Map Graph*/}
@@ -68,7 +74,7 @@ class ChartPage extends Component {
                                         </Content>
                                     </Layout>
 
-                                    {/*The Network Graph*/}
+                                    {/*The Line Graph*/}
                                     <Layout
                                         id={'network_graph_layout_div'}
                                         className={'network_card'}
