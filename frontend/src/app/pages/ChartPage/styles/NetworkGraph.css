@@ -1,0 +1,8 @@
+#network_graph_layout_div{
+    border: 3px solid black;
+    margin-top: 3%;
+}
+
+#network_graph_card_content{
+    border: 3px solid yellow;
+}

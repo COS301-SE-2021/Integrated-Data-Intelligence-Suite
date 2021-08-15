@@ -9,6 +9,8 @@ import {
 import {Route, Switch} from "react-router-dom";
 import MapCard from "./MapCard";
 import DetailsCard from "./DetailsCard";
+import NetworkGraphCard from "./NetworkGraphCard";
+import "../styles/NetworkGraph.css";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -62,6 +64,7 @@ class ChartPage extends Component {
                                             id={'network_graph_card_content'}
                                             className={'network_card'}
                                         >
+                                            <NetworkGraphCard/>
                                         </Content>
 
                                         <Sider

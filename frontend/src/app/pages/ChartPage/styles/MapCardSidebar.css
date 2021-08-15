@@ -2,8 +2,8 @@
 * The Div that contains the detail card
 * The '[style]' + '!important' is used to overwrite the default inline styling
   used by antd.css
-  * This hack can be used in other places as well where inline css needs to be overwritten
-  *NB!! The '[style]' and the '!important' must be used together to override
+* This hack can be used in other places as well where inline css needs to be overwritten
+*NB!! The '[style]' and the '!important' must be used together to override the inline styling
 */
 #map_card_sidebar[style] {
     border: 3px solid red;
