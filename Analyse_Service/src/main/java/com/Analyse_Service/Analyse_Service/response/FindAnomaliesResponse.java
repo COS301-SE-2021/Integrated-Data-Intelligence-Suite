@@ -3,13 +3,13 @@ package com.Analyse_Service.Analyse_Service.response;
 import java.util.ArrayList;
 
 public class FindAnomaliesResponse {
-    ArrayList<ArrayList> pattenList;
+    ArrayList<String> pattenList;
 
-    public FindAnomaliesResponse (ArrayList<ArrayList> pattenList){
+    public FindAnomaliesResponse (ArrayList<String> pattenList){
         this.pattenList = pattenList;
     }
 
-    public ArrayList<ArrayList> getPattenList(){
+    public ArrayList<String> getPattenList(){
         return this.pattenList;
     }
 }
