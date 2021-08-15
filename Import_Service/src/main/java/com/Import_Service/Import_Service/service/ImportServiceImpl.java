@@ -99,8 +99,6 @@ public class ImportServiceImpl {
 
         String keyword = request.getKeyword().strip();
 
-        System.out.println("{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\""+from.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\", \r\n  \"toDate\":\""+ to.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\"\r\n}");
-
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");

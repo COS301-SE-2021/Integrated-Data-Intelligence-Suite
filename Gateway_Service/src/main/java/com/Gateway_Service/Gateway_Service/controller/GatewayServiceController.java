@@ -187,28 +187,14 @@ public class GatewayServiceController {
     }
 
 
-    @GetMapping(value = "/collect/{key}/{from}/{to}", produces = "application/json")
+    @GetMapping(value = "/collect/{key}/{from}/{to}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to){
-
-
-        ImportTwitterResponse res = importClient.importDatedData(new ImportTwitterRequest(key, from, to));
-
-        if(!res.getFallback()){
-            System.out.println(".........................Import completed successfully..................\n\n\n");
-
-
-            ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, res.getJsonData());
-            ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
-
-            if(!parseResponse.getFallback()) {
-                System.out.println("........................Parsed Data Successfully...........................\n\n\n");
-                return new ResponseEntity<>("{ \n \"success\" : true \n}",HttpStatus.OK);
-            }
-
-        }
-        System.out.println("///////////////////////////////////////    FAILED //////////////////////////////////////////");
-        return null;
+    public ResponseEntity<ImportTwitterResponse> importDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to){
+        ImportTwitterRequest request = new ImportTwitterRequest(key, from, to);
+        System.out.println("\n\n.........................Request");
+        System.out.println(request);
+        ImportTwitterResponse response = importClient.importDatedData(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

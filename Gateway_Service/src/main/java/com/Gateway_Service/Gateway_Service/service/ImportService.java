@@ -94,16 +94,11 @@ public class ImportService {
 
 
     public ImportTwitterResponse importDatedData(ImportTwitterRequest importRequest) {
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<ImportTwitterRequest> requestEntity = new HttpEntity<>(importRequest, requestHeaders);
-
+        HttpEntity<ImportTwitterRequest> requestEntity = new HttpEntity<ImportTwitterRequest>(importRequest, requestHeaders);
         ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/importDatedData", HttpMethod.POST, requestEntity, ImportTwitterResponse.class);
-        ImportTwitterResponse importTwitterResponse = responseEntity.getBody();
-
-        return  importTwitterResponse;
+        return responseEntity.getBody();
     }
 
     public ImportTwitterResponse getDatedDataFallback(ImportTwitterRequest importRequest){
