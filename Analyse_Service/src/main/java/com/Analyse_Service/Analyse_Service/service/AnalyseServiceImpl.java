@@ -59,6 +59,8 @@ public class AnalyseServiceImpl {
     @Autowired
     private AnalyseRepository repository;
 
+    static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
+
     /**
      * This method used to analyse data which has been parsed by Parse-Service.
      * @param request This is a request object which contains data required to be analysed.
@@ -374,7 +376,21 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP SPARK*****************/
 
+        logger.setLevel(Level.ERROR);
 
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+
+        //Logger rootLoggerM = LogManager.getRootLogger();
+        //rootLoggerM.setLevel(Level.ERROR);
+
+
+
+        /*Logger rootLoggerL = Logger.getRootLogger();
+        rootLoggerL.setLevel(Level.ERROR);
+
+        Logger.getLogger("org.apache").setLevel(Level.ERROR);
+        Logger.getLogger("org").setLevel(Level.ERROR);
+        Logger.getLogger("akka").setLevel(Level.ERROR);*/
 
         SparkSession sparkTrends = SparkSession
                 .builder()
