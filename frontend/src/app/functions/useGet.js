@@ -11,16 +11,17 @@ const useGet = (url) => {
         const abortCont = new AbortController();
 
         setTimeout(() => {
-            fetch(url, { signal: abortCont.signal })
+            fetch("http://localhost:9000"+url, { signal: abortCont.signal })
                 .then(res => {
                     if(!res.ok){
-                        throw Error('Server Error')
+                        console.log(res)
+                        throw Error(res.error())
                     }
-                    // console.log(res)
                     return res.json()
                 })
                 .then((data ) => {
                     setData(data)
+                    console.log("data is here", data)
                     setIsPending(false)
                     setError(null)
                 })
