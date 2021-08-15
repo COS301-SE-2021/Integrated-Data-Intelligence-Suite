@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Registry_Service" />
-        <module name="Analyse_Service" />
         <module name="Gateway_Service" />
+        <module name="Analyse_Service" />
         <module name="Parse_Service" />
         <module name="Import_Service" />
       </profile>
