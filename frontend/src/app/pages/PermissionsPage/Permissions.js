@@ -11,7 +11,7 @@ import React, {Component, useRef} from 'react';
 const Permissions = () => {
 
 
-    const { data:users, isPending, error } = useGet('http://localhost:8000/people');
+    const { data:users, isPending, error } = useGet('/user/getAll');
 
     return (
 
@@ -26,7 +26,7 @@ const Permissions = () => {
                 <div className={"permissions"}>
                     { error && <div>{ error }</div> }
                     { isPending && <div>Loading...</div> }
-                    { users && <UserList users={ users }/> }
+                    { users && <UserList users={ users.users }/> }
                 </div>
             </Content>
             <Footer id={'footer_section'}>Footer</Footer>
