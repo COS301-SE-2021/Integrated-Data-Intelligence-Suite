@@ -12,7 +12,8 @@
 
 /* The div contains the Actual Map component */
 #map_container_div {
-    height: 500px;
+    height: 520px;
+    /*height: 100%;*/
     width: 100%;
     border: 3px solid yellow;
     padding: 0;

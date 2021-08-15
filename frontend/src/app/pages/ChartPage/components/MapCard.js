@@ -237,8 +237,8 @@ function MapCard() {
 
 
         /*
-            * Retrieving data from a datapoint.json file and
-                displaying those data points on the map
+        * Retrieving data from a datapoint.json file and
+            displaying those data points on the map
         */
         function createCircle(datapoint) {
             console.log("some datapoint value:" + datapoint.lat);
@@ -261,8 +261,7 @@ function MapCard() {
         /*
         * Updating statistics based on circle click
         *
-         */
-
+        */
         layer_with_drawn_items.on("click", function (e) {
             var clickedCircle = e.layer; // e.target is the group itself.
             console.log(clickedCircle.options.className);
