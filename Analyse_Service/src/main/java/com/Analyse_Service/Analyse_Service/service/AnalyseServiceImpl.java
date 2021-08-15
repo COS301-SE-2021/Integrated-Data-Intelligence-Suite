@@ -956,7 +956,37 @@ public class AnalyseServiceImpl {
 
         //training set
         List<Row> trainSet = new ArrayList<>();
+        for(int i=0; i < namedEntities.size(); i++){
 
+            String name = namedEntities.get(i).get(0).toString();
+
+            List<Row> loc = itemsDF.select("Location").filter(col("EntityName").equalTo(name)).collectAsList();
+            ArrayList<String> locations = new ArrayList<>();
+            for(int j =0; j<  loc.size(); j++)
+                locations.add(loc.get(0).toString());
+
+            List<Row> sen = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(name)).collectAsList();
+            ArrayList<String> sentiments = new ArrayList<>();
+            for(int j =0; j<  sen.size(); j++)
+                sentiments.add(sen.get(0).toString());
+
+            List<Row> da = itemsDF.select("Date").filter(col("EntityName").equalTo(name)).collectAsList();
+            ArrayList<String> dates = new ArrayList<>();
+            for(int j =0; j<  da.size(); j++)
+                dates.add(da.get(0).toString());
+
+            Row trainRow = RowFactory.create(
+                    namedEntities.get(i).get(0).toString(), //EntityName
+                    namedEntities.get(i).get(1).toString(), //EntityType
+                    Integer.parseInt(namedEntities.get(i).get(2).toString()), //EntityTypeNumber
+                    Integer.parseInt(namedEntities.get(i).get(3).toString()), //Frequency
+                    locations, //Location
+                    sentiments, //Sentiment
+                    dates, //Date
+                    Float.parseFloat(averageLikes.get(i).get(1).toString()) //AverageLikes
+            );
+            trainSet.add(trainRow);
+        }
 
 
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
