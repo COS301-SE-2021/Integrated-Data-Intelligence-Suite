@@ -1,17 +1,25 @@
-#network_graph_layout_div{
+#network_graph_layout_div {
     border: 3px solid black;
     margin-top: 3%;
+    position: relative;
+    /*width: 100%;*/
+
+    height: 90%;
+    z-index: 999;
+    /*margin-left: 290px;*/
+    right: 0px;
 }
 
-#network_graph_card_content{
+#network_graph_card_content {
     border: 3px solid yellow;
 }
 
-/*The Cytoscape object that holds the network graph */
-#cy{
-    border: 3px solid blue;
-}
 
-#n0{
-    background-color: red;
+#randomizeButton{
+    width: 50px;
+    height: 50px;
+    /*position: absolute;*/
+}
+#sidePanel{
+    width:300px;
 }

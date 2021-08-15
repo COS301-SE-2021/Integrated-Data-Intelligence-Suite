@@ -66,15 +66,19 @@ class ChartPage extends Component {
                                         >
                                             <NetworkGraphCard/>
                                         </Content>
+                                    </Layout>
 
-                                        <Sider
-                                            id={'map_card_sidebar'}
-                                            className={'map_card'}
-
+                                    {/*The Network Graph*/}
+                                    <Layout
+                                        id={'network_graph_layout_div'}
+                                        className={'network_card'}
+                                    >
+                                        <Content
+                                            id={'network_graph_card_content'}
+                                            className={'network_card'}
                                         >
-                                            <DetailsCard/>
-
-                                        </Sider>
+                                            <NetworkGraphCard/>
+                                        </Content>
                                     </Layout>
 
                                 </Content>
