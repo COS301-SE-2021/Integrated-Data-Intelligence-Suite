@@ -1,16 +1,11 @@
 package com.User_Service.User_Service.controller;
 
 
-import com.User_Service.User_Service.request.GetAllUsersRequest;
-import com.User_Service.User_Service.request.LoginRequest;
-import com.User_Service.User_Service.request.ManagePermissionsRequest;
-import com.User_Service.User_Service.request.RegisterRequest;
-import com.User_Service.User_Service.response.GetAllUsersResponse;
-import com.User_Service.User_Service.response.LoginResponse;
-import com.User_Service.User_Service.response.ManagePersmissionsResponse;
-import com.User_Service.User_Service.response.RegisterResponse;
+import com.User_Service.User_Service.request.*;
+import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,10 +30,16 @@ public class UserServiceController {
         return service.managePermissions(request);
     }
 
-    @GetMapping(value = "/getAll")
+    @GetMapping(value = "/getAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
     public GetAllUsersResponse getAllUsers(RequestEntity<GetAllUsersRequest> requestEntity) throws Exception {
         GetAllUsersRequest request = requestEntity.getBody();
         return service.getAllUsers(request);
+    }
+
+    @PostMapping(value = "/getUser" , produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GetUserResponse getUser(RequestEntity<GetUserRequest> requestEntity) throws Exception{
+        GetUserRequest request = requestEntity.getBody();
+        return service.getUser(request);
     }
 
     @PostMapping(value = "/register")

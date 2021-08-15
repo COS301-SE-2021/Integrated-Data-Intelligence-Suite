@@ -54,6 +54,14 @@ public class UserService {
         ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/register", HttpMethod.POST, requestEntity, RegisterResponse.class);
         return responseEntity.getBody();
     }
+
+    public GetUserResponse getUser(GetUserRequest request){
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<GetUserRequest> requestEntity = new HttpEntity<GetUserRequest>(request, requestHeaders);
+        ResponseEntity<GetUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/getUser", HttpMethod.POST, requestEntity, GetUserResponse.class);
+        return responseEntity.getBody();
+    }
     /**
      * This function is used to connect to the user service to allow the user to login
      * to the system. It sends a request to the user controller and send the request
