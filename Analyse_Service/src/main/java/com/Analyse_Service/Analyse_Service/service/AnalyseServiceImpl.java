@@ -25,6 +25,8 @@ import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.*;
+import org.apache.spark.ml.clustering.KMeans;
+import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.feature.HashingTF;
@@ -33,8 +35,7 @@ import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
-import org.apache.spark.mllib.clustering.KMeans;
-import org.apache.spark.mllib.clustering.KMeansModel;
+
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.sql.*;
@@ -925,33 +926,33 @@ public class AnalyseServiceImpl {
         /*******************SETUP MODEL*****************/
         //features
 
-
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber","Frequency", "AverageLikes"})
                 .setOutputCol("features");
 
-        Dataset<Row> testDF = assembler.transform(trainSetDF);
+        //Dataset<Row> testDF = assembler.transform(trainSetDF);
 
-        StringIndexer indexer = new StringIndexer()
-                .setInputCol("IsTrending")
-                .setOutputCol("label");
+        //model
+        /*int numClusters = 2; //number of classses
+        int numIterations = 20;
+        //KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);*/
 
-        Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
+        KMeans km = new KMeans()
+                .setK(2) //number of classses/clusters
+                .setFeaturesCol("features")
+                .setPredictionCol("prediction");
+                //.setMaxIterations(numIterations);
 
-        indexed.show();
+        //KMeansModel kmModel = km.fit(testDF);
+
+        //pipeline
+        Pipeline pipeline = new Pipeline()
+                .setStages(new PipelineStage[] {assembler,km});
+
+        // Fit the pipeline to training documents.
+        PipelineModel model = pipeline.fit(trainSetDF);
 
         /*******************summary (REMOVE)*****************/
-
-        // Cluster the data into two classes using KMeans
-        int numClusters = 2;
-        int numIterations = 20;
-
-        //KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);
-        KMeans kModel = new KMeans()
-                .setK(8);
-                //.setFeaturesCol("features")
-                //.setPredictionCol("prediction")
-
         //summary
         /*System.out.println("Cluster centers:");
         for (Vector center: clusters.clusterCenters()) {
