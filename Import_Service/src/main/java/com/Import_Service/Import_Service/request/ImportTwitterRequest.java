@@ -9,6 +9,8 @@ public class ImportTwitterRequest {
     LocalDate to;
 
 
+    public ImportTwitterRequest() {
+    }
 
     public ImportTwitterRequest(String keyword) {
         this.keyword = keyword;
@@ -46,5 +48,21 @@ public class ImportTwitterRequest {
 
     public LocalDate getTo() {
         return to;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public void setFrom(LocalDate from) {
+        this.from = from;
+    }
+
+    public void setTo(LocalDate to) {
+        this.to = to;
     }
 }
