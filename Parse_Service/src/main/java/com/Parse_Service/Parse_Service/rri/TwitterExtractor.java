@@ -8,6 +8,8 @@ import com.Parse_Service.Parse_Service.response.*;
 import com.Parse_Service.Parse_Service.dataclass.*;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 public class TwitterExtractor implements Extractor {
     /**
      * This method is used to extract the text of a given tweet.
@@ -80,6 +82,16 @@ public class TwitterExtractor implements Extractor {
         //Double c = obj.getJSONArray("geo").getDouble(1);
 
         return new GetLocationResponse(coordinates);
+    }
+
+    /**
+     * This function is used to generate a random latitude and longitude for
+     * mocking location data.
+     */
+    private void generateLocation() {
+        Random rand = new Random();
+        double longitude = rand.nextDouble();
+        double latitude = rand.nextDouble();
     }
 
     /**
