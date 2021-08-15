@@ -21,6 +21,12 @@ public class VisualizeServiceImpl {
         if (request.getPredictionList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
+        if (request.getTrendList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        if (request.getAnomalyList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
 
         return new VisualizeDataResponse(null);
     }
