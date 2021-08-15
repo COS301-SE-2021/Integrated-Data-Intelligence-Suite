@@ -521,13 +521,13 @@ public class AnalyseServiceImpl {
 
         StructType schema = new StructType(
                 new StructField[]{
-                        new StructField("IsTrending",  DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("IsTrending",  DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Frequency", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
         });
 
         StructType schema2 = new StructType(
@@ -564,14 +564,18 @@ public class AnalyseServiceImpl {
         //training set
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < namedEntities.size(); i++){
+            double trending = 0.0;
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >  1 ){
+                trending = 1.0;
+            }
             Row trainRow = RowFactory.create(
-                    (int)Math.round(Math.random()),
+                    trending,
                     namedEntities.get(i).get(0).toString(),
                     namedEntities.get(i).get(1).toString(),
-                    Integer.parseInt(namedEntities.get(i).get(2).toString()),
-                    Integer.parseInt(namedEntities.get(i).get(3).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
                     rate.get(i).get(1).toString(),
-                    Float.parseFloat(averageLikes.get(i).get(1).toString())
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
             );
             trainSet.add(trainRow);
         }
@@ -686,7 +690,7 @@ public class AnalyseServiceImpl {
 
 
         /*******************READ MODEL OUTPUT*****************/
-        Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
+        Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
         Dataset<Row> res = lrModel.transform(input);
 
