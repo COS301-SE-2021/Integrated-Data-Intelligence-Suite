@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +35,10 @@ public class UserServiceImpl {
     public void setRepository(UserRepository repository) {
         this.repository = repository;
     }
+
+
+
+
     /**
      * This function logs the user in.
      * @param request This class contains the user information for login.
@@ -248,6 +253,27 @@ public class UserServiceImpl {
             success = true;
         }
         return new GetAllUsersResponse(message, success, users);
+    }
+
+    public GetUserResponse getUser(GetUserRequest request) throws InvalidRequestException{
+
+        if(request == null ) throw new InvalidRequestException("get user request is null");
+
+        if(request.getId() == null) throw new InvalidRequestException("user id is null");
+
+        boolean success;
+        String message;
+        List<User> response = repository.findAllById(Collections.singleton(request.getId()));
+        if(response.isEmpty()){
+            message = "No user with specified id";
+            success = false;
+        }else{
+            message = "Returned user";
+            success = true;
+            System.out.println(response.get(0).getFirstName());
+        }
+        System.out.println(message);
+        return  new GetUserResponse(message, success, response);
     }
 /*
 =================== Private Functions ====================

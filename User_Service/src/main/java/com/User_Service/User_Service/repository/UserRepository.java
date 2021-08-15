@@ -20,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT s FROM users s WHERE s.email = ?1")
     Optional<User> findUserByEmail(String email);
 
+    @Query("SELECT s FROM users s WHERE s.id = ?1")
+    Optional<User> findUserById(UUID userID);
+
     @Modifying
     @Query("UPDATE users u SET u.permission = :perm WHERE u.id = :id")
     int updatePermission(@Param("id")UUID userID, @Param("perm")Permission perm);

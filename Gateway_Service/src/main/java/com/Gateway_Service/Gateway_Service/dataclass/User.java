@@ -1,7 +1,11 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
 import com.Gateway_Service.Gateway_Service.rri.Permission;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.util.UUID;
+
 
 public class User {
     UUID id;
@@ -89,4 +93,14 @@ public class User {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
+    }
+
 }
+
