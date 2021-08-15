@@ -36,6 +36,8 @@ public class ImportServiceImpl {
     @Value("${newsApi.apikey}")
     String newsToken;
 
+    public ImportServiceImpl() {
+    }
 
     /**
      *
@@ -60,7 +62,7 @@ public class ImportServiceImpl {
                 .build();
         Request req = new Request.Builder()
                 .addHeader("Authorization", "Bearer "+bearer)
-                .url("https://api.twitter.com/1.1/search/tweets.json?q="+keyword+"&count="+limit)
+                .url("https://api.twitter.com/1.1/search/tweets.json?lang=en&q="+keyword+"&count="+limit)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(req).execute();
@@ -75,7 +77,7 @@ public class ImportServiceImpl {
 
     public ImportTwitterResponse importDatedData(ImportTwitterRequest request) throws Exception {
 
-        if(request == null) throw new InvalidTwitterRequestException("request cannot be null");
+        if(request == null) throw new InvalidTwitterRequestException("request object is null");
 
         if(request.getKeyword().strip().length() >250 || request.getKeyword().strip().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
 

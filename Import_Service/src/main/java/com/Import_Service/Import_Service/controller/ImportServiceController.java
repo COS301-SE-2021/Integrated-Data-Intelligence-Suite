@@ -13,6 +13,7 @@ import com.Import_Service.Import_Service.response.ImportTwitterResponse;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,9 @@ public class ImportServiceController {
 
     @Autowired
     private ImportServiceImpl service;
+
+    public ImportServiceController() {
+    }
 
     /**
      * This method is used to facilitate communication to the Import-Service.
@@ -55,20 +59,18 @@ public class ImportServiceController {
     }
 
     //TODO add comments
-    @PostMapping(value = "/importDatedData")
-    public ImportTwitterResponse importDatedData(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
-
+    @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ImportTwitterResponse importDatedData(RequestEntity<ImportTwitterRequest> requestEntity) {
         ImportTwitterRequest request = requestEntity.getBody();
-        return new ImportTwitterResponse("{\"data\" : \"returned ok\"}");
+
+        try{
+            return service.importDatedData(request);
+        } catch (Exception e) {
+
+            return new ImportTwitterResponse(null);
+        }
     }
 
-    //TODO add comments
-//    @PostMapping(value = "/TwitterData")
-//    public ImportTwitterResponse getTwitterData(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
-//
-//        ImportTwitterRequest request = requestEntity.getBody();
-//        return service.importDatedData(request);
-//    }
 
     /**
      * Used to test twitter data retrieval
