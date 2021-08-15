@@ -37,7 +37,9 @@ public class VisualizeServiceTest {
     public void visualizeDataPatternListNull(){
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2);
+        ArrayList<ArrayList> testlist3 = new ArrayList<>();
+        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
@@ -46,7 +48,9 @@ public class VisualizeServiceTest {
     public void visualizeDataRelationshipListNull(){
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,null,testlist2);
+        ArrayList<ArrayList> testlist3 = new ArrayList<>();
+        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,null,testlist2,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
@@ -55,9 +59,35 @@ public class VisualizeServiceTest {
     public void visualizeDataPredictionListNull(){
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null);
+        ArrayList<ArrayList> testlist3 = new ArrayList<>();
+        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
+
+    @Test
+    @DisplayName("When the TrendsList is Null")
+    public void visualizeDataTrendsListNull(){
+        ArrayList<ArrayList> testlist1 = new ArrayList<>();
+        ArrayList<ArrayList> testlist2 = new ArrayList<>();
+        ArrayList<ArrayList> testlist3 = new ArrayList<>();
+        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,null,testlist4);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
+    }
+
+    @Test
+    @DisplayName("When the AnomalyList is Null")
+    public void visualizeDataAnomalyListNull(){
+        ArrayList<ArrayList> testlist1 = new ArrayList<>();
+        ArrayList<ArrayList> testlist2 = new ArrayList<>();
+        ArrayList<ArrayList> testlist3 = new ArrayList<>();
+        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,testlist4,null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
+    }
+
+
 
     @Test
     @DisplayName("When createlineGraphRequest is Null")
