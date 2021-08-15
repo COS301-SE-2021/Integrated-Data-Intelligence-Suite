@@ -46,7 +46,8 @@
 
 /* The root div. Its encompasses all the elements/components */
 #root {
-    border: 3px solid red;
+    /*border: 3px solid red;*/
+    border:0;
     height: 100vh;
     position: relative;
     margin:auto;

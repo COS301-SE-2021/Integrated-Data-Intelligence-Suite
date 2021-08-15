@@ -7,8 +7,8 @@
 #sidebar_menu {
     background: transparent;
     color: white;
-    /*border: 0;*/
-    border: 3px solid red;
+    border: 0;
+    /*border: 3px solid red;*/
     height:87%;
 }
 

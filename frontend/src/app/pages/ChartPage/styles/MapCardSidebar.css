@@ -1,17 +1,4 @@
 /*
-*
-*
-*
-
-*/
-
-/*
-* The parent div of the details card
-
-*/
-
-
-/*
 * The Div that contains the detail card
 * The '[style]' + '!important' is used to overwrite the default inline styling
   used by antd.css

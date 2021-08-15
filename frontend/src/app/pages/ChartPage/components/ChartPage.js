@@ -31,6 +31,7 @@ class ChartPage extends Component {
                                     <Title level={1}>Chart Page Title</Title>
                                 </Header>
 
+                                {/*The Map Graph*/}
                                 <Content id={'content_section'}>
                                     <Layout
                                         id={'map_card_content_layout_div'}
@@ -46,12 +47,33 @@ class ChartPage extends Component {
                                         <Sider
                                             id={'map_card_sidebar'}
                                             className={'map_card'}
+                                        >
+                                            <DetailsCard/>
+                                        </Sider>
+
+                                    </Layout>
+
+                                    {/*The Network Graph*/}
+                                    <Layout
+                                        id={'network_graph_layout_div'}
+                                        className={'network_card'}
+                                    >
+                                        <Content
+                                            id={'network_graph_card_content'}
+                                            className={'network_card'}
+                                        >
+                                        </Content>
+
+                                        <Sider
+                                            id={'map_card_sidebar'}
+                                            className={'map_card'}
 
                                         >
                                             <DetailsCard/>
 
                                         </Sider>
                                     </Layout>
+
                                 </Content>
                             </Layout>
                         </Layout>
