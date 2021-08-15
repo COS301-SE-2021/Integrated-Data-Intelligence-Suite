@@ -80,6 +80,8 @@ public class TwitterExtractor implements Extractor {
         //System.out.println(jsonString);
         JSONObject obj = new JSONObject(jsonString);
         //Double c = obj.getJSONArray("geo").getDouble(1);
+        //Mocking coordinates
+        coordinates = generateMockLocation();
 
         return new GetLocationResponse(coordinates);
     }
@@ -88,10 +90,42 @@ public class TwitterExtractor implements Extractor {
      * This function is used to generate a random latitude and longitude for
      * mocking location data.
      */
-    private void generateLocation() {
+    private String generateMockLocation() {
         Random rand = new Random();
-        double longitude = rand.nextDouble();
-        double latitude = rand.nextDouble();
+        double latitude;
+        double longitude;
+        int box = rand.nextInt(6 - 1 + 1) + 1;
+        switch(box) {
+            case 1:
+                longitude = rand.nextDouble() * (25.634785 - 18.405492) + 18.405492;
+                latitude = rand.nextDouble() * (-28.974683 - (-34.052033)) + (-34.052033);
+                break;
+            case 2:
+                longitude = rand.nextDouble() * (25.430238 - 20.103088) + 20.103088;
+                latitude = rand.nextDouble() * (-26.757924 - (-28.974683 )) + (-28.974683 );
+                break;
+            case 3:
+                longitude = rand.nextDouble() * (28.845715 - 25.621856) + 25.621856;
+                latitude = rand.nextDouble() * (-29.98297 - (-32.225122)) + (-32.225122);
+                break;
+            case 4:
+                longitude = rand.nextDouble() * (30.987774 - 25.621856) + 25.621856;
+                latitude = rand.nextDouble() * (-28.869128 - (-29.944601)) + (-29.944601);
+                break;
+            case 5:
+                longitude = rand.nextDouble() * (32.321107 - 25.621856) + 25.621856;
+                latitude = rand.nextDouble() * (-24.966058 - (-28.869128)) + (-28.869128);
+                break;
+            case 6:
+                longitude = rand.nextDouble() * (31.404368 - 27.865276) + 27.865276;
+                latitude = rand.nextDouble() * (-22.509154 - (-24.875462)) + (-24.875462);
+                break;
+            default:
+                latitude = 0.0;
+                longitude = 0.0;
+        }
+
+        return latitude + ", " + longitude;
     }
 
     /**
