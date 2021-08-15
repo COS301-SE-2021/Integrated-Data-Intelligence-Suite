@@ -385,7 +385,6 @@ public class AnalyseServiceImpl {
         //rootLoggerM.setLevel(Level.ERROR);
 
 
-
         /*Logger rootLoggerL = Logger.getRootLogger();
         rootLoggerL.setLevel(Level.ERROR);
 
@@ -613,8 +612,10 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
+        //save to database
+
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); // .read().parquet("...");
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row> [] split = trainingDF.randomSplit((new double[]{0.7, 0.3}),5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -905,18 +906,85 @@ public class AnalyseServiceImpl {
 
         List<Row> anomaliesData  = new ArrayList<>();
 
-        // Load and parse data
-        /*String data = "mllib/kmeans/data.txt"; //TODO: default
-        JavaRDD<String> rddData = anomaliesSparkContext.textFile(data);
-        JavaRDD<Vector> parsedData =  rddData.map(s -> {
-            String[] sarray = s.split(" ");
-            double[] values = new double[sarray.length];
-            for (int i = 0; i < sarray.length; i++) {
-                values[i] = Double.parseDouble(sarray[i]);
+        ArrayList<String> requestData = request.getDataList(); //TODO Check why inconsistent
+
+        /*for(int i=0; i < requestData.size(); i++){
+            trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
+        }*/
+
+        //ArrayList<ArrayList> formatedData = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
+        for(int i=0; i < requestData.size(); i++){
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+
+            for (int j=0; j< namedEntities.size(); j++){
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()){// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                }else {
+                    if (types.contains(namedEntities.get(j).get(1).toString()))
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    else{
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                //row.add(requestData.get(i).get(1).toString());//location
+                //row.add(requestData.get(i).get(2).toString());//date
+                //row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
+                row.add(sentiment);//sentiment
+                // row.add(sentiment);//PoS
+
+                Row trendRow = RowFactory.create(row.toArray());
+                anomaliesData.add(trendRow );
             }
-            return Vectors.dense(values);
-        });
-        parsedData.cache();*/
+        }
+
+
+        /*******************SETUP DATAFRAME*****************/
+
+        /*StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending",  DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
+                });*/
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
+                });
+
+        //List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
+        Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema2); // .read().parquet("...");
+
+
 
         /*******************MANIPULATE DATAFRAME*****************/
         Dataset<Row> trainSetDF = null;
