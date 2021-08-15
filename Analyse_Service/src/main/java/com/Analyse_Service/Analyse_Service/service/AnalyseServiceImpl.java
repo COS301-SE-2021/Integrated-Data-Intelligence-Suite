@@ -374,11 +374,15 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP SPARK*****************/
 
+
+
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
                 .master("local")
                 .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -591,6 +595,8 @@ public class AnalyseServiceImpl {
             );
             trainSet.add(trainRow);
         }
+
+        //split data
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); // .read().parquet("...");
         Dataset<Row> [] split = trainingDF.randomSplit((new double[]{0.7, 0.3}),5043);
 
@@ -608,7 +614,7 @@ public class AnalyseServiceImpl {
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
         //features
-         Tokenizer tokenizer = new Tokenizer()
+        Tokenizer tokenizer = new Tokenizer()
                 .setInputCol("text")
                 .setOutputCol("words");
 
@@ -672,19 +678,19 @@ public class AnalyseServiceImpl {
         double accuracy = evaluator.evaluate(predictions);
         System.out.println("/**********************    Accuracy: "+ Double.toString(accuracy));
 
-
+        /*******************summary (REMOVE)*****************/
         //summaries
-       /* BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
+        /* BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
 
         // Obtain the loss per iteration.
         double[] objectiveHistory = trainingSummary.objectiveHistory();
         for (double lossPerIteration : objectiveHistory) {
             System.out.println(lossPerIteration);
         }
-        //System.out.println("/*******************SomeStuff*****************/
+        //System.out.println("******************SomeStuff****************")'
 
-        // Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
-       /* Dataset<Row> roc = trainingSummary.roc();
+        //Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
+        Dataset<Row> roc = trainingSummary.roc();
         roc.show();
         roc.select("FPR").show();
         System.out.println(trainingSummary.areaUnderROC());
@@ -694,7 +700,7 @@ public class AnalyseServiceImpl {
         double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
         double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
                 .select("threshold").head().getDouble(0);
-        lrModel.setThreshold(bestThreshold);
+        lrModel.setThreshold(bestThreshold);*/
 
 
         /*******************READ MODEL OUTPUT*****************/
@@ -882,10 +888,8 @@ public class AnalyseServiceImpl {
 
         List<Row> anomaliesData  = new ArrayList<>();
 
-        /*******************SETUP MODEL*****************/
-
         // Load and parse data
-        String data = "mllib/kmeans/data.txt"; //TODO: default
+        /*String data = "mllib/kmeans/data.txt"; //TODO: default
         JavaRDD<String> rddData = anomaliesSparkContext.textFile(data);
         JavaRDD<Vector> parsedData =  rddData.map(s -> {
             String[] sarray = s.split(" ");
@@ -895,14 +899,45 @@ public class AnalyseServiceImpl {
             }
             return Vectors.dense(values);
         });
-        parsedData.cache();
+        parsedData.cache();*/
+
+        /*******************MANIPULATE DATAFRAME*****************/
+        Dataset<Row> trainSetDF = null;
+
+
+        /*******************SETUP PIPELINE*****************/
+        /*******************SETUP MODEL*****************/
+        //features
+
+
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"EntityTypeNumber","Frequency", "AverageLikes"})
+                .setOutputCol("features");
+
+        Dataset<Row> testDF = assembler.transform(trainSetDF);
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
+
+        indexed.show();
+
+        /*******************summary (REMOVE)*****************/
 
         // Cluster the data into two classes using KMeans
         int numClusters = 2;
         int numIterations = 20;
-        KMeansModel clusters = KMeans.train(parsedData.rdd(), numClusters, numIterations);
 
-        System.out.println("Cluster centers:");
+        //KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);
+        KMeans kModel = new KMeans()
+                .setK(8);
+                //.setFeaturesCol("features")
+                //.setPredictionCol("prediction")
+
+        //summary
+        /*System.out.println("Cluster centers:");
         for (Vector center: clusters.clusterCenters()) {
             System.out.println(" " + center);
         }
@@ -911,12 +946,12 @@ public class AnalyseServiceImpl {
 
         // Evaluate clustering by computing Within Set Sum of Squared Errors
         double WSSSE = clusters.computeCost(parsedData.rdd());
-        System.out.println("Within Set Sum of Squared Errors = " + WSSSE);
+        System.out.println("Within Set Sum of Squared Errors = " + WSSSE);*/
 
         // Save and load model
-        clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
+        /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
         KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
-                "target/org/apache/spark/JavaKMeansExample/KMeansModel");
+                "target/org/apache/spark/JavaKMeansExample/KMeansModel");*/
 
         /*******************READ MODEL OUTPUT*****************/
 
@@ -1151,6 +1186,11 @@ public class AnalyseServiceImpl {
             String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
             System.out.println("TOKEN : " + label.originalText());
         }
+
+        //svae models
+        /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
+        KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
+                "target/org/apache/spark/JavaKMeansExample/KMeansModel");*/
 
     }
 
