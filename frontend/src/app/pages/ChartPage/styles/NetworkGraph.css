@@ -6,3 +6,12 @@
 #network_graph_card_content{
     border: 3px solid yellow;
 }
+
+/*The Cytoscape object that holds the network graph */
+#cy{
+    border: 3px solid blue;
+}
+
+#n0{
+    background-color: red;
+}
