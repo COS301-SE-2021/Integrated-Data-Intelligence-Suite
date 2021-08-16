@@ -83,7 +83,6 @@ public class GatewayServiceController {
     }
 
 
-=======
     /*@GetMapping(value ="test/{line}", produces = "application/json")
     public String testNothing2(@PathVariable String line) {
 
