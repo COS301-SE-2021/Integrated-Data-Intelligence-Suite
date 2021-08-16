@@ -54,7 +54,7 @@ public class VisualizeServiceImpl {
 
         //network graph
         CreateLineGraphRequest lineRequest = new CreateLineGraphRequest(request.getRelationshipList());
-        CreateLineGraphResponse lineResponse =  this.createlineGraph(lineRequest);
+        CreateLineGraphResponse lineResponse =  this.createLineGraph(lineRequest);
 
         //outputData.add(networkResponse.NetworkGraphArray);
 
@@ -65,7 +65,7 @@ public class VisualizeServiceImpl {
 
 
 
-    public CreateLineGraphResponse createlineGraph(CreateLineGraphRequest request) throws InvalidRequestException{
+    public CreateLineGraphResponse createLineGraph(CreateLineGraphRequest request) throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
