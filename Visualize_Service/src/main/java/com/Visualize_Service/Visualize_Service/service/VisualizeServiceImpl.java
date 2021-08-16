@@ -1,9 +1,6 @@
 package com.Visualize_Service.Visualize_Service.service;
 
-import com.Visualize_Service.Visualize_Service.dataclass.Graph;
-import com.Visualize_Service.Visualize_Service.dataclass.MapGraph;
-import com.Visualize_Service.Visualize_Service.dataclass.NetworkGraph;
-import com.Visualize_Service.Visualize_Service.dataclass.NodeNetworkGraph;
+import com.Visualize_Service.Visualize_Service.dataclass.*;
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
 import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
@@ -71,21 +68,50 @@ public class VisualizeServiceImpl {
         }
 
         for(int i =0; i < reqData.size(); i++ ){
-            for(int j=0; j < reqData.get(i).size(); i++){
-                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+            for(int j=0; j < reqData.get(i).size(); i++){ //strings, (one, two, three)
 
-                NodeNetworkGraph.data data = nodeGraphOne .new data();
-                data.id = "node";
+                String idOne = reqData.get(j).toString();
 
-                NodeNetworkGraph.position position = nodeGraphOne .new position();
-                position.x = 0;
-                position.y = 0;
+                for(int k=0; k<reqData.get(i).size(); k++ ){ //compares with other values
+                    if(idOne != reqData.get(k).toString()){ //not the same value
+                        if (isNetworkGraph(idOne, reqData.get(k).toString()) != false){
 
-                if(reqData.get(i).get(j) == entitiesID.get(0) ){ // row, entity to another
-                    System.out.println("here");
+                            String idTwo = reqData.get(k).toString();
+
+                            //first node
+                            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+
+                            NodeNetworkGraph.data dataNodeOne = nodeGraphOne .new data();
+                            dataNodeOne.id = idOne;
+
+                            NodeNetworkGraph.position positionOne = nodeGraphOne .new position();
+                            positionOne.x = 0;
+                            positionOne.y = 0;
+
+                            //second node
+                            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+
+                            NodeNetworkGraph.data dataNodeTwo = nodeGraphTwo .new data();
+                            dataNodeTwo.id = idTwo;
+
+                            NodeNetworkGraph.position positionTwo = nodeGraphTwo .new position();
+                            positionTwo.x = 0;
+                            positionTwo.y = 0;
+
+                            //edge node
+
+                            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+
+                            EdgeNetworkGraph.data dataEdge = edgeGraph.new data();
+                            dataEdge.id = "Relationship found between";
+                            dataEdge.source = idOne;
+                            dataEdge.target = idTwo;
+
+
+                            output.add(nodeGraphOne);
+                        }
+                    }
                 }
-
-                output.add(nodeGraphOne);
             }
         }
 
@@ -93,6 +119,8 @@ public class VisualizeServiceImpl {
 
         return new CreateNetworkGraphResponse(output);
     }
+
+
 
 
     public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
@@ -133,5 +161,13 @@ public class VisualizeServiceImpl {
         Graph newGraph = new Graph();
         return null;
     }
+
+
+    /******************************************************************************************************************/
+
+    private boolean isNetworkGraph(String idOne, String toString) {
+        return false;
+    }
+
 
 }
