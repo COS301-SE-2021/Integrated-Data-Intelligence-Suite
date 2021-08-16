@@ -46,6 +46,7 @@ const LoginPage = () => {
                 }).then(json => {
                     alert(json.message);
                     if(json.success) {
+                        localStorage.setItem("user", json.id)
                         history.push('/');
                     }
                 });
