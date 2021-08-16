@@ -154,13 +154,13 @@ function MapCard() {
                 * true = enabled
                 * false = disabled
              */
-            draw:{
+            draw: {
                 polygon: false,
                 circle: false,
                 rectangle: false,
-                circlemarker:false,
-                marker:true,
-                polyline:false
+                circlemarker: false,
+                marker: true,
+                polyline: false
             },
 
 
@@ -179,6 +179,24 @@ function MapCard() {
             }
         });
         map.addControl(drawControl);
+
+
+        // var marker = L.marker([48.488, 1.395]).addTo(map);
+        // marker.snapediting = new L.Handler.MarkerSnap(map, marker);
+        // marker.snapediting.addGuideLayer(guideLayer);
+        // marker.snapediting.enable();
+
+        let markers = [];
+        map.eachLayer((layer) => {
+            if (layer instanceof L.Circle) {
+                markers.push(layer.feature);
+            }
+        });
+
+        console.log("===========");
+        console.log(map)
+        console.log("===========");
+
 
         /*
             * runs everytime a vector is drawn from the toolbar
