@@ -60,7 +60,7 @@
 
 /*The div wrapping the users avatar*/
 #meta_id > .ant-card-meta-avatar {
-    float: left;
+    float: right;
     padding-right: 0;
     padding-left: 0;
     margin-top: 18px;

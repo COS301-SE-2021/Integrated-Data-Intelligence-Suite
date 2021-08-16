@@ -3,89 +3,89 @@
 /********************* Found in header ********************/
 #search_input {
     /*border-bottom: 1px solid red;*/
-    padding: 5px;
-    padding-left: 6px;
+    /*padding: 5px;*/
+    /*padding-left: 6px;*/
     margin: 0;
     border: 2px solid transparent;
     border-bottom-left-radius: 6px;
     border-top-left-radius: 6px;
 }
 
-#search_input:hover{
-    border-left: 2px solid #15B761;
-    border-bottom: 2px solid #15B761;
-    border-top: 2px solid #15B761;
-    border-right: 2px solid transparent;
-}
+/*#search_input:hover{*/
+/*    border-left: 2px solid #15B761;*/
+/*    border-bottom: 2px solid #15B761;*/
+/*    border-top: 2px solid #15B761;*/
+/*    border-right: 2px solid transparent;*/
+/*}*/
 
-/* While the search Input is still with the cursor in it*/
-#search_input:focus{
-    border-left: 2px solid #15B761;
-    border-bottom: 2px solid #15B761;
-    border-top: 2px solid #15B761;
-    border-right: 2px solid transparent;
-}
-
-
-#search_input ::selection {
-    color: #fff;
-    background: springgreen;
-}
+/*!* While the search Input is still with the cursor in it*!*/
+/*#search_input:focus{*/
+/*    border-left: 2px solid #15B761;*/
+/*    border-bottom: 2px solid #15B761;*/
+/*    border-top: 2px solid #15B761;*/
+/*    border-right: 2px solid transparent;*/
+/*}*/
 
 
-#search_input:focus {
-    box-shadow: none;
-}
+/*#search_input ::selection {*/
+/*    color: #fff;*/
+/*    background: springgreen;*/
+/*}*/
+
+
+/*#search_input:focus {*/
+/*    box-shadow: none;*/
+/*}*/
 
 
 #top_bar > .ant-input-search {
-    /*border: 2px solid black;*/
-    border: 0;
-    width: 300px;
-    float: right;
-    margin-top: 15px;
-}
-
-#top_bar > .ant-input-search > .ant-input-group {
-    border: 2px solid lightgrey;
+    border: 2px solid black;
     /*border: 0;*/
-    padding: 5px;
-    border-radius: 11px;
+    width: 22%;
+    float: left;
+    /*margin-top: 15px;*/
 }
 
-
-#top_bar > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {
-    border: 3px solid blue;
-    padding-right: 4px;
-    padding-left: 4px;
-}
-
-/*The div that contains the search Button i.e its parent*/
-#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {
-    /*BORDER: 2PX SOLID YELLOW;*/
-    border: 0;
-    left: 0;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border: 2px solid transparent;
-}
-/*When Hovering over The div that contains the search Button i.e its parent*/
-#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon:hover {
-    /*BORDER: 2PX SOLID YELLOW;*/
-    border: 0;
-    left: 0;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom: 2px solid #15B761;
-    border-top: 2px solid #15B761;
-    border-right: 2px solid #15B761;
-}
+/*#top_bar > .ant-input-search > .ant-input-group {*/
+/*    border: 2px solid lightgrey;*/
+/*    !*border: 0;*!*/
+/*    padding: 5px;*/
+/*    border-radius: 11px;*/
+/*}*/
 
 
-/* The button that contains the search icon*/
-#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {
-    /*border-bottom: 1px solid red;*/
-    border: 0;
-    border-radius: 12%;
-    /*--antd-wave-shadow-color: none;*/
-}
+/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {*/
+/*    border: 3px solid blue;*/
+/*    padding-right: 4px;*/
+/*    padding-left: 4px;*/
+/*}*/
+
+/*!*The div that contains the search Button i.e its parent*!*/
+/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {*/
+/*    !*BORDER: 2PX SOLID YELLOW;*!*/
+/*    border: 0;*/
+/*    left: 0;*/
+/*    border-top-right-radius: 6px;*/
+/*    border-bottom-right-radius: 6px;*/
+/*    border: 2px solid transparent;*/
+/*}*/
+/*!*When Hovering over The div that contains the search Button i.e its parent*!*/
+/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon:hover {*/
+/*    !*BORDER: 2PX SOLID YELLOW;*!*/
+/*    border: 0;*/
+/*    left: 0;*/
+/*    border-top-right-radius: 6px;*/
+/*    border-bottom-right-radius: 6px;*/
+/*    border-bottom: 2px solid #15B761;*/
+/*    border-top: 2px solid #15B761;*/
+/*    border-right: 2px solid #15B761;*/
+/*}*/
+
+
+/*!* The button that contains the search icon*!*/
+/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {*/
+/*    !*border-bottom: 1px solid red;*!*/
+/*    border: 0;*/
+/*    border-radius: 12%;*/
+/*    !*--antd-wave-shadow-color: none;*!*/
+/*}*/
