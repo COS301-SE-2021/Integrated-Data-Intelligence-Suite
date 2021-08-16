@@ -12,6 +12,7 @@ import com.Gateway_Service.Gateway_Service.service.ParseService;
 
 //import com.netflix.discovery.DiscoveryClient;
 
+import com.Gateway_Service.Gateway_Service.service.VisualizeService;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,10 @@ public class GatewayServiceController {
 
     @Autowired
     private AnalyseService analyseClient;
+
+
+    @Autowired
+    private VisualizeService visualizeClient;
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -163,25 +168,51 @@ public class GatewayServiceController {
 
         /*********************VISUALISE**********************/
 
-        /*************LINE**********/
+        VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
+                analyseResponse.patternList,
+                analyseResponse.relationshipList,
+                analyseResponse.getPattenList(),
+                analyseResponse.trendList,
+                analyseResponse.anomalyList);//    DataSource.TWITTER,ImportResponse. getJsonData());
+        VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
+
+
+        if(visualizeResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
+
+        /*************LINE**********
         ArrayList<Graph> LineGraphArray = createlineGraph(analyseResponse.getPattenList());
 
 
-        /*************NETWORK**********/
+        /*************NETWORK**********
         ArrayList<Graph> NetworkGraphArray =  createNetworkGraph( analyseResponse.getPattenList());
 
 
-        /************MAP**********/
+        /************MAP**********
         ArrayList<Graph> mapArray = createMapGraph();
 
 
-        /************TIMELINE**********/
+        /************TIMELINE**********
         ArrayList<Graph> TimelineArray = createTimelineGraph();
 
         outputData.add(LineGraphArray);
         outputData.add(NetworkGraphArray );
         //outputData.add(mapArray);
-        outputData.add(TimelineArray);
+        outputData.add(TimelineArray);*/
+
+        for(int i =0; i < visualizeResponse.outputData.size(); i++)
+            outputData.add(visualizeResponse.outputData.get(i));
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
 
