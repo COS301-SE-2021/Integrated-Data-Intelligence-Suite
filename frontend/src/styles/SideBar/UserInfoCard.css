@@ -7,7 +7,7 @@
     /*bottom: -50vh;*/
     /*bottom:0;*/
     float: right;
-    height: 100%;
+    /*height: 100%;*/
     width: 20%;
     /* color: black; */
     /*background: #15B761;*/
@@ -17,6 +17,11 @@
     /*margin-left: 8px;*/
     /*margin-right: 8px;*/
     /*border-radius: 6px;*/
+
+    /* Vertically Center the div*/
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 
 }
 
@@ -41,7 +46,7 @@
 }
 
 #meta_id {
-     border: 2px solid purple;
+    border: 2px solid purple;
     /*border: 0;*/
     float: right;
     /*width: 78%;*/
@@ -118,6 +123,7 @@
     background: transparent;
     color: black;
 }
+
 /*The actual Image Icon
 * Currently its a ">" icon facing upwards
 */

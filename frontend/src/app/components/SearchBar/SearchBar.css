@@ -44,6 +44,11 @@
     width: 22%;
     float: left;
     /*margin-top: 15px;*/
+    position: relative;
+
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 /*#top_bar > .ant-input-search > .ant-input-group {*/
