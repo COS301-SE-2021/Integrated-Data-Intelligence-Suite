@@ -91,9 +91,14 @@ public class VisualizeServiceImpl {
         ArrayList<Graph> output = new ArrayList<>();
 
         ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
+        ArrayList<String[]> Relationships = new ArrayList<>();
 
+        System.out.println("Row count : " +  reqData.size());
         for(int i =0; i < reqData.size(); i++ ){
+
+            System.out.println("String count : " + reqData.get(i).size());
             for(int j=0; j < reqData.get(i).size(); j++){ //strings, (one, two, three)
+                System.out.println(reqData.get(i).toString());
 
                 String idOne = reqData.get(j).toString();
 
@@ -101,29 +106,26 @@ public class VisualizeServiceImpl {
 
                     String idTwo = reqData.get(k).toString();
 
-                    if(idOne != idTwo){ //not the same value
-                        if (isNetworkGraph(idOne, idTwo,foundRelationships) != false){
-
+                    System.out.println("Checking : " + idOne + " : " + idTwo);
+                    if(idOne.equals(idTwo) == false ){ //not the same value
+                        System.out.println("Not equal");
+                        if (isNetworkGraph(idOne, idTwo,foundRelationships, Relationships) == false){
+                            System.out.println("add graph");
                             //first node
                             NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
 
-                            nodeGraphOne.data.id = idOne;
-                            nodeGraphOne.position.x = 0;
-                            nodeGraphOne.position.y = 0;
+                            nodeGraphOne.setData(idOne);
+                            nodeGraphOne.setPosition(10,10);
 
                             //second node
                             NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
 
-                            nodeGraphTwo.data.id = idTwo;
-                            nodeGraphTwo.position.x = 0;
-                            nodeGraphTwo.position.y = 0;
+                            nodeGraphTwo.setData(idTwo);
+                            nodeGraphTwo.setPosition(50,5);
 
                             //edge node
                             EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-
-                            edgeGraph.data.id = "Relationship found between";
-                            edgeGraph.data.source = idOne;
-                            edgeGraph.data.target = idTwo;
+                            edgeGraph.setData("Relationship found between",idOne,idTwo);
 
                             //add graphs to output
                             output.add(nodeGraphOne);
@@ -211,19 +213,21 @@ public class VisualizeServiceImpl {
 
     /******************************************************************************************************************/
 
-    private boolean isNetworkGraph(String idOne, String idTwo, ArrayList<EdgeNetworkGraph> foundRelationships) {
+    private boolean isNetworkGraph(String idOne, String idTwo, ArrayList<EdgeNetworkGraph> foundRelationships,ArrayList<String[]> Relationships ) {
 
         if(foundRelationships.isEmpty() == true) {
             return true;
         }
         else{
+            System.out.println("Size : " + foundRelationships.size());
             for(int i =0; i < foundRelationships.size();i++){
 
                 EdgeNetworkGraph edgeNetworkGraph = foundRelationships.get(i);
 
-
-                String source = edgeNetworkGraph.data.source;
-                String target = edgeNetworkGraph.data.target;
+                String[] values = Relationships.get(0);
+                String value = values[0];//source
+                String source = "";//edgeNetworkGraph.getSource();//edgeNetworkGraph.data.source;
+                String target = "";//edgeNetworkGraph.getTarget();//edgeNetworkGraph.data.target;
 
                 if ( (idOne == source) || (idOne == target)){
                     if((idOne == source) && (idTwo == target))
