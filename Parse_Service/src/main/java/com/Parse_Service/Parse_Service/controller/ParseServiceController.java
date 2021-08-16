@@ -17,13 +17,13 @@ public class ParseServiceController {
     @Autowired
     private ParseServiceImpl service;
 
-    /*@GetMapping("/")
-    public ParseImportedDataResponse parseImportedData(String jsonString) throws Exception {
-        DataSource type = DataSource.TWITTER;
-        ParseImportedDataRequest req = new ParseImportedDataRequest(type,jsonString);
-        return service.parseImportedData(req);
-    }*/
 
+    /**
+     * This method is used to facilitate communication to the Parse-Service.
+     * @param requestEntity This is a request entity which contains a ParseImportedDataRequest object.
+     * @return ParseImportedDataResponse This object contains imported data which has been processed by Parse-Service.
+     * @throws Exception This is thrown if exception caught in Parse-Service.
+     */
     @PostMapping("/parseImportedData")
     public ParseImportedDataResponse parseImportedData(RequestEntity<ParseImportedDataRequest> requestEntity) throws Exception {
         //DataSource type = DataSource.TWITTER;
