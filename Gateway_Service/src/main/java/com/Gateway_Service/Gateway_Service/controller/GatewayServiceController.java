@@ -13,6 +13,9 @@ import com.Gateway_Service.Gateway_Service.service.ParseService;
 //import com.netflix.discovery.DiscoveryClient;
 
 import com.Gateway_Service.Gateway_Service.service.VisualizeService;
+
+import com.Gateway_Service.Gateway_Service.service.UserService;
+
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +39,17 @@ public class GatewayServiceController {
     @Autowired
     private AnalyseService analyseClient;
 
-
     @Autowired
     private VisualizeService visualizeClient;
 
     @Autowired
     private DiscoveryClient discoveryClient;
+  
+    @Autowired
+    private UserService userClient;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
 
 
@@ -72,6 +80,86 @@ public class GatewayServiceController {
             output = importResponse.getJsonData();
 
         return output;
+    }
+
+
+=======
+    /*@GetMapping(value ="test/{line}", produces = "application/json")
+    public String testNothing2(@PathVariable String line) {
+
+        String output = "";
+        AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
+
+        if(analyseResponse.getFallback() == true)
+            output = analyseResponse.getFallbackMessage();
+        else {
+            output = analyseResponse.getSentiment().getCssClass();
+        }
+
+        return output;
+    }*/
+
+    /**
+     * This the endpoint for registering the user.
+     * @param form This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/register",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
+        RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        RegisterResponse registerResponse = userClient.register(registerRequest);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
+        GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
+        GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
+        return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for changing the permission of a user
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/user/login",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = userClient.login(request);
+        System.out.println(response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for changing the permission of a user
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/changePermission",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ManagePermissionsResponse> managePermissions(@RequestBody ManagePermissionsRequest request) {
+        ManagePermissionsResponse response = userClient.managePermissions(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/user/getAll", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
+        GetAllUsersRequest request = new GetAllUsersRequest();
+        System.out.println("Getting all users from the database");
+        System.out.println(request.getMessage());
+        GetAllUsersResponse response = userClient.getAllUsers(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

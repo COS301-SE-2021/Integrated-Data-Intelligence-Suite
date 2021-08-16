@@ -75,9 +75,8 @@ public class TwitterExtractor implements Extractor {
         String coordinates = "null";
 
         String jsonString = request.getJsonString();
-        //System.out.println(jsonString);
         JSONObject obj = new JSONObject(jsonString);
-        //Double c = obj.getJSONArray("geo").getDouble(1);
+
 
         return new GetLocationResponse(coordinates);
     }

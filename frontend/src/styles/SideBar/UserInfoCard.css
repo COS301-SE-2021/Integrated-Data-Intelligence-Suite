@@ -1,0 +1,135 @@
+/*************************************************************/
+/********************* User Avatar  Card ***************************/
+/************Found in the Bottom Left corner********************/
+
+/* The div that holds the entire user_avatar card*/
+#user_avatar_card {
+    /*bottom: -50vh;*/
+    /*bottom:0;*/
+    float: right;
+    /*height: 100%;*/
+    width: 20%;
+    /* color: black; */
+    /*background: #15B761;*/
+    background: transparent;
+    /*border: 0;*/
+    border: 2px solid yellow;
+    /*margin-left: 8px;*/
+    /*margin-right: 8px;*/
+    /*border-radius: 6px;*/
+
+    /* Vertically Center the div*/
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+}
+
+#user_avatar_card > .ant-card-body {
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+}
+
+#user_avatar_pic {
+    /*border: 2px solid black;*/
+    color: white;
+    background: orange;
+    float: right;
+    width: 39px;
+    height: 39px;
+    line-height: 1.5715;
+    font-size: 16px;
+    border-radius: 100%;
+    margin-left: 4px;
+}
+
+#meta_id {
+    border: 2px solid purple;
+    /*border: 0;*/
+    float: right;
+    /*width: 78%;*/
+    /*height: 100%;*/
+    background: #04aa6d00;
+
+}
+
+.ant-card-meta {
+    /*border: 2px solid blue;*/
+    margin: 0;
+    background: transparent;
+    border: 0;
+
+}
+
+/*The div wrapping the users avatar*/
+#meta_id > .ant-card-meta-avatar {
+    float: right;
+    padding-right: 0;
+    padding-left: 0;
+    margin-top: 18px;
+    background: transparent;
+    border: 0;
+}
+
+/*The div for the users Name and a description*/
+#meta_id > .ant-card-meta-detail {
+    float: left;
+    justify-content: left;
+    /*margin-top: 19px;*/
+    background: transparent;
+    border: 0;
+
+}
+
+/*The users' Name
+* AKA the title in the JS code
+*/
+#meta_id > .ant-card-meta-detail > .ant-card-meta-title {
+    color: black;
+    border: 0;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-top: 25px;
+    /*background: black;*/
+    border: 0;
+
+}
+
+/*The grey out section underneath the name*/
+#meta_id > .ant-card-meta-detail > .ant-card-meta-description {
+    font-size: 11px;
+    height: 17px;
+    width: 12px;
+    color: #9c9494;
+    background: transparent;
+}
+
+/*The ellipsis button*/
+#exit_menu_button {
+    /*border: 1px solid green;*/
+    border: 0;
+    font-size: 0;
+    float: right;
+    transform: rotate(
+            180deg
+    );
+    margin-top: 24px;
+    width: 31px;
+    height: 23px;
+    padding: 0;
+    background: transparent;
+    color: black;
+}
+
+/*The actual Image Icon
+* Currently its a ">" icon facing upwards
+*/
+#exit_menu_button > .exit_menu_ellipsis_icon > svg {
+    color: black;
+    background: transparent;
+}
+
+
