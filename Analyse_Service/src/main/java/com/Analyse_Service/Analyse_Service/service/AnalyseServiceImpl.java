@@ -740,7 +740,7 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = lrModel.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());

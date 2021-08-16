@@ -13,7 +13,7 @@
     /*background: #15B761;*/
     background: transparent;
     /*border: 0;*/
-    border: 2px solid yellow;
+    /*border: 2px solid yellow;*/
     /*margin-left: 8px;*/
     /*margin-right: 8px;*/
     /*border-radius: 6px;*/
@@ -46,9 +46,11 @@
 }
 
 #meta_id {
-    border: 2px solid purple;
+    /*border: 2px solid purple;*/
     /*border: 0;*/
     float: right;
+    text-transform: capitalize;
+    font-weight: 600;
     /*width: 78%;*/
     /*height: 100%;*/
     background: #04aa6d00;
