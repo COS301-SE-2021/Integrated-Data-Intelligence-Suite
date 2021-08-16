@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import cytoscape from "cytoscape/dist/cytoscape.cjs";
 import fcose from "cytoscape-fcose";
 import cosebase from "cose-base";
-import timelineNodes from "../resources/networkGraphNodes.json";
+import timelineNodes from "../resources/graphStructures/networkGraphNodes.json";
 import "../styles/NetworkGraph.css";
-import network_stylesheet from "../resources/networkGraphNodesStyleSheet.json";
+import network_stylesheet from "../resources/graphStructures/networkGraphNodesStyleSheet.json";
 import layoutUtilities from "cytoscape-layout-utilities";
 import ScriptTag from 'react-script-tag';
 

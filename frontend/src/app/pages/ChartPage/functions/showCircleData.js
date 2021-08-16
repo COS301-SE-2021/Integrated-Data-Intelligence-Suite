@@ -1,4 +1,4 @@
-import datapoints from "../resources/datapoints.json"
+import datapoints from "../resources/graphStructures/mapDatapoints.json"
 export function showCircleData(clicked_circle_class_name) {
     console.log("I am new function that's running on click");
     //Find the all statistic fields

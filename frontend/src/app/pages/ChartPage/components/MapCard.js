@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import '../../../components/leaflet/leaflet.css';
 import 'leaflet-snap/leaflet.snap.js';
-import datapoints from "../resources/datapoints.json"
+import datapoints from "../resources/graphStructures/mapDatapoints.json"
 import {showCircleData} from "../functions/showCircleData";
 
 //Do not Change the order of these lines
@@ -140,7 +140,7 @@ function MapCard() {
 
         //Creating the actual map component
         map = L.map('map_container_div', {drawControl: false, dragging: true})
-            .setView([48.49, 1.4], 16)
+            .setView([18.987807, 72.836447], 9)
             .addLayer(osm);
 
 
@@ -186,12 +186,12 @@ function MapCard() {
         // marker.snapediting.addGuideLayer(guideLayer);
         // marker.snapediting.enable();
 
-        let markers = [];
-        map.eachLayer((layer) => {
-            if (layer instanceof L.Circle) {
-                markers.push(layer.feature);
-            }
-        });
+        // let markers = [];
+        // map.eachLayer((layer) => {
+        //     if (layer instanceof L.Circle) {
+        //         markers.push(layer.feature);
+        //     }
+        // });
 
         console.log("===========");
         console.log(map)
@@ -278,7 +278,7 @@ function MapCard() {
             return L.circle(L.latLng(datapoint.lat, datapoint.lng), {
                 className: datapoint.classname,
                 id: "broski",
-                radius: 69
+                radius: 5900
             });
         }
 
