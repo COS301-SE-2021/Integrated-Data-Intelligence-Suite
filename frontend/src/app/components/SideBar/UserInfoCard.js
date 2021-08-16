@@ -8,7 +8,7 @@ import ExitMenuTooltip from "./ExitMenuTooltip";
 function setUserName(){
     const localUser = localStorage.getItem("user");
     if(localUser){
-        return "Wandile";
+        return JSON.parse(localUser);
     }else{
         return "user";
     }
@@ -21,7 +21,7 @@ class UserInfoCard extends React.Component {
         this.state = {
             loading: true,
             collapsed: false,
-            title: setUserName()
+            user: setUserName()
         };
     }
 
@@ -40,7 +40,7 @@ class UserInfoCard extends React.Component {
     }
 
     render() {
-        const {loading, title:user} = this.state;
+        const {loading, user} = this.state;
 
         return (
             <>
@@ -71,13 +71,13 @@ class UserInfoCard extends React.Component {
                         <Meta
                             id={'meta_id'}
                             className={'user_meta_card'}
-                            title={this.state.title}
+                            title={user.username}
                             avatar={
                                 <Avatar
                                     id={'user_avatar_pic'}
                                     shape={'round'}
                                 >
-                                    {this.props.name}
+                                    {user.username.substring(0,1)}
                                 </Avatar>
                             }
                         />

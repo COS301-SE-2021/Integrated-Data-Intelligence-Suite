@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import {Typography} from 'antd';
 import {Redirect, Route, Switch} from "react-router-dom";
+import UserInfoCard from "../../components/SideBar/UserInfoCard";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -12,7 +13,8 @@ const {Header, Footer, Sider, Content} = Layout;
 function getLocalUser(){
     const localUser = localStorage.getItem("user");
     if(localUser){
-        return localUser;
+        // console.log("user logged in is ", localUser)
+        return JSON.parse(localUser);
     }else{
         return null;
     }

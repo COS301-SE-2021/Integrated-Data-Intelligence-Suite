@@ -5,6 +5,7 @@ import Title from "antd/es/typography/Title";
 import SideBar from "../../components/SideBar/SideBar";
 import {Link, Route} from "react-router-dom";
 import Permissions from "../PermissionsPage/Permissions";
+import UserInfoCard from "../../components/SideBar/UserInfoCard";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -19,9 +20,12 @@ const SettingsPage = () => {
     return (
         <Layout style={{ minHeight: '100vh' }} className={"bodyDiv"}>
             <SideBar/>
-            <Layout>
+            <Layout id={'inner_layout_div'}>
                 <Header id={"top_bar"} className={"header"} >
                     <Title level={1}>Settings</Title>
+                    <UserInfoCard
+                        name="s"
+                    />
                 </Header>
                 <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' ,backgroundColor:""}}>
                     <Row className={"row"} style={{ border:"2px solid black"}}>
