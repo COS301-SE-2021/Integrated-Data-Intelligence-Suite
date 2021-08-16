@@ -1,26 +1,28 @@
 [
   {
-    "selector": "#n0",
+    "selector": "node",
     "style": {
-      "background-color": "red",
-      "label": "data(id)"
-    }
-  },
-  {
-    "selector": "#n1",
-    "style": {
-      "background-color": "pink",
-      "label": "data(id)"
+      "background-color": "#2B65EC"
     }
   },
   {
     "selector": "edge",
     "style": {
       "width": 3,
-      "line-color": "yellow",
-      "target-arrow-color": "#ccc",
-      "target-arrow-shape": "triangle",
-      "curve-style": "bezier"
+      "line-color": "#2B65EC"
+    }
+  },
+  {
+    "selector": "node:selected",
+    "style": {
+      "background-color": "#F08080",
+      "border-color": "red"
+    }
+  },
+  {
+    "selector": "edge:selected",
+    "style": {
+      "line-color": "#F08080"
     }
   }
 ]
