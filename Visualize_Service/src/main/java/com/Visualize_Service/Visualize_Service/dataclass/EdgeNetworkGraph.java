@@ -4,21 +4,11 @@ public class EdgeNetworkGraph extends NetworkGraph{
 
     public String group = "edges";
 
-    public class data {
-        public String id;
+    public data data = new data();
 
-        public String source;
 
-        public String target;
-    }
 
-    public String getSource(){
-        return new data().source;
-    }
 
-    public String getTarget(){
-        return new data().target;
-    }
 
 
 }
