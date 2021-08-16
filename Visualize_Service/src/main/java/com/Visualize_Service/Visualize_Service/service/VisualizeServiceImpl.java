@@ -107,30 +107,23 @@ public class VisualizeServiceImpl {
                             //first node
                             NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
 
-                            NodeNetworkGraph.data dataNodeOne = nodeGraphOne .new data();
-                            dataNodeOne.id = idOne;
-
-                            NodeNetworkGraph.position positionOne = nodeGraphOne .new position();
-                            positionOne.x = 0;
-                            positionOne.y = 0;
+                            nodeGraphOne.data.id = idOne;
+                            nodeGraphOne.position.x = 0;
+                            nodeGraphOne.position.y = 0;
 
                             //second node
                             NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
 
-                            NodeNetworkGraph.data dataNodeTwo = nodeGraphTwo .new data();
-                            dataNodeTwo.id = idTwo;
-
-                            NodeNetworkGraph.position positionTwo = nodeGraphTwo .new position();
-                            positionTwo.x = 0;
-                            positionTwo.y = 0;
+                            nodeGraphTwo.data.id = idTwo;
+                            nodeGraphTwo.position.x = 0;
+                            nodeGraphTwo.position.y = 0;
 
                             //edge node
                             EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
 
-                            EdgeNetworkGraph.data dataEdge = edgeGraph.new data();
-                            dataEdge.id = "Relationship found between";
-                            dataEdge.source = idOne;
-                            dataEdge.target = idTwo;
+                            edgeGraph.data.id = "Relationship found between";
+                            edgeGraph.data.source = idOne;
+                            edgeGraph.data.target = idTwo;
 
                             //add graphs to output
                             output.add(nodeGraphOne);
@@ -228,8 +221,9 @@ public class VisualizeServiceImpl {
 
                 EdgeNetworkGraph edgeNetworkGraph = foundRelationships.get(i);
 
-                String source = edgeNetworkGraph.getSource();
-                String target = edgeNetworkGraph.getTarget();
+
+                String source = edgeNetworkGraph.data.source;
+                String target = edgeNetworkGraph.data.target;
 
                 if ( (idOne == source) || (idOne == target)){
                     if((idOne == source) && (idTwo == target))
