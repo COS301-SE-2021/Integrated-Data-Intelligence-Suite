@@ -124,8 +124,6 @@ function MapCard() {
     let osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
     });
-    // <div id="leafletmap">
-    // </div>
 
     useEffect(() => {
         var map;
@@ -151,7 +149,11 @@ function MapCard() {
         const layer_with_drawn_items = new L.FeatureGroup();
         map.addLayer(layer_with_drawn_items);
         var drawControl = new L.Control.Draw({
-            //enables/disables draw components
+            /*
+                * enables/disables draw components
+                * true = enabled
+                * false = disabled
+             */
             draw:{
                 polygon: false,
                 circle: false,
@@ -161,14 +163,17 @@ function MapCard() {
                 polyline:false
             },
 
+
             //Events
             create: {
                 featureGroup: layer_with_drawn_items
             },
 
             edit: {
-                featureGroup: layer_with_drawn_items
+                featureGroup: layer_with_drawn_items,
+                edit: false //Disabling the edit button
             },
+
             delete: {
                 featureGroup: layer_with_drawn_items
             }
@@ -176,7 +181,7 @@ function MapCard() {
         map.addControl(drawControl);
 
         /*
-        * runs everytime a vector is drawn from the toolbar
+            * runs everytime a vector is drawn from the toolbar
         */
         map.on(L.Draw.Event.CREATED, function (e) {
             //Everytime a layer is draw on the map
@@ -247,8 +252,8 @@ function MapCard() {
 
 
         /*
-        * Retrieving data from a datapoint.json file and
-            displaying those data points on the map
+            * Retrieving data from a datapoint.json file and
+               displaying those data points on the map
         */
         function createCircle(datapoint) {
             console.log("some datapoint value:" + datapoint.lat);
@@ -270,8 +275,7 @@ function MapCard() {
 
 
         /*
-        * Updating statistics based on circle click
-        *
+            * Updating statistics based on circle click
         */
         layer_with_drawn_items.on("click", function (e) {
             var clickedCircle = e.layer; // e.target is the group itself.
