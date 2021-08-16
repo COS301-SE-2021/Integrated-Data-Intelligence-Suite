@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {Divider} from "antd";
 
 
 const UserList = (props) => {
@@ -7,7 +8,7 @@ const UserList = (props) => {
     const users = props.users
 
     return (
-        <div>
+        <div className={"user-list"}>
             { users.map((user) => (
                 <Link to={`user/${user.id}`}>
                     <div className={"user-preview"} key={user.id} >
@@ -23,6 +24,7 @@ const UserList = (props) => {
                             </p>
                     </div>
                 </Link>
+
             ))
             }
         </div>

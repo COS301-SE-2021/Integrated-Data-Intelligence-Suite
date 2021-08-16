@@ -55,12 +55,11 @@ const UserPermissions = () => {
 
     return (
 
-        <Layout id={'outer_layout'}>
+        <Layout className={"bodyDiv"}>
             <SideBar/>
             <Layout>
-                <Header id={'top_bar'}>
-                    {/*<SearchBar/>*/}
-                    <Title level={1}>Permission Management</Title>
+                <Header id={"top_bar"} className={"header"} >
+                    <Title level={1}>Settings</Title>
                 </Header>
                 <Content className={"permissions-content-section"}>
                     <div className={"permissions"}>
