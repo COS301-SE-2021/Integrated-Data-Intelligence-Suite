@@ -8,10 +8,10 @@
         <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Import_Service/pom.xml" />
         <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Parse_Service/pom.xml" />
         <option value="$PROJECT_DIR$/../MCTEST/Integrated-Data-Intelligence-Suite/Registry_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/pom.xml" />
         <option value="$PROJECT_DIR$/Gateway_Service/pom.xml" />
-        <option value="$PROJECT_DIR$/Import_Service/pom.xml" />
         <option value="$PROJECT_DIR$/Parse_Service/pom.xml" />
-        <option value="$PROJECT_DIR$/Registry_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/Import_Service/pom.xml" />
         <option value="$PROJECT_DIR$/Analyse_Service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/pom.xml" />
         <option value="$PROJECT_DIR$/../Visualize_Service/pom.xml" />
