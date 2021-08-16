@@ -56,7 +56,6 @@ class App extends Component {
                             <Link to="/"> back to home page</Link>
                         </div>
                     </Route>
-
                 </Switch>
             </>
         );

@@ -9,8 +9,6 @@ import React, {Component, useRef} from 'react';
 
 
 const Permissions = () => {
-
-
     const { data:users, isPending, error } = useGet('/user/getAll');
 
     return (
