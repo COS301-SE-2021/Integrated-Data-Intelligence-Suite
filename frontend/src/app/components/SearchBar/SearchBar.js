@@ -15,8 +15,17 @@ class SearchBar extends Component {
     //Runs when the search button is clicked
     onSearch(values){
         alert(values + "= Search term");
-
-        //Some API request
+        const requestOptions = {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+        };
+        const url = '/main/' + values;
+        fetch(url, requestOptions)
+            .then(response => {
+                return response.json()
+            }).then(json => {
+                //JSON response from API
+        });
 
         if(values === "yes"){
             //Show loading icon while API request is waiting for data
