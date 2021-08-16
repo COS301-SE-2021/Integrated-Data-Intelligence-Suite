@@ -125,7 +125,7 @@ public class TwitterExtractor implements Extractor {
                 longitude = 0.0;
         }
 
-        return latitude + ", " + longitude;
+        return latitude + "," + longitude;
     }
 
     /**
