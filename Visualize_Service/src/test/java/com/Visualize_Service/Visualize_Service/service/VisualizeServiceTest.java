@@ -38,7 +38,7 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
-        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        ArrayList<String> testlist4 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
@@ -49,7 +49,7 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
-        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        ArrayList<String> testlist4 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(testlist1,null,testlist2,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
@@ -60,7 +60,7 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
-        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        ArrayList<String> testlist4 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
@@ -71,7 +71,7 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
-        ArrayList<ArrayList> testlist4 = new ArrayList<>();
+        ArrayList<String> testlist4 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,null,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
