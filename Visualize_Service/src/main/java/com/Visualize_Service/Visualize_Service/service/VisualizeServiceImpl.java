@@ -58,25 +58,28 @@ public class VisualizeServiceImpl {
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-        ArrayList<String> entitiesID = new ArrayList<>();
+        /*ArrayList<String> entitiesID = new ArrayList<>();
         for(int i =0; i < reqData.size(); i++ ){
             for(int j=0; j < reqData.get(i).size(); i++){
                 if(entitiesID.contains(reqData.get(i).get(j)) == false){
                     entitiesID.add(reqData.get(i).get(j).toString());
                 }
             }
-        }
+        }*/
+
+        ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
 
         for(int i =0; i < reqData.size(); i++ ){
             for(int j=0; j < reqData.get(i).size(); i++){ //strings, (one, two, three)
 
                 String idOne = reqData.get(j).toString();
 
-                for(int k=0; k<reqData.get(i).size(); k++ ){ //compares with other values
-                    if(idOne != reqData.get(k).toString()){ //not the same value
-                        if (isNetworkGraph(idOne, reqData.get(k).toString()) != false){
+                for(int k=0; k<reqData.get(i).size(); k++ ){ //compares with other values, in same row
 
-                            String idTwo = reqData.get(k).toString();
+                    String idTwo = reqData.get(k).toString();
+
+                    if(idOne != idTwo){ //not the same value
+                        if (isNetworkGraph(idOne, idTwo,foundRelationships) != false){
 
                             //first node
                             NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
@@ -99,7 +102,6 @@ public class VisualizeServiceImpl {
                             positionTwo.y = 0;
 
                             //edge node
-
                             EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
 
                             EdgeNetworkGraph.data dataEdge = edgeGraph.new data();
@@ -107,8 +109,12 @@ public class VisualizeServiceImpl {
                             dataEdge.source = idOne;
                             dataEdge.target = idTwo;
 
-
+                            //add graphs to output
                             output.add(nodeGraphOne);
+                            output.add(nodeGraphTwo);
+                            output.add(edgeGraph);
+
+                            foundRelationships.add(edgeGraph);
                         }
                     }
                 }
@@ -165,7 +171,34 @@ public class VisualizeServiceImpl {
 
     /******************************************************************************************************************/
 
-    private boolean isNetworkGraph(String idOne, String toString) {
+    private boolean isNetworkGraph(String idOne, String idTwo, ArrayList<EdgeNetworkGraph> foundRelationships) {
+
+        if(foundRelationships.isEmpty() == true) {
+            return true;
+        }
+        else{
+            for(int i =0; i < foundRelationships.size();i++){
+
+                EdgeNetworkGraph edgeNetworkGraph = foundRelationships.get(i);
+
+                String source = edgeNetworkGraph.getSource();
+                String target = edgeNetworkGraph.getTarget();
+
+                if ( (idOne == source) || (idOne == target)){
+                    if((idOne == source) && (idTwo == target))
+                        return true;
+                    else if((idOne == target) && (idTwo == source))
+                        return true;
+                }
+                else if ( (idTwo == source) || (idTwo == target)){
+                    if((idOne == source) && (idTwo == target))
+                        return true;
+                    else if((idOne == target) && (idTwo == source))
+                        return true;
+                }
+            }
+        }
+
         return false;
     }
 

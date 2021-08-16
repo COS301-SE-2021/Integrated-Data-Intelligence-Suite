@@ -10,5 +10,13 @@ public class EdgeNetworkGraph extends NetworkGraph{
         public String target;
     }
 
+    public String getSource(){
+        return new data().source;
+    }
+
+    public String getTarget(){
+        return new data().target;
+    }
+
 
 }
