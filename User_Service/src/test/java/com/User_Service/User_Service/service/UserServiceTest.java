@@ -1,5 +1,3 @@
-package com.User_Service.User_Service.service;
-
 import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.repository.UserRepository;

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 public class FindPatternRequest {
     ArrayList<String> dataList;
 
-    public FindPatternRequest(){
-
-    }
-
     public FindPatternRequest(ArrayList<String> dataList){
         this.dataList = dataList;
     }

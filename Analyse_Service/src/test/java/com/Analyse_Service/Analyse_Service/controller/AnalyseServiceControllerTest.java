@@ -3,6 +3,7 @@ package com.Analyse_Service.Analyse_Service.controller;
 import com.Analyse_Service.Analyse_Service.AnalyseServiceApplication;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.AnalyseDataRequest;
+import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +30,8 @@ public class AnalyseServiceControllerTest {
     @InjectMocks
     private AnalyseServiceController controller;
 
-
+    @Mock
+    private AnalyseServiceImpl service;
 
     private MockMvc mockMvc;
 
@@ -56,7 +59,9 @@ public class AnalyseServiceControllerTest {
         HttpEntity<AnalyseDataRequest> instance =new HttpEntity<>(analyseRequest,requestHeaders);
 
         Gson gson = new Gson();
-        String json = gson.toJson(instance);;
+        System.out.println(gson.toJson(instance));
+        String json = gson.toJson(instance);
+        System.out.println(json);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
                 .contentType(MediaType.APPLICATION_JSON).content(json)
