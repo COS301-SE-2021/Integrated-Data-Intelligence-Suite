@@ -90,7 +90,7 @@ public class AnalyseServiceImpl {
             String row = "";
 
             String text = dataList.get(i).getTextMessage();
-            String location = "12.3223,23.3223";//dataList.get(i).getLocation();
+            String location = dataList.get(i).getLocation();
             String date = dataList.get(i).getDate();
             System.out.println("HERE IS THE DATE1 _______________________________ : " + date);
             date = date.replaceAll("\\s+","/");
@@ -740,7 +740,7 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = lrModel.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
