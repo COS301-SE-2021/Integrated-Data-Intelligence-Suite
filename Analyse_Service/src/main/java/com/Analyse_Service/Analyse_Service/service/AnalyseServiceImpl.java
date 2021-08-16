@@ -611,7 +611,7 @@ public class AnalyseServiceImpl {
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < minSize; i++){
             double trending = 0.0;
-            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >  1 ){
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >  1  || Double.parseDouble(averageLikes.get(i).get(1).toString()) >= 6000.0){
                 trending = 1.0;
             }
             Row trainRow = RowFactory.create(
