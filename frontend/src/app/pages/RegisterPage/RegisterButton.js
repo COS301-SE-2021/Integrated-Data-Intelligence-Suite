@@ -36,7 +36,7 @@ class RegisterButton extends React.Component {
                     loading={this.state.is_loading}
                     onClick={() => this.enterLoading(!this.state.is_loading)}
                 >
-                    Log in
+                    Register
                 </Button>
             </>
         );

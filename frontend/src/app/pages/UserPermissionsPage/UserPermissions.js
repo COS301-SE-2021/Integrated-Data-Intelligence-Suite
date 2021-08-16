@@ -22,9 +22,9 @@ const UserPermissions = () => {
     const history = useHistory();
     const [permission, setPermission] = useState(null);
     const [submit, setSubmit] = useState(false);
+    const [user, setUser] = useState(null);
 
-    const {data:user, isPending, error} = useGet('http://localhost:8000/people/'+ id)
-
+    const {data:users, isPending, error} = useGet('/user/getUser/'+ id)
 
     const enableSubmit = (value) => {
         setPermission(value);
@@ -34,11 +34,16 @@ const UserPermissions = () => {
     const submitChanges = (e) =>{
         e.preventDefault();
         setSubmit(false);
-        user.permissions = permission;
-        fetch('http://localhost:8000/people/'+id,{
-            method:"PUT",
+        const requestBody = {
+            username : user.username,
+            newPermission : permission
+        }
+        console.log("userdata ",user.user);
+        console.log("body is ", requestBody)
+        fetch('http://localhost:9000/changePermission',{
+            method:"POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(user)
+            body: JSON.stringify(requestBody)
         }).then( () => {
             console.log("uploaded")
             history.go(-1);
@@ -50,18 +55,18 @@ const UserPermissions = () => {
 
     return (
 
-        <Layout id={'outer_layout'}>
+        <Layout className={"bodyDiv"}>
             <SideBar/>
             <Layout>
-                <Header id={'top_bar'}>
-                    {/*<SearchBar/>*/}
-                    <Title level={1}>Permission Management</Title>
+                <Header id={"top_bar"} className={"header"} >
+                    <Title level={1}>Settings</Title>
                 </Header>
                 <Content className={"permissions-content-section"}>
                     <div className={"permissions"}>
                         <div className={"user-info"}>
                             { isPending && <div>loading </div>}
                             { error && <div>{error}</div>}
+                            {users && user===null && setUser(users.user[0])}
                             {user && permission===null && setPermission(user.permission)}
                             {user && (
                                 <div>

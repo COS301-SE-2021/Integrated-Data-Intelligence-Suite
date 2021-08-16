@@ -1,16 +1,25 @@
 .user-preview{
-    padding: 10px 10px;
+    padding: 20px;
     margin-bottom: 10px;
-    border: 1px solid #95dbb6;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     line-height: normal;
     display: flex;
-    background: #95dbb6;
+    background-color: lightgray;
+    border-radius: 10px;
 }
 
 .user-preview:hover{
-    border-color: #15B761;
+    background-color: #bfbebe;
+}
 
+.user-preview h3{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.user-list a{
+    color: black;
+    font-weight: 500;
 }
 
 
@@ -44,7 +53,7 @@
 
 }
 .user-info {
-    background: #95DBB6;
+    background:rgba(0,0,0,0);
     width: 50%;
     margin: 0 auto;
     border-radius: 10px;
@@ -65,6 +74,44 @@
 .user-info form{
     border: none;
 }
+.bodyDiv .ant-layout{
+    background-color: rgba(0,0,0,0);
+}
+
+
+.bodyDiv .ant-layout-content{
+    background-color: lightgrey;
+}
+
+.bodyDiv .right-column .ant-layout-content{
+    background-color: rgba(0,0,0,0);
+}
+
+.ant-divider#lightgrey{
+    border-color: lightgray;
+}
+
+
+.clear-background h1#permissions-title{
+    font-size: 28px;
+    margin: 0;
+    padding-left: 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+
+
+}
+
+
+.bodyDiv .outer-container .left-column>div{
+    color: black;
+    text-transform: capitalize;
+    font-size: 16px;
+}
+
+
+
+
 
 .user-info .form-button-container{
     display: inline-block;

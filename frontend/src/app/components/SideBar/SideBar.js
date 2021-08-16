@@ -50,6 +50,7 @@ class SideBar extends React.Component {
                     {/*</SubMenu>*/}
                     <Menu.Item key="9" icon={<SettingOutlined/>}>
                         Settings
+                        <Link to={"/settings"}/>
                     </Menu.Item>
                     <Menu.Item key="10">
                         Permissions

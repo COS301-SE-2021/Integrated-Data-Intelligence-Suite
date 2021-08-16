@@ -34,18 +34,23 @@ const LoginPage = () => {
         },
         validate,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-            history.push('/');
+            //alert(JSON.stringify(values, null, 2));
+            const requestOptions = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(values)
+            };
+            fetch('/user/login', requestOptions)
+                .then(response => {
+                    return response.json()
+                }).then(json => {
+                    alert(json.message);
+                    if(json.success) {
+                        localStorage.setItem("user", json.id)
+                        history.push('/');
+                    }
+                });
 
-            /*
-                Some ASync Function
-
-                Make Get Request
-
-                Update Client if get request Unsuccesfull
-
-                else, redirect to home page
-             */
         },
     });
 

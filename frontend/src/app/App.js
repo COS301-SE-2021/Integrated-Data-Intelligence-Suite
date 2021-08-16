@@ -7,6 +7,8 @@ import ChartPage from "./pages/ChartPage/components/ChartPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import UserPermissions from "./pages/UserPermissionsPage/UserPermissions";
 import Permissions from "./pages/PermissionsPage/Permissions";
+import LogoutPage from "./pages/LogoutPage/LogoutPage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
 
 class App extends Component {
     state = {}
@@ -36,7 +38,15 @@ class App extends Component {
                         <Permissions/>
                     </Route>
 
-                    <Route path={"/permissions/user/:id"}>
+                    <Route exact path={"/logout"}>
+                        <LogoutPage/>
+                    </Route>
+
+                    <Route exact path={"/settings"}>
+                        <SettingsPage/>
+                    </Route>
+
+                    <Route path={"/user/:id"}>
                         <UserPermissions/>
                     </Route>
 

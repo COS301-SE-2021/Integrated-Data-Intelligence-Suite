@@ -4,35 +4,54 @@ import {
     Input, Layout
 } from 'antd';
 import {Typography} from 'antd';
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
 
+function getLocalUser(){
+    const localUser = localStorage.getItem("user");
+    if(localUser){
+        return localUser;
+    }else{
+        return null;
+    }
+}
 
 class HomePage extends Component {
-    state = {}
+    constructor(props) {
+        super(props);
+        this.state.user = getLocalUser();
+    }
+    state = {
+        user : null
+    }
 
     render() {
-        return (
-            <>
-                <Switch>
-                    <Route exact path='/'>
-                        <Layout id={'outer_layout'}>
-                            <SideBar/>
-                            <Layout>
-                                <Header id={'top_bar'}>
-                                    {/*<SearchBar/>*/}
-                                    <Title level={1}>Home</Title>
-                                </Header>
-                                <Content id={'content_section'}>Content</Content>
-                                <Footer id={'footer_section'}>Footer</Footer>
+        if(this.state.user){
+            return (
+                <>
+                    <Switch>
+                        <Route exact path='/'>
+                            <Layout id={'outer_layout'}>
+                                <SideBar/>
+                                <Layout>
+                                    <Header id={'top_bar'}>
+                                        {/*<SearchBar/>*/}
+                                        <Title level={1}>Home</Title>
+                                    </Header>
+                                    <Content id={'content_section'}>Content</Content>
+                                    <Footer id={'footer_section'}>Footer</Footer>
+                                </Layout>
                             </Layout>
-                        </Layout>
-                    </Route>
-                </Switch>
-            </>
-        );
+                        </Route>
+                    </Switch>
+                </>
+            );
+        }else{
+           return <Redirect to={'/login'}/>
+        }
+
     }
 
 }
