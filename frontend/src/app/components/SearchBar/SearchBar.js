@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Input} from 'antd';
 import "./SearchBar.css";
+
 const {Search} = Input;
 
 class SearchBar extends Component {
@@ -8,13 +9,15 @@ class SearchBar extends Component {
     // showLoadingIcon = false;
     constructor() {
         super();
-        this.state = { showLoadingIcon:false };
+        this.state = {showLoadingIcon: false};
         this.onSearch = this.onSearch.bind(this);
     }
 
     //Runs when the search button is clicked
-    onSearch(values){
+    onSearch(values) {
         alert(values + "= Search term");
+        //Show loading icon while API request is waiting for data
+        this.setState((prevState) => ({showLoadingIcon: true}))
         const requestOptions = {
             method: 'GET',
             headers: {'Content-Type': 'application/json'}
@@ -24,18 +27,12 @@ class SearchBar extends Component {
             .then(response => {
                 return response.json()
             }).then(json => {
-                //JSON response from API
+            //remove or stop the loading icon
+            this.setState((prevState) => ({showLoadingIcon: false}))
+            
+            //JSON response from API
         });
 
-        if(values === "yes"){
-            //Show loading icon while API request is waiting for data
-            this.setState((prevState) => ({showLoadingIcon: true}))
-
-
-        }else{
-            //After data received remove loading icon
-            this.setState((prevState) => ({showLoadingIcon: false}))
-        }
     }
 
     render() {
