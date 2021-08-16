@@ -4,7 +4,6 @@ import {
     Descriptions
 } from "antd";
 
-
 class DetailsCard extends React.Component {
     state = {}
 

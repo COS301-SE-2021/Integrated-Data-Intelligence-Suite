@@ -60,7 +60,7 @@ class UserInfoCard extends React.Component {
                         <Meta
                             id={'meta_id'}
                             className={'user_meta_card'}
-                            title=""
+                            title="Name Surname"
                             avatar={
                                 <Avatar
                                     id={'user_avatar_pic'}

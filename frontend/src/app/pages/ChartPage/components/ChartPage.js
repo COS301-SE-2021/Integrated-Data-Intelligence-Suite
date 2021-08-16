@@ -9,10 +9,14 @@ import {
 import {Route, Switch} from "react-router-dom";
 import MapCard from "./MapCard";
 import DetailsCard from "./DetailsCard";
+import NetworkGraphCard from "./NetworkGraphCard";
+import "../styles/NetworkGraph.css";
+import UserInfoCard from "../../../components/SideBar/UserInfoCard";
+import SearchBar from "../../../components/SearchBar/SearchBar";
+import TimelineGraph from "./TimelineGraph";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
-
 
 class ChartPage extends Component {
     state = {}
@@ -29,9 +33,14 @@ class ChartPage extends Component {
                             <SideBar/>
                             <Layout id={'inner_layout_div'}>
                                 <Header id={'top_bar'}>
-                                    <Title level={1}>Chart Page Title</Title>
+                                    {/*<Title level={1}>Chart Page Title</Title>*/}
+                                    <SearchBar/>
+                                    <UserInfoCard
+                                        name="s"
+                                    />
                                 </Header>
 
+                                {/*The Map Graph*/}
                                 <Content id={'content_section'}>
                                     <Layout
                                         id={'map_card_content_layout_div'}
@@ -47,12 +56,37 @@ class ChartPage extends Component {
                                         <Sider
                                             id={'map_card_sidebar'}
                                             className={'map_card'}
-
                                         >
                                             <DetailsCard/>
-
                                         </Sider>
                                     </Layout>
+
+                                    {/*The Network Graph*/}
+                                    <Layout
+                                        id={'network_graph_layout_div'}
+                                        className={'network_card'}
+                                    >
+                                        <Content
+                                            id={'network_graph_card_content'}
+                                            className={'network_card'}
+                                        >
+                                            <NetworkGraphCard/>
+                                        </Content>
+                                    </Layout>
+
+                                    {/*The timeline Graph*/}
+                                    <Layout
+                                        id={'timeline_graph_div'}
+                                        className={'timeline_card'}
+                                    >
+                                        <Content
+                                            id={'timeline_graph_card_content'}
+                                            className={'timeline_card'}
+                                        >
+                                            <TimelineGraph/>
+                                        </Content>
+                                    </Layout>
+
                                 </Content>
                             </Layout>
                         </Layout>

@@ -16,6 +16,7 @@ th.ant-descriptions-item.map_1 > div.ant-descriptions-item-container > span.ant-
     font-weight: 800 !important;
     font-size: 35px !important;
     border: 3px solid black;
+    color: black;
 }
 
 /*The actual statistic / number value underneath the Label Title*/

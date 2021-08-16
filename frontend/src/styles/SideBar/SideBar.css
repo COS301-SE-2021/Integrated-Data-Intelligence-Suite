@@ -7,8 +7,8 @@
 #sidebar_menu {
     background: transparent;
     color: white;
-    /*border: 0;*/
-    border: 3px solid red;
+    border: 0;
+    /*border: 3px solid red;*/
     height:87%;
 }
 
@@ -56,18 +56,17 @@
 
 
 /* The Collapse/Expand Trigger(arrow) at the Top of the SideBar*/
-.ant-layout-sider-trigger {
+.ant-layout-sider-trigger[style] {
     /* Positions the Trigger at the top of*/
     /*Comment this out and Set 'bottom:0' to position trigger at the bottom*/
     top: 0;
-
     position: fixed;
     z-index: 1;
     height: 48px;
-    color: #fff;
+    color: black !important;
     line-height: 48px;
     text-align: center;
-    background: #002140;
+    background:  white !important  ;
     cursor: pointer;
     transition: all 0.2s;
 }

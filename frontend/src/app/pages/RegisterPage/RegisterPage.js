@@ -165,7 +165,6 @@ const RegisterPage = () => {
                 >
                     <Input.Password
                         id="password"
-
                         name="password"
                         type="password"
                         placeholder="Password"

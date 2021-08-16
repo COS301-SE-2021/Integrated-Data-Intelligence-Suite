@@ -57,10 +57,7 @@ class SideBar extends React.Component {
                         <Link to="/permissions/"/>
                     </Menu.Item>
                 </Menu>
-                <UserInfoCard
-                    collapsed={collapsed}
-                    name="s"
-                />
+
             </Sider>
         );
     }

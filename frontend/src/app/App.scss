@@ -7,7 +7,7 @@
 
 //Header and all its child components
 @import url("../styles/Header/Header.css");
-@import url("../styles/Header/SearchBar.css");
+@import url("components/SearchBar/SearchBar.css");
 
 //Content Section and all its child components
 @import url("../styles/ContentSection/ContentSection.css");
@@ -40,10 +40,10 @@
 
 //Chart Page and all its child components
 @import '~leaflet/dist/leaflet.css';
-@import '../styles/ChartPage/ChartPage.css';
-@import '../styles/ChartPage/MapCardSidebar.css';
-@import '../styles/ChartPage/MapCard.css';
-@import '../styles/ChartPage/DetailsCard.css';
+@import 'pages/ChartPage/styles/ChartPage.css';
+@import 'pages/ChartPage/styles/MapCardSidebar.css';
+@import 'pages/ChartPage/styles/Leaflet/MapCard.css';
+@import 'pages/ChartPage/styles/DetailsCard.css';
 
 
 
