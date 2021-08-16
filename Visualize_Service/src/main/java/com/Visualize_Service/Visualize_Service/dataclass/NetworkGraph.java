@@ -6,6 +6,7 @@ public class NetworkGraph extends Graph {
     public class data {
         public String id;
     }
+
     public class position {
         public int x;
         public int y;

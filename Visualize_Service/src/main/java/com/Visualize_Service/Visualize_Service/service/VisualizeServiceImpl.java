@@ -2,6 +2,7 @@ package com.Visualize_Service.Visualize_Service.service;
 
 import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import com.Visualize_Service.Visualize_Service.dataclass.MapGraph;
+import com.Visualize_Service.Visualize_Service.dataclass.NetworkGraph;
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
 import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
@@ -59,12 +60,31 @@ public class VisualizeServiceImpl {
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-        ArrayList<String> entities = new ArrayList<>();
+        ArrayList<String> entitiesID = new ArrayList<>();
         for(int i =0; i < reqData.size(); i++ ){
             for(int j=0; j < reqData.get(i).size(); i++){
-                if(entities.contains(reqData.get(i).get(j)) == false){
-                    entities.add(reqData.get(i).get(j).toString());
+                if(entitiesID.contains(reqData.get(i).get(j)) == false){
+                    entitiesID.add(reqData.get(i).get(j).toString());
                 }
+            }
+        }
+
+        for(int i =0; i < reqData.size(); i++ ){
+            for(int j=0; j < reqData.get(i).size(); i++){
+                NetworkGraph newGraph = new NetworkGraph();
+
+                NetworkGraph.data data = newGraph.new data();
+                data.id = "node";
+
+                NetworkGraph.position position = newGraph.new position();
+                position.x = 0;
+                position.y = 0;
+
+                if(reqData.get(i).get(j) == entitiesID.get(0) ){ // row, entity to another
+                    System.out.println("here");
+                }
+
+                output.add(newGraph);
             }
         }
 
