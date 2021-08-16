@@ -52,15 +52,14 @@ public class VisualizeServiceImpl {
         CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
         CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
 
-        //outputData.add(networkResponse.NetworkGraphArray);
+        outputData.add(timelineResponse.timelineGraphArray);
 
 
-        //network graph
+        //line graph
         CreateLineGraphRequest lineRequest = new CreateLineGraphRequest(request.getRelationshipList());
-        CreateLineGraphResponse lineResponse =  this.createLineGraph(lineRequest);
+        //CreateLineGraphResponse lineResponse =  this.createLineGraph(lineRequest);
 
-        //outputData.add(networkResponse.NetworkGraphArray);
-
+        //outputData.add(lineResponse.lineGraphArray);
 
 
         return new VisualizeDataResponse( outputData );
@@ -213,7 +212,7 @@ public class VisualizeServiceImpl {
 
             output.add(newGraph);
         }
-        return null;
+        return new CreateTimelineGraphResponse(output);
     }
 
 
