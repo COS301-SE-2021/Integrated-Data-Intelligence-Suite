@@ -1,10 +1,13 @@
 package com.Visualize_Service.Visualize_Service.service;
 
 import com.Visualize_Service.Visualize_Service.dataclass.Graph;
+import com.Visualize_Service.Visualize_Service.dataclass.MapGraph;
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
 import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class VisualizeServiceImpl {
@@ -64,8 +67,22 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
-        Graph newGraph = new Graph();
-        return null;
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+
+        for (int i = 0; i < reqData.size(); i++) {
+            MapGraph newGraph = new MapGraph();
+            newGraph.statistic_1 = reqData.get(0).get(i).toString();
+            newGraph.lat = "12.3223";
+            newGraph.lon = "23.3223";
+            newGraph.classnamel = "circle1";
+            output.add(newGraph);
+        }
+
+
+
+        return new CreateMapGraphResponse(output);
     }
 
 
