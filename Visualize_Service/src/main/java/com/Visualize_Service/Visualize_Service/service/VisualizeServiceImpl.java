@@ -14,23 +14,53 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
-        if (request.getPatternList() == null){
-            throw new InvalidRequestException("Arraylist is null");
+        if (request.getAnomalyList() == null){
+            throw new InvalidRequestException("Arraylist of AnomalyList is null");
         }
-        if (request.getRelationshipList() == null){
-            throw new InvalidRequestException("Arraylist is null");
+        if (request.getPatternList() == null){
+            throw new InvalidRequestException("Arraylist of PatternList is null");
         }
         if (request.getPredictionList() == null){
-            throw new InvalidRequestException("Arraylist is null");
+            throw new InvalidRequestException("Arraylist of PredictionList is null");
+        }
+        if (request.getRelationshipList() == null){
+            throw new InvalidRequestException("Arraylist of RelationshipList is null");
         }
         if (request.getTrendList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        if (request.getAnomalyList() == null){
-            throw new InvalidRequestException("Arraylist is null");
+            throw new InvalidRequestException("Arraylist of TrendList is null");
         }
 
-        return new VisualizeDataResponse(null);
+        ArrayList<ArrayList> outputData = new ArrayList<>();
+
+        //map graph
+        CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
+        CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
+
+        outputData.add(mapResponse.mapGraphArray);
+
+
+        //network graph
+        CreateNetworkGraphRequest networkRequest = new CreateNetworkGraphRequest(request.getRelationshipList());
+        CreateNetworkGraphResponse networkResponse =  this.createNetworkGraph(networkRequest);
+
+        outputData.add(networkResponse.NetworkGraphArray);
+
+        //timeline graph
+        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getRelationshipList());
+        CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
+
+        //outputData.add(networkResponse.NetworkGraphArray);
+
+
+        //network graph
+        CreateLineGraphRequest lineRequest = new CreateLineGraphRequest(request.getRelationshipList());
+        CreateLineGraphResponse lineResponse =  this.createlineGraph(lineRequest);
+
+        //outputData.add(networkResponse.NetworkGraphArray);
+
+
+
+        return new VisualizeDataResponse( outputData );
     }
 
 
@@ -57,15 +87,6 @@ public class VisualizeServiceImpl {
 
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
-
-        /*ArrayList<String> entitiesID = new ArrayList<>();
-        for(int i =0; i < reqData.size(); i++ ){
-            for(int j=0; j < reqData.get(i).size(); i++){
-                if(entitiesID.contains(reqData.get(i).get(j)) == false){
-                    entitiesID.add(reqData.get(i).get(j).toString());
-                }
-            }
-        }*/
 
         ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
 
