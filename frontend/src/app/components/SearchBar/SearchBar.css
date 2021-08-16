@@ -41,11 +41,12 @@
 #top_bar > .ant-input-search {
     border: 2px solid black;
     /*border: 0;*/
+
     width: 22%;
     float: left;
-    /*margin-top: 15px;*/
     position: relative;
 
+    /* Vertically Aligning it the middle*/
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);

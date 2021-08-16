@@ -59,7 +59,6 @@ class ChartPage extends Component {
                                         >
                                             <DetailsCard/>
                                         </Sider>
-
                                     </Layout>
 
                                     {/*The Network Graph*/}
