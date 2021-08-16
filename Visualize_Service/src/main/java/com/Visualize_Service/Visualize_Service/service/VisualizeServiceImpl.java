@@ -6,7 +6,10 @@ import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Service
 public class VisualizeServiceImpl {
@@ -46,7 +49,7 @@ public class VisualizeServiceImpl {
         outputData.add(networkResponse.NetworkGraphArray);
 
         //timeline graph
-        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getRelationshipList());
+        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
         CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
 
         //outputData.add(networkResponse.NetworkGraphArray);
@@ -189,13 +192,24 @@ public class VisualizeServiceImpl {
             throw new InvalidRequestException("Arraylist is null");
         }
 
+        ArrayList<String> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
-        for (int i = 0; i < i; i++) { //TODO
+        for (int i = 0; i < reqData.size(); i++) {
             TimelineGraph newGraph = new TimelineGraph();
 
-            newGraph.title = "";
-            newGraph.cardTitle = "";
-            newGraph.cardSubtitle = "";
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "Anomaly Detected";
+            newGraph.cardSubtitle = reqData.get(i);
 
             output.add(newGraph);
         }
