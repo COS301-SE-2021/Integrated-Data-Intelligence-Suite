@@ -6,9 +6,14 @@ public class EdgeNetworkGraph extends NetworkGraph{
 
     public data data = new data();
 
+    class data {
+        public String id;
 
+        public String source;
 
-
-
+        public String target;
+    }
 
 }
+
+
