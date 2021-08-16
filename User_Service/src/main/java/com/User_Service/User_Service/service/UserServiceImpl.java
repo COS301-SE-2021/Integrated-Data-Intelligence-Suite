@@ -6,6 +6,7 @@ import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +76,10 @@ public class UserServiceImpl {
             }
 
             if (diff == 0) {
-                return new LoginResponse("Successfully logged in", true,user.getId());
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", user.getId().toString());
+                jsonObject.put("username", user.getUsername());
+                return new LoginResponse("Successfully logged in", true,jsonObject.toString());
             }
             else {
                 return new LoginResponse("Incorrect password", false);
