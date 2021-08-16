@@ -9,13 +9,13 @@ public class AnalyseDataResponse {
     public ArrayList<ArrayList> relationshipList;
     public ArrayList<ArrayList> predictionList;
     public ArrayList<ArrayList> trendList;
-    public ArrayList<ArrayList> anomalyList;
+    public ArrayList<String> anomalyList;
 
     public AnalyseDataResponse(ArrayList<ArrayList> pattenList,
                                ArrayList<ArrayList> relationshipList,
                                ArrayList<ArrayList> predictionList,
                                ArrayList<ArrayList> trendList,
-                               ArrayList<ArrayList> anomalyList){
+                               ArrayList<String> anomalyList){
         this.patternList = pattenList;
         this.relationshipList = relationshipList;
         this.predictionList = predictionList;
@@ -39,7 +39,7 @@ public class AnalyseDataResponse {
         return trendList;
     }
 
-    public ArrayList<ArrayList> getAnomalyList(){
+    public ArrayList<String> getAnomalyList(){
         return anomalyList;
     }
 }

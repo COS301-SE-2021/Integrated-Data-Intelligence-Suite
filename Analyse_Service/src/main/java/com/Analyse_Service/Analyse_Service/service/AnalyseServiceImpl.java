@@ -73,13 +73,13 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
         if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList is null");
+            throw new InvalidRequestException("DataList of parsedData is null");
         }
 
         ArrayList<ParsedData> dataList =  request.getDataList();
 
         //set data
-        ArrayList<ArrayList> trendDatalist = new ArrayList<>();
+        ArrayList<ArrayList> parsedDatalist = new ArrayList<>();
 
         /*******************Find pattern******************/
 
@@ -103,31 +103,40 @@ public class AnalyseServiceImpl {
 
 
             row = sentimentResponse.getSentiment().getCssClass() + " " + date + " "+ likes;
-            ArrayList<String> rowforTrends = new ArrayList<>();
-            rowforTrends.add(text);
-            rowforTrends.add(location);
-            rowforTrends.add(date);
-            rowforTrends.add(dataList.get(i).getLikes().toString());
-            rowforTrends.add(sentimentResponse.getSentiment().getCssClass());
+            ArrayList<String> rowOfParsed = new ArrayList<>();
+            rowOfParsed.add(text);
+            rowOfParsed.add(location);
+            rowOfParsed.add(date);
+            rowOfParsed.add(dataList.get(i).getLikes().toString()); //likes
+            //rowOfParsed.add(sentimentResponse.getSentiment().getCssClass());
 
-            trendDatalist.add(rowforTrends);
+            parsedDatalist.add(rowOfParsed);
 
             dataSendList.add(row);
         }
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(dataSendList);
+        FindPatternRequest findPatternRequest = new FindPatternRequest(dataSendList); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(trendDatalist);
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(dataSendList);
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(dataSendList); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(trendDatalist);
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        return new AnalyseDataResponse(findPatternResponse.getPattenList(), findRelationshipsResponse.getPattenList(), getPredictionResponse.getPattenList());
+        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
+        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+
+
+        return new AnalyseDataResponse(
+                findPatternResponse.getPattenList(),
+                findRelationshipsResponse.getPattenList(),
+                getPredictionResponse.getPattenList(),
+                findTrendsResponse.getPattenList(),
+                findAnomaliesResponse.getPattenList())  ;
     }
 
 
