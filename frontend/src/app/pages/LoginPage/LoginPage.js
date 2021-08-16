@@ -37,7 +37,7 @@ const LoginPage = () => {
             //alert(JSON.stringify(values, null, 2));
 
             if (values.email === "myron@gmail.com" && values.password === "123") {
-                localStorage.setItem("user", "myron");
+                localStorage.setItem("user", "{'id' : 'b5aa283d-35d1-421d-a8c6-42dd3e115463', 'username' : 'myron'}");
                 history.push('/');
             } else {
                 const requestOptions = {
