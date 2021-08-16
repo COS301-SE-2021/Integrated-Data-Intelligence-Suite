@@ -75,7 +75,7 @@ public class UserServiceImpl {
             }
 
             if (diff == 0) {
-                return new LoginResponse("Successfully logged in", true);
+                return new LoginResponse("Successfully logged in", true,user.getId());
             }
             else {
                 return new LoginResponse("Incorrect password", false);

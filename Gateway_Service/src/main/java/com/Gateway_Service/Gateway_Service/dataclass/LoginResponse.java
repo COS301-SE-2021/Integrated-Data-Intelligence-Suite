@@ -1,8 +1,11 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
+import java.util.UUID;
+
 public class LoginResponse {
     private String message;
     private boolean success;
+    private UUID id;
 
     public LoginResponse() {
 
@@ -12,6 +15,15 @@ public class LoginResponse {
         this.message = message;
         this.success = success;
     }
+    public LoginResponse(String message, boolean success, UUID id) {
+        this.message = message;
+        this.success = success;
+        this.id = id;
+    }
+
+    public UUID getId() { return id; }
+
+    public void setId(UUID id) { this.id = id; }
 
     public String getMessage() {
         return message;
