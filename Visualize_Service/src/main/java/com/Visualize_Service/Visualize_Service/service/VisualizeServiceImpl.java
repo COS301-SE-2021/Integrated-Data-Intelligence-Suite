@@ -3,6 +3,7 @@ package com.Visualize_Service.Visualize_Service.service;
 import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import com.Visualize_Service.Visualize_Service.dataclass.MapGraph;
 import com.Visualize_Service.Visualize_Service.dataclass.NetworkGraph;
+import com.Visualize_Service.Visualize_Service.dataclass.NodeNetworkGraph;
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
 import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
@@ -71,12 +72,12 @@ public class VisualizeServiceImpl {
 
         for(int i =0; i < reqData.size(); i++ ){
             for(int j=0; j < reqData.get(i).size(); i++){
-                NetworkGraph newGraph = new NetworkGraph();
+                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
 
-                NetworkGraph.data data = newGraph.new data();
+                NodeNetworkGraph.data data = nodeGraphOne .new data();
                 data.id = "node";
 
-                NetworkGraph.position position = newGraph.new position();
+                NodeNetworkGraph.position position = nodeGraphOne .new position();
                 position.x = 0;
                 position.y = 0;
 
@@ -84,7 +85,7 @@ public class VisualizeServiceImpl {
                     System.out.println("here");
                 }
 
-                output.add(newGraph);
+                output.add(nodeGraphOne);
             }
         }
 
