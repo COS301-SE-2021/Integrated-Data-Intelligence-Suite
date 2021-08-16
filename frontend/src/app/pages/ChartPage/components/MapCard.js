@@ -242,9 +242,10 @@ function MapCard() {
         */
         function createCircle(datapoint) {
             console.log("some datapoint value:" + datapoint.lat);
-            return L.circleMarker(L.latLng(datapoint.lat, datapoint.lng), {
+            return L.circle(L.latLng(datapoint.lat, datapoint.lng), {
                 className: datapoint.classname,
-                id: "broski"
+                id: "broski",
+                radius: 10
             });
         }
 
