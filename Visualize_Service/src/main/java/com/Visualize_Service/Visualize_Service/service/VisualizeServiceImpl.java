@@ -100,16 +100,16 @@ public class VisualizeServiceImpl {
             for(int j=0; j < reqData.get(i).size(); j++){ //strings, (one, two, three)
                 System.out.println(reqData.get(i).toString());
 
-                String idOne = reqData.get(j).toString();
+                String idOne = reqData.get(i).get(j).toString();
 
                 for(int k=0; k<reqData.get(i).size(); k++ ){ //compares with other values, in same row
 
-                    String idTwo = reqData.get(k).toString();
+                    String idTwo = reqData.get(i).get(k).toString();
 
                     System.out.println("Checking : " + idOne + " : " + idTwo);
                     if(idOne.equals(idTwo) == false ){ //not the same value
                         System.out.println("Not equal");
-                        if (isNetworkGraph(idOne, idTwo,foundRelationships, Relationships) == false){
+                        if (isNetworkGraph(idOne, idTwo, Relationships) == false){
                             System.out.println("add graph");
                             //first node
                             NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
@@ -132,7 +132,9 @@ public class VisualizeServiceImpl {
                             output.add(nodeGraphTwo);
                             output.add(edgeGraph);
 
-                            foundRelationships.add(edgeGraph);
+                            //foundRelationships.add(edgeGraph);
+                            String[] values = new String[] {idOne,idTwo };
+                            Relationships.add(values);
                         }
                     }
                 }
@@ -213,21 +215,20 @@ public class VisualizeServiceImpl {
 
     /******************************************************************************************************************/
 
-    private boolean isNetworkGraph(String idOne, String idTwo, ArrayList<EdgeNetworkGraph> foundRelationships,ArrayList<String[]> Relationships ) {
+    private boolean isNetworkGraph(String idOne, String idTwo,ArrayList<String[]> Relationships ) {
 
-        if(foundRelationships.isEmpty() == true) {
-            return true;
+        if(Relationships.isEmpty() == true) {
+            return false;
         }
         else{
-            System.out.println("Size : " + foundRelationships.size());
-            for(int i =0; i < foundRelationships.size();i++){
+            System.out.println("Size : " + Relationships.size());
+            for(int i =0; i < Relationships.size();i++){
 
-                EdgeNetworkGraph edgeNetworkGraph = foundRelationships.get(i);
+                //EdgeNetworkGraph edgeNetworkGraph = foundRelationships.get(i);
 
                 String[] values = Relationships.get(0);
-                String value = values[0];//source
-                String source = "";//edgeNetworkGraph.getSource();//edgeNetworkGraph.data.source;
-                String target = "";//edgeNetworkGraph.getTarget();//edgeNetworkGraph.data.target;
+                String source =  values[0];;//edgeNetworkGraph.getSource();//edgeNetworkGraph.data.source;
+                String target =  values[1];;//edgeNetworkGraph.getTarget();//edgeNetworkGraph.data.target;
 
                 if ( (idOne == source) || (idOne == target)){
                     if((idOne == source) && (idTwo == target))
