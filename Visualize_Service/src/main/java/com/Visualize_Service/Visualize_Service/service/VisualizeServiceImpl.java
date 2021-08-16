@@ -17,12 +17,12 @@ public class VisualizeServiceImpl {
         if (request.getAnomalyList() == null){
             throw new InvalidRequestException("Arraylist of AnomalyList is null");
         }
-        if (request.getPatternList() == null){
+        /*if (request.getPatternList() == null){
             throw new InvalidRequestException("Arraylist of PatternList is null");
         }
         if (request.getPredictionList() == null){
             throw new InvalidRequestException("Arraylist of PredictionList is null");
-        }
+        }*/
         if (request.getRelationshipList() == null){
             throw new InvalidRequestException("Arraylist of RelationshipList is null");
         }
@@ -91,7 +91,7 @@ public class VisualizeServiceImpl {
         ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
 
         for(int i =0; i < reqData.size(); i++ ){
-            for(int j=0; j < reqData.get(i).size(); i++){ //strings, (one, two, three)
+            for(int j=0; j < reqData.get(i).size(); j++){ //strings, (one, two, three)
 
                 String idOne = reqData.get(j).toString();
 
@@ -163,15 +163,18 @@ public class VisualizeServiceImpl {
 
 
         for (int i = 0; i < reqData.size(); i++) {
-            MapGraph newGraph = new MapGraph();
-            newGraph.statistic_1 = reqData.get(0).get(i).toString();
-            newGraph.lat = "12.3223";
-            newGraph.lon = "23.3223";
-            newGraph.classnamel = "circle1";
-            output.add(newGraph);
+            ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
+            //System.out.println(locs.toString());
+            for (int j = 0; j < locs.size(); j++) {
+                MapGraph newGraph = new MapGraph();
+                newGraph.statistic_1 = reqData.get(i).get(0).toString();
+                String [] latlon = locs.get(j).toString().split(",");
+                newGraph.lat = latlon[0];
+                newGraph.lon = latlon[1];
+                newGraph.classnamel = "circle1";
+                output.add(newGraph);
+            }
         }
-
-
 
         return new CreateMapGraphResponse(output);
     }
