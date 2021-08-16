@@ -34,10 +34,10 @@ public class GatewayServiceApplication {
 
 	@Bean
 	@LoadBalanced
-	public RestTemplate getTemplate(){
+	public RestTemplate getRestTemplate(){
 		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
 		clientHttpRequestFactory.setConnectTimeout(90000); // 1 min 30 secs Timeout
-		return new RestTemplate();
+		return new RestTemplate( clientHttpRequestFactory);
 	}
 }
 

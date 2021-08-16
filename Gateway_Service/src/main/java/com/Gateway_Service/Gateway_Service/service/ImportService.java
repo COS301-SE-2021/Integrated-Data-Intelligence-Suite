@@ -5,6 +5,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.ImportDataResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.ImportTwitterRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.ImportTwitterResponse;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.*;
@@ -20,18 +21,19 @@ import java.security.NoSuchAlgorithmException;
 @Service
 //@FeignClient(value = "Import-Service" , url = "localhost:9001/Import" , fallback = ImportServiceFallback.class)
 public class ImportService {
-    /*@GetMapping(value = "/importData")
-    ImportDataResponse importData(@RequestParam("request") ImportDataRequest request) throws Exception;
-
-    @GetMapping(value = "/getTwitterDataJson")
-    ImportTwitterResponse getTwitterDataJson(@RequestParam("request") ImportTwitterRequest request) throws Exception ;*/
 
     @Autowired
     private RestTemplate restTemplate;
 
-
-
-    //@HystrixCommand(fallbackMethod = "getTwitterDataJsonFallback")
+    /**
+     * This method is used to communicate to the Import-Service.
+     * @param importRequest This is a request object which contains data required to be imported.
+     * @return ImportTwitterResponse This object contains imported twitter data returned by Import-Service
+     */
+    @HystrixCommand(/*commandProperties = {
+            @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE"),
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "90000") },*/
+            fallbackMethod = "getTwitterDataJsonFallback")
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest) {
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -39,14 +41,18 @@ public class ImportService {
 
         HttpEntity<ImportTwitterRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
 
-        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST, requestEntity, ImportTwitterResponse.class);
-        ImportTwitterResponse importResponse = responseEntity.getBody();
+        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST,null, ImportTwitterResponse.class);
+        ImportTwitterResponse importResponse = new ImportTwitterResponse("hello world"); // responseEntity.getBody();
 
         return importResponse;
     }
 
 
-
+    /**
+     * This method is used to communicate to the Import-Service.
+     * @param importRequest
+     * @return ImportDataResponse This object contains imported data returned by Import-Service
+     */
     //@HystrixCommand(fallbackMethod = "importDataFallback")
     public ImportDataResponse importData(ImportDataRequest importRequest) {
 
@@ -61,6 +67,11 @@ public class ImportService {
         return importResponse;
     }
 
+    /**
+     * This method is used to return fail values if communication to the Import-Service fails.
+     * @param importRequest This param is used to identify the method.
+     * @return ImportTwitterResponse This object contains failure values as data.
+     */
     public ImportTwitterResponse getTwitterDataJsonFallback(ImportTwitterRequest importRequest){
         ImportTwitterResponse importTwitterResponse =  new ImportTwitterResponse(null);
         importTwitterResponse.setFallback(true);
@@ -68,7 +79,11 @@ public class ImportService {
         return importTwitterResponse;
     }
 
-
+    /**
+     * This method is used to return fail values if communication to the Import-Service fails.
+     * @param importRequest This param is used to identify the method.
+     * @return ImportDataResponse This object contains failure values as data.
+     */
     public ImportDataResponse importDataFallback(ImportDataRequest importRequest){
         //return "Import Service is not working...try again later";
         ImportDataResponse importDataResponse =  new ImportDataResponse(null);
@@ -78,5 +93,10 @@ public class ImportService {
     }
 
 
+    /*@GetMapping(value = "/importData")
+    ImportDataResponse importData(@RequestParam("request") ImportDataRequest request) throws Exception;
+
+    @GetMapping(value = "/getTwitterDataJson")
+    ImportTwitterResponse getTwitterDataJson(@RequestParam("request") ImportTwitterRequest request) throws Exception ;*/
 
 }

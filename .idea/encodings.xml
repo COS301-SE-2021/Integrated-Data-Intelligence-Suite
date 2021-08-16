@@ -11,5 +11,9 @@
     <file url="file://$PROJECT_DIR$/Parse_Service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Registry_Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Registry_Service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/User_Service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/User_Service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Visualize_Service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Visualize_Service/src/main/resources" charset="UTF-8" />
   </component>
 </project>

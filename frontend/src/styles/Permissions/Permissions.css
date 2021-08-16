@@ -1,0 +1,151 @@
+.user-preview{
+    padding: 20px;
+    margin-bottom: 10px;
+    /*border-radius: 5px;*/
+    line-height: normal;
+    display: flex;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+.user-preview:hover{
+    background-color: #bfbebe;
+}
+
+.user-preview h3{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.user-list a{
+    color: black;
+    font-weight: 500;
+}
+
+
+.user-preview .admin-tag{
+    color: #f1356d;
+}
+
+.user-preview a{
+    /*padding: 0;*/
+    display: flex;
+    align-items: center;
+    /*margin: 0 10px;*/
+    min-height: 50px;
+    text-decoration: none;
+}
+.user-preview p{
+    margin-right: 0;
+    margin-left: auto;
+    display: flex;
+}
+.user-preview p select{
+    margin: 10px;
+    background: #15B761;
+    border: none;
+    border-radius: 5px;
+}
+
+.permissions-content-section{
+    padding: 20px;
+    line-height: normal;
+
+}
+.user-info {
+    background:rgba(0,0,0,0);
+    width: 50%;
+    margin: 0 auto;
+    border-radius: 10px;
+    padding: 50px;
+    align-items: center;
+    min-width: 350px;
+}
+
+.user-info h2{
+    font-size: 25px;
+    padding-bottom: 20px;
+}
+
+.user-info  p{
+    padding-bottom: 10px;
+}
+
+.user-info form{
+    border: none;
+}
+.bodyDiv .ant-layout{
+    background-color: rgba(0,0,0,0);
+}
+
+
+.bodyDiv .ant-layout-content{
+    background-color: lightgrey;
+}
+
+.bodyDiv .right-column .ant-layout-content{
+    background-color: rgba(0,0,0,0);
+}
+
+.ant-divider#lightgrey{
+    border-color: lightgray;
+}
+
+
+.clear-background h1#permissions-title{
+    font-size: 28px;
+    margin: 0;
+    padding-left: 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+
+
+}
+
+
+.bodyDiv .outer-container .left-column>div{
+    color: black;
+    text-transform: capitalize;
+    font-size: 16px;
+}
+
+
+
+
+
+.user-info .form-button-container{
+    display: inline-block;
+    width: 100%;
+    align-items: center;
+}
+
+.user-info form button{
+    width: 200px;
+}
+
+.user-info form label{
+    font-size: 14px;
+    color: black;
+
+}
+
+.user-info form input[type="text"]{
+    background: #04AA6D;
+    font-size: 14px;
+}
+
+.user-info form select{
+    background: #04AA6D;
+    border-radius: 2px;
+    height: 35px;
+    width: 100%;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    padding-left: 10px;
+
+}
+
+button.disabled{
+
+}
+
