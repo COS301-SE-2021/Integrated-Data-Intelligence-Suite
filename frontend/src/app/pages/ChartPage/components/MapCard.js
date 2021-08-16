@@ -48,7 +48,6 @@ const markerIcon = new L.Icon({
 function MapCard() {
     const [mapLayers, setMapLayers] = useState([]);
 
-
     const _onDeleted = (e) => {
         console.log(e);
         const {
@@ -129,17 +128,16 @@ function MapCard() {
     // </div>
 
     useEffect(() => {
-
         var map;
         var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
         });
 
-        //Checking if the map already exists
+        //Checking if the map already exists? if it does clear it
+        //Solves map errors that occur on page reload
         var container = L.DomUtil.get('map_container_div');
         if (container != null) {
             container._leaflet_id = null;
-
         }
 
         //Creating the actual map component
@@ -153,9 +151,21 @@ function MapCard() {
         const layer_with_drawn_items = new L.FeatureGroup();
         map.addLayer(layer_with_drawn_items);
         var drawControl = new L.Control.Draw({
+            //enables/disables draw components
+            draw:{
+                polygon: false,
+                circle: false,
+                rectangle: false,
+                circlemarker:false,
+                marker:true,
+                polyline:false
+            },
+
+            //Events
             create: {
                 featureGroup: layer_with_drawn_items
             },
+
             edit: {
                 featureGroup: layer_with_drawn_items
             },
@@ -245,7 +255,7 @@ function MapCard() {
             return L.circle(L.latLng(datapoint.lat, datapoint.lng), {
                 className: datapoint.classname,
                 id: "broski",
-                radius: 10
+                radius: 69
             });
         }
 
