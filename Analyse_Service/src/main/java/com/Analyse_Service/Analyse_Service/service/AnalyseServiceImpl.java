@@ -90,7 +90,7 @@ public class AnalyseServiceImpl {
             String row = "";
 
             String text = dataList.get(i).getTextMessage();
-            String location = dataList.get(i).getLocation();
+            String location = "12.3223,23.3223";//dataList.get(i).getLocation();
             String date = dataList.get(i).getDate();
             System.out.println("HERE IS THE DATE1 _______________________________ : " + date);
             date = date.replaceAll("\\s+","/");
@@ -107,7 +107,10 @@ public class AnalyseServiceImpl {
             rowOfParsed.add(text);
             rowOfParsed.add(location);
             rowOfParsed.add(date);
-            rowOfParsed.add(dataList.get(i).getLikes().toString()); //likes
+
+            Random rn = new Random();
+            int mockLike = rn.nextInt(10000) + 1;
+            rowOfParsed.add(String.valueOf(mockLike)); //dataList.get(i).getLikes().toString()); //likes
             //rowOfParsed.add(sentimentResponse.getSentiment().getCssClass());
 
             parsedDatalist.add(rowOfParsed);
@@ -155,7 +158,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
         SparkSession sparkPatterns = SparkSession
                 .builder()
@@ -177,16 +180,16 @@ public class AnalyseServiceImpl {
         test.add(RowFactory.create(Arrays.asList("1 2 5".split(" "))));
         System.out.println(test.get(0).toString()); */
 
-        ArrayList<String> reqData = request.getDataList();
+        /*ArrayList<String> reqData = request.getDataList();
         List<Row> patternData = new ArrayList<>();
 
         for(int i=0; i < reqData.size(); i++){
             patternData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
-        }
+        }*/
 
         /*******************SETUP MODEL*****************/
 
-        StructType schema = new StructType(new StructField[]{ new StructField(
+        /*StructType schema = new StructType(new StructField[]{ new StructField(
                 "items", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
         });
         Dataset<Row> itemsDF = sparkPatterns.createDataFrame(patternData, schema);
@@ -195,7 +198,7 @@ public class AnalyseServiceImpl {
                 .setItemsCol("items")
                 .setMinSupport(0.5)
                 .setMinConfidence(0.6)
-                .fit(itemsDF);
+                .fit(itemsDF);*/
         //LogManager.getRootLogger().setLevel(Level.OFF); //TODO: what this for?
 
         /*******************READ MODEL OUTPUT*****************/
@@ -211,7 +214,7 @@ public class AnalyseServiceImpl {
         /* transform examines the input items against all the association rules and summarize the consequent as a prediction
         model.transform(itemsDF).show();*/
 
-        List<Row> pData = model.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
+        /*List<Row> pData = model.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         for (int i = 0; i < pData.size(); i++) {
@@ -229,9 +232,9 @@ public class AnalyseServiceImpl {
         }
         System.out.println(results.toString());
 
-        sparkPatterns.stop();
+        sparkPatterns.stop();*/
 
-        return new FindPatternResponse(results);
+        return new FindPatternResponse(null);
     }
 
 
@@ -282,9 +285,21 @@ public class AnalyseServiceImpl {
             FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for(int j=0; j < namedEntities.size(); j++){
+
+            }
+
             row = new ArrayList<>();
             for (int j=0; j< namedEntities.size(); j++){
-                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                if (row.isEmpty()) {
+                    row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                }
+                else {
+                    if(!row.contains(namedEntities.get(j).get(0).toString())) {
+                        row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                    }
+                }
 
             }
             if (!row.isEmpty()) {
@@ -571,8 +586,30 @@ public class AnalyseServiceImpl {
         rate.get(1); //rate ???
 
         //training set
+        int minSize = 0;
+        if(namedEntities.size()>averageLikes.size())
+            minSize = averageLikes.size();
+        else
+            minSize = namedEntities.size();
+
+        if(minSize >rate.size() )
+            minSize =rate.size();
+
+
+
+        System.out.println("NameEntity : " +namedEntities.size() );
+        for(int i=0; i < namedEntities.size(); i++)
+            System.out.println(namedEntities.get(i).toString());
+
+        System.out.println("AverageLikes : " +averageLikes.size() );
+        for(int i=0; i < averageLikes.size(); i++)
+            System.out.println(averageLikes.get(i).toString());
+
+        System.out.println("*****************ITEMDF****************");
+        itemsDF.show();
+
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < namedEntities.size(); i++){
+        for(int i=0; i < minSize; i++){
             double trending = 0.0;
             if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >  1 ){
                 trending = 1.0;
@@ -710,15 +747,30 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Outputs begin*****************/");
 
 
-        ArrayList<ArrayList> results = new ArrayList<>();
+        /*ArrayList<ArrayList> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
             ArrayList<Object> r = new ArrayList<>();
             r.add(rawResults.get(i).get(0).toString());
             r.add(Double.parseDouble(rawResults.get(i).get(1).toString()));
             results.add(r);
+        }*/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+        for (int i = 0; i < rawResults.size(); i++) {
+            ArrayList<Object> r = new ArrayList<>();
+            String en = rawResults.get(i).get(0).toString();
+            ArrayList<String> locs =new ArrayList<>();
+            List<Row> rawLocs = itemsDF.select("location").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawLocs.toString());
+            for (int j = 0; j < rawLocs.size(); j++) {
+                locs.add(rawLocs.get(j).get(0).toString());
+            }
+            r.add(en);
+            r.add(locs);
+
+            results.add(r);
         }
 
-        ArrayList<ArrayList> results2 = new ArrayList<>();
         return new FindTrendsResponse(results);
     }
 
@@ -737,7 +789,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
         SparkSession sparkPredictions = SparkSession
                 .builder()
@@ -760,12 +812,12 @@ public class AnalyseServiceImpl {
             PredictionsData.add(RowFactory.create(attempt));
         }*/
 
-        List<Row> predictionsData  = new ArrayList<>();
+        /*List<Row> predictionsData  = new ArrayList<>();
         ArrayList<String> reqData = request.getDataList();
 
         for(int i=0; i < reqData.size(); i++){
             predictionsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
-        }
+        }*/
 
         /*******************SETUP MODEL*****************/
 
@@ -792,7 +844,7 @@ public class AnalyseServiceImpl {
                 .fit(itemsDF);*/
 
 
-        String data = "mllib/layers/data.txt"; //TODO: default
+        /*String data = "mllib/layers/data.txt"; //TODO: default
         Dataset<Row> dataFrame = sparkPredictions.read().format("libsvm").load(data);
 
         // Split the data into train and test
@@ -813,22 +865,22 @@ public class AnalyseServiceImpl {
                 .setMaxIter(100);
 
         // train the model
-        MultilayerPerceptronClassificationModel model = trainer.fit(train);
+        MultilayerPerceptronClassificationModel model = trainer.fit(train);*/
 
         /******************Analyse Model Accuracy**************/
 
         // compute accuracy on the test set
-        Dataset<Row> result = model.transform(test);
+        /*Dataset<Row> result = model.transform(test);
         Dataset<Row> predictionAndLabels = result.select("prediction", "label");
         MulticlassClassificationEvaluator evaluator = new MulticlassClassificationEvaluator()
                 .setMetricName("accuracy");
 
-        System.out.println("Test set accuracy = " + evaluator.evaluate(predictionAndLabels));
+        System.out.println("Test set accuracy = " + evaluator.evaluate(predictionAndLabels));*/
 
         /*******************READ MODEL OUTPUT*****************/
 
         //List<Row> pData = model.transform(itemsDF).collectAsList();
-        List<Row> pData = new ArrayList<>(); //TODO: default
+        /*List<Row> pData = new ArrayList<>(); //TODO: default
         ArrayList<ArrayList> results = new ArrayList<>();
 
         for (int i = 0; i < pData.size(); i++) {
@@ -849,9 +901,9 @@ public class AnalyseServiceImpl {
         }
         System.out.println(results.toString());
 
-        sparkPredictions.stop();
+        sparkPredictions.stop();*/
 
-        return new GetPredictionResponse(results);
+        return new GetPredictionResponse(null);
     }
 
     /**
@@ -967,9 +1019,16 @@ public class AnalyseServiceImpl {
 
         //List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
 
+        int minSize = 0;
+        if(namedEntities.size()>averageLikes.size())
+            minSize = averageLikes.size();
+        else
+            minSize = namedEntities.size();
+
+
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < namedEntities.size(); i++){
+        for(int i=0; i < minSize; i++){
 
             String name = namedEntities.get(i).get(0).toString();
 
@@ -1087,7 +1146,7 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
-            results.add(rawResults.get(0).get(i).toString());
+            results.add(rawResults.get(i).get(0).toString());//name
         }
 
 
