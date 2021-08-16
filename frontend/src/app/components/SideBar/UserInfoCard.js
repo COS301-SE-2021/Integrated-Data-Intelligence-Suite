@@ -5,6 +5,15 @@ import {UpOutlined} from "@ant-design/icons";
 import React, {Component} from 'react';
 import ExitMenuTooltip from "./ExitMenuTooltip";
 
+function setUserName(){
+    const localUser = localStorage.getItem("user");
+    if(localUser){
+        return "Wandile";
+    }else{
+        return "user";
+    }
+}
+
 class UserInfoCard extends React.Component {
     constructor(props) {
         super(props);
@@ -12,12 +21,14 @@ class UserInfoCard extends React.Component {
         this.state = {
             loading: true,
             collapsed: false,
+            title: setUserName()
         };
     }
 
 
     onChange = checked => {
         this.setState({loading: !checked});
+
     };
 
     onCollapse(collapsed) {
@@ -29,7 +40,7 @@ class UserInfoCard extends React.Component {
     }
 
     render() {
-        const {loading} = this.state;
+        const {loading, title:user} = this.state;
 
         return (
             <>
@@ -60,7 +71,7 @@ class UserInfoCard extends React.Component {
                         <Meta
                             id={'meta_id'}
                             className={'user_meta_card'}
-                            title="Name Surname"
+                            title={this.state.title}
                             avatar={
                                 <Avatar
                                     id={'user_avatar_pic'}
