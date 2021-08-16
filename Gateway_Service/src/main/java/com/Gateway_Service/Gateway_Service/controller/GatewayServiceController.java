@@ -10,12 +10,12 @@ import com.Gateway_Service.Gateway_Service.service.ImportService;
 import com.Gateway_Service.Gateway_Service.service.ParseService;
 
 
-
-
-
 //import com.netflix.discovery.DiscoveryClient;
 
+import com.Gateway_Service.Gateway_Service.service.VisualizeService;
+
 import com.Gateway_Service.Gateway_Service.service.UserService;
+
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/")
 public class GatewayServiceController {
+
     @Autowired
     private ImportService importClient;
 
@@ -39,8 +40,11 @@ public class GatewayServiceController {
     private AnalyseService analyseClient;
 
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private VisualizeService visualizeClient;
 
+    @Autowired
+    private DiscoveryClient discoveryClient;
+  
     @Autowired
     private UserService userClient;
 
@@ -48,45 +52,21 @@ public class GatewayServiceController {
     private RestTemplate restTemplate;
 
 
+
+    /**
+     * This method is used the map/convert the name os a service to its respective url on a specific host
+     * @param serviceName This is string value of a service's name identity
+     * @return String This is string value that would represent a url of a service
+     */
     private String getServiceURL(String serviceName){
         return this.discoveryClient.getInstances(serviceName).get(0).getUri().toString();
     }
 
-    public static class Graph{
-        Graph(){}
-    }
-
-    public static class LineGraph extends Graph{
-        public String name;
-        public ArrayList<String> marker = new ArrayList<>();
-        public ArrayList<String> data  = new ArrayList<>();
-    }
-
-    public static class NetworkGraph extends Graph{
-        public String From;
-        public String to;
-    }
-
-    public static class TimelineGraph extends Graph{
-        public String x;
-        public String name;
-        public String label;
-        public String description;
-
-    }
-
-
-    public static class mapGraph extends Graph{
-        ArrayList<ArrayList> map = new ArrayList<>();
-
-    }
-
-    public static class ErrorGraph extends Graph{
-        public String Error;
-    }
-
-
-    //TEST FUNCTION
+    /**
+     * Test function, this methoe is used to test the service
+     * @param key This is a path variable of string value
+     * @return String This is a string value of a json test
+     */
     @GetMapping(value ="/{key}", produces = "application/json")
     public String testNothing(@PathVariable String key) {
         String output = "";
@@ -102,6 +82,8 @@ public class GatewayServiceController {
         return output;
     }
 
+
+=======
     /*@GetMapping(value ="test/{line}", produces = "application/json")
     public String testNothing2(@PathVariable String line) {
 
@@ -180,6 +162,15 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+    /**
+     * This method is used to facilitate communication to all the Services.
+     * Outputs data related to a topic/key.
+     * @param key This is a path variable of string value
+     * @return ResponseEntity<ArrayList<ArrayList<Graph>>>
+     *     This object contains data representing a response from all the services combined.
+     * @throws Exception This is thrown if exception caught in any of the Services.
+     */
     @GetMapping(value = "/main/{key}", produces = "application/json")
     @CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
@@ -265,190 +256,48 @@ public class GatewayServiceController {
 
         /*********************VISUALISE**********************/
 
-        /*************LINE**********/
-        ArrayList<Graph> LineGraphArray = createlineGraph(analyseResponse.getPattenList());
+        VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
+                analyseResponse.patternList,
+                analyseResponse.relationshipList,
+                analyseResponse.getPattenList(),
+                analyseResponse.trendList,
+                analyseResponse.anomalyList);//    DataSource.TWITTER,ImportResponse. getJsonData());
+        VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
 
 
-        /*************NETWORK**********/
-        ArrayList<Graph> NetworkGraphArray =  createNetworkGraph( analyseResponse.getPattenList());
+        if(visualizeResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
 
 
-        /************MAP**********/
-        ArrayList<Graph> mapArray = createMapGraph();
-
-
-        /************TIMELINE**********/
-        ArrayList<Graph> TimelineArray = createTimelineGraph();
-
-        outputData.add(LineGraphArray);
-        outputData.add(NetworkGraphArray );
-        //outputData.add(mapArray);
-        outputData.add(TimelineArray);
+        for(int i =0; i < visualizeResponse.outputData.size(); i++)
+            outputData.add(visualizeResponse.outputData.get(i));
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
 
     }
 
-    private ArrayList<Graph> createlineGraph(ArrayList<ArrayList> list){
-        LineGraph vpos = new LineGraph();
-        vpos.name = "Very Positive";
-        vpos.marker.add("square");
-
-        LineGraph pos = new LineGraph();
-        pos.name = "Positive";
-        pos.marker.add("square");
-
-        LineGraph net = new LineGraph();
-        net.name = "Neutral";
-        net.marker.add("square");
-
-
-        LineGraph neg = new LineGraph();
-        neg.name = "Negative";
-        neg.marker.add("square");
-
-
-        LineGraph vneg = new LineGraph();
-        vneg.name = "Very Negative";
-        vneg.marker.add("square");
 
 
 
-
-        ArrayList<ArrayList> rela = list;
-        for(int i = 0; i < rela.size(); i++) {
-            for (int j = 0;j< rela.get(i).size(); j++){
-                if (rela.get(i).get(j).toString().equals("Very_Negative")){
-                    int index = rela.get(i).size()-1;
-                    vneg.data.add(rela.get(i).get(index).toString());
-                }
-
-
-
-                else if (rela.get(i).get(j).toString().equals("Negative")){
-                    int index = rela.get(i).size()-1;
-                    neg.data.add(rela.get(i).get(index).toString());
-                }
-                else if (rela.get(i).get(j).toString().equals("Neutral")){
-                    int index = rela.get(i).size()-1;
-                    net.data.add(rela.get(i).get(index).toString());
-                }
-                else if (rela.get(i).get(j).toString().equals("Positive")){
-                    int index = rela.get(i).size()-1;
-                    pos.data.add(rela.get(i).get(index).toString());
-                }
-                else if (rela.get(i).get(j).toString().equals("Very_Positive")){
-                    int index = rela.get(i).size()-1;
-                    vpos.data.add(rela.get(i).get(index).toString());
-                }
-            }
-
-        }
-
-        ArrayList<Graph> lineGraphArray = new ArrayList<>();
-        lineGraphArray.add(vpos);
-        lineGraphArray.add(pos);
-        lineGraphArray.add(net);
-        lineGraphArray.add(neg);
-        lineGraphArray.add(vneg);
-
-        return  lineGraphArray;
+    public static class Graph{
+        Graph(){}
     }
 
-
-    private ArrayList<Graph> createNetworkGraph(ArrayList<ArrayList> list){
-        NetworkGraph temp;
-        ArrayList<ArrayList> pdata = list;
-        ArrayList<Graph> NetworkGraphArray = new ArrayList<>();
-
-
-
-
-
-        for (int i = 0; i < pdata.size(); i++) {
-            temp =  new NetworkGraph();
-            temp.From = pdata.get(i).get(pdata.get(i).size()-3).toString();
-            temp.to = "";
-            for (int j = 0; j < pdata.get(i).size()-2; j++) {
-                temp.to += pdata.get(i).get(j).toString() + ", ";
-            }
-            NetworkGraphArray.add(temp);
-        }
-
-        return NetworkGraphArray;
+    public static class ErrorGraph extends Graph{
+        public String Error;
     }
 
-
-    private ArrayList<Graph> createMapGraph(){
-        ArrayList<Graph> mapArray = new ArrayList<>();
-        ArrayList<String> coordinates;
-        mapGraph mapG = new mapGraph();
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-ec");
-        coordinates.add("100");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-np");
-        coordinates.add("102");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-nl");
-        coordinates.add("120");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-wc");
-        coordinates.add("300");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-nc");
-        coordinates.add("106");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-nw");
-        coordinates.add("90");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-fs");
-        coordinates.add("130");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-gt");
-        coordinates.add("130");
-        mapG.map.add(coordinates);
-
-        coordinates = new ArrayList<>();
-        coordinates.add("za-mp");
-        coordinates.add("134");
-        mapG.map.add(coordinates);
-
-        mapArray.add(mapG);
-
-        return mapArray;
-    }
-
-
-
-    private ArrayList<Graph> createTimelineGraph(){
-        ArrayList<Graph> timelineArray = new ArrayList<>();
-        for (int i = 1; i < 13; i++) {
-            TimelineGraph timel = new TimelineGraph();
-            timel.x = "2021,"+ Integer.toString(i) + ",11";
-            timel.label = "MOCK";
-            timel.name = "MOCK";
-            timel.description = "MOCK";
-
-            timelineArray.add(timel);
-        }
-        return timelineArray;
-    }
 
 
 }

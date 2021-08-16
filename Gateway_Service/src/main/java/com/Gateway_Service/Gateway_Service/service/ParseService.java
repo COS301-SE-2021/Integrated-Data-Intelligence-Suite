@@ -17,8 +17,11 @@ public class ParseService {
     @Autowired
     private RestTemplate restTemplate;
 
-
-
+    /**
+     * This method is used to communicate to the Parse-Service.
+     * @param parseRequest
+     * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
+     */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) {
 
@@ -34,7 +37,11 @@ public class ParseService {
         return parseResponse;
     }
 
-
+    /**
+     * This method is used to return fail values if communication to the Parse-Service fails.
+     * @param parseRequest This param is used to identify the method.
+     * @return ParseImportedDataResponse This object contains failure values as data.
+     */
     public ParseImportedDataResponse parseImportedDataFallback(ParseImportedDataRequest parseRequest){
         ParseImportedDataResponse parseImportedDataResponse =  new ParseImportedDataResponse(null);
         parseImportedDataResponse.setFallback(true);

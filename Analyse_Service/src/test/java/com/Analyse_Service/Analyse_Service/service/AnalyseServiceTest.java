@@ -1,21 +1,28 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
-import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
 public class AnalyseServiceTest {
     @InjectMocks
-    AnalyseServiceImpl service ;
+    private AnalyseServiceImpl service ;
+
+    @BeforeEach
+    public void setup(){
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     @DisplayName("When analyzeRequest is Null")
@@ -116,7 +123,7 @@ public class AnalyseServiceTest {
         TestList.add(row2);
         TestList.add(row3);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(TestList);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
@@ -174,4 +181,60 @@ public class AnalyseServiceTest {
     }
 
 
+    @Test
+    @DisplayName("When findTrendsNullRequest is Null")
+    public void findTrendsNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(null));
+    }
+
+    @Test
+    @DisplayName("When the data list is Null")
+    public void findTrendsDataNullList(){
+        FindTrendsRequest test = new FindTrendsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(test));
+    }
+
+    @Test
+    @DisplayName("When findEntitiesNullRequest is Null")
+    public void findEntitiesNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(null));
+    }
+
+    @Test
+    @DisplayName("When the text is Null")
+    public void findEntitiesTextNull(){
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(test));
+    }
+
+    @Test
+    @DisplayName("When the text is Valid")
+    public void findEntitiesValidRequest() throws InvalidRequestException {
+        String text = "test text for function";
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
+        FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
+        Assertions.assertNotNull(testResults);
+    }
+
+    @Test
+    @DisplayName("Fetch first data from database")
+    public void fetchFirstDataFromDatabase() throws AnalyzerException {
+        ParsedData testResults = service.testdbAdd();
+        Assertions.assertNotNull(testResults);
+    }
+
+    @Test
+    @DisplayName("Delete first data from database")
+    public void deleteFirstDataFromDatabase() throws AnalyzerException {
+        int testResults = service.testdbDelete();
+        Assertions.assertNotEquals(-1, testResults);
+    }
+
+    @Test
+    @DisplayName("fetch parsedData from database")
+    public void fetchParsedDataFromDatabase() throws AnalyzerException {
+        FetchParsedDataRequest request = new FetchParsedDataRequest("ParsedData");
+        FetchParsedDataResponse testResults = service.fetchParsedData(request);
+        Assertions.assertNotNull(testResults);
+    }
 }

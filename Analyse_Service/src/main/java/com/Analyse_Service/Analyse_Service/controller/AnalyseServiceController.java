@@ -14,16 +14,12 @@ public class AnalyseServiceController {
     @Autowired
     private AnalyseServiceImpl service;
 
-    /*@GetMapping("/findSentiment")
-    public AnalyzeDataResponse findSentiment(@RequestParam("line") String line) throws Exception {
-        TweetWithSentiment sentiment = service.findSentiment(line);
-
-        if(sentiment != null)
-            System.out.println("CHECKING HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
-
-        return new AnalyzeDataResponse(sentiment);
-    }*/
-
+    /**
+     * This method is used to facilitate communication to the Analyse-Service.
+     * @param requestEntity This is a request entity which contains a AnalyseDataRequest object.
+     * @return AnalyseDataResponse This object contains analysed data which has been processed by Analyse-Service.
+     * @throws Exception This is thrown if exception caught in Analyse-Service.
+     */
     @PostMapping("/analyzeData")
     public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{
         AnalyseDataRequest request = requestEntity.getBody();
