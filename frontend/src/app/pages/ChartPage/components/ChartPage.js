@@ -13,6 +13,7 @@ import NetworkGraphCard from "./NetworkGraphCard";
 import "../styles/NetworkGraph.css";
 import UserInfoCard from "../../../components/SideBar/UserInfoCard";
 import SearchBar from "../../../components/SearchBar/SearchBar";
+import TimelineGraph from "./TimelineGraph";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -74,16 +75,16 @@ class ChartPage extends Component {
                                         </Content>
                                     </Layout>
 
-                                    {/*The Line Graph*/}
+                                    {/*The timeline Graph*/}
                                     <Layout
-                                        id={'network_graph_layout_div'}
-                                        className={'network_card'}
+                                        id={'timeline_graph_div'}
+                                        className={'timeline_card'}
                                     >
                                         <Content
-                                            id={'network_graph_card_content'}
-                                            className={'network_card'}
+                                            id={'timeline_graph_card_content'}
+                                            className={'timeline_card'}
                                         >
-                                            <NetworkGraphCard/>
+                                            <TimelineGraph/>
                                         </Content>
                                     </Layout>
 
