@@ -21,14 +21,19 @@ import java.util.Objects;
 public class ImportServiceImpl {
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest req) throws Exception {
 
-        if(req == null) throw new InvalidTwitterRequestException("request cannot be null");
-        if(req.getKeyword().length() >250 || req.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
+        //if(req == null) throw new InvalidTwitterRequestException("request cannot be null");
+        //if(req.getKeyword().length() >250 || req.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
         String keyword = req.getKeyword();
         int limit = req.getLimit();
+
+        System.out.println("check here");
+        System.out.println(keyword);
+        System.out.println(limit);
+
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .addHeader("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANh%2FQQEAAAAAVr4WLviUZsSsjKQdYp5%2BUbVVMXQ%3D6BmOGAk60QOl9dMxl4toje8BzHNFbVmAOWKAh2qTTK3w1d8Ks4")
+                .addHeader("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAANh%2FQQEAAAAAyKF%2BfVbcBjeTIDCyNbQ5pqMiiV8%3DRBtp4v3a4jLMZWOPz84EBLekJCO6JDIeNbkiDdhJhp2CXOQfz7")
                 .url("https://api.twitter.com/1.1/search/tweets.json?q="+keyword+"&count="+limit)
                 .method("GET", null)
                 .build();
@@ -44,6 +49,9 @@ public class ImportServiceImpl {
         String keyword = request.getKeyword();
         int limit = request.getLimit();
         ArrayList<ImportedData> list = new ArrayList<>();
+
+        System.out.println(keyword);
+        System.out.println(limit);
 
         try {
             String twitterData = getTwitterDataJson(new ImportTwitterRequest(keyword, limit)).getJsonData();
