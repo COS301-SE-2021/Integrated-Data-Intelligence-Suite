@@ -185,7 +185,17 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
-        Graph newGraph = new Graph();
+
+        ArrayList<Graph> output = new ArrayList<>();
+        for (int i = 0; i < i; i++) { //TODO
+            TimelineGraph newGraph = new TimelineGraph();
+
+            newGraph.title = "";
+            newGraph.cardTitle = "";
+            newGraph.cardSubtitle = "";
+
+            output.add(newGraph);
+        }
         return null;
     }
 
