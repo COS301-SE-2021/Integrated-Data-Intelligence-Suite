@@ -314,7 +314,7 @@ public class AnalyseServiceImpl {
             for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
                 row.add(Rdata.get(i).getList(0).get(j).toString());
             }
-            row.add(Rdata.get(i).get(1).toString());
+            //row.add(Rdata.get(i).get(1).toString());
             results.add(row);
         }
         System.out.println(results.toString());

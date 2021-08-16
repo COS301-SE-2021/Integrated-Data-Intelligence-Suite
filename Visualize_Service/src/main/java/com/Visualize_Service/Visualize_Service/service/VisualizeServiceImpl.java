@@ -55,8 +55,22 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
-        Graph newGraph = new Graph();
-        return null;
+
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        ArrayList<String> entities = new ArrayList<>();
+        for(int i =0; i < reqData.size(); i++ ){
+            for(int j=0; j < reqData.get(i).size(); i++){
+                if(entities.contains(reqData.get(i).get(j)) == false){
+                    entities.add(reqData.get(i).get(j).toString());
+                }
+            }
+        }
+
+
+
+        return new CreateNetworkGraphResponse(output);
     }
 
 
