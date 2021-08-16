@@ -52,10 +52,6 @@ class SideBar extends React.Component {
                         Settings
                         <Link to={"/settings"}/>
                     </Menu.Item>
-                    <Menu.Item key="10">
-                        Permissions
-                        <Link to="/permissions/"/>
-                    </Menu.Item>
                 </Menu>
 
             </Sider>
