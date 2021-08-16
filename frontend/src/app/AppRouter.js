@@ -1,15 +1,15 @@
 import React, { Component,Suspense, lazy } from 'react';
 import { Switch, Route, Redirect, Link, useLocation } from 'react-router-dom';
 
-import Spinner from '../app/components/Spinner';
+import Spinner from './components/ContentSection/Spinner';
 
 
 // const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 
 
 
-const Login = lazy(() => import('./pages/Login'));
-const Register1 = lazy(() => import('./pages/Register'));
+const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
+const Register1 = lazy(() => import('./pages/RegisterPage/RegisterPage'));
 
 const ValidateLogin = lazy(() => import('./functions/ValidateLogin'));
 const ValidateRegister = lazy(() => import('./functions/ValidateRegister'));
@@ -22,8 +22,8 @@ class AppRoutes extends Component {
                 <Switch>
                     {/*<Route exact path="/dashboard" component={ Dashboard } />*/}
 
-                    <Route path="/pages/Login" component={ Login } />
-                    <Route path="/pages/Register" component={ Register1 } />
+                    <Route path="/pages/LoginPage" component={ Login } />
+                    <Route path="/pages/RegisterPage" component={ Register1 } />
 
                     <Route path="/functions/ValidateLogin" component={ VLogin} />}
                     <Route path="/functions/ValidateRegister" component={ VRegister} />}
