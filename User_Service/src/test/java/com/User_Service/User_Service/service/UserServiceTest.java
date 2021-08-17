@@ -23,16 +23,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class UserServiceTest {
 
-    @InjectMocks
+    @Autowired
     private UserServiceImpl service;
 
-    @Mock
+    @Autowired
     private UserRepository repository;
 
-    @Before
-    public void initMocks() {
-        MockitoAnnotations.initMocks(this);
-    }
     /*
     ============================ManagePermissions tests============================
     */
@@ -67,10 +63,10 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Exists")
     public void managePermissionsValidRequestUserExists() throws Exception {
-        ManagePermissionsRequest request = new ManagePermissionsRequest("testUser", Permission.VIEWING);
+        ManagePermissionsRequest request = new ManagePermissionsRequest("newUser", Permission.IMPORTING);
         String expectedMessage = "Permission updated";
         ManagePersmissionsResponse response = service.managePermissions(request);
-        Assertions.assertEquals(response.getMessage(), expectedMessage);
+        Assertions.assertEquals(expectedMessage, response.getMessage());
     }
 
     @Test
@@ -79,24 +75,12 @@ public class UserServiceTest {
         ManagePermissionsRequest request = new ManagePermissionsRequest("nonExistantUser", Permission.VIEWING);
         String expectedMessage = "User does not exist";
         ManagePersmissionsResponse response = service.managePermissions(request);
-        Assertions.assertEquals(response.getMessage(), expectedMessage);
+        Assertions.assertEquals(expectedMessage, response.getMessage());
     }
 
     /*
     ============================Register tests============================
     */
-
-    /*
-    Saving using repository only
-     */
-
-    @Test
-    @DisplayName("Saving_Repository_Test")
-    public void savingRepository() {
-        User user = new User("testuser", "testUserlast", "usertestname", "test22@gmail.com", "password", Permission.VIEWING);
-
-        repository.save(user);
-    }
 
     @Test
     @DisplayName("If_RegisterRequest_Is_Null")
@@ -152,14 +136,19 @@ public class UserServiceTest {
         RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "email");
         String expectedMessage = "Username has been taken";
         RegisterResponse response = service.register(request);
-        Assertions.assertEquals(response.getMessage(), expectedMessage);
+        Assertions.assertEquals(expectedMessage, response.getMessage());
     }
 
     @Test
     @DisplayName("If_New_User_Email_Already_Taken")
     public void registerEmailTaken() throws Exception {
-        RegisterRequest request = new RegisterRequest("newUser3", "firstname", "lastname", "password", "takenEmail@gmail.com");
-        String expectedMessage = "Email has been taken";
+        int max = 10;
+        int min = 1;
+        int range = max - min + 1;
+        int usernameNum = (int)(Math.random() * range) + min;
+        String randomUsername = "newUser" + usernameNum;
+        RegisterRequest request = new RegisterRequest(randomUsername, "firstname", "lastname", "password", "takenEmail@gmail.com");
+        String expectedMessage = "This email has already been registered";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(expectedMessage, response.getMessage());
     }
@@ -170,7 +159,7 @@ public class UserServiceTest {
         RegisterRequest request = new RegisterRequest("newUser", "firstname", "lastname", "password", "newEmail");
         String expectedMessage = "Registration successful";
         RegisterResponse response = service.register(request);
-        Assertions.assertEquals(response.getMessage(), expectedMessage);
+        Assertions.assertEquals(expectedMessage, response.getMessage());
     }
 
     @Test
@@ -212,18 +201,18 @@ public class UserServiceTest {
     @Test
     @DisplayName("Login_Existing_Email_Wrong_Password")
     public void loginWrongPassword() throws Exception {
-        LoginRequest request = new LoginRequest("existingEmail@exist.com", "wrongpass");
+        LoginRequest request = new LoginRequest("testEmail2@test.test", "wrongpass");
         String expected = "Incorrect password";
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(response.getMessage(), expected);
+        Assertions.assertEquals(expected, response.getMessage());
     }
 
     @Test
     @DisplayName("Login_Successful")
     public void loginSuccessful() throws Exception {
-        LoginRequest request = new LoginRequest("existingEmail@exist.com", "correctpass");
+        LoginRequest request = new LoginRequest("testEmail2@test.test", "pass");
         String expected = "Successfully logged in";
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(response.getMessage(), expected);
+        Assertions.assertEquals(expected, response.getMessage());
     }
 }
