@@ -84,14 +84,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the data list is Valid")
     public void findPatternValidRequest() throws InvalidRequestException {
-        ArrayList<String> TestList = new ArrayList<>();
-        String row1 = "Neuatral testi testii 20";
-        String row2 = "Neuatral testi testii 20";
-        String row3 = "Neuatral testi testii 20";
+        ArrayList<ArrayList> TestList = new ArrayList<>();
 
-        TestList.add(row1);
-        TestList.add(row2);
-        TestList.add(row3);
+        ArrayList<String> row = new ArrayList<>();
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+
+        TestList.add(row);
 
         FindPatternRequest test = new FindPatternRequest(TestList);
         FindPatternResponse testResults = service.findPattern(test);
@@ -144,14 +144,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the data list is Valid")
     public void getPredictionValidRequest() throws InvalidRequestException {
-        ArrayList<String> TestList = new ArrayList<>();
-        String row1 = "Neuatral testi testii 20";
-        String row2 = "Neuatral testi testii 20";
-        String row3 = "Neuatral testi testii 20";
+        ArrayList<ArrayList> TestList = new ArrayList<>();
 
-        TestList.add(row1);
-        TestList.add(row2);
-        TestList.add(row3);
+        ArrayList<String> row = new ArrayList<>();
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+
+        TestList.add(row);
 
         GetPredictionRequest test = new GetPredictionRequest(TestList);
         GetPredictionResponse testResults = service.getPredictions(test);

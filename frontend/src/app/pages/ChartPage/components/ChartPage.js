@@ -95,7 +95,10 @@ class ChartPage extends Component {
                                             id={'timeline_graph_card_content'}
                                             className={'timeline_card'}
                                         >
-                                            <TimelineGraph text={this.state.text}/>
+                                            <TimelineGraph
+                                                text={this.state.text}
+                                                key={this.state.text}
+                                            />
                                         </Content>
                                     </Layout>
 
