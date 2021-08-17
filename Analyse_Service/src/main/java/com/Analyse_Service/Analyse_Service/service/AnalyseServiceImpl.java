@@ -596,7 +596,6 @@ public class AnalyseServiceImpl {
             minSize =rate.size();
 
 
-
         System.out.println("NameEntity : " +namedEntities.size() );
         for(int i=0; i < namedEntities.size(); i++)
             System.out.println(namedEntities.get(i).toString());
@@ -611,7 +610,7 @@ public class AnalyseServiceImpl {
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < minSize; i++){
             double trending = 0.0;
-            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >  1  || Double.parseDouble(averageLikes.get(i).get(1).toString()) >= 6000.0){
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4 ){
                 trending = 1.0;
             }
             Row trainRow = RowFactory.create(
@@ -699,7 +698,7 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Predictions*****************/");
 
 
-        for (Row r : predictions.select("isTrending").collectAsList())
+        for (Row r : trainSetDF.select("isTrending").collectAsList())
             System.out.println("Trending -> " + r.get(0));
 
 
@@ -740,10 +739,12 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = lrModel.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
+        for (Row r : res.select("prediction").collectAsList())
+            System.out.println("Trending -> " + r.get(0));
         System.out.println("/*******************Outputs begin*****************/");
 
 

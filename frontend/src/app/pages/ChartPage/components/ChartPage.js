@@ -19,7 +19,15 @@ const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
 
 class ChartPage extends Component {
-    state = {}
+    constructor(props){
+        super(props);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.state = {text: ''};
+    }
+
+    handleTextChange(newText){
+        this.setState(({text: newText}));
+    }
 
     render() {
         return (
@@ -34,7 +42,10 @@ class ChartPage extends Component {
                             <Layout id={'inner_layout_div'}>
                                 <Header id={'top_bar'}>
                                     {/*<Title level={1}>Chart Page Title</Title>*/}
-                                    <SearchBar/>
+                                    <SearchBar
+                                        text={this.state.text}
+                                        handleTextChange={this.handleTextChange}
+                                    />
                                     <UserInfoCard
                                         name="s"
                                     />
@@ -50,7 +61,7 @@ class ChartPage extends Component {
                                             id={'map_card_content'}
                                             className={'map_card'}
                                         >
-                                            <MapCard/>
+                                            <MapCard text={this.state.text}/>
                                         </Content>
 
                                         <Sider

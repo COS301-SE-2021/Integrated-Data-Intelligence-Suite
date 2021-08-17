@@ -45,7 +45,9 @@ const markerIcon = new L.Icon({
     shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
 });
 
-function MapCard() {
+function MapCard(props) {
+
+
     const [mapLayers, setMapLayers] = useState([]);
 
     const _onDeleted = (e) => {
@@ -273,11 +275,13 @@ function MapCard() {
             * Retrieving data from a datapoint.json file and
                displaying those data points on the map
         */
+
+
         function createCircle(datapoint) {
             console.log("some datapoint value:" + datapoint.lat);
             return L.circle(L.latLng(datapoint.lat, datapoint.lng), {
                 className: datapoint.classname,
-                id: "broski",
+                id: props.text,
                 radius: 5900
             });
         }
