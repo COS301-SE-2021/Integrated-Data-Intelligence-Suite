@@ -55,25 +55,24 @@ function MapCard(props) {
 
     let data_from_backend = props.text[0];
     if (typeof props.text[0] === 'undefined') {
+        console.log()
+        console.log("Data Received from Backend was undefined");
+
         //some error message
         data_from_backend = [];
     } else {
         if (props.text[0].length == 0) {
-            //Some error
+            console.log("Data Received from Backend was of length 0");
+
+            //Some error message
             data_from_backend = [];
 
         } else if (props.text[0].length > 0) {
-            // let array_of_map_data = props.text[0];
-            // let array_of_circle_markers = array_of_map_data.map(createCircle);
-            // console.log(array_of_circle_markers);
-            // array_of_circle_markers.forEach(addCircleLayer)
             data_from_backend = props.text[0];
         }
     }
 
-
     const [mapLayers, setMapLayers] = useState([]);
-
 
     const animateRef = useRef(true)
     let poly;
@@ -107,7 +106,7 @@ function MapCard(props) {
                     {/*    />*/}
                     {/*</FeatureGroup>*/}
 
-                    {/*Map City markers from cities.json*/}
+                    {/*Display the City markers onto the map*/}
                     {data_from_backend.map((city, idx) => (
                         <CircleMarker
                             center={[city.lat, city.lng]}
