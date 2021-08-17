@@ -2,7 +2,8 @@
     its child is the map card
 */
 #map_card {
-    border: 3px solid green;
+    /*border: 3px solid green;*/
+    border: 0;
     height: 100%;
     /*width: 700px;*/
     width: 100%;
