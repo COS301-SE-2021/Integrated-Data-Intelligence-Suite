@@ -31,7 +31,5 @@ jobs:
         with:
           java-version: 1.11
       # Runs a set of commands using the runners shell
-      - name: Build with Maven
-        run: mvn -B package --file User_Service/pom.xml
       - name: Test with Maven
         run: mvn -B test --file User_Service/pom.xml
