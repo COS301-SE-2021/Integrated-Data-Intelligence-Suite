@@ -159,29 +159,6 @@ public class AnalyseServiceTest {
     }
 
     @Test
-    @DisplayName("When findSentimentRequest is Null")
-    public void findSentimentRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findSentiment(null));
-    }
-
-    @Test
-    @DisplayName("When the text is Null")
-    public void findSentimentDataNullList(){
-        FindSentimentRequest test = new FindSentimentRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findSentiment(test));
-    }
-
-    @Test
-    @DisplayName("When the text is Valid")
-    public void findSentimentValidRequest() throws InvalidRequestException {
-        String text = "test text for function";
-        FindSentimentRequest test = new FindSentimentRequest(text);
-        FindSentimentResponse testResults = service.findSentiment(test);
-        Assertions.assertNotNull(testResults);
-    }
-
-
-    @Test
     @DisplayName("When findTrendsNullRequest is Null")
     public void findTrendsNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(null));
