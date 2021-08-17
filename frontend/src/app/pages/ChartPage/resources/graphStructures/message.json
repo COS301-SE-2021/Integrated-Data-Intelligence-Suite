@@ -1,5 +1,28 @@
 [
-  [],
+  [{
+    "statistic_1": "stat1-thisCircle",
+    "statistic_2": "stat2-thisCircle",
+    "statistic_3": "stat3-thisCircle",
+    "lat": "18.987807",
+    "lng": "72.836447",
+    "classname": "circle1"
+  },
+  {
+    "statistic_1": "stat1-thisOtherCircle",
+    "statistic_2": "stat2-thisOtherCircle",
+    "statistic_3": "stat3-thisOtherCircle",
+    "lat": "18.987807",
+    "lng": "73.836447",
+    "classname": "circle2"
+  },
+  {
+    "statistic_1": "stat1-DiffCircle",
+    "statistic_2": "stat2-DiffCircle",
+    "statistic_3": "stat3-DiffCircle",
+    "lat": "18.987807",
+    "lng": "74.836447",
+    "classname": "circle3"
+  }],
   [
     {
       "group": "nodes",
