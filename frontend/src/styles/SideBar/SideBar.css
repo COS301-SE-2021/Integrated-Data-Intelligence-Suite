@@ -2,7 +2,8 @@
 /********************* Sidebar(Left)  ***************************/
 #sidebar_div {
     background: white;
-    border-right: 1px solid #5873f9;
+    border-right: 0.2em solid #E8E8E9;
+    /*border: 3px solid #5873f9;*/
 }
 
 #sidebar_menu {
