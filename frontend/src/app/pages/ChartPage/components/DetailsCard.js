@@ -4,6 +4,11 @@ import {
     Descriptions
 } from "antd";
 
+const hideDetailsBar = () =>{
+    const detailsbar = document.getElementById("map_card_sidebar")
+    detailsbar.style.display="none";
+}
+
 class DetailsCard extends React.Component {
     state = {}
 
@@ -13,7 +18,7 @@ class DetailsCard extends React.Component {
                 <Card
                     id={'details_card'}
                     title="Details Card Title"
-                    extra={<p></p>}
+                    extra={<p onClick={hideDetailsBar}>close</p>}
                 >
 
                     <Descriptions

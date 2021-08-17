@@ -8,6 +8,7 @@ export function showCircleData(clicked_circle_class_name) {
     );
     console.log("X-brooo:" + x);
 
+
     //Find element with same classname in the datapoints.json file
     let circle_obj_with_data = datapoints.find(x => x.classname === clicked_circle_class_name);
     console.log(circle_obj_with_data);
@@ -18,4 +19,7 @@ export function showCircleData(clicked_circle_class_name) {
     x[0].innerHTML= circle_obj_with_data.statistic_1;
     x[1].innerHTML= circle_obj_with_data.statistic_2;
     x[2].innerHTML= circle_obj_with_data.statistic_3;
+
+    let detailsbar = document.getElementById("map_card_sidebar")
+    detailsbar.style.display="block";
 }

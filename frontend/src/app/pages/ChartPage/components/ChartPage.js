@@ -56,8 +56,9 @@ class ChartPage extends Component {
                                         <Sider
                                             id={'map_card_sidebar'}
                                             className={'map_card'}
+                                            style={{display:"none"}}
                                         >
-                                            <DetailsCard/>
+                                            {<DetailsCard/>}
                                         </Sider>
                                     </Layout>
 
