@@ -56,13 +56,20 @@
 
 }
 .user-info {
-    background:rgba(0,0,0,0);
-    width: 50%;
-    margin: 0 auto;
-    border-radius: 10px;
-    padding: 50px;
-    align-items: center;
-    min-width: 350px;
+    /*display: flex;*/
+    /*background:rgba(0,0,0,0);*/
+    /*width: 50%;*/
+    /*margin: auto;*/
+    /*border-radius: 10px;*/
+    /*padding: 50px;*/
+    /*min-width: 350px;*/
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    padding: 20px;
 }
 
 .user-info h2{
@@ -113,6 +120,12 @@
 }
 
 
+.form-container{
+
+    border: 3px solid #f1356d;
+    padding: 20px;
+}
+
 
 
 
@@ -133,13 +146,19 @@
 }
 
 .user-info form input[type="text"]{
-    background: #04AA6D;
+    background: none;
     font-size: 14px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    width: 100%;
+    padding: 5px;
+    margin: 5px;
 }
 
 .user-info form select{
-    background: #04AA6D;
-    border-radius: 2px;
+    background: none;
+    border: 1px solid lightgray;
+    border-radius: 5px;
     height: 35px;
     width: 100%;
     margin-bottom: 30px;
@@ -148,7 +167,20 @@
 
 }
 
-button.disabled{
-
+button.enabled{
+    background: #f1356d;
+    border: none;
+    border-radius: 5px;
 }
+
+.form-header{
+    display: flex;
+}
+
+.form-header span{
+    float: left;
+    margin-left: 150px;
+    font-size: 20px;
+}
+
 
