@@ -257,8 +257,8 @@ public class VisualizeServiceImpl {
                 newGraph.statistic_1 = reqData.get(i).get(0).toString();
                 String [] latlon = locs.get(j).toString().split(",");
                 newGraph.lat = latlon[0];
-                newGraph.lon = latlon[1];
-                newGraph.classnamel = "circle1";
+                newGraph.lng = latlon[1];
+                newGraph.classname = "circle"+i;
                 output.add(newGraph);
             }
         }

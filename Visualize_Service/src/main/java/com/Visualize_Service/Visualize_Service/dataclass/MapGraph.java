@@ -5,6 +5,6 @@ import java.util.ArrayList;
 public class MapGraph extends Graph {
     public String statistic_1;
     public String lat;
-    public String lon;
-    public String classnamel;
+    public String lng;
+    public String classname;
 }
