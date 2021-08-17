@@ -72,68 +72,54 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
         if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList of parsedData is null");
+            throw new InvalidRequestException("DataList of requested parsedData is null");
         }
 
-        ArrayList<ParsedData> dataList =  request.getDataList();
+        /*******************Setup Data******************/
 
-        //set data
+        ArrayList<ParsedData> dataList =  request.getDataList();
         ArrayList<ArrayList> parsedDatalist = new ArrayList<>();
 
-        /*******************Find pattern******************/
-
-
-        ArrayList<String> sentiments = new ArrayList<>();
-        ArrayList<String> dataSendList = new ArrayList<>();
         for (int i=0 ;i < dataList.size(); i++){
-            String row = "";
+            //String row = "";
 
             String text = dataList.get(i).getTextMessage();
             String location = dataList.get(i).getLocation();
-
-            String date = dataList.get(i).getDate();
-            //System.out.println("HERE IS THE DATE1 _______________________________ : " + date); //Mon Jul 08 07:13:29 +0000 2019
+            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
             String[] dateTime = date.split(" ");
             String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
-            //System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
-
             String likes = String.valueOf(dataList.get(i).getLikes());
 
-            FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
-            FindSentimentResponse sentimentResponse = this.findSentiment(sentimentRequest);
+            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(text);
+            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
+            //FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
+            //FindSentimentResponse sentimentResponse = this.findSentiment(sentimentRequest);
+            //row = sentimentResponse.getSentiment().getCssClass() + " " + date + " "+ likes;
 
-            row = sentimentResponse.getSentiment().getCssClass() + " " + date + " "+ likes;
-            ArrayList<String> rowOfParsed = new ArrayList<>();
+            //Random rn = new Random();
+            //int mockLike = rn.nextInt(10000) + 1;
+
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
             rowOfParsed.add(text);
             rowOfParsed.add(location);
             rowOfParsed.add(formattedDate);
+            rowOfParsed.add(likes);
+            rowOfParsed.add(findNlpPropertiesResponse);
 
-            //System.out.println("HERE IS THE RAW _______________________________ : " +rowOfParsed);
-            //System.out.println(rowOfParsed.toString());
-
-
-
-            Random rn = new Random();
-            //int mockLike = rn.nextInt(10000) + 1;
-            rowOfParsed.add(likes); //dataList.get(i).getLikes().toString()); //likes
-            //rowOfParsed.add(sentimentResponse.getSentiment().getCssClass());
 
             parsedDatalist.add(rowOfParsed);
-
-            //System.out.println("HERE IS THE ROWS _______________________________ : " +parsedDatalist);
-            //System.out.println(rowOfParsed.toString());
-
-            dataSendList.add(row);
         }
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(dataSendList); //TODO
+        /*******************Run A.I Models******************/
+
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
         FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(dataSendList); //TODO
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
@@ -290,8 +276,8 @@ public class AnalyseServiceImpl {
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
@@ -402,22 +388,16 @@ public class AnalyseServiceImpl {
         List<Row> trendsData = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
-        /*for(int i=0; i < requestData.size(); i++){
-            trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
-        }*/
-
-        //ArrayList<ArrayList> formatedData = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
             ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
-
 
             for (int j=0; j< namedEntities.size(); j++){
                 //row.add(isTrending)
@@ -441,7 +421,6 @@ public class AnalyseServiceImpl {
                 row.add(requestData.get(i).get(2).toString());//date
                 row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
                 row.add(sentiment);//sentiment
-               // row.add(sentiment);//PoS
 
                 Row trendRow = RowFactory.create(row.toArray());
                 trendsData.add(trendRow );
@@ -547,7 +526,6 @@ public class AnalyseServiceImpl {
             4. [0, ORGANIZATION, 1, 1, 34.0]]
 
          */
-
 
 
         /*******************SETUP DATAFRAME*****************/
@@ -950,6 +928,12 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> requestData = request.getDataList();
         ArrayList<String> types = new ArrayList<>();
 
+        /*text //0
+        location //1
+        formattedDate//2
+        likes//3
+        findNlpPropertiesResponse//4*/
+
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
 
@@ -958,13 +942,11 @@ public class AnalyseServiceImpl {
             String date = requestData.get(i).get(2).toString();
             int like = Integer.parseInt(requestData.get(i).get(3).toString());
 
-
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
             row.add(sentiment);
-
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
             ArrayList<String> entityTypeNames = new ArrayList<>();
@@ -994,27 +976,16 @@ public class AnalyseServiceImpl {
                 }
             }
 
-            System.out.println("here is a date");
-            System.out.println(date);
-
-            /*System.out.println(Text);
-            System.out.println(entityTypeNames);
-            System.out.println(entityTypeNames.toString());
-
-            System.out.println(entityTypesNumbers);
-            System.out.println(entityTypesNumbers.toString());*/
-
             Row anomalyRow = RowFactory.create(
                     Text, //text
                     entityTypeNames, //array entity name
                     entityTypesNumbers, //array entity type
+                    entityTypesNumbers.size(), //amount of entities
                     sentiment, //sentiment
                     location, //location
                     date, //date
                     like  //like
             );
-
-
 
             //Row anomalyRow = RowFactory.create(row);
             anomaliesData.add(anomalyRow);
@@ -1027,6 +998,7 @@ public class AnalyseServiceImpl {
                         new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
                         new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
+                        new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
@@ -1061,13 +1033,14 @@ public class AnalyseServiceImpl {
         /*textData.get(0); //Text
         textData.get(1); //EntityTypes
         textData.get(2); //EntityTypeNumbers
+        textData.get(3); //AmountOfEntities
 
-        textData.get(3); //Sentiment
-        textData.get(4); //Location
-        textData.get(5); //Date
-        textData.get(6); //Like*/
+        textData.get(4); //Sentiment
+        textData.get(5); //Location
+        textData.get(6); //Date
+        textData.get(7); //Like*/
 
-        //itemsDF.select(col("EntityTypes")).filter();
+
 
         //List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
         //locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
@@ -1106,37 +1079,38 @@ public class AnalyseServiceImpl {
             //System.out.println("Location");
             //System.out.println(textData.get(i).get(4).toString());
 
-            String[] locationData = textData.get(i).get(4).toString().split(","); // location
+            String[] locationData = textData.get(i).get(5).toString().split(","); // location
 
             //System.out.println(locationData.get(i).get(0).toString());
             //Latitude
             //Float.parseFloat(locationData.get(i).get(1).toString()),//Longitude
 
 
-            System.out.println(textData.get(i).get(0).toString());
+            /*System.out.println(textData.get(i).get(0).toString());
             System.out.println(textData.get(i).get(1).toString());
             System.out.println(textData.get(i).get(2));
             System.out.println(amountOfEntities.size());
-            System.out.println( textData.get(i).get(3).toString());
-            System.out.println(textData.get(i).get(4).toString());
+            System.out.println( textData.get(i).get(4).toString());
+            System.out.println(textData.get(i).get(5).toString());
             System.out.println(Float.parseFloat(locationData[0]));
             System.out.println(Float.parseFloat(locationData[1]));
-            System.out.println(textData.get(i).get(5));
             System.out.println(textData.get(i).get(6));
+            System.out.println(textData.get(i).get(7));*/
 
             Row trainRow = RowFactory.create(
                     textData.get(i).get(0).toString(), //text
                     textData.get(i).get(1), //EntityTypes
                     textData.get(i).get(2), //EntityTypeNumbers
-                    amountOfEntities.size(),
+                    //amountOfEntities.size(),
                     //((ArrayList<?>) textData.get(i).get(2)).size(),//AmountOfEntities
                     //amountOfEntities.size(), //AmountOfEntities
-                    textData.get(i).get(3).toString(), //Sentiment
-                    textData.get(i).get(4).toString(), //Location
+                    Integer.parseInt(textData.get(i).get(3).toString()), //AmountOfEntities
+                    textData.get(i).get(4).toString(), //Sentiment
+                    textData.get(i).get(5).toString(), //Location
                     Float.parseFloat(locationData[0]),//Latitude
                     Float.parseFloat(locationData[1]),//Longitude
-                    textData.get(i).get(5), //Date
-                    textData.get(i).get(6) //Like
+                    textData.get(i).get(6), //Date
+                    textData.get(i).get(7) //Like
             );
 
 
@@ -1336,72 +1310,6 @@ public class AnalyseServiceImpl {
 
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
         return new FetchParsedDataResponse(list );
-    }
-
-
-    /**
-     * This method used to find a sentiment of a statement
-     * @param request This is a request object which contains data required to be analysed.
-     * @return FindSentimentResponse This object contains data of the sentiment found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FindSentimentResponse findSentiment(FindSentimentRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FindSentimentRequest Object is null");
-        }
-        if (request.getTextMessage() == null){
-            throw new InvalidRequestException("Text is null");
-        }
-
-
-        String line = request.getTextMessage();
-
-        //Setup the Core NLP
-        Properties properties = new Properties();
-        properties.setProperty("annotators", "tokenize, ssplit, parse, sentiment");
-        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-        int mainSentiment = 0;
-
-        //apply NLP to each tweet AKA line
-        if (line != null && !line.isEmpty()) {
-            int longest = 0;
-            Annotation annotation = stanfordCoreNLP.process(line);
-            for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-                Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
-                int sentiment = RNNCoreAnnotations.getPredictedClass(tree);
-                String partText = sentence.toString();
-                if (partText.length() > longest) {
-                    mainSentiment = sentiment;
-                    longest = partText.length();
-                }
-            }
-        }
-
-        TweetWithSentiment tweetWithSentiment = new TweetWithSentiment(line, toCss(mainSentiment));
-        return new FindSentimentResponse(tweetWithSentiment);
-    }
-
-
-    /**
-     * Helper function, this method used to map sentiments
-     * @param sentiment This is a int value which represent a sentiment.
-     * @return String This is a String value which represents a sentiment.
-     */
-    private String toCss(int sentiment) {
-        switch (sentiment) {
-            case 0:
-                return "Very_Negative";
-            case 1:
-                return "Negative";
-            case 2:
-                return "Neutral";
-            case 3:
-                return "Positive";
-            case 4:
-                return "Very_Positive";
-            default:
-                return "";
-        }
     }
 
 
