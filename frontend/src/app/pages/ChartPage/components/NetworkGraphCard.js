@@ -115,7 +115,7 @@ function NetworkGraphCard(props) {
                     cy.add(props.text[1]);
 
                     run_layout_on_nodes();
-                    setTimeout(run_layout_on_nodes, 3000);
+                    setTimeout(run_layout_on_nodes, 3100);
                     run_layout_on_nodes();
                 }
 
