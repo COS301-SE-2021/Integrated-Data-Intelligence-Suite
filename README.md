@@ -209,7 +209,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Myron Lopes</h1>
 
-<p align="right"><em>Frontend & Data Visualisation</em></p>
+<p align="right"><em>UI, UX & Data Visualisation</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/myron-lopes/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
