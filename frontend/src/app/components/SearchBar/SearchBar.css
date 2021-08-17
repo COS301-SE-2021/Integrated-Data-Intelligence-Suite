@@ -2,11 +2,11 @@
 /********************* Search Bar ***************************/
 /********************* Found in header ********************/
 #search_input {
-    /*border-bottom: 1px solid red;*/
+    border-bottom: 1px solid red;
     /*padding: 5px;*/
     /*padding-left: 6px;*/
     margin: 0;
-    border: 2px solid transparent;
+    /*border: 2px solid transparent;*/
     border-bottom-left-radius: 6px;
     border-top-left-radius: 6px;
 }
@@ -42,9 +42,10 @@
     border: 2px solid black;
     /*border: 0;*/
 
-    width: 22%;
+    width: 18%;
     float: left;
     position: relative;
+    margin-left: 2%;
 
     /* Vertically Aligning it the middle*/
     top: 50%;
@@ -52,12 +53,19 @@
     transform: translateY(-50%);
 }
 
-/*#top_bar > .ant-input-search > .ant-input-group {*/
-/*    border: 2px solid lightgrey;*/
-/*    !*border: 0;*!*/
-/*    padding: 5px;*/
-/*    border-radius: 11px;*/
-/*}*/
+/*The actual inside of the search
+* Color = color of the text when it is being searched
+*/
+#top_bar > .ant-input-search > .ant-input-group > input.ant-input {
+    /*border: 2px solid lightgrey;*/
+    border: 0;
+    /*padding: 5px;*/
+    border-radius: 15%;
+    background-color: #EFF0F0 ;
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
 
 
 /*#top_bar > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {*/
@@ -66,32 +74,26 @@
 /*    padding-left: 4px;*/
 /*}*/
 
-/*!*The div that contains the search Button i.e its parent*!*/
-/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {*/
-/*    !*BORDER: 2PX SOLID YELLOW;*!*/
-/*    border: 0;*/
-/*    left: 0;*/
-/*    border-top-right-radius: 6px;*/
-/*    border-bottom-right-radius: 6px;*/
-/*    border: 2px solid transparent;*/
-/*}*/
-/*!*When Hovering over The div that contains the search Button i.e its parent*!*/
-/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon:hover {*/
-/*    !*BORDER: 2PX SOLID YELLOW;*!*/
-/*    border: 0;*/
-/*    left: 0;*/
-/*    border-top-right-radius: 6px;*/
-/*    border-bottom-right-radius: 6px;*/
-/*    border-bottom: 2px solid #15B761;*/
-/*    border-top: 2px solid #15B761;*/
-/*    border-right: 2px solid #15B761;*/
-/*}*/
+/*The div that contains the search Button i.e its parent*/
+#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {
+    /*BORDER: 2PX SOLID YELLOW;*/
+    /*border: 0;*/
+    left: 0;
+
+    border-top-right-radius: 20%;
+    border-bottom-right-radius: 20%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    /*border: 2px solid transparent;*/
+}
 
 
 /*!* The button that contains the search icon*!*/
-/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {*/
-/*    !*border-bottom: 1px solid red;*!*/
-/*    border: 0;*/
-/*    border-radius: 12%;*/
-/*    !*--antd-wave-shadow-color: none;*!*/
-/*}*/
+#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {
+    /*border-bottom: 1px solid red;*/
+    border: 0;
+    /*border-radius: 12%;*/
+    /*--antd-wave-shadow-color: none;*/
+    color: #5C5C5C;
+    background-color: #EFF0F0 ;
+}
