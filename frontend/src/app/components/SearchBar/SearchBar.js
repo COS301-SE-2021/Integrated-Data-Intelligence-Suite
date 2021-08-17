@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Input} from 'antd';
 import "./SearchBar.css";
+import template_json from "../../pages/ChartPage/resources/graphStructures/message.json"
 
 const {Search} = Input;
 
@@ -22,9 +23,7 @@ class SearchBar extends Component {
     onSearch(values) {
         alert(values + "= Search term");
 
-
-        this.handleTextChange(values)
-
+        // this.handleTextChange(template_json)
 
         //Show loading icon while API request is waiting for data
         this.setState((prevState) => ({showLoadingIcon: true}))
@@ -38,6 +37,7 @@ class SearchBar extends Component {
                 return response.json()
             }).then(json => {
             //remove or stop the loading icon
+            this.handleTextChange(json);
             this.setState((prevState) => ({showLoadingIcon: false}))
 
             //JSON response from API

@@ -13,7 +13,7 @@ const Demo = props => (
 )
 cytoscape.use(fcose);
 
-function NetworkGraphCard() {
+function NetworkGraphCard(props) {
 
     var cy;
 
@@ -101,15 +101,29 @@ function NetworkGraphCard() {
 
 
             // //Adding nodes to the layout
-            cy.add(timelineNodes);
+            if (typeof props.text[1] === 'undefined') {
+                //some error message
+                console.log("array is undefined");
+            } else {
+                if (props.text[1].length === 0) {
+                    //Some error
+                    console.log("array is empty");
+
+                } else if (props.text[1].length > 0) {
+                    console.log("array is not empty");
+                    console.log(props.text[1]);
+                    cy.add(props.text[1]);
+
+                    run_layout_on_nodes();
+                    setTimeout(run_layout_on_nodes, 3100);
+                    run_layout_on_nodes();
+                }
+
+            }
 
             // //Adding a stylesheet to the network graph
             cy.style(network_stylesheet);
 
-
-            run_layout_on_nodes();
-            setTimeout(run_layout_on_nodes, 3000);
-            run_layout_on_nodes();
 
         }
     )

@@ -1,7 +1,7 @@
 import datapoints from "../resources/graphStructures/mapDatapoints.json"
-export function showCircleData(clicked_circle_class_name) {
-    console.log("I am new function that's running on click");
-    //Find the all statistic fields
+export function showCircleData(clicked_circle_class_name, json_data_from_backend) {
+    // console.log("I am new function that's running on click");
+    //Find the all statistic fields in the frontend UI
     const x = document.querySelectorAll("td.ant-descriptions-item.map_1 " +
         "> div.ant-descriptions-item-container" +
         " > span.ant-descriptions-item-content"
@@ -9,8 +9,8 @@ export function showCircleData(clicked_circle_class_name) {
     console.log("X-brooo:" + x);
 
 
-    //Find element with same classname in the datapoints.json file
-    let circle_obj_with_data = datapoints.find(x => x.classname === clicked_circle_class_name);
+    //Find element with same classname in the json_data_from_backend
+    let circle_obj_with_data = json_data_from_backend.find(x => x.classname === clicked_circle_class_name);
     console.log(circle_obj_with_data);
 
 

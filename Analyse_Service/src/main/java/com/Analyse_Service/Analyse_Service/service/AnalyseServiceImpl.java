@@ -41,9 +41,6 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
-import static org.apache.spark.sql.functions.col;
-import static org.apache.spark.sql.functions.struct;
-
 import org.apache.spark.storage.StorageLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +49,8 @@ import scala.Tuple2;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.spark.sql.functions.*;
 
 @Service
 public class AnalyseServiceImpl {
@@ -91,11 +90,13 @@ public class AnalyseServiceImpl {
 
             String text = dataList.get(i).getTextMessage();
             String location = dataList.get(i).getLocation();
-            String date = dataList.get(i).getDate();
-            System.out.println("HERE IS THE DATE1 _______________________________ : " + date);
-            date = date.replaceAll("\\s+","/");
 
-            System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
+            String date = dataList.get(i).getDate();
+            //System.out.println("HERE IS THE DATE1 _______________________________ : " + date); //Mon Jul 08 07:13:29 +0000 2019
+            String[] dateTime = date.split(" ");
+            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            //System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
+
             String likes = String.valueOf(dataList.get(i).getLikes());
 
             FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
@@ -106,14 +107,22 @@ public class AnalyseServiceImpl {
             ArrayList<String> rowOfParsed = new ArrayList<>();
             rowOfParsed.add(text);
             rowOfParsed.add(location);
-            rowOfParsed.add(date);
+            rowOfParsed.add(formattedDate);
+
+            //System.out.println("HERE IS THE RAW _______________________________ : " +rowOfParsed);
+            //System.out.println(rowOfParsed.toString());
+
+
 
             Random rn = new Random();
-            int mockLike = rn.nextInt(10000) + 1;
-            rowOfParsed.add(String.valueOf(mockLike)); //dataList.get(i).getLikes().toString()); //likes
+            //int mockLike = rn.nextInt(10000) + 1;
+            rowOfParsed.add(likes); //dataList.get(i).getLikes().toString()); //likes
             //rowOfParsed.add(sentimentResponse.getSentiment().getCssClass());
 
             parsedDatalist.add(rowOfParsed);
+
+            //System.out.println("HERE IS THE ROWS _______________________________ : " +parsedDatalist);
+            //System.out.println(rowOfParsed.toString());
 
             dataSendList.add(row);
         }
@@ -139,7 +148,7 @@ public class AnalyseServiceImpl {
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList())  ;
+                findAnomaliesResponse.getPattenList()) ;
     }
 
 
@@ -741,6 +750,9 @@ public class AnalyseServiceImpl {
 
         List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
 
+        if( rawResults.isEmpty())
+            rawResults = res.select("EntityName","prediction", "Frequency").filter(col("Frequency").geq(2.0)).collectAsList();
+
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
         for (Row r : res.select("prediction").collectAsList())
@@ -940,68 +952,103 @@ public class AnalyseServiceImpl {
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+
+            String Text = requestData.get(i).get(0).toString(); //New topic, text
+            String location = requestData.get(i).get(1).toString();
+            String date = requestData.get(i).get(2).toString();
+            int like = Integer.parseInt(requestData.get(i).get(3).toString());
+
+
+            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
             FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
-            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
-            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+            row.add(sentiment);
 
+
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+            ArrayList<String> entityTypeNames = new ArrayList<>();
+            ArrayList<Integer> entityTypesNumbers = new ArrayList<>();
 
             for (int j=0; j< namedEntities.size(); j++){
-                row = new ArrayList<>();
-                row.add(namedEntities.get(j).get(0).toString()); //entity-name
-                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+
+                //row.add(namedEntities.get(j).get(0).toString()); //entity-name ---- don't use
+                //row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                entityTypeNames.add(namedEntities.get(j).get(1).toString()); //TODO: avoid repeating entities?
+
                 if (types.isEmpty()){ //entity-typeNumber
-                    row.add(0);
+                    //row.add(0);
+                    entityTypesNumbers.add(0); //replace
                     types.add(namedEntities.get(j).get(1).toString());
-                }else {
-                    if (types.contains(namedEntities.get(j).get(1).toString()))
-                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                }
+                else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        //row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                        entityTypesNumbers.add(types.indexOf(namedEntities.get(j).get(1).toString())); //replace
+                    }
                     else{
-                        row.add(types.size());
+                        //row.add(types.size());
+                        entityTypesNumbers.add(types.size()); //replace
                         types.add(namedEntities.get(j).get(1).toString());
                     }
-
                 }
-
-                row.add(requestData.get(i).get(1).toString());//location
-                row.add(requestData.get(i).get(2).toString());//date
-                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
-                row.add(sentiment);//sentiment
-
-                Row anomalyRow = RowFactory.create(row.toArray());
-                anomaliesData.add(anomalyRow);
             }
+
+            System.out.println("here is a date");
+            System.out.println(date);
+
+            /*System.out.println(Text);
+            System.out.println(entityTypeNames);
+            System.out.println(entityTypeNames.toString());
+
+            System.out.println(entityTypesNumbers);
+            System.out.println(entityTypesNumbers.toString());*/
+
+            Row anomalyRow = RowFactory.create(
+                    Text, //text
+                    entityTypeNames, //array entity name
+                    entityTypesNumbers, //array entity type
+                    sentiment, //sentiment
+                    location, //location
+                    date, //date
+                    like  //like
+            );
+
+
+
+            //Row anomalyRow = RowFactory.create(row);
+            anomaliesData.add(anomalyRow);
         }
 
         /*******************SETUP DATAFRAME*****************/
 
         StructType schema = new StructType(
                 new StructField[]{
-                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
-                        //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
         Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema);
 
         StructType schema2 = new StructType(
                 new StructField[]{
-                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Frequency", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Location", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("Sentiment", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
-                        new StructField("Date", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        //new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
+                        new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Latitude", DataTypes.FloatType, false, Metadata.empty()),
+                        new StructField("Longitude", DataTypes.FloatType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
+                        //new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
                 });
 
 
@@ -1009,55 +1056,90 @@ public class AnalyseServiceImpl {
 
         //group named entity
 
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
-        namedEntities.get(0); /*name entity*/
-        namedEntities.get(1); /*name type*/
-        namedEntities.get(2); /*name type-number*/
-        namedEntities.get(3); /*name frequency*/
 
-        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        averageLikes.get(1); //average likes
+        List<Row> textData = itemsDF.select("*").collectAsList();
+        /*textData.get(0); //Text
+        textData.get(1); //EntityTypes
+        textData.get(2); //EntityTypeNumbers
 
-        //List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        textData.get(3); //Sentiment
+        textData.get(4); //Location
+        textData.get(5); //Date
+        textData.get(6); //Like*/
 
-        int minSize = 0;
-        if(namedEntities.size()>averageLikes.size())
-            minSize = averageLikes.size();
+        //itemsDF.select(col("EntityTypes")).filter();
+
+        //List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
+        //locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
+
+
+        /*int minSize = 0;
+        if(textData.size()>locationData.size())
+            minSize = locationData.size();
         else
-            minSize = namedEntities.size();
+            minSize = textData.size();*/
 
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < minSize; i++){
+        for(int i=0; i < textData.size(); i++){
 
-            String name = namedEntities.get(i).get(0).toString();
+            Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
 
-            List<Row> loc = itemsDF.select("Location").filter(col("EntityName").equalTo(name)).collectAsList();
-            ArrayList<String> locations = new ArrayList<>();
-            for(int j =0; j<  loc.size(); j++)
-                locations.add(loc.get(0).toString());
+            List<?> amountOfEntities = new ArrayList<>();
+            if (amountOfEntitiesObject.getClass().isArray()) {
+                amountOfEntities = Arrays.asList((Object[])amountOfEntitiesObject);
+            } else if (amountOfEntitiesObject instanceof Collection) {
+                amountOfEntities = new ArrayList<>((Collection<?>)amountOfEntitiesObject);
+            }
 
-            List<Row> sen = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(name)).collectAsList();
-            ArrayList<String> sentiments = new ArrayList<>();
-            for(int j =0; j<  sen.size(); j++)
-                sentiments.add(sen.get(0).toString());
+            System.out.println("entity count");
+            System.out.println(amountOfEntities);
 
-            List<Row> da = itemsDF.select("Date").filter(col("EntityName").equalTo(name)).collectAsList();
+
+
+            /*List<Row> da = itemsDF.select("Date").filter(col("EntityName").equalTo(name)).collectAsList();
             ArrayList<String> dates = new ArrayList<>();
             for(int j =0; j<  da.size(); j++)
-                dates.add(da.get(0).toString());
+                dates.add(da.get(0).toString());*/
+
+            //System.out.println("Location");
+            //System.out.println(textData.get(i).get(4).toString());
+
+            String[] locationData = textData.get(i).get(4).toString().split(","); // location
+
+            //System.out.println(locationData.get(i).get(0).toString());
+            //Latitude
+            //Float.parseFloat(locationData.get(i).get(1).toString()),//Longitude
+
+
+            System.out.println(textData.get(i).get(0).toString());
+            System.out.println(textData.get(i).get(1).toString());
+            System.out.println(textData.get(i).get(2));
+            System.out.println(amountOfEntities.size());
+            System.out.println( textData.get(i).get(3).toString());
+            System.out.println(textData.get(i).get(4).toString());
+            System.out.println(Float.parseFloat(locationData[0]));
+            System.out.println(Float.parseFloat(locationData[1]));
+            System.out.println(textData.get(i).get(5));
+            System.out.println(textData.get(i).get(6));
 
             Row trainRow = RowFactory.create(
-                    namedEntities.get(i).get(0).toString(), //EntityName
-                    namedEntities.get(i).get(1).toString(), //EntityType
-                    Integer.parseInt(namedEntities.get(i).get(2).toString()), //EntityTypeNumber
-                    Integer.parseInt(namedEntities.get(i).get(3).toString()), //Frequency
-                    locations, //Location
-                    sentiments, //Sentiment
-                    dates, //Date
-                    Float.parseFloat(averageLikes.get(i).get(1).toString()) //AverageLikes
+                    textData.get(i).get(0).toString(), //text
+                    textData.get(i).get(1), //EntityTypes
+                    textData.get(i).get(2), //EntityTypeNumbers
+                    amountOfEntities.size(),
+                    //((ArrayList<?>) textData.get(i).get(2)).size(),//AmountOfEntities
+                    //amountOfEntities.size(), //AmountOfEntities
+                    textData.get(i).get(3).toString(), //Sentiment
+                    textData.get(i).get(4).toString(), //Location
+                    Float.parseFloat(locationData[0]),//Latitude
+                    Float.parseFloat(locationData[1]),//Longitude
+                    textData.get(i).get(5), //Date
+                    textData.get(i).get(6) //Like
             );
+
+
             trainSet.add(trainRow);
         }
 
@@ -1069,15 +1151,16 @@ public class AnalyseServiceImpl {
         //features
 
         VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"Frequency", "AverageLikes"})
+                //.setInputCols(new String[]{"EntityTypeNumbers", "AmountOfEntities", "Latitude", "Latitude", "Like"})
+                .setInputCols(new String[]{"AmountOfEntities", "Latitude", "Latitude", "Like"})
                 .setOutputCol("features");
 
         Dataset<Row> testDF = assembler.transform(trainingDF);
 
         //model
-     /*int numClusters = 2; //number of classses
-     int numIterations = 20;
-     //KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);*/
+        /*int numClusters = 2; //number of classses
+        int numIterations = 20;
+        KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);*/
 
         KMeans km = new KMeans()
                 //.setK(2) //number of classses/clusters
@@ -1089,13 +1172,11 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> summary=  kmModel.summary().predictions();
 
-
         summary.show();
 
 
-
-        System.out.println(kmModel.summary().clusterSizes().toString());
         System.out.println("*******************************************************************************************");
+        System.out.println(Arrays.stream(kmModel.summary().clusterSizes()).toArray());
         System.out.println("***************************************SUMMARY*********************************************");
         System.out.println("*******************************************************************************************");
         System.out.println("*******************************************************************************************");
@@ -1112,33 +1193,33 @@ public class AnalyseServiceImpl {
 
         /*******************summary (REMOVE)*****************/
         //summary
-     /*System.out.println("Cluster centers:");
-     for (Vector center: clusters.clusterCenters()) {
-         System.out.println(" " + center);
-     }
-     double cost = clusters.computeCost(parsedData.rdd());
-     System.out.println("Cost: " + cost);
+        /*System.out.println("Cluster centers:");
+        for (Vector center: clusters.clusterCenters()) {
+            System.out.println(" " + center);
+        }
+        double cost = clusters.computeCost(parsedData.rdd());
+        System.out.println("Cost: " + cost);
 
-     // Evaluate clustering by computing Within Set Sum of Squared Errors
-     double WSSSE = clusters.computeCost(parsedData.rdd());
-     System.out.println("Within Set Sum of Squared Errors = " + WSSSE);*/
+        // Evaluate clustering by computing Within Set Sum of Squared Errors
+        double WSSSE = clusters.computeCost(parsedData.rdd());
+        System.out.println("Within Set Sum of Squared Errors = " + WSSSE);*/
 
         // Save and load model
-     /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
-     KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
+        /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
+        KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
              "target/org/apache/spark/JavaKMeansExample/KMeansModel");*/
 
         /*******************READ MODEL OUTPUT*****************/
 
-     /*ArrayList<ArrayList> results = new ArrayList<>();
-     Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
+        /*ArrayList<ArrayList> results = new ArrayList<>();
+        Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
 
-     Dataset<Row> res = lrModel.transform(input);
+        Dataset<Row> res = lrModel.transform(input);
 
-     List<Row> rawResults = res.select("EntityName","prediction").collectAsList();*/
+        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();*/
 
-        Dataset<Row> Results = summary.select("EntityName","prediction").filter(col("prediction").$greater(0));
-        List<Row> rawResults = Results.select("EntityName","prediction").collectAsList();
+        Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
+        List<Row> rawResults = Results.select("Text","prediction").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());

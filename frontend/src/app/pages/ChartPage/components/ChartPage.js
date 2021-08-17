@@ -38,18 +38,18 @@ class ChartPage extends Component {
                             id={'outer_layout'}
                             className={'chart-page'}
                         >
-                            <SideBar/>
+                            <Header id={'top_bar'}>
+                                {/*<Title level={1}>Chart Page Title</Title>*/}
+                                <SearchBar
+                                    text={this.state.text}
+                                    handleTextChange={this.handleTextChange}
+                                />
+                                <UserInfoCard
+                                    name="s"
+                                />
+                            </Header>
                             <Layout id={'inner_layout_div'}>
-                                <Header id={'top_bar'}>
-                                    {/*<Title level={1}>Chart Page Title</Title>*/}
-                                    <SearchBar
-                                        text={this.state.text}
-                                        handleTextChange={this.handleTextChange}
-                                    />
-                                    <UserInfoCard
-                                        name="s"
-                                    />
-                                </Header>
+                            <SideBar/>
 
                                 {/*The Map Graph*/}
                                 <Content id={'content_section'}>
@@ -82,7 +82,7 @@ class ChartPage extends Component {
                                             id={'network_graph_card_content'}
                                             className={'network_card'}
                                         >
-                                            <NetworkGraphCard/>
+                                            <NetworkGraphCard text={this.state.text}/>
                                         </Content>
                                     </Layout>
 
@@ -95,7 +95,7 @@ class ChartPage extends Component {
                                             id={'timeline_graph_card_content'}
                                             className={'timeline_card'}
                                         >
-                                            <TimelineGraph/>
+                                            <TimelineGraph text={this.state.text}/>
                                         </Content>
                                     </Layout>
 

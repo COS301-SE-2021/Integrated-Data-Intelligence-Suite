@@ -46,8 +46,6 @@ const markerIcon = new L.Icon({
 });
 
 function MapCard(props) {
-
-
     const [mapLayers, setMapLayers] = useState([]);
 
     const _onDeleted = (e) => {
@@ -183,18 +181,6 @@ function MapCard(props) {
         map.addControl(drawControl);
 
 
-        // var marker = L.marker([48.488, 1.395]).addTo(map);
-        // marker.snapediting = new L.Handler.MarkerSnap(map, marker);
-        // marker.snapediting.addGuideLayer(guideLayer);
-        // marker.snapediting.enable();
-
-        // let markers = [];
-        // map.eachLayer((layer) => {
-        //     if (layer instanceof L.Circle) {
-        //         markers.push(layer.feature);
-        //     }
-        // });
-
         console.log("===========");
         console.log(map)
         console.log("===========");
@@ -281,7 +267,7 @@ function MapCard(props) {
             console.log("some datapoint value:" + datapoint.lat);
             return L.circle(L.latLng(datapoint.lat, datapoint.lng), {
                 className: datapoint.classname,
-                id: props.text,
+                id: "broski",
                 radius: 5900
             });
         }
@@ -290,14 +276,30 @@ function MapCard(props) {
             layer_with_drawn_items.addLayer(some_circle_layer);
         }
 
-        console.log(datapoints);
-        var array_of_circle_markers = datapoints.map(createCircle);
-        console.log(array_of_circle_markers);
-        array_of_circle_markers.forEach(addCircleLayer)
+
+        /*
+        * Implementation using actual json data from backend
+        *
+        * */
+        console.log(props.text[0]);
+        if(typeof props.text[0] === 'undefined'){
+            //some error message
+        }else{
+            if (props.text[0].length == 0) {
+                //Some error
+
+            } else if (props.text[0].length > 0) {
+                let array_of_map_data = props.text[0];
+                let array_of_circle_markers = array_of_map_data.map(createCircle);
+                console.log(array_of_circle_markers);
+                array_of_circle_markers.forEach(addCircleLayer)
+            }
+        }
 
 
         /*
-            * Updating statistics based on circle click
+        * Updating statistics based on circle click
+        *
         */
         layer_with_drawn_items.on("click", function (e) {
             var clickedCircle = e.layer; // e.target is the group itself.
@@ -305,14 +307,12 @@ function MapCard(props) {
             console.log();
             console.log(e);
             alert("circle clicked");
-            showCircleData(clickedCircle.options.className);
+            showCircleData(clickedCircle.options.className, this.props.text[0]);
         });
     })
 
     return (
-        <div id="map_container_div">
-
-        </div>
+        <div id="map_container_div"/>
     );
 
 

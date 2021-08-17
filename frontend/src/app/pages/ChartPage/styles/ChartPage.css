@@ -4,7 +4,6 @@
 * NOTE: If a component is too large or requires in-depth styling or can be re-used in other pages
     best to give that component its own file.
 */
-
 #top_bar {
     background: #ffffff;
     color: #000000;
@@ -14,6 +13,7 @@
     margin: 0;
     /*border: 3px solid red;*/
     /*border: 0;*/
+    border-bottom: 0.2em solid #E8E8E9;
 }
 
 /*

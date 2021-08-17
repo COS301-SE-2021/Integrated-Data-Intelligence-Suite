@@ -54,8 +54,8 @@ public class TwitterExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        String[] dateTimeInfo = obj.getString("created_at").split("T");
-        String responseDate = dateTimeInfo[0];
+        String dateTimeInfo = obj.getString("created_at");
+        String responseDate = dateTimeInfo;
 
         GetDateResponse response = new GetDateResponse(responseDate);
         return response;
@@ -147,7 +147,7 @@ public class TwitterExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        likes = obj.getInt("favorite_count");
+        likes = obj.getInt("retweet_count");
 
         return new GetLikesResponse(likes);
     }

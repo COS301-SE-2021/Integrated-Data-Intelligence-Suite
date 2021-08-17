@@ -20,7 +20,7 @@
 }
 
 .content-wrapper {
-    border: 3px solid red;
+    /*border: 3px solid red;*/
     box-sizing: border-box;
     border-radius: 5px 0 0 5px;
 }
