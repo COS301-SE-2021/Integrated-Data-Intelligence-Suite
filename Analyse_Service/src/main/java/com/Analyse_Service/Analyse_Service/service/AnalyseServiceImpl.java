@@ -276,8 +276,8 @@ public class AnalyseServiceImpl {
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
@@ -928,6 +928,12 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> requestData = request.getDataList();
         ArrayList<String> types = new ArrayList<>();
 
+        /*text //0
+        location //1
+        formattedDate//2
+        likes//3
+        findNlpPropertiesResponse//4*/
+
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
 
@@ -936,13 +942,11 @@ public class AnalyseServiceImpl {
             String date = requestData.get(i).get(2).toString();
             int like = Integer.parseInt(requestData.get(i).get(3).toString());
 
-
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
             row.add(sentiment);
-
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
             ArrayList<String> entityTypeNames = new ArrayList<>();
@@ -971,14 +975,6 @@ public class AnalyseServiceImpl {
                     }
                 }
             }
-
-
-            /*System.out.println(Text);
-            System.out.println(entityTypeNames);
-            System.out.println(entityTypeNames.toString());
-
-            System.out.println(entityTypesNumbers);
-            System.out.println(entityTypesNumbers.toString());*/
 
             Row anomalyRow = RowFactory.create(
                     Text, //text
@@ -1314,72 +1310,6 @@ public class AnalyseServiceImpl {
 
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
         return new FetchParsedDataResponse(list );
-    }
-
-
-    /**
-     * This method used to find a sentiment of a statement
-     * @param request This is a request object which contains data required to be analysed.
-     * @return FindSentimentResponse This object contains data of the sentiment found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FindSentimentResponse findSentiment(FindSentimentRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FindSentimentRequest Object is null");
-        }
-        if (request.getTextMessage() == null){
-            throw new InvalidRequestException("Text is null");
-        }
-
-
-        String line = request.getTextMessage();
-
-        //Setup the Core NLP
-        Properties properties = new Properties();
-        properties.setProperty("annotators", "tokenize, ssplit, parse, sentiment");
-        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-        int mainSentiment = 0;
-
-        //apply NLP to each tweet AKA line
-        if (line != null && !line.isEmpty()) {
-            int longest = 0;
-            Annotation annotation = stanfordCoreNLP.process(line);
-            for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-                Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
-                int sentiment = RNNCoreAnnotations.getPredictedClass(tree);
-                String partText = sentence.toString();
-                if (partText.length() > longest) {
-                    mainSentiment = sentiment;
-                    longest = partText.length();
-                }
-            }
-        }
-
-        TweetWithSentiment tweetWithSentiment = new TweetWithSentiment(line, toCss(mainSentiment));
-        return new FindSentimentResponse(tweetWithSentiment);
-    }
-
-
-    /**
-     * Helper function, this method used to map sentiments
-     * @param sentiment This is a int value which represent a sentiment.
-     * @return String This is a String value which represents a sentiment.
-     */
-    private String toCss(int sentiment) {
-        switch (sentiment) {
-            case 0:
-                return "Very_Negative";
-            case 1:
-                return "Negative";
-            case 2:
-                return "Neutral";
-            case 3:
-                return "Positive";
-            case 4:
-                return "Very_Positive";
-            default:
-                return "";
-        }
     }
 
 
