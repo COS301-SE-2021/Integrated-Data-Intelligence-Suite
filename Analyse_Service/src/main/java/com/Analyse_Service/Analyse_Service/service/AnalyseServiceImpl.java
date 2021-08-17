@@ -388,22 +388,16 @@ public class AnalyseServiceImpl {
         List<Row> trendsData = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
-        /*for(int i=0; i < requestData.size(); i++){
-            trendsData.add( RowFactory.create(Arrays.asList(reqData.get(i).split(" "))));
-        }*/
-
-        //ArrayList<ArrayList> formatedData = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
             ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
-
 
             for (int j=0; j< namedEntities.size(); j++){
                 //row.add(isTrending)
@@ -427,7 +421,6 @@ public class AnalyseServiceImpl {
                 row.add(requestData.get(i).get(2).toString());//date
                 row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
                 row.add(sentiment);//sentiment
-               // row.add(sentiment);//PoS
 
                 Row trendRow = RowFactory.create(row.toArray());
                 trendsData.add(trendRow );
@@ -533,7 +526,6 @@ public class AnalyseServiceImpl {
             4. [0, ORGANIZATION, 1, 1, 34.0]]
 
          */
-
 
 
         /*******************SETUP DATAFRAME*****************/
