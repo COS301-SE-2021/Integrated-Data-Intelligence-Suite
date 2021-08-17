@@ -941,16 +941,16 @@ public class AnalyseServiceImpl {
             List<Object> row = new ArrayList<>();
 
             String Text = requestData.get(i).get(0).toString(); //New topic, text
+            String location = requestData.get(i).get(1).toString();
+            String date = requestData.get(i).get(2).toString();
+            int like = Integer.parseInt(requestData.get(i).get(3).toString());
+
 
             FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
             FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
-            row.add( sentiment);
-
-            String location = requestData.get(i).get(1).toString();
-            String date = requestData.get(i).get(2).toString();
-            int like = Integer.parseInt(requestData.get(i).get(3).toString());
+            row.add(sentiment);
 
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
@@ -961,13 +961,14 @@ public class AnalyseServiceImpl {
 
                 //row.add(namedEntities.get(j).get(0).toString()); //entity-name ---- don't use
                 //row.add(namedEntities.get(j).get(1).toString()); //entity-type
-                entityTypeNames.add(namedEntities.get(j).get(1).toString());
+                entityTypeNames.add(namedEntities.get(j).get(1).toString()); //TODO: avoid repeating entities?
 
                 if (types.isEmpty()){ //entity-typeNumber
                     //row.add(0);
                     entityTypesNumbers.add(0); //replace
                     types.add(namedEntities.get(j).get(1).toString());
-                }else {
+                }
+                else {
                     if (types.contains(namedEntities.get(j).get(1).toString())) {
                         //row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
                         entityTypesNumbers.add(types.indexOf(namedEntities.get(j).get(1).toString())); //replace
@@ -980,15 +981,26 @@ public class AnalyseServiceImpl {
                 }
             }
 
-            row.add(Text); //text
-            row.add(entityTypeNames.toArray()); //array entity name
-            row.add(entityTypesNumbers.toArray()); //array entity type
-            row.add(sentiment);//sentiment
-            row.add(location); //location
-            row.add(date); //date
-            row.add(like);  //like
+            System.out.println(Text);
+            System.out.println(entityTypeNames);
+            System.out.println(entityTypeNames.toString());
 
-            Row anomalyRow = RowFactory.create(row);
+            System.out.println(entityTypesNumbers);
+            System.out.println(entityTypesNumbers.toString());
+
+            Row anomalyRow = RowFactory.create(
+                    Text, //text
+                    entityTypeNames, //array entity name
+                    entityTypesNumbers, //array entity type
+                    sentiment, //sentiment
+                    location, //location
+                    date, //date
+                    like  //like
+            );
+
+
+
+            //Row anomalyRow = RowFactory.create(row);
             anomaliesData.add(anomalyRow);
         }
 
@@ -1039,32 +1051,74 @@ public class AnalyseServiceImpl {
         textData.get(5); //Date
         textData.get(6); //Like*/
 
-        List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
-        locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
+        //itemsDF.select(col("EntityTypes")).filter();
+
+        //List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
+        //locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
 
 
-        int minSize = 0;
+        /*int minSize = 0;
         if(textData.size()>locationData.size())
             minSize = locationData.size();
         else
-            minSize = textData.size();
+            minSize = textData.size();*/
 
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < minSize; i++){
+        for(int i=0; i < textData.size(); i++){
 
-            ArrayList<Integer> amountOfEntities = (ArrayList<Integer>) textData.get(i).get(2); //amount = fun(EntityTypeNumbers)
+            Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
+
+            List<?> amountOfEntities = new ArrayList<>();
+            if (amountOfEntitiesObject.getClass().isArray()) {
+                amountOfEntities = Arrays.asList((Object[])amountOfEntitiesObject);
+            } else if (amountOfEntitiesObject instanceof Collection) {
+                amountOfEntities = new ArrayList<>((Collection<?>)amountOfEntitiesObject);
+            }
+
+            System.out.println("entity count");
+            System.out.println(amountOfEntities);
+
+
+
+            /*List<Row> da = itemsDF.select("Date").filter(col("EntityName").equalTo(name)).collectAsList();
+            ArrayList<String> dates = new ArrayList<>();
+            for(int j =0; j<  da.size(); j++)
+                dates.add(da.get(0).toString());*/
+
+            //System.out.println("Location");
+            //System.out.println(textData.get(i).get(4).toString());
+
+            String[] locationData = textData.get(i).get(4).toString().split(","); // location
+
+            //System.out.println(locationData.get(i).get(0).toString());
+            //Latitude
+            //Float.parseFloat(locationData.get(i).get(1).toString()),//Longitude
+
+
+            System.out.println(textData.get(i).get(0).toString());
+            System.out.println(textData.get(i).get(1).toString());
+            System.out.println(textData.get(i).get(2));
+            System.out.println(amountOfEntities.size());
+            System.out.println( textData.get(i).get(3).toString());
+            System.out.println(textData.get(i).get(4).toString());
+            System.out.println(Float.parseFloat(locationData[0]));
+            System.out.println(Float.parseFloat(locationData[1]));
+            System.out.println(textData.get(i).get(5));
+            System.out.println(textData.get(i).get(6));
 
             Row trainRow = RowFactory.create(
                     textData.get(i).get(0).toString(), //text
-                    textData.get(i).get(1).toString(), //EntityTypes
+                    textData.get(i).get(1), //EntityTypes
                     textData.get(i).get(2), //EntityTypeNumbers
-                    amountOfEntities.size(), //AmountOfEntities
+                    amountOfEntities.size(),
+                    //((ArrayList<?>) textData.get(i).get(2)).size(),//AmountOfEntities
+                    //amountOfEntities.size(), //AmountOfEntities
                     textData.get(i).get(3).toString(), //Sentiment
                     textData.get(i).get(4).toString(), //Location
-                    Float.parseFloat(locationData.get(i).get(0).toString()),//Latitude
-                    Float.parseFloat(locationData.get(i).get(1).toString()),//Longitude
+                    Float.parseFloat(locationData[0]),//Latitude
+                    Float.parseFloat(locationData[1]),//Longitude
                     textData.get(i).get(5), //Date
                     textData.get(i).get(6) //Like
             );
@@ -1081,7 +1135,8 @@ public class AnalyseServiceImpl {
         //features
 
         VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"EntityTypeNumbers", "AmountOfEntities", "Latitude", "Latitude", "Like"})
+                //.setInputCols(new String[]{"EntityTypeNumbers", "AmountOfEntities", "Latitude", "Latitude", "Like"})
+                .setInputCols(new String[]{"AmountOfEntities", "Latitude", "Latitude", "Like"})
                 .setOutputCol("features");
 
         Dataset<Row> testDF = assembler.transform(trainingDF);
