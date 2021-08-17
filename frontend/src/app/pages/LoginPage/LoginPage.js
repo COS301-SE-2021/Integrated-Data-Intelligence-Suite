@@ -42,7 +42,7 @@ const LoginPage = () => {
                     username : "myron"
                 }
                 localStorage.setItem("user", JSON.stringify(localuser));
-                history.push('/');
+                history.push('/chart');
             } else {
                 const requestOptions = {
                     method: 'POST',
@@ -56,7 +56,7 @@ const LoginPage = () => {
                     alert(json.message);
                     if (json.success) {
                         localStorage.setItem("user", json.id)
-                        history.push('/');
+                        history.push('/chart');
                     }
                 });
             }
