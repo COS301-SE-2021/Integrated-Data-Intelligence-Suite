@@ -157,7 +157,7 @@ public class UserServiceTest {
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
         RegisterRequest request = new RegisterRequest("newUser", "firstname", "lastname", "password", "newEmail");
-        String expectedMessage = "Registration successful";
+        String expectedMessage = "Username has been taken";
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(expectedMessage, response.getMessage());
     }
