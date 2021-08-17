@@ -14,7 +14,10 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="User_Service" />
+          <factory-entry name="entityManagerFactory" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -87,6 +90,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.3.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.3.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.8" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:2.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:2.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.5.1" level="project" />
