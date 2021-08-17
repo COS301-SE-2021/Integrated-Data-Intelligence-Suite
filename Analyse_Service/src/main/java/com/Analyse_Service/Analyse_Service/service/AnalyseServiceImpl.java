@@ -72,68 +72,54 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
         if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList of parsedData is null");
+            throw new InvalidRequestException("DataList of requested parsedData is null");
         }
 
-        ArrayList<ParsedData> dataList =  request.getDataList();
+        /*******************Setup Data******************/
 
-        //set data
+        ArrayList<ParsedData> dataList =  request.getDataList();
         ArrayList<ArrayList> parsedDatalist = new ArrayList<>();
 
-        /*******************Find pattern******************/
-
-
-        ArrayList<String> sentiments = new ArrayList<>();
-        ArrayList<String> dataSendList = new ArrayList<>();
         for (int i=0 ;i < dataList.size(); i++){
-            String row = "";
+            //String row = "";
 
             String text = dataList.get(i).getTextMessage();
             String location = dataList.get(i).getLocation();
-
-            String date = dataList.get(i).getDate();
-            //System.out.println("HERE IS THE DATE1 _______________________________ : " + date); //Mon Jul 08 07:13:29 +0000 2019
+            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
             String[] dateTime = date.split(" ");
             String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
-            //System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
-
             String likes = String.valueOf(dataList.get(i).getLikes());
 
-            FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
-            FindSentimentResponse sentimentResponse = this.findSentiment(sentimentRequest);
+            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(text);
+            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
+            //FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
+            //FindSentimentResponse sentimentResponse = this.findSentiment(sentimentRequest);
+            //row = sentimentResponse.getSentiment().getCssClass() + " " + date + " "+ likes;
 
-            row = sentimentResponse.getSentiment().getCssClass() + " " + date + " "+ likes;
-            ArrayList<String> rowOfParsed = new ArrayList<>();
+            //Random rn = new Random();
+            //int mockLike = rn.nextInt(10000) + 1;
+
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
             rowOfParsed.add(text);
             rowOfParsed.add(location);
             rowOfParsed.add(formattedDate);
+            rowOfParsed.add(likes);
+            rowOfParsed.add(findNlpPropertiesResponse);
 
-            //System.out.println("HERE IS THE RAW _______________________________ : " +rowOfParsed);
-            //System.out.println(rowOfParsed.toString());
-
-
-
-            Random rn = new Random();
-            //int mockLike = rn.nextInt(10000) + 1;
-            rowOfParsed.add(likes); //dataList.get(i).getLikes().toString()); //likes
-            //rowOfParsed.add(sentimentResponse.getSentiment().getCssClass());
 
             parsedDatalist.add(rowOfParsed);
-
-            //System.out.println("HERE IS THE ROWS _______________________________ : " +parsedDatalist);
-            //System.out.println(rowOfParsed.toString());
-
-            dataSendList.add(row);
         }
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(dataSendList); //TODO
+        /*******************Run A.I Models******************/
+
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
         FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(dataSendList); //TODO
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
