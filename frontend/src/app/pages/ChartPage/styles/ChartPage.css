@@ -4,7 +4,6 @@
 * NOTE: If a component is too large or requires in-depth styling or can be re-used in other pages
     best to give that component its own file.
 */
-
 #top_bar {
     background: #ffffff;
     color: #000000;
@@ -12,8 +11,9 @@
     /*padding: 0 1%;*/
     padding: 0;
     margin: 0;
-    border: 3px solid red;
+    /*border: 3px solid red;*/
     /*border: 0;*/
+    border-bottom: 0.2em solid #E8E8E9;
 }
 
 /*
@@ -21,10 +21,10 @@
 */
 #content_section {
     padding: 5%;
-    background: #ffffff;
+    background: #EFF0F0;
     color: #000000;
     /*height: 206px;*/
-    border: 3px solid blue;
+    border:0;
 
     /*Scrolling Functionality*/
     max-height: 100vh;
@@ -40,6 +40,7 @@
 
 #inner_layout_div {
     /*border: 3px solid green;*/
+    border: 0;
 }
 
 /*The div that Stores/Contains EVERYTHING inside it*/
@@ -54,10 +55,13 @@
     * and the content section to have its 'own' overflow
     */
     /*overflow:hidden*/
+
+    overflow-x: hidden;
 }
 
 #map_card_content_layout_div {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
+    border:0;
 }
 
 

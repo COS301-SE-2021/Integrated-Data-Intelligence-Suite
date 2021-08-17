@@ -13,9 +13,6 @@ const Permissions = () => {
 
     return (
         <Layout>
-            <div className={"clear-background"} id={"permissions_header"}>
-                <h1 id={"permissions-title"}>Permissions</h1>
-            </div>
             <Content className={"permissions-content-section"}>
                 <div className={"permissions user"}>
                     { error && <div>{ error }</div> }

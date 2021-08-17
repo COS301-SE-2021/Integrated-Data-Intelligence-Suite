@@ -4,12 +4,15 @@
     /*border-radius: 5px;*/
     line-height: normal;
     display: flex;
-    background-color: lightgray;
+    background-color: white;
     border-radius: 10px;
+    border: 1px solid #eff0f0;
 }
 
 .user-preview:hover{
-    background-color: #bfbebe;
+    /*background-color: #5873f9;*/
+    /*color: white;*/
+    border-color: #5873f9;
 }
 
 .user-preview h3{
@@ -80,7 +83,7 @@
 
 
 .bodyDiv .ant-layout-content{
-    background-color: lightgrey;
+    /*background-color: lightgrey;*/
 }
 
 .bodyDiv .right-column .ant-layout-content{

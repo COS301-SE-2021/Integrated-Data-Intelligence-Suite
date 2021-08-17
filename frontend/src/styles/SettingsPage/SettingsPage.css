@@ -1,8 +1,56 @@
-.bodyDiv{
-    height: 99vh;
-}
 
 main .outer-container#settings-container{
-    border: 2px solid ;
+    /*border: 2px solid ;*/
 
+}
+
+.ant-col>div.option{
+    /*background-color: white;*/
+    /*border-radius: 10px;*/
+    margin: 0;
+    padding: 10px;
+    line-height: normal;
+}
+
+.ant-col>div.option.active{
+    background: #5873f9;
+    border-radius: 5px;
+    color: white;
+}
+
+.bodyDiv .header{
+    background: white;
+    display: inline-flex;
+    /*width: 100vw;*/
+    align-items: end;
+}
+
+.top-padding{
+    width: 100%;
+    /*border: 3px solid red;*/
+    height: 50px;
+    /*padding-right: 100px;*/
+}
+
+.ant-col .left-column{
+    padding-top: 50px;
+}
+
+.ant-col .right-column{
+    background: #eff0f0;
+
+}
+
+
+
+.back-button{
+    margin: 15px 15px 100px 0;
+    font-size: 30px;
+    float: right;
+    position: relative;
+}
+
+
+.ant-col>div.ant-divider{
+    border-color: #5873f9;
 }

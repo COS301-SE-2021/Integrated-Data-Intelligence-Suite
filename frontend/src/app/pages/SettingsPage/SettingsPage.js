@@ -1,49 +1,53 @@
-import React, {Component, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {Layout, Row, Col, Divider} from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import Title from "antd/es/typography/Title";
-import SideBar from "../../components/SideBar/SideBar";
-import {Link, Route} from "react-router-dom";
+import {CloseCircleTwoTone} from '@ant-design/icons'
+import { useHistory} from "react-router-dom";
 import Permissions from "../PermissionsPage/Permissions";
-import UserInfoCard from "../../components/SideBar/UserInfoCard";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content} = Layout;
 
-
+const setActive = (component) =>{
+    let options = document.getElementsByClassName("option");
+    console.log(options)
+    for (let i = 0; i < options.length; i++) {
+        console.log(options[i].id)
+        if(options[i].id === component){
+            options[i].className = "option active"
+        }else{
+            options[i].className = "option"
+        }
+    }
+    return true;
+}
 
 
 const SettingsPage = () => {
 
     const [component, setComponent] = useState("Permissions");
+    const history = useHistory();
 
 
     return (
-        <Layout style={{ minHeight: '100vh' }} className={"bodyDiv"}>
-            <SideBar/>
-            <Layout id={'inner_layout_div'}>
-                <Header id={"top_bar"} className={"header"} >
-                    <Title level={1}>Settings</Title>
-                    <UserInfoCard
-                        name="s"
-                    />
-                </Header>
-                <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' ,backgroundColor:""}}>
-                    <Row className={"row"} style={{ border:"2px solid black"}}>
+        <Layout className={"bodyDiv"}>
+            <div className={"header white-background"}>
+            </div>
+                <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' , minHeight:"100vh"}}>
+                    <Row className={"row"}>
                         <Col style={{padding:"30px 20px"}} className={"left-column"} flex="200px">
-                            <div onClick={()=>setComponent("Permissions")}>Permissions</div>
+                            <div id={"Permissions"} className={"option"} onClick={()=>setComponent("Permissions")}>Permissions</div>
                             <Divider />
-                            <div onClick={()=>setComponent("Profile")}>Profile</div>
+                            <div id={"Profile"} className={"option"} onClick={()=>setComponent("Profile")}>Profile</div>
                             <Divider />
-                            <div onClick={()=>setComponent("Account")}>Account</div>
+                            <div id={"Account"} className={"option"} onClick={()=>setComponent("Account")}>Account</div>
                         </Col>
-                        <Col style={{background:"#999999", padding:"0 0px 30px 0", border: "1px solid #999999"}} className={"right-column"} flex="auto">
-                            { component === "Permissions" && <Permissions/>}
-                            { component === "Profile" && <div>Display profile here</div>}
-                            { component === "Account" && <div>Manage user account here</div>}
+                        <Col style={{padding:"0 0px 30px 0", backgroundColor:"#eff0f0"}} className={"right-column"} flex="auto">
+                            {<div className={"top-padding"}><CloseCircleTwoTone className={"back-button"} onClick={()=>history.go(-1)}/></div>}
+                            { component === "Permissions" && setActive(component) && <Permissions/>}
+                            { component === "Profile" && setActive(component) && <div>Display profile here</div>}
+                            { component === "Account" && setActive(component) && <div>Manage user account here</div>}
                         </Col>
                     </Row>
                 </Content>
-            </Layout>
         </Layout>
 
     );
