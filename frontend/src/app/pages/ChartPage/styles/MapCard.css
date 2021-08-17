@@ -15,7 +15,8 @@
     height: 520px;
     /*height: 100%;*/
     width: 100%;
-    border: 3px solid yellow;
+    /*border: 3px solid yellow;*/
+    border: 0;
     padding: 0;
 }
 
