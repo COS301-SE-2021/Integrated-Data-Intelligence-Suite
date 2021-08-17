@@ -18,25 +18,25 @@ const SettingsPage = () => {
 
 
     return (
-        <Layout style={{ minHeight: '100vh' }} className={"bodyDiv"}>
+        <Layout className={"bodyDiv"}>
             <SideBar/>
             <Layout id={'inner_layout_div'}>
                 <Header id={"top_bar"} className={"header"} >
-                    <Title level={1}>Settings</Title>
+                    {/*<Title level={1}>Settings</Title>*/}
                     <UserInfoCard
                         name="s"
                     />
                 </Header>
-                <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' ,backgroundColor:""}}>
-                    <Row className={"row"} style={{ border:"2px solid black"}}>
+                <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' }}>
+                    <Row className={"row"}>
                         <Col style={{padding:"30px 20px"}} className={"left-column"} flex="200px">
-                            <div onClick={()=>setComponent("Permissions")}>Permissions</div>
+                            <div className={"option"} onClick={()=>setComponent("Permissions")}>Permissions</div>
                             <Divider />
-                            <div onClick={()=>setComponent("Profile")}>Profile</div>
+                            <div className={"option"} onClick={()=>setComponent("Profile")}>Profile</div>
                             <Divider />
-                            <div onClick={()=>setComponent("Account")}>Account</div>
+                            <div className={"option"} onClick={()=>setComponent("Account")}>Account</div>
                         </Col>
-                        <Col style={{background:"#999999", padding:"0 0px 30px 0", border: "1px solid #999999"}} className={"right-column"} flex="auto">
+                        <Col style={{padding:"0 0px 30px 0"}} className={"right-column"} flex="auto">
                             { component === "Permissions" && <Permissions/>}
                             { component === "Profile" && <div>Display profile here</div>}
                             { component === "Account" && <div>Manage user account here</div>}

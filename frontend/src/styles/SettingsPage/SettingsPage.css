@@ -1,8 +1,18 @@
-.bodyDiv{
-    height: 99vh;
-}
 
 main .outer-container#settings-container{
-    border: 2px solid ;
+    /*border: 2px solid ;*/
 
+}
+
+.ant-col>div.option{
+    /*background-color: white;*/
+    /*border-radius: 10px;*/
+    margin: 0px;
+    padding: 10px;
+    line-height: normal;
+}
+
+
+.ant-col>div.ant-divider{
+    border-color: #5873f9;
 }
