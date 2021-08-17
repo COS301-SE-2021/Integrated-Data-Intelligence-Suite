@@ -93,14 +93,7 @@ public class VisualizeServiceImpl {
         ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
         ArrayList<String[]> Relationships = new ArrayList<>();
 
-
-
-
-
-
-
         System.out.println("Row count : " +  reqData.size());
-
 
         for (int i = 0; i < reqData.size(); i++) {
 
@@ -318,16 +311,12 @@ public class VisualizeServiceImpl {
                 String source =  values[0];;//edgeNetworkGraph.getSource();//edgeNetworkGraph.data.source;
                 String target =  values[1];;//edgeNetworkGraph.getTarget();//edgeNetworkGraph.data.target;
 
-                if ( (idOne == source) || (idOne == target)){
-                    if((idOne == source) && (idTwo == target))
-                        return true;
-                    else if((idOne == target) && (idTwo == source))
+                if ( (idOne.equals(source)) || (idOne.equals(target))){
+                    if ( (idTwo.equals(source)) || (idTwo.equals(target)))
                         return true;
                 }
-                else if ( (idTwo == source) || (idTwo == target)){
-                    if((idOne == source) && (idTwo == target))
-                        return true;
-                    else if((idOne == target) && (idTwo == source))
+                else if ((idTwo.equals(source)) || (idTwo.equals(target))) {
+                    if ((idOne.equals(source)) || (idOne.equals(target)))
                         return true;
                 }
             }
