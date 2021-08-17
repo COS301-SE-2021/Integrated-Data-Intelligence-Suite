@@ -981,14 +981,14 @@ public class AnalyseServiceImpl {
             }
 
             row.add(Text); //text
-            row.add(entityTypeNames); //array entity name
-            row.add(entityTypesNumbers); //array entity type
+            row.add(entityTypeNames.toArray()); //array entity name
+            row.add(entityTypesNumbers.toArray()); //array entity type
             row.add(sentiment);//sentiment
-            row.add(location); //loation
+            row.add(location); //location
             row.add(date); //date
             row.add(like);  //like
 
-            Row anomalyRow = RowFactory.create(row.toArray());
+            Row anomalyRow = RowFactory.create(row);
             anomaliesData.add(anomalyRow);
         }
 
@@ -1018,7 +1018,7 @@ public class AnalyseServiceImpl {
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Latitude", DataTypes.FloatType, false, Metadata.empty()),
                         new StructField("Longitude", DataTypes.FloatType, false, Metadata.empty()),
-                        new StructField("Date", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                         //new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
                 });
@@ -1040,9 +1040,7 @@ public class AnalyseServiceImpl {
         textData.get(6); //Like*/
 
         List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
-        locationData.get(0); //Latitude
-        locationData.get(1); //Longitude
-
+        locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
 
 
         int minSize = 0;
@@ -1083,15 +1081,15 @@ public class AnalyseServiceImpl {
         //features
 
         VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"Frequency", "AverageLikes"})
+                .setInputCols(new String[]{"EntityTypeNumbers", "AmountOfEntities", "Latitude", "Latitude", "Like"})
                 .setOutputCol("features");
 
         Dataset<Row> testDF = assembler.transform(trainingDF);
 
         //model
-     /*int numClusters = 2; //number of classses
-     int numIterations = 20;
-     //KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);*/
+        /*int numClusters = 2; //number of classses
+        int numIterations = 20;
+        KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);*/
 
         KMeans km = new KMeans()
                 //.setK(2) //number of classses/clusters
@@ -1103,13 +1101,11 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> summary=  kmModel.summary().predictions();
 
-
         summary.show();
 
 
-
-        System.out.println(kmModel.summary().clusterSizes().toString());
         System.out.println("*******************************************************************************************");
+        System.out.println(kmModel.summary().clusterSizes().toString());
         System.out.println("***************************************SUMMARY*********************************************");
         System.out.println("*******************************************************************************************");
         System.out.println("*******************************************************************************************");
@@ -1126,33 +1122,33 @@ public class AnalyseServiceImpl {
 
         /*******************summary (REMOVE)*****************/
         //summary
-     /*System.out.println("Cluster centers:");
-     for (Vector center: clusters.clusterCenters()) {
-         System.out.println(" " + center);
-     }
-     double cost = clusters.computeCost(parsedData.rdd());
-     System.out.println("Cost: " + cost);
+        /*System.out.println("Cluster centers:");
+        for (Vector center: clusters.clusterCenters()) {
+            System.out.println(" " + center);
+        }
+        double cost = clusters.computeCost(parsedData.rdd());
+        System.out.println("Cost: " + cost);
 
-     // Evaluate clustering by computing Within Set Sum of Squared Errors
-     double WSSSE = clusters.computeCost(parsedData.rdd());
-     System.out.println("Within Set Sum of Squared Errors = " + WSSSE);*/
+        // Evaluate clustering by computing Within Set Sum of Squared Errors
+        double WSSSE = clusters.computeCost(parsedData.rdd());
+        System.out.println("Within Set Sum of Squared Errors = " + WSSSE);*/
 
         // Save and load model
-     /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
-     KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
+        /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
+        KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
              "target/org/apache/spark/JavaKMeansExample/KMeansModel");*/
 
         /*******************READ MODEL OUTPUT*****************/
 
-     /*ArrayList<ArrayList> results = new ArrayList<>();
-     Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
+        /*ArrayList<ArrayList> results = new ArrayList<>();
+        Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
 
-     Dataset<Row> res = lrModel.transform(input);
+        Dataset<Row> res = lrModel.transform(input);
 
-     List<Row> rawResults = res.select("EntityName","prediction").collectAsList();*/
+        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();*/
 
-        Dataset<Row> Results = summary.select("EntityName","prediction").filter(col("prediction").$greater(0));
-        List<Row> rawResults = Results.select("EntityName","prediction").collectAsList();
+        Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
+        List<Row> rawResults = Results.select("Text","prediction").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
