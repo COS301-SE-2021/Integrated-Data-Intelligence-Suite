@@ -90,11 +90,13 @@ public class AnalyseServiceImpl {
 
             String text = dataList.get(i).getTextMessage();
             String location = dataList.get(i).getLocation();
-            String date = dataList.get(i).getDate();
-            System.out.println("HERE IS THE DATE1 _______________________________ : " + date);
-            date = date.replaceAll("\\s+","/");
 
-            System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
+            String date = dataList.get(i).getDate();
+            //System.out.println("HERE IS THE DATE1 _______________________________ : " + date); //Mon Jul 08 07:13:29 +0000 2019
+            String[] dateTime = date.split(" ");
+            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            //System.out.println("HERE IS THE DATE2 _______________________________ : " + date);
+
             String likes = String.valueOf(dataList.get(i).getLikes());
 
             FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
@@ -105,14 +107,22 @@ public class AnalyseServiceImpl {
             ArrayList<String> rowOfParsed = new ArrayList<>();
             rowOfParsed.add(text);
             rowOfParsed.add(location);
-            rowOfParsed.add(date);
+            rowOfParsed.add(formattedDate);
+
+            //System.out.println("HERE IS THE RAW _______________________________ : " +rowOfParsed);
+            //System.out.println(rowOfParsed.toString());
+
+
 
             Random rn = new Random();
-            int mockLike = rn.nextInt(10000) + 1;
-            rowOfParsed.add(String.valueOf(mockLike)); //dataList.get(i).getLikes().toString()); //likes
+            //int mockLike = rn.nextInt(10000) + 1;
+            rowOfParsed.add(likes); //dataList.get(i).getLikes().toString()); //likes
             //rowOfParsed.add(sentimentResponse.getSentiment().getCssClass());
 
             parsedDatalist.add(rowOfParsed);
+
+            //System.out.println("HERE IS THE ROWS _______________________________ : " +parsedDatalist);
+            //System.out.println(rowOfParsed.toString());
 
             dataSendList.add(row);
         }
@@ -138,7 +148,7 @@ public class AnalyseServiceImpl {
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList())  ;
+                findAnomaliesResponse.getPattenList()) ;
     }
 
 
@@ -740,6 +750,9 @@ public class AnalyseServiceImpl {
 
         List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
 
+        if( rawResults.isEmpty())
+            rawResults = res.select("EntityName","prediction", "Frequency").filter(col("Frequency").geq(2.0)).collectAsList();
+
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
         for (Row r : res.select("prediction").collectAsList())
@@ -981,12 +994,15 @@ public class AnalyseServiceImpl {
                 }
             }
 
-            System.out.println(Text);
+            System.out.println("here is a date");
+            System.out.println(date);
+
+            /*System.out.println(Text);
             System.out.println(entityTypeNames);
             System.out.println(entityTypeNames.toString());
 
             System.out.println(entityTypesNumbers);
-            System.out.println(entityTypesNumbers.toString());
+            System.out.println(entityTypesNumbers.toString());*/
 
             Row anomalyRow = RowFactory.create(
                     Text, //text
@@ -1013,7 +1029,7 @@ public class AnalyseServiceImpl {
                         new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
                         //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
@@ -1160,7 +1176,7 @@ public class AnalyseServiceImpl {
 
 
         System.out.println("*******************************************************************************************");
-        System.out.println(kmModel.summary().clusterSizes().toString());
+        System.out.println(Arrays.stream(kmModel.summary().clusterSizes()).toArray());
         System.out.println("***************************************SUMMARY*********************************************");
         System.out.println("*******************************************************************************************");
         System.out.println("*******************************************************************************************");
