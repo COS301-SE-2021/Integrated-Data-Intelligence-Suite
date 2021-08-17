@@ -282,14 +282,18 @@ function MapCard(props) {
         *
         * */
         console.log(props.text[0]);
-        if (props.text[0].length == 0) {
-            //Some error message
+        if(typeof props.text[0] === 'undefined'){
+            //some error message
+        }else{
+            if (props.text[0].length == 0) {
+                //Some error
 
-        } else if (props.text[0].length > 0) {
-            let array_of_map_data = props.text[0][0];
-            let array_of_circle_markers = array_of_map_data.map(createCircle);
-            console.log(array_of_circle_markers);
-            array_of_circle_markers.forEach(addCircleLayer)
+            } else if (props.text[0].length > 0) {
+                let array_of_map_data = props.text[0];
+                let array_of_circle_markers = array_of_map_data.map(createCircle);
+                console.log(array_of_circle_markers);
+                array_of_circle_markers.forEach(addCircleLayer)
+            }
         }
 
 
@@ -303,7 +307,7 @@ function MapCard(props) {
             console.log();
             console.log(e);
             alert("circle clicked");
-            showCircleData(clickedCircle.options.className);
+            showCircleData(clickedCircle.options.className, this.props.text[0]);
         });
     })
 

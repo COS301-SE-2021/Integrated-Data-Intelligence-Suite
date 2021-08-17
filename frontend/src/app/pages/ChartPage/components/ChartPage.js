@@ -82,7 +82,7 @@ class ChartPage extends Component {
                                             id={'network_graph_card_content'}
                                             className={'network_card'}
                                         >
-                                            <NetworkGraphCard/>
+                                            <NetworkGraphCard text={this.state.text}/>
                                         </Content>
                                     </Layout>
 
@@ -95,7 +95,7 @@ class ChartPage extends Component {
                                             id={'timeline_graph_card_content'}
                                             className={'timeline_card'}
                                         >
-                                            <TimelineGraph/>
+                                            <TimelineGraph text={this.state.text}/>
                                         </Content>
                                     </Layout>
 

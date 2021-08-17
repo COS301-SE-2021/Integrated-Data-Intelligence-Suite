@@ -13,7 +13,7 @@ const Demo = props => (
 )
 cytoscape.use(fcose);
 
-function NetworkGraphCard() {
+function NetworkGraphCard(props) {
 
     var cy;
 
