@@ -128,7 +128,7 @@ function MapCard(props) {
 
                 </Map>
 
-                <pre className="text-left">{JSON.stringify(mapLayers)}</pre>
+                {/*<pre className="text-left">{JSON.stringify(mapLayers)}</pre>*/}
             </Card>
 
         </>
