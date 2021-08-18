@@ -40,10 +40,11 @@ public class ImportServiceImpl {
     }
 
     /**
+     * This function receives does a get request to twitter using the request parameters given to it
      *
      * @param request a request object specifying different parameter used in creating a request to the twitter API
      * @return  json string representing a list of tweets and its associated information
-     * @throws Exception when request object contains invalid parameters or when twitter
+     * @throws Exception when request object contains invalid parameters or when twitter request
      *                   does not complete successfully
      */
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest request) throws Exception {
@@ -74,7 +75,15 @@ public class ImportServiceImpl {
     }
 
 
-
+    /**
+     * This function function gets twitter statuses between two specified dates
+     *
+     * @param request a request object containing the search phrase and two dates which the search should
+     *               be between
+     * @return an Import Twitter Response object with a String containing a list of statuses.
+     * @throws Exception thrown when the request object is null or contains invalid parameters or when
+     *                   the Twitter request does not complete successfully
+     */
     public ImportTwitterResponse importDatedData(ImportTwitterRequest request) throws Exception {
 
         if(request == null) throw new InvalidTwitterRequestException("request object is null");
@@ -99,7 +108,6 @@ public class ImportServiceImpl {
 
         String keyword = request.getKeyword().strip();
 
-        System.out.println("{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\""+from.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\", \r\n  \"toDate\":\""+ to.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\"\r\n}");
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -113,17 +121,23 @@ public class ImportServiceImpl {
                 .build();
         Response res = client.newCall(req).execute();
         if(!res.isSuccessful()){
+            System.out.println("{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\""+from.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\", \r\n  \"toDate\":\""+ to.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\"\r\n}");
 
             throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(res.body()).string());
+        }
+
+        if(res.body() == null){
+            throw new ImporterException("No data returned");
         }
         return  new ImportTwitterResponse(Objects.requireNonNull(res.body()).string());
     }
 
     /**
+     * this function searches for new articles related to the given search query
      *
      * @param request a request object specifying the parameters to create a request to newsAPi
      * @return a list of articles as specified by the request parameter
-     * @throws Exception when request object contains invalid parameters or when newsAPi
+     * @throws Exception when request object contains invalid parameters or when newsAPi request
      *                   does not complete successfully
      */
     public ImportNewsDataResponse importNewsData(ImportNewsDataRequest request) throws Exception {
@@ -146,23 +160,20 @@ public class ImportServiceImpl {
                 .build();
         Response response = client.newCall(req).execute();
 
-        System.out.println(response.isSuccessful());
-        System.out.println(response.body().string());
         if(!response.isSuccessful()){
             throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(response.body()).string());
-
         }
 
         if(response.body() == null){
-            throw new ImporterException("Could not import news data");
+            throw new ImporterException("No data returned");
         }
-
-//        System.out.println(Objects.requireNonNull(response.body()).string());
 
         return new ImportNewsDataResponse(Objects.requireNonNull(response.body()).string());
     }
 
     /**
+     * This function searches different data sources based on the search query provided. This
+     * function calls importNewsData and getTwitterDataJson and returns their collective results
      *
      * @param request a request object containing a search key and other search related parameters
      * @return a list of data from different data sources related to the search key
@@ -197,28 +208,24 @@ public class ImportServiceImpl {
 
         } catch (Exception e){
 
-            throw new ImporterException("Error while collecting twitter data.");
+            System.out.println("\n\n twitter error: "+e.getMessage());
         }
 
         //NewsAPI request
 
-//        try{
-//            ImportNewsDataRequest newsRequest = new ImportNewsDataRequest(keyword);
-//            ImportNewsDataResponse newsResponse = importNewsData(newsRequest);
-//
-//            String newsData = newsResponse.getData();
-//
-//            list.add(new ImportedData(DataSource.NEWSSCOURCE, newsData));
-//
-//        } catch (Exception e) {
-//
-//            throw new ImporterException("Error while collecting news data");
-//        }
-        System.out.println(list.get(0).getData());
+        try{
+            ImportNewsDataRequest newsRequest = new ImportNewsDataRequest(keyword);
+            ImportNewsDataResponse newsResponse = importNewsData(newsRequest);
+
+            String newsData = newsResponse.getData();
+
+            list.add(new ImportedData(DataSource.NEWSSCOURCE, newsData));
+
+        } catch (Exception e) {
+            System.out.println("\n\n newsAPI error:"+e.getMessage());
+        }
+
         return new ImportDataResponse(list);
-
     }
-
-
 
 }
