@@ -24,18 +24,92 @@ public class AnalyseServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
+    /************************************************Boundry Test******************************************************/
+
     @Test
-    @DisplayName("When analyzeRequest is Null")
+    @DisplayName("When analyzeDataRequest is Null")
     public void analyzeDataNullRequest(){
         Assertions.assertThrows(InvalidRequestException.class, () -> service.analyzeData(null));
     }
 
     @Test
-    @DisplayName("When the data list is Null")
+    @DisplayName("When the analyzeData data list is Null")
     public void analyzeDataNullList(){
         AnalyseDataRequest test = new AnalyseDataRequest(null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.analyzeData(test));
     }
+
+
+    @Test
+    @DisplayName("When findPatternRequest is Null")
+    public void findPatternNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(null));
+    }
+
+    @Test
+    @DisplayName("When the findPattern data list is Null")
+    public void findPatternDataNullList(){
+        FindPatternRequest test = new FindPatternRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(test));
+    }
+
+
+    @Test
+    @DisplayName("When findRelationshipRequest is Null")
+    public void findRelationshipNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(null));
+    }
+
+    @Test
+    @DisplayName("When the findRelationship data list is Null")
+    public void findRelationshipDataNullList(){
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
+    }
+
+
+    @Test
+    @DisplayName("When getPredictionNullRequest is Null")
+    public void getPredictionNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.getPredictions(null));
+    }
+
+    @Test
+    @DisplayName("When the getPrediction data list is Null")
+    public void getPredictionDataNullList(){
+        GetPredictionRequest test = new GetPredictionRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.getPredictions(test));
+    }
+
+
+    @Test
+    @DisplayName("When findTrendsNullRequest is Null")
+    public void findTrendsNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(null));
+    }
+
+    @Test
+    @DisplayName("When the findTrends data list is Null")
+    public void findTrendsDataNullList(){
+        FindTrendsRequest test = new FindTrendsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(test));
+    }
+
+    @Test
+    @DisplayName("When NlpPropertiesNullRequest is Null")
+    public void findNlpPropertiesNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(null));
+    }
+
+    @Test
+    @DisplayName("When the NlpProperties text is Null")
+    public void findNlpPropertiesTextNull(){
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(test));
+    }
+
+
+    /*********************************************Functionality Test****************************************************/
 
     @Test
     @DisplayName("When the data list is Valid")
@@ -68,18 +142,7 @@ public class AnalyseServiceTest {
         Assertions.assertNotNull(testResults);
     }
 
-    @Test
-    @DisplayName("When findPatternRequest is Null")
-    public void findPatternNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(null));
-    }
 
-    @Test
-    @DisplayName("When the data list is Null")
-    public void findPatternDataNullList(){
-        FindPatternRequest test = new FindPatternRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(test));
-    }
 
     @Test
     @DisplayName("When the data list is Valid")
@@ -98,18 +161,7 @@ public class AnalyseServiceTest {
         Assertions.assertNotNull(testResults);
     }
 
-    @Test
-    @DisplayName("When findRelationshipRequest is Null")
-    public void findRelationshipNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(null));
-    }
 
-    @Test
-    @DisplayName("When the data list is Null")
-    public void findRelationshipDataNullList(){
-        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
-    }
 
     @Test
     @DisplayName("When the data list is Valid")
@@ -129,19 +181,6 @@ public class AnalyseServiceTest {
     }
 
     @Test
-    @DisplayName("When getPredictionNullRequest is Null")
-    public void getPredictionNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.getPredictions(null));
-    }
-
-    @Test
-    @DisplayName("When the data list is Null")
-    public void getPredictionDataNullList(){
-        GetPredictionRequest test = new GetPredictionRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.getPredictions(test));
-    }
-
-    @Test
     @DisplayName("When the data list is Valid")
     public void getPredictionValidRequest() throws InvalidRequestException {
         ArrayList<ArrayList> TestList = new ArrayList<>();
@@ -158,31 +197,6 @@ public class AnalyseServiceTest {
         Assertions.assertNotNull(testResults);
     }
 
-    @Test
-    @DisplayName("When findTrendsNullRequest is Null")
-    public void findTrendsNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(null));
-    }
-
-    @Test
-    @DisplayName("When the data list is Null")
-    public void findTrendsDataNullList(){
-        FindTrendsRequest test = new FindTrendsRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(test));
-    }
-
-    @Test
-    @DisplayName("When findEntitiesNullRequest is Null")
-    public void findEntitiesNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(null));
-    }
-
-    @Test
-    @DisplayName("When the text is Null")
-    public void findEntitiesTextNull(){
-        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(test));
-    }
 
     @Test
     @DisplayName("When the text is Valid")
@@ -192,6 +206,8 @@ public class AnalyseServiceTest {
         FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
+
+    /******************************************Repository Functional Test**********************************************/
 
     @Test
     @DisplayName("Fetch first data from database")
