@@ -2,7 +2,7 @@ package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceRepository;
+import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -11,12 +11,7 @@ import edu.stanford.nlp.pipeline.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -34,10 +29,8 @@ import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
-import org.apache.spark.storage.StorageLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import scala.Tuple2;
 
 
 import java.util.*;
@@ -50,7 +43,7 @@ public class AnalyseServiceImpl {
 
 
     @Autowired
-    private AnalyseServiceRepository repository;
+    private AnalyseServiceParsedDataRepository repository;
 
     static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
@@ -1515,6 +1508,7 @@ public class AnalyseServiceImpl {
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
         return new FetchParsedDataResponse(list );
     }
+
 
     public void saveAIModel(){
 
