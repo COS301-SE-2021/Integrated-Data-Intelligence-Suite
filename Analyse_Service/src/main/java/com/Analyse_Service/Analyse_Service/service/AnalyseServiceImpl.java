@@ -1,7 +1,9 @@
 package com.Analyse_Service.Analyse_Service.service;
 
+import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
+import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -43,7 +45,10 @@ public class AnalyseServiceImpl {
 
 
     @Autowired
-    private AnalyseServiceParsedDataRepository repository;
+    private AnalyseServiceParsedDataRepository parsedDataRepository;
+
+    @Autowired
+    private AnalyseServiceAIModelRepository aiModelRepository;
 
     static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
@@ -1504,14 +1509,28 @@ public class AnalyseServiceImpl {
         }
 
 
-        ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
+        ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
         return new FetchParsedDataResponse(list );
     }
 
 
-    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request){
+    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("SaveAIModelRequest Object is null");
+        }
+        if (request.getSaveAIModel() == null) {
+            throw new InvalidRequestException("SaveAIModelRequest AIModel Object is null");
+        }
 
-        return new SaveAIModelResponse();
+        AIModel model = request.getSaveAIModel();
+        aiModelRepository.save(model);
+
+        return new SaveAIModelResponse(true);
+    }
+
+    public SaveAIModelResponse fetchAIModel(SaveAIModelRequest request){
+
+        return new SaveAIModelResponse(true);
     }
 
 
