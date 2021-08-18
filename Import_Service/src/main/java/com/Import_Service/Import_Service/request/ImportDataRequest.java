@@ -19,6 +19,9 @@ public class ImportDataRequest {
         this.limit = limit;
     }
 
+    public ImportDataRequest() {
+    }
+
     /**
      * used to retrieve the keyword
      *
