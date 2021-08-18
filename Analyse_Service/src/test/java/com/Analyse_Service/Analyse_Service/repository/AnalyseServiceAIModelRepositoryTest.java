@@ -24,32 +24,32 @@ public class AnalyseServiceAIModelRepositoryTest {
 
         //create & set model
         AIModel aiModel1 = new AIModel(); //create model
-        aiModel1.setId((long) 0);
+        //aiModel1.setId((long) 0);
         aiModel1.setAccuracy(37.0F);
         aiModel1.setType(AIType.Prediction);
         //save model in database
         analyseServiceAIModelRepository.save(aiModel1);
 
         AIModel aiModel2 = new AIModel();
-        aiModel2.setId((long) 1);
+        //aiModel2.setId((long) 1);
         aiModel2.setAccuracy(50.0F);
         aiModel2.setType(AIType.Prediction);
         analyseServiceAIModelRepository.save(aiModel2);
 
         AIModel aiModel3 = new AIModel();
-        aiModel3.setId((long) 1);
+        //aiModel3.setId((long) 1);
         aiModel3.setAccuracy(93.1F);
         aiModel3.setType(AIType.Prediction);
         analyseServiceAIModelRepository.save(aiModel3);
 
         AIModel aiModel4 = new AIModel();
-        aiModel4.setId((long) 1);
+        //aiModel4.setId((long) 1);
         aiModel4.setAccuracy(92.0F);
         aiModel4.setType(AIType.Prediction);
         analyseServiceAIModelRepository.save(aiModel4);
 
         AIModel aiModel5 = new AIModel();
-        aiModel5.setId((long) 1);
+        //aiModel5.setId((long) 1);
         aiModel5.setAccuracy(84.5F);
         aiModel5.setType(AIType.Prediction);
         analyseServiceAIModelRepository.save(aiModel5);
