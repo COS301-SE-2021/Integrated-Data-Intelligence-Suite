@@ -7,13 +7,13 @@ import {
     Typography
 } from 'antd';
 import {Route, Switch} from "react-router-dom";
-import MapCard from "./MapCard";
-import DetailsCard from "./DetailsCard";
-import NetworkGraphCard from "./NetworkGraphCard";
-import "../styles/NetworkGraph.css";
+import MapCard from "./MapCard/MapCard";
+import DetailsCard from "./DetailsCard/DetailsCard";
+import NetworkGraphCard from "./Network Graph/NetworkGraphCard";
+import "./Network Graph/NetworkGraph.css";
 import UserInfoCard from "../../../components/SideBar/UserInfoCard";
 import SearchBar from "../../../components/SearchBar/SearchBar";
-import TimelineGraph from "./TimelineGraph";
+import TimelineGraph from "./TimelineGraph/TimelineGraph";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;

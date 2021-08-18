@@ -5,10 +5,10 @@ import L, {map} from "leaflet";
 import {Marker, Map, FeatureGroup, Circle, TileLayer, Popup, CircleMarker} from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
-import '../../../components/leaflet/leaflet.css';
+import './leaflet/leaflet.css';
 import 'leaflet-snap/leaflet.snap.js';
-import datapoints from "../resources/graphStructures/mapDatapoints.json"
-import {showCircleData} from "../functions/showCircleData";
+import datapoints from "../../resources/graphStructures/mapDatapoints.json"
+import {showCircleData} from "../../functions/showCircleData";
 
 //Do not Change the order of these lines
 //The Css MUST be loaded before the js
