@@ -40,8 +40,8 @@
 
 
 #top_bar > .ant-input-search {
-    border: 2px solid black;
-    /*border: 0;*/
+    /*border: 2px solid black;*/
+    border: 0;
 
     width: 18%;
     float: left;
@@ -54,18 +54,30 @@
     transform: translateY(-50%);
 }
 
+span.ant-input-wrapper.ant-input-group{
+    /*border: 2px solid black;*/
+    border-radius: 1em;
+    padding: 2%;
+    background-color: #EFF0F0;
+}
+
 /*The actual inside of the search
 * Color = color of the text when it is being searched
 */
 #top_bar > .ant-input-search > .ant-input-group > input.ant-input {
     /*border: 2px solid lightgrey;*/
     border: 0;
-    /*padding: 5px;*/
-    border-radius: 15%;
+    padding: 5px;
+    /*border-radius: 15%;*/
     background-color: #EFF0F0 ;
     border-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+}
+#top_bar > .ant-input-search > .ant-input-group > input.ant-input:focus {
+   border:0;
+    box-shadow: none;
+
 }
 
 
@@ -95,6 +107,15 @@
     border: 0;
     /*border-radius: 12%;*/
     /*--antd-wave-shadow-color: none;*/
-    color: #5C5C5C;
+    /*color: #5C5C5C;*/
+    color: #898D8F;
     background-color: #EFF0F0 ;
+}
+
+
+button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button{
+    border:0;
+    box-shadow: none;
+    background-color: red ;
+
 }
