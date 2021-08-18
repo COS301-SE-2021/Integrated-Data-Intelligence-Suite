@@ -1,21 +1,52 @@
-/*@import "src/styles/dashboard";
-@import "../styles/navbar";
-@import "../styles/sidebar";
-@import "../styles/footer";*/
+//Ant.d components
+@import '~antd/dist/antd.css';
+
+//Side Bar and its child Components
+@import url("../styles/SideBar/SideBar.css");
+@import url("../styles/SideBar/UserInfoCard.css");
+
+//Header and all its child components
+@import url("../styles/Header/Header.css");
+@import url("components/SearchBar/SearchBar.css");
+
+//Content Section and all its child components
+@import url("../styles/ContentSection/ContentSection.css");
+@import "../styles/Demo2/line_graph.css";
+@import "../styles/Demo2/map_graph.css";
+@import "../styles/Demo2/network_graph.css";
+@import url("../styles/Demo2/timeline_graph.css");
+@import url("../styles/Demo2/graph_list.css");
 
 
-@import "../styles/Login.css";
-@import "../styles/general.css";
+//Footer and all its child components
+@import url("../styles/Footer/Footer.css");
+
+//Login Page
+@import "../styles/LoginPage/login.css";
+
+//Register Page
+//@import "../styles/RegisterPage/registerPage.css";
 
 
-@import "../styles/networkGraph.css";
-@import "../styles/lineGraph.css";
-@import "../styles/mapGraph.css";
+//Permissions Page
+@import "../styles/Permissions/Permissions.css";
+//@import "../styles/UserPermissions/UserPermissions.css";
+
+//Settings Page
+@import "../styles/SettingsPage/SettingsPage.css";
+
+//Miscellaneous
+@import "../index.css";
+
+//Chart Page and all its child components
+@import '~leaflet/dist/leaflet.css';
+@import 'pages/ChartPage/styles/ChartPage.css';
+@import 'pages/ChartPage/styles/MapCardSidebar.css';
+@import 'pages/ChartPage/styles/MapCard.css';
+@import 'pages/ChartPage/styles/DetailsCard.css';
 
 
-@import url("../styles/timelineGraph.css");
-// @import url("../styles/searchBar.css");
 
-@import url("../styles/graphList.css");
+
 
 

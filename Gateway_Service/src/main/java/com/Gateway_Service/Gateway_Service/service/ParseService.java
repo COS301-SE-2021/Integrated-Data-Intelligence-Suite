@@ -4,7 +4,6 @@ package com.Gateway_Service.Gateway_Service.service;
 import com.Gateway_Service.Gateway_Service.dataclass.*;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
