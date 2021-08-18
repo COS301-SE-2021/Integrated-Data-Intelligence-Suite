@@ -47,31 +47,34 @@ const markerIcon = new L.Icon({
 
 
 function MapCard(props) {
-    console.log("=======Start of Map Card===============");
-    console.log("The data received from the backend:");
-    console.log(props.text);
-    console.log();
+    // console.log("=======Start of Map Card===============");
+    // console.log("The data received from the backend:");
+    // console.log(props.text);
+    // console.log();
 
 
-    let data_from_backend = props.text[0];
-    if (typeof props.text[0] === 'undefined') {
-        console.log()
-        console.log("Data Received from Backend was undefined");
-
-        //some error message
+    let data_from_backend;
+    if (typeof props.text === 'undefined') {
         data_from_backend = [];
     } else {
-        if (props.text[0].length == 0) {
-            console.log("Data Received from Backend was of length 0");
+        if (typeof props.text[0] === 'undefined') {
+            // console.log()
+            // console.log("Data Received from Backend was undefined");
 
-            //Some error message
+            //some error message
             data_from_backend = [];
+        } else {
+            if (props.text[0].length === 0) {
+                // console.log("Data Received from Backend was of length 0");
 
-        } else if (props.text[0].length > 0) {
-            data_from_backend = props.text[0];
+                //Some error message
+                data_from_backend = [];
+
+            } else if (props.text[0].length > 0) {
+                data_from_backend = props.text[0];
+            }
         }
     }
-
     const [mapLayers, setMapLayers] = useState([]);
 
     const animateRef = useRef(true)
