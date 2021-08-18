@@ -6,10 +6,7 @@ import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
@@ -209,19 +206,6 @@ public class AnalyseServiceTest {
 
     /******************************************Repository Functional Test**********************************************/
 
-    @Test
-    @DisplayName("Fetch first data from database")
-    public void fetchFirstDataFromDatabase() throws AnalyzerException {
-        ParsedData testResults = service.testdbAdd();
-        Assertions.assertNotNull(testResults);
-    }
-
-    @Test
-    @DisplayName("Delete first data from database")
-    public void deleteFirstDataFromDatabase() throws AnalyzerException {
-        int testResults = service.testdbDelete();
-        Assertions.assertNotEquals(-1, testResults);
-    }
 
     @Test
     @DisplayName("fetch parsedData from database")
@@ -230,4 +214,14 @@ public class AnalyseServiceTest {
         FetchParsedDataResponse testResults = service.fetchParsedData(request);
         Assertions.assertNotNull(testResults);
     }
+
+    @Test
+    @DisplayName("fetch saveAIModel from database")
+    public void fetchsaveAIModelFromDatabase() throws AnalyzerException {
+        SaveAIModelRequest request = new SaveAIModelRequest();
+        SaveAIModelResponse testResults = service.saveAIModel(request);
+        Assertions.assertNotNull(testResults);
+    }
+
+
 }
