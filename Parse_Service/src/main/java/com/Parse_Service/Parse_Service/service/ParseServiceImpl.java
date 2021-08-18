@@ -1,5 +1,6 @@
 package com.Parse_Service.Parse_Service.service;
 
+import com.Parse_Service.Parse_Service.repository.ArticleRepository;
 import com.Parse_Service.Parse_Service.repository.DataRepository;
 import com.Parse_Service.Parse_Service.rri.ArticleExtractor;
 import org.json.JSONArray;
@@ -19,7 +20,10 @@ import java.util.*;
 public class ParseServiceImpl {
 
     @Autowired
-    private DataRepository repository;
+    private DataRepository dataRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     public ParseServiceImpl() {
 
@@ -85,8 +89,7 @@ public class ParseServiceImpl {
 
                 parsedList.add(parsedData);
             }
-
-            repository.saveAll(parsedList);
+            dataRepository.saveAll(parsedList);
         }
         else if(request.getType() == DataSource.NEWSARTICLE) {
             JSONArray jsonArray = obj.getJSONArray("articles");
@@ -109,6 +112,7 @@ public class ParseServiceImpl {
                 //add parsed article to list
                 parsedArticlesList.add(article);
             }
+            articleRepository.saveAll(parsedArticlesList);
         }
 
         return new ParseImportedDataResponse(parsedList, parsedArticlesList);
