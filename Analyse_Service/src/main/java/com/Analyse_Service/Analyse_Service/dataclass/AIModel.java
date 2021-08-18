@@ -32,14 +32,14 @@ public class AIModel {
 
 
     public Long getId(){
-        return id;
+        return this.id;
     }
 
     public AIType getType(){
-        return type;
+        return this.type;
     }
 
     public float getAccuracy(){
-        return accuracy;
+        return this.accuracy;
     }
 }
