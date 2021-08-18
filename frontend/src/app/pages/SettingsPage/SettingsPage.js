@@ -3,7 +3,6 @@ import {Layout, Row, Col, Divider} from 'antd';
 import {CloseCircleTwoTone} from '@ant-design/icons'
 import { useHistory} from "react-router-dom";
 import Permissions from "../PermissionsPage/Permissions";
-import ProfilePage from "../ProfilePage/ProfilePage";
 
 
 const { Content} = Layout;
@@ -49,11 +48,12 @@ const SettingsPage = () => {
                 <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' , minHeight:"100vh"}}>
                     <Row className={"row"}>
                         <Col style={{padding:"30px 20px"}} className={"left-column"} flex="200px">
-                            <div id={"Profile"} className={"active option"} onClick={()=>setComponent("Profile")}>Profile</div>
-                            <Divider />
 
-                            { user && user.isAdmin && <div id={"Permissions"} className={"option"} onClick={()=>setComponent("Permissions")}>Permissions</div>}
+                            { user && user.isAdmin && <div id={"Permissions"} className={"option active"} onClick={()=>setComponent("Permissions")}>Permissions</div>}
                             {user && user.isAdmin && <Divider />}
+
+                            <div id={"Profile"} className={"option"} onClick={()=>setComponent("Profile")}>Profile</div>
+                            <Divider />
 
                             <div id={"Account"} className={"option"} onClick={()=>setComponent("Account")}>Account</div>
                         </Col>
