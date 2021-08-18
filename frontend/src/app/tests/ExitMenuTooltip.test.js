@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import SearchBar from '../components/SearchBar/SearchBar';
+import ExitMenuTooltip from "../components/SideBar/ExitMenuTooltip";
 
-it('SearchBar renders correctly', () => {
+it('ExitMenuTooltip renders correctly', () => {
     const tree = renderer
-        .create(<SearchBar/>)
+        .create(<ExitMenuTooltip/>)
         .toJSON();
     expect(tree).toMatchSnapshot();
 });

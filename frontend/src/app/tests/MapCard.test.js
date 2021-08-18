@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import SearchBar from '../components/SearchBar/SearchBar';
+import MapCard from "../pages/ChartPage/components/MapCard/MapCard";
 
-it('SearchBar renders correctly', () => {
+it('MapCard renders correctly', () => {
     const tree = renderer
-        .create(<SearchBar/>)
+        .create(<MapCard/>)
         .toJSON();
     expect(tree).toMatchSnapshot();
 });

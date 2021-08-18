@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import SearchBar from '../components/SearchBar/SearchBar';
+import UserInfoCard from "../components/SideBar/UserInfoCard";
 
-it('SearchBar renders correctly', () => {
+it('renders correctly', () => {
     const tree = renderer
-        .create(<SearchBar/>)
+        .create(<UserInfoCard/>)
         .toJSON();
     expect(tree).toMatchSnapshot();
 });

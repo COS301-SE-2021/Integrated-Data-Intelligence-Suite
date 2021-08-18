@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import SearchBar from '../components/SearchBar/SearchBar';
+import SideBar from '../components/SideBar/SideBar';
 
-it('SearchBar renders correctly', () => {
+it('renders correctly', () => {
     const tree = renderer
-        .create(<SearchBar/>)
+        .create(<SideBar/>)
         .toJSON();
     expect(tree).toMatchSnapshot();
 });

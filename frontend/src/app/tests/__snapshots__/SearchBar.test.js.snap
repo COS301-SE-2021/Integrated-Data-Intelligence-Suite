@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`SearchBar renders correctly 1`] = `
 <span
   className="ant-input-group-wrapper ant-input-search"
 >
