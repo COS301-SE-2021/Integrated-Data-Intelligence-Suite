@@ -9,6 +9,7 @@
     /*border: 2px solid transparent;*/
     border-bottom-left-radius: 6px;
     border-top-left-radius: 6px;
+    overflow: hidden;
 }
 
 /*#search_input:hover{*/
