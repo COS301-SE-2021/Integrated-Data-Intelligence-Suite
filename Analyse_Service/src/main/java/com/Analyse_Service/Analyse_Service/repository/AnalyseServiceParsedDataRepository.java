@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AnalyseServiceRepository extends JpaRepository<ParsedData,Long> {
+public interface AnalyseServiceParsedDataRepository extends JpaRepository<ParsedData,Long> {
 
     @Query(
             value = "SELECT * FROM parsed_data P WHERE P.id = ?1",
