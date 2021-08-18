@@ -49,15 +49,18 @@ public class ImportServiceImpl {
      */
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest request) throws Exception {
 
-        if(request == null) throw new InvalidTwitterRequestException("request cannot be null");
+        if(request == null) throw new InvalidTwitterRequestException("request object is null");
+
+        if(request.getKeyword() == null) throw new InvalidTwitterRequestException("Invalid key. key is null");
+
+
+
+        if(request.getKeyword().length() >250 || request.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
+
+        if(request.getLimit() > 100 || request.getLimit() < 1) throw new InvalidTwitterRequestException("Invalid limit value: limit can only be between 1 and 100");
 
         String keyword = request.getKeyword().strip();
         int limit = request.getLimit();
-
-        if(keyword.length() >250 || keyword.length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
-
-        if(limit > 100 || limit < 1) throw new InvalidTwitterRequestException("Invalid limit value: limit can only be between 1 and 100");
-
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -143,11 +146,19 @@ public class ImportServiceImpl {
     public ImportNewsDataResponse importNewsData(ImportNewsDataRequest request) throws Exception {
 
         if(request == null){
-            throw new InvalidNewsRequestException("Request object cannot be null.");
+            throw new InvalidNewsRequestException("Request object is null.");
         }
 
         if(request.getKey() == null){
-            throw new InvalidTwitterRequestException("Invalid key. Key length must be between 3 and 100.");
+            throw new InvalidNewsRequestException("Invalid key. Key is null");
+        }
+
+        if(request.getKey().length() <  3 || request.getKey().length() > 100){
+            throw new InvalidNewsRequestException("Invalid key. Key length must be between 3 and 100.");
+        }
+
+        if(request.getKey().contains("&") ||  request.getKey().contains("://")){
+            throw new InvalidNewsRequestException("Key contain contain :// or &.");
         }
 
         String key = request.getKey();
@@ -183,10 +194,13 @@ public class ImportServiceImpl {
     public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
 
         if(request == null) {
-            throw new InvalidImporterRequestException("Request object cannot be null.");
+            throw new InvalidImporterRequestException("Request object is null.");
         }
-        if(request.getKeyword().equals("")) {
-            throw new InvalidImporterRequestException("Keyword cannot be null.");
+        if(request.getKeyword() == null){
+            throw new InvalidImporterRequestException("Keyword is null");
+        }
+        if(request.getKeyword().length() < 3) {
+            throw new InvalidImporterRequestException("Keyword must be between 3 and 100 characters");
         }
         if(request.getLimit() <1) {
             throw new InvalidImporterRequestException("Limit cannot be less than 1.");
