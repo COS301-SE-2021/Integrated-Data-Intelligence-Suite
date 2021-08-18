@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ParseServiceApplication.class)
 public class ParseServiceControllerTest {
-    @InjectMocks
+    @Autowired
     private ParseServiceController controller;
 
     @Mock
@@ -37,7 +38,7 @@ public class ParseServiceControllerTest {
     @DisplayName("When parse is requested")
     public void parseRequest() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/Parse")
+                MockMvcRequestBuilders.post("/Parse/parseImportedData")
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
