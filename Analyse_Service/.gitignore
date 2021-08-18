@@ -34,3 +34,4 @@ build/
 
 ### resources ###
 !/src/main/resources/
+!/src/test/resources/
