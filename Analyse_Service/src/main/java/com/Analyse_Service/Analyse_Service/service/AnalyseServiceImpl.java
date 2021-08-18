@@ -1,7 +1,9 @@
 package com.Analyse_Service.Analyse_Service.service;
 
+import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
+import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -43,7 +45,10 @@ public class AnalyseServiceImpl {
 
 
     @Autowired
-    private AnalyseServiceParsedDataRepository repository;
+    private AnalyseServiceParsedDataRepository parsedDataRepository;
+
+    @Autowired
+    private AnalyseServiceAIModelRepository aiModelRepository;
 
     static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
@@ -786,10 +791,10 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = lrModel.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         if( rawResults.isEmpty())
-            rawResults = res.select("EntityName","prediction", "Frequency").filter(col("Frequency").geq(2.0)).collectAsList();
+            rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
@@ -818,6 +823,9 @@ public class AnalyseServiceImpl {
             }
             r.add(en);
             r.add(locs);
+            r.add( rawResults.get(i).get(3).toString());
+            r.add( rawResults.get(i).get(4).toString());
+
 
             results.add(r);
         }
@@ -1499,64 +1507,34 @@ public class AnalyseServiceImpl {
         if (request.getDataType() == null){
             throw new InvalidRequestException("Datatype is null");
         }
-
         if(request.getDataType() != "ParsedData") {
-            return null;
+            throw new InvalidRequestException("Wrong Datatype is used");
         }
 
 
-        ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
+        ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
         return new FetchParsedDataResponse(list );
     }
 
 
-    public void saveAIModel(){
-
-    }
-
-
-    /*******************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     */
-
-
-    //adds one entity into database
-    public ParsedData testdbAdd(){
-        if ( repository.count() <= 0) {
-            ParsedData newData = new ParsedData();
-            Date date = new Date();
-            newData.setDate(date.toString());
-            newData.setTextMessage("This is a test/demo text message.");
-            newData.setLikes(100);
-            newData.setLocation("Default Location");
-            repository.save(newData);
-
-
-            return repository.findAll().get(0);
+    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("SaveAIModelRequest Object is null");
         }
-        return null;
-    }
-
-    //adds one entity into database
-    public int testdbDelete(){
-        if ( repository.count() == 1) {
-
-            ParsedData data = repository.findAll().get(0);
-            repository.delete(data);
-
-
-            return (int) repository.count();
+        if (request.getSaveAIModel() == null) {
+            throw new InvalidRequestException("SaveAIModelRequest AIModel Object is null");
         }
-        return -1;
+
+        AIModel model = request.getSaveAIModel();
+        aiModelRepository.save(model);
+
+        return new SaveAIModelResponse(true);
     }
 
+    public SaveAIModelResponse fetchAIModel(SaveAIModelRequest request){
 
-
-
-
+        return new SaveAIModelResponse(true);
+    }
 
 }
 

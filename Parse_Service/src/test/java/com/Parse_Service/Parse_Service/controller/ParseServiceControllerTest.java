@@ -247,7 +247,7 @@ public class ParseServiceControllerTest {
     }
 
     @Test
-    @DisplayName("When parse is requested")
+    @DisplayName("When_parseImportedData_is_requested")
     public void parseRequest() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/Parse/parseImportedData")
