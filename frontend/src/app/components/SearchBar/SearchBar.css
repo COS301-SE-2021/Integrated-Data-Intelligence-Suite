@@ -92,9 +92,10 @@ span.ant-input-wrapper.ant-input-group{
 /*The div that contains the search Button i.e its parent*/
 #top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {
     /*BORDER: 2PX SOLID YELLOW;*/
-    /*border: 0;*/
+    border: 0;
     /*left: 0;*/
     float: left;
+    box-shadow: none;
 
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
@@ -113,10 +114,11 @@ span.ant-input-wrapper.ant-input-group{
     /*color: #5C5C5C;*/
     color: #898D8F;
     background-color: #EFF0F0 ;
+    box-shadow: none;
 }
 
 
-button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button{
+#top_bar > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button{
     border:0;
     box-shadow: none;
     background-color: red ;
