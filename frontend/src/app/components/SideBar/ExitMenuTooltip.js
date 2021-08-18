@@ -6,24 +6,21 @@ import {
     Switch,
     Route, Link
 } from "react-router-dom";
-import LoginPage from "../../pages/LoginPage/LoginPage";
-import GraphList from "../ContentSection/GraphList";
-import RegisterPage from "../../pages/RegisterPage/RegisterPage";
-
-// import {Link} from "react-router-dom";
 
 class ExitMenuTooltip extends React.Component {
     render() {
         return (
             <>
-                <Menu id={'exit_menu'}>
-                    <Menu.Item key="1" icon={<LockOutlined/>}>
-                        Lock
-                    </Menu.Item>
-                    <Menu.Item key="2" icon={<PoweroffOutlined/>}>
-                        <Link to="/login">logout</Link>
-                    </Menu.Item>
-                </Menu>
+                <Router>
+                    <Menu id={'exit_menu'}>
+                        <Menu.Item key="1" icon={<LockOutlined/>}>
+                            Lock
+                        </Menu.Item>
+                        <Menu.Item key="2" icon={<PoweroffOutlined/>}>
+                            <Link to="/login">logout</Link>
+                        </Menu.Item>
+                    </Menu>
+                </Router>
             </>
         );
     }
