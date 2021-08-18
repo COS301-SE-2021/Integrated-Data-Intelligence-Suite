@@ -791,7 +791,7 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = lrModel.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         if( rawResults.isEmpty())
             rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
@@ -823,6 +823,9 @@ public class AnalyseServiceImpl {
             }
             r.add(en);
             r.add(locs);
+            r.add( rawResults.get(i).get(3).toString());
+            r.add( rawResults.get(i).get(4).toString());
+
 
             results.add(r);
         }
@@ -1532,23 +1535,6 @@ public class AnalyseServiceImpl {
 
         return new SaveAIModelResponse(true);
     }
-
-
-    /*******************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     */
-
-
-
-
-
-
-
-
-
 
 }
 
