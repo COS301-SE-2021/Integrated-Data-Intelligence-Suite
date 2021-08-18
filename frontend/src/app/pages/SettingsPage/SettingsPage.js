@@ -3,6 +3,8 @@ import {Layout, Row, Col, Divider} from 'antd';
 import {CloseCircleTwoTone} from '@ant-design/icons'
 import { useHistory} from "react-router-dom";
 import Permissions from "../PermissionsPage/Permissions";
+import ProfilePage from "../ProfilePage/ProfilePage";
+
 
 const { Content} = Layout;
 
@@ -35,7 +37,7 @@ function getLocalUser() {
 
 const SettingsPage = () => {
 
-    const [component, setComponent] = useState("Profile");
+    const [component, setComponent] = useState("profile");
     const [user, setUser] = useState(getLocalUser());
     const history = useHistory();
 

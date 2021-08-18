@@ -183,4 +183,28 @@ button.enabled{
     font-size: 20px;
 }
 
+.profile.user{
+    margin: 20px;
+}
+
+.profile.user h2{
+
+    padding: 0 40px 40px 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid red;
+    line-height: normal;
+
+}
+
+.profile.user>div{
+    line-height: normal;
+    /*background: white;*/
+
+}
+
+profilr.user .about-user div{
+    color: black;
+}
+
 
