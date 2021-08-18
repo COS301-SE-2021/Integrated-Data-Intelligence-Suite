@@ -92,6 +92,28 @@ public class ImportService {
     }
 
 
+    public ImportTwitterResponse importDatedData(ImportTwitterRequest importRequest) {
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ImportTwitterRequest> requestEntity = new HttpEntity<>(importRequest, requestHeaders);
+
+        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/importDatedData", HttpMethod.POST, requestEntity, ImportTwitterResponse.class);
+        ImportTwitterResponse importTwitterResponse = responseEntity.getBody();
+
+        return  importTwitterResponse;
+    }
+
+    public ImportTwitterResponse getDatedDataFallback(ImportTwitterRequest importRequest){
+        ImportTwitterResponse importTwitterResponse = new ImportTwitterResponse(null);
+        importTwitterResponse.setFallback(true);
+        importTwitterResponse.setFallbackMessage("{failed to get import data}");
+        return importTwitterResponse;
+    }
+
+
+
     /*@GetMapping(value = "/importData")
     ImportDataResponse importData(@RequestParam("request") ImportDataRequest request) throws Exception;
 

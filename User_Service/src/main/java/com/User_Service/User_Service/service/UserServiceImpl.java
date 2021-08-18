@@ -79,6 +79,7 @@ public class UserServiceImpl {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", user.getId().toString());
                 jsonObject.put("username", user.getUsername());
+                jsonObject.put("isAdmin",user.getAdmin());
                 return new LoginResponse("Successfully logged in", true,jsonObject.toString());
             }
             else {

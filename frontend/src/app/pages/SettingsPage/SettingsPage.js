@@ -20,10 +20,23 @@ const setActive = (component) =>{
     return true;
 }
 
+function getLocalUser() {
+    const localUser = localStorage.getItem("user");
+    if (localUser) {
+        // console.log("user logged in is ", localUser)
+        return JSON.parse(localUser);
+    } else {
+        return null;
+    }
+}
+
+
+
 
 const SettingsPage = () => {
 
-    const [component, setComponent] = useState("Permissions");
+    const [component, setComponent] = useState("Profile");
+    const [user, setUser] = useState(getLocalUser());
     const history = useHistory();
 
 
@@ -34,17 +47,19 @@ const SettingsPage = () => {
                 <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' , minHeight:"100vh"}}>
                     <Row className={"row"}>
                         <Col style={{padding:"30px 20px"}} className={"left-column"} flex="200px">
-                            <div id={"Permissions"} className={"option"} onClick={()=>setComponent("Permissions")}>Permissions</div>
+                            <div id={"Profile"} className={"active option"} onClick={()=>setComponent("Profile")}>Profile</div>
                             <Divider />
-                            <div id={"Profile"} className={"option"} onClick={()=>setComponent("Profile")}>Profile</div>
-                            <Divider />
+
+                            { user && user.isAdmin && <div id={"Permissions"} className={"option"} onClick={()=>setComponent("Permissions")}>Permissions</div>}
+                            {user && user.isAdmin && <Divider />}
+
                             <div id={"Account"} className={"option"} onClick={()=>setComponent("Account")}>Account</div>
                         </Col>
                         <Col style={{padding:"0 0px 30px 0", backgroundColor:"#eff0f0"}} className={"right-column"} flex="auto">
                             {<div className={"top-padding"}><CloseCircleTwoTone className={"back-button"} onClick={()=>history.go(-1)}/></div>}
-                            { component === "Permissions" && setActive(component) && <Permissions/>}
-                            { component === "Profile" && setActive(component) && <div>Display profile here</div>}
-                            { component === "Account" && setActive(component) && <div>Manage user account here</div>}
+                            { component === "Permissions" && user && user.isAdmin && setActive(component) && <Permissions/>}
+                            { component === "Profile" && setActive(component) && <div> <h1>Page not implemented</h1></div>}
+                            { component === "Account" && setActive(component) && <div><h1>Page not implemented</h1></div>}
                         </Col>
                     </Row>
                 </Content>

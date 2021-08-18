@@ -791,10 +791,10 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = lrModel.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         if( rawResults.isEmpty())
-            rawResults = res.select("EntityName","prediction", "Frequency").filter(col("Frequency").geq(2.0)).collectAsList();
+            rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());

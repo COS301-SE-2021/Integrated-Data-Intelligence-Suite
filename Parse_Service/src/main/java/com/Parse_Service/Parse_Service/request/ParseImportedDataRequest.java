@@ -6,6 +6,10 @@ public class ParseImportedDataRequest {
     DataSource type;
     String jsonString;
 
+    public ParseImportedDataRequest() {
+
+    }
+
     public ParseImportedDataRequest(DataSource type, String jsonString) {
         this.type = type;
         this.jsonString = jsonString;
