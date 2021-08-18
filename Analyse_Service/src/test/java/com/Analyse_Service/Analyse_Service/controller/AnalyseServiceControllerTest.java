@@ -5,13 +5,14 @@ import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.AnalyseDataRequest;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import com.google.gson.Gson;
-import org.junit.Before;
+
+
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AnalyseServiceController.class)
-@AutoConfigureMockMvc
 public class AnalyseServiceControllerTest {
 
     @Autowired
@@ -45,10 +49,11 @@ public class AnalyseServiceControllerTest {
     @Test
     @DisplayName("When analyze is requested")
     public void analyzeRequest() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/Analyse")
-        ).andExpect(MockMvcResultMatchers.status().isOk());
 
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Analyse/analyzeData");
+        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+
+        mockMvc.perform( requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
