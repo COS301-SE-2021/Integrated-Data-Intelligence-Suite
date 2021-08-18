@@ -1,26 +1,17 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseRepository;
+import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
 import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.util.CoreMap;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -28,7 +19,6 @@ import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.Tokenizer;
@@ -36,15 +26,11 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 
-import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
-import org.apache.spark.storage.StorageLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import scala.Tuple2;
 
 
 import java.util.*;
@@ -57,7 +43,7 @@ public class AnalyseServiceImpl {
 
 
     @Autowired
-    private AnalyseRepository repository;
+    private AnalyseServiceParsedDataRepository repository;
 
     static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
@@ -67,7 +53,8 @@ public class AnalyseServiceImpl {
      * @return AnalyseDataResponse This object contains analysed data which has been processed.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public AnalyseDataResponse analyzeData(AnalyseDataRequest request) throws InvalidRequestException {
+    public AnalyseDataResponse analyzeData(AnalyseDataRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
@@ -113,20 +100,20 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
-        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
+        TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
+        TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
-        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+        TrainFindRelationshipsRequest findRelationshipsRequest = new TrainFindRelationshipsRequest(parsedDatalist);
+        TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
-        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
+        TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
+        TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
-        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(
@@ -145,7 +132,8 @@ public class AnalyseServiceImpl {
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindPatternResponse findPattern(FindPatternRequest request) throws InvalidRequestException {
+    public TrainFindPatternResponse trainFindPattern(TrainFindPatternRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
@@ -155,15 +143,15 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP SPARK*****************
 
-        SparkSession sparkPatterns = SparkSession
-                .builder()
-                .appName("Pattern")
-                .master("local")
-                .getOrCreate();
+         SparkSession sparkPatterns = SparkSession
+         .builder()
+         .appName("Pattern")
+         .master("local")
+         .getOrCreate();
 
-        sparkPatterns.sparkContext().setLogLevel("OFF");
+         sparkPatterns.sparkContext().setLogLevel("OFF");
 
-        /*******************SETUP DATA*****************/
+         /*******************SETUP DATA*****************/
 
          /*List<Row> data = Arrays.asList(
                 RowFactory.create(Arrays.asList("Hatflied good popular".split(" "))),
@@ -229,8 +217,40 @@ public class AnalyseServiceImpl {
 
         sparkPatterns.stop();*/
 
+        return new TrainFindPatternResponse(null);
+    }
+
+    /**
+     * This method used to find a pattern(s) within a given data,
+     * A pattern is found when there's a relation,trend, anamaly etc found as a patten; [relationship,trend,number_of_likes]
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindPatternResponse This object contains data of the patterns found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindPatternResponse findPattern(FindPatternRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("AnalyzeDataRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+
+        /*******************SETUP DATA*****************/
+
+
+        /*******************SETUP MODEL*****************/
+
+
+
+        /*******************READ MODEL OUTPUT*****************/
+
         return new FindPatternResponse(null);
     }
+
 
 
     /**
@@ -240,7 +260,8 @@ public class AnalyseServiceImpl {
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindRelationshipsResponse findRelationship(FindRelationshipsRequest request) throws InvalidRequestException {
+    public TrainFindRelationshipsResponse trainFindRelationship(TrainFindRelationshipsRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
         }
@@ -340,8 +361,46 @@ public class AnalyseServiceImpl {
 
         sparkRelationships.stop();
 
-        return new FindRelationshipsResponse(results);
+        return new TrainFindRelationshipsResponse(results);
     }
+
+    /**
+     * This method used to find a relationship(s) within a given data
+     * A relationship is when topics are related, x is found when y is present, e.g when elon musk name pops, (bitcoin is present as-well | spacex is present as-well) [topic]
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindRelationshipsResponse findRelationship(FindRelationshipsRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindRelationshipsRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkRelationships = SparkSession
+                .builder()
+                .appName("Relationships")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+
+
+        /*******************SETUP MODEL*****************/
+
+
+        /*******************READ MODEL OUTPUT*****************/
+
+        return new FindRelationshipsResponse(null);
+    }
+
+
 
     /**
      * This method used to find a trends(s) within a given data.
@@ -350,7 +409,8 @@ public class AnalyseServiceImpl {
      * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindTrendsResponse findTrends(FindTrendsRequest request) throws InvalidRequestException {
+    public TrainFindTrendsResponse trainFindTrends(TrainFindTrendsRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -762,8 +822,55 @@ public class AnalyseServiceImpl {
             results.add(r);
         }
 
-        return new FindTrendsResponse(results);
+        return new TrainFindTrendsResponse(results);
     }
+
+    /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindTrendsResponse findTrends(FindTrendsRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
+
+        /*******************SETUP DATA*****************/
+
+
+        /*******************SETUP DATAFRAME*****************/
+
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+
+        /*******************SETUP PIPELINE*****************/
+        /*******************SETUP MODEL*****************/
+
+
+        /*******************READ MODEL OUTPUT*****************/
+
+
+        return new FindTrendsResponse(null);
+    }
+
+
 
     /**
      * This method used to find a predictions(s) within a given data
@@ -772,7 +879,8 @@ public class AnalyseServiceImpl {
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public GetPredictionResponse getPredictions(GetPredictionRequest request) throws InvalidRequestException {
+    public TrainGetPredictionResponse trainGetPredictions(TrainGetPredictionRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("GetPredictionRequest Object is null");
         }
@@ -894,8 +1002,50 @@ public class AnalyseServiceImpl {
 
         sparkPredictions.stop();*/
 
+        return new TrainGetPredictionResponse(null);
+    }
+
+    /**
+     * This method used to find a predictions(s) within a given data
+     * A prediction is a prediction...
+     * @param request This is a request object which contains data required to be analysed.
+     * @return GetPredictionResponse This object contains data of the predictions found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public GetPredictionResponse getPredictions(GetPredictionRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("GetPredictionRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+         SparkSession sparkPredictions = SparkSession
+         .builder()
+         .appName("Predictions")
+         .master("local")
+         .getOrCreate();
+
+         /*******************SETUP DATA*****************/
+
+
+        /*******************SETUP MODEL*****************/
+
+
+
+        /******************Analyse Model Accuracy**************/
+
+
+        /*******************READ MODEL OUTPUT*****************/
+
+
         return new GetPredictionResponse(null);
     }
+
+
 
     /**
      * This method used to find a anomalies(s) within a given data.
@@ -904,7 +1054,8 @@ public class AnalyseServiceImpl {
      * @return findAnomaliesResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request) throws InvalidRequestException {
+    public TrainFindAnomaliesResponse trainFindAnomalies(TrainFindAnomaliesRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
@@ -1206,7 +1357,51 @@ public class AnalyseServiceImpl {
         }
 
 
-        return new FindAnomaliesResponse(results);
+        return new TrainFindAnomaliesResponse(results);
+    }
+
+    /**
+     * This method used to find a anomalies(s) within a given data.
+     * A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date.
+     * @param request This is a request object which contains data required to be analysed.
+     * @return findAnomaliesResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("findAnomalies Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkAnomalies = SparkSession
+                .builder()
+                .appName("Anomalies")
+                .master("local")
+                .getOrCreate();
+
+        JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
+
+        /*******************SETUP DATA*****************/
+
+
+        /*******************SETUP DATAFRAME*****************/
+
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+
+        /*******************SETUP PIPELINE*****************/
+        /*******************SETUP MODEL*****************/
+
+
+        /*******************READ MODEL OUTPUT*****************/
+
+        return new FindAnomaliesResponse(null);
     }
 
 
@@ -1224,7 +1419,8 @@ public class AnalyseServiceImpl {
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindNlpPropertiesResponse findNlpProperties(FindNlpPropertiesRequest request) throws InvalidRequestException {
+    public FindNlpPropertiesResponse findNlpProperties(FindNlpPropertiesRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -1295,7 +1491,8 @@ public class AnalyseServiceImpl {
      * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request) throws InvalidRequestException {
+    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FetchParsedDataRequest Object is null");
         }
@@ -1313,6 +1510,11 @@ public class AnalyseServiceImpl {
     }
 
 
+    public void saveAIModel(){
+
+    }
+
+
     /*******************************************************************************************************************
      * *****************************************************************************************************************
      * *****************************************************************************************************************
@@ -1320,170 +1522,6 @@ public class AnalyseServiceImpl {
      * *****************************************************************************************************************
      */
 
-
-    private void test(){
-        List<Integer> inputList = new ArrayList<>();
-        inputList.add(1);
-        inputList.add(1);
-        inputList.add(1);
-        inputList.add(1);
-        inputList.add(1);
-
-        //Logger.getLogger("org.apache").setLevel(Level.ERROR); //Level.OFF
-
-        SparkConf sparkConf = new SparkConf().setAppName("Test").setMaster("local[*]"); //session. replace
-        JavaSparkContext javaSparkContext = new JavaSparkContext(sparkConf);
-
-        JavaRDD<Integer > javaRDD = javaSparkContext.parallelize(inputList);
-
-        javaSparkContext.close();
-    }
-
-    private void test2(){
-        Properties properties = new Properties();
-
-        String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
-        pipelineProperties = "tokenize, ssplit, parse, sentiment";
-        properties.setProperty("annotators", pipelineProperties);
-        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-
-
-        String text = "This is a test text. lets goo!";
-
-        CoreDocument coreDocument = new CoreDocument(text);
-
-        stanfordCoreNLP.annotate(coreDocument);
-
-        List<CoreSentence> coreSentences = coreDocument.sentences();
-        List<CoreLabel> coreLabels = coreDocument.tokens();
-
-
-        for (CoreSentence sentence : coreSentences ){
-            String sentiment = sentence.sentiment(); //sentiment
-            System.out.println("SENTENCE : " + sentence.toString() + " - " + sentiment);
-        }
-
-        for (CoreLabel label : coreLabels){
-            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
-            String lemma = label.lemma();//lemmanation
-            String ner = label.get(CoreAnnotations.NamedEntityTagAnnotation.class); //named entity recognition
-            System.out.println("TOKEN : " + label.originalText());
-        }
-
-        //svae models
-        /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
-        KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
-                "target/org/apache/spark/JavaKMeansExample/KMeansModel");*/
-
-    }
-
-    private void test3(){
-        /**RDD's**/
-        /**Initialise**/
-        SparkConf conf = new SparkConf().setAppName("Test3").setMaster("local[*]"); //session. replace
-        JavaSparkContext sc = new JavaSparkContext(conf);
-
-
-        /**Paralising data**/
-        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
-        JavaRDD<Integer> distData = sc.parallelize(data);
-        JavaRDD<Integer> distData2 = sc.parallelize(data,10); // add 10 as a slice (no. of partitions), 2-4 the norm
-
-        //external data
-        JavaRDD<String> distFile = sc.textFile("url"); //return one record per line in "each" file [using the spark context, i.e hadoop]
-        JavaRDD<String> distFile2 = sc.textFile("url", 10); //no. of partitions
-        JavaPairRDD<String,String> distFile3 = sc.wholeTextFiles("url"); // takes multiple files
-
-        //working with key-value pairs - example
-        JavaRDD<String> lines = sc.textFile("data.txt");
-        JavaPairRDD<String, Integer> pairs = lines.mapToPair(s -> new Tuple2(s, 1)); //uses scala
-        JavaPairRDD<String, Integer> counts = pairs.reduceByKey((a, b) -> a + b);
-
-        //save rdd
-        distFile.saveAsObjectFile("url");
-
-
-        /**Operations to data {transformation and reduce} **/
-
-        //example [reduce]
-        JavaRDD<String> lines2 = sc.textFile("data.txt"); //pointer
-        JavaRDD<Integer> lineLengths = lines2.map(s -> s.length()); //pointer
-
-        lineLengths.persist(StorageLevel.MEMORY_ONLY()); //[Optional] saves rdd to memory to be reused, after running
-        int totalLength = lineLengths.reduce((a, b) -> a + b); //only here is the rdd ran. [return to driver program.]
-
-
-        /**NOTE**/
-        //passing with function [Spark’s API relies heavily on passing functions in the driver program]
-        JavaRDD<String> lines3 = sc.textFile("data.txt");
-        JavaRDD<Integer> lineLengths3 = lines3.map(new Function<String, Integer>() {
-            public Integer call(String s) { return s.length(); }
-        });
-
-        /*int totalLength2 = lineLengths2.reduce(new Function2<Integer, Integer, Integer>() {
-            public Integer call(Integer a, Integer b) { return a + b; }
-        });*/
-
-        /**NOTE**/
-        distData.foreach(x -> x += x); //this has a change to not work. locally is okay, distributed is not okay.
-
-    }
-
-    private void test4(){
-        /**DATAFRAMES or DATASET**/
-        /**Initialise and create**/
-        SparkSession spark = SparkSession
-                .builder()
-                .appName("test 4")
-                .master("local")
-                .getOrCreate();
-
-        //A dataframe, like rdd but with scheme like table of database, collection of partitions
-
-        Dataset<Row> df = spark.read().json("url");
-
-        // Displays the content of the DataFrame to stdout
-        df.show();
-
-        /**Opertaion to data
-         * assume...
-         *  | age|   name|
-         *  ______________
-         *  |null|Michael|
-         *  |  30|   Andy|
-         * **/
-
-        // Print the schema in a tree format
-        df.printSchema();
-
-        // Select only the "name" column
-        df.select("name").show();
-
-        // Select everybody, but increment the age by 1
-        df.select(col("name"), col("age").plus(1)).show(); // df.col() works, but using static import here [better?]
-
-        // Select people older than 21
-        df.filter(col("age").gt(21)).show();
-
-        // Count people by age
-        df.groupBy("age").count().show();
-
-        /**Convert to sql querying**/
-
-        df.createOrReplaceTempView("sqlpeople");
-
-        Dataset<Row> sqlDF = null;
-        //sqlDF = spark.sql("SELECT * FROM sqlpeople");
-        sqlDF.show();
-
-        try { //to persist the sql query among sessions
-            df.createGlobalTempView("people");
-            // Global temporary view is tied to a system preserved database `global_temp`
-            //spark.sql("SELECT * FROM global_temp.people").show();
-        } catch (AnalysisException e) {
-            e.printStackTrace();
-        }
-    }
 
     //adds one entity into database
     public ParsedData testdbAdd(){
