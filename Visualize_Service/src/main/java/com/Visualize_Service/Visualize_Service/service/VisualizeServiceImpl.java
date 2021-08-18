@@ -249,7 +249,10 @@ public class VisualizeServiceImpl {
             //System.out.println(locs.toString());
             for (int j = 0; j < locs.size(); j++) {
                 MapGraph newGraph = new MapGraph();
-                newGraph.statistic_1 = reqData.get(i).get(0).toString();
+                newGraph.statistic_1 = reqData.get(i).get(0).toString(); //topic
+                newGraph.statistic_2 = reqData.get(i).get(2).toString(); //type
+                newGraph.statistic_3 = reqData.get(i).get(3).toString(); //average likes
+
                 String [] latlon = locs.get(j).toString().split(",");
                 newGraph.lat = latlon[0];
                 newGraph.lng = latlon[1];
