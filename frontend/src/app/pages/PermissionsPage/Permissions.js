@@ -15,8 +15,6 @@ const Permissions = () => {
         <Layout>
             <Content className={"permissions-content-section"}>
                 <div className={"permissions user"}>
-                    { error && <div>{ error }</div> }
-                    { isPending && <div>Loading...</div> }
                     { users && <UserList users={ users.users }/> }
                 </div>
             </Content>

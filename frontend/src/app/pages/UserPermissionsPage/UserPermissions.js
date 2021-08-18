@@ -3,14 +3,6 @@ import {useHistory, useParams} from "react-router-dom";
 import useGet from "../../functions/useGet";
 import {CloseCircleTwoTone} from "@ant-design/icons";
 
-const Checkbox = ({ label, value, onChange }) => {
-    return (
-        <label>
-            <input type="checkbox" checked={value} onChange={onChange} />
-            {label}
-        </label>
-    );
-};
 
 const UserPermissions = () => {
 

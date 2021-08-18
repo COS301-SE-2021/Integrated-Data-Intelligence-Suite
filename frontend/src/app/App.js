@@ -52,7 +52,7 @@ class App extends Component {
 
                     <Route path="*">
                         <div>
-                            <h2>Page not Fount</h2>
+                            <h2>Page not Found</h2>
                             <Link to="/"> back to home page</Link>
                         </div>
                     </Route>
