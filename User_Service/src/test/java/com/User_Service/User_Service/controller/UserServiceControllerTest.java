@@ -3,11 +3,14 @@ package com.User_Service.User_Service.controller;
 import com.User_Service.User_Service.UserServiceApplication;
 import com.User_Service.User_Service.request.GetUserRequest;
 import com.User_Service.User_Service.request.LoginRequest;
+import com.User_Service.User_Service.request.ManagePermissionsRequest;
 import com.User_Service.User_Service.request.RegisterRequest;
+import com.User_Service.User_Service.rri.Permission;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -34,9 +37,19 @@ public class UserServiceControllerTest {
 
     private MockMvc mockMvc;
 
+    private String randomUsername;
+
+    private String randomEmail;
+
     @Before
     public void setup(){
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        int max = 100;
+        int min = 1;
+        int range = max - min + 1;
+        int randomNum = (int)(Math.random() * range) + min;
+        randomUsername = "testUser" + randomNum;
+        randomEmail = "testEmail" + randomNum + "@test.com";
     }
 
     @Test
@@ -61,15 +74,32 @@ public class UserServiceControllerTest {
     @Test
     @DisplayName("When_user_register_is_requested")
     public void userRegisterRequest() throws Exception {
-        int max = 100;
-        int min = 1;
-        int range = max - min + 1;
-        int randomNum = (int)(Math.random() * range) + min;
-        String randomUsername = "testUser" + randomNum;
-        String randomEmail = "testEmail" + randomNum + "@test.com";
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/User/register")
                 .content(asJsonString(new RegisterRequest(randomUsername, "firstname", "lastname", "password", randomEmail)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("When_User_getUser_Is_Requested")
+    public void userGetUserRequest() throws Exception {
+        UUID id = UUID.fromString("0b4e8936-bd7e-4373-b097-ce227b9f4072");
+        mockMvc.perform( MockMvcRequestBuilders
+                .post("/User/getUser")
+                .content(asJsonString(new GetUserRequest(id)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("When_user_managePermissions_is_Requested")
+    public void userManagePermissions() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                .post("/User/changepermission")
+                .content(asJsonString(new ManagePermissionsRequest(randomUsername, Permission.IMPORTING)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
