@@ -139,7 +139,7 @@ public class AnalyseServiceImpl {
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindPatternResponse trainFindPattern(FindPatternRequest request)
+    public TrainFindPatternResponse trainFindPattern(TrainFindPatternRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
@@ -224,7 +224,7 @@ public class AnalyseServiceImpl {
 
         sparkPatterns.stop();*/
 
-        return new FindPatternResponse(null);
+        return new TrainFindPatternResponse(null);
     }
 
     /**
@@ -259,6 +259,7 @@ public class AnalyseServiceImpl {
     }
 
 
+
     /**
      * This method used to find a relationship(s) within a given data
      * A relationship is when topics are related, x is found when y is present, e.g when elon musk name pops, (bitcoin is present as-well | spacex is present as-well) [topic]
@@ -266,7 +267,7 @@ public class AnalyseServiceImpl {
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindRelationshipsResponse trainFindRelationship(FindRelationshipsRequest request)
+    public TrainFindRelationshipsResponse trainFindRelationship(TrainFindRelationshipsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
@@ -367,9 +368,8 @@ public class AnalyseServiceImpl {
 
         sparkRelationships.stop();
 
-        return new FindRelationshipsResponse(results);
+        return new TrainFindRelationshipsResponse(results);
     }
-
 
     /**
      * This method used to find a relationship(s) within a given data
@@ -416,7 +416,7 @@ public class AnalyseServiceImpl {
      * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindTrendsResponse trainFindTrends(FindTrendsRequest request)
+    public TrainFindTrendsResponse trainFindTrends(TrainFindTrendsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
@@ -829,7 +829,7 @@ public class AnalyseServiceImpl {
             results.add(r);
         }
 
-        return new FindTrendsResponse(results);
+        return new TrainFindTrendsResponse(results);
     }
 
     /**
@@ -877,6 +877,8 @@ public class AnalyseServiceImpl {
         return new FindTrendsResponse(null);
     }
 
+
+
     /**
      * This method used to find a predictions(s) within a given data
      * A prediction is a prediction...
@@ -884,7 +886,7 @@ public class AnalyseServiceImpl {
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public GetPredictionResponse trainGetPredictions(GetPredictionRequest request)
+    public TrainGetPredictionResponse trainGetPredictions(TrainGetPredictionRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("GetPredictionRequest Object is null");
@@ -1007,7 +1009,7 @@ public class AnalyseServiceImpl {
 
         sparkPredictions.stop();*/
 
-        return new GetPredictionResponse(null);
+        return new TrainGetPredictionResponse(null);
     }
 
     /**
@@ -1050,6 +1052,8 @@ public class AnalyseServiceImpl {
         return new GetPredictionResponse(null);
     }
 
+
+
     /**
      * This method used to find a anomalies(s) within a given data.
      * A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date.
@@ -1057,7 +1061,7 @@ public class AnalyseServiceImpl {
      * @return findAnomaliesResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindAnomaliesResponse trainFindAnomalies(FindAnomaliesRequest request)
+    public TrainFindAnomaliesResponse trainFindAnomalies(TrainFindAnomaliesRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
@@ -1360,9 +1364,8 @@ public class AnalyseServiceImpl {
         }
 
 
-        return new FindAnomaliesResponse(results);
+        return new TrainFindAnomaliesResponse(results);
     }
-
 
     /**
      * This method used to find a anomalies(s) within a given data.
@@ -1511,6 +1514,10 @@ public class AnalyseServiceImpl {
 
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) repository.findAll();
         return new FetchParsedDataResponse(list );
+    }
+
+    public void saveAIModel(){
+
     }
 
 
