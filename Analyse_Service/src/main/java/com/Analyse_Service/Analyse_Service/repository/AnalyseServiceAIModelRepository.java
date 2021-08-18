@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface AnalyseServiceAIModelRepository extends JpaRepository<AIModel,Long> {
 
-    @Query(
-            value = "SELECT MAX(accuracy) FROM AIModel a WHERE P.type = ?1 ",
-            nativeQuery = true)
+    //"SELECT MAX(a.accuracy) FROM AIModel a WHERE a.type = ?1"+
+    @Query(value = "SELECT a FROM AIModel a " +
+            "WHERE a.accuracy = (SELECT MAX(accuracy) FROM AIModel WHERE type = ?1)")
     AIModel findHighestAccuracyByType(AIType type);
 }
