@@ -32,4 +32,13 @@ public class ImportTwitterResponse {
     public String getFallbackMessage(){
         return this.fallbackMessage;
     }
+
+    public void setJsonData(String jsonData) {
+        this.jsonData = jsonData;
+    }
+
+    public boolean isFallback() {
+        return fallback;
+    }
+
 }
