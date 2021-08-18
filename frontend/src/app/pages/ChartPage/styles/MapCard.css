@@ -1,0 +1,32 @@
+/* the parent div of the entire map card
+    its child is the map card
+*/
+#map_card {
+    /*border: 3px solid green;*/
+    border: 0;
+    height: 100%;
+    /*width: 700px;*/
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* The div contains the Actual Map component */
+#map_container_div {
+    height: 520px;
+    /*height: 100%;*/
+    width: 100%;
+    /*border: 3px solid yellow;*/
+    border: 0;
+    padding: 0;
+}
+
+/*
+* The body of the Map Card
+* Map Card = Green Border
+*/
+#map_card > .ant-card-body {
+    padding: 0;
+}
+
+

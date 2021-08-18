@@ -20,13 +20,19 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <a name="demo-video-links"></a>
 ## Demos
 * [Demo 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
-* [Demo 2]()
+* [Demo 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [Demo 3]()
 * [Demo 4]()
 
 <a name="srs"></a>
 ## Documentation
-* [SRS Document](https://www.overleaf.com/read/wqrzstnshqpt)
+* SRS
+  * [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
+  * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+  * [Version 3]()
+  * [Version 4]()
+* [Coding Standards PDF](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+* [Architectural Document](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools
@@ -38,140 +44,193 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 ## Branching Strategy
 **master** <br>
 &nbsp;&nbsp;&nbsp; - **develop** <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - **develop**-*subsystem* <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-*subsystem*-name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-name
 
 
 <a name="about-members"></a>
-## About the Team
-
-<!-- <h2 align="center">Contact on</h2> -->
-
-<!-- <p align="center">
-  <a href="https://www.linkedin.com/in/akshat-tamrakar">
-    <img  alt="Linkedin" width="15px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
-  &nbsp&nbsp&nbsp&nbsp
-  <a href="https://github.com/dev-akshat">
-    <img alt="GitHub" width="15px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
-  </a>
-</p> -->
-
+## Meet the Team!
 
 <table>
+<!-- --------------------- -->
+<!--  Shrey ----------------->
+<!-- --------------------- -->
 <tr>
-  <td style="width: 25%;">
-    <img alt="Shrey" src="https://i.imgur.com/sX6JNYi.jpg" width="200pt">
-  </td>
-  
-  <td style="width: 25%;">
-    <img alt="Rhuli" src="https://media-exp3.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1628726400&v=beta&t=EfToBL0VX5o8tmkDrypVcaeCgjrO8rbTugAvmRIavTg" width="200pt">
-  </td>
-  
-  <td style="width: 25%;">
-    <img alt="Wandile" src="https://media-exp1.licdn.com/dms/image/C4D03AQF9xmaPIT4sGA/profile-displayphoto-shrink_800_800/0/1613066923973?e=1628121600&v=beta&t=pI14hAWqRKAxs6mTpmSy6wBnAYdCtkxFk4sMss2SSts" width="200pt" >
-  </td>
-  
-  <td style="width: 25%;">
-    <img alt="Myron" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt">
-  </td>
-  
-  <td style="width: 25%;">
-    <img alt="Steve" src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
-  </td>
-</tr>
+<td>
 
-<tr>
-   <td style="width: 25%;">
-    <h3>Shrey Mandalia</h3>
-    <p><em>Front-End and Data Analysis</em></p>
-  </td>
+  <div>
+    <img align="left" alt="Shrey" width="200px" height="200px" src="https://i.imgur.com/sX6JNYi.jpg">
+  </div>
 
-   <td style="width: 25%;">
-    <h3>Rhuli Nghondzweni</h3>
-    <p><em>Back-end and Machine Learning</em></p>
 
-  </td>
+<h1 align="right">Shrey Mandalia</h1>
 
-  <td style="width: 25%;">
-    <h3>Wandile Makhubele</h3>
-    <p><em>Deployment and Back-End</em></p>
-
-  </td>
-  
-  <td style="width: 25%">
-    <h3>Myron Lopes</h3>
-    <p><em>Front-End and Data Analysis</em></p>
-  </td>
-
-  <td style="width: 25%;">
-    <h3>Steve Mbuguje</h3>
-    <p><em>Data Analysis And Machine Learning</em></p>
-
-  </td>
-
-</tr>
-
-<tr>
-  <td>
-    <p align="center">
+<p align="right"><em>Data parsing & Data Importing</em></p>
+ <p align="right">
       <a href="https://www.linkedin.com/in/shrey-mandalia-5b9a961b8/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/dev-akshat">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+     <a href="https://github.com/dev-akshat">
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
-  </td>
 
-  <td>
-    <p align="center">
-      <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
+<br>
+
+<p><br>
+Something interesting about you. Something Special or unique about you.<br>
+it's okay, We think cats are super cool<br>
+Wow thats a lot of stuff!<br>
+</p>
+</td>
+</tr>
+ 
+<!-- --------------------- -->
+<!--  Rhuli ----------------->
+<!-- --------------------- -->
+<tr>
+<td>
+
+  <div>
+    <img align='left' alt="Rhuli" src="https://media-exp3.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1628726400&v=beta&t=EfToBL0VX5o8tmkDrypVcaeCgjrO8rbTugAvmRIavTg" width="200pt">
+
+  </div>
+
+<h1 align="right">Rhuli Nghondzweni</h1>
+
+<p align="right"><em>Back-end & Machine Learning</em></p>
+ <p align="right">
+     <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/u18003517-Rhuli">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
-  </td>
 
-  <td>
-    <p align="center">
+<br>
+
+<p>
+<br>
+Something interesting about you. Something Special or unique about you.<br>
+it's okay, We think cats are super cool<br>
+Wow thats a lot of stuff!<br>
+</p>
+</td>
+</tr>
+
+<!-- --------------------- -->
+<!--  Wandile --------------->
+<!-- --------------------- -->
+<tr>
+<td>
+
+  <div>
+    <img align='left' alt="Wandile"  src="https://media-exp1.licdn.com/dms/image/C4D03AQF9xmaPIT4sGA/profile-displayphoto-shrink_800_800/0/1613066923973?e=1628121600&v=beta&t=pI14hAWqRKAxs6mTpmSy6wBnAYdCtkxFk4sMss2SSts" width="200pt">
+
+  </div>
+
+
+<h1 align="right">Wandile Makhubele</h1>
+
+<p align="right"> <em>Deployment & Back-End</em></p>
+
+</p>
+ <p align="right">
       <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
       <a href="https://github.com/abDivergent">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
-  </td>
 
-  <td>
-    <p align="center">
-      <a href="https://www.linkedin.com/in/myron-lopes/">
+<br>
+
+<p>
+ <br>
+Something interesting about you. Something Special or unique about you.<br>
+it's okay, We think cats are super cool<br>
+Wow thats a lot of stuff!<br>
+</p>
+</td>
+</tr>
+
+<!-- --------------------- -->
+<!--  Steve ----------------->
+<!-- --------------------- -->
+<tr>
+<td>
+
+  <div>
+    <img align='left' alt="Rhuli"  src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
+
+  </div>
+
+
+<h1 align="right">Steve Mbuguje</h1>
+
+<p align="right"><em>Data Analysis & Machine Learning</em></p>
+ <p align="right">
+       <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/myronlopes-tuks">
-        <img alt="GitHub" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+     <a href="https://github.com/u18008390">
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
-    </p>
-  </td>
-  
-  <td>
-    <p align="center">
-      <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
-        <img  alt="Linkedin" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
+</p>
+
+<br>
+
+<p>
+<br>
+Something interesting about you. Something Special or unique about you.<br>
+it's okay, We think cats are super cool<br>
+Wow thats a lot of stuff!<br>
+</p>
+</td>
+</tr>
+ 
+
+ 
+<!-- --------------------- -->
+<!--  Myron------------------>
+<!-- --------------------- -->
+<tr>
+<td>
+
+  <div>
+    <img align='left' alt="Myron" height="250px" src="https://github.com/myronlopes-tuks/myronlopes-tuks.github.io/blob/main/formal_shadow.jpg" width="200pt">
+  </div>
+
+
+<h1 align="right">Myron Lopes</h1>
+
+<p align="right"><em>Frontend & Data Visualisation</em></p>
+ <p align="right">
+       <a href="https://www.linkedin.com/in/myron-lopes/">
+        <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
-      <a href="https://github.com/u18008390">
-        <img alt="GitHub" width="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/github.svg"/>
+       <a href="https://github.com/myronlopes-tuks">
+        <img alt="GitHub" width="20px" height="20px" src="https://github.com/myronlopes-tuks/misc/blob/master/GitHub-Mark/PNG/GitHub-Mark-Light-32px.png"/>
       </a>
     </p>
-  </td>
 
+<br>
+
+<p>
+<br> 
+<br> 
+<br>
+Something interesting about you. Something Special or unique about you.<br>
+it's okay, We think cats are super cool<br>
+Wow thats a lot of stuff!<br>
+</p>
+</td>
 </tr>
 
 

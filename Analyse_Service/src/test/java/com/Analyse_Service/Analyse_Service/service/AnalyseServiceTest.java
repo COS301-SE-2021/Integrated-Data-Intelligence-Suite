@@ -1,18 +1,17 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
@@ -85,14 +84,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the data list is Valid")
     public void findPatternValidRequest() throws InvalidRequestException {
-        ArrayList<String> TestList = new ArrayList<>();
-        String row1 = "Neuatral testi testii 20";
-        String row2 = "Neuatral testi testii 20";
-        String row3 = "Neuatral testi testii 20";
+        ArrayList<ArrayList> TestList = new ArrayList<>();
 
-        TestList.add(row1);
-        TestList.add(row2);
-        TestList.add(row3);
+        ArrayList<String> row = new ArrayList<>();
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+
+        TestList.add(row);
 
         FindPatternRequest test = new FindPatternRequest(TestList);
         FindPatternResponse testResults = service.findPattern(test);
@@ -124,7 +123,7 @@ public class AnalyseServiceTest {
         TestList.add(row2);
         TestList.add(row3);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(TestList);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
@@ -145,14 +144,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the data list is Valid")
     public void getPredictionValidRequest() throws InvalidRequestException {
-        ArrayList<String> TestList = new ArrayList<>();
-        String row1 = "Neuatral testi testii 20";
-        String row2 = "Neuatral testi testii 20";
-        String row3 = "Neuatral testi testii 20";
+        ArrayList<ArrayList> TestList = new ArrayList<>();
 
-        TestList.add(row1);
-        TestList.add(row2);
-        TestList.add(row3);
+        ArrayList<String> row = new ArrayList<>();
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+        row.add("Neuatral testi testii 20");
+
+        TestList.add(row);
 
         GetPredictionRequest test = new GetPredictionRequest(TestList);
         GetPredictionResponse testResults = service.getPredictions(test);
@@ -160,26 +159,59 @@ public class AnalyseServiceTest {
     }
 
     @Test
-    @DisplayName("When findSentimentRequest is Null")
-    public void findSentimentRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findSentiment(null));
+    @DisplayName("When findTrendsNullRequest is Null")
+    public void findTrendsNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(null));
+    }
+
+    @Test
+    @DisplayName("When the data list is Null")
+    public void findTrendsDataNullList(){
+        FindTrendsRequest test = new FindTrendsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findTrends(test));
+    }
+
+    @Test
+    @DisplayName("When findEntitiesNullRequest is Null")
+    public void findEntitiesNullRequest(){
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(null));
     }
 
     @Test
     @DisplayName("When the text is Null")
-    public void findSentimentDataNullList(){
-        FindSentimentRequest test = new FindSentimentRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findSentiment(test));
+    public void findEntitiesTextNull(){
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findNlpProperties(test));
     }
 
     @Test
     @DisplayName("When the text is Valid")
-    public void findSentimentValidRequest() throws InvalidRequestException {
+    public void findEntitiesValidRequest() throws InvalidRequestException {
         String text = "test text for function";
-        FindSentimentRequest test = new FindSentimentRequest(text);
-        FindSentimentResponse testResults = service.findSentiment(test);
+        FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
+        FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 
+    @Test
+    @DisplayName("Fetch first data from database")
+    public void fetchFirstDataFromDatabase() throws AnalyzerException {
+        ParsedData testResults = service.testdbAdd();
+        Assertions.assertNotNull(testResults);
+    }
 
+    @Test
+    @DisplayName("Delete first data from database")
+    public void deleteFirstDataFromDatabase() throws AnalyzerException {
+        int testResults = service.testdbDelete();
+        Assertions.assertNotEquals(-1, testResults);
+    }
+
+    @Test
+    @DisplayName("fetch parsedData from database")
+    public void fetchParsedDataFromDatabase() throws AnalyzerException {
+        FetchParsedDataRequest request = new FetchParsedDataRequest("ParsedData");
+        FetchParsedDataResponse testResults = service.fetchParsedData(request);
+        Assertions.assertNotNull(testResults);
+    }
 }

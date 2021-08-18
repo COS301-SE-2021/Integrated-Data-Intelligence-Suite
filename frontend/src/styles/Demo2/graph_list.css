@@ -1,0 +1,23 @@
+div.graph_list{
+	display: grid;
+	height: 100vh;
+	padding: 10px;
+	grid-gap: 20px;
+	grid-template: repeat(1, 1fr)/ 100px 90px;
+
+}
+
+#graph_list_div{
+	border: 3px solid green;
+	box-sizing: border-box;
+	border-radius: 5px 0 0 5px;
+	padding: 0;
+	margin: 0;
+
+}
+
+div.graph_list div{
+	background: white;
+	border: none;
+	border-radius: 5px;
+}
