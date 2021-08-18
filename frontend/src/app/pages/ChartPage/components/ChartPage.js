@@ -9,8 +9,8 @@ import {
 import {Route, Switch} from "react-router-dom";
 import MapCard from "./MapCard/MapCard";
 import DetailsCard from "./DetailsCard/DetailsCard";
-import NetworkGraphCard from "./Network Graph/NetworkGraphCard";
-import "./Network Graph/NetworkGraph.css";
+import NetworkGraphCard from "./NetworkGraph/NetworkGraphCard";
+import "./NetworkGraph/NetworkGraph.css";
 import UserInfoCard from "../../../components/SideBar/UserInfoCard";
 import SearchBar from "../../../components/SearchBar/SearchBar";
 import TimelineGraph from "./TimelineGraph/TimelineGraph";

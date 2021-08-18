@@ -1,6 +1,13 @@
 package com.Parse_Service.Parse_Service.dataclass;
 
+import javax.persistence.*;
+
+@Entity(name = "parsed_article")
+@Table(name = "parsed_article")
 public class ParsedArticle {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String title;
     private String description;
     private String content;
