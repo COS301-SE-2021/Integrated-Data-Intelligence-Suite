@@ -58,7 +58,12 @@ public class ImportServiceController {
         return service.getTwitterDataJson(request);
     }
 
-    //TODO add comments
+    /**
+     * This method is used  to facilitate communication to the Import_service.
+     *
+     * @param requestEntity Ta request entity which contains a TwitterRequest object.
+     * @return ImportTwitterResponse. This object contains imported data which has been processed by Import-Service.
+     */
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ImportTwitterResponse importDatedData(RequestEntity<ImportTwitterRequest> requestEntity) {
         ImportTwitterRequest request = requestEntity.getBody();
@@ -73,10 +78,10 @@ public class ImportServiceController {
 
 
     /**
-     * Used to test twitter data retrieval
+     * This method retrieves twitter data based on a search key
      *
-     * @param key keyword used to search for posts
-     * @return a list of posts as a Json string
+     * @param key a phrase used as a search term for twitter data.
+     * @return a json string with a list of tweets
      */
     @GetMapping(value = "test/twitter/{key}")
     public String testTwitter(@PathVariable String key){
@@ -84,7 +89,7 @@ public class ImportServiceController {
         try{
             res = service.getTwitterDataJson(new ImportTwitterRequest(key));
         } catch (Exception e) {
-            return "{\"data\": \"Import failed.\"}";
+            return "{\"data\": \""+e.getMessage()+"\"}";
         }
         if(res == null) return "{\"data\": \"No data found.\"}";
 
@@ -92,11 +97,12 @@ public class ImportServiceController {
     }
 
     /**
+     * This function retrieves twitter data basd on a search key and date.
      *
      * @param key a phrase or sentence used as a search query
      * @param from the date at which the search should start. Date is in the form YYYY-MM-DD
      * @param to the date at which the search should end. Date is in the form YYYY-MM-DD
-     * @return a jason string of tweets related to the search key and within the two specified dates
+     * @return a json string with a list of tweets
      */
     @GetMapping(value = "test/twitter/{key}/{from}/{to}")
     public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
@@ -114,10 +120,10 @@ public class ImportServiceController {
     }
 
     /**
-     * Used to test newsAPI data retrieval
+     * This function is used to retrieve newsAPI articles based on a search key
      *
-     * @param key keyword used to search for articles
-     * @return a list of articles as a Json string
+     * @param key a phrase or sentence used as a search query
+     * @return a json string with a list of tweets
      */
     @GetMapping(value="test/news/{key}")
     public String testNewsAPI(@PathVariable String key){
@@ -126,7 +132,7 @@ public class ImportServiceController {
             res = service.importNewsData(new ImportNewsDataRequest(key));
         } catch (Exception e) {
 
-            return "{\"data\": \"Import failed.\"}";
+            return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
         if(res == null) return "{\"data\": \"No data found.\"}";
 
@@ -135,9 +141,9 @@ public class ImportServiceController {
     }
 
     /**
-     * Used to test all data sources at the same time
+     * This function is used to retrieve data from different data sources based on a search key
      *
-     * @param key keyword used to search multiple data sources
+     * @param key a phrase or sentence used as a search query
      * @return a list of articles from different data sources related to
      *         search key as a json string
      */
@@ -150,7 +156,7 @@ public class ImportServiceController {
 
         } catch (ImporterException e) {
 
-            return "{\"data\": \"Import failed.\"}";
+            return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
         if(res == null) return "{\"data\": \"No data found.\"}";
 

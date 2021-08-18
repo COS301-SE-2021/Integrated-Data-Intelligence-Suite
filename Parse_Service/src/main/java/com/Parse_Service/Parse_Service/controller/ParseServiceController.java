@@ -26,8 +26,6 @@ public class ParseServiceController {
      */
     @PostMapping("/parseImportedData")
     public ParseImportedDataResponse parseImportedData(RequestEntity<ParseImportedDataRequest> requestEntity) throws Exception {
-        //DataSource type = DataSource.TWITTER;
-        //ParseImportedDataRequest req = new ParseImportedDataRequest(type,jsonString);
         ParseImportedDataRequest request = requestEntity.getBody();
         return service.parseImportedData(request);
     }
