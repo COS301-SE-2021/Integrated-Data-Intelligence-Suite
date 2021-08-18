@@ -2,6 +2,7 @@ package com.Analyse_Service.Analyse_Service.repository;
 
 import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
 import com.Analyse_Service.Analyse_Service.dataclass.AIType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,10 @@ public class AnalyseServiceAIModelRepositoryTest {
         aiModel5.setAccuracy(84.5F);
         aiModel5.setType(AIType.Prediction);
         analyseServiceAIModelRepository.save(aiModel5);
+
+        //Test
+        AIModel aiModelTest = analyseServiceAIModelRepository.findHighestAccuracyByType(AIType.Prediction);
+        Assertions.assertEquals(aiModel3,aiModelTest);
     }
 
 }

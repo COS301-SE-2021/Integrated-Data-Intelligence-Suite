@@ -12,5 +12,5 @@ public interface AnalyseServiceAIModelRepository extends JpaRepository<AIModel,L
     @Query(
             value = "SELECT MAX(accuracy) FROM AIModel a WHERE P.type = ?1 ",
             nativeQuery = true)
-    List<AIModel> findHighestAccuracyByType(AIType type);
+    AIModel findHighestAccuracyByType(AIType type);
 }
