@@ -73,6 +73,8 @@ span.ant-input-wrapper.ant-input-group{
     border-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    float:right;
+    width: 80%;
 }
 #top_bar > .ant-input-search > .ant-input-group > input.ant-input:focus {
    border:0;
@@ -91,7 +93,8 @@ span.ant-input-wrapper.ant-input-group{
 #top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {
     /*BORDER: 2PX SOLID YELLOW;*/
     /*border: 0;*/
-    left: 0;
+    /*left: 0;*/
+    float: left;
 
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
