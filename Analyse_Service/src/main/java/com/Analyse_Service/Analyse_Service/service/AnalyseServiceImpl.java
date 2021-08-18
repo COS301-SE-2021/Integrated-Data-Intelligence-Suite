@@ -1499,9 +1499,8 @@ public class AnalyseServiceImpl {
         if (request.getDataType() == null){
             throw new InvalidRequestException("Datatype is null");
         }
-
         if(request.getDataType() != "ParsedData") {
-            return null;
+            throw new InvalidRequestException("Wrong Datatype is used");
         }
 
 
@@ -1510,8 +1509,9 @@ public class AnalyseServiceImpl {
     }
 
 
-    public void saveAIModel(){
+    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request){
 
+        return new SaveAIModelResponse();
     }
 
 
@@ -1523,35 +1523,8 @@ public class AnalyseServiceImpl {
      */
 
 
-    //adds one entity into database
-    public ParsedData testdbAdd(){
-        if ( repository.count() <= 0) {
-            ParsedData newData = new ParsedData();
-            Date date = new Date();
-            newData.setDate(date.toString());
-            newData.setTextMessage("This is a test/demo text message.");
-            newData.setLikes(100);
-            newData.setLocation("Default Location");
-            repository.save(newData);
 
 
-            return repository.findAll().get(0);
-        }
-        return null;
-    }
-
-    //adds one entity into database
-    public int testdbDelete(){
-        if ( repository.count() == 1) {
-
-            ParsedData data = repository.findAll().get(0);
-            repository.delete(data);
-
-
-            return (int) repository.count();
-        }
-        return -1;
-    }
 
 
 
