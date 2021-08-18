@@ -6,16 +6,19 @@ import com.Analyse_Service.Analyse_Service.request.AnalyseDataRequest;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import com.google.gson.Gson;
 import org.junit.Before;
-import org.junit.Test;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,10 +33,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AnalyseServiceController.class)
+@AutoConfigureMockMvc
 public class AnalyseServiceControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private AnalyseServiceImpl service;
 
     @Test
     @DisplayName("When analyze is requested")
@@ -41,6 +48,7 @@ public class AnalyseServiceControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/Analyse")
         ).andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
     @Test
