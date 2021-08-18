@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class ImportServiceTest {
 
@@ -66,7 +65,7 @@ public class ImportServiceTest {
     @DisplayName("If_Import_News_Data_Request_Key_Is_Null")
     public void nullKeyNewsDataReqeust() {
         ImportNewsDataRequest request = new ImportNewsDataRequest(null);
-        Assertions.assertThrows(InvalidNewsRequestException.class, () -> service.importNewsData(request));
+        Assertions.assertThrows(InvalidTwitterRequestException.class, () -> service.importNewsData(request));
     }
 
 }
