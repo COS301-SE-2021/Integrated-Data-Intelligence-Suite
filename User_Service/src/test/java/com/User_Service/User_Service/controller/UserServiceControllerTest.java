@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,10 +19,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserServiceApplication.class)
 public class UserServiceControllerTest {
-    @InjectMocks
+    @Autowired
     private UserServiceController controller;
 
-    @Mock
+    @Autowired
     private UserServiceImpl service;
 
     private MockMvc mockMvc;
@@ -35,7 +36,7 @@ public class UserServiceControllerTest {
     @DisplayName("When user is requested")
     public void userRequest() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/User")
+                MockMvcRequestBuilders.get("/User/getAll")
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
