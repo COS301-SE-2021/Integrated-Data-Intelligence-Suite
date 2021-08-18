@@ -1,9 +1,9 @@
-import {Button, Card, Dropdown, Menu, Skeleton} from "antd";
-import Meta from "antd/es/card/Meta";
-import Avatar from "antd/es/avatar/avatar";
+import {Button, Card, Dropdown, Menu, Skeleton, Avatar } from "antd";
+// import Avatar from "antd/es/avatar/avatar";
 import {UpOutlined} from "@ant-design/icons";
 import React, {Component} from 'react';
 import ExitMenuTooltip from "./ExitMenuTooltip";
+const { Meta } = Card;
 
 function setUserName(){
     const localUser = localStorage.getItem("user");
