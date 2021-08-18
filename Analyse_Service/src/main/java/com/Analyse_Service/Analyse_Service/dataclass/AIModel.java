@@ -1,26 +1,22 @@
 package com.Analyse_Service.Analyse_Service.dataclass;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Entity(name = "AIModel")
-@Table(name = "AI Model")
+@Entity
+@Table(name = "AIModel")
 public class AIModel {
 
     @Id
-    @GeneratedValue(generator = "")
+    @Column(name="ID")
+    @GeneratedValue
     private Long id;
 
+    @Column(name="type")
     private AIType type;
 
+    @Column(name="accuracy")
     private float accuracy;
 
-
-    public void setId(Long id){
-        this.id = id;
-;    }
 
     public void setType(AIType type){
         this.type = type;
