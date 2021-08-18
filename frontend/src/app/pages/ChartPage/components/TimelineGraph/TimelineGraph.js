@@ -1,7 +1,7 @@
 import React, {useEffect, Component} from 'react';
-import "../styles/TimelineGraph.css"
+import "./TimelineGraph.css"
 import {Chrono} from "react-chrono";
-import timeline_cards from "../resources/graphStructures/timelineData.json"
+import timeline_cards from "../../resources/graphStructures/timelineData.json"
 
 class TimelineGraph extends React.Component {
     constructor(props) {
