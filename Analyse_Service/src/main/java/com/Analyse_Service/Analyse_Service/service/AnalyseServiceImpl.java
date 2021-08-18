@@ -100,20 +100,20 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
-        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
+        TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
+        TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
-        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+        TrainFindRelationshipsRequest findRelationshipsRequest = new TrainFindRelationshipsRequest(parsedDatalist);
+        TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
-        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
+        TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
+        TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
-        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(
