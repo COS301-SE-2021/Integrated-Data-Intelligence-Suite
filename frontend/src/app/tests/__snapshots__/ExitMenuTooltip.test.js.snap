@@ -45,7 +45,7 @@ Array [
         className="ant-menu-title-content"
       >
         <a
-          class="logout_link"
+          className="logout_link"
           href="/login"
           onClick={[Function]}
         >
