@@ -87,8 +87,7 @@ public class UserRepositoryTest {
     @ParameterizedTest
     @ValueSource(strings = "d043e930-7b3b-48e3-bdbe-5a3ccfb833db")
     @DisplayName("update Permission")
-    public void updatePermission(@Param("id")UUID userID, @Param("perm") Permission perm){
-        //updatePermission(@Param("id")UUID userID, @Param("perm") Permission perm)
+    public void updatePermission(){
         User testUser = new User();
 
         testUser.setFirstName("FirstNameTest");
@@ -100,13 +99,28 @@ public class UserRepositoryTest {
 
         userRepository.save(testUser);
 
+        int testResult = userRepository.updatePermission(testUser.getId(),Permission.IMPORTING);
 
+        Assertions.assertEquals(1,testResult);
     }
 
     @ParameterizedTest
     @ValueSource(strings = "d043e930-7b3b-48e3-bdbe-5a3ccfb833db")
     @DisplayName("update Password")
-    public void updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass){
-        //updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass)
+    public void updatePassword(){
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.VIEWING);
+
+        userRepository.save(testUser);
+
+        int testResult = userRepository.updatePassword(testUser.getId(),"newPasswordTest");
+
+        Assertions.assertEquals(1,testResult);
     }
 }
