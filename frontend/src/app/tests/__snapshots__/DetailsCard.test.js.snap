@@ -12,11 +12,7 @@ exports[`DetailsCard renders correctly 1`] = `
     <div
       className="ant-card-head-wrapper"
     >
-      <div
-        className="ant-card-head-title"
-      >
-        Details Card Title
-      </div>
+      
       <div
         className="ant-card-extra"
       >
@@ -54,7 +50,7 @@ exports[`DetailsCard renders correctly 1`] = `
                     className="ant-descriptions-item-label ant-descriptions-item-no-colon"
                     style={Object {}}
                   >
-                    Statistic 1
+                    Entity Name
                   </span>
                 </div>
               </th>
@@ -73,7 +69,7 @@ exports[`DetailsCard renders correctly 1`] = `
                     className="ant-descriptions-item-content"
                     style={Object {}}
                   >
-                    89%
+                    Individual
                   </span>
                 </div>
               </td>
@@ -92,7 +88,7 @@ exports[`DetailsCard renders correctly 1`] = `
                     className="ant-descriptions-item-label ant-descriptions-item-no-colon"
                     style={Object {}}
                   >
-                    Statistic 2
+                    Entity Type
                   </span>
                 </div>
               </th>
@@ -111,7 +107,7 @@ exports[`DetailsCard renders correctly 1`] = `
                     className="ant-descriptions-item-content"
                     style={Object {}}
                   >
-                    1810K
+                    Strong
                   </span>
                 </div>
               </td>
@@ -130,7 +126,7 @@ exports[`DetailsCard renders correctly 1`] = `
                     className="ant-descriptions-item-label ant-descriptions-item-no-colon"
                     style={Object {}}
                   >
-                    Statistic 3
+                    Average Likes
                   </span>
                 </div>
               </th>
@@ -149,7 +145,7 @@ exports[`DetailsCard renders correctly 1`] = `
                     className="ant-descriptions-item-content"
                     style={Object {}}
                   >
-                    Pretoria, Hatfield
+                    46776
                   </span>
                 </div>
               </td>
