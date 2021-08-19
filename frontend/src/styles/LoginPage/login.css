@@ -1,5 +1,5 @@
 #login_card {
-    border: 3px solid deeppink;
+    border: 3px solid #5773FA;
     /* align-self: center; */
 
     /*Aligning it Horizontally in the Center*/
@@ -16,13 +16,13 @@
 }
 
 .login_button {
-    background: deeppink;
-    border-color: deeppink;
+    background: #5773FA;
+    border-color: #5773FA;
     width: 100%;
 }
 
 .forgot_password_link {
-    color: deeppink;
+    color: #5773FA;
     float: none;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .register_link {
-    color: deeppink;
+    color: #5873f9;
     float: right;
 }
 
