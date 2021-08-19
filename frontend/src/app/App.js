@@ -29,7 +29,6 @@ class App extends Component {
                         <RegisterPage/>
                     </Route>
 
-
                     <Route exact path='/chart'>
                         <ChartPage/>
                     </Route>

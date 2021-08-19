@@ -14,6 +14,7 @@ class SideBar extends React.Component {
 
         this.state = {
             collapsed: false,
+            active: "2"
         };
     }
 
@@ -22,8 +23,13 @@ class SideBar extends React.Component {
         this.setState({collapsed});
     };
 
+    setActive = (value) =>{
+        this.setState({active: value})
+    }
+
     render() {
-        const {collapsed} = this.state;
+        const {collapsed, active} = this.state;
+        console.log("active comp ", active)
         return (
             <>
 
@@ -32,16 +38,16 @@ class SideBar extends React.Component {
                     <Menu
                         id={'sidebar_menu'}
                         theme="light"
-                        defaultSelectedKeys={['1']}
+                        defaultSelectedKeys={active || "2"}
                         mode="inline"
                     >
-                        <Menu.Item key="1" icon={<HomeOutlined/>}>
-                            Home
-                            <Link to='/'/>
-                        </Menu.Item>
-                        <Menu.Item key="2" icon={<BarChartOutlined/>}>
+                        {/*<Menu.Item key="1" icon={<HomeOutlined/>}>*/}
+                        {/*    Home*/}
+                        {/*    <Link to='/'/>*/}
+                        {/*</Menu.Item>*/}
+                        <Menu.Item key="2" icon={<BarChartOutlined/>} onClick={()=>this.setActive("2")}>
                             Charts
-                            <Link to='/chart'/>
+                            <Link to='/'/>
                         </Menu.Item>
                         {/*<SubMenu key="sub1" icon={<UserOutlined/>} title="User">*/}
                         {/*    <Menu.Item key="3">User 1</Menu.Item>*/}
@@ -51,7 +57,7 @@ class SideBar extends React.Component {
                         {/*    <Menu.Item key="6">Team 1</Menu.Item>*/}
                         {/*    <Menu.Item key="8">Team 2</Menu.Item>*/}
                         {/*</SubMenu>*/}
-                        <Menu.Item key="9" icon={<SettingOutlined/>}>
+                        <Menu.Item key="9" icon={<SettingOutlined/>} onClick={()=>this.setActive("9")}>
                             Settings
                             <Link to={"/settings"}/>
                         </Menu.Item>
