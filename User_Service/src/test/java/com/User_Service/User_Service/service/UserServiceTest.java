@@ -9,25 +9,34 @@ import com.User_Service.User_Service.rri.Permission;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @Autowired
-    private UserServiceImpl service;
+    @Mock
+    private UserRepository userRepository;
 
-    @Autowired
-    private UserRepository repository;
+    @InjectMocks
+    private UserServiceImpl service;
 
     /*
     ============================ManagePermissions tests============================
@@ -59,23 +68,59 @@ public class UserServiceTest {
         ManagePermissionsRequest request = new ManagePermissionsRequest("exampleUser", null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
     }
-    /*
-        @Test
-        @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Exists")
-        public void managePermissionsValidRequestUserExists() throws Exception {
-            ManagePermissionsRequest request = new ManagePermissionsRequest("newUser", Permission.IMPORTING);
-            String expectedMessage = "Permission updated";
-            ManagePersmissionsResponse response = service.managePermissions(request);
-            Assertions.assertEquals(expectedMessage, response.getMessage());
-        }
-    */
+
+    @Test
+    @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Exists")
+    public void managePermissionsValidRequestUserExists() throws Exception {
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+        ManagePermissionsRequest request = new ManagePermissionsRequest("UserNameTest", Permission.IMPORTING);
+        ManagePersmissionsResponse response = service.managePermissions(request);
+
+        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
+        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
+        Assertions.assertNotNull(foundUser);
+
+        int count = verify(userRepository).updatePermission(foundUser.get().getId(), foundUser.get().getPermission());
+        Assertions.assertNotEquals(0,count);
+
+        Assertions.assertEquals("Permission updated", response.getMessage());
+    }
+
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Does_Not_Exist")
     public void managePermissionsValidRequestUserNotExists() throws Exception {
-        ManagePermissionsRequest request = new ManagePermissionsRequest("nonExistantUser", Permission.VIEWING);
-        String expectedMessage = "User does not exist";
+
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+        ManagePermissionsRequest request = new ManagePermissionsRequest("NotUserNameTest", Permission.VIEWING);
         ManagePersmissionsResponse response = service.managePermissions(request);
-        Assertions.assertEquals(expectedMessage, response.getMessage());
+
+        Optional<User> foundUser = verify(userRepository).findUserByUsername("NotUserNameTest");
+        Assertions.assertNull(foundUser);
+
+        Assertions.assertEquals("User does not exist", response.getMessage());
+
     }
 
     /*
@@ -166,6 +211,10 @@ public class UserServiceTest {
         RegisterResponse response = service.register(request);
         Assertions.assertEquals(expectedMessage, response.getMessage());
     }
+
+    /*
+    ============================Login tests============================
+    */
 
     @Test
     @DisplayName("If_LoginRequest_Is_Null")
