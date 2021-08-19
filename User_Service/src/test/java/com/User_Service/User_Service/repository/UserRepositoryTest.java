@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,7 +31,6 @@ public class UserRepositoryTest {
     @Test
     @DisplayName("find User By Username")
     public void findUserByUsername(){
-        //findUserByUsername(String username)
         User testUser = new User();
 
         testUser.setFirstName("FirstNameTest");
@@ -47,8 +49,6 @@ public class UserRepositoryTest {
     @Test
     @DisplayName("find User By Email")
     public void findUserByEmail(){
-        //findUserByEmail(String email)
-
         User testUser = new User();
 
         testUser.setFirstName("FirstNameTest");
@@ -65,12 +65,27 @@ public class UserRepositoryTest {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = "d043e930-7b3b-48e3-bdbe-5a3ccfb833db")
     @DisplayName("find User By Id")
-    public void findUserById(UUID userID){
-        
+    public void findUserById(){
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.VIEWING);
+
+        userRepository.save(testUser);
+
+
+        Optional<User> testUser2 = userRepository.findUserById(testUser.getId());
+        Assertions.assertEquals(testUser,testUser2.get());
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = "d043e930-7b3b-48e3-bdbe-5a3ccfb833db")
     @DisplayName("update Permission")
     public void updatePermission(@Param("id")UUID userID, @Param("perm") Permission perm){
         //updatePermission(@Param("id")UUID userID, @Param("perm") Permission perm)
@@ -88,7 +103,8 @@ public class UserRepositoryTest {
 
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = "d043e930-7b3b-48e3-bdbe-5a3ccfb833db")
     @DisplayName("update Password")
     public void updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass){
         //updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass)
