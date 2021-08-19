@@ -89,7 +89,9 @@ public class ParseServiceImpl {
 
                 parsedList.add(parsedData);
             }
-            dataRepository.saveAll(parsedList);
+            if(request.getPermission().equals("IMPORTING")) {
+                dataRepository.saveAll(parsedList);
+            }
         }
         else if(request.getType() == DataSource.NEWSARTICLE) {
             JSONArray jsonArray = obj.getJSONArray("articles");
@@ -112,7 +114,9 @@ public class ParseServiceImpl {
                 //add parsed article to list
                 parsedArticlesList.add(article);
             }
-            articleRepository.saveAll(parsedArticlesList);
+            if(request.getPermission().equals("IMPORTING")) {
+                articleRepository.saveAll(parsedArticlesList);
+            }
         }
 
         return new ParseImportedDataResponse(parsedList, parsedArticlesList);
