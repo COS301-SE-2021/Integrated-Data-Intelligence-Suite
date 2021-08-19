@@ -72,14 +72,15 @@ class UserInfoCard extends React.Component {
                             id={'meta_id'}
                             className={'user_meta_card'}
                             title={user.username}
-                            avatar={
-                                <Avatar
-                                    id={'user_avatar_pic'}
-                                    shape={'round'}
-                                >
-                                    {user.username.substring(0,1)}
-                                </Avatar>
-                            }
+                            // description={'name@example.com'}
+                            // avatar={
+                            //     <Avatar
+                            //         id={'user_avatar_pic'}
+                            //         shape={'round'}
+                            //     >
+                            //         {user.username.substring(0,1)}
+                            //     </Avatar>
+                            // }
                         />
                     </Skeleton>
                 </Card>
