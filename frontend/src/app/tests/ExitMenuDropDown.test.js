@@ -6,6 +6,7 @@ import ExitMenuDropDown from "../components/ExitMenuDropDown/ExitMenuDropDown";
 import {act, render} from "@testing-library/react";
 import {Dropdown} from "antd";
 import ExitMenuTooltip from "../components/ExitMenuTooltip/ExitMenuTooltip";
+import {BrowserRouter} from "react-router-dom";
 
 let container = null;
 beforeEach(() => {
@@ -30,13 +31,36 @@ it('Exit Menu DropDown renders correctly', () => {
 });
 
 
-it("changes value when clicked", () => {
+it("Exit menu dropdown button show the correct icon", () => {
     const onChange = jest.fn();
     act(() => {
-        render(<ExitMenuDropDown/>, container);
+        render(<BrowserRouter><ExitMenuDropDown/></BrowserRouter>, container);
     });
 
     // get a hold of the button element and check that it has the correct children
     const button = document.querySelector("#exit_menu_button");
     expect(button.childNodes.length).toBe(1);
 });
+
+
+
+/* Events */
+it("Exit menu shows up once button has been clicked", () => {
+    const onChange = jest.fn();
+    act(() => {
+        render(<BrowserRouter><ExitMenuDropDown/></BrowserRouter>, container);
+    });
+
+    // get a hold of the button element
+    const button = document.querySelector("#exit_menu_button");
+
+    //Trigger the click event
+    act(() => {
+        button.dispatchEvent(new MouseEvent("click", {bubbles: true}));
+    });
+
+    //Check that the drop down menu has shown
+    expect(button.classList.contains('ant-dropdown-open')).toBeTruthy();
+
+});
+
