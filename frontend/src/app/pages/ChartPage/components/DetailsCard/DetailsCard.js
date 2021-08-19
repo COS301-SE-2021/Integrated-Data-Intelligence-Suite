@@ -7,6 +7,12 @@ import {
 const hideDetailsBar = () =>{
     const detailsbar = document.getElementById("map_card_sidebar")
     detailsbar.style.display="none";
+
+    //Change Circle color back to normal
+    let clicked_circle = document.getElementsByClassName('chosen_circle');
+    clicked_circle[0].style.fill= "red";
+    clicked_circle[0].style.fillopacity= 0.2;
+    clicked_circle[0].classList.remove('chosen_circle');
 }
 
 class DetailsCard extends React.Component {
