@@ -14,24 +14,7 @@ import HomePage from "../../pages/HomePage/HomePage";
 
 const {Header, Footer, Sider, Content} = Layout;
 
-
-// class SideBar extends React.Component {
 export default function SideBar() {
-    // constructor(props) {
-    //     super(props);
-    //
-    //     this.state = {
-    //         collapsed: false,
-    //     };
-    // }
-
-    // onCollapse = collapsed => {
-    //     console.log("IsCOllapsed: " + collapsed);
-    //     this.setState({collapsed});
-    // };
-
-    // render() {
-    //     const {collapsed} = this.state;
     return (
         <Router>
             <Sider collapsible={false} id={'sidebar_div'}>
