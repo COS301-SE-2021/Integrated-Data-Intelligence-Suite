@@ -40,7 +40,8 @@ const LoginPage = () => {
                 const localuser = {
                     id : "b5aa283d-35d1-421d-a8c6-42dd3e115463",
                     username : "myron",
-                    isAdmin: true
+                    isAdmin: true,
+                    permission: 'IMPORTING'
                 }
                 localStorage.setItem("user", JSON.stringify(localuser));
                 history.push('/chart');
