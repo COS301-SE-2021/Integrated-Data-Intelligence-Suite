@@ -1,15 +1,17 @@
-import {Button, Card, Dropdown, Menu, Skeleton, Avatar } from "antd";
+import {Button, Card, Dropdown, Menu, Skeleton, Avatar} from "antd";
 // import Avatar from "antd/es/avatar/avatar";
 import {UpOutlined, CaretUpFilled} from "@ant-design/icons";
 import React, {Component} from 'react';
 import ExitMenuTooltip from "../ExitMenuTooltip/ExitMenuTooltip";
-const { Meta } = Card;
+import ExitMenuDropDown from "../ExitMenuDropDown/ExitMenuDropDown";
 
-function setUserName(){
+const {Meta} = Card;
+
+function setUserName() {
     const localUser = localStorage.getItem("user");
-    if(localUser){
+    if (localUser) {
         return JSON.parse(localUser);
-    }else{
+    } else {
         return "user";
     }
 }
@@ -24,34 +26,16 @@ class UserInfoCard extends React.Component {
     }
 
 
-
     render() {
         const {loading, user} = this.state;
 
         return (
             <>
-                {/*<Switch checked={!loading} onChange={this.onChange} style={{width: 40}}/>*/}
                 <Card id={'user_avatar_card'}>
                     <Skeleton loading={false} avatar active>
 
                         {/*The drop down menu that allows the user to log out or lock the app*/}
-                        <Dropdown
-                            overlay={<ExitMenuTooltip/>}
-                            placement="bottomLeft"
-                            arrow={true}
-                            trigger={'click'}
-                            className={"exit_menu_dropdown"}
-                        >
-                            <Button
-                                id={'exit_menu_button'}
-                                icon={
-                                    <CaretUpFilled
-                                        className={'exit_menu_ellipsis_icon'}
-                                    />
-                                }
-                            >
-                            </Button>
-                        </Dropdown>
+                        <ExitMenuDropDown/>
 
                         {/*The user Avatar Image*/}
                         <Meta
