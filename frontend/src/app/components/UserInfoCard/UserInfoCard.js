@@ -19,25 +19,11 @@ class UserInfoCard extends React.Component {
         super(props);
 
         this.state = {
-            loading: true,
-            collapsed: false,
             user: setUserName()
         };
     }
 
 
-    onChange = checked => {
-        this.setState({loading: !checked});
-
-    };
-
-    onCollapse(collapsed) {
-        if (this.state.collapsed) {
-
-
-        }
-
-    }
 
     render() {
         const {loading, user} = this.state;
@@ -73,14 +59,6 @@ class UserInfoCard extends React.Component {
                             className={'user_meta_card'}
                             title={user.username}
                             // description={'name@example.com'}
-                            // avatar={
-                            //     <Avatar
-                            //         id={'user_avatar_pic'}
-                            //         shape={'round'}
-                            //     >
-                            //         {user.username.substring(0,1)}
-                            //     </Avatar>
-                            // }
                         />
                     </Skeleton>
                 </Card>
