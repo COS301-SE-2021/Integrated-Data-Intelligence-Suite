@@ -6,10 +6,10 @@
 *NB!! The '[style]' and the '!important' must be used together to override the inline styling
 */
 #map_card_sidebar[style] {
-    border: 3px solid red;
+    /*border: 3px solid red;*/
     background: white;
     margin-left: 5%;
-
+    border:0;
 
     /*Overwritting the default inline styline*/
     flex: 0 1 !important;

@@ -1,6 +1,6 @@
 import {Button, Card, Dropdown, Menu, Skeleton, Avatar } from "antd";
 // import Avatar from "antd/es/avatar/avatar";
-import {UpOutlined} from "@ant-design/icons";
+import {UpOutlined, CaretUpFilled} from "@ant-design/icons";
 import React, {Component} from 'react';
 import ExitMenuTooltip from "../ExitMenuTooltip/ExitMenuTooltip";
 const { Meta } = Card;
@@ -59,7 +59,7 @@ class UserInfoCard extends React.Component {
                             <Button
                                 id={'exit_menu_button'}
                                 icon={
-                                    <UpOutlined
+                                    <CaretUpFilled
                                         className={'exit_menu_ellipsis_icon'}
                                     />
                                 }

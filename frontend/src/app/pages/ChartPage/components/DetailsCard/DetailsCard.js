@@ -17,7 +17,7 @@ class DetailsCard extends React.Component {
             <>
                 <Card
                     id={'details_card'}
-                    title="Details Card Title"
+                    title=""
                     extra={<p onClick={hideDetailsBar}>close</p>}
                 >
 
@@ -30,23 +30,23 @@ class DetailsCard extends React.Component {
                     >
                         <Descriptions.Item
                             className={'map_1'}
-                            label="Statistic 1"
+                            label="Entity Name"
                         >
-                            89%
+                            Individual
                         </Descriptions.Item>
 
                         <Descriptions.Item
                             className={'map_1'}
-                            label="Statistic 2"
+                            label="Entity Type"
                         >
-                            1810K
+                            Strong
                         </Descriptions.Item>
 
                         <Descriptions.Item
                             className={'map_1'}
-                            label="Statistic 3"
+                            label="Average Likes"
                         >
-                            Pretoria, Hatfield
+                            46776
                         </Descriptions.Item>
                     </Descriptions>
 
