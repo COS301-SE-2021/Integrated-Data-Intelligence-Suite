@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DetailsCard renders correctly 1`] = `
+exports[`Exit Menu DropDown renders correctly 1`] = `
 <button
   className="ant-btn ant-btn-icon-only ant-dropdown-trigger exit_menu_dropdown"
   id="exit_menu_button"
