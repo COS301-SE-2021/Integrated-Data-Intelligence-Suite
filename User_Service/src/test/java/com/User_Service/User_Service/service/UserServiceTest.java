@@ -9,25 +9,34 @@ import com.User_Service.User_Service.rri.Permission;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @Autowired
-    private UserServiceImpl service;
+    @Mock
+    private UserRepository userRepository;
 
-    @Autowired
-    private UserRepository repository;
+    @InjectMocks
+    private UserServiceImpl service;
 
     /*
     ============================ManagePermissions tests============================
@@ -59,23 +68,59 @@ public class UserServiceTest {
         ManagePermissionsRequest request = new ManagePermissionsRequest("exampleUser", null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
     }
-    /*
-        @Test
-        @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Exists")
-        public void managePermissionsValidRequestUserExists() throws Exception {
-            ManagePermissionsRequest request = new ManagePermissionsRequest("newUser", Permission.IMPORTING);
-            String expectedMessage = "Permission updated";
-            ManagePersmissionsResponse response = service.managePermissions(request);
-            Assertions.assertEquals(expectedMessage, response.getMessage());
-        }
-    */
+
+    @Test
+    @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Exists")
+    public void managePermissionsValidRequestUserExists() throws Exception {
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+        ManagePermissionsRequest request = new ManagePermissionsRequest("UserNameTest", Permission.IMPORTING);
+        ManagePersmissionsResponse response = service.managePermissions(request);
+
+        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
+        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
+        Assertions.assertNotNull(foundUser);
+
+        int count = verify(userRepository).updatePermission(foundUser.get().getId(), foundUser.get().getPermission());
+        Assertions.assertNotEquals(0,count);
+
+        Assertions.assertEquals("Permission updated", response.getMessage());
+    }
+
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Does_Not_Exist")
     public void managePermissionsValidRequestUserNotExists() throws Exception {
-        ManagePermissionsRequest request = new ManagePermissionsRequest("nonExistantUser", Permission.VIEWING);
-        String expectedMessage = "User does not exist";
+
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+        ManagePermissionsRequest request = new ManagePermissionsRequest("NotUserNameTest", Permission.VIEWING);
         ManagePersmissionsResponse response = service.managePermissions(request);
-        Assertions.assertEquals(expectedMessage, response.getMessage());
+
+        Optional<User> foundUser = verify(userRepository).findUserByUsername("NotUserNameTest");
+        Assertions.assertNull(foundUser);
+
+        Assertions.assertEquals("User does not exist", response.getMessage());
+
     }
 
     /*
@@ -129,43 +174,105 @@ public class UserServiceTest {
         RegisterRequest request = new RegisterRequest("username", "firstname", "lastname", "password", null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.register(request));
     }
-    /*
-        @Test
-        @DisplayName("If_New_User_Username_Already_Taken")
-        public void registerUsernameTaken() throws Exception {
-            RegisterRequest request = new RegisterRequest("takenTest1", "firstname", "lastname", "password", "email");
-            String expectedMessage = "Username has been taken";
-            RegisterResponse response = service.register(request);
-            Assertions.assertEquals(expectedMessage, response.getMessage());
-        }
-        @Test
-        @DisplayName("If_New_User_Email_Already_Taken")
-        public void registerEmailTaken() throws Exception {
-            int max = 10;
-            int min = 1;
-            int range = max - min + 1;
-            int usernameNum = (int)(Math.random() * range) + min;
-            String randomUsername = "newUser" + usernameNum;
-            RegisterRequest request = new RegisterRequest(randomUsername, "firstname", "lastname", "password", "takenEmail@gmail.com");
-            String expectedMessage = "This email has already been registered";
-            RegisterResponse response = service.register(request);
-            Assertions.assertEquals(expectedMessage, response.getMessage());
-        }
-        */
+
+    @Test
+    @DisplayName("If_New_User_Username_Already_Taken")
+    public void registerUsernameTaken() throws Exception {
+
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+
+        RegisterRequest request = new RegisterRequest("UserNameTest", "FirstNameTestDifferent", "LastNameTestDifferent", "emailDifferent@test.com", "passwordTestDifferent");
+        RegisterResponse response = service.register(request);
+
+        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
+        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
+        Assertions.assertNotNull(foundUser);
+
+        Assertions.assertEquals("Username has been taken", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_New_User_Email_Already_Taken")
+    public void registerEmailTaken() throws Exception {
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+        RegisterRequest request = new RegisterRequest("UserNameTestDifferent", "FirstNameTestDifferent", "LastNameTestDifferent", "email@test.com", "passwordTestDifferent");
+        RegisterResponse response = service.register(request);
+
+        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
+        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
+        Assertions.assertNotNull(foundUser);
+
+        Assertions.assertEquals("This email has already been registered", response.getMessage());
+    }
+
     @Test
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
-        int max = 100;
-        int min = 1;
-        int range = max - min + 1;
-        int randomNum = (int)(Math.random() * range) + min;
-        String randomUsername = "newUser" + randomNum;
-        String randomEmail = "newEmail" + randomNum + "@gmail.com";
-        RegisterRequest request = new RegisterRequest(randomUsername, "firstname", "lastname", "password", randomEmail);
-        String expectedMessage = "Registration successful";
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.VIEWING);
+
+        //test
+        RegisterRequest request = new RegisterRequest(
+                testUser.getUsername(),
+                testUser.getFirstName(),
+                testUser.getLastName(),
+                testUser.getPassword(),
+                testUser.getEmail());
         RegisterResponse response = service.register(request);
-        Assertions.assertEquals(expectedMessage, response.getMessage());
+
+        /*String password = request.getPassword();
+        String hashedPass;
+        //Hashing the password
+        int iterations = 1000;
+        char[] chars = password.toCharArray();
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+
+        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] hash = skf.generateSecret(spec).getEncoded();
+        hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);*/
+
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userArgumentCaptor.capture());
+        User testUser2 = userArgumentCaptor.getValue();
+
+        Assertions.assertEquals(testUser,testUser2);
+        Assertions.assertEquals("Registration successful", response.getMessage());
     }
+
+    /*
+    ============================Login tests============================
+    */
 
     @Test
     @DisplayName("If_LoginRequest_Is_Null")
@@ -197,27 +304,69 @@ public class UserServiceTest {
     @Test
     @DisplayName("Login_If_Email_Does_Not_Exist")
     public void loginEmailNotExist() throws Exception {
+        //test
+
         LoginRequest request = new LoginRequest("missingEmail@notexist.com", "password");
-        String expected = "The email does not exist";
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(expected, response.getMessage());
+
+        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+        Assertions.assertNull(foundUser);
+
+        Assertions.assertEquals("The email does not exist", response.getMessage());
+
     }
-    /*
+
     @Test
     @DisplayName("Login_Existing_Email_Wrong_Password")
     public void loginWrongPassword() throws Exception {
-        LoginRequest request = new LoginRequest("testEmail2@test.test", "wrongpass");
-        String expected = "Incorrect password";
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+
+        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(expected, response.getMessage());
+
+        Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
+        Assertions.assertNotNull(foundUser);
+
+        Assertions.assertEquals("Incorrect password", response.getMessage());
+
     }
+
     @Test
     @DisplayName("Login_Successful")
     public void loginSuccessful() throws Exception {
-        LoginRequest request = new LoginRequest("testEmail2@test.test", "pass");
-        String expected = "Successfully logged in";
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+
+        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(expected, response.getMessage());
+
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(testUser));
+        Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
+        Assertions.assertNotNull(foundUser);
+
+        Assertions.assertEquals("Incorrect password", response.getMessage());
+
     }
-    */
+
 }

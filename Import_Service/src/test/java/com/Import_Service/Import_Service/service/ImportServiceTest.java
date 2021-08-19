@@ -4,24 +4,26 @@ import com.Import_Service.Import_Service.exception.InvalidNewsRequestException;
 import com.Import_Service.Import_Service.exception.InvalidTwitterRequestException;
 import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
 import com.Import_Service.Import_Service.request.ImportTwitterRequest;
-import org.junit.Assert;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ImportServiceTest {
 
-    @Autowired
+    @InjectMocks
     private ImportServiceImpl service;
 
     @BeforeEach

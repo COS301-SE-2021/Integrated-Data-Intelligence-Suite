@@ -31,6 +31,9 @@ class HomePage extends Component {
     }
 
     render() {
+        if(true){
+            return <Redirect to={'/chart'}/>
+        }
         if (this.state.user) {
             return (
                 <>

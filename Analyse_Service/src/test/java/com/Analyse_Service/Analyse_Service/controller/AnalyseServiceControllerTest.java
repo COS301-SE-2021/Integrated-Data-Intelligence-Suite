@@ -64,28 +64,48 @@ public class AnalyseServiceControllerTest {
     @Test
     @DisplayName("When analyze is requested")
     public void analyzeRequest() throws Exception {
-
-        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Analyse/analyzeData");
-        //MvcResult mvcResult = mockMvc.perform(requestBuilder);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
-
-        //mockMvc.perform( requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @DisplayName("When analyzeRequest is Null")
     public void analyzeDataNullRequest() throws Exception {
 
-        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Analyse/analyzeData");
-        //MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-
         ArrayList<ParsedData> dataList = new ArrayList<>();
         ParsedData parsedData = new ParsedData();
         dataList.add(parsedData);
 
         AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList);
+
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(analyseRequest);
+
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null);
+        when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        AnalyseDataResponse someClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);
+
+        Assertions.assertNotNull(someClass);
+
+        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Analyse/analyzeData");
+        //MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+
+        //ObjectReader or = mapper.reader();
+        //String requestJson=or.readValue(result.andReturn().getResponse().getContentAsString(),AnalyseDataResponse.class)
+
+
         //AnalyseDataRequest analyseRequest = Mockito.mock(AnalyseDataRequest.class);
         //analyseRequest.setDataList(analyseRequest);
 
@@ -99,18 +119,14 @@ public class AnalyseServiceControllerTest {
 
         //ResponseEntity<AnalyseDataResponse> result = this.testRestTemplate.postForEntity("/Analyse/analyzeData", request, AnalyseDataResponse.class);
 
-        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
-        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+
         //mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(analyseRequest);
 
         //AnalyseDataResponse analyseDataResponse = Mockito.mock(AnalyseDataResponse.class, withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS));
-        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse();
-        when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+
 
         //OngoingStubbing<AnalyseDataResponse> ongoingStubbing =
         //AnalyseDataResponse analyseDataResponse =  mockChannel
@@ -123,10 +139,7 @@ public class AnalyseServiceControllerTest {
         OngoingStubbing<AnalyseDataResponse> ongoingStubbing =  when(service.analyzeData(any(AnalyseDataRequest.class)));
         ongoingStubbing.thenReturn(response);*/
 
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+
                 //.andExpect(resulte -> Assertions.assertTrue(resulte.getResolvedException() instanceof InvalidRequestException));
                 //.andExpect(result2 -> Assertions.assertThrows(InvalidRequestException.class, () -> result2.getResolvedException()))
                 //.andExpect(result -> Assertions.assertSame(result.getResolvedException(),  CoreMatchers.instanceOf(InvalidRequestException.class)));
@@ -140,11 +153,7 @@ public class AnalyseServiceControllerTest {
 
         Assertions.assertNotNull(testModel);*/
 
-        AnalyseDataResponse someClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);
-        //ObjectReader or = mapper.reader();
-        //String requestJson=or.readValue(result.andReturn().getResponse().getContentAsString(),AnalyseDataResponse.class)
 
-        Assertions.assertNotNull(someClass);
 
         /*Assertions.assertThrows(InvalidRequestException.class,() ->mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
                 .contentType(MediaType.APPLICATION_JSON)
