@@ -141,7 +141,7 @@
 
 /*When you Click on the Downward arrow icon change color*/
 button#exit_menu_button.ant-btn.ant-btn-icon-only.ant-dropdown-trigger.ant-dropdown-open >
-span.anticon.anticon-up.exit_menu_ellipsis_icon > svg{
+span.anticon.anticon-caret-up.exit_menu_ellipsis_icon > svg{
     color: #5773FA;
     background: transparent;
 }

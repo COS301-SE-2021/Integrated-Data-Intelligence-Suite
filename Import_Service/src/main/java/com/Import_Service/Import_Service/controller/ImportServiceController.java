@@ -52,9 +52,9 @@ public class ImportServiceController {
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
     @PostMapping(value = "/getTwitterDataJson")
-    public ImportTwitterResponse getTwitterDataJson(RequestEntity<ImportTwitterRequest> requestEntity) throws Exception {
+    public @ResponseBody ImportTwitterResponse getTwitterDataJson(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        ImportTwitterRequest request = requestEntity.getBody();
+        //ImportTwitterRequest request = requestEntity.getBody();
         return service.getTwitterDataJson(request);
     }
 
@@ -65,8 +65,8 @@ public class ImportServiceController {
      * @return ImportTwitterResponse. This object contains imported data which has been processed by Import-Service.
      */
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ImportTwitterResponse importDatedData(RequestEntity<ImportTwitterRequest> requestEntity) {
-        ImportTwitterRequest request = requestEntity.getBody();
+    public @ResponseBody ImportTwitterResponse importDatedData(@RequestBody ImportTwitterRequest request) {
+        //ImportTwitterRequest request = requestEntity.getBody();
 
         try{
             return service.importDatedData(request);

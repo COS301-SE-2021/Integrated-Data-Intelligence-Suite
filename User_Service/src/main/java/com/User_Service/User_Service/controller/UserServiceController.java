@@ -7,10 +7,7 @@ import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/User")
@@ -25,32 +22,32 @@ public class UserServiceController {
      * @throws Exception Thrown when any exceptions are encountered
      */
     @PostMapping(value = "/changepermission")
-    public ManagePersmissionsResponse managePermissions(RequestEntity<ManagePermissionsRequest> requestEntity) throws Exception {
-        ManagePermissionsRequest request = requestEntity.getBody();
+    public @ResponseBody ManagePersmissionsResponse managePermissions(@RequestBody ManagePermissionsRequest request) throws Exception {
+        //ManagePermissionsRequest request = requestEntity.getBody();
         return service.managePermissions(request);
     }
 
     @GetMapping(value = "/getAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
-    public GetAllUsersResponse getAllUsers(RequestEntity<GetAllUsersRequest> requestEntity) throws Exception {
-        GetAllUsersRequest request = requestEntity.getBody();
+    public @ResponseBody GetAllUsersResponse getAllUsers(@PathVariable GetAllUsersRequest request) throws Exception {
+        //GetAllUsersRequest request = requestEntity.getBody();
         return service.getAllUsers(request);
     }
 
     @PostMapping(value = "/getUser" , produces = {MediaType.APPLICATION_JSON_VALUE})
-    public GetUserResponse getUser(RequestEntity<GetUserRequest> requestEntity) throws Exception{
-        GetUserRequest request = requestEntity.getBody();
+    public @ResponseBody GetUserResponse getUser(@RequestBody GetUserRequest request) throws Exception{
+        //GetUserRequest request = requestEntity.getBody();
         return service.getUser(request);
     }
 
     @PostMapping(value = "/register")
-    public RegisterResponse register(RequestEntity<RegisterRequest> requestEntity) throws Exception {
-        RegisterRequest request = requestEntity.getBody();
+    public @ResponseBody RegisterResponse register(@RequestBody RegisterRequest request) throws Exception {
+        //RegisterRequest request = requestEntity.getBody();
         return service.register(request);
     }
 
     @PostMapping(value = "/login")
-    public LoginResponse login(RequestEntity<LoginRequest> requestEntity) throws Exception {
-        LoginRequest request = requestEntity.getBody();
+    public @ResponseBody LoginResponse login(@RequestBody LoginRequest request) throws Exception {
+        //LoginRequest request = requestEntity.getBody();
         return service.login(request);
     }
 }

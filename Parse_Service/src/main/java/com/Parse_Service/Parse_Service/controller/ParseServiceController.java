@@ -25,8 +25,8 @@ public class ParseServiceController {
      * @throws Exception This is thrown if exception caught in Parse-Service.
      */
     @PostMapping("/parseImportedData")
-    public ParseImportedDataResponse parseImportedData(RequestEntity<ParseImportedDataRequest> requestEntity) throws Exception {
-        ParseImportedDataRequest request = requestEntity.getBody();
+    public @ResponseBody ParseImportedDataResponse parseImportedData(@RequestBody ParseImportedDataRequest request) throws Exception {
+        //ParseImportedDataRequest request = requestEntity.getBody();
         return service.parseImportedData(request);
     }
 

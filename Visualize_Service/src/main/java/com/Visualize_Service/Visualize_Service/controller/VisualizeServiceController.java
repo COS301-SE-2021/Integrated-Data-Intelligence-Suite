@@ -5,9 +5,7 @@ import com.Visualize_Service.Visualize_Service.response.VisualizeDataResponse;
 import com.Visualize_Service.Visualize_Service.service.VisualizeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/Visualize")
@@ -22,8 +20,8 @@ public class VisualizeServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/visualizeData")
-    public VisualizeDataResponse visualizeData(RequestEntity<VisualizeDataRequest> requestEntity) throws Exception{
-        VisualizeDataRequest request = requestEntity.getBody();
+    public @ResponseBody VisualizeDataResponse visualizeData(@RequestBody VisualizeDataRequest request) throws Exception{
+        //VisualizeDataRequest request = requestEntity.getBody();
         return service.visualizeData(request);
     }
 }
