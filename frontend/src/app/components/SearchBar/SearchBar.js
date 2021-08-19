@@ -5,6 +5,16 @@ import template_json from "../../pages/ChartPage/resources/graphStructures/messa
 
 const {Search} = Input;
 
+function getLocalUser() {
+    const localUser = localStorage.getItem("user");
+    if (localUser) {
+        // console.log("user logged in is ", localUser)
+        return JSON.parse(localUser);
+    } else {
+        return null;
+    }
+}
+
 class SearchBar extends Component {
 
     // showLoadingIcon = false;
@@ -13,6 +23,7 @@ class SearchBar extends Component {
         this.state = {showLoadingIcon: false};
         this.onSearch = this.onSearch.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
+        this.state.user = getLocalUser();
     }
 
     handleTextChange(some_json_data) {
@@ -27,11 +38,17 @@ class SearchBar extends Component {
 
         //Show loading icon while API request is waiting for data
         this.setState((prevState) => ({showLoadingIcon: true}))
+        const obj = {
+            permission : this.state.user.permission,
+            username : this.state.user.username
+        }
         const requestOptions = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'}
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(obj)
         };
         const url = '/main/' + values;
+        // console.log(requestOptions)
         fetch(url, requestOptions)
             .then(response => {
                 return response.json()
@@ -40,7 +57,7 @@ class SearchBar extends Component {
             this.handleTextChange(json);
             this.setState((prevState) => ({showLoadingIcon: false}))
 
-            //JSON response from API
+            // JSON response from API
         });
 
     }

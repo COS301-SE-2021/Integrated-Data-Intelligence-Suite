@@ -265,21 +265,21 @@ public class ParseServiceTest {
     @Test
     @DisplayName("If_Request_JSONString_Is_Null")
     public void parseImportedDataJsonStringNull() {
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, null);
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, null, "");
         Assertions.assertThrows(InvalidRequestException.class, () -> service.parseImportedData(request));
     }
 
     @Test
     @DisplayName("If_Request_Type_Is_Null")
     public void parseImportedDataTypeNull() {
-        ParseImportedDataRequest request = new ParseImportedDataRequest(null, "");
+        ParseImportedDataRequest request = new ParseImportedDataRequest(null, "", "");
         Assertions.assertThrows(InvalidRequestException.class, () -> service.parseImportedData(request));
     }
 
     @Test
     @DisplayName("Run_With_Mock_Twitter_Data")
     public void parseImportedDataMockTwitterData() throws Exception {
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, mockJsonData);
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, mockJsonData, "VIEWING");
         ParseImportedDataResponse response = service.parseImportedData(request);
         ParsedData data = response.getDataList().get(0);
         String expectedText = "RT @LeGhettoSnob_: All I can think about is how the #FeesMustFall  movement deserves it's own day of commemoration.";
@@ -294,7 +294,7 @@ public class ParseServiceTest {
     @Test
     @DisplayName("Test_With_Mock_News_Data")
     public void parseImportedDataMockNewsData() throws Exception {
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.NEWSARTICLE, mockArticleData);
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.NEWSARTICLE, mockArticleData, "VIEWING");
         ParseImportedDataResponse response = service.parseImportedData(request);
         ParsedArticle data = response.getArticleList().get(0);
         String expectedTitle = "A Field Guide for Nature-Resistant Nerds";

@@ -14,16 +14,48 @@ import "./NetworkGraph/NetworkGraph.css";
 import UserInfoCard from "../../../components/SideBar/UserInfoCard";
 import SearchBar from "../../../components/SearchBar/SearchBar";
 import TimelineGraph from "./TimelineGraph/TimelineGraph";
+import useGet from "../../../functions/useGet";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
 
+function retrieveData(){
+    fetch('/retrievePrevious')
+        .then(res =>{
+            if(!res.ok){
+                return null;
+            }else{
+                return res.json();
+            }
+        })
+
+}
+
+function getLocalUser() {
+    const localUser = localStorage.getItem("user");
+    if (localUser) {
+        console.log("user logged in is ", localUser)
+        return JSON.parse(localUser);
+    } else {
+        return null;
+    }
+}
+
 class ChartPage extends Component {
-    constructor(props){
+constructor(props){
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.state = {text: ''};
+        this.state = {text: ''}
+        this.state.user= getLocalUser();
+
     }
+
+
+    // componentDidMount() {
+    //     // this.state.text=retrieveData()
+    //
+    // }
+
 
     handleTextChange(newText){
         this.setState(({text: newText}));

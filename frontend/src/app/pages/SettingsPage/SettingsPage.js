@@ -36,7 +36,7 @@ function getLocalUser() {
 
 const SettingsPage = () => {
 
-    const [component, setComponent] = useState("profile");
+    const [component, setComponent] = useState("Permissions");
     const [user, setUser] = useState(getLocalUser());
     const history = useHistory();
 

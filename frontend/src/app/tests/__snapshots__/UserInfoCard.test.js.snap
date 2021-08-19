@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="ant-card ant-card-bordered"
+  id="user_avatar_card"
+>
+  <div
+    className="ant-card-body"
+    style={Object {}}
+  >
+    <button
+      className="ant-btn ant-btn-icon-only ant-dropdown-trigger"
+      id="exit_menu_button"
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <span
+        aria-label="up"
+        className="anticon anticon-up exit_menu_ellipsis_icon"
+        role="img"
+      >
+        <svg
+          aria-hidden="true"
+          data-icon="up"
+          fill="currentColor"
+          focusable="false"
+          height="1em"
+          viewBox="64 64 896 896"
+          width="1em"
+        >
+          <path
+            d="M890.5 755.3L537.9 269.2c-12.8-17.6-39-17.6-51.7 0L133.5 755.3A8 8 0 00140 768h75c5.1 0 9.9-2.5 12.9-6.6L512 369.8l284.1 391.6c3 4.1 7.8 6.6 12.9 6.6h75c6.5 0 10.3-7.4 6.5-12.7z"
+          />
+        </svg>
+      </span>
+    </button>
+    <div
+      className="ant-card-meta user_meta_card"
+      id="meta_id"
+    />
+  </div>
+</div>
+`;

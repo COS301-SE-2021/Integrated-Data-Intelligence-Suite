@@ -161,6 +161,12 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/retrievePrevious", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
+        return null;
+    }
+
 
     /**
      * This method is used to facilitate communication to all the Services.
@@ -170,12 +176,14 @@ public class GatewayServiceController {
      *     This object contains data representing a response from all the services combined.
      * @throws Exception This is thrown if exception caught in any of the Services.
      */
-    @GetMapping(value = "/main/{key}", produces = "application/json")
+    @PostMapping(value = "/main/{key}", produces = "application/json")
     @CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key) throws Exception {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key, @RequestBody SearchRequest request) throws Exception {
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
+        System.out.println(request.getUsername());
+        System.out.println(request.getPermission());
         //ArrayList <String> outputData = new ArrayList<>();
         HttpHeaders requestHeaders;
 
@@ -208,7 +216,7 @@ public class GatewayServiceController {
 
         /*********************PARSE*************************/
 
-        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());//    DataSource.TWITTER,ImportResponse. getJsonData());
         ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
 
 
@@ -298,7 +306,7 @@ public class GatewayServiceController {
             System.out.println(".........................Import completed successfully..................\n\n\n");
 
 
-            ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, res.getJsonData());
+            ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, res.getJsonData(), "VIEWING");
             ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
 
             if(!parseResponse.getFallback()) {
