@@ -251,7 +251,7 @@ public class ParseServiceControllerTest {
     public void parseRequest() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/Parse/parseImportedData")
-                .content(asJsonString(new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData)))
+                .content(asJsonString(new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "VIEWING")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());

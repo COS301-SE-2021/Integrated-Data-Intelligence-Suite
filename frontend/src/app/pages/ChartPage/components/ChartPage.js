@@ -34,7 +34,7 @@ function retrieveData(){
 function getLocalUser() {
     const localUser = localStorage.getItem("user");
     if (localUser) {
-        // console.log("user logged in is ", localUser)
+        console.log("user logged in is ", localUser)
         return JSON.parse(localUser);
     } else {
         return null;
@@ -45,7 +45,7 @@ class ChartPage extends Component {
 constructor(props){
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.state.text= '';
+        this.state = {text: ''}
         this.state.user= getLocalUser();
 
     }
