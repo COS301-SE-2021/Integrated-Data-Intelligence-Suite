@@ -179,7 +179,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="confirmpassword"
+                    // name="confirmpassword"
                     label={'Confirm password'}
                 >
                     <Input.Password

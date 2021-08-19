@@ -417,7 +417,6 @@ exports[`renders correctly 1`] = `
         >
           <label
             className=""
-            htmlFor="confirmpassword"
             title="Confirm password"
           >
             Confirm password

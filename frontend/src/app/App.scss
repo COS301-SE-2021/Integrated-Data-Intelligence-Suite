@@ -3,7 +3,7 @@
 
 //Side Bar and its child Components
 @import url("components/SideBar/SideBar.css");
-@import url("components/SideBar/UserInfoCard.css");
+@import url("components/UserInfoCard/UserInfoCard.css");
 
 //Header and all its child components
 @import url("../styles/Header/Header.css");
@@ -25,7 +25,7 @@
 @import "../styles/LoginPage/login.css";
 
 //Register Page
-//@import "../styles/RegisterPage/registerPage.css";
+@import "../styles/RegisterPage/registerPage.css";
 
 
 //Permissions Page
@@ -46,6 +46,8 @@
 @import 'pages/ChartPage/components/DetailsCard/DetailsCard.css';
 
 
+
+@import 'components/ExitMenuTooltip/ExitMenuTooltip.css';
 
 
 

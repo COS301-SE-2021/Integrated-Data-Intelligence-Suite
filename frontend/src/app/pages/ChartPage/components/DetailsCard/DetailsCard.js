@@ -7,6 +7,12 @@ import {
 const hideDetailsBar = () =>{
     const detailsbar = document.getElementById("map_card_sidebar")
     detailsbar.style.display="none";
+
+    //Change Circle color back to normal
+    let clicked_circle = document.getElementsByClassName('chosen_circle');
+    clicked_circle[0].style.fill= "red";
+    clicked_circle[0].style.fillopacity= 0.2;
+    clicked_circle[0].classList.remove('chosen_circle');
 }
 
 class DetailsCard extends React.Component {
@@ -17,7 +23,7 @@ class DetailsCard extends React.Component {
             <>
                 <Card
                     id={'details_card'}
-                    title="Details Card Title"
+                    title=""
                     extra={<p onClick={hideDetailsBar}>close</p>}
                 >
 
@@ -30,23 +36,23 @@ class DetailsCard extends React.Component {
                     >
                         <Descriptions.Item
                             className={'map_1'}
-                            label="Statistic 1"
+                            label="Entity Name"
                         >
-                            89%
+                            Individual
                         </Descriptions.Item>
 
                         <Descriptions.Item
                             className={'map_1'}
-                            label="Statistic 2"
+                            label="Entity Type"
                         >
-                            1810K
+                            Strong
                         </Descriptions.Item>
 
                         <Descriptions.Item
                             className={'map_1'}
-                            label="Statistic 3"
+                            label="Average Likes"
                         >
-                            Pretoria, Hatfield
+                            46776
                         </Descriptions.Item>
                     </Descriptions>
 

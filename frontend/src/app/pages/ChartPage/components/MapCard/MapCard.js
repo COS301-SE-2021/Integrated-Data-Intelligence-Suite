@@ -83,7 +83,7 @@ function MapCard(props) {
         <>
             <Card
                 id={'map_card'}
-                title="Map Card Title"
+                title="Map"
                 extra={<p></p>}
             >
                 {/*<p>Card content</p>*/}

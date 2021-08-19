@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import {Typography} from 'antd';
 import {Redirect, Route, Switch} from "react-router-dom";
-import UserInfoCard from "../../components/SideBar/UserInfoCard";
+import UserInfoCard from "../../components/UserInfoCard/UserInfoCard";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -31,6 +31,9 @@ class HomePage extends Component {
     }
 
     render() {
+        if(true){
+            return <Redirect to={'/chart'}/>
+        }
         if (this.state.user) {
             return (
                 <>
