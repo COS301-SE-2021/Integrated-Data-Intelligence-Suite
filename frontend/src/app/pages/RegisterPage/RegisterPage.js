@@ -80,6 +80,7 @@ const RegisterPage = () => {
     });
 
     return (
+        <div className={"background gradient register"}>
         <Card
             id={"register_card"}
             className={"loginCard"}
@@ -221,6 +222,7 @@ const RegisterPage = () => {
                 {/*</Form.Item>*/}
             </form>
         </Card>
+        </div>
     );
 };
 
