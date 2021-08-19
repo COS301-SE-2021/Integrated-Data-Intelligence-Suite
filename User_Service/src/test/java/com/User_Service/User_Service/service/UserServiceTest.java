@@ -304,27 +304,69 @@ public class UserServiceTest {
     @Test
     @DisplayName("Login_If_Email_Does_Not_Exist")
     public void loginEmailNotExist() throws Exception {
+        //test
+
         LoginRequest request = new LoginRequest("missingEmail@notexist.com", "password");
-        String expected = "The email does not exist";
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(expected, response.getMessage());
+
+        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+        Assertions.assertNull(foundUser);
+
+        Assertions.assertEquals("The email does not exist", response.getMessage());
+
     }
-    /*
+
     @Test
     @DisplayName("Login_Existing_Email_Wrong_Password")
     public void loginWrongPassword() throws Exception {
-        LoginRequest request = new LoginRequest("testEmail2@test.test", "wrongpass");
-        String expected = "Incorrect password";
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+
+        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(expected, response.getMessage());
+
+        Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
+        Assertions.assertNotNull(foundUser);
+
+        Assertions.assertEquals("Incorrect password", response.getMessage());
+
     }
+
     @Test
     @DisplayName("Login_Successful")
     public void loginSuccessful() throws Exception {
-        LoginRequest request = new LoginRequest("testEmail2@test.test", "pass");
-        String expected = "Successfully logged in";
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.IMPORTING);
+
+        userRepository.save(testUser);
+
+        //test
+
+        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
         LoginResponse response = service.login(request);
-        Assertions.assertEquals(expected, response.getMessage());
+
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(testUser));
+        Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
+        Assertions.assertNotNull(foundUser);
+
+        Assertions.assertEquals("Incorrect password", response.getMessage());
+
     }
-    */
+
 }
