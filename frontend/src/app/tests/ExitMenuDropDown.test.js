@@ -1,7 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import NetworkGraphCard from '../pages/ChartPage/components/NetworkGraph/NetworkGraphCard';
+import DetailsCard from '../pages/ChartPage/components/DetailsCard/DetailsCard' ;
 import {unmountComponentAtNode} from "react-dom";
+import ExitMenuDropDown from "../components/ExitMenuDropDown/ExitMenuDropDown";
 
 let container = null;
 beforeEach(() => {
@@ -19,9 +20,9 @@ afterEach(() => {
 
 
 
-it('renders correctly', () => {
+it('DetailsCard renders correctly', () => {
     const tree = renderer
-        .create(<NetworkGraphCard/>)
+        .create(<ExitMenuDropDown/>)
         .toJSON();
     expect(tree).toMatchSnapshot();
 });
