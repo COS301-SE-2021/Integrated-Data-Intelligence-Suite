@@ -2,6 +2,7 @@ package com.User_Service.User_Service.repository;
 
 import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.rri.Permission;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,9 +23,22 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("Fetch AIModel by type")
+    @DisplayName("find User By Username")
     public void findUserByUsername(){
         //findUserByUsername(String username)
+        User testUser = new User();
+
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("passwordTest");
+        testUser.setPermission(Permission.VIEWING);
+
+        userRepository.save(testUser);
+
+        Optional<User> testUser2 = userRepository.findUserByUsername("UserNameTest");
+        Assertions.assertEquals(testUser,testUser);
     }
 
     @Test
