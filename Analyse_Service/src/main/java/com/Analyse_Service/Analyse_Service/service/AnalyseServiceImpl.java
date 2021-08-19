@@ -66,6 +66,13 @@ public class AnalyseServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList of requested parsedData is null");
         }
+        else{
+            for(int i =0; i<request.getDataList().size(); i++) {
+                if (request.getDataList().get(i) == null) {
+                    throw new InvalidRequestException("DataList inside data of requested parsedData is null");
+                }
+            }
+        }
 
         /*******************Setup Data******************/
 
