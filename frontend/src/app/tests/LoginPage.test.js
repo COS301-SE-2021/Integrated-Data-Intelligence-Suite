@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import '../Mocks/matchMedia.mock';
 import LoginPage from "../pages/LoginPage/LoginPage";
 import {BrowserRouter} from "react-router-dom";
 
