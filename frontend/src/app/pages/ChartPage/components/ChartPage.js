@@ -11,7 +11,7 @@ import MapCard from "./MapCard/MapCard";
 import DetailsCard from "./DetailsCard/DetailsCard";
 import NetworkGraphCard from "./NetworkGraph/NetworkGraphCard";
 import "./NetworkGraph/NetworkGraph.css";
-import UserInfoCard from "../../../components/SideBar/UserInfoCard";
+import UserInfoCard from "../../../components/UserInfoCard/UserInfoCard";
 import SearchBar from "../../../components/SearchBar/SearchBar";
 import TimelineGraph from "./TimelineGraph/TimelineGraph";
 import useGet from "../../../functions/useGet";

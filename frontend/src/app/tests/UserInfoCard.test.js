@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import UserInfoCard from "../components/SideBar/UserInfoCard";
+import UserInfoCard from "../components/UserInfoCard/UserInfoCard";
 
 it('renders correctly', () => {
     const tree = renderer

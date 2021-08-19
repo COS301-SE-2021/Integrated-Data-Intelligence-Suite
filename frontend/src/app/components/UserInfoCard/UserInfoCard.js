@@ -2,7 +2,7 @@ import {Button, Card, Dropdown, Menu, Skeleton, Avatar } from "antd";
 // import Avatar from "antd/es/avatar/avatar";
 import {UpOutlined} from "@ant-design/icons";
 import React, {Component} from 'react';
-import ExitMenuTooltip from "../ExitMenuTooltip";
+import ExitMenuTooltip from "../ExitMenuTooltip/ExitMenuTooltip";
 const { Meta } = Card;
 
 function setUserName(){
@@ -48,13 +48,13 @@ class UserInfoCard extends React.Component {
                 <Card id={'user_avatar_card'}>
                     <Skeleton loading={false} avatar active>
 
-
                         {/*The drop down menu that allows the user to log out or lock the app*/}
                         <Dropdown
                             overlay={<ExitMenuTooltip/>}
-                            placement="topCenter"
+                            placement="bottomLeft"
                             arrow={true}
                             trigger={'click'}
+                            className={"exit_menu_dropdown"}
                         >
                             <Button
                                 id={'exit_menu_button'}

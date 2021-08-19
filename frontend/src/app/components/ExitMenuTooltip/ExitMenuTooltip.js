@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Menu} from "antd";
 import {LockOutlined, PoweroffOutlined} from "@ant-design/icons";
+import './ExitMenuTooltip.css';
 import {
     BrowserRouter as Router,
     Switch,
@@ -13,11 +14,11 @@ class ExitMenuTooltip extends React.Component {
             <>
                 <Router>
                     <Menu id={'exit_menu'}>
-                        <Menu.Item key="1" icon={<LockOutlined/>}>
-                            Lock
-                        </Menu.Item>
+                        {/*<Menu.Item key="1" icon={<LockOutlined/>}>*/}
+                        {/*    Lock*/}
+                        {/*</Menu.Item>*/}
                         <Menu.Item key="2" icon={<PoweroffOutlined/>}>
-                            <Link to="/login">logout</Link>
+                            <Link class={'logout_link'} to="/login">logout</Link>
                         </Menu.Item>
                     </Menu>
                 </Router>

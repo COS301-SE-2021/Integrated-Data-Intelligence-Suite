@@ -1,6 +1,6 @@
 import {Menu, Layout} from "antd";
 import {BarChartOutlined, HomeOutlined, SettingOutlined} from "@ant-design/icons";
-import UserInfoCard from "./UserInfoCard";
+import UserInfoCard from "../UserInfoCard/UserInfoCard";
 import React, {Component} from 'react';
 import {BrowserRouter, Link, Router} from "react-router-dom";
 
