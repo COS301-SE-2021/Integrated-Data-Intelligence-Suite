@@ -27,8 +27,9 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Test using yarn
-        run: yarn install
-        run: yarn test
+        run: | 
+            yarn install
+            yarn test
     
 
       # Runs a set of commands using the runners shell
