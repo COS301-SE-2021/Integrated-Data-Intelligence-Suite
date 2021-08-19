@@ -88,7 +88,7 @@ const RegisterPage = () => {
             <form onSubmit={formik.handleSubmit}>
 
                 <Form.Item
-                    name="firstName"
+                    // name="firstName"
                     label={'First Name'}
                 >
                     <Input
@@ -106,7 +106,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="lastName"
+                    // name="lastName"
                     label={'Last Name'}
                 >
                     <Input
@@ -124,7 +124,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="username"
+                    // name="username"
                     label={'User name'}
                 >
                     <Input
@@ -142,7 +142,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="email"
+                    // name="email"
                     label={'email'}
                 >
                     <Input
@@ -160,7 +160,7 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="password"
+                    // name="password"
                     label={'password'}
                 >
                     <Input.Password

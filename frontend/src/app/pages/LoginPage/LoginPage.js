@@ -38,8 +38,8 @@ const LoginPage = () => {
 
             if (values.email === "myron@gmail.com" && values.password === "123") {
                 const localuser = {
-                    id : "b5aa283d-35d1-421d-a8c6-42dd3e115463",
-                    username : "myron",
+                    id: "b5aa283d-35d1-421d-a8c6-42dd3e115463",
+                    username: "myron",
                     isAdmin: true,
                     permission: 'IMPORTING'
                 }
@@ -64,7 +64,6 @@ const LoginPage = () => {
             }
 
 
-
         },
     });
 
@@ -74,10 +73,11 @@ const LoginPage = () => {
             className={"loginCard"}
             title="Data Intelligence Suite"
         >
+
             <form onSubmit={formik.handleSubmit}>
 
                 <Form.Item
-                    name="email"
+                    // name="email"
                 >
                     <Input
                         id="email"
@@ -94,7 +94,7 @@ const LoginPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="password"
+                    // name="password"
                 >
                     <Input.Password
                         id="password"
@@ -134,6 +134,8 @@ const LoginPage = () => {
                     </a>
                 </Form.Item>
             </form>
+
+
         </Card>
     );
 };
