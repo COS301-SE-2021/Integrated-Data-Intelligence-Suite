@@ -36,7 +36,6 @@ exports[`renders correctly 1`] = `
         >
           <label
             className=""
-            htmlFor="firstName"
             title="First Name"
           >
             First Name
@@ -107,7 +106,6 @@ exports[`renders correctly 1`] = `
         >
           <label
             className=""
-            htmlFor="lastName"
             title="Last Name"
           >
             Last Name
@@ -178,7 +176,6 @@ exports[`renders correctly 1`] = `
         >
           <label
             className=""
-            htmlFor="username"
             title="User name"
           >
             User name
@@ -249,7 +246,6 @@ exports[`renders correctly 1`] = `
         >
           <label
             className=""
-            htmlFor="email"
             title="email"
           >
             email
@@ -320,7 +316,6 @@ exports[`renders correctly 1`] = `
         >
           <label
             className=""
-            htmlFor="password"
             title="password"
           >
             password
