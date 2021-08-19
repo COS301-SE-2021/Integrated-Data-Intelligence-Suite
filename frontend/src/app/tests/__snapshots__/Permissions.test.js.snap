@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<section
+  className="ant-layout"
+>
+  <main
+    className="ant-layout-content permissions-content-section"
+  >
+    <div
+      className="permissions user"
+    />
+  </main>
+</section>
+`;
