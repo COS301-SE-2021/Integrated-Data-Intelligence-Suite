@@ -41,6 +41,10 @@ public class ImportServiceController {
     @PostMapping(value = "/importData")
     public @ResponseBody ImportDataResponse importData(@RequestBody ImportDataRequest request) throws Exception{
         //ImportDataRequest request = requestEntity.getBody();
+        if(request == null) {
+            throw new InvalidImporterRequestException("Request object is null.");
+        }
+
         return service.importData(request);
     }
 
