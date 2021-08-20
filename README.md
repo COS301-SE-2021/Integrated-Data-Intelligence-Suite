@@ -104,7 +104,7 @@ I love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <h1 align="right">Rhuli Nghondzweni</h1>
 
-<p align="right"><em>Back-end & Machine Learning</em></p>
+<p align="right"><em>Architecture & Machine Learning</em></p>
  <p align="right">
      <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -180,7 +180,7 @@ We can change the world by changing the people around us, with memes!<br>
 
 <h1 align="right">Steve Mbuguje</h1>
 
-<p align="right"><em>Data Analysis & Machine Learning</em></p>
+<p align="right"><em>Architecture & Machine Learning</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
