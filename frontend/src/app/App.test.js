@@ -7,6 +7,6 @@ import {BrowserRouter} from "react-router-dom";
 
 test('renders learn react link', () => {
   render(<BrowserRouter><App/></BrowserRouter>);
-  const linkElement = screen.getByText('Data Intelligence Suite');
+  const linkElement = screen.getByText('Login');
   expect(linkElement).toBeTruthy();
 });
