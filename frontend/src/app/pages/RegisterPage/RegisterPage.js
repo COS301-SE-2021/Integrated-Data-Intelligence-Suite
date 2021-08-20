@@ -47,6 +47,7 @@ const validate = (values) => {
 
 
 const RegisterPage = () => {
+    localStorage.clear();
     let history = useHistory();
     const formik = useFormik({
         initialValues: {
@@ -68,9 +69,10 @@ const RegisterPage = () => {
                 .then(response => {
                     return response.json()
                 }).then(json => {
-                    alert(json.message);
                     if(json.success) {
                         history.push('/');
+                    }else{
+                        alert(json.message)
                     }
                 });
 

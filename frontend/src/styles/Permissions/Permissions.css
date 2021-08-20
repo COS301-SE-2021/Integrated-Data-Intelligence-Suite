@@ -12,7 +12,7 @@
 .user-preview:hover{
     /*background-color: #5873f9;*/
     /*color: white;*/
-    border-color: #5873f9;
+    border-color: #5773FA;
 }
 
 .user-preview h3{
@@ -27,7 +27,7 @@
 
 
 .user-preview .admin-tag{
-    color: #f1356d;
+    color: #5773FA;
 }
 
 .user-preview a{
@@ -45,7 +45,7 @@
 }
 .user-preview p select{
     margin: 10px;
-    background: #15B761;
+    background: #5773FA;
     border: none;
     border-radius: 5px;
 }
@@ -65,6 +65,7 @@
     /*min-width: 350px;*/
 
     position: absolute;
+    width: 24%;
     left: 50%;
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
@@ -122,7 +123,7 @@
 
 .form-container{
 
-    border: 3px solid #f1356d;
+    border: 3px solid #5773FA;
     padding: 20px;
 }
 
@@ -168,7 +169,7 @@
 }
 
 button.enabled{
-    background: #f1356d;
+    background: #5773FA;
     border: none;
     border-radius: 5px;
 }
@@ -192,7 +193,7 @@ button.enabled{
     padding: 0 40px 40px 40px;
     text-transform: uppercase;
     font-weight: 600;
-    border: 1px solid red;
+    border: 1px solid #5773FA;
     line-height: normal;
 
 }

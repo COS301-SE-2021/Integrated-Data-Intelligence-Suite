@@ -32,7 +32,7 @@ class SearchBar extends Component {
 
     //Runs when the search button is clicked
     onSearch(values) {
-        alert(values + "= Search term");
+        // alert(values + "= Search term");
 
         // this.handleTextChange(template_json)
 
