@@ -106,7 +106,7 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <p align="right"><em>Back-end & Machine Learning</em></p>
  <p align="right">
-     <a href="https://avatars.githubusercontent.com/u/82459444?v=4">
+     <a href="https://media-exp1.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1634774400&v=beta&t=2DRHcUYyGURT1hjD5les6UWP_gqkmKeT_4vgvhQpWjY">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
