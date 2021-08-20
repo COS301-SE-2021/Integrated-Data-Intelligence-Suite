@@ -131,7 +131,35 @@ public class UserServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @DisplayName("When_user_register_is_requested_valid_data")
+    public void userRegisterRequestValidData() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest("username",
+                "firstName",
+                "lastName",
+                "password",
+                    "email");
 
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(registerRequest);
+
+        RegisterResponse registerResponse = new RegisterResponse(true, "message");
+        when(service.register(any(RegisterRequest.class))).thenReturn(registerResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        RegisterResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), RegisterResponse.class);
+
+        Assertions.assertNotNull(returnClass);
+    }
 
     @Test
     @DisplayName("When_User_getUser_Is_Requested")
