@@ -138,7 +138,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Wandile Makhubele</h1>
 
-<p align="right"> <em>Deployment & Back-End</em></p>
+<p align="right"> <em>Data Importing, Permission Management & Back-End</em></p>
 
 </p>
  <p align="right">
