@@ -42,10 +42,13 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <a name="branching strategy"></a>
 ## Branching Strategy
-**master** <br>
-&nbsp;&nbsp;&nbsp; - **develop** <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-name
-
+```
+master
+│   
+└─develop
+    │
+    └──feature
+```
 
 <a name="about-members"></a>
 ## Meet the Team!
