@@ -127,37 +127,6 @@ public class AnalyseServiceTest {
 
     /*********************************************Functionality Test****************************************************/
 
-    @Test
-    @DisplayName("When the data list is Valid")
-    public void analyzeDataValidRequest() throws InvalidRequestException {
-        ArrayList<ParsedData> TestList = new ArrayList<>();
-        ParsedData test1 = new ParsedData();
-        test1.setTextMessage("Test Text3 Data");
-        test1.setDate("TestDateData");
-        test1.setLocation("TestLocationData");
-        test1.setLikes(20);
-
-        ParsedData test2 = new ParsedData();
-        test2.setTextMessage("Test Text2 Data");
-        test2.setDate("TestDateData");
-        test2.setLocation("TestLocationData");
-        test2.setLikes(20);
-
-        ParsedData test3 = new ParsedData();
-        test3.setTextMessage("Test Text3 Data");
-        test3.setDate("TestDateData");
-        test3.setLocation("TestLocationData");
-        test3.setLikes(20);
-
-        TestList.add(test1);
-        TestList.add(test2);
-        TestList.add(test3);
-
-        AnalyseDataRequest test = new AnalyseDataRequest(TestList);
-        AnalyseDataResponse testResults = service.analyzeData(test);
-        Assertions.assertNotNull(testResults);
-    }
-
 
 
     @Test
@@ -191,7 +160,10 @@ public class AnalyseServiceTest {
         TestList.add(row2);
         TestList.add(row3);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
+        ArrayList<ArrayList> input = new ArrayList<>();
+        input.add(TestList);
+
+        FindRelationshipsRequest test = new FindRelationshipsRequest(input);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
