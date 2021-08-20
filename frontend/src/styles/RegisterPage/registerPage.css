@@ -35,7 +35,7 @@
     position: relative;
     margin:auto;
     /*width: 100vw;*/
-    background: white;
+    /*background: white;*/
 }
 
 .forgot_password_link_container > .ant-form-item-control > .ant-form-item-control-input

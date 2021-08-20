@@ -1,5 +1,6 @@
 #login_card {
-    border: 3px solid #5773FA;
+    /*border: 3px solid #5773FA;*/
+    border:none;
     /* align-self: center; */
 
     /*Aligning it Horizontally in the Center*/
@@ -52,7 +53,8 @@
     position: relative;
     margin:auto;
     /*width: 100vw;*/
-    background: white;
+    /*background: white;*/
+    background: linear-gradient(176deg, #1c8efa 70%, #F4F4F4 calc(70% + 2px));
 }
 
 .forgot_password_link_container > .ant-form-item-control > .ant-form-item-control-input
