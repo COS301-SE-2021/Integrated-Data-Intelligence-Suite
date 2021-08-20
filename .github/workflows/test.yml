@@ -6,6 +6,7 @@ name: Master CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
+
     branches:
         - master
         - develop(new)
@@ -40,6 +41,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    runs-on: windows-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -65,4 +67,3 @@ jobs:
       # Runs tests of Visualize_Service
       - name: Test Import_Service with Maven
         run: mvn -B test --file Visualize_Service/pom.xml
-

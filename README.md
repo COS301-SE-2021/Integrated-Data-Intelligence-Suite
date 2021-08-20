@@ -42,10 +42,13 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 
 <a name="branching strategy"></a>
 ## Branching Strategy
-**master** <br>
-&nbsp;&nbsp;&nbsp; - **develop** <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ***feature***-name
-
+```
+master
+│   
+└─develop
+    │
+    └──feature
+```
 
 <a name="about-members"></a>
 ## Meet the Team!
@@ -78,9 +81,10 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <br>
 
 <p><br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+I am a Computer Science student studying at University of Pretoria <br>
+I'm skilled in data structures, design patterns, Java, C++, HTML, CSS, JavaScript <br>
+I enjoy programming and learning new things. <br>
+I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 </p>
 </td>
 </tr>
@@ -209,7 +213,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Myron Lopes</h1>
 
-<p align="right"><em>Frontend & Data Visualisation</em></p>
+<p align="right"><em>UI, UX & Data Visualisation</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/myron-lopes/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
