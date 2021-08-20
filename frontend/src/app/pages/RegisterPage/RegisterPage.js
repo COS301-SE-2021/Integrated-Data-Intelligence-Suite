@@ -103,7 +103,7 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.firstName}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.firstName && formik.errors.firstName ? (
                         <p>{formik.errors.firstName}</p>) : null}
@@ -121,7 +121,7 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.lastName}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.lastName && formik.errors.lastName ? (
                         <p>{formik.errors.lastName}</p>) : null}
@@ -139,7 +139,7 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.username}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.username && formik.errors.username ? (
                         <p>{formik.errors.username}</p>) : null}
@@ -157,7 +157,7 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.email}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.email && formik.errors.email ? (
                         <p>{formik.errors.email}</p>) : null}
@@ -175,7 +175,7 @@ const RegisterPage = () => {
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur} //When the user leaves the form
-                        prefix={<LockOutlined className="site-form-item-icon"/>}
+                        // prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.password && formik.errors.password ? (
                         <p>{formik.errors.password}</p>) : null}
@@ -194,7 +194,7 @@ const RegisterPage = () => {
                         value={formik.values.confirmedpassword}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur} //When the user leaves the form
-                        prefix={<LockOutlined className="site-form-item-icon"/>}
+                        // prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.confirmedpassword && formik.errors.confirmedpassword ? (
                         <p>{formik.errors.confirmedpassword}</p>) : null}

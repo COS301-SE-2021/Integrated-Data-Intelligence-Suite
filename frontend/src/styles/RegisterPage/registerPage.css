@@ -10,16 +10,16 @@
 }
 
 /*The  Lines in between the word OR*/
-.ant-divider-horizontal.ant-divider-with-text {
+div.ant-divider.ant-divider-horizontal.ant-divider-with-text.ant-divider-with-text-center.or_divider{
     display: flex;
     margin: 16px 0;
-    color: black;
+    color: black !important;
     font-weight: 500;
     font-size: 16px;
     white-space: nowrap;
     text-align: center;
     border-top: 0;
-    border-top-color: rgb(0 0 0);
+    border-top-color: black!important;
 }
 
 .register_link {
