@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -29,12 +30,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ParseServiceController.class)
 public class ParseServiceControllerTest {
-    @Autowired
-    private ParseServiceController controller;
 
-    @Mock
+    @MockBean
     private ParseServiceImpl service;
 
+    @Autowired
     private MockMvc mockMvc;
 
     private String mockTwitterData;
@@ -253,19 +253,8 @@ public class ParseServiceControllerTest {
     @Test
     @DisplayName("When_parseImportedData_is_requested")
     public void parseRequest() throws Exception {
-        mockMvc.perform( MockMvcRequestBuilders
-                .post("/Parse/parseImportedData")
-                .content(asJsonString(new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "VIEWING")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }
