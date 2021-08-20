@@ -58,12 +58,9 @@ public class AnalyseServiceControllerTest {
     @MockBean
     private AnalyseServiceImpl service;
 
-    //@Autowired
-    //private TestRestTemplate testRestTemplate;
-
     @Test
-    @DisplayName("When analyze is requested")
-    public void analyzeRequest() throws Exception {
+    @DisplayName("When analyze check connection")
+    public void analyzeRequestConnection() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -100,94 +97,6 @@ public class AnalyseServiceControllerTest {
 
         Assertions.assertNotNull(returnClass);
 
-        //RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Analyse/analyzeData");
-        //MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-
-        //ObjectReader or = mapper.reader();
-        //String requestJson=or.readValue(result.andReturn().getResponse().getContentAsString(),AnalyseDataResponse.class)
-
-
-        //AnalyseDataRequest analyseRequest = Mockito.mock(AnalyseDataRequest.class);
-        //analyseRequest.setDataList(analyseRequest);
-
-        /*HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.set("X-COM-PERSIST", "true");
-
-        HttpEntity<AnalyseDataRequest> request = new HttpEntity<>(analyseRequest, requestHeaders);*/
-        //RequestEntity<AnalyseDataRequest> req = new RequestEntity(analyseRequest, requestHeaders);
-
-        //ResponseEntity<AnalyseDataResponse> result = this.testRestTemplate.postForEntity("/Analyse/analyzeData", request, AnalyseDataResponse.class);
-
-
-
-        //mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-
-        //AnalyseDataResponse analyseDataResponse = Mockito.mock(AnalyseDataResponse.class, withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS));
-
-
-        //OngoingStubbing<AnalyseDataResponse> ongoingStubbing =
-        //AnalyseDataResponse analyseDataResponse =  mockChannel
-        //ongoingStubbing.thenReturn(analyseDataResponse);
-
-        //doReturn(AnalyseDataResponse.class).when(service.analyzeData(any(AnalyseDataRequest.class)));
-
-
-        /*Class response = AnalyseDataResponse.class;
-        OngoingStubbing<AnalyseDataResponse> ongoingStubbing =  when(service.analyzeData(any(AnalyseDataRequest.class)));
-        ongoingStubbing.thenReturn(response);*/
-
-
-                //.andExpect(resulte -> Assertions.assertTrue(resulte.getResolvedException() instanceof InvalidRequestException));
-                //.andExpect(result2 -> Assertions.assertThrows(InvalidRequestException.class, () -> result2.getResolvedException()))
-                //.andExpect(result -> Assertions.assertSame(result.getResolvedException(),  CoreMatchers.instanceOf(InvalidRequestException.class)));
-        //result2.getResolvedException(),  CoreMatchers.instanceOf(SecurityException.class
-        //.andExpect(result -> Assertions.assertEquals("AnalyzeDataRequest Object is null",result.getResolvedException()));
-
-
-        /*ArgumentCaptor<AnalyseDataResponse> aiModelArgumentCaptor = ArgumentCaptor.forClass(AnalyseDataResponse.class);
-
-        AnalyseDataResponse testModel = aiModelArgumentCaptor.getValue();
-
-        Assertions.assertNotNull(testModel);*/
-
-
-
-        /*Assertions.assertThrows(InvalidRequestException.class,() ->mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson)) );*/
-
-
-        //Assertions.assertEquals(200,result.getStatusCodeValue());
-        //Assertions.assertNotNull(result.getBody());
-
-        /*ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(anObject );*/
-
-        //Assertions.assertThrows()
-
-        /*HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        AnalyseDataRequest analyseRequest = null;
-        HttpEntity<AnalyseDataRequest> instance =new HttpEntity<>(analyseRequest,requestHeaders);
-
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(instance));
-        String json = gson.toJson(instance);
-        System.out.println(json);*/
-
-        /*mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
-                .contentType(MediaType.APPLICATION_JSON).content(json)
-        )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof InvalidRequestException));
-                //.andExpect(result -> Assertions.assertEquals("resource not found", result.getResolvedException().getMessage()));*/
     }
 
     @Test
