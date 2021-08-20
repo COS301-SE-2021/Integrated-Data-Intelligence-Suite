@@ -4,6 +4,7 @@ import RegisterButton from "./RegisterButton";
 import {Link, useHistory} from "react-router-dom";
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
+import '../../../styles/RegisterPage/registerPage.css';
 
 
 //Validation Function

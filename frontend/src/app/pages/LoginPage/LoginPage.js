@@ -4,6 +4,7 @@ import LoginButton from "./LoginButton";
 import {Link, useHistory} from "react-router-dom";
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
+import '../../../styles/LoginPage/login.css';
 
 
 //Validation Function
