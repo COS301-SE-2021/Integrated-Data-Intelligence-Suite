@@ -31,7 +31,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
   * [Version 3]()
   * [Version 4]()
-* [Coding Standards PDF](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+* [Coding Standards](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [Architectural Document](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [User Manual]()
 * [Technical Installation]()
