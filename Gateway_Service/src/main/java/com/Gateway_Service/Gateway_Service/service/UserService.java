@@ -49,10 +49,9 @@ public class UserService {
 
     /**
      * This function sends a request to the user service to get all users saved on the database.
-     * @param userRequest ***
      * @return This class contains a list of users saved on the system.
      */
-    public GetAllUsersResponse getAllUsers(GetAllUsersRequest userRequest) {
+    public GetAllUsersResponse getAllUsers() {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -61,15 +60,11 @@ public class UserService {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
         mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        HttpEntity<String> request = null;
-        try {
-            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        GetAllUsersResponse userResponse = restTemplate.postForObject("http://User-Service/User/getAll", request, GetAllUsersResponse.class);
+        ResponseEntity<GetAllUsersResponse> responseEntity = restTemplate.exchange("http://User-Service/User/getAll", HttpMethod.GET, null, GetAllUsersResponse.class);
 
-        return userResponse;
+        GetAllUsersResponse getAllUsersResponse = responseEntity.getBody();
+
+        return getAllUsersResponse;
     }
 
     /**
