@@ -243,21 +243,24 @@ public class VisualizeServiceImpl {
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-
+        int k = 0;
         for (int i = 0; i < reqData.size(); i++) {
             ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
             //System.out.println(locs.toString());
+
             for (int j = 0; j < locs.size(); j++) {
                 MapGraph newGraph = new MapGraph();
                 newGraph.statistic_1 = reqData.get(i).get(0).toString(); //topic
                 newGraph.statistic_2 = reqData.get(i).get(2).toString(); //type
                 newGraph.statistic_3 = reqData.get(i).get(3).toString(); //average likes
 
+
                 String [] latlon = locs.get(j).toString().split(",");
                 newGraph.lat = latlon[0];
                 newGraph.lng = latlon[1];
-                newGraph.classname = "circle"+i;
+                newGraph.classname = "circle"+k;
                 output.add(newGraph);
+                k++;
             }
         }
 
