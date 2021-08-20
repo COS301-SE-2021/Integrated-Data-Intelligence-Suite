@@ -117,9 +117,9 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <p>
 <br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+I'm a programmer always willing in improve myself, challenge me and I'll do you one better. <br>
+I am main interested in backend functionality, but will take up any other forms of programming happily. <br>
+In my spare time when not coding, i like to gym and be outdoors, and food and gamming <br>
 </p>
 </td>
 </tr>
