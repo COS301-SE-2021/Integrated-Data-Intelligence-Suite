@@ -79,7 +79,6 @@ const LoginPage = () => {
             <form onSubmit={formik.handleSubmit}>
 
                 <Form.Item
-                    // name="email"
                 >
                     <Input
                         id="email"
@@ -96,7 +95,6 @@ const LoginPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    // name="password"
                 >
                     <Input.Password
                         id="password"

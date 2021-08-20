@@ -120,11 +120,11 @@ function MapCard(props) {
                                 showCircleData(city.classname, data_from_backend)
                             }}
                         >
-                            <Popup>
-                                <b>
-                                    {city.classname}
-                                </b>
-                            </Popup>
+                            {/*<Popup>*/}
+                            {/*    <b>*/}
+                            {/*        {city.classname}*/}
+                            {/*    </b>*/}
+                            {/*</Popup>*/}
                         </CircleMarker>
                     ))}
 
