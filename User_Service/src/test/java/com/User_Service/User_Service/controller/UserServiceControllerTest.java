@@ -6,11 +6,12 @@ import com.User_Service.User_Service.request.GetUserRequest;
 import com.User_Service.User_Service.request.LoginRequest;
 import com.User_Service.User_Service.request.ManagePermissionsRequest;
 import com.User_Service.User_Service.request.RegisterRequest;
-import com.User_Service.User_Service.response.GetAllUsersResponse;
+import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -93,6 +94,33 @@ public class UserServiceControllerTest {
     }
 
     @Test
+    @DisplayName("When_user_login_is_requested_valid_data")
+    public void userLoginRequestValidData() throws Exception {
+
+        LoginRequest loginRequest = new LoginRequest();
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(loginRequest);
+
+        LoginResponse loginResponse = new LoginResponse();
+        when(service.login(any(LoginRequest.class))).thenReturn(loginResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        LoginResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), LoginResponse.class);
+
+        Assertions.assertNotNull(returnClass);
+    }
+
+    @Test
     @DisplayName("When_user_register_is_requested")
     public void userRegisterRequest() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
@@ -102,6 +130,8 @@ public class UserServiceControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+
 
     @Test
     @DisplayName("When_User_getUser_Is_Requested")
@@ -115,6 +145,8 @@ public class UserServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+
+
     @Test
     @DisplayName("When_user_managePermissions_is_Requested")
     public void userManagePermissions() throws Exception {
@@ -125,6 +157,8 @@ public class UserServiceControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+
 
     public static String asJsonString(final Object obj) {
         try {
