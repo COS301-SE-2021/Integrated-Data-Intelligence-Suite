@@ -9,6 +9,10 @@ public class AnalyseDataResponse {
     public ArrayList<ArrayList> trendList;
     public ArrayList<String> anomalyList;
 
+    public AnalyseDataResponse(){
+
+    }
+
     public AnalyseDataResponse(ArrayList<ArrayList> pattenList,
                                ArrayList<ArrayList> relationshipList,
                                ArrayList<ArrayList> predictionList,

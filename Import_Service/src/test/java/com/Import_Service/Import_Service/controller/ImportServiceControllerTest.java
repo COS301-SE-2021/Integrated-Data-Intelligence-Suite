@@ -1,11 +1,15 @@
 package com.Import_Service.Import_Service.controller;
 
 import com.Import_Service.Import_Service.ImportServiceApplication;
+import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
 import com.Import_Service.Import_Service.request.ImportDataRequest;
 import com.Import_Service.Import_Service.request.ImportTwitterRequest;
+import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
 import org.aspectj.lang.annotation.Before;
@@ -20,113 +24,117 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Random;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ImportServiceController.class)
 public class ImportServiceControllerTest {
 
-    @Autowired
-    private ImportServiceController controller;
-
-    @Autowired
+    @MockBean
     private ImportServiceImpl service;
 
+    @Autowired
     private MockMvc mockMvc;
 
 
-    /*@Before
-    public void setup(){
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }*/
-
-
-    @Test
+    /*@Test
     @DisplayName("When import is requested")
     public void importRequest() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/Import/importData")
-                .content(asJsonString(new ImportDataRequest(generateRandomString(), generateRandNum())))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
     @Test
     @DisplayName("When dated data is requested")
     public void  datedDataRequest() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/Import/importDatedData")
-                .content(asJsonString(new ImportTwitterRequest(generateRandomString(), generateRandomDate() , LocalDate.now())))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+    }*/
+
+    @Test
+    @DisplayName("When import check connection")
+    public void importRequestConnection() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/Import/importData"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 
-    private String generateRandomString(){
+    @Test
+    @DisplayName("When importRequest is Null")
+    public void importDataNullRequest() throws Exception {
+
+        ImportDataRequest importDataRequest = new ImportDataRequest("testKey",50);
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(importDataRequest);
+
+        ArrayList<ImportedData> importedData = new ArrayList<>();
+        ImportedData importedData1 = new ImportedData();
+        importedData.add(importedData1);
+
+        ImportDataResponse importDataResponse = new ImportDataResponse(importedData);
+        when(service.importData(any(ImportDataRequest.class))).thenReturn(importDataResponse);
 
 
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Import/importData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof InvalidImporterRequestException));
 
-        StringBuilder sb = new StringBuilder();
+        ImportDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ImportDataResponse.class);
 
-        Random random = new Random();
-
-        int length = 7;
-
-        for(int i = 0; i < length; i++) {
-
-            int index = random.nextInt(alphabet.length());
-
-            char randomChar = alphabet.charAt(index);
-
-            sb.append(randomChar);
-        }
-        return sb.toString();
-
+        Assertions.assertNotNull(returnClass);
     }
 
-    private int generateRandNum(){
-        int max = 28;
-        int min = 1;
-        int range = max - min + 1;
-        return (int)(Math.random() * range) + min;
+
+    @Test
+    @DisplayName("When importRequest is Success")
+    public void importDataSuccessfulRequest() throws Exception {
+
+        ImportDataRequest importDataRequest = new ImportDataRequest("testKey",50);
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(importDataRequest);
+
+        ArrayList<ImportedData> importedData = new ArrayList<>();
+        ImportedData importedData1 = new ImportedData();
+        importedData.add(importedData1);
+
+        ImportDataResponse importDataResponse = new ImportDataResponse(importedData);
+        when(service.importData(any(ImportDataRequest.class))).thenReturn(importDataResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Import/importData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        ImportDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ImportDataResponse.class);
+
+        Assertions.assertNotNull(returnClass);
     }
-
-    private LocalDate generateRandomDate(){
-        int max = 28;
-        int min = 1;
-        int range = max - min + 1;
-        int day = (int)(Math.random() * range) + min;
-
-        max = 12;
-        min = 1;
-        range = max - min + 1;
-        int month = (int)(Math.random() * range) + min;
-
-        int year = 2021- month;
-        return LocalDate.of(year,month,day);
-
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

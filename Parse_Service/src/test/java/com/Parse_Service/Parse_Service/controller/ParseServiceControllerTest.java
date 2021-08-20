@@ -2,11 +2,18 @@ package com.Parse_Service.Parse_Service.controller;
 
 import com.Parse_Service.Parse_Service.ParseServiceApplication;
 import com.Parse_Service.Parse_Service.dataclass.DataSource;
+import com.Parse_Service.Parse_Service.dataclass.ParsedArticle;
+import com.Parse_Service.Parse_Service.dataclass.ParsedData;
+import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import com.Parse_Service.Parse_Service.request.ParseImportedDataRequest;
+import com.Parse_Service.Parse_Service.response.ParseImportedDataResponse;
 import com.Parse_Service.Parse_Service.service.ParseServiceImpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,28 +25,34 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ParseServiceController.class)
 public class ParseServiceControllerTest {
-    @Autowired
-    private ParseServiceController controller;
 
-    @Mock
+    @MockBean
     private ParseServiceImpl service;
 
+    @Autowired
     private MockMvc mockMvc;
 
     private String mockTwitterData;
 
-    @BeforeAll
+    /*@BeforeAll
     public void setup(){
         //this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockTwitterData = "{\n" +
@@ -253,19 +266,89 @@ public class ParseServiceControllerTest {
     @Test
     @DisplayName("When_parseImportedData_is_requested")
     public void parseRequest() throws Exception {
-        mockMvc.perform( MockMvcRequestBuilders
-                .post("/Parse/parseImportedData")
-                .content(asJsonString(new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "VIEWING")))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }*/
+
+
+    @Test
+    @DisplayName("When parse check connection")
+    public void parseRequestConnection() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/Parse/parseImportedData"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Test
+    @DisplayName("When parseRequest is Null")
+    public void parseDataNullRequest() throws Exception {
+
+
+        ParseImportedDataRequest parseImportedDataRequest = new ParseImportedDataRequest(DataSource.TWITTER,"{}", "Admin");
+
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(parseImportedDataRequest);
+
+        ArrayList<ParsedData> dataList = new ArrayList<>();
+        ParsedData parsedData = new ParsedData();
+        dataList.add(parsedData);
+
+        ArrayList<ParsedArticle> articleList = new ArrayList<>();
+        ParsedArticle parsedArticle = new ParsedArticle();
+        articleList.add(parsedArticle);
+
+        ParseImportedDataResponse parseImportedDataResponse = new ParseImportedDataResponse(dataList,articleList);
+        when(service.parseImportedData(any(ParseImportedDataRequest.class))).thenReturn(parseImportedDataResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Parse/parseImportedData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof InvalidRequestException));
+
+        ParseImportedDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ParseImportedDataResponse.class);
+
+        Assertions.assertNotNull(returnClass);
     }
+
+
+    @Test
+    @DisplayName("When parseRequest is Success")
+    public void parseDataSuccessfulRequest() throws Exception {
+
+        ParseImportedDataRequest parseImportedDataRequest = new ParseImportedDataRequest(DataSource.TWITTER,"{}", "Admin");
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(parseImportedDataRequest);
+
+        ArrayList<ParsedData> dataList = new ArrayList<>();
+        ParsedData parsedData = new ParsedData();
+        dataList.add(parsedData);
+
+        ArrayList<ParsedArticle> articleList = new ArrayList<>();
+        ParsedArticle parsedArticle = new ParsedArticle();
+        articleList.add(parsedArticle);
+
+        ParseImportedDataResponse parseImportedDataResponse = new ParseImportedDataResponse(dataList,articleList);
+        when(service.parseImportedData(any(ParseImportedDataRequest.class))).thenReturn(parseImportedDataResponse);
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Parse/parseImportedData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        ParseImportedDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ParseImportedDataResponse.class);
+
+        Assertions.assertNotNull(returnClass);
+    }
+
+
 }

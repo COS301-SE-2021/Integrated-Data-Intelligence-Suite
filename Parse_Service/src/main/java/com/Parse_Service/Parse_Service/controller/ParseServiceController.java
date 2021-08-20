@@ -2,6 +2,7 @@ package com.Parse_Service.Parse_Service.controller;
 
 
 import com.Parse_Service.Parse_Service.dataclass.DataSource;
+import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import com.Parse_Service.Parse_Service.request.ParseImportedDataRequest;
 import com.Parse_Service.Parse_Service.response.ParseImportedDataResponse;
 import com.Parse_Service.Parse_Service.service.ParseServiceImpl;
@@ -27,6 +28,10 @@ public class ParseServiceController {
     @PostMapping("/parseImportedData")
     public @ResponseBody ParseImportedDataResponse parseImportedData(@RequestBody ParseImportedDataRequest request) throws Exception {
         //ParseImportedDataRequest request = requestEntity.getBody();
+        if (request == null) {
+            throw new InvalidRequestException("Request object is null");
+        }
+
         return service.parseImportedData(request);
     }
 

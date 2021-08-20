@@ -1,9 +1,9 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Gateway_Service.Gateway_Service.dataclass.ImportDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.ImportDataResponse;
-import com.Gateway_Service.Gateway_Service.dataclass.ImportTwitterRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.ImportTwitterResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +33,33 @@ public class ImportService {
             @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE"),
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "90000") },*/
             fallbackMethod = "getTwitterDataJsonFallback")
-    public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest) {
+    public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest)  {
 
-        HttpHeaders requestHeaders = new HttpHeaders();
+        /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<ImportTwitterRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
 
         ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST,null, ImportTwitterResponse.class);
         ImportTwitterResponse importResponse = new ImportTwitterResponse("hello world"); // responseEntity.getBody();
+
+        return importResponse;*/
+
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(importRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ImportTwitterResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/getTwitterDataJson", request, ImportTwitterResponse.class);
 
         return importResponse;
     }
@@ -58,10 +76,17 @@ public class ImportService {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ImportDataRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        ResponseEntity<ImportDataResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/importData",  HttpMethod.POST, requestEntity,ImportDataResponse.class);
-        ImportDataResponse importResponse = responseEntity.getBody();
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(importRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ImportDataResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/importData", request, ImportDataResponse.class);
 
         return importResponse;
     }

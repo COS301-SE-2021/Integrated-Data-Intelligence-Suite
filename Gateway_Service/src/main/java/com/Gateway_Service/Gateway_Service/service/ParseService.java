@@ -2,6 +2,9 @@ package com.Gateway_Service.Gateway_Service.service;
 
 
 import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -24,14 +27,20 @@ public class ParseService {
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) {
 
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ParseImportedDataRequest> requestEntity =new HttpEntity<>(parseRequest,requestHeaders);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        ResponseEntity<ParseImportedDataResponse> responseEntity = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",  HttpMethod.POST, requestEntity, ParseImportedDataResponse.class);
-        ParseImportedDataResponse parseResponse = responseEntity.getBody();
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ParseImportedDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseImportedData", request, ParseImportedDataResponse.class);
 
         return parseResponse;
     }

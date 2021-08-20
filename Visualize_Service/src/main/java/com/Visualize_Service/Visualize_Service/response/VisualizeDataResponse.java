@@ -7,6 +7,10 @@ import java.util.ArrayList;
 public class VisualizeDataResponse {
     public ArrayList<ArrayList> outputData;
 
+    public VisualizeDataResponse(){
+
+    }
+
     public VisualizeDataResponse(ArrayList<ArrayList> outputData){
         this.outputData = outputData;
     }

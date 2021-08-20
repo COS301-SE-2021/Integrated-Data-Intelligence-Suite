@@ -34,20 +34,24 @@ public class ImportServiceController {
     /**
      * This method is used to facilitate communication to the Import-Service.
      *
-     * @param requestEntity This is a request entity which contains a ImportDataRequest object.
+     * @param request This is a request entity which contains a ImportDataRequest object.
      * @return ImportDataResponse This object contains imported data which has been processed by Import-Service.
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
     @PostMapping(value = "/importData")
-    public ImportDataResponse importData(RequestEntity<ImportDataRequest> requestEntity) throws Exception{
-        ImportDataRequest request = requestEntity.getBody();
+    public @ResponseBody ImportDataResponse importData(@RequestBody ImportDataRequest request) throws Exception{
+        //ImportDataRequest request = requestEntity.getBody();
+        if(request == null) {
+            throw new InvalidImporterRequestException("Request object is null.");
+        }
+
         return service.importData(request);
     }
 
     /**
      * This method is used to facilitate communication to the Import-Service.
      *
-     * @param requestEntity This is a request entity which contains a ImportTwitterRequest object.
+     * @param request This is a request entity which contains a ImportTwitterRequest object.
      * @return ImportTwitterResponse This object contains imported data which has been processed by Import-Service.
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
@@ -61,19 +65,14 @@ public class ImportServiceController {
     /**
      * This method is used  to facilitate communication to the Import_service.
      *
-     * @param requestEntity Ta request entity which contains a TwitterRequest object.
+     * @param request Ta request entity which contains a TwitterRequest object.
      * @return ImportTwitterResponse. This object contains imported data which has been processed by Import-Service.
      */
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ImportTwitterResponse importDatedData(@RequestBody ImportTwitterRequest request) {
+    public @ResponseBody ImportTwitterResponse importDatedData(@RequestBody ImportTwitterRequest request) throws Exception {
+
         //ImportTwitterRequest request = requestEntity.getBody();
-
-        try{
-            return service.importDatedData(request);
-        } catch (Exception e) {
-
-            return new ImportTwitterResponse(null);
-        }
+        return service.importDatedData(request);
     }
 
 
