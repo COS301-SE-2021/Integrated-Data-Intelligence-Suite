@@ -9,6 +9,10 @@ public class ParseImportedDataResponse {
     ArrayList<ParsedData> dataList;
     ArrayList<ParsedArticle> articleList;
 
+    public ParseImportedDataResponse(){
+
+    }
+
     public ParseImportedDataResponse(ArrayList<ParsedData> dataList, ArrayList<ParsedArticle> articleList){
         this.dataList = dataList;
         this.articleList = articleList;
