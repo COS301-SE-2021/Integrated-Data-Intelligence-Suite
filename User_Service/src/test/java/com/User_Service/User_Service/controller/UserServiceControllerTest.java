@@ -212,7 +212,30 @@ public class UserServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @DisplayName("When_user_managePermissions_is_Requested_valid_data")
+    public void userManagePermissionsValidData() throws Exception {
+        ManagePermissionsRequest managePermissionsRequest = new ManagePermissionsRequest("userName", Permission.VIEWING);
 
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(managePermissionsRequest);
+
+        ManagePersmissionsResponse managePersmissionsResponse = new ManagePersmissionsResponse("message", true);
+        when(service.managePermissions(any(ManagePermissionsRequest.class))).thenReturn(managePersmissionsResponse);
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/changepermission")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        ManagePersmissionsResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ManagePersmissionsResponse.class);
+
+        Assertions.assertNotNull(returnClass);
+    }
 
     public static String asJsonString(final Object obj) {
         try {
