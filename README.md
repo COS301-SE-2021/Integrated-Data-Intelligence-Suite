@@ -21,7 +21,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 ## Demos
 * [Demo 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
 * [Demo 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
-* [Demo 3]()
+* [Demo 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
 * [Demo 4]()
 
 <a name="srs"></a>
@@ -29,10 +29,10 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 * SRS
   * [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
   * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
-  * [Version 3]()
+  * [Version 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
   * [Version 4]()
 * [Coding Standards](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
-* [Architectural Document](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
+* [Architectural Document](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
 * [User Manual](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
 * [Technical Installation](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
 
@@ -86,7 +86,7 @@ master
 I am a Computer Science student studying at University of Pretoria <br>
 I'm skilled in data structures, design patterns, Java, C++, HTML, CSS, JavaScript <br>
 I enjoy programming and learning new things. <br>
-I'm love gaming, playing/watching soccer, and occasionally reading. <br>
+I love gaming, playing/watching soccer, and occasionally reading. <br>
 </p>
 </td>
 </tr>
@@ -104,7 +104,7 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <h1 align="right">Rhuli Nghondzweni</h1>
 
-<p align="right"><em>Back-end & Machine Learning</em></p>
+<p align="right"><em>Architecture & Machine Learning</em></p>
  <p align="right">
      <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -120,8 +120,9 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 <p>
 <br>
 I'm a programmer always willing in improve myself, challenge me and I'll do you one better. <br>
-I am main interested in backend functionality, but will take up any other forms of programming happily. <br>
-In my spare time when not coding, i like to gym and be outdoors, and food and gamming <br>
+I am mainly interested in backend functionality, <br>
+but will take up other forms of programming happily. <br>
+In my spare time I like to gym, be outdoors, food and gamming <br>
 </p>
 </td>
 </tr>
@@ -140,7 +141,7 @@ In my spare time when not coding, i like to gym and be outdoors, and food and ga
 
 <h1 align="right">Wandile Makhubele</h1>
 
-<p align="right"> <em>Data Importing, Permission Management</em></p>
+<p align="right"> <em>Data Importing & User Permissions</em></p>
 
 </p>
  <p align="right">
@@ -172,14 +173,14 @@ We can change the world by changing the people around us, with memes!<br>
 <td>
 
   <div>
-    <img align='left' alt="Steve"  src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
+    <img align='left' alt="Steve"  src="https://avatars.githubusercontent.com/u/73910152?s=400&u=5f3529e51f9c2f7504a574a6b0965edc5c6cbf69&v=4" width="200pt">
 
   </div>
 
 
 <h1 align="right">Steve Mbuguje</h1>
 
-<p align="right"><em>Data Analysis & Machine Learning</em></p>
+<p align="right"><em>Architecture & Machine Learning</em></p>
  <p align="right">
        <a href="https://www.linkedin.com/in/steve-mbuguje-851b1520b/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -194,9 +195,9 @@ We can change the world by changing the people around us, with memes!<br>
 
 <p>
 <br>
-I am very Interested in Quantum computing <br>
+I am very interested in Quantum computing <br>
 and how far it will rise in the future<br>
-my hobbies include gymming,watching movies, playing viedo games<br>
+my hobbies include gymming,watching movies, playing video games<br>
 I enjoy coding and learning new things<br>
 </p>
 </td>
