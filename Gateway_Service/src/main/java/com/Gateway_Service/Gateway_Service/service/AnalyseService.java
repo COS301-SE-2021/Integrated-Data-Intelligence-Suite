@@ -23,7 +23,7 @@ public class AnalyseService {
      * @return AnalyseDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) throws JsonProcessingException {
+    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -31,11 +31,13 @@ public class AnalyseService {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
         mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        HttpEntity<String> request = new HttpEntity<>(mapper.writeValueAsString(analyseRequest),requestHeaders);
-
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(analyseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         AnalyseDataResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeData", request, AnalyseDataResponse.class);
-
-        System.out.println(analyseResponse);
 
         return analyseResponse;
     }
