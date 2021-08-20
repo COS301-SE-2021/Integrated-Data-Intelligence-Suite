@@ -173,7 +173,33 @@ public class UserServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @DisplayName("When_User_getUser_Is_Requested_valid_data")
+    public void userGetUserRequestValidData() throws Exception {
+        UUID id = UUID.fromString("0b4e8936-bd7e-4373-b097-ce227b9f4072");
+        GetUserRequest getUserRequest = new GetUserRequest(id);
 
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(getUserRequest);
+
+        List<User> user = new ArrayList<>();
+        GetUserResponse getUserResponse = new GetUserResponse("message", true, user);
+        when(service.getUser(any(GetUserRequest.class))).thenReturn(getUserResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/getUser")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        GetUserResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), GetUserResponse.class);
+
+        Assertions.assertNotNull(returnClass);
+    }
 
     @Test
     @DisplayName("When_user_managePermissions_is_Requested")
