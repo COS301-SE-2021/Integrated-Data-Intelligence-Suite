@@ -157,7 +157,7 @@ public class GatewayServiceController {
         GetAllUsersRequest request = new GetAllUsersRequest();
         System.out.println("Getting all users from the database");
         System.out.println(request.getMessage());
-        GetAllUsersResponse response = userClient.getAllUsers(request);
+        GetAllUsersResponse response = userClient.getAllUsers();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
