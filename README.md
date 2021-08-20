@@ -155,9 +155,9 @@ In my spare time when not coding, i like to gym and be outdoors, and food and ga
 
 <p>
  <br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+A computer science student and Linux enthusiast who is into learning random facts about science and technology.<br>
+I prefer coding in Java, Python or javascript.<br>
+We can change the world by changing the people around us, with memes!<br>
 </p>
 </td>
 </tr>
