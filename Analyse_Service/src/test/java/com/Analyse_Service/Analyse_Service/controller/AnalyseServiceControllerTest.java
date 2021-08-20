@@ -93,11 +93,12 @@ public class AnalyseServiceControllerTest {
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof InvalidRequestException));
 
-        AnalyseDataResponse someClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);
+        AnalyseDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);
 
-        Assertions.assertNotNull(someClass);
+        Assertions.assertNotNull(returnClass);
 
         //RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Analyse/analyzeData");
         //MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
@@ -187,5 +188,42 @@ public class AnalyseServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof InvalidRequestException));
                 //.andExpect(result -> Assertions.assertEquals("resource not found", result.getResolvedException().getMessage()));*/
+    }
+
+    @Test
+    @DisplayName("When analyzeRequest is Success")
+    public void analyzeDataSuccessfulRequest() throws Exception {
+
+        ArrayList<ParsedData> dataList = new ArrayList<>();
+        ParsedData parsedData = new ParsedData();
+        parsedData.setTextMessage("MockTextMesssage");
+        parsedData.setLikes(1);
+        parsedData.setDate("2020/04/12");
+        parsedData.setLocation("location");
+
+        dataList.add(parsedData);
+
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList);
+
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(analyseRequest);
+
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null, null, null, null, null);
+        when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        AnalyseDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);
+
+        Assertions.assertNotNull(returnClass);
     }
 }
