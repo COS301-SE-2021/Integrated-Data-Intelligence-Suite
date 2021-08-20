@@ -87,7 +87,7 @@ const RegisterPage = () => {
         <Card
             id={"register_card"}
             className={"loginCard"}
-            title="Data Intelligence Suite"
+            title="Register"
         >
             <form onSubmit={formik.handleSubmit}>
 

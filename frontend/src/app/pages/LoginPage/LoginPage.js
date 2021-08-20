@@ -73,7 +73,7 @@ const LoginPage = () => {
         <Card
             id={"login_card"}
             className={"loginCard"}
-            title="Data Intelligence Suite"
+            title="Login"
         >
 
             <form onSubmit={formik.handleSubmit}>

@@ -44,8 +44,9 @@
 }
 
 #register_card{
-    border: 3px solid #5773FA;
+    /*border: 3px solid #5773FA;*/
     /* align-self: center; */
+    border:none;
 
     /*Aligning it Horizontally in the Center*/
     width: 30%;
