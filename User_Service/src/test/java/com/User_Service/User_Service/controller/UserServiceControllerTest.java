@@ -60,6 +60,28 @@ public class UserServiceControllerTest {
     }
 
     @Test
+    @DisplayName("When_getAll_is_requested_valid_data")
+    public void userGetAllRequestValidData() throws Exception {
+
+        List<User> users = new ArrayList<>();
+        GetAllUsersResponse getAllUsersResponse = new GetAllUsersResponse("message", true, users);
+
+        when(service.getAllUsers()).thenReturn(getAllUsersResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/User/getAll"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase cha
+
+        GetAllUsersResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), GetAllUsersResponse.class);
+
+        Assertions.assertNotNull(returnClass);
+    }
+
+    @Test
     @DisplayName("When_user_login_is_requested")
     public void userLoginRequest() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
