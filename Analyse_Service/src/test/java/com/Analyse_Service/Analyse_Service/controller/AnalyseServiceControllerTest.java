@@ -114,7 +114,6 @@ public class AnalyseServiceControllerTest {
 
         AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList);
 
-
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
         mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
