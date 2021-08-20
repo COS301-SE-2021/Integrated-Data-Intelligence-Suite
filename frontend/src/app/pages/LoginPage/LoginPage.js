@@ -55,10 +55,11 @@ const LoginPage = () => {
                     .then(response => {
                         return response.json()
                     }).then(json => {
-                    alert(json.message);
                     if (json.success) {
                         localStorage.setItem("user", json.id)
                         history.push('/chart');
+                    }else{
+                        alert(json.message)
                     }
                 });
             }
