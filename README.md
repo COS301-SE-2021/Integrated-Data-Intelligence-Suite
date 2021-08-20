@@ -98,7 +98,7 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 <td>
 
   <div>
-    <img align='left' alt="Rhuli" src="https://media-exp3.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1628726400&v=beta&t=EfToBL0VX5o8tmkDrypVcaeCgjrO8rbTugAvmRIavTg" width="200pt">
+    <img align='left' alt="Rhuli" src="https://avatars.githubusercontent.com/u/82459444?s=400&u=03c9b49c05229b42983fa2a6535101cf05564bc8&v=4" width="200pt">
 
   </div>
 
@@ -106,7 +106,7 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <p align="right"><em>Back-end & Machine Learning</em></p>
  <p align="right">
-     <a href="https://media-exp1.licdn.com/dms/image/C4D03AQFPjkvXxyQa2A/profile-displayphoto-shrink_800_800/0/1622998182638?e=1634774400&v=beta&t=2DRHcUYyGURT1hjD5les6UWP_gqkmKeT_4vgvhQpWjY">
+     <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
