@@ -155,7 +155,8 @@ In my spare time when not coding, i like to gym and be outdoors, and food and ga
 
 <p>
  <br>
-A computer science student and Linux enthusiast who is into learning random facts about science and technology.<br>
+A computer science student and Linux enthusiast who is into learning random facts<br>
+about science and technology.<br>
 I prefer coding in Java, Python or javascript.<br>
 We can change the world by changing the people around us, with memes!<br>
 </p>
@@ -191,7 +192,8 @@ We can change the world by changing the people around us, with memes!<br>
 
 <p>
 <br>
-I am very Interested in Quantum computing and how far it will rise in the future<br>
+I am very Interested in Quantum computing <br>
+and how far it will rise in the future<br>
 my hobbies include gymming,watching movies, playing viedo games<br>
 I enjoy coding and learning new things<br>
 </p>
