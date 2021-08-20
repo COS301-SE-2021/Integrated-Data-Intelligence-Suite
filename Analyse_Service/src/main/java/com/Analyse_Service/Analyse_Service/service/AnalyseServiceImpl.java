@@ -794,7 +794,7 @@ public class AnalyseServiceImpl {
 
 
         /*******************READ MODEL OUTPUT*****************/
-        LogisticRegressionModel model1 = LogisticRegressionModel.load("../models/SteveLogisticRegesionmodel");
+        LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
         Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
         Dataset<Row> res = model1.transform(input);
