@@ -28,9 +28,9 @@ public class UserServiceController {
     }
 
     @GetMapping(value = "/getAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody GetAllUsersResponse getAllUsers( GetAllUsersRequest request) throws Exception {
+    public @ResponseBody GetAllUsersResponse getAllUsers() throws Exception {
         //GetAllUsersRequest request = requestEntity.getBody();
-        return service.getAllUsers(request);
+        return service.getAllUsers();
     }
 
     @PostMapping(value = "/getUser" , produces = {MediaType.APPLICATION_JSON_VALUE})
