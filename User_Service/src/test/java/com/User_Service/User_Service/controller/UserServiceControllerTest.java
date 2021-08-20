@@ -1,56 +1,55 @@
 package com.User_Service.User_Service.controller;
 
 import com.User_Service.User_Service.UserServiceApplication;
+import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.request.GetUserRequest;
 import com.User_Service.User_Service.request.LoginRequest;
 import com.User_Service.User_Service.request.ManagePermissionsRequest;
 import com.User_Service.User_Service.request.RegisterRequest;
+import com.User_Service.User_Service.response.GetAllUsersResponse;
 import com.User_Service.User_Service.rri.Permission;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = UserServiceApplication.class)
-public class UserServiceControllerTest {
-    @Autowired
-    private UserServiceController controller;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-    @Autowired
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(UserServiceController.class)
+public class UserServiceControllerTest {
+
+
+    @MockBean
     private UserServiceImpl service;
 
+    @Autowired
     private MockMvc mockMvc;
 
-    private String randomUsername;
-
-    private String randomEmail;
-
-    /*@Before
-    public void setup(){
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        int max = 100;
-        int min = 1;
-        int range = max - min + 1;
-        int randomNum = (int)(Math.random() * range) + min;
-        randomUsername = "testUser" + randomNum;
-        randomEmail = "testEmail" + randomNum + "@test.com";
-    }*/
 
     @Test
     @DisplayName("When_getAll_is_requested")
@@ -76,7 +75,7 @@ public class UserServiceControllerTest {
     public void userRegisterRequest() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/User/register")
-                .content(asJsonString(new RegisterRequest(randomUsername, "firstname", "lastname", "password", randomEmail)))
+                .content(asJsonString(new RegisterRequest("randomUsername", "firstname", "lastname", "password", "randomEmail")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -99,7 +98,7 @@ public class UserServiceControllerTest {
     public void userManagePermissions() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/User/changepermission")
-                .content(asJsonString(new ManagePermissionsRequest(randomUsername, Permission.IMPORTING)))
+                .content(asJsonString(new ManagePermissionsRequest("randomUsername", Permission.IMPORTING)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
