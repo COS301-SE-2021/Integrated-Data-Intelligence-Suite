@@ -117,9 +117,9 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <p>
 <br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+I'm a programmer always willing in improve myself, challenge me and I'll do you one better. <br>
+I am main interested in backend functionality, but will take up any other forms of programming happily. <br>
+In my spare time when not coding, i like to gym and be outdoors, and food and gamming <br>
 </p>
 </td>
 </tr>
@@ -138,7 +138,7 @@ Wow thats a lot of stuff!<br>
 
 <h1 align="right">Wandile Makhubele</h1>
 
-<p align="right"> <em>Deployment & Back-End</em></p>
+<p align="right"> <em>Data Importing, Permission Management</em></p>
 
 </p>
  <p align="right">
@@ -169,7 +169,7 @@ Wow thats a lot of stuff!<br>
 <td>
 
   <div>
-    <img align='left' alt="Rhuli"  src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
+    <img align='left' alt="Steve"  src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
 
   </div>
 
@@ -230,9 +230,9 @@ Wow thats a lot of stuff!<br>
 <br> 
 <br> 
 <br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+Striving to become a well-rounded full-stack engineer.<br>
+If you can master both ends, then why not?<br>
+I enjoy problem-solving, fleshing out new ideas and exploring new worlds.<br>
 </p>
 </td>
 </tr>
