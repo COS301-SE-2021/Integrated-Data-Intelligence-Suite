@@ -33,8 +33,8 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [Version 4]()
 * [Coding Standards](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [Architectural Document](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
-* [User Manual]()
-* [Technical Installation]()
+* [User Manual](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
+* [Technical Installation](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S)
 
 <a name="project-board"></a>
 ## Project Management Tools
