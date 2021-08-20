@@ -104,7 +104,7 @@ I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <p align="right"><em>Back-end & Machine Learning</em></p>
  <p align="right">
-     <a href="https://www.linkedin.com/in/rhuli-nghondzweni-28a0a6210/">
+     <a href="https://avatars.githubusercontent.com/u/82459444?v=4">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
       </a>
       &nbsp&nbsp&nbsp&nbsp
