@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DetailsCard renders correctly 1`] = `
+<div
+  className="ant-card ant-card-bordered"
+  id="details_card"
+>
+  <div
+    className="ant-card-head"
+    style={Object {}}
+  >
+    <div
+      className="ant-card-head-wrapper"
+    >
+      
+      <div
+        className="ant-card-extra"
+      >
+        <p
+          onClick={[Function]}
+        >
+          close
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="ant-card-body"
+    style={Object {}}
+  >
+    <div
+      className="ant-descriptions"
+    >
+      <div
+        className="ant-descriptions-view"
+      >
+        <table>
+          <tbody>
+            <tr
+              className="ant-descriptions-row"
+            >
+              <th
+                className="ant-descriptions-item map_1"
+                colSpan={1}
+              >
+                <div
+                  className="ant-descriptions-item-container"
+                >
+                  <span
+                    className="ant-descriptions-item-label ant-descriptions-item-no-colon"
+                    style={Object {}}
+                  >
+                    Entity Name
+                  </span>
+                </div>
+              </th>
+            </tr>
+            <tr
+              className="ant-descriptions-row"
+            >
+              <td
+                className="ant-descriptions-item map_1"
+                colSpan={1}
+              >
+                <div
+                  className="ant-descriptions-item-container"
+                >
+                  <span
+                    className="ant-descriptions-item-content"
+                    style={Object {}}
+                  >
+                    Individual
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr
+              className="ant-descriptions-row"
+            >
+              <th
+                className="ant-descriptions-item map_1"
+                colSpan={1}
+              >
+                <div
+                  className="ant-descriptions-item-container"
+                >
+                  <span
+                    className="ant-descriptions-item-label ant-descriptions-item-no-colon"
+                    style={Object {}}
+                  >
+                    Entity Type
+                  </span>
+                </div>
+              </th>
+            </tr>
+            <tr
+              className="ant-descriptions-row"
+            >
+              <td
+                className="ant-descriptions-item map_1"
+                colSpan={1}
+              >
+                <div
+                  className="ant-descriptions-item-container"
+                >
+                  <span
+                    className="ant-descriptions-item-content"
+                    style={Object {}}
+                  >
+                    Strong
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr
+              className="ant-descriptions-row"
+            >
+              <th
+                className="ant-descriptions-item map_1"
+                colSpan={1}
+              >
+                <div
+                  className="ant-descriptions-item-container"
+                >
+                  <span
+                    className="ant-descriptions-item-label ant-descriptions-item-no-colon"
+                    style={Object {}}
+                  >
+                    Average Likes
+                  </span>
+                </div>
+              </th>
+            </tr>
+            <tr
+              className="ant-descriptions-row"
+            >
+              <td
+                className="ant-descriptions-item map_1"
+                colSpan={1}
+              >
+                <div
+                  className="ant-descriptions-item-container"
+                >
+                  <span
+                    className="ant-descriptions-item-content"
+                    style={Object {}}
+                  >
+                    46776
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+`;

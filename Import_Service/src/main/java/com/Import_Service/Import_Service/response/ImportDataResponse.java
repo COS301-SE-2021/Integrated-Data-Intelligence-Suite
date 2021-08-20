@@ -7,6 +7,10 @@ import java.util.ArrayList;
 public class ImportDataResponse {
     ArrayList<ImportedData> list;
 
+    public ImportDataResponse() {
+
+    }
+
     public ImportDataResponse(ArrayList<ImportedData> list) {
         this.list = list;
     }

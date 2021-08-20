@@ -1,7 +1,15 @@
 package com.Analyse_Service.Analyse_Service.dataclass;
 
+import javax.persistence.*;
+
+@Entity(name = "ParsedData")
+@Table(name = "ParsedData")
 public class ParsedData {
+    @Id
+    @GeneratedValue(generator = "")
     private Long id;
+
+
     private String textMessage;
     private String date;
     private String location;
@@ -9,6 +17,14 @@ public class ParsedData {
 
     public ParsedData() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTextMessage() {
@@ -43,12 +59,4 @@ public class ParsedData {
         this.likes = likes;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

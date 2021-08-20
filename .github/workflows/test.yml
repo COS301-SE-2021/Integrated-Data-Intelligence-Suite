@@ -6,9 +6,15 @@ name: Master CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+
+    branches:
+        - master
+        - develop(new)
+
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+      - develop(new)
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,8 +24,24 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: user
+          POSTGRES_PASSWORD: cos301emergeCapstone
+          POSTGRES_USER: emerge
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    runs-on: windows-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -28,10 +50,20 @@ jobs:
       # Runs a single command using the runners shell
       - name: Set up JDK 1.11
         uses: actions/setup-java@v1
-        with: 
+        with:
           java-version: 1.11
-      # Runs a set of commands using the runners shell
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Test with Maven
-        run: mvn -B test --file pom.xml
+      # Runs tests of User_Service
+      - name: Test User_Service with Maven
+        run: mvn -B test --file User_Service/pom.xml
+      # Runs tests of Parse_Service
+      - name: Test Parse_Service with Maven
+        run: mvn -B test --file Parse_Service/pom.xml
+      # Runs tests of Import_Service
+      - name: Test Import_Service with Maven
+        run: mvn -B test --file Import_Service/pom.xml
+      # Runs tests of Analyse_Service
+      - name: Test Import_Service with Maven
+        run: mvn -B test --file Analyse_Service/pom.xml
+      # Runs tests of Visualize_Service
+      - name: Test Import_Service with Maven
+        run: mvn -B test --file Visualize_Service/pom.xml

@@ -1,0 +1,114 @@
+/*************************************************************/
+/********************* Sidebar(Left)  ***************************/
+#sidebar_div {
+    background: white;
+    border-right: 0.2em solid #E8E8E9;
+    /*border: 3px solid #5873f9;*/
+}
+
+#sidebar_menu {
+    background: transparent;
+    color: #333333;
+    border: 0;
+    /*border: 3px solid red;*/
+    height:87%;
+}
+
+#sidebar_menu > li {
+    padding-left: 24px;
+    /*border: 2px solid red;*/
+    width: 80%;
+    margin-left: 12px;
+    margin-right: 0px;
+    margin-bottom: 14px;
+    margin-top: 8px;
+    padding-right: 24px;
+    border-radius: 6px;
+    padding-bottom: 11px;
+    padding-top: 10px;
+    height: 45px;
+    background: transparent;
+}
+
+/*When a Sidebar Menu item when it has been selected(clicked)*/
+#sidebar_menu > li.ant-menu-item-selected {
+    border: 0;
+    background: #5873f9;
+    color: white;
+}
+
+/*When a Sidebar Menu item when it has been Hovered over*/
+#sidebar_menu > li.ant-menu-item-active {
+    border: 0;
+    color: #5873f9;
+}
+
+/*Hovering over a menu item that has been selected*/
+#sidebar_menu > li.ant-menu-item-active.ant-menu-item-selected {
+    border: 0;
+    color: white;
+}
+
+
+/**/
+#sidebar_menu > li.ant-menu-item::after {
+    border: 0;
+    color: white;
+}
+
+
+/* The Collapse/Expand Trigger(arrow) at the Top of the SideBar*/
+.ant-layout-sider-trigger[style] {
+    /* Positions the Trigger at the top of*/
+    /*Comment this out and Set 'bottom:0' to position trigger at the bottom*/
+    top: 0;
+    position: fixed;
+    z-index: 1;
+    height: 48px;
+    color: black !important;
+    line-height: 48px;
+    text-align: center;
+    background:   #5873f9 !important  ;
+    cursor: pointer;
+    transition: all 0.2s;
+    /*border-radius: 10px;*/
+    /*left:0;*/
+    /*width: 50px;*/
+
+}
+
+#outer_layout {
+    min-height: 100vh;
+    background: black;
+}
+
+#logo {
+    height: 10%;
+    /*margin: 16px;*/
+    margin: 0;
+    /*background: rgb(252, 0, 64);*/
+    background: transparent;
+    line-height: 3px;
+    /*border: 3px solid #f44336;*/
+}
+
+
+.ant-layout-sider {
+    color: #fff;
+    line-height: 120px;
+    /*background: #3ba0e9;*/
+}
+
+> .code-box-demo > .ant-layout + .ant-layout {
+    margin-top: 48px;
+}
+
+/*Color of a Menu Item When Selected*/
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: deeppink;
+}
+
+[data-theme="dark"] .ant-layout-sider {
+    background: #3499ec;
+}
+

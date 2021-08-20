@@ -1,6 +1,9 @@
 package com.Gateway_Service.Gateway_Service.service;
 
 import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,46 +17,38 @@ public class AnalyseService {
     @Autowired
     private RestTemplate restTemplate;
 
-
-
-    //@HystrixCommand(fallbackMethod = "findSentimentFallback")
-    /*public AnalyseDataResponse findSentiment(String line) {
-
-        String url = "http://Analyse-Service/Analyse/findSentiment";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("line",line);
-
-        ResponseEntity<AnalyseDataResponse> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, AnalyseDataResponse.class);
-        AnalyseDataResponse analyseResponse = responseEntity.getBody();
-
-        return analyseResponse;
-    }
-
-
-    public AnalyseDataResponse findSentimentFallback(String line){
-        AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null);
-        analyseDataResponse.setFallback(true);
-        analyseDataResponse.setFallbackMessage("{Failed to get findSentiment data}");
-        return analyseDataResponse;
-    }*/
-
-
+    /**
+     * This method is used to communicate to the Analyse-Service.
+     * @param analyseRequest This is a request object which contains data required to be analysed.
+     * @return AnalyseDataResponse This object contains analysed data returned by Analyse-Service
+     */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) {
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<AnalyseDataRequest> requestEntity =new HttpEntity<>(analyseRequest,requestHeaders);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        ResponseEntity<AnalyseDataResponse > responseEntity = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",  HttpMethod.POST, requestEntity,AnalyseDataResponse.class);
-        AnalyseDataResponse analyseResponse= responseEntity.getBody();
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(analyseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        AnalyseDataResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeData", request, AnalyseDataResponse.class);
 
         return analyseResponse;
     }
 
-
-    public AnalyseDataResponse analyzeDataFallback(String line){
-        AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null, null, null);
+    /**
+     * This method is used to return fail values if communication to the Analyse-Service fails.
+     * @param analyseRequest This param is used to identify the method.
+     * @return AnalyseDataResponse This object contains failure values as data.
+     */
+    public AnalyseDataResponse analyzeDataFallback(AnalyseDataRequest analyseRequest){
+        AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null, null, null, null, null);
         analyseDataResponse.setFallback(true);
         analyseDataResponse.setFallbackMessage("{Failed to get analyzeData's data}");
         return analyseDataResponse;

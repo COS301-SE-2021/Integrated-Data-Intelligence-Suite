@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="vertical_alternating js-focus-visible focus-visible css-g5lqm7-Wrapper e1gmwefz5"
+  onClickCapture={[Function]}
+  onKeyDown={[Function]}
+>
+  <div
+    className="vertical_alternating timeline-main-wrapper css-1dujl4k-TimelineMainWrapper e1gmwefz4"
+    id="timeline-main-wrapper"
+    onScroll={[Function]}
+  >
+    <div
+      className="css-1iv48dl-TimelineVerticalWrapper eecm4uk5"
+      data-testid="tree-main"
+      role="list"
+    />
+  </div>
+  <div
+    className="css-16u30nb-TimelineControlContainer e1gmwefz1"
+    mode="VERTICAL_ALTERNATING"
+  >
+    <div
+      className="css-1lbpa0g-TimelineControlContainer e1fht2ox3"
+    >
+      <ul
+        className="timeline-controls css-1kbn8lv-TimelineNavWrapper e1fht2ox6"
+      >
+        <li
+          className="css-10pi3kr-TimelineNavItem e1fht2ox5"
+        >
+          <button
+            aria-controls="timeline-main-wrapper"
+            aria-disabled={true}
+            aria-label="first"
+            className="css-itazge-TimelineNavButton e1fht2ox4"
+            mode="VERTICAL_ALTERNATING"
+            onClick={[Function]}
+            rotate="TRUE"
+            tabIndex={-1}
+            title="Go to First"
+          >
+            <svg
+              className="feather feather-chevrons-left"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="11 17 6 12 11 7"
+              />
+              <polyline
+                points="18 17 13 12 18 7"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          className="css-10pi3kr-TimelineNavItem e1fht2ox5"
+        >
+          <button
+            aria-controls="timeline-main-wrapper"
+            aria-disabled={true}
+            aria-label="previous"
+            className="css-itazge-TimelineNavButton e1fht2ox4"
+            mode="VERTICAL_ALTERNATING"
+            onClick={[Function]}
+            rotate="TRUE"
+            tabIndex={-1}
+            title="Previous"
+          >
+            <svg
+              className="feather feather-chevron-left"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="15 18 9 12 15 6"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          className="css-z8omlh-TimelineNavItem e1fht2ox5"
+        >
+          <button
+            aria-controls="timeline-main-wrapper"
+            aria-disabled={false}
+            aria-label="next"
+            className="css-itazge-TimelineNavButton e1fht2ox4"
+            mode="VERTICAL_ALTERNATING"
+            onClick={[Function]}
+            rotate="TRUE"
+            tabIndex={0}
+            title="Next"
+          >
+            <svg
+              className="feather feather-chevron-right"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="9 18 15 12 9 6"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          className="css-z8omlh-TimelineNavItem e1fht2ox5"
+        >
+          <button
+            aria-controls="timeline-main-wrapper"
+            aria-disabled={false}
+            aria-label="last"
+            className="css-itazge-TimelineNavButton e1fht2ox4"
+            mode="VERTICAL_ALTERNATING"
+            onClick={[Function]}
+            rotate="TRUE"
+            tabIndex={0}
+            title="Go to Last"
+          >
+            <svg
+              className="feather feather-chevrons-right"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="13 17 18 12 13 7"
+              />
+              <polyline
+                points="6 17 11 12 6 7"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          className="css-z8omlh-TimelineNavItem e1fht2ox5"
+        />
+      </ul>
+    </div>
+  </div>
+  <div
+    className="css-bqtt3d-TimelineContentRender e1gmwefz0"
+    id="react-chrono-timeline"
+  />
+</div>
+`;
