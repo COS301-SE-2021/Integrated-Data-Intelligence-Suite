@@ -17,7 +17,7 @@ public class UserServiceController {
     private UserServiceImpl service;
     /**
      * This function will allow the admin to change the permissions of a user.
-     * @param requestEntity The request containing the necessary information about the user.
+     * @param request The request containing the necessary information about the user.
      * @return A class that contains if the update was successful or not.
      * @throws Exception Thrown when any exceptions are encountered
      */
@@ -28,7 +28,7 @@ public class UserServiceController {
     }
 
     @GetMapping(value = "/getAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody GetAllUsersResponse getAllUsers(@PathVariable GetAllUsersRequest request) throws Exception {
+    public @ResponseBody GetAllUsersResponse getAllUsers( GetAllUsersRequest request) throws Exception {
         //GetAllUsersRequest request = requestEntity.getBody();
         return service.getAllUsers(request);
     }
