@@ -728,7 +728,7 @@ public class AnalyseServiceImpl {
         indexed.show();
 
         //model
-        LogisticRegression lr = new LogisticRegression() //estimator
+       /* LogisticRegression lr = new LogisticRegression() //estimator
                 .setMaxIter(10)
                 .setRegParam(0.3)
                 .setElasticNetParam(0.8);
@@ -750,14 +750,14 @@ public class AnalyseServiceImpl {
 
         /******************Analyse Model Accuracy**************/
         //test
-         Dataset<Row> test = null;
+       /*  Dataset<Row> test = null;
 
         Dataset<Row> predictions = model.transform(testSetDF);
         predictions.show();
-        System.out.println("/*******************Predictions*****************/");
+        System.out.println("/*******************Predictions*****************///");
 
 
-        for (Row r : trainSetDF.select("isTrending").collectAsList())
+      /*  for (Row r : trainSetDF.select("isTrending").collectAsList())
             System.out.println("Trending -> " + r.get(0));
 
 
@@ -794,9 +794,10 @@ public class AnalyseServiceImpl {
 
 
         /*******************READ MODEL OUTPUT*****************/
+        LogisticRegressionModel model1 = LogisticRegressionModel.load("../models/SteveLogisticRegesionmodel");
         Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
-        Dataset<Row> res = lrModel.transform(input);
+        Dataset<Row> res = model1.transform(input);
 
         List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 

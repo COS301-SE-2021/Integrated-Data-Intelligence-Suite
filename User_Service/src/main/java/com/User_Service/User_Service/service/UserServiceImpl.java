@@ -236,14 +236,13 @@ public class UserServiceImpl {
     /**
      * The purpose of this function is to return a list of all users currently
      * registered to the system.
-     * @param request This is the request of the use case.
      * @return This is the response class. It contains a list of all the users
      *         returned from the repository
      * @throws InvalidRequestException This is thrown if the request is null
      *         or if any of its attributes are null.
      */
     @Transactional
-    public GetAllUsersResponse getAllUsers(GetAllUsersRequest request) throws InvalidRequestException {
+    public GetAllUsersResponse getAllUsers() throws InvalidRequestException {
 //        if(request == null) {
 //            throw new InvalidRequestException("The request is null");
 //        }

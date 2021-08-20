@@ -70,6 +70,8 @@ public class ImportServiceImpl {
                 .method("GET", null)
                 .build();
         Response response = client.newCall(req).execute();
+
+
         if(!response.isSuccessful()){
 
             throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(response.body()).string());
