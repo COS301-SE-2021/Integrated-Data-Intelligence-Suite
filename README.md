@@ -191,9 +191,9 @@ We can change the world by changing the people around us, with memes!<br>
 
 <p>
 <br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+I am very Interested in Quantum computing and how far it will rise in the future<br>
+my hobbies include gymming,watching movies, playing viedo games<br>
+I enjoy coding and learning new things<br>
 </p>
 </td>
 </tr>
