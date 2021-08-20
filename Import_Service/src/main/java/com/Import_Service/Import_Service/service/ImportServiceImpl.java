@@ -91,13 +91,25 @@ public class ImportServiceImpl {
      */
     public ImportTwitterResponse importDatedData(ImportTwitterRequest request) throws Exception {
 
-        if(request == null) throw new InvalidTwitterRequestException("request object is null");
+        if(request == null) {
+            throw new InvalidTwitterRequestException("request object is null");
+        }
 
-        if(request.getKeyword().strip().length() >250 || request.getKeyword().strip().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
+        if(request.getKeyword() == null) {
+            throw new InvalidImporterRequestException("Request contains a null value");
+        }
 
-        if(request.getFrom() == null) throw new InvalidTwitterRequestException("\"from\" date not specified");
+        if(request.getKeyword().strip().length() >250 || request.getKeyword().strip().length() < 2) {
+            throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
+        }
 
-        if(request.getTo() == null) throw new InvalidTwitterRequestException("\"to\" date not specified ");
+        if(request.getFrom() == null) {
+            throw new InvalidTwitterRequestException("\"from\" date not specified");
+        }
+
+        if(request.getTo() == null) {
+            throw new InvalidTwitterRequestException("\"to\" date not specified ");
+        }
 
         LocalDate from = request.getFrom();
 

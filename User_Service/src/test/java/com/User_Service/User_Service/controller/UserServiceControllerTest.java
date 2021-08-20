@@ -9,6 +9,7 @@ import com.User_Service.User_Service.rri.Permission;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest(classes = UserServiceApplication.class)
 public class UserServiceControllerTest {
     @Autowired
@@ -41,7 +42,7 @@ public class UserServiceControllerTest {
 
     private String randomEmail;
 
-    /*@Before
+    @Before
     public void setup(){
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         int max = 100;
@@ -50,7 +51,7 @@ public class UserServiceControllerTest {
         int randomNum = (int)(Math.random() * range) + min;
         randomUsername = "testUser" + randomNum;
         randomEmail = "testEmail" + randomNum + "@test.com";
-    }*/
+    }
 
     @Test
     @DisplayName("When_getAll_is_requested")

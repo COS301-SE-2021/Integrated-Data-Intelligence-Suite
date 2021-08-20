@@ -56,3 +56,5 @@ jobs:
       #Runs tests of Parse_Service
       - name: Test Parse_Service with Maven
         run: mvn -B test --file Parse_Service/pom.xml
+      - name: Test Import_Service with Maven
+        run: mvn -B test --file Import_Service/pom.xml
