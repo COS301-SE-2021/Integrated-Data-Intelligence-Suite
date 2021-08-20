@@ -141,7 +141,7 @@ In my spare time I like to gym, be outdoors, food and gamming <br>
 
 <h1 align="right">Wandile Makhubele</h1>
 
-<p align="right"> <em>Data Importing, Permission Management</em></p>
+<p align="right"> <em>Data Importing & User Permissions</em></p>
 
 </p>
  <p align="right">
