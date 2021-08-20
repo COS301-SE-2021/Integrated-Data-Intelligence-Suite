@@ -1,5 +1,6 @@
 package com.Visualize_Service.Visualize_Service.controller;
 
+import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
 import com.Visualize_Service.Visualize_Service.request.VisualizeDataRequest;
 import com.Visualize_Service.Visualize_Service.response.VisualizeDataResponse;
 import com.Visualize_Service.Visualize_Service.service.VisualizeServiceImpl;
@@ -22,6 +23,10 @@ public class VisualizeServiceController {
     @PostMapping("/visualizeData")
     public @ResponseBody VisualizeDataResponse visualizeData(@RequestBody VisualizeDataRequest request) throws Exception{
         //VisualizeDataRequest request = requestEntity.getBody();
+        if (request == null) {
+            throw new InvalidRequestException("FindEntitiesRequest Object is null");
+        }
+
         return service.visualizeData(request);
     }
 }
