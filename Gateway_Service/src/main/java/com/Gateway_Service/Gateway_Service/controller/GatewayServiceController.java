@@ -192,7 +192,7 @@ public class GatewayServiceController {
         //String url = "http://Import-Service/Import/importData";
         //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
 
-        ImportDataRequest importRequest = new ImportDataRequest(key,50);
+        ImportDataRequest importRequest = new ImportDataRequest(key,100);
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
         if(importResponse.getFallback() == true) {

@@ -151,7 +151,7 @@ public class ImportServiceController {
         ImportDataResponse res = null;
         String retString = "";
         try{
-            res = service.importData(new ImportDataRequest("bitcoin", 10));
+            res = service.importData(new ImportDataRequest("bitcoin", 100));
 
         } catch (ImporterException e) {
 
