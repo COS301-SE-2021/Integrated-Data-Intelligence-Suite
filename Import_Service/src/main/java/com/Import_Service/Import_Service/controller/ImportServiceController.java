@@ -34,7 +34,7 @@ public class ImportServiceController {
     /**
      * This method is used to facilitate communication to the Import-Service.
      *
-     * @param requestEntity This is a request entity which contains a ImportDataRequest object.
+     * @param request This is a request entity which contains a ImportDataRequest object.
      * @return ImportDataResponse This object contains imported data which has been processed by Import-Service.
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
@@ -51,7 +51,7 @@ public class ImportServiceController {
     /**
      * This method is used to facilitate communication to the Import-Service.
      *
-     * @param requestEntity This is a request entity which contains a ImportTwitterRequest object.
+     * @param request This is a request entity which contains a ImportTwitterRequest object.
      * @return ImportTwitterResponse This object contains imported data which has been processed by Import-Service.
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
@@ -65,7 +65,7 @@ public class ImportServiceController {
     /**
      * This method is used  to facilitate communication to the Import_service.
      *
-     * @param requestEntity Ta request entity which contains a TwitterRequest object.
+     * @param request Ta request entity which contains a TwitterRequest object.
      * @return ImportTwitterResponse. This object contains imported data which has been processed by Import-Service.
      */
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
