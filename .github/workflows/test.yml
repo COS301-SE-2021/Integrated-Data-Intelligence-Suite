@@ -50,11 +50,19 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.11
-#      # Runs tests of User_Service
-      ##      - name: Test User_Service with Maven
-      ##        run: mvn -B test --file User_Service/pom.xml
-      #Runs tests of Parse_Service
+      # Runs tests of User_Service
+      - name: Test User_Service with Maven
+        run: mvn -B test --file User_Service/pom.xml
+      # Runs tests of Parse_Service
       - name: Test Parse_Service with Maven
         run: mvn -B test --file Parse_Service/pom.xml
+      # Runs tests of Import_Service
       - name: Test Import_Service with Maven
         run: mvn -B test --file Import_Service/pom.xml
+      # Runs tests of Analyse_Service
+      - name: Test Import_Service with Maven
+        run: mvn -B test --file Analyse_Service/pom.xml
+      # Runs tests of Visualize_Service
+      - name: Test Import_Service with Maven
+        run: mvn -B test --file Visualize_Service/pom.xml
+
