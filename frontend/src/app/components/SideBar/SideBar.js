@@ -23,7 +23,7 @@ class SideBar extends React.Component {
         this.setState({collapsed});
     };
 
-    setActive = (value) =>{
+    setActive = (value) => {
         this.setState({active: value})
     }
 
@@ -41,23 +41,13 @@ class SideBar extends React.Component {
                         defaultSelectedKeys={active || "2"}
                         mode="inline"
                     >
-                        {/*<Menu.Item key="1" icon={<HomeOutlined/>}>*/}
-                        {/*    Home*/}
-                        {/*    <Link to='/'/>*/}
-                        {/*</Menu.Item>*/}
-                        <Menu.Item key="2" icon={<BarChartOutlined/>} onClick={()=>this.setActive("2")}>
+
+                        <Menu.Item key="2" icon={<BarChartOutlined/>} onClick={() => this.setActive("2")}>
                             Charts
                             <Link to='/'/>
                         </Menu.Item>
-                        {/*<SubMenu key="sub1" icon={<UserOutlined/>} title="User">*/}
-                        {/*    <Menu.Item key="3">User 1</Menu.Item>*/}
-                        {/*    <Menu.Item key="4"> User 2</Menu.Item>*/}
-                        {/*</SubMenu>*/}
-                        {/*<SubMenu key="sub2" icon={<TeamOutlined/>} title="Team">*/}
-                        {/*    <Menu.Item key="6">Team 1</Menu.Item>*/}
-                        {/*    <Menu.Item key="8">Team 2</Menu.Item>*/}
-                        {/*</SubMenu>*/}
-                        <Menu.Item key="9" icon={<SettingOutlined/>} onClick={()=>this.setActive("9")}>
+
+                        <Menu.Item key="9" icon={<SettingOutlined/>} onClick={() => this.setActive("9")}>
                             Settings
                             <Link to={"/settings"}/>
                         </Menu.Item>

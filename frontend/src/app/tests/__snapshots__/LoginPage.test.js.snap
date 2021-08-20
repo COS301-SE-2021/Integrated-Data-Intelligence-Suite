@@ -15,7 +15,7 @@ exports[`renders correctly 1`] = `
       <div
         className="ant-card-head-title"
       >
-        Data Intelligence Suite
+        Login
       </div>
     </div>
   </div>
