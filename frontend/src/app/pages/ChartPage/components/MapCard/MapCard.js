@@ -92,22 +92,12 @@ function MapCard(props) {
                     center={pretoria_position}
                     zoom={9}
                     scrollWheelZoom={true}
-                    // ref={map => this.map = Map}
                 >
                     <TileLayer
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
 
-                    {/*<FeatureGroup>*/}
-                    {/*    <EditControl*/}
-                    {/*        position="topleft"*/}
-                    {/*        onCreated={_onCreate}*/}
-                    {/*        onEdited={_onEdited}*/}
-                    {/*        onDeleted={_onDeleted}*/}
-                    {/*        draw={{}}*/}
-                    {/*    />*/}
-                    {/*</FeatureGroup>*/}
 
                     {/*Display the City markers onto the map*/}
                     {data_from_backend.map((city, idx) => (
@@ -120,18 +110,13 @@ function MapCard(props) {
                                 showCircleData(city.classname, data_from_backend)
                             }}
                         >
-                            {/*<Popup>*/}
-                            {/*    <b>*/}
-                            {/*        {city.classname}*/}
-                            {/*    </b>*/}
-                            {/*</Popup>*/}
+
                         </CircleMarker>
                     ))}
 
 
                 </Map>
 
-                {/*<pre className="text-left">{JSON.stringify(mapLayers)}</pre>*/}
             </Card>
 
         </>
