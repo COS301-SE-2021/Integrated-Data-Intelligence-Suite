@@ -103,7 +103,7 @@ const LoginPage = () => {
                         placeholder="Password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur} //When the user leaves the form
+                        onBlur={formik.handleBlur} //When the user leaves the form field
                         prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.password && formik.errors.password ? (
