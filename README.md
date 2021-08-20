@@ -80,7 +80,8 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 <p><br>
 I am a Computer Science student studying at University of Pretoria <br>
 I'm skilled in data structures, design patterns, Java, C++, HTML, CSS, JavaScript <br>
-I enjoy programming and learning new things. I'm love gaming, playing/watching soccer, and occasionally reading. <br>
+I enjoy programming and learning new things. <br>
+I'm love gaming, playing/watching soccer, and occasionally reading. <br>
 </p>
 </td>
 </tr>
