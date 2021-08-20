@@ -36,7 +36,7 @@ public class VisualizeService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        VisualizeDataResponse visualizeResponse = restTemplate.postForObject("http://User-Service/User/getAll", request, VisualizeDataResponse.class);
+        VisualizeDataResponse visualizeResponse = restTemplate.postForObject("http://Visualize-Service/Visualize/visualizeData", request, VisualizeDataResponse.class);
 
         return visualizeResponse;
     }
