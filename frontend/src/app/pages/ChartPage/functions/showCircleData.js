@@ -22,7 +22,7 @@ export function showCircleData(clicked_circle_class_name, json_data_from_backend
     array_of_statistic_fields[1].innerHTML = circle_obj_with_data.statistic_2;
     array_of_statistic_fields[2].innerHTML = circle_obj_with_data.statistic_3;
 
-    let detailsbar = document.getElementById("map_card_sidebar")
+    let detailsbar = document.getElementById("map_card_sidebar");
     detailsbar.style.display = "block";
 
 
@@ -31,7 +31,6 @@ export function showCircleData(clicked_circle_class_name, json_data_from_backend
     //Remove The color from the previously clicked circle(if any)
     const array_prev_clicked_circle = document.getElementsByClassName('chosen_circle');
     if (array_prev_clicked_circle.length > 0) {
-
         array_prev_clicked_circle[0].style.fill = 'red';
         array_prev_clicked_circle[0].style.fillopacity = 0.2;
         array_prev_clicked_circle[0].classList.remove('chosen_circle');
