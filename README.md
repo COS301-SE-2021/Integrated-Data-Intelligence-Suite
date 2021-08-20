@@ -172,7 +172,7 @@ We can change the world by changing the people around us, with memes!<br>
 <td>
 
   <div>
-    <img align='left' alt="Steve"  src="https://media-exp3.licdn.com/dms/image/C5603AQFu0hLlJM_kAg/profile-displayphoto-shrink_800_800/0/1618570420545?e=1628726400&v=beta&t=ttnSEtIGAVcnokld3u7jrSib4DcsS_n9U2j3FB4v_uE" width="200pt">
+    <img align='left' alt="Steve"  src="https://avatars.githubusercontent.com/u/73910152?s=400&u=5f3529e51f9c2f7504a574a6b0965edc5c6cbf69&v=4" width="200pt">
 
   </div>
 
@@ -196,7 +196,7 @@ We can change the world by changing the people around us, with memes!<br>
 <br>
 I am very Interested in Quantum computing <br>
 and how far it will rise in the future<br>
-my hobbies include gymming,watching movies, playing viedo games<br>
+my hobbies include gymming,watching movies, playing video games<br>
 I enjoy coding and learning new things<br>
 </p>
 </td>
