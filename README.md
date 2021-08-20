@@ -131,7 +131,7 @@ In my spare time when not coding, i like to gym and be outdoors, and food and ga
 <td>
 
   <div>
-    <img align='left' alt="Wandile"  src="https://media-exp1.licdn.com/dms/image/C4D03AQF9xmaPIT4sGA/profile-displayphoto-shrink_800_800/0/1613066923973?e=1628121600&v=beta&t=pI14hAWqRKAxs6mTpmSy6wBnAYdCtkxFk4sMss2SSts" width="200pt">
+    <img align='left' alt="Wandile"  src="https://avatars.githubusercontent.com/u/81305595?s=400&u=3f7a2dfb37af9c23b5feac1dc47261c8508bbefa&v=4" width="200pt">
 
   </div>
 
