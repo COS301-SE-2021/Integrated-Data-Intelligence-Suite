@@ -225,15 +225,6 @@ public class AnalyseServiceTest {
 
     /******************************************Repository Functional Test**********************************************/
 
-
-    @Test
-    @DisplayName("fetch parsedData from database")
-    public void fetchParsedDataFromDatabase() throws AnalyzerException {
-        FetchParsedDataRequest request = new FetchParsedDataRequest("ParsedData");
-        FetchParsedDataResponse testResults = service.fetchParsedData(request);
-        Assertions.assertNotNull(testResults);
-    }
-
     @Test
     @DisplayName("fetch saveAIModel from database")
     public void fetchSaveAIModelFromDatabase() throws AnalyzerException {
