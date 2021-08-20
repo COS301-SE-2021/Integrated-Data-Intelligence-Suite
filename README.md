@@ -230,9 +230,9 @@ Wow thats a lot of stuff!<br>
 <br> 
 <br> 
 <br>
-Something interesting about you. Something Special or unique about you.<br>
-it's okay, We think cats are super cool<br>
-Wow thats a lot of stuff!<br>
+Striving to become a well-rounded full-stack engineer.<br>
+If you can master both ends, then why not?<br>
+I enjoy problem-solving, fleshing out new ideas and exploring new worlds.<br>
 </p>
 </td>
 </tr>
