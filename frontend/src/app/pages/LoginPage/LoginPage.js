@@ -5,6 +5,7 @@ import {Link, useHistory} from "react-router-dom";
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
 import '../../../styles/LoginPage/login.css';
+import "../../../styles/LoginPage/loginButton.css";
 
 
 //Validation Function
@@ -59,7 +60,7 @@ const LoginPage = () => {
                     if (json.success) {
                         localStorage.setItem("user", json.id)
                         history.push('/chart');
-                    }else{
+                    } else {
                         alert(json.message)
                     }
                 });
@@ -77,8 +78,8 @@ const LoginPage = () => {
         >
 
             <form onSubmit={formik.handleSubmit}>
-
                 <Form.Item
+                    className={'input_item_div'}
                 >
                     <Input
                         id="email"
@@ -90,24 +91,23 @@ const LoginPage = () => {
                         value={formik.values.email}
                         prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
-                    {formik.touched.email && formik.errors.email ? (
-                        <p>{formik.errors.email}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
+                    className={'input_item_div'}
                 >
                     <Input.Password
                         id="password"
                         name="password"
                         type="password"
-                        placeholder="Password"
+                        placeholder="password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur} //When the user leaves the form field
                         prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
-                    {formik.touched.password && formik.errors.password ? (
-                        <p>{formik.errors.password}</p>) : null}
+                    {/*{formik.touched.password && formik.errors.password ? (*/}
+                    {/*    <p>{formik.errors.password}</p>) : null}*/}
 
                 </Form.Item>
 
