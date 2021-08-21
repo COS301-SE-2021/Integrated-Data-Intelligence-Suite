@@ -1,4 +1,3 @@
-import './App.scss';
 import React, {Component} from 'react';
 import {Link, Route, Switch} from "react-router-dom";
 import LoginPage from './pages/LoginPage/LoginPage';
@@ -9,6 +8,7 @@ import UserPermissions from "./pages/UserPermissionsPage/UserPermissions";
 import Permissions from "./pages/PermissionsPage/Permissions";
 import LogoutPage from "./pages/LogoutPage/LogoutPage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
+import './App.scss';
 
 class App extends Component {
     state = {}
@@ -28,7 +28,6 @@ class App extends Component {
                     <Route exact path='/register'>
                         <RegisterPage/>
                     </Route>
-
 
                     <Route exact path='/chart'>
                         <ChartPage/>
@@ -52,11 +51,10 @@ class App extends Component {
 
                     <Route path="*">
                         <div>
-                            <h2>Page not Fount</h2>
+                            <h2>Page not Found</h2>
                             <Link to="/"> back to home page</Link>
                         </div>
                     </Route>
-
                 </Switch>
             </>
         );

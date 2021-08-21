@@ -1,0 +1,38 @@
+/*The div of the Entire details card
+* The Parent div of all the components inside the details card
+    including the card 'head' and 'body'
+*
+*/
+#details_card{
+    /*border: 3px solid blue;*/
+    /*height: 400px;*/
+    height: 100%;
+    /*width: ;*/
+    border: 0;
+    box-shadow: none;
+}
+
+/*The Label/Title of each description */
+th.ant-descriptions-item.map_1 > div.ant-descriptions-item-container > span.ant-descriptions-item-label{
+    background-color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 1.4em !important;
+    /*border: 3px solid black;*/
+    border:0;
+    color: black;
+}
+
+/*The actual statistic / number value underneath the Label Title*/
+td.ant-descriptions-item.map_1 > div.ant-descriptions-item-container > span.ant-descriptions-item-content{
+    font-size: 20px;
+    /*border: 3px solid orange;*/
+    border:0;
+    color: #5873f9;
+    background: white;
+    box-shadow: none;
+}
+
+#details_card > .ant-card-head{
+    border:0;
+}
+

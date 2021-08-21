@@ -6,6 +6,7 @@ import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +76,12 @@ public class UserServiceImpl {
             }
 
             if (diff == 0) {
-                return new LoginResponse("Successfully logged in", true,user.getId());
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", user.getId().toString());
+                jsonObject.put("username", user.getUsername());
+                jsonObject.put("isAdmin", user.getAdmin());
+                jsonObject.put("permission", user.getPermission().toString());
+                return new LoginResponse("Successfully logged in", true, jsonObject.toString());
             }
             else {
                 return new LoginResponse("Incorrect password", false);
@@ -230,14 +236,13 @@ public class UserServiceImpl {
     /**
      * The purpose of this function is to return a list of all users currently
      * registered to the system.
-     * @param request This is the request of the use case.
      * @return This is the response class. It contains a list of all the users
      *         returned from the repository
      * @throws InvalidRequestException This is thrown if the request is null
      *         or if any of its attributes are null.
      */
     @Transactional
-    public GetAllUsersResponse getAllUsers(GetAllUsersRequest request) throws InvalidRequestException {
+    public GetAllUsersResponse getAllUsers() throws InvalidRequestException {
 //        if(request == null) {
 //            throw new InvalidRequestException("The request is null");
 //        }

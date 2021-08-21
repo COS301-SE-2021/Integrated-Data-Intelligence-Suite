@@ -2,12 +2,18 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 import com.Analyse_Service.Analyse_Service.controller.AnalyseServiceController;
 import com.Gateway_Service.Gateway_Service.GatewayServiceApplication;
+import com.Gateway_Service.Gateway_Service.service.AnalyseService;
+import com.Gateway_Service.Gateway_Service.service.ImportService;
+import com.Gateway_Service.Gateway_Service.service.ParseService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,6 +25,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 public class GatewayServiceControllerTest {
     @InjectMocks
     private GatewayServiceController controller;
+
+    @Mock
+    private ImportService importClient;
+
+    @Mock
+    private ParseService parseClient;
+
+    @Mock
+    private AnalyseService analyseClient;
+
 
     private MockMvc mockMvc;
 

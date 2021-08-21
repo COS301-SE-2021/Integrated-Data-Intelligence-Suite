@@ -1,8 +1,12 @@
 package com.Parse_Service.Parse_Service.service;
 
+import com.Parse_Service.Parse_Service.repository.ArticleRepository;
+import com.Parse_Service.Parse_Service.repository.DataRepository;
+import com.Parse_Service.Parse_Service.rri.ArticleExtractor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import com.Parse_Service.Parse_Service.request.*;
@@ -14,6 +18,12 @@ import java.util.*;
 
 @Service
 public class ParseServiceImpl {
+
+    @Autowired
+    private DataRepository dataRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     public ParseServiceImpl() {
 
@@ -47,10 +57,11 @@ public class ParseServiceImpl {
 
         System.out.println(request.getJsonString());
         JSONObject obj = new JSONObject(request.getJsonString());
-        JSONArray jsonArray = obj.getJSONArray("statuses");;
         ArrayList<ParsedData> parsedList = new ArrayList<>();
+        ArrayList<ParsedArticle> parsedArticlesList = new ArrayList<>();
 
         if (request.getType() == DataSource.TWITTER) {
+            JSONArray jsonArray = obj.getJSONArray("statuses");;
             for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
                 ParsedData parsedData = new ParsedData();
@@ -78,8 +89,36 @@ public class ParseServiceImpl {
 
                 parsedList.add(parsedData);
             }
+            //if(request.getPermission().equals("IMPORTING")) {
+            //    dataRepository.saveAll(parsedList);
+            //}
+        }
+        else if(request.getType() == DataSource.NEWSARTICLE) {
+            JSONArray jsonArray = obj.getJSONArray("articles");
+            for(int i = 0; i < jsonArray.length() && i < 100; i++) {
+                ParsedArticle article = new ParsedArticle();
+                ArticleExtractor extractor = new ArticleExtractor();
+
+                //parse title from article
+                article.setTitle(extractor.getTitle(jsonArray.get(i).toString()));
+
+                //parse description from article
+                article.setDescription(extractor.getDescription(jsonArray.get(i).toString()));
+
+                //parse description from article
+                article.setContent(extractor.getContent(jsonArray.get(i).toString()));
+
+                //parse description from article
+                article.setDate(extractor.getDate(jsonArray.get(i).toString()));
+
+                //add parsed article to list
+                parsedArticlesList.add(article);
+            }
+            if(request.getPermission().equals("IMPORTING")) {
+                articleRepository.saveAll(parsedArticlesList);
+            }
         }
 
-        return new ParseImportedDataResponse(parsedList);
+        return new ParseImportedDataResponse(parsedList, parsedArticlesList);
     }
 }

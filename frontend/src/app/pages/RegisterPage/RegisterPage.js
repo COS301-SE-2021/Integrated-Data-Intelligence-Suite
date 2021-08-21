@@ -4,6 +4,7 @@ import RegisterButton from "./RegisterButton";
 import {Link, useHistory} from "react-router-dom";
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
+import '../../../styles/RegisterPage/registerPage.css';
 
 
 //Validation Function
@@ -47,6 +48,7 @@ const validate = (values) => {
 
 
 const RegisterPage = () => {
+    localStorage.clear();
     let history = useHistory();
     const formik = useFormik({
         initialValues: {
@@ -68,27 +70,29 @@ const RegisterPage = () => {
                 .then(response => {
                     return response.json()
                 }).then(json => {
-                    alert(json.message);
                     if(json.success) {
                         history.push('/');
+                    }else{
+                        alert(json.message)
                     }
                 });
 
             //use this to go to another page after successful validation server-side
 
         },
+
     });
 
     return (
+        <div className={"background gradient register"}>
         <Card
             id={"register_card"}
             className={"loginCard"}
-            title="Data Intelligence Suite"
+            title="Register"
         >
             <form onSubmit={formik.handleSubmit}>
 
                 <Form.Item
-                    name="firstName"
                     label={'First Name'}
                 >
                     <Input
@@ -99,14 +103,13 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.firstName}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.firstName && formik.errors.firstName ? (
                         <p>{formik.errors.firstName}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
-                    name="lastName"
                     label={'Last Name'}
                 >
                     <Input
@@ -117,14 +120,13 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.lastName}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.lastName && formik.errors.lastName ? (
                         <p>{formik.errors.lastName}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
-                    name="username"
                     label={'User name'}
                 >
                     <Input
@@ -135,14 +137,13 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.username}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.username && formik.errors.username ? (
                         <p>{formik.errors.username}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
-                    name="email"
                     label={'email'}
                 >
                     <Input
@@ -153,26 +154,24 @@ const RegisterPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.email}
-                        prefix={<UserOutlined className="site-form-item-icon"/>}
+                        // prefix={<UserOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.email && formik.errors.email ? (
                         <p>{formik.errors.email}</p>) : null}
                 </Form.Item>
 
                 <Form.Item
-                    name="password"
                     label={'password'}
                 >
                     <Input.Password
                         id="password"
-
                         name="password"
                         type="password"
                         placeholder="Password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur} //When the user leaves the form
-                        prefix={<LockOutlined className="site-form-item-icon"/>}
+                        // prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.password && formik.errors.password ? (
                         <p>{formik.errors.password}</p>) : null}
@@ -180,7 +179,6 @@ const RegisterPage = () => {
                 </Form.Item>
 
                 <Form.Item
-                    name="confirmpassword"
                     label={'Confirm password'}
                 >
                     <Input.Password
@@ -191,7 +189,7 @@ const RegisterPage = () => {
                         value={formik.values.confirmedpassword}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur} //When the user leaves the form
-                        prefix={<LockOutlined className="site-form-item-icon"/>}
+                        // prefix={<LockOutlined className="site-form-item-icon"/>}
                     />
                     {formik.touched.confirmedpassword && formik.errors.confirmedpassword ? (
                         <p>{formik.errors.confirmedpassword}</p>) : null}
@@ -222,6 +220,7 @@ const RegisterPage = () => {
                 {/*</Form.Item>*/}
             </form>
         </Card>
+        </div>
     );
 };
 
