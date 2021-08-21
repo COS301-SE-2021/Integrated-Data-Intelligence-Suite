@@ -270,9 +270,9 @@ public class UserServiceTest {
         Assertions.assertEquals("Registration successful", response.getMessage());
     }
 
-    /*
-    ============================Login tests============================
-    */
+
+    //============================Login tests============================
+
 
     @Test
     @DisplayName("If_LoginRequest_Is_Null")
@@ -358,15 +358,41 @@ public class UserServiceTest {
 
         //test
 
-        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
+        LoginRequest request = new LoginRequest("email@test.com", "passwordTest");
         LoginResponse response = service.login(request);
 
         when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(testUser));
         Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
         Assertions.assertNotNull(foundUser);
 
-        Assertions.assertEquals("Incorrect password", response.getMessage());
+        Assertions.assertEquals("Successfully logged in", response.getMessage());
 
+    }
+
+//===================== RegisterAdmin tests =====================
+
+    @Test
+    @DisplayName("If_RegisterAdminRequest_Is_Null")
+    public void registerAdminRequestNull() {
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(null));
+    }
+
+    @Test
+    @DisplayName("If_RegisterAdminRequest_Contains_Null_Attributes")
+    public void registerAdminRequestAtribTest() {
+        RegisterAdminRequest requestAllNull = new RegisterAdminRequest(null,null,null,null,null);
+        RegisterAdminRequest requestUsernameNull = new RegisterAdminRequest("username", "first" , "last", "pass", "email@test.com");
+        RegisterAdminRequest requestFirstNameNull = new RegisterAdminRequest("username", null , "last", "pass", "email@test.com");
+        RegisterAdminRequest requestLastNameNull = new RegisterAdminRequest("username", "first" , null, "pass", "email@test.com");
+        RegisterAdminRequest requestPasswordNull = new RegisterAdminRequest("username", "first" , "last", null, "email@test.com");
+        RegisterAdminRequest requestEmailNull = new RegisterAdminRequest("username", "first" , "last", "pass", null);
+
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestAllNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestUsernameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestFirstNameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestLastNameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestPasswordNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestEmailNull));
     }
 
 }
