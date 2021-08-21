@@ -32,6 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-
-### Importer ###
+### resources ###
+!/src/test/resources/
 src/main/resources/application.properties
