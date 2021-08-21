@@ -89,9 +89,9 @@ public class ParseServiceImpl {
 
                 parsedList.add(parsedData);
             }
-            if(request.getPermission().equals("IMPORTING")) {
-                dataRepository.saveAll(parsedList);
-            }
+            //if(request.getPermission().equals("IMPORTING")) {
+            //    dataRepository.saveAll(parsedList);
+            //}
         }
         else if(request.getType() == DataSource.NEWSARTICLE) {
             JSONArray jsonArray = obj.getJSONArray("articles");
