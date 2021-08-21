@@ -30,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Modifying
     @Query("UPDATE users u SET u.password = :newpass WHERE u.id = :id")
     int updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass);
+
+    @Query("SELECT s FROM users s WHERE s.isAdmin = true")
+    Optional<User> findUsersByAdmin();
 }
