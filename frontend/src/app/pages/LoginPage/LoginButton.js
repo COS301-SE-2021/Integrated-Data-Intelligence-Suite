@@ -1,5 +1,7 @@
 import {Button} from 'antd';
 import React, {Component} from 'react';
+import "../../../styles/LoginPage/loginButton.css";
+import {addError} from "./ShakeAnimation/addErrorClassToInput";
 
 class LoginButton extends React.Component {
     constructor(props) {
@@ -12,27 +14,6 @@ class LoginButton extends React.Component {
         password: '',
     }
 
-
-    enterLoading(val) {
-
-        this.setState({
-            is_loading: !this.state.is_loading,
-        })
-
-
-
-        this.setState({
-            is_loading: false,
-        })
-
-
-
-
-
-        // console.log(user)
-    }
-
-
     render() {
         return (
             <>
@@ -40,14 +21,10 @@ class LoginButton extends React.Component {
                     type="primary"
                     htmlType="submit"
                     className="login_button"
-                    loading={this.state.is_loading}
-                    onClick={() => this.enterLoading(!this.state.is_loading)}
-
+                    onClick={addError}
                 >
                     Log in
                 </Button>
-
-
             </>
         );
     }

@@ -1,6 +1,6 @@
 package com.Import_Service.Import_Service.controller;
 
-import com.Import_Service.Import_Service.dataclass.DataSource;
+
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
@@ -41,6 +41,7 @@ public class ImportServiceController {
     @PostMapping(value = "/importData")
     public @ResponseBody ImportDataResponse importData(@RequestBody ImportDataRequest request) throws Exception{
         //ImportDataRequest request = requestEntity.getBody();
+
         if(request == null) {
             throw new InvalidImporterRequestException("Request object is null.");
         }

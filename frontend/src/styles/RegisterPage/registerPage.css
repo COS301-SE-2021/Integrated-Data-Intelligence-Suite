@@ -65,7 +65,7 @@ div.ant-divider.ant-divider-horizontal.ant-divider-with-text.ant-divider-with-te
     height: 100vh;
     padding: 0;
     margin: 0;
-    /*background-image: linear-gradient(176deg, #5773FA 60%, #5C5C5C calc(60% + 2px));*/
+    background-image: linear-gradient(176deg, #1c8efa 70%, #000000 calc(70% + 2px));
 }
 
 
