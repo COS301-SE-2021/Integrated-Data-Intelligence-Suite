@@ -55,6 +55,7 @@ public class AnalyseServiceImpl {
 
     /**
      * This method used to analyse data which has been parsed by Parse-Service.
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return AnalyseDataResponse This object contains analysed data which has been processed.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -64,11 +65,13 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList of requested parsedData is null");
         }
-        else{
-            for(int i =0; i<request.getDataList().size(); i++) {
+        else {
+            for (int i = 0;
+                 i < request.getDataList().size();
+                 i++) {
                 if (request.getDataList().get(i) == null) {
                     throw new InvalidRequestException("DataList inside data of requested parsedData is null");
                 }
@@ -77,10 +80,12 @@ public class AnalyseServiceImpl {
 
         /*******************Setup Data******************/
 
-        ArrayList<ParsedData> dataList =  request.getDataList();
+        ArrayList<ParsedData> dataList = request.getDataList();
         ArrayList<ArrayList> parsedDatalist = new ArrayList<>();
 
-        for (int i=0 ;i < dataList.size(); i++){
+        for (int i = 0;
+             i < dataList.size();
+             i++) {
             //String row = "";
 
             String text = dataList.get(i).getTextMessage();
@@ -134,13 +139,14 @@ public class AnalyseServiceImpl {
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList()) ;
+                findAnomaliesResponse.getPattenList());
     }
 
 
     /**
      * This method used to find a pattern(s) within a given data,
      * A pattern is found when there's a relation,trend, anamaly etc found as a patten; [relationship,trend,number_of_likes]
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -150,7 +156,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -236,6 +242,7 @@ public class AnalyseServiceImpl {
     /**
      * This method used to find a pattern(s) within a given data,
      * A pattern is found when there's a relation,trend, anamaly etc found as a patten; [relationship,trend,number_of_likes]
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -245,7 +252,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -258,17 +265,16 @@ public class AnalyseServiceImpl {
         /*******************SETUP MODEL*****************/
 
 
-
         /*******************READ MODEL OUTPUT*****************/
 
         return new FindPatternResponse(null);
     }
 
 
-
     /**
      * This method used to find a relationship(s) within a given data
      * A relationship is when topics are related, x is found when y is present, e.g when elon musk name pops, (bitcoin is present as-well | spacex is present as-well) [topic]
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -278,7 +284,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -305,27 +311,33 @@ public class AnalyseServiceImpl {
             relationshipData.add(RowFactory.create(attempt));
         }*/
 
-        List<Row> relationshipData  = new ArrayList<>();
+        List<Row> relationshipData = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
-        for(int i=0; i < requestData.size(); i++){
+        for (int i = 0;
+             i < requestData.size();
+             i++) {
             List<Object> row = new ArrayList<>();
             //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
-            for(int j=0; j < namedEntities.size(); j++){
+            for (int j = 0;
+                 j < namedEntities.size();
+                 j++) {
 
             }
 
             row = new ArrayList<>();
-            for (int j=0; j< namedEntities.size(); j++){
+            for (int j = 0;
+                 j < namedEntities.size();
+                 j++) {
                 if (row.isEmpty()) {
                     row.add(namedEntities.get(j).get(0).toString()); //entity-name
                 }
                 else {
-                    if(!row.contains(namedEntities.get(j).get(0).toString())) {
+                    if (!row.contains(namedEntities.get(j).get(0).toString())) {
                         row.add(namedEntities.get(j).get(0).toString()); //entity-name
                     }
                 }
@@ -339,8 +351,8 @@ public class AnalyseServiceImpl {
 
         System.out.println(relationshipData);
 
-        StructType schema = new StructType(new StructField[]{ new StructField(
-                "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
+        StructType schema = new StructType(new StructField[]{new StructField(
+                "Tweets", DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
         Dataset<Row> itemsDF = sparkRelationships.createDataFrame(relationshipData, schema);
@@ -362,9 +374,13 @@ public class AnalyseServiceImpl {
 
 
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < Rdata.size(); i++) {
+        for (int i = 0;
+             i < Rdata.size();
+             i++) {
             ArrayList<String> row = new ArrayList<>();
-            for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
+            for (int j = 0;
+                 j < Rdata.get(i).getList(0).size();
+                 j++) {
                 row.add(Rdata.get(i).getList(0).get(j).toString());
             }
             //row.add(Rdata.get(i).get(1).toString());
@@ -380,6 +396,7 @@ public class AnalyseServiceImpl {
     /**
      * This method used to find a relationship(s) within a given data
      * A relationship is when topics are related, x is found when y is present, e.g when elon musk name pops, (bitcoin is present as-well | spacex is present as-well) [topic]
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -389,7 +406,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -404,7 +421,6 @@ public class AnalyseServiceImpl {
         /*******************SETUP DATA*****************/
 
 
-
         /*******************SETUP MODEL*****************/
 
 
@@ -414,10 +430,10 @@ public class AnalyseServiceImpl {
     }
 
 
-
     /**
      * This method used to find a trends(s) within a given data.
      * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -427,7 +443,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -463,7 +479,9 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> types = new ArrayList<>();
 
-        for(int i=0; i < requestData.size(); i++){
+        for (int i = 0;
+             i < requestData.size();
+             i++) {
             List<Object> row = new ArrayList<>();
             //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
@@ -472,18 +490,22 @@ public class AnalyseServiceImpl {
             ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
-            for (int j=0; j< namedEntities.size(); j++){
+            for (int j = 0;
+                 j < namedEntities.size();
+                 j++) {
                 //row.add(isTrending)
                 row = new ArrayList<>();
                 row.add(namedEntities.get(j).get(0).toString()); //entity-name
                 row.add(namedEntities.get(j).get(1).toString()); //entity-type
-                if (types.isEmpty()){// entity-typeNumber
+                if (types.isEmpty()) {// entity-typeNumber
                     row.add(0);
                     types.add(namedEntities.get(j).get(1).toString());
-                }else {
-                    if (types.contains(namedEntities.get(j).get(1).toString()))
+                }
+                else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
                         row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
-                    else{
+                    }
+                    else {
                         row.add(types.size());
                         types.add(namedEntities.get(j).get(1).toString());
                     }
@@ -496,20 +518,20 @@ public class AnalyseServiceImpl {
                 row.add(sentiment);//sentiment
 
                 Row trendRow = RowFactory.create(row.toArray());
-                trendsData.add(trendRow );
+                trendsData.add(trendRow);
             }
         }
         //System.out.println(trendsData);
         /*Example of input ArrayList of Tweets
 
-        * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
-        * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
-        * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
-        * [Google is a great place, hatfield, 20/05/20201, 45644],
-        * [i like Microsoft, hatfield, 20/05/20201, 34]
-        *
-        *
-        * */
+         * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
+         * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
+         * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
+         * [Google is a great place, hatfield, 20/05/20201, 45644],
+         * [i like Microsoft, hatfield, 20/05/20201, 34]
+         *
+         *
+         * */
         /* Example output of trendsData
             [[Elon Musk, PERSON, hatfield, 20/05/20201, 456, Neutral],
             [Google, ORGANIZATION, hatfield, 20/05/20201, 456, Neutral],
@@ -605,22 +627,22 @@ public class AnalyseServiceImpl {
 
         StructType schema = new StructType(
                 new StructField[]{
-                        new StructField("IsTrending",  DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
-        });
+                });
 
         StructType schema2 = new StructType(
                 new StructField[]{
                         new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Location",DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
@@ -633,7 +655,7 @@ public class AnalyseServiceImpl {
 
         //group named entity
 
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
         namedEntities.get(0); /*name entity*/
         namedEntities.get(1); /*name type*/
         namedEntities.get(2); /*name type-number*/
@@ -647,30 +669,39 @@ public class AnalyseServiceImpl {
 
         //training set
         int minSize = 0;
-        if(namedEntities.size()>averageLikes.size())
+        if (namedEntities.size() > averageLikes.size()) {
             minSize = averageLikes.size();
-        else
+        }
+        else {
             minSize = namedEntities.size();
+        }
 
-        if(minSize >rate.size() )
-            minSize =rate.size();
+        if (minSize > rate.size()) {
+            minSize = rate.size();
+        }
 
 
-        System.out.println("NameEntity : " +namedEntities.size() );
-        for(int i=0; i < namedEntities.size(); i++)
+        System.out.println("NameEntity : " + namedEntities.size());
+        for (int i = 0;
+             i < namedEntities.size();
+             i++)
             System.out.println(namedEntities.get(i).toString());
 
-        System.out.println("AverageLikes : " +averageLikes.size() );
-        for(int i=0; i < averageLikes.size(); i++)
+        System.out.println("AverageLikes : " + averageLikes.size());
+        for (int i = 0;
+             i < averageLikes.size();
+             i++)
             System.out.println(averageLikes.get(i).toString());
 
         System.out.println("*****************ITEMDF****************");
         itemsDF.show();
 
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < minSize; i++){
+        for (int i = 0;
+             i < minSize;
+             i++) {
             double trending = 0.0;
-            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4 ){
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
                 trending = 1.0;
             }
             Row trainRow = RowFactory.create(
@@ -689,7 +720,7 @@ public class AnalyseServiceImpl {
 
         //split data
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
-        Dataset<Row> [] split = trainingDF.randomSplit((new double[]{0.7, 0.3}),5043);
+        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
         Dataset<Row> testSetDF = split[1];
@@ -715,7 +746,7 @@ public class AnalyseServiceImpl {
                 .setOutputCol("features");*/
 
         VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"EntityTypeNumber","Frequency", "AverageLikes"})
+                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
                 .setOutputCol("features");
 
         Dataset<Row> testDF = assembler.transform(trainSetDF);
@@ -781,7 +812,7 @@ public class AnalyseServiceImpl {
                 .setRawPredictionCol("prediction")
                 .setMetricName("areaUnderROC");
         double accuracy = evaluator.evaluate(predictions);
-        System.out.println("/**********************    Accuracy: "+ Double.toString(accuracy));
+        System.out.println("/**********************    Accuracy: " + Double.toString(accuracy));
 
         //save
         lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodelNumber2");
@@ -817,10 +848,11 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = model1.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
-        if( rawResults.isEmpty())
-            rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+        if (rawResults.isEmpty()) {
+            rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+        }
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
@@ -838,19 +870,23 @@ public class AnalyseServiceImpl {
         }*/
 
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < rawResults.size(); i++) {
+        for (int i = 0;
+             i < rawResults.size();
+             i++) {
             ArrayList<Object> r = new ArrayList<>();
             String en = rawResults.get(i).get(0).toString();
-            ArrayList<String> locs =new ArrayList<>();
+            ArrayList<String> locs = new ArrayList<>();
             List<Row> rawLocs = itemsDF.select("location").filter(col("EntityName").equalTo(en)).collectAsList();
             System.out.println(rawLocs.toString());
-            for (int j = 0; j < rawLocs.size(); j++) {
+            for (int j = 0;
+                 j < rawLocs.size();
+                 j++) {
                 locs.add(rawLocs.get(j).get(0).toString());
             }
             r.add(en);
             r.add(locs);
-            r.add( rawResults.get(i).get(3).toString());
-            r.add( rawResults.get(i).get(4).toString());
+            r.add(rawResults.get(i).get(3).toString());
+            r.add(rawResults.get(i).get(4).toString());
 
 
             results.add(r);
@@ -862,6 +898,7 @@ public class AnalyseServiceImpl {
     /**
      * This method used to find a trends(s) within a given data.
      * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -871,7 +908,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -905,10 +942,10 @@ public class AnalyseServiceImpl {
     }
 
 
-
     /**
      * This method used to find a predictions(s) within a given data
      * A prediction is a prediction...
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -918,19 +955,19 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("GetPredictionRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
         /*******************SETUP SPARK*****************
 
-        SparkSession sparkPredictions = SparkSession
-                .builder()
-                .appName("Predictions")
-                .master("local")
-                .getOrCreate();
+         SparkSession sparkPredictions = SparkSession
+         .builder()
+         .appName("Predictions")
+         .master("local")
+         .getOrCreate();
 
-        /*******************SETUP DATA*****************/
+         /*******************SETUP DATA*****************/
 
         /*for (int i = 0; i < 100; i++) {
             //MOCK DATASET WITH 5 "features"
@@ -1042,6 +1079,7 @@ public class AnalyseServiceImpl {
     /**
      * This method used to find a predictions(s) within a given data
      * A prediction is a prediction...
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -1051,23 +1089,22 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("GetPredictionRequest Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
         /*******************SETUP SPARK*****************/
 
-         SparkSession sparkPredictions = SparkSession
-         .builder()
-         .appName("Predictions")
-         .master("local")
-         .getOrCreate();
+        SparkSession sparkPredictions = SparkSession
+                .builder()
+                .appName("Predictions")
+                .master("local")
+                .getOrCreate();
 
-         /*******************SETUP DATA*****************/
+        /*******************SETUP DATA*****************/
 
 
         /*******************SETUP MODEL*****************/
-
 
 
         /******************Analyse Model Accuracy**************/
@@ -1080,10 +1117,10 @@ public class AnalyseServiceImpl {
     }
 
 
-
     /**
      * This method used to find a anomalies(s) within a given data.
      * A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date.
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return findAnomaliesResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -1093,7 +1130,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -1109,7 +1146,7 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-        List<Row> anomaliesData  = new ArrayList<>();
+        List<Row> anomaliesData = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
         ArrayList<String> types = new ArrayList<>();
 
@@ -1119,7 +1156,9 @@ public class AnalyseServiceImpl {
         likes//3
         findNlpPropertiesResponse//4*/
 
-        for(int i=0; i < requestData.size(); i++){
+        for (int i = 0;
+             i < requestData.size();
+             i++) {
             List<Object> row = new ArrayList<>();
 
             String Text = requestData.get(i).get(0).toString(); //New topic, text
@@ -1137,13 +1176,15 @@ public class AnalyseServiceImpl {
             ArrayList<String> entityTypeNames = new ArrayList<>();
             ArrayList<Integer> entityTypesNumbers = new ArrayList<>();
 
-            for (int j=0; j< namedEntities.size(); j++){
+            for (int j = 0;
+                 j < namedEntities.size();
+                 j++) {
 
                 //row.add(namedEntities.get(j).get(0).toString()); //entity-name ---- don't use
                 //row.add(namedEntities.get(j).get(1).toString()); //entity-type
                 entityTypeNames.add(namedEntities.get(j).get(1).toString()); //TODO: avoid repeating entities?
 
-                if (types.isEmpty()){ //entity-typeNumber
+                if (types.isEmpty()) { //entity-typeNumber
                     //row.add(0);
                     entityTypesNumbers.add(0); //replace
                     types.add(namedEntities.get(j).get(1).toString());
@@ -1153,7 +1194,7 @@ public class AnalyseServiceImpl {
                         //row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
                         entityTypesNumbers.add(types.indexOf(namedEntities.get(j).get(1).toString())); //replace
                     }
-                    else{
+                    else {
                         //row.add(types.size());
                         entityTypesNumbers.add(types.size()); //replace
                         types.add(namedEntities.get(j).get(1).toString());
@@ -1181,12 +1222,12 @@ public class AnalyseServiceImpl {
         StructType schema = new StructType(
                 new StructField[]{
                         new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
-                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType, true), false, Metadata.empty()),
                         new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                         //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
@@ -1196,8 +1237,8 @@ public class AnalyseServiceImpl {
         StructType schema2 = new StructType(
                 new StructField[]{
                         new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
-                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType, true), false, Metadata.empty()),
                         new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
@@ -1226,7 +1267,6 @@ public class AnalyseServiceImpl {
         textData.get(7); //Like*/
 
 
-
         //List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
         //locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
 
@@ -1240,15 +1280,18 @@ public class AnalyseServiceImpl {
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < textData.size(); i++){
+        for (int i = 0;
+             i < textData.size();
+             i++) {
 
             Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
 
             List<?> amountOfEntities = new ArrayList<>();
             if (amountOfEntitiesObject.getClass().isArray()) {
-                amountOfEntities = Arrays.asList((Object[])amountOfEntitiesObject);
-            } else if (amountOfEntitiesObject instanceof Collection) {
-                amountOfEntities = new ArrayList<>((Collection<?>)amountOfEntitiesObject);
+                amountOfEntities = Arrays.asList((Object[]) amountOfEntitiesObject);
+            }
+            else if (amountOfEntitiesObject instanceof Collection) {
+                amountOfEntities = new ArrayList<>((Collection<?>) amountOfEntitiesObject);
             }
 
             System.out.println("entity count");
@@ -1329,7 +1372,7 @@ public class AnalyseServiceImpl {
 
         KMeansModel kmModel = km.fit(testDF);
 
-        Dataset<Row> summary=  kmModel.summary().predictions();
+        Dataset<Row> summary = kmModel.summary().predictions();
 
         summary.show();
 
@@ -1377,8 +1420,8 @@ public class AnalyseServiceImpl {
 
         List<Row> rawResults = res.select("EntityName","prediction").collectAsList();*/
 
-        Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
-        List<Row> rawResults = Results.select("Text","prediction").collectAsList();
+        Dataset<Row> Results = summary.select("Text", "prediction").filter(col("prediction").$greater(0));
+        List<Row> rawResults = Results.select("Text", "prediction").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
@@ -1386,7 +1429,9 @@ public class AnalyseServiceImpl {
 
 
         ArrayList<String> results = new ArrayList<>();
-        for (int i = 0; i < rawResults.size(); i++) {
+        for (int i = 0;
+             i < rawResults.size();
+             i++) {
             results.add(rawResults.get(i).get(0).toString());//name
         }
 
@@ -1397,6 +1442,7 @@ public class AnalyseServiceImpl {
     /**
      * This method used to find a anomalies(s) within a given data.
      * A Anomaly is an outlier in the data, in the context of the data e.g elon musk was trending the whole except one specific date.
+     *
      * @param request This is a request object which contains data required to be analysed.
      * @return findAnomaliesResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -1406,7 +1452,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
-        if (request.getDataList() == null){
+        if (request.getDataList() == null) {
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -1449,6 +1495,7 @@ public class AnalyseServiceImpl {
 
     /**
      * This method used to find an entity of a statement i.e sentiments/parts of speech
+     *
      * @param request This is a request object which contains data required to be processed.
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -1458,7 +1505,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
-        if (request.getText() == null){
+        if (request.getText() == null) {
             throw new InvalidRequestException("Text is null");
         }
 
@@ -1480,7 +1527,7 @@ public class AnalyseServiceImpl {
         //get sentiment of text
         String sentiment;
         ArrayList<String> sentiments = new ArrayList<>();
-        for (CoreSentence sentence : coreSentences )
+        for (CoreSentence sentence : coreSentences)
             sentiments.add(sentence.sentiment());
 
         Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
@@ -1495,9 +1542,10 @@ public class AnalyseServiceImpl {
 
         //get parts of speech
         ArrayList<ArrayList> partOfSpeech = new ArrayList<>();
-        for (CoreLabel label : coreLabels){
+        for (CoreLabel label : coreLabels) {
             //String lemma = label.lemma();//lemmanation
-            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);; //parts of speech
+            String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+            ; //parts of speech
             row = new ArrayList<>();
             row.add(label.toString());
             row.add(pos);
@@ -1508,7 +1556,7 @@ public class AnalyseServiceImpl {
 
         //get parts of named entity
         ArrayList<ArrayList> nameEntities = new ArrayList<>();
-        for (CoreEntityMention em : coreDocument.entityMentions()){
+        for (CoreEntityMention em : coreDocument.entityMentions()) {
             row = new ArrayList<>();
             row.add(em.text());
             row.add(em.entityType());
@@ -1521,6 +1569,7 @@ public class AnalyseServiceImpl {
 
     /**
      * This method used to fetch the parsed data from the database
+     *
      * @param request This is a request object which contains data required to be fetched.
      * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -1530,16 +1579,16 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FetchParsedDataRequest Object is null");
         }
-        if (request.getDataType() == null){
+        if (request.getDataType() == null) {
             throw new InvalidRequestException("Datatype is null");
         }
-        if(request.getDataType() != "ParsedData") {
+        if (request.getDataType() != "ParsedData") {
             throw new InvalidRequestException("Wrong Datatype is used");
         }
 
 
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
-        return new FetchParsedDataResponse(list );
+        return new FetchParsedDataResponse(list);
     }
 
 
@@ -1557,7 +1606,7 @@ public class AnalyseServiceImpl {
         return new SaveAIModelResponse(true);
     }
 
-    public SaveAIModelResponse fetchAIModel(SaveAIModelRequest request){
+    public SaveAIModelResponse fetchAIModel(SaveAIModelRequest request) {
 
         return new SaveAIModelResponse(true);
     }
