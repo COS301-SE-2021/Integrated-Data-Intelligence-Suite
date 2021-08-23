@@ -11,12 +11,6 @@
 
 //Content Section and all its child components
 @import url("../styles/ContentSection/ContentSection.css");
-@import "../styles/Demo2/line_graph.css";
-@import "../styles/Demo2/map_graph.css";
-@import "../styles/Demo2/network_graph.css";
-@import url("../styles/Demo2/timeline_graph.css");
-@import url("../styles/Demo2/graph_list.css");
-
 
 //Footer and all its child components
 @import url("../styles/Footer/Footer.css");
@@ -26,7 +20,6 @@
 
 //Register Page
 //@import "../styles/RegisterPage/registerPage.css";
-
 
 //Permissions Page
 @import "../styles/Permissions/Permissions.css";
@@ -44,8 +37,6 @@
 @import 'pages/ChartPage/components/MapCard/MapCardSidebar.css';
 @import 'pages/ChartPage/components/MapCard/MapCard.css';
 @import 'pages/ChartPage/components/DetailsCard/DetailsCard.css';
-
-
 
 @import 'components/ExitMenuTooltip/ExitMenuTooltip.css';
 
