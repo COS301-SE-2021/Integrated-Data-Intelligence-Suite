@@ -119,7 +119,7 @@ I love gaming, playing/watching soccer, and occasionally reading. <br>
 
 <p>
 <br>
-I'm a programmer always willing in improve myself, challenge me and I'll do you one better. <br>
+I am a programmer always willing in improve myself, challenge me and I'll do you one better. <br>
 I am mainly interested in backend functionality, <br>
 but will take up other forms of programming happily. <br>
 In my spare time I like to gym, be outdoors, food and gamming <br>
@@ -196,8 +196,8 @@ We can change the world by changing the people around us, with memes!<br>
 <p>
 <br>
 I am very interested in Quantum computing <br>
-and how far it will rise in the future<br>
-my hobbies include gymming,watching movies, playing video games<br>
+and how far it will rise in the future.<br>
+my hobbies include gyming, watching movies and playing video games.<br>
 I enjoy coding and learning new things<br>
 </p>
 </td>
