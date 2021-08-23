@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public AnalyseDataResponse analyzeData(AnalyseDataRequest request)
-            throws InvalidRequestException {
+            throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
@@ -422,7 +423,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindTrendsResponse trainFindTrends(TrainFindTrendsRequest request)
-            throws InvalidRequestException {
+            throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -704,14 +705,14 @@ public class AnalyseServiceImpl {
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
         //features
-        Tokenizer tokenizer = new Tokenizer()
+        /*Tokenizer tokenizer = new Tokenizer()
                 .setInputCol("text")
                 .setOutputCol("words");
 
         HashingTF hashingTF = new HashingTF()
                 .setNumFeatures(1000)
                 .setInputCol(tokenizer.getOutputCol())
-                .setOutputCol("features");
+                .setOutputCol("features");*/
 
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber","Frequency", "AverageLikes"})
@@ -726,6 +727,18 @@ public class AnalyseServiceImpl {
         Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
 
         indexed.show();
+
+        //model
+        LogisticRegression lr = new LogisticRegression() //estimator
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8);
+
+        // Fit the model
+        LogisticRegressionModel lrModel = lr.fit(indexed);
+        // Print the coefficients and intercept for logistic regression
+        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
+
 
         //model
        /* LogisticRegression lr = new LogisticRegression() //estimator
@@ -750,14 +763,16 @@ public class AnalyseServiceImpl {
 
         /******************Analyse Model Accuracy**************/
         //test
-       /*  Dataset<Row> test = null;
+        //test
+        /*Dataset<Row> test = assembler.transform(testSetDF);
+        test = indexer.fit(test).transform(test);*/
 
-        Dataset<Row> predictions = model.transform(testSetDF);
+        Dataset<Row> predictions = lrModel.transform(testSetDF);
         predictions.show();
         System.out.println("/*******************Predictions*****************///");
 
 
-      /*  for (Row r : trainSetDF.select("isTrending").collectAsList())
+        for (Row r : trainSetDF.select("isTrending").collectAsList())
             System.out.println("Trending -> " + r.get(0));
 
 
@@ -767,6 +782,9 @@ public class AnalyseServiceImpl {
                 .setMetricName("areaUnderROC");
         double accuracy = evaluator.evaluate(predictions);
         System.out.println("/**********************    Accuracy: "+ Double.toString(accuracy));
+
+        //save
+        lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodelNumber2");
 
         /*******************summary (REMOVE)*****************/
         //summaries
