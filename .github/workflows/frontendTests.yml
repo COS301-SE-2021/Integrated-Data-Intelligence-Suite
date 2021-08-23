@@ -13,6 +13,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+#Tells the workflow which directory to execute the commands in 
 defaults:
   run:
     working-directory: ./frontend/
