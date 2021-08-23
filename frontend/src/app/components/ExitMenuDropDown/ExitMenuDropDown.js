@@ -1,7 +1,7 @@
+import React, {Component} from 'react';
 import {Button, Dropdown} from "antd";
 import ExitMenuTooltip from "../ExitMenuTooltip/ExitMenuTooltip";
 import {CaretUpFilled} from "@ant-design/icons";
-import React, {Component} from 'react';
 
 export default function ExitMenuDropDown(){
 
