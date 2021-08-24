@@ -374,7 +374,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_RegisterAdminRequest_Is_Null")
     public void registerAdminRequestNull() {
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(null));
     }
 
     @Test
@@ -387,12 +387,12 @@ public class UserServiceTest {
         RegisterAdminRequest requestPasswordNull = new RegisterAdminRequest("username", "first" , "last", null, "email@test.com");
         RegisterAdminRequest requestEmailNull = new RegisterAdminRequest("username", "first" , "last", "pass", null);
 
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestAllNull));
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestUsernameNull));
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestFirstNameNull));
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestLastNameNull));
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestPasswordNull));
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.registerAdmin(requestEmailNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestAllNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestUsernameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestFirstNameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestLastNameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestPasswordNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestEmailNull));
     }
 
 }
