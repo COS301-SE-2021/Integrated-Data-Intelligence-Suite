@@ -24,17 +24,11 @@ import java.util.Objects;
 @Service
 public class ImportServiceImpl {
 
-    /**
-     * @bearer  token string used to authenticate twitter requests
-     */
     @Value("${twitter.bearer}")
-    String bearer;
+    private String bearer;
 
-    /**
-     * @newsToken token string used to authenticate requests to newsAPI
-     */
     @Value("${newsApi.apikey}")
-    String newsToken;
+    private String newsToken;
 
     public ImportServiceImpl() {
     }
@@ -49,15 +43,21 @@ public class ImportServiceImpl {
      */
     public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest request) throws Exception {
 
-        if(request == null) throw new InvalidTwitterRequestException("request object is null");
+        if(request == null){
+            throw new InvalidTwitterRequestException("request object is null");
+        }
 
-        if(request.getKeyword() == null) throw new InvalidTwitterRequestException("Invalid key. key is null");
+        if(request.getKeyword() == null){
+            throw new InvalidTwitterRequestException("Invalid key. key is null");
+        }
 
+        if(request.getKeyword().length() >250 || request.getKeyword().length() < 2){
+            throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
+        }
 
-
-        if(request.getKeyword().length() >250 || request.getKeyword().length() < 2) throw new InvalidTwitterRequestException("String length error: string must be between 2 and 250 characters");
-
-        if(request.getLimit() > 100 || request.getLimit() < 1) throw new InvalidTwitterRequestException("Invalid limit value: limit can only be between 1 and 100");
+        if(request.getLimit() > 100 || request.getLimit() < 1){
+            throw new InvalidTwitterRequestException("Invalid limit value: limit can only be between 1 and 100");
+        }
 
         String keyword = request.getKeyword().strip();
         int limit = request.getLimit();
@@ -112,19 +112,25 @@ public class ImportServiceImpl {
         }
 
         LocalDate from = request.getFrom();
-
         LocalDate to = request.getTo();
 
-        if(from.isAfter(to)) throw new InvalidTwitterRequestException("\"from\" must be earlier than \"to\" date");
+        if(from.isAfter(to)) {
+            throw new InvalidTwitterRequestException("\"from\" must be earlier than \"to\" date");
+        }
 
-        if(from.getYear() < 2006 ) throw new InvalidTwitterRequestException("\"from\" date cannot be earlier than 2006");
+        if(from.getYear() < 2006 ){
+            throw new InvalidTwitterRequestException("\"from\" date cannot be earlier than 2006");
+        }
 
-        if(to.isAfter(LocalDate.now())) throw new InvalidTwitterRequestException("\"to\" date cannot be in the future");
+        if(to.isAfter(LocalDate.now())) {
+            throw new InvalidTwitterRequestException("\"to\" date cannot be in the future");
+        }
 
-        if(from.isAfter(LocalDate.now())) throw new InvalidTwitterRequestException("\"from\" date cannot be in the future");
+        if(from.isAfter(LocalDate.now())){
+            throw new InvalidTwitterRequestException("\"from\" date cannot be in the future");
+        }
 
         String keyword = request.getKeyword().strip();
-
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -136,17 +142,15 @@ public class ImportServiceImpl {
                 .addHeader("Authorization", "Bearer "+bearer)
                 .addHeader("Content-Type", "application/json")
                 .build();
-        Response res = client.newCall(req).execute();
-        if(!res.isSuccessful()){
-            System.out.println("{\r\n   \"query\":\""+ keyword +" lang:en\",\r\n    \"maxResults\": \"100\",\r\n    \"fromDate\":\""+from.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\", \r\n  \"toDate\":\""+ to.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"0000\"\r\n}");
-
-            throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(res.body()).string());
+        Response response = client.newCall(req).execute();
+        if(!response.isSuccessful()){
+            throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(response.body()).string());
         }
 
-        if(res.body() == null){
+        if(response.body() == null){
             throw new ImporterException("No data returned");
         }
-        return  new ImportTwitterResponse(Objects.requireNonNull(res.body()).string());
+        return  new ImportTwitterResponse(Objects.requireNonNull(response.body()).string());
     }
 
     /**
@@ -235,12 +239,10 @@ public class ImportServiceImpl {
             list.add(new ImportedData(DataSource.TWITTER, twitterData));
 
         } catch (Exception e){
-
             System.out.println("\n\n twitter error: "+e.getMessage());
         }
 
         //NewsAPI request
-
         try{
             ImportNewsDataRequest newsRequest = new ImportNewsDataRequest(keyword);
             ImportNewsDataResponse newsResponse = importNewsData(newsRequest);

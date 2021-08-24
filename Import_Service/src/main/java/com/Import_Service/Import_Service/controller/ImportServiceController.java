@@ -1,6 +1,5 @@
 package com.Import_Service.Import_Service.controller;
 
-
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
@@ -11,10 +10,8 @@ import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -40,7 +37,6 @@ public class ImportServiceController {
      */
     @PostMapping(value = "/importData")
     public @ResponseBody ImportDataResponse importData(@RequestBody ImportDataRequest request) throws Exception{
-        //ImportDataRequest request = requestEntity.getBody();
 
         if(request == null) {
             throw new InvalidImporterRequestException("Request object is null.");
@@ -59,7 +55,6 @@ public class ImportServiceController {
     @PostMapping(value = "/getTwitterDataJson")
     public @ResponseBody ImportTwitterResponse getTwitterDataJson(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        //ImportTwitterRequest request = requestEntity.getBody();
         return service.getTwitterDataJson(request);
     }
 
@@ -72,7 +67,6 @@ public class ImportServiceController {
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody ImportTwitterResponse importDatedData(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        //ImportTwitterRequest request = requestEntity.getBody();
         return service.importDatedData(request);
     }
 
@@ -85,19 +79,21 @@ public class ImportServiceController {
      */
     @GetMapping(value = "test/twitter/{key}")
     public String testTwitter(@PathVariable String key){
-        ImportTwitterResponse res = null;
+        ImportTwitterResponse res;
         try{
             res = service.getTwitterDataJson(new ImportTwitterRequest(key));
         } catch (Exception e) {
             return "{\"data\": \""+e.getMessage()+"\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+        if(res == null){
+            return "{\"data\": \"No data found.\"}";
+        }
 
         return res.getJsonData();
     }
 
     /**
-     * This function retrieves twitter data basd on a search key and date.
+     * This function retrieves twitter data based on a search key and date.
      *
      * @param key a phrase or sentence used as a search query
      * @param from the date at which the search should start. Date is in the form YYYY-MM-DD
@@ -106,7 +102,7 @@ public class ImportServiceController {
      */
     @GetMapping(value = "test/twitter/{key}/{from}/{to}")
     public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
-        ImportTwitterResponse res = null;
+        ImportTwitterResponse res;
         try{
             LocalDate fromDate = LocalDate.parse(from);
             LocalDate toDate = LocalDate.parse(to);
@@ -114,7 +110,9 @@ public class ImportServiceController {
         } catch (Exception e) {
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+        if(res == null){
+            return "{\"data\": \"No data found.\"}";
+        }
 
         return res.getJsonData();
     }
@@ -127,14 +125,16 @@ public class ImportServiceController {
      */
     @GetMapping(value="test/news/{key}")
     public String testNewsAPI(@PathVariable String key){
-        ImportNewsDataResponse res = null;
+        ImportNewsDataResponse res;
         try {
             res = service.importNewsData(new ImportNewsDataRequest(key));
         } catch (Exception e) {
 
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+        if(res == null) {
+            return "{\"data\": \"No data found.\"}";
+        }
 
 
         return res.getData();
@@ -149,16 +149,18 @@ public class ImportServiceController {
      */
     @GetMapping(value="test/all/{key}")
     public  String searchData(@PathVariable String key){
-        ImportDataResponse res = null;
-        String retString = "";
+        ImportDataResponse res;
         try{
-            res = service.importData(new ImportDataRequest("bitcoin", 100));
+            res = service.importData(new ImportDataRequest(key, 100));
 
         } catch (ImporterException e) {
 
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+
+        if(res == null) {
+            return "{\"data\": \"No data found.\"}";
+        }
 
         ArrayList<String> lst = new ArrayList<>();
 
