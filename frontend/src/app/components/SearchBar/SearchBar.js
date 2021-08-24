@@ -15,7 +15,7 @@ function getLocalUser() {
     }
 }
 
-class SearchBar extends Component {
+class SearchBar extends React.Component {
 
     // showLoadingIcon = false;
     constructor(props) {
