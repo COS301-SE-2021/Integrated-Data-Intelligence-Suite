@@ -1,4 +1,4 @@
-import UserList from "../../components/UserList";
+import UserList from "../../components/UserList/UserList";
 import SideBar from "../../components/SideBar/SideBar";
 import {Divider, Layout, Typography} from "antd";
 import useGet from "../../functions/useGet";

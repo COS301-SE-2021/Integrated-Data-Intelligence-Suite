@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import RegisterButton from "../pages/RegisterPage/RegisterButton";
+import RegisterButton from "../components/RegisterButton/RegisterButton";
 import {unmountComponentAtNode} from "react-dom";
 
 let container = null;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SideBar from "../../../components/SideBar/SideBar";
+import SideBar from "../../components/SideBar/SideBar";
 import {
     Input,
     Layout,
@@ -7,14 +7,14 @@ import {
     Typography
 } from 'antd';
 import {Redirect, Route, Switch} from "react-router-dom";
-import MapCard from "./MapCard/MapCard";
-import DetailsCard from "./DetailsCard/DetailsCard";
-import NetworkGraphCard from "./NetworkGraph/NetworkGraphCard";
-import "./NetworkGraph/NetworkGraph.css";
-import UserInfoCard from "../../../components/UserInfoCard/UserInfoCard";
-import SearchBar from "../../../components/SearchBar/SearchBar";
-import TimelineGraph from "./TimelineGraph/TimelineGraph";
-import useGet from "../../../functions/useGet";
+import MapCard from "../../components/MapCard/MapCard";
+import DetailsCard from "../../components/DetailsCard/DetailsCard";
+import NetworkGraphCard from "../../components/NetworkGraph/NetworkGraphCard";
+import "../../components/NetworkGraph/NetworkGraph.css";
+import UserInfoCard from "../../components/UserInfoCard/UserInfoCard";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import TimelineGraph from "../../components/TimelineGraph/TimelineGraph";
+import useGet from "../../functions/useGet";
 
 const {Title, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;

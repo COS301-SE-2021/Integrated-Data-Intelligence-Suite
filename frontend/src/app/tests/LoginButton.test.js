@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import LoginButton from "../pages/LoginPage/LoginButton";
+import LoginButton from "../components/LoginButton/LoginButton";
 import {unmountComponentAtNode} from "react-dom";
 
 let container = null;

@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import DetailsCard from '../pages/ChartPage/components/DetailsCard/DetailsCard' ;
+import DetailsCard from '../components/DetailsCard/DetailsCard' ;
 import {unmountComponentAtNode} from "react-dom";
 import ExitMenuDropDown from "../components/ExitMenuDropDown/ExitMenuDropDown";
 import {act, render} from "@testing-library/react";

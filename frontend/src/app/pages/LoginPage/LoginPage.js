@@ -1,11 +1,11 @@
 import {useFormik} from 'formik';
 import React, {Component} from 'react';
-import LoginButton from "./LoginButton";
+import LoginButton from "../../components/LoginButton/LoginButton";
 import {Link, useHistory} from "react-router-dom";
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
-import '../../../styles/LoginPage/login.css';
-import "../../../styles/LoginPage/loginButton.css";
+import './loginPage.css';
+import "../../components/LoginButton/loginButton.css";
 
 
 //Validation Function

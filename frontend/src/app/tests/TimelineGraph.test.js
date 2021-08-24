@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import TimelineGraph from "../../app/pages/ChartPage/components/TimelineGraph/TimelineGraph";
+import TimelineGraph from "../components/TimelineGraph/TimelineGraph";
 import {BrowserRouter} from "react-router-dom";
 import {unmountComponentAtNode} from "react-dom";
 

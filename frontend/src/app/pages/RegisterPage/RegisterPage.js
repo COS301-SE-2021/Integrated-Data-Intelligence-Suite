@@ -1,10 +1,10 @@
 import {useFormik} from 'formik';
 import React, {Component} from 'react';
-import RegisterButton from "./RegisterButton";
+import RegisterButton from "../../components/RegisterButton/RegisterButton";
 import {Link, useHistory} from "react-router-dom";
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Form, Input, Button, Checkbox, Card, Divider} from 'antd';
-import '../../../styles/RegisterPage/registerPage.css';
+import './registerPage.css';
 
 
 //Validation Function

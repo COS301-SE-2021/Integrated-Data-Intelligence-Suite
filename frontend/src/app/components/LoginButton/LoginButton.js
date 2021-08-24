@@ -1,7 +1,7 @@
 import {Button} from 'antd';
 import React, {Component} from 'react';
-import "../../../styles/LoginPage/loginButton.css";
-import {addError} from "./ShakeAnimation/addErrorClassToInput";
+import "./loginButton.css";
+import {addError} from "../../functions/ShakeAnimation/addErrorClassToInput";
 
 class LoginButton extends React.Component {
     constructor(props) {

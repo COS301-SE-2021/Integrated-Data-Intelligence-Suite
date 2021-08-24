@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import NetworkGraphCard from '../pages/ChartPage/components/NetworkGraph/NetworkGraphCard';
+import NetworkGraphCard from '../components/NetworkGraph/NetworkGraphCard';
 import {unmountComponentAtNode} from "react-dom";
 
 let container = null;

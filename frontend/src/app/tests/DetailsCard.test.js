@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import DetailsCard from '../pages/ChartPage/components/DetailsCard/DetailsCard' ;
+import DetailsCard from '../components/DetailsCard/DetailsCard' ;
 import {unmountComponentAtNode} from "react-dom";
 
 let container = null;
