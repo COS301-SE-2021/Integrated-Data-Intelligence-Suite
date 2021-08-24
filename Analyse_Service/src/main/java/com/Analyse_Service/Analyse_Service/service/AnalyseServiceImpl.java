@@ -521,107 +521,6 @@ public class AnalyseServiceImpl {
                 trendsData.add(trendRow);
             }
         }
-        //System.out.println(trendsData);
-        /*Example of input ArrayList of Tweets
-
-         * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
-         * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
-         * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
-         * [Google is a great place, hatfield, 20/05/20201, 45644],
-         * [i like Microsoft, hatfield, 20/05/20201, 34]
-         *
-         *
-         * */
-        /* Example output of trendsData
-            [[Elon Musk, PERSON, hatfield, 20/05/20201, 456, Neutral],
-            [Google, ORGANIZATION, hatfield, 20/05/20201, 456, Neutral],
-            [Elon Musk, PERSON, hatfield, 20/05/20201, 44, Neutral],
-            [Amazon, ORGANIZATION, hatfield, 20/05/20201, 44, Neutral],
-            [Elon Musk, PERSON, hatfield, 20/05/20201, 22, Positive],
-            [Google, ORGANIZATION, hatfield, 20/05/20201, 45644, Positive],
-            [Microsoft, ORGANIZATION, hatfield, 20/05/20201, 34, Neutral]]
-        */
-
-        /*ArrayList<ArrayList> structureData = new ArrayList<>();
-
-        ArrayList<String> FoundEntities = new ArrayList<>();
-        ArrayList<Float> Totallikes = new ArrayList<>();
-
-        for (int k = 0; k < trendsData.size(); k++){
-            ArrayList<String> r = new ArrayList<>();
-            String en = trendsData.get(k).get(0).toString();//Entity name eg. Elon Musk
-            Float likes = Float.parseFloat(trendsData.get(k).get(4).toString()); // geting Number of likes
-
-            if (structureData.isEmpty()){
-                FoundEntities.add(en);//Registering Enitiy eg. Elon Musk
-                Totallikes.add(likes);
-                r.add("0");// is Trending
-                r.add(trendsData.get(k).get(1).toString());//Entity type
-                r.add("1");//Frequency of Enitity in dataset
-                r.add("1");// Rate of tweets per hour
-                r.add(Float.toString(likes));// average likes
-                structureData.add(r);
-            }else{
-                boolean found = false;
-                int pos = 0;
-                /********Check if Entity is in the list of registerd enitities **********/
-                /*for (int x = 0; x < FoundEntities.size(); x++){
-                    if (en.equals(FoundEntities.get(x))){
-                        found = true;
-                        pos = FoundEntities.indexOf(en);
-                        break;
-                    }
-                }
-
-                if (found){
-                    ArrayList<String> temp = structureData.get(pos);
-                    int freq = Integer.parseInt(temp.get(2));
-                    freq++;
-                    temp.set(2,Integer.toString(freq));   ///increasing frequecy
-
-                    float avglikes = Totallikes.get(pos) + likes;
-                    Totallikes.set(pos,avglikes);
-                    avglikes = avglikes/freq;
-                    temp.set(4,Float.toString(avglikes));///changing average
-
-                    structureData.set(pos,temp);
-                }else {
-                    FoundEntities.add(en); //Registering Enitiy eg. Elon Musk
-                    Totallikes.add(likes);
-                    r.add("0");// is Trending
-                    r.add(trendsData.get(k).get(1).toString());//Entity type
-                    r.add("1");//Frequency of Enitity in dataset
-                    r.add("1");// Rate of tweets per hour
-                    r.add(Float.toString(likes));// average likes
-                    structureData.add(r);
-                }
-            }
-        }
-        /*System.out.println(FoundEntities);
-        System.out.println(Totallikes);
-        System.out.println(structureData);*/
-
-        /*Example output of Found Enities , Total Likes  structureData
-            Found Enities
-            1.Elon Musk,
-            2.Google,
-            3.Amazon,
-            4.Microsoft
-
-            Total Likes
-            1) 522.0,
-            2) 46100.0,
-            3) 44.0,
-            4) 34.0
-
-            structureData
-            1. [0, PERSON, 3, 1, 174.0],
-            2. [0, ORGANIZATION, 2, 1, 23050.0],
-            3. [0, ORGANIZATION, 1, 1, 44.0],
-            4. [0, ORGANIZATION, 1, 1, 34.0]]
-
-         */
-
 
         /*******************SETUP DATAFRAME*****************/
 
@@ -682,16 +581,14 @@ public class AnalyseServiceImpl {
 
 
         System.out.println("NameEntity : " + namedEntities.size());
-        for (int i = 0;
-             i < namedEntities.size();
-             i++)
+        for (int i = 0; i < namedEntities.size(); i++) {
             System.out.println(namedEntities.get(i).toString());
+        }
 
         System.out.println("AverageLikes : " + averageLikes.size());
-        for (int i = 0;
-             i < averageLikes.size();
-             i++)
+        for (int i = 0; i < averageLikes.size(); i++) {
             System.out.println(averageLikes.get(i).toString());
+        }
 
         System.out.println("*****************ITEMDF****************");
         itemsDF.show();
@@ -788,12 +685,11 @@ public class AnalyseServiceImpl {
                 .setStages(new PipelineStage[] {assembler,indexer,lr});
 
         // Fit the pipeline to training documents.
-        PipelineModel model = pipeline.fit(trainSetDF);
+        PipelineModel model = pipeline.fit(trainSetDF);*/
 
 
 
         /******************Analyse Model Accuracy**************/
-        //test
         //test
         /*Dataset<Row> test = assembler.transform(testSetDF);
         test = indexer.fit(test).transform(test);*/
@@ -803,8 +699,9 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Predictions*****************///");
 
 
-        for (Row r : trainSetDF.select("isTrending").collectAsList())
+        for (Row r : trainSetDF.select("isTrending").collectAsList()) {
             System.out.println("Trending -> " + r.get(0));
+        }
 
 
         BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
@@ -856,8 +753,9 @@ public class AnalyseServiceImpl {
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
-        for (Row r : res.select("prediction").collectAsList())
+        for (Row r : res.select("prediction").collectAsList()) {
             System.out.println("Trending -> " + r.get(0));
+        }
         System.out.println("/*******************Outputs begin*****************/");
 
 
@@ -924,21 +822,262 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
+        List<Row> trendsData = new ArrayList<>();
+        ArrayList<ArrayList> requestData = request.getDataList();
+
+        ArrayList<String> types = new ArrayList<>();
+
+        for (int i = 0;
+             i < requestData.size();
+             i++) {
+            List<Object> row = new ArrayList<>();
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for (int j = 0;
+                 j < namedEntities.size();
+                 j++) {
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()) {// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                }
+                else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    }
+                    else {
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                row.add(requestData.get(i).get(1).toString());//location
+                row.add(requestData.get(i).get(2).toString());//date
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
+                row.add(sentiment);//sentiment
+
+                Row trendRow = RowFactory.create(row.toArray());
+                trendsData.add(trendRow);
+            }
+        }
 
         /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
+                });
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                });
+
+        //List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
 
+        //group named entity
+
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+        namedEntities.get(0); /*name entity*/
+        namedEntities.get(1); /*name type*/
+        namedEntities.get(2); /*name type-number*/
+        namedEntities.get(3); /*name frequency*/
+
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        averageLikes.get(1); //average likes
+
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        rate.get(1); //rate ???
+
+        //training set
+        int minSize = 0;
+        if (namedEntities.size() > averageLikes.size()) {
+            minSize = averageLikes.size();
+        }
+        else {
+            minSize = namedEntities.size();
+        }
+
+        if (minSize > rate.size()) {
+            minSize = rate.size();
+        }
+
+
+        System.out.println("NameEntity : " + namedEntities.size());
+        for (int i = 0; i < namedEntities.size(); i++) {
+            System.out.println(namedEntities.get(i).toString());
+        }
+
+        System.out.println("AverageLikes : " + averageLikes.size());
+        for (int i = 0; i < averageLikes.size(); i++) {
+            System.out.println(averageLikes.get(i).toString());
+        }
+
+        System.out.println("*****************ITEMDF****************");
+        itemsDF.show();
+
+        List<Row> trainSet = new ArrayList<>();
+        for (int i = 0;
+             i < minSize;
+             i++) {
+            double trending = 0.0;
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
+                trending = 1.0;
+            }
+            Row trainRow = RowFactory.create(
+                    trending,
+                    namedEntities.get(i).get(0).toString(),
+                    namedEntities.get(i).get(1).toString(),
+                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                    rate.get(i).get(1).toString(),
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+        //save to database
+
+        //split data
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
+
+        Dataset<Row> trainSetDF = split[0];
+        Dataset<Row> testSetDF = split[1];
+
+
+        //display
+        itemsDF.show();
+        System.out.println("/*******************Train Set*****************/");
+        trainSetDF.show();
+        System.out.println("/*******************Test Set*****************/");
+        testSetDF.show();
+
 
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
+                .setOutputCol("features");
+
+        Dataset<Row> testDF = assembler.transform(trainSetDF);
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
+
+        indexed.show();
+
+        //model
+        //LogisticRegression lr = new LogisticRegression() //estimator
+                //.setMaxIter(10)
+                //.setRegParam(0.3)
+                //.setElasticNetParam(0.8);
+
+        // Fit the model
+        //LogisticRegressionModel lrModel = lr.fit(indexed);
+
+        /******************Analyse Model Accuracy**************/
+        //test
+        /*Dataset<Row> test = assembler.transform(testSetDF);
+        test = indexer.fit(test).transform(test);*/
+
+        //Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel
+        Dataset<Row> parquetModel = sparkTrends.read().parquet("../models/SteveLogisticRegesionmodel/data/part-00000-a6345197-7a7a-4bc0-b55d-db32697b7e4e-c000.snappy.parquet");
+
+        LogisticRegressionModel lrModel = LogisticRegressionModel.load("../models/SteveLogisticRegesionmodel");
+        Dataset<Row> getPrediction =  lrModel.transform(indexed);
+
+        System.out.println("/*******************Found Model*****************/");
+        parquetModel.show();
+        System.out.println("/*******************Predictions*****************/");
+        getPrediction.show();
+
+
+        /*for (Row r : trainSetDF.select("isTrending").collectAsList()) {
+            System.out.println("Trending -> " + r.get(0));
+        }*/
+
+
+
+        BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+        double accuracy = evaluator.evaluate(parquetModel);
+        System.out.println("/********************Found Model Accuracy : " + Double.toString(accuracy));
+
+        //save
+        //lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodelNumber2");
 
 
         /*******************READ MODEL OUTPUT*****************/
 
+        //LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
+        Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
-        return new FindTrendsResponse(null);
+        Dataset<Row> res = lrModel.transform(input);
+
+        List<Row> rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+
+        if (rawResults.isEmpty()) {
+            rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+        }
+
+        System.out.println("/*******************Outputs begin*****************/");
+        System.out.println(rawResults.toString());
+        for (Row r : res.select("prediction").collectAsList()) {
+            System.out.println("Trending -> " + r.get(0));
+        }
+        System.out.println("/*******************Outputs begin*****************/");
+
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+        for (int i = 0; i < rawResults.size(); i++) {
+            ArrayList<Object> r = new ArrayList<>();
+            String en = rawResults.get(i).get(0).toString();
+            ArrayList<String> locs = new ArrayList<>();
+            List<Row> rawLocs = itemsDF.select("location").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawLocs.toString());
+            for (int j = 0; j < rawLocs.size(); j++) {
+                locs.add(rawLocs.get(j).get(0).toString());
+            }
+            r.add(en);
+            r.add(locs);
+            r.add(rawResults.get(i).get(3).toString());
+            r.add(rawResults.get(i).get(4).toString());
+
+            results.add(r);
+        }
+
+        return new FindTrendsResponse(results);
     }
 
 
@@ -1527,8 +1666,9 @@ public class AnalyseServiceImpl {
         //get sentiment of text
         String sentiment;
         ArrayList<String> sentiments = new ArrayList<>();
-        for (CoreSentence sentence : coreSentences)
+        for (CoreSentence sentence : coreSentences) {
             sentiments.add(sentence.sentiment());
+        }
 
         Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
         Map.Entry<String, Long> maxEntry = null;
