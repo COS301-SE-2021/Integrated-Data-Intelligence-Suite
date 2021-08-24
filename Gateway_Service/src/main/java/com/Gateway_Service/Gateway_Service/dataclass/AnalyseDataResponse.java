@@ -1,7 +1,5 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
-
 import java.util.ArrayList;
 
 public class AnalyseDataResponse {

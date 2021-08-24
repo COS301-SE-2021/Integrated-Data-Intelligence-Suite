@@ -1,9 +1,9 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Gateway_Service.Gateway_Service.dataclass.AnalyseDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.AnalyseDataResponse;
-import com.Gateway_Service.Gateway_Service.dataclass.VisualizeDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -26,10 +26,17 @@ public class VisualizeService {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<VisualizeDataRequest> requestEntity =new HttpEntity<>(visualizeRequest,requestHeaders);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        ResponseEntity<VisualizeDataResponse> responseEntity = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData",  HttpMethod.POST, requestEntity,VisualizeDataResponse.class);
-        VisualizeDataResponse visualizeResponse= responseEntity.getBody();
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(visualizeRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        VisualizeDataResponse visualizeResponse = restTemplate.postForObject("http://Visualize-Service/Visualize/visualizeData", request, VisualizeDataResponse.class);
 
         return visualizeResponse;
     }

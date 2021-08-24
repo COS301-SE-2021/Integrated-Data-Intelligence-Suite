@@ -2,8 +2,8 @@
 @import '~antd/dist/antd.css';
 
 //Side Bar and its child Components
-@import url("../styles/SideBar/SideBar.css");
-@import url("../styles/SideBar/UserInfoCard.css");
+@import url("components/SideBar/SideBar.css");
+@import url("components/UserInfoCard/UserInfoCard.css");
 
 //Header and all its child components
 @import url("../styles/Header/Header.css");
@@ -22,7 +22,7 @@
 @import url("../styles/Footer/Footer.css");
 
 //Login Page
-@import "../styles/LoginPage/login.css";
+//@import "../styles/LoginPage/login.css";
 
 //Register Page
 //@import "../styles/RegisterPage/registerPage.css";
@@ -40,12 +40,14 @@
 
 //Chart Page and all its child components
 @import '~leaflet/dist/leaflet.css';
-@import 'pages/ChartPage/styles/ChartPage.css';
-@import 'pages/ChartPage/styles/MapCardSidebar.css';
-@import 'pages/ChartPage/styles/Leaflet/MapCard.css';
-@import 'pages/ChartPage/styles/DetailsCard.css';
+@import 'pages/ChartPage/components/ChartPage.css';
+@import 'pages/ChartPage/components/MapCard/MapCardSidebar.css';
+@import 'pages/ChartPage/components/MapCard/MapCard.css';
+@import 'pages/ChartPage/components/DetailsCard/DetailsCard.css';
 
 
+
+@import 'components/ExitMenuTooltip/ExitMenuTooltip.css';
 
 
 

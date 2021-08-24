@@ -15,7 +15,7 @@
     min-height: 120px;
     color: #fff;
     line-height: 120px;
-    background: lightgrey;
+    background: white;
 }
 
 [data-theme="dark"] .ant-layout-content {

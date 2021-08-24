@@ -4,6 +4,10 @@ public class ManagePersmissionsResponse {
     private String message;
     private boolean success;
 
+    public ManagePersmissionsResponse() {
+
+    }
+
     public ManagePersmissionsResponse(String message, boolean success) {
         this.message = message;
         this.success = success;

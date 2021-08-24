@@ -83,7 +83,6 @@ public class GatewayServiceController {
     }
 
 
-=======
     /*@GetMapping(value ="test/{line}", produces = "application/json")
     public String testNothing2(@PathVariable String line) {
 
@@ -158,8 +157,14 @@ public class GatewayServiceController {
         GetAllUsersRequest request = new GetAllUsersRequest();
         System.out.println("Getting all users from the database");
         System.out.println(request.getMessage());
-        GetAllUsersResponse response = userClient.getAllUsers(request);
+        GetAllUsersResponse response = userClient.getAllUsers();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/retrievePrevious", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
+        return null;
     }
 
 
@@ -171,12 +176,14 @@ public class GatewayServiceController {
      *     This object contains data representing a response from all the services combined.
      * @throws Exception This is thrown if exception caught in any of the Services.
      */
-    @GetMapping(value = "/main/{key}", produces = "application/json")
+    @PostMapping(value = "/main/{key}", produces = "application/json")
     @CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key) throws Exception {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key, @RequestBody SearchRequest request) throws Exception {
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
+        System.out.println(request.getUsername());
+        System.out.println(request.getPermission());
         //ArrayList <String> outputData = new ArrayList<>();
         HttpHeaders requestHeaders;
 
@@ -185,7 +192,7 @@ public class GatewayServiceController {
         //String url = "http://Import-Service/Import/importData";
         //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
 
-        ImportDataRequest importRequest = new ImportDataRequest(key,50);
+        ImportDataRequest importRequest = new ImportDataRequest(key,100);
         ImportDataResponse importResponse = importClient.importData(importRequest);
 
         if(importResponse.getFallback() == true) {
@@ -209,7 +216,7 @@ public class GatewayServiceController {
 
         /*********************PARSE*************************/
 
-        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());//    DataSource.TWITTER,ImportResponse. getJsonData());
         ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
 
 
@@ -288,6 +295,29 @@ public class GatewayServiceController {
     }
 
 
+    @GetMapping(value = "/collect/{key}/{from}/{to}", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to){
+
+
+        ImportTwitterResponse res = importClient.importDatedData(new ImportTwitterRequest(key, from, to));
+
+        if(!res.getFallback()){
+            System.out.println(".........................Import completed successfully..................\n\n\n");
+
+
+            ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, res.getJsonData(), "VIEWING");
+            ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
+
+            if(!parseResponse.getFallback()) {
+                System.out.println("........................Parsed Data Successfully...........................\n\n\n");
+                return new ResponseEntity<>("{ \n \"success\" : true \n}",HttpStatus.OK);
+            }
+
+        }
+        System.out.println("///////////////////////////////////////    FAILED //////////////////////////////////////////");
+        return null;
+    }
 
 
     public static class Graph{

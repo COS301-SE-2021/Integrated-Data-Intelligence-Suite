@@ -3,10 +3,10 @@ import React from "react";
 
 
 const LogoutPage = () =>{
-
     localStorage.clear()
-
-    return <Redirect to={'/'}/>
+    return (
+        <Redirect to={'/login'}/>
+    )
 }
 
 export default LogoutPage;

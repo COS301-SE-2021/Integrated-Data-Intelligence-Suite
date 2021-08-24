@@ -1,7 +1,5 @@
 package com.Analyse_Service.Analyse_Service.response;
 
-import com.Analyse_Service.Analyse_Service.dataclass.TweetWithSentiment;
-
 import java.util.ArrayList;
 
 public class AnalyseDataResponse {
@@ -10,6 +8,10 @@ public class AnalyseDataResponse {
     public ArrayList<ArrayList> predictionList;
     public ArrayList<ArrayList> trendList;
     public ArrayList<String> anomalyList;
+
+    public AnalyseDataResponse(){
+
+    }
 
     public AnalyseDataResponse(ArrayList<ArrayList> pattenList,
                                ArrayList<ArrayList> relationshipList,

@@ -1,0 +1,22 @@
+#exit_menu{
+      border: 1px solid black;
+    border-radius: 0.7em;
+    background-color: #000000;
+    color: white;
+}
+
+
+/*The little arrow in the tooltip*/
+div.ant-dropdown.ant-dropdown-show-arrow.ant-dropdown-placement-bottomRight>div.ant-dropdown-arrow{
+    top: 6px;
+    border-top-color: #000 !important;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: #040404 !important;
+    /* box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06); */
+}
+
+/*The LINKs in the tooltip*/
+.logout_link{
+    color: white !important;
+}

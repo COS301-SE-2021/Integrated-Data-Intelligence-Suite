@@ -1,6 +1,13 @@
 package com.Parse_Service.Parse_Service.dataclass;
 
+import javax.persistence.*;
+
+@Entity(name = "parsed_data")
+@Table(name = "parsed_data")
 public class ParsedData {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String textMessage;
     private String date;
     private String location;

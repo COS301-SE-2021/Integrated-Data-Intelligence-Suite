@@ -6,7 +6,10 @@ import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Service
 public class VisualizeServiceImpl {
@@ -46,18 +49,17 @@ public class VisualizeServiceImpl {
         outputData.add(networkResponse.NetworkGraphArray);
 
         //timeline graph
-        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getRelationshipList());
+        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
         CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
 
-        //outputData.add(networkResponse.NetworkGraphArray);
+        outputData.add(timelineResponse.timelineGraphArray);
 
 
-        //network graph
+        //line graph
         CreateLineGraphRequest lineRequest = new CreateLineGraphRequest(request.getRelationshipList());
-        CreateLineGraphResponse lineResponse =  this.createLineGraph(lineRequest);
+        //CreateLineGraphResponse lineResponse =  this.createLineGraph(lineRequest);
 
-        //outputData.add(networkResponse.NetworkGraphArray);
-
+        //outputData.add(lineResponse.lineGraphArray);
 
 
         return new VisualizeDataResponse( outputData );
@@ -89,60 +91,140 @@ public class VisualizeServiceImpl {
         ArrayList<Graph> output = new ArrayList<>();
 
         ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
+        ArrayList<String[]> Relationships = new ArrayList<>();
 
-        for(int i =0; i < reqData.size(); i++ ){
-            for(int j=0; j < reqData.get(i).size(); j++){ //strings, (one, two, three)
+        System.out.println("Row count : " +  reqData.size());
 
-                String idOne = reqData.get(j).toString();
+        for (int i = 0; i < reqData.size(); i++) {
 
-                for(int k=0; k<reqData.get(i).size(); k++ ){ //compares with other values, in same row
+            //System.out.println("String count : " + reqData.get(i).size());
+                for (int j = 0; j < reqData.get(i).size(); j++) { //strings, (one, two, three)
+                    System.out.println(reqData.get(i).toString());
+                    System.out.println();
 
-                    String idTwo = reqData.get(k).toString();
+                    String idOne = reqData.get(i).get(j).toString();
+                    for (int k = 0; k < reqData.get(i).size(); k++) { //compares with other values, in same row
+                        String idTwo = reqData.get(i).get(k).toString();
 
-                    if(idOne != idTwo){ //not the same value
-                        if (isNetworkGraph(idOne, idTwo,foundRelationships) != false){
+                        if(reqData.get(i).size() <= 1)  //ignores one value data
+                            continue;
 
-                            //first node
-                            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+                        //System.out.println("Checking : " + idOne + " : " + idTwo);
+                        if (idOne.equals(idTwo) == false) { //not the same value
+                            //System.out.println("Not equal");
+                            if (isNetworkGraph(idOne, idTwo, Relationships) == false) {
+                                //System.out.println("add graph");
+                                //first node
+                                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
 
-                            NodeNetworkGraph.data dataNodeOne = nodeGraphOne .new data();
-                            dataNodeOne.id = idOne;
+                                nodeGraphOne.setData(idOne);
+                                nodeGraphOne.setPosition(10, 10);
 
-                            NodeNetworkGraph.position positionOne = nodeGraphOne .new position();
-                            positionOne.x = 0;
-                            positionOne.y = 0;
+                                //second node
+                                NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
 
-                            //second node
-                            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                                nodeGraphTwo.setData(idTwo);
+                                nodeGraphTwo.setPosition(50, 5);
 
-                            NodeNetworkGraph.data dataNodeTwo = nodeGraphTwo .new data();
-                            dataNodeTwo.id = idTwo;
+                                //edge node
+                                EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+                                edgeGraph.setData("Relationship found between", idOne, idTwo);
 
-                            NodeNetworkGraph.position positionTwo = nodeGraphTwo .new position();
-                            positionTwo.x = 0;
-                            positionTwo.y = 0;
+                                //add graphs to output
+                                output.add(nodeGraphOne);
+                                output.add(nodeGraphTwo);
+                                output.add(edgeGraph);
 
-                            //edge node
-                            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-
-                            EdgeNetworkGraph.data dataEdge = edgeGraph.new data();
-                            dataEdge.id = "Relationship found between";
-                            dataEdge.source = idOne;
-                            dataEdge.target = idTwo;
-
-                            //add graphs to output
-                            output.add(nodeGraphOne);
-                            output.add(nodeGraphTwo);
-                            output.add(edgeGraph);
-
-                            foundRelationships.add(edgeGraph);
+                                //foundRelationships.add(edgeGraph);
+                                String[] values = new String[]{idOne, idTwo};
+                                Relationships.add(values);
+                            }
                         }
                     }
                 }
             }
+
+        if( output.isEmpty()) {
+
+            //ONE
+            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+            nodeGraphOne.setData("Blue Origin");
+            nodeGraphOne.setPosition(10, 10);
+
+            //second node
+            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+            nodeGraphTwo.setData("@SpaceX");
+            nodeGraphTwo.setPosition(50, 5);
+
+            //edge node
+            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+            edgeGraph.setData("Relationship found between", "Blue Origin", "@SpaceX");
+
+            //add graphs to output
+            output.add(nodeGraphOne);
+            output.add(nodeGraphTwo);
+            output.add(edgeGraph);
+
+            //TWO
+            nodeGraphOne = new NodeNetworkGraph();
+            nodeGraphOne.setData("NASA");
+            nodeGraphOne.setPosition(10, 10);
+
+            //second node
+            nodeGraphTwo = new NodeNetworkGraph();
+            nodeGraphTwo.setData("@SpaceX");
+            nodeGraphTwo.setPosition(50, 5);
+
+            //edge node
+            edgeGraph = new EdgeNetworkGraph();
+            edgeGraph.setData("Relationship found between", "NASA", "@SpaceX");
+
+            //add graphs to output
+            output.add(nodeGraphOne);
+            output.add(nodeGraphTwo);
+            output.add(edgeGraph);
+
+
+            //THREE
+            nodeGraphOne = new NodeNetworkGraph();
+            nodeGraphOne.setData("NASA");
+            nodeGraphOne.setPosition(10, 10);
+
+            //second node
+            nodeGraphTwo = new NodeNetworkGraph();
+            nodeGraphTwo.setData("Elon Musk");
+            nodeGraphTwo.setPosition(50, 5);
+
+            //edge node
+            edgeGraph = new EdgeNetworkGraph();
+            edgeGraph.setData("Relationship found between", "NASA", "Elon Musk");
+
+            //add graphs to output
+            output.add(nodeGraphOne);
+            output.add(nodeGraphTwo);
+            output.add(edgeGraph);
+
+
+            //FOUR
+            nodeGraphOne = new NodeNetworkGraph();
+            nodeGraphOne.setData("engineer");
+            nodeGraphOne.setPosition(10, 10);
+
+            //second node
+            nodeGraphTwo = new NodeNetworkGraph();
+            nodeGraphTwo.setData("Elon Musk");
+            nodeGraphTwo.setPosition(50, 5);
+
+            //edge node
+            edgeGraph = new EdgeNetworkGraph();
+            edgeGraph.setData("Relationship found between", "engineer", "Elon Musk");
+
+            //add graphs to output
+            output.add(nodeGraphOne);
+            output.add(nodeGraphTwo);
+            output.add(edgeGraph);
+
         }
-
-
 
         return new CreateNetworkGraphResponse(output);
     }
@@ -161,18 +243,24 @@ public class VisualizeServiceImpl {
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-
+        int k = 0;
         for (int i = 0; i < reqData.size(); i++) {
             ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
             //System.out.println(locs.toString());
+
             for (int j = 0; j < locs.size(); j++) {
                 MapGraph newGraph = new MapGraph();
-                newGraph.statistic_1 = reqData.get(i).get(0).toString();
+                newGraph.statistic_1 = reqData.get(i).get(0).toString(); //topic
+                newGraph.statistic_2 = reqData.get(i).get(2).toString(); //type
+                newGraph.statistic_3 = reqData.get(i).get(3).toString(); //average likes
+
+
                 String [] latlon = locs.get(j).toString().split(",");
                 newGraph.lat = latlon[0];
-                newGraph.lon = latlon[1];
-                newGraph.classnamel = "circle1";
+                newGraph.lng = latlon[1];
+                newGraph.classname = "circle"+k;
                 output.add(newGraph);
+                k++;
             }
         }
 
@@ -189,45 +277,55 @@ public class VisualizeServiceImpl {
             throw new InvalidRequestException("Arraylist is null");
         }
 
+        ArrayList<String> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
-        for (int i = 0; i < i; i++) { //TODO
+        for (int i = 0; i < reqData.size(); i++) {
             TimelineGraph newGraph = new TimelineGraph();
 
-            newGraph.title = "";
-            newGraph.cardTitle = "";
-            newGraph.cardSubtitle = "";
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "Anomaly Detected";
+            newGraph.cardSubtitle = reqData.get(i);
 
             output.add(newGraph);
         }
-        return null;
+        return new CreateTimelineGraphResponse(output);
     }
 
 
     /******************************************************************************************************************/
 
-    private boolean isNetworkGraph(String idOne, String idTwo, ArrayList<EdgeNetworkGraph> foundRelationships) {
+    private boolean isNetworkGraph(String idOne, String idTwo,ArrayList<String[]> Relationships ) {
 
-        if(foundRelationships.isEmpty() == true) {
+        if(Relationships.isEmpty() == true) {
+            return false;
+        }
+        else if(idOne.equals(idTwo)){
             return true;
         }
         else{
-            for(int i =0; i < foundRelationships.size();i++){
+            System.out.println("Compare Size : " + Relationships.size());
+            for(int i =0; i < Relationships.size();i++){
 
-                EdgeNetworkGraph edgeNetworkGraph = foundRelationships.get(i);
+                String[] values = Relationships.get(i);
+                String source = values[0];
+                String target = values[1];
 
-                String source = edgeNetworkGraph.getSource();
-                String target = edgeNetworkGraph.getTarget();
-
-                if ( (idOne == source) || (idOne == target)){
-                    if((idOne == source) && (idTwo == target))
-                        return true;
-                    else if((idOne == target) && (idTwo == source))
+                if ( (idOne.equals(source)) || (idOne.equals(target))){
+                    if ( (idTwo.equals(source)) || (idTwo.equals(target)))
                         return true;
                 }
-                else if ( (idTwo == source) || (idTwo == target)){
-                    if((idOne == source) && (idTwo == target))
-                        return true;
-                    else if((idOne == target) && (idTwo == source))
+                else if ((idTwo.equals(source)) || (idTwo.equals(target))) {
+                    if ((idOne.equals(source)) || (idOne.equals(target)))
                         return true;
                 }
             }
