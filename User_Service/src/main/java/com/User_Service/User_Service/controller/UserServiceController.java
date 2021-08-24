@@ -45,6 +45,12 @@ public class UserServiceController {
         return service.register(request);
     }
 
+    @PostMapping(value = "/requestAdmin")
+    public @ResponseBody RegisterAdminResponse registerAdmin(@RequestBody RegisterAdminRequest request) throws Exception {
+        //RegisterRequest request = requestEntity.getBody();
+        return service.requestAdmin(request);
+    }
+
     @PostMapping(value = "/login")
     public @ResponseBody LoginResponse login(@RequestBody LoginRequest request) throws Exception {
         //LoginRequest request = requestEntity.getBody();
