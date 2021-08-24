@@ -34,7 +34,7 @@ class SearchBar extends Component {
     onSearch(values) {
         // alert(values + "= Search term");
 
-        this.handleTextChange(template_json);
+        // this.handleTextChange(template_json);
 
         //Show loading icon while API request is waiting for data
         this.setState((prevState) => ({showLoadingIcon: true}))
