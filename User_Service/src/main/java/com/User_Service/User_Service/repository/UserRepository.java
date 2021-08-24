@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,5 +33,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     int updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass);
 
     @Query("SELECT s FROM users s WHERE s.isAdmin = true")
-    Optional<User> findUsersByAdmin();
+    ArrayList<User> findUsersByAdmin();
 }

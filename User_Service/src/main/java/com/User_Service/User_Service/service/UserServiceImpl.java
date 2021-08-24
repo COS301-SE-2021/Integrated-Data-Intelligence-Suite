@@ -8,25 +8,30 @@ import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
+import javax.mail.internet.InternetAddress;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    private final Integer staticCode = 123456;
 
     public UserServiceImpl() {
 
@@ -43,6 +48,8 @@ public class UserServiceImpl {
     /**
      * This function logs the user in.
      * @param request This class contains the user information for login.
+     *                It contains the email of the user and password set
+     *                by the user when registering their account.
      * @return This returns a response contains the exit code**
      */
     public LoginResponse login(LoginRequest request) throws NoSuchAlgorithmException, InvalidRequestException, InvalidKeySpecException {
@@ -105,7 +112,7 @@ public class UserServiceImpl {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
         if(repository == null) {
-            System.out.println("repository is null");
+            System.out.println("Repository is null");
         }
         System.out.println(request.getUsername());
         Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
@@ -141,11 +148,93 @@ public class UserServiceImpl {
     }
 
     /**
+     * This function allows a user to register as an admin. It will register the user as normal
+     * but it will send an admin user an email containing the details of the user that wants to
+     * register as an admin. The admin will decide whether or not go through with it.
+     * @param request This class contains the details of the user.
+     * @return This class entails if the registration of the user was successful or not.
+     * @throws Exception This is thrown if the request is invalid.
+     */
+    @Transactional
+    public RegisterAdminResponse requestAdmin(RegisterAdminRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+
+        if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
+            throw new InvalidRequestException("One or more attributes of the register request is null.");
+        }
+
+        Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
+        if(usersByUsername.isPresent()) {
+            return new RegisterAdminResponse(false, "Username has been taken");
+        }
+
+        Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
+        if(usersByEmail.isPresent()) {
+            return new RegisterAdminResponse(false, "This email has already been registered");
+        }
+
+        String password = request.getPassword();
+        String hashedPass;
+        //Hashing the password
+        int iterations = 1000;
+        char[] chars = password.toCharArray();
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+
+        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] hash = skf.generateSecret(spec).getEncoded();
+        hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
+
+        //Creating User
+        User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, Permission.VIEWING);
+        //Storing the user in the database
+        repository.save(newUser);
+
+        String emailText = "A user has registered to be an admin. Please verify their details.\n";
+        emailText += "Name: " + newUser.getFirstName() + "\n";
+        emailText += "Surname: " + newUser.getLastName() + "\n";
+        emailText += "Email: " + newUser.getEmail() + "\n";
+        emailText += "Username: " + newUser.getUsername() + "\n";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("emergenoreply@gmail.com");
+        message.setSubject("Admin Request");
+        message.setText(emailText);
+
+        ArrayList<User> adminUsers = repository.findUsersByAdmin();
+        ArrayList<String> admins = new ArrayList<String>();
+        String[] adminEmails = new String[admins.size()];
+        if(adminUsers.isEmpty()) {
+            message.setTo("shreymandalia@gmail.com");
+        }
+        else {
+            for (User adminUser : adminUsers) {
+                admins.add(adminUser.getEmail());
+            }
+            adminEmails = admins.toArray(adminEmails);
+            message.setTo(adminEmails);
+        }
+        emailSender.send(message);
+        return new RegisterAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
+    }
+
+    /**
      * This function verifies the user's authenticity.
      * @param request This class contains the information of the user.
      * @return The return class returns if the verification process was successful**
      */
     public VerifyAccountResponse verifyAccount(VerifyAccountRequest request) {
+        String emailText = "Below is the code you will require to verify your account.\n";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("emergenoreply@gmail.com");
+        message.setSubject("Admin Request");
+        message.setText(emailText);
+
         return null;
     }
 
