@@ -2,29 +2,36 @@ package com.Analyse_Service.Analyse_Service.dataclass;
 
 import javax.persistence.*;
 
-@Entity(name = "ParsedData")
+@Entity
 @Table(name = "ParsedData")
 public class ParsedData {
     @Id
-    @GeneratedValue(generator = "")
-    private Long id;
+    @Column(name="ID")
+    @GeneratedValue
+    private Long ID;
 
-
+    @Column(name="textMessage")
     private String textMessage;
+
+    @Column(name="date")
     private String date;
+
+    @Column(name="location")
     private String location;
+
+    @Column(name="likes")
     private Integer likes;
 
     public ParsedData() {
 
     }
 
-    public Long getId() {
-        return id;
+    public Long getID() {
+        return ID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setID(Long id) {
+        this.ID = id;
     }
 
     public String getTextMessage() {
