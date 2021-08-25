@@ -119,27 +119,34 @@ public class AnalyseServiceImpl {
         /*******************Run A.I Models******************/
 
         TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
-        TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
+        //TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
 
         TrainFindRelationshipsRequest findRelationshipsRequest = new TrainFindRelationshipsRequest(parsedDatalist);
-        TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
+        //TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
 
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
-        TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
+        //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
         TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(
+                null,
+                null,
+                null,
+                findTrendsResponse.getPattenList(),
+                null);
+
+        /*return new AnalyseDataResponse(
                 findPatternResponse.getPattenList(),
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList());
+                findAnomaliesResponse.getPattenList());*/
     }
 
 
@@ -1710,13 +1717,13 @@ public class AnalyseServiceImpl {
     /**
      * This method used to fetch the parsed data from the database
      *
-     * @param request This is a request object which contains data required to be fetched.
+     *  This is a request object which contains data required to be fetched.
      * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request)
+    public FetchParsedDataResponse fetchParsedData()
             throws InvalidRequestException {
-        if (request == null) {
+        /*if (request == null) {
             throw new InvalidRequestException("FetchParsedDataRequest Object is null");
         }
         if (request.getDataType() == null) {
@@ -1724,10 +1731,14 @@ public class AnalyseServiceImpl {
         }
         if (request.getDataType() != "ParsedData") {
             throw new InvalidRequestException("Wrong Datatype is used");
-        }
+        }*/
 
-
+        System.out.println("here 1");
+        if(parsedDataRepository == null)
+            System.out.println( " Is null ");
+        System.out.println("here 2");
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
+        System.out.println("here 3");
         return new FetchParsedDataResponse(list);
     }
 
