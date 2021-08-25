@@ -24,6 +24,7 @@
     "electron-is-dev": "^2.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
+    "eslint-config-airbnb": "^18.2.1",
     "formik": "^2.2.9",
     "glob-parent": "^5.1.2",
     "hosted-git-info": "^2.8.9",
@@ -92,6 +93,7 @@
     "cross-env": "^7.0.3",
     "electron": "^13.0.1",
     "electron-builder": "^22.10.5",
+    "eslint-plugin-react": "^7.24.0",
     "identity-obj-proxy": "^3.0.0",
     "wait-on": "^5.3.0"
   },
