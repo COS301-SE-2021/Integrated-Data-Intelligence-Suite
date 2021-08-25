@@ -23,6 +23,9 @@
   "plugins": [
     "react"
   ],
+  "ignorePatterns": [
+    "src/app/tests"
+  ],
   "rules": {
     "no-undef": [
       "off"
