@@ -10,14 +10,14 @@ import {
 class ExitMenuTooltip extends React.Component {
   render() {
     return (
-      <>
-        <Menu id="exit_menu">
-          <Menu.Item key="2" icon={<PoweroffOutlined />}>
-            <Link className="logout_link" to="/login">logout</Link>
-          </Menu.Item>
-        </Menu>
+        <>
+            <Menu id="exit_menu">
+                <Menu.Item key="2" icon={<PoweroffOutlined />}>
+                    <Link className="logout_link" to="/login">logout</Link>
+                </Menu.Item>
+            </Menu>
 
-      </>
+        </>
     );
   }
 }

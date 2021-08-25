@@ -4,7 +4,7 @@ import React from 'react';
 const LogoutPage = () => {
   localStorage.clear();
   return (
-    <Redirect to="/login" />
+      <Redirect to="/login" />
   );
 };
 

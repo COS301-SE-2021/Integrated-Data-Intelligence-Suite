@@ -42,44 +42,44 @@ const UserPermissions = () => {
   };
 
   return (
-    <div className="user-info">
-      {isPending && <div>loading </div>}
-      {error && <div>{error}</div>}
-      {users && user === null && setUser(users.user[0])}
-      {user && permission === null && setPermission(user.permission)}
-      {user && (
-        <div className="form-container">
-          <div className="form-header">
-            <h2>{user.firstName}</h2>
-            <CloseCircleTwoTone
-              className="back-button-form"
-              onClick={() => history.go(-1)}
-            />
+      <div className="user-info">
+          {isPending && <div>loading </div>}
+          {error && <div>{error}</div>}
+          {users && user === null && setUser(users.user[0])}
+          {user && permission === null && setPermission(user.permission)}
+          {user && (
+          <div className="form-container">
+              <div className="form-header">
+                  <h2>{user.firstName}</h2>
+                  <CloseCircleTwoTone
+                    className="back-button-form"
+                    onClick={() => history.go(-1)}
+                  />
+              </div>
+
+              <form onSubmit={submitChanges}>
+                  <label>Username</label>
+                  <br />
+                  <input type="text" value={user.username} />
+                  <br />
+                  <label>Permission</label>
+                  <br />
+                  <select
+                    value={permission}
+                    onChange={(e) => enableSubmit(e.target.value)}
+                  >
+                      <option value="VIEWING">VIEWING</option>
+                      <option value="IMPORTING">IMPORTING</option>
+                  </select>
+                  <br />
+
+                  {!submit && <button disabled className="disabled">submit</button>}
+                  {submit && <button className="enabled">submit</button>}
+
+              </form>
           </div>
-
-          <form onSubmit={submitChanges}>
-            <label>Username</label>
-            <br />
-            <input type="text" value={user.username} />
-            <br />
-            <label>Permission</label>
-            <br />
-            <select
-              value={permission}
-              onChange={(e) => enableSubmit(e.target.value)}
-            >
-              <option value="VIEWING">VIEWING</option>
-              <option value="IMPORTING">IMPORTING</option>
-            </select>
-            <br />
-
-            {!submit && <button disabled className="disabled">submit</button>}
-            {submit && <button className="enabled">submit</button>}
-
-          </form>
-        </div>
       )}
-    </div>
+      </div>
   );
 };
 

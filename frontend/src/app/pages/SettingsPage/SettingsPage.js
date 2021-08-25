@@ -37,34 +37,34 @@ const SettingsPage = () => {
   const history = useHistory();
 
   return (
-    <Layout className="bodyDiv">
-      <div className="header white-background" />
-      <Content id="settings-container" className="outer-container" style={{ margin: '0', minHeight: '100vh' }}>
-        <Row className="row">
-          <Col style={{ padding: '30px 20px' }} className="left-column" flex="200px">
+      <Layout className="bodyDiv">
+          <div className="header white-background" />
+          <Content id="settings-container" className="outer-container" style={{ margin: '0', minHeight: '100vh' }}>
+              <Row className="row">
+                  <Col style={{ padding: '30px 20px' }} className="left-column" flex="200px">
 
-            { user && user.isAdmin && <div id="Permissions" className="option active" onClick={() => setComponent('Permissions')}>Permissions</div>}
-            {user && user.isAdmin && <Divider />}
+                      { user && user.isAdmin && <div id="Permissions" className="option active" onClick={() => setComponent('Permissions')}>Permissions</div>}
+                      {user && user.isAdmin && <Divider />}
 
-            <div id="Profile" className="option" onClick={() => setComponent('Profile')}>Profile</div>
-            <Divider />
+                      <div id="Profile" className="option" onClick={() => setComponent('Profile')}>Profile</div>
+                      <Divider />
 
-            <div id="Account" className="option" onClick={() => setComponent('Account')}>Account</div>
-          </Col>
-          <Col style={{ padding: '0 0px 30px 0', backgroundColor: '#eff0f0' }} className="right-column" flex="auto">
-            <div className="top-padding"><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
-            { component === 'Permissions' && user && user.isAdmin && setActive(component) && <Permissions />}
-            { component === 'Profile' && setActive(component) && (
-            <div>
-              {' '}
-              <h1>Page not implemented</h1>
-            </div>
+                      <div id="Account" className="option" onClick={() => setComponent('Account')}>Account</div>
+                  </Col>
+                  <Col style={{ padding: '0 0px 30px 0', backgroundColor: '#eff0f0' }} className="right-column" flex="auto">
+                      <div className="top-padding"><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
+                      { component === 'Permissions' && user && user.isAdmin && setActive(component) && <Permissions />}
+                      { component === 'Profile' && setActive(component) && (
+                      <div>
+                          {' '}
+                          <h1>Page not implemented</h1>
+                      </div>
             )}
-            { component === 'Account' && setActive(component) && <div><h1>Page not implemented</h1></div>}
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+                      { component === 'Account' && setActive(component) && <div><h1>Page not implemented</h1></div>}
+                  </Col>
+              </Row>
+          </Content>
+      </Layout>
 
   );
 };

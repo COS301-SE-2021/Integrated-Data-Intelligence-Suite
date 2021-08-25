@@ -60,83 +60,83 @@ class ChartPage extends Component {
   render() {
     if (this.state.user) {
       return (
-        <>
-          <Switch>
-            <Route exact path="/chart">
-              <Layout
-                id="outer_layout"
-                className="chart-page"
-              >
-                <Header id="top_bar">
-                  {/* <Title level={1}>Chart Page Title</Title> */}
-                  <SearchBar
-                    text={this.state.text}
-                    handleTextChange={this.handleTextChange}
-                  />
-                  <UserInfoCard
-                    name="s"
-                  />
-                </Header>
-                <Layout id="inner_layout_div">
-                  <SideBar />
-
-                  {/* The Map Graph */}
-                  <Content id="content_section">
-                    <Layout
-                      id="map_card_content_layout_div"
-                      className="map_card"
-                    >
-                      <Content
-                        id="map_card_content"
-                        className="map_card"
+          <>
+              <Switch>
+                  <Route exact path="/chart">
+                      <Layout
+                        id="outer_layout"
+                        className="chart-page"
                       >
-                        <MapCard text={this.state.text} />
-                      </Content>
+                          <Header id="top_bar">
+                              {/* <Title level={1}>Chart Page Title</Title> */}
+                              <SearchBar
+                                text={this.state.text}
+                                handleTextChange={this.handleTextChange}
+                              />
+                              <UserInfoCard
+                                name="s"
+                              />
+                          </Header>
+                          <Layout id="inner_layout_div">
+                              <SideBar />
 
-                      <Sider
-                        id="map_card_sidebar"
-                        className="map_card"
-                        style={{ display: 'none' }}
-                      >
-                        <DetailsCard />
-                      </Sider>
-                    </Layout>
+                              {/* The Map Graph */}
+                              <Content id="content_section">
+                                  <Layout
+                                    id="map_card_content_layout_div"
+                                    className="map_card"
+                                  >
+                                      <Content
+                                        id="map_card_content"
+                                        className="map_card"
+                                      >
+                                          <MapCard text={this.state.text} />
+                                      </Content>
 
-                    {/* The Network Graph */}
-                    <Layout
-                      id="network_graph_layout_div"
-                      className="network_card"
-                    >
-                      <Content
-                        id="network_graph_card_content"
-                        className="network_card"
-                      >
-                        <NetworkGraphCard text={this.state.text} />
-                      </Content>
-                    </Layout>
+                                      <Sider
+                                        id="map_card_sidebar"
+                                        className="map_card"
+                                        style={{ display: 'none' }}
+                                      >
+                                          <DetailsCard />
+                                      </Sider>
+                                  </Layout>
 
-                    {/* The timeline Graph */}
-                    <Layout
-                      id="timeline_graph_div"
-                      className="timeline_card"
-                    >
-                      <Content
-                        id="timeline_graph_card_content"
-                        className="timeline_card"
-                      >
-                        <TimelineGraph
-                          text={this.state.text}
-                          key={this.state.text}
-                        />
-                      </Content>
-                    </Layout>
+                                  {/* The Network Graph */}
+                                  <Layout
+                                    id="network_graph_layout_div"
+                                    className="network_card"
+                                  >
+                                      <Content
+                                        id="network_graph_card_content"
+                                        className="network_card"
+                                      >
+                                          <NetworkGraphCard text={this.state.text} />
+                                      </Content>
+                                  </Layout>
 
-                  </Content>
-                </Layout>
-              </Layout>
-            </Route>
-          </Switch>
-        </>
+                                  {/* The timeline Graph */}
+                                  <Layout
+                                    id="timeline_graph_div"
+                                    className="timeline_card"
+                                  >
+                                      <Content
+                                        id="timeline_graph_card_content"
+                                        className="timeline_card"
+                                      >
+                                          <TimelineGraph
+                                            text={this.state.text}
+                                            key={this.state.text}
+                                          />
+                                      </Content>
+                                  </Layout>
+
+                              </Content>
+                          </Layout>
+                      </Layout>
+                  </Route>
+              </Switch>
+          </>
       );
     }
     return <Redirect to="/login" />;

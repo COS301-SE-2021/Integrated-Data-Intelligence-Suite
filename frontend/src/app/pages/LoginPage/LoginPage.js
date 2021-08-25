@@ -67,71 +67,71 @@ const LoginPage = () => {
   });
 
   return (
-    <Card
-      id="login_card"
-      className="loginCard"
-      title="Login"
-    >
+      <Card
+        id="login_card"
+        className="loginCard"
+        title="Login"
+      >
 
-      <form onSubmit={formik.handleSubmit}>
-        <Form.Item
-          className="input_item_div"
-        >
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="email"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
-            prefix={<UserOutlined className="site-form-item-icon" />}
-          />
-        </Form.Item>
+          <form onSubmit={formik.handleSubmit}>
+              <Form.Item
+                className="input_item_div"
+              >
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="email"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.email}
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                  />
+              </Form.Item>
 
-        <Form.Item
-          className="input_item_div"
-        >
-          <Input.Password
-            id="password"
-            name="password"
-            type="password"
-            placeholder="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur} // When the user leaves the form field
-            prefix={<LockOutlined className="site-form-item-icon" />}
-          />
-          {/* {formik.touched.password && formik.errors.password ? ( */}
-          {/*    <p>{formik.errors.password}</p>) : null} */}
+              <Form.Item
+                className="input_item_div"
+              >
+                  <Input.Password
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur} // When the user leaves the form field
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                  />
+                  {/* {formik.touched.password && formik.errors.password ? ( */}
+                  {/*    <p>{formik.errors.password}</p>) : null} */}
 
-        </Form.Item>
+              </Form.Item>
 
-        <Form.Item>
-          <LoginButton />
-        </Form.Item>
+              <Form.Item>
+                  <LoginButton />
+              </Form.Item>
 
-        <Divider className="or_divider">
-          OR
-        </Divider>
+              <Divider className="or_divider">
+                  OR
+              </Divider>
 
-        <Form.Item>
-          Don't have an account?
-          <Link to="/register">
-            <a className="register_link" href="#">register now!</a>
-          </Link>
-        </Form.Item>
+              <Form.Item>
+                  Don't have an account?
+                  <Link to="/register">
+                      <a className="register_link" href="#">register now!</a>
+                  </Link>
+              </Form.Item>
 
-        <Form.Item
-          className="forgot_password_link_container"
-        >
-          <a className="forgot_password_link" href="">
-            Forgot password
-          </a>
-        </Form.Item>
-      </form>
+              <Form.Item
+                className="forgot_password_link_container"
+              >
+                  <a className="forgot_password_link" href="">
+                      Forgot password
+                  </a>
+              </Form.Item>
+          </form>
 
-    </Card>
+      </Card>
   );
 };
 

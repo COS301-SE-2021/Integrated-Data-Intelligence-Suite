@@ -9,7 +9,7 @@ import layoutUtilities from 'cytoscape-layout-utilities';
 import ScriptTag from 'react-script-tag';
 
 const Demo = (props) => (
-  <ScriptTag type="text/javascript" src="https://unpkg.com/cytoscape-layout-utilities/cytoscape-layout-utilities.js" />
+    <ScriptTag type="text/javascript" src="https://unpkg.com/cytoscape-layout-utilities/cytoscape-layout-utilities.js" />
 );
 cytoscape.use(fcose);
 

@@ -11,13 +11,13 @@ const Permissions = () => {
   const { data: users, isPending, error } = useGet('/user/getAll');
 
   return (
-    <Layout>
-      <Content className="permissions-content-section">
-        <div className="permissions user">
-          {users && <UserList users={users.users} />}
-        </div>
-      </Content>
-    </Layout>
+      <Layout>
+          <Content className="permissions-content-section">
+              <div className="permissions user">
+                  {users && <UserList users={users.users} />}
+              </div>
+          </Content>
+      </Layout>
   );
 };
 

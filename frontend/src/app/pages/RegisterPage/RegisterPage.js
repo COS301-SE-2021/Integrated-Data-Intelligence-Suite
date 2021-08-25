@@ -80,137 +80,137 @@ const RegisterPage = () => {
   });
 
   return (
-    <div className="background gradient register">
-      <Card
-        id="register_card"
-        className="loginCard"
-        title="Register"
-      >
-        <form onSubmit={formik.handleSubmit}>
-
-          <Form.Item
-            label="First Name"
+      <div className="background gradient register">
+          <Card
+            id="register_card"
+            className="loginCard"
+            title="Register"
           >
-            <Input
-              id="firstName"
-              name="firstName"
-              type="text"
-              placeholder="first name"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.firstName}
-            />
-            {formik.touched.firstName && formik.errors.firstName ? (
-              <p>{formik.errors.firstName}</p>) : null}
-          </Form.Item>
+              <form onSubmit={formik.handleSubmit}>
 
-          <Form.Item
-            label="Last Name"
-          >
-            <Input
-              id="lastName"
-              name="lastName"
-              type="text"
-              placeholder="last name"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.lastName}
-            />
-            {formik.touched.lastName && formik.errors.lastName ? (
-              <p>{formik.errors.lastName}</p>) : null}
-          </Form.Item>
+                  <Form.Item
+                    label="First Name"
+                  >
+                      <Input
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        placeholder="first name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.firstName}
+                      />
+                      {formik.touched.firstName && formik.errors.firstName ? (
+                          <p>{formik.errors.firstName}</p>) : null}
+                  </Form.Item>
 
-          <Form.Item
-            label="User name"
-          >
-            <Input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="user name"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.username}
-            />
-            {formik.touched.username && formik.errors.username ? (
-              <p>{formik.errors.username}</p>) : null}
-          </Form.Item>
+                  <Form.Item
+                    label="Last Name"
+                  >
+                      <Input
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        placeholder="last name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.lastName}
+                      />
+                      {formik.touched.lastName && formik.errors.lastName ? (
+                          <p>{formik.errors.lastName}</p>) : null}
+                  </Form.Item>
 
-          <Form.Item
-            label="email"
-          >
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-            />
-            {formik.touched.email && formik.errors.email ? (
-              <p>{formik.errors.email}</p>) : null}
-          </Form.Item>
+                  <Form.Item
+                    label="User name"
+                  >
+                      <Input
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder="user name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.username}
+                      />
+                      {formik.touched.username && formik.errors.username ? (
+                          <p>{formik.errors.username}</p>) : null}
+                  </Form.Item>
 
-          <Form.Item
-            label="password"
-          >
-            <Input.Password
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.password && formik.errors.password ? (
-              <p>{formik.errors.password}</p>) : null}
+                  <Form.Item
+                    label="email"
+                  >
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="email"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.email}
+                      />
+                      {formik.touched.email && formik.errors.email ? (
+                          <p>{formik.errors.email}</p>) : null}
+                  </Form.Item>
 
-          </Form.Item>
+                  <Form.Item
+                    label="password"
+                  >
+                      <Input.Password
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.password && formik.errors.password ? (
+                          <p>{formik.errors.password}</p>) : null}
 
-          <Form.Item
-            label="Confirm password"
-          >
-            <Input.Password
-              id="confirmedpassword"
-              name="confirmedpassword"
-              type="password"
-              placeholder="rewrite the password"
-              value={formik.values.confirmedpassword}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.confirmedpassword && formik.errors.confirmedpassword ? (
-              <p>{formik.errors.confirmedpassword}</p>) : null}
+                  </Form.Item>
 
-          </Form.Item>
+                  <Form.Item
+                    label="Confirm password"
+                  >
+                      <Input.Password
+                        id="confirmedpassword"
+                        name="confirmedpassword"
+                        type="password"
+                        placeholder="rewrite the password"
+                        value={formik.values.confirmedpassword}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.confirmedpassword && formik.errors.confirmedpassword ? (
+                          <p>{formik.errors.confirmedpassword}</p>) : null}
 
-          <Form.Item>
-            <RegisterButton />
-          </Form.Item>
+                  </Form.Item>
 
-          <Divider className="or_divider">
-            OR
-          </Divider>
+                  <Form.Item>
+                      <RegisterButton />
+                  </Form.Item>
 
-          <Form.Item>
-            Already have an account?
-            <Link to="/login">
-              <a className="register_link" href="#">login</a>
-            </Link>
-          </Form.Item>
+                  <Divider className="or_divider">
+                      OR
+                  </Divider>
 
-          {/* <Form.Item */}
-          {/*    className={"forgot_password_link_container"} */}
-          {/* > */}
-          {/*    <a className="forgot_password_link" href=""> */}
-          {/*        Forgot passw */}
-          {/*    </a> */}
-          {/* </Form.Item> */}
-        </form>
-      </Card>
-    </div>
+                  <Form.Item>
+                      Already have an account?
+                      <Link to="/login">
+                          <a className="register_link" href="#">login</a>
+                      </Link>
+                  </Form.Item>
+
+                  {/* <Form.Item */}
+                  {/*    className={"forgot_password_link_container"} */}
+                  {/* > */}
+                  {/*    <a className="forgot_password_link" href=""> */}
+                  {/*        Forgot passw */}
+                  {/*    </a> */}
+                  {/* </Form.Item> */}
+              </form>
+          </Card>
+      </div>
   );
 };
 

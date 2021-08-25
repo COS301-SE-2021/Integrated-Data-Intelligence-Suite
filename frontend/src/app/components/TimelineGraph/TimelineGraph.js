@@ -50,11 +50,11 @@ class TimelineGraph extends React.Component {
     }
 
     return (
-      <Chrono
-        items={data_from_backend}
-        mode="VERTICAL_ALTERNATING"
-        scrollable
-      />
+        <Chrono
+          items={data_from_backend}
+          mode="VERTICAL_ALTERNATING"
+          scrollable
+        />
     );
   }
 }

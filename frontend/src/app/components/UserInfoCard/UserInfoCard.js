@@ -30,22 +30,22 @@ class UserInfoCard extends React.Component {
     const { loading, user } = this.state;
 
     return (
-      <>
-        <Card id="user_avatar_card">
-          <Skeleton loading={false} avatar active>
+        <>
+            <Card id="user_avatar_card">
+                <Skeleton loading={false} avatar active>
 
-            {/* The drop down menu that allows the user to log out or lock the app */}
-            <ExitMenuDropDown />
+                    {/* The drop down menu that allows the user to log out or lock the app */}
+                    <ExitMenuDropDown />
 
-            {/* The user Avatar Image */}
-            <Meta
-              id="meta_id"
-              className="user_meta_card"
-              title={user.username}
-            />
-          </Skeleton>
-        </Card>
-      </>
+                    {/* The user Avatar Image */}
+                    <Meta
+                      id="meta_id"
+                      className="user_meta_card"
+                      title={user.username}
+                    />
+                </Skeleton>
+            </Card>
+        </>
     );
   }
 }

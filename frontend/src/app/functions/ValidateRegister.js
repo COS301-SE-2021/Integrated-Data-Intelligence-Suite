@@ -23,11 +23,11 @@ class ValidateRegister extends Component {
 
   render() {
     return (
-      <div className="ValidateLogin">
-        <Link to={this.state.url}>
-          <button type="submit">CHECK</button>
-        </Link>
-      </div>
+        <div className="ValidateLogin">
+            <Link to={this.state.url}>
+                <button type="submit">CHECK</button>
+            </Link>
+        </div>
     );
   }
 }
