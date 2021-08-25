@@ -24,7 +24,7 @@
     "react"
   ],
   "ignorePatterns": [
-    "src/app/tests"
+    "src/app/tests", "src/app/Mocks", "src/app/resources"
   ],
   "rules": {
     "no-undef": [
