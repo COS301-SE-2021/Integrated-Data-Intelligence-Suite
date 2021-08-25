@@ -24,7 +24,7 @@
     "react"
   ],
   "ignorePatterns": [
-    "src/app/tests", "src/app/Mocks", "src/app/resources"
+    "src/app/tests", "src/app/Mocks", "src/app/resources", "src/app/components/MapCard/leaflet/"
   ],
   "rules": {
     "no-undef": [
@@ -37,6 +37,9 @@
       "off"
     ],
     "no-sequences": "off",
-    "no-multi-assign": "off"
+    "no-multi-assign": "off",
+    "indent": ["error", "tab"],
+    "no-tabs": "off",
+    "react/jsx-indent": [2, "tab"]
   }
 }
