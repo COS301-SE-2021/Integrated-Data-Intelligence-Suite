@@ -56,4 +56,14 @@ public class UserServiceController {
         //LoginRequest request = requestEntity.getBody();
         return service.login(request);
     }
+
+    @PostMapping(value = "/getCurrentUser", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody GetCurrentUserResponse getCurrentUser(@RequestBody GetCurrentUserRequest request) throws Exception {
+        return service.getCurrentUser(request);
+    }
+
+    @PostMapping(value = "/verifyAccount")
+    public @ResponseBody VerifyAccountResponse verifyAccount(@RequestBody VerifyAccountRequest request) throws Exception {
+        return service.verifyAccount(request);
+    }
 }
