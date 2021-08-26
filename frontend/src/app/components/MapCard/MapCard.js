@@ -26,7 +26,7 @@ import 'leaflet-geometryutil/src/leaflet.geometryutil.js';
 import 'leaflet-draw/dist/leaflet.draw.js';
 
 const Demo = (props) => (
-    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js" />
+    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
 );
 const pretoria_position = [-25.731340, 28.218370];
 
@@ -84,38 +84,39 @@ function MapCard(props) {
     return (
         <>
             <Card
-              id="map_card"
-              title="Map"
-              extra={<p />}
+                id="map_card"
+                title="Map"
+                // extra={<p/>}
             >
                 {/* <p>Card content</p> */}
                 <Map
-                  id="map_container_div"
-                  center={pretoria_position}
-                  zoom={9}
-                  scrollWheelZoom
+                    id="map_container_div"
+                    center={pretoria_position}
+                    zoom={9}
+                    scrollWheelZoom
                 >
-
-                    <LayersControl position="topright" collapsed={false}>
-                        <LayersControl.BaseLayer name="osm black and white">
+                    <LayersControl
+                        position="topright"
+                        collapsed={false}
+                    >
+                        <LayersControl.BaseLayer name="osm b&w">
                             <TileLayer
-                              attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                              url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                                attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
                         <LayersControl.BaseLayer name="osm colour">
                             <TileLayer
-                              attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
                         <LayersControl.BaseLayer name="google">
                             <TileLayer
-                              attribution='google'
-                              url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  "
+                                attribution="google"
+                                url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  "
                             />
                         </LayersControl.BaseLayer>
-
 
 
                         <LayersControl.Overlay name="Marker with popup">
@@ -124,7 +125,7 @@ function MapCard(props) {
                                     <span>
                                         A pretty CSS3 popup.
                                         {' '}
-                                        <br />
+                                        <br/>
                                         {' '}
                                         Easily customizable.
                                     </span>
@@ -136,32 +137,30 @@ function MapCard(props) {
                                 <Popup>
                                     <span>Popup in FeatureGroup</span>
                                 </Popup>
-                                <Circle center={[51.51, -0.06]} radius={200} />
+                                <Circle center={[51.51, -0.06]} radius={200}/>
+                            </FeatureGroup>
+                        </LayersControl.Overlay>
+
+                        <LayersControl.Overlay name={"drawn items"}>
+                            <FeatureGroup>
+                                <EditControl
+                                    position="topleft"
+                                    onCreated={_created}
+                                    draw={{}}
+                                />
                             </FeatureGroup>
                         </LayersControl.Overlay>
                     </LayersControl>
 
-                    {/*<TileLayer*/}
-                    {/*  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
-                    {/*  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
-                    {/*/>*/}
-
-                    <FeatureGroup>
-                        <EditControl
-                          position="topleft"
-                          onCreated={_created}
-                          draw={{}}
-                        />
-                    </FeatureGroup>
 
                     {/* Display the City markers onto the map */}
                     {data_from_backend.map((city, idx) => (
                         <CircleMarker
-                          center={[city.lat, city.lng]}
-                          icon={markerIcon}
-                          key={idx}
-                          className={city.classname}
-                          onClick={() => {
+                            center={[city.lat, city.lng]}
+                            icon={markerIcon}
+                            key={idx}
+                            className={city.classname}
+                            onClick={() => {
                                 showCircleData(city.classname, data_from_backend);
                             }}
                         />
