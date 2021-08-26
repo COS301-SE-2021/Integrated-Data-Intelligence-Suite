@@ -24,6 +24,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT s FROM users s WHERE s.id = ?1")
     Optional<User> findUserById(UUID userID);
 
+    @Query("SELECT s FROM users s WHERE s.isAdmin = true")
+    ArrayList<User> findUsersByAdmin();
+
     @Modifying
     @Query("UPDATE users u SET u.permission = :perm WHERE u.id = :id")
     int updatePermission(@Param("id")UUID userID, @Param("perm")Permission perm);
@@ -32,6 +35,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("UPDATE users u SET u.password = :newpass WHERE u.id = :id")
     int updatePassword(@Param("id")UUID userID, @Param("newpass")String newpass);
 
-    @Query("SELECT s FROM users s WHERE s.isAdmin = true")
-    ArrayList<User> findUsersByAdmin();
+    @Modifying
+    @Query("UPDATE users u SET u.isVerified = true WHERE u.id = :id")
+    int verifyUser(@Param("id")UUID userid);
+
+
 }
