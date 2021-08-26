@@ -10,7 +10,7 @@ import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 
 const {
     Title,
-    Text
+    Text,
 } = Typography;
 const {
     Header,
@@ -31,16 +31,14 @@ function getLocalUser() {
 class HomePage extends Component {
     constructor(props) {
         super(props);
-        this.state.user = getLocalUser();
+        this.setState({
+            user: null,
+        });
     }
-
-    state = {
-        user: null
-    };
 
     render() {
         if (true) {
-            return <Redirect to="/chart"/>;
+            return <Redirect to="/chart" />;
         }
         if (this.state.user) {
             return (
@@ -48,18 +46,18 @@ class HomePage extends Component {
                     <Switch>
                         <Route exact path="/">
                             <Layout
-                                id="outer_layout"
-                                className="chart-page"
+                              id="outer_layout"
+                              className="chart-page"
                             >
                                 <Header id="top_bar">
                                     {/* <Title level={1}>Home</Title> */}
 
                                     <UserInfoCard
-                                        name="s"
+                                      name="s"
                                     />
                                 </Header>
                                 <Layout id="inner_layout_div">
-                                    <SideBar/>
+                                    <SideBar />
                                 </Layout>
 
                             </Layout>
@@ -68,7 +66,7 @@ class HomePage extends Component {
                 </>
             );
         }
-        return <Redirect to="/login"/>;
+        return <Redirect to="/login" />;
     }
 }
 
