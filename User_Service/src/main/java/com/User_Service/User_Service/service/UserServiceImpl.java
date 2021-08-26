@@ -148,7 +148,7 @@ public class UserServiceImpl {
     }
 
     /**
-     * This function allows a user to register as an admin. It will register the user as normal
+     * This function allows a user to request to be an admin. It will register the user as normal
      * but it will send an admin user an email containing the details of the user that wants to
      * register as an admin. The admin will decide whether or not go through with it.
      * @param request This class contains the details of the user.
@@ -165,61 +165,45 @@ public class UserServiceImpl {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
 
-        Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
-        if(usersByUsername.isPresent()) {
-            return new RegisterAdminResponse(false, "Username has been taken");
-        }
-
         Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
         if(usersByEmail.isPresent()) {
-            return new RegisterAdminResponse(false, "This email has already been registered");
-        }
+            User user = usersByEmail.get();
 
-        String password = request.getPassword();
-        String hashedPass;
-        //Hashing the password
-        int iterations = 1000;
-        char[] chars = password.toCharArray();
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
+            if(user.getAdmin()) {
+                return new RegisterAdminResponse(false, "The user is already an admin.");
+            }
 
-        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = skf.generateSecret(spec).getEncoded();
-        hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
+            String emailText = "A user has requested to be an admin. Please verify their details.\n";
+            emailText += "Name: " + user.getFirstName() + "\n";
+            emailText += "Surname: " + user.getLastName() + "\n";
+            emailText += "Email: " + user.getEmail() + "\n";
+            emailText += "Username: " + user.getUsername() + "\n";
 
-        //Creating User
-        User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, Permission.VIEWING);
-        //Storing the user in the database
-        repository.save(newUser);
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("emergenoreply@gmail.com");
+            message.setSubject("Admin Request");
+            message.setText(emailText);
 
-        String emailText = "A user has registered to be an admin. Please verify their details.\n";
-        emailText += "Name: " + newUser.getFirstName() + "\n";
-        emailText += "Surname: " + newUser.getLastName() + "\n";
-        emailText += "Email: " + newUser.getEmail() + "\n";
-        emailText += "Username: " + newUser.getUsername() + "\n";
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("emergenoreply@gmail.com");
-        message.setSubject("Admin Request");
-        message.setText(emailText);
-
-        ArrayList<User> adminUsers = repository.findUsersByAdmin();
-        ArrayList<String> admins = new ArrayList<String>();
-        String[] adminEmails = new String[admins.size()];
-        if(adminUsers.isEmpty()) {
-            message.setTo("shreymandalia@gmail.com");
+            ArrayList<User> adminUsers = repository.findUsersByAdmin();
+            ArrayList<String> admins = new ArrayList<String>();
+            String[] adminEmails = new String[adminUsers.size()];
+            if(adminUsers.isEmpty()) {
+                message.setTo("shreymandalia@gmail.com");
+            }
+            else {
+                for (User adminUser : adminUsers) {
+                    admins.add(adminUser.getEmail());
+                }
+                adminEmails = admins.toArray(adminEmails);
+                message.setTo(adminEmails);
+            }
+            emailSender.send(message);
+            return new RegisterAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
         }
         else {
-            for (User adminUser : adminUsers) {
-                admins.add(adminUser.getEmail());
-            }
-            adminEmails = admins.toArray(adminEmails);
-            message.setTo(adminEmails);
+            return new RegisterAdminResponse(false, "The user does not exist");
         }
-        emailSender.send(message);
-        return new RegisterAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
+
     }
 
     /**
@@ -227,13 +211,34 @@ public class UserServiceImpl {
      * @param request This class contains the information of the user.
      * @return The return class returns if the verification process was successful**
      */
-    public VerifyAccountResponse verifyAccount(VerifyAccountRequest request) {
-        String emailText = "Below is the code you will require to verify your account.\n";
+    public VerifyAccountResponse verifyAccount(VerifyAccountRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null.");
+        }
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("emergenoreply@gmail.com");
-        message.setSubject("Admin Request");
-        message.setText(emailText);
+        Optional<User> userCheck = repository.findUserByEmail(request.getEmail());
+
+        if(userCheck.isEmpty()) {
+            return new VerifyAccountResponse(false, "User does not exist");
+        }
+        else {
+            User user = userCheck.get();
+
+            if(user.getVerified()) {
+                return new VerifyAccountResponse(false, "This account has already been verified");
+            }
+
+            String emailText = "Below is the code you will require to verify your account.\n";
+            emailText += user.getVerificationCode();
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("emergenoreply@gmail.com");
+            message.setTo(user.getEmail());
+            message.setSubject("Verify Account");
+            message.setText(emailText);
+        }
+
+
 
         return null;
     }
@@ -288,8 +293,22 @@ public class UserServiceImpl {
      * @param request This is the request for the use case.
      * @return This class will contain the current user logged on.
      */
-    public GetCurrentUserResponse getCurrentUser(GetCurrentUserRequest request) {
-        return null;
+    public GetCurrentUserResponse getCurrentUser(GetCurrentUserRequest request) throws InvalidRequestException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        if(request.getId() == null) {
+            throw new InvalidRequestException("The request contains null");
+        }
+
+        Optional<User> currentUser = repository.findUserById(UUID.fromString(request.getId()));
+
+        if(currentUser.isPresent()) {
+            return new GetCurrentUserResponse(true, "Succesfully returned current user", currentUser.get().getFirstName(), currentUser.get().getLastName(), currentUser.get().getUsername(), currentUser.get().getEmail(), currentUser.get().getAdmin());
+        }
+        else {
+            return new GetCurrentUserResponse(false, "User does not exist.");
+        }
     }
 
     /**
@@ -301,7 +320,7 @@ public class UserServiceImpl {
     @Transactional
     public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
         if(request == null) {
-            throw new InvalidRequestException("The register request is null");
+            throw new InvalidRequestException("The Manage Permissions request is null");
         }
         if(request.getUsername() == null  || request.getNewPermission() == null) {
             throw new InvalidRequestException("One or more attributes of the register request is null");
