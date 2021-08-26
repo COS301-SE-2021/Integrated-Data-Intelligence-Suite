@@ -19,7 +19,7 @@ import 'leaflet-geometryutil/src/leaflet.geometryutil.js';
 import 'leaflet-draw/dist/leaflet.draw.js';
 
 const Demo = (props) => (
-    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js" />
+    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
 );
 const pretoria_position = [-25.731340, 28.218370];
 
@@ -70,35 +70,45 @@ function MapCard(props) {
     }
     const [mapLayers, setMapLayers] = useState([]);
 
+    const _created = (e) => console.log(e);
+
     const animateRef = useRef(true);
     let poly;
     return (
         <>
             <Card
-              id="map_card"
-              title="Map"
-              extra={<p />}
+                id="map_card"
+                title="Map"
+                extra={<p/>}
             >
                 {/* <p>Card content</p> */}
                 <Map
-                  id="map_container_div"
-                  center={pretoria_position}
-                  zoom={9}
-                  scrollWheelZoom
+                    id="map_container_div"
+                    center={pretoria_position}
+                    zoom={9}
+                    scrollWheelZoom
                 >
                     <TileLayer
-                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+
+                    <FeatureGroup>
+                        <EditControl
+                            position="topleft"
+                            onCreated={_created}
+                            draw={{}}
+                        />
+                    </FeatureGroup>
 
                     {/* Display the City markers onto the map */}
                     {data_from_backend.map((city, idx) => (
                         <CircleMarker
-                          center={[city.lat, city.lng]}
-                          icon={markerIcon}
-                          key={idx}
-                          className={city.classname}
-                          onClick={() => {
+                            center={[city.lat, city.lng]}
+                            icon={markerIcon}
+                            key={idx}
+                            className={city.classname}
+                            onClick={() => {
                                 showCircleData(city.classname, data_from_backend);
                             }}
                         />
