@@ -6,22 +6,14 @@ import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -380,12 +372,12 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_RegisterAdminRequest_Contains_Null_Attributes")
     public void registerAdminRequestAtribTest() {
-        RegisterAdminRequest requestAllNull = new RegisterAdminRequest(null,null,null,null,null);
-        RegisterAdminRequest requestUsernameNull = new RegisterAdminRequest("username", "first" , "last", "pass", "email@test.com");
-        RegisterAdminRequest requestFirstNameNull = new RegisterAdminRequest("username", null , "last", "pass", "email@test.com");
-        RegisterAdminRequest requestLastNameNull = new RegisterAdminRequest("username", "first" , null, "pass", "email@test.com");
-        RegisterAdminRequest requestPasswordNull = new RegisterAdminRequest("username", "first" , "last", null, "email@test.com");
-        RegisterAdminRequest requestEmailNull = new RegisterAdminRequest("username", "first" , "last", "pass", null);
+        RequestAdminRequest requestAllNull = new RequestAdminRequest(null,null,null,null,null);
+        RequestAdminRequest requestUsernameNull = new RequestAdminRequest("username", "first" , "last", "pass", "email@test.com");
+        RequestAdminRequest requestFirstNameNull = new RequestAdminRequest("username", null , "last", "pass", "email@test.com");
+        RequestAdminRequest requestLastNameNull = new RequestAdminRequest("username", "first" , null, "pass", "email@test.com");
+        RequestAdminRequest requestPasswordNull = new RequestAdminRequest("username", "first" , "last", null, "email@test.com");
+        RequestAdminRequest requestEmailNull = new RequestAdminRequest("username", "first" , "last", "pass", null);
 
         Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestAllNull));
         Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestUsernameNull));

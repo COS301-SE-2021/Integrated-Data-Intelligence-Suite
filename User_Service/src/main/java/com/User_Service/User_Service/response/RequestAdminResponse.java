@@ -1,14 +1,14 @@
 package com.User_Service.User_Service.response;
 
-public class RegisterAdminResponse {
+public class RequestAdminResponse {
     private boolean success;
     private String message;
 
-    public RegisterAdminResponse() {
+    public RequestAdminResponse() {
 
     }
 
-    public RegisterAdminResponse(boolean success, String message) {
+    public RequestAdminResponse(boolean success, String message) {
         this.success = success;
         this.message = message;
     }

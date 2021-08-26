@@ -6,7 +6,6 @@ import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -46,7 +45,8 @@ public class UserServiceController {
     }
 
     @PostMapping(value = "/requestAdmin")
-    public @ResponseBody RegisterAdminResponse registerAdmin(@RequestBody RegisterAdminRequest request) throws Exception {
+    public @ResponseBody
+    RequestAdminResponse registerAdmin(@RequestBody RequestAdminRequest request) throws Exception {
         //RegisterRequest request = requestEntity.getBody();
         return service.requestAdmin(request);
     }

@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
-import javax.mail.SendFailedException;
-import javax.mail.internet.InternetAddress;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -190,7 +188,7 @@ public class UserServiceImpl {
      * @throws Exception This is thrown if the request is invalid.
      */
     @Transactional
-    public RegisterAdminResponse requestAdmin(RegisterAdminRequest request) throws InvalidRequestException {
+    public RequestAdminResponse requestAdmin(RequestAdminRequest request) throws InvalidRequestException {
         if(request == null) {
             throw new InvalidRequestException("The request is null");
         }
@@ -204,7 +202,7 @@ public class UserServiceImpl {
             User user = usersByEmail.get();
 
             if(user.getAdmin()) {
-                return new RegisterAdminResponse(false, "The user is already an admin.");
+                return new RequestAdminResponse(false, "The user is already an admin.");
             }
 
             String emailText = "A user has requested to be an admin. Please verify their details.\n";
@@ -232,10 +230,10 @@ public class UserServiceImpl {
                 message.setTo(adminEmails);
             }
             emailSender.send(message);
-            return new RegisterAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
+            return new RequestAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
         }
         else {
-            return new RegisterAdminResponse(false, "The user does not exist");
+            return new RequestAdminResponse(false, "The user does not exist");
         }
 
     }

@@ -1,17 +1,17 @@
 package com.User_Service.User_Service.request;
 
-public class RegisterAdminRequest {
+public class RequestAdminRequest {
     String username;
     String firstName;
     String lastName;
     String password;
     String email;
 
-    public RegisterAdminRequest() {
+    public RequestAdminRequest() {
 
     }
 
-    public RegisterAdminRequest(String username, String firstName, String lastName, String password, String email) {
+    public RequestAdminRequest(String username, String firstName, String lastName, String password, String email) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
