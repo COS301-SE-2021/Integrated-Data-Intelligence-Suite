@@ -6,8 +6,10 @@ import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
+import org.apache.commons.lang.RandomStringUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
+import javax.mail.SendFailedException;
 import javax.mail.internet.InternetAddress;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +35,8 @@ public class UserServiceImpl {
     private JavaMailSender emailSender;
 
     private final Integer staticCode = 123456;
+
+    private final boolean mock = false;
 
     public UserServiceImpl() {
 
@@ -141,8 +146,37 @@ public class UserServiceImpl {
 
         //Creating User
         User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, Permission.VIEWING);
+
+        //Creating a verification code for the user to verify their account
+        String verificationCode = RandomStringUtils.random(64, true, true);
+
+        //Initializing their verified status to false and setting user's verification code
+        newUser.setVerified(false);
+        newUser.setVerificationCode(verificationCode);
+
+        if(!mock) {
+            String emailText = "Thank you for signing up. Your verification code is:\n";
+            emailText += newUser.getVerificationCode() + "\n";
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("emergenoreply@gmail.com");
+            message.setTo(newUser.getEmail());
+            message.setSubject("Integrated Data Intelligence Suite Registration");
+            message.setText(emailText);
+
+            try {
+                emailSender.send(message);
+            } catch (MailException e) {
+                return new RegisterResponse(false, "An error has occured while sending an the activation code to user.");
+            }
+        }
+
         //Storing the user in the database
-        repository.save(newUser);
+        User checkIfSaved = repository.save(newUser);
+
+        if(checkIfSaved == newUser) {
+            return new RegisterResponse(false, "Registration failed");
+        }
 
         return new RegisterResponse(true, "Registration successful");
     }
@@ -156,7 +190,7 @@ public class UserServiceImpl {
      * @throws Exception This is thrown if the request is invalid.
      */
     @Transactional
-    public RegisterAdminResponse requestAdmin(RegisterAdminRequest request) throws Exception {
+    public RegisterAdminResponse requestAdmin(RegisterAdminRequest request) throws InvalidRequestException {
         if(request == null) {
             throw new InvalidRequestException("The request is null");
         }
@@ -228,19 +262,19 @@ public class UserServiceImpl {
                 return new VerifyAccountResponse(false, "This account has already been verified");
             }
 
-            String emailText = "Below is the code you will require to verify your account.\n";
-            emailText += user.getVerificationCode();
-
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("emergenoreply@gmail.com");
-            message.setTo(user.getEmail());
-            message.setSubject("Verify Account");
-            message.setText(emailText);
+            if(request.getVerificationCode().equals(user.getVerificationCode())) {
+                int success = repository.verifyUser(user.getId());
+                if(success == 0) {
+                    return new VerifyAccountResponse(false, "Unable to verify account");
+                }
+                else {
+                    return new VerifyAccountResponse(true, "Successfully verified account");
+                }
+            }
+            else {
+                return new VerifyAccountResponse(false, "Verification code is incorrect");
+            }
         }
-
-
-
-        return null;
     }
 
     /**

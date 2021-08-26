@@ -395,4 +395,29 @@ public class UserServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestEmailNull));
     }
 
+//===================== verifyAccount tests =====================
+
+    @Test
+    @DisplayName("If_User_Does_Not_Exist")
+    public void verifyUserDoesNotExist() throws Exception {
+//        VerifyAccountRequest request = new VerifyAccountRequest("missingEmail@notexist.com");
+//        VerifyAccountResponse response = service.verifyAccount(request);
+//
+//        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+//        Assertions.assertNull(foundUser);
+//
+//        Assertions.assertEquals("User does not exist", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_User_Already_Verified")
+    public void userAlreadyVerified() throws Exception {
+//        VerifyAccountRequest request = new VerifyAccountRequest("missingEmail@notexist.com");
+//        VerifyAccountResponse response = service.verifyAccount(request);
+//
+//        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+//        Assertions.assertNull(foundUser);
+//
+//        Assertions.assertEquals("This account has already been verified", response.getMessage());
+    }
 }
