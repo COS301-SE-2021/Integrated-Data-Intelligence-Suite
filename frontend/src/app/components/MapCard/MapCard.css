@@ -29,9 +29,24 @@
     padding: 0;
 }
 
+
+/*The circle that has been clicked*/
 .chosen_circle{
     fill: red;
     fill-opacity: 1;
+    animation: chosenCircleExpandShrink infinite 2s;
+}
+
+/*The beeping animation when a circle has clicked*/
+@keyframes chosenCircleExpandShrink {
+    0%{
+        stroke-width: 0.5em;
+    }
+
+    50%{
+        stroke-width: 1em;
+    }
+    
 }
 
 

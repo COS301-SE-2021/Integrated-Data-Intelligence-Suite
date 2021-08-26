@@ -105,7 +105,7 @@ function MapCard(props) {
                               url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="osm colour">
+                        <LayersControl.BaseLayer name="osm colour" checked>
                             <TileLayer
                               attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -118,29 +118,7 @@ function MapCard(props) {
                             />
                         </LayersControl.BaseLayer>
 
-                        <LayersControl.Overlay name="Marker with popup">
-                            <Marker position={[51.51, -0.06]}>
-                                <Popup>
-                                    <span>
-                                        A pretty CSS3 popup.
-                                        {' '}
-                                        <br />
-                                        {' '}
-                                        Easily customizable.
-                                    </span>
-                                </Popup>
-                            </Marker>
-                        </LayersControl.Overlay>
-                        <LayersControl.Overlay name="Feature group">
-                            <FeatureGroup color="purple">
-                                <Popup>
-                                    <span>Popup in FeatureGroup</span>
-                                </Popup>
-                                <Circle center={[51.51, -0.06]} radius={200} />
-                            </FeatureGroup>
-                        </LayersControl.Overlay>
-
-                        <LayersControl.Overlay name="drawn items">
+                        <LayersControl.Overlay name="drawn items" checked>
                             <FeatureGroup>
                                 <EditControl
                                   position="topleft"
