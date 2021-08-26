@@ -130,6 +130,9 @@ public class AnalyseServiceImpl {
         TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
+        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
         //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
@@ -653,12 +656,11 @@ public class AnalyseServiceImpl {
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
                 .setOutputCol("features");
 
-        Dataset<Row> testDF = assembler.transform(trainSetDF);
-
         StringIndexer indexer = new StringIndexer()
                 .setInputCol("IsTrending")
                 .setOutputCol("label");
 
+        Dataset<Row> testDF = assembler.transform(trainSetDF);
         Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
 
         indexed.show();
@@ -675,18 +677,7 @@ public class AnalyseServiceImpl {
         System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
 
 
-        //model
-       /* LogisticRegression lr = new LogisticRegression() //estimator
-                .setMaxIter(10)
-                .setRegParam(0.3)
-                .setElasticNetParam(0.8);
-
-        // Fit the model
-        LogisticRegressionModel lrModel = lr.fit(indexed);
-        // Print the coefficients and intercept for logistic regression
-        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
-
-
+        /*
         //pipeline
         Pipeline pipeline = new Pipeline()
                 .setStages(new PipelineStage[] {assembler,indexer,lr});
@@ -697,11 +688,12 @@ public class AnalyseServiceImpl {
 
 
         /******************Analyse Model Accuracy**************/
+        /*******************SAVE MODEL*****************/
         //test
-        /*Dataset<Row> test = assembler.transform(testSetDF);
-        test = indexer.fit(test).transform(test);*/
+        Dataset<Row> test = assembler.transform(testSetDF);
+        test = indexer.fit(test).transform(test);
 
-        Dataset<Row> predictions = lrModel.transform(testSetDF);
+        Dataset<Row> predictions = lrModel.transform(test); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
         System.out.println("/*******************Predictions*****************///");
 
@@ -716,10 +708,13 @@ public class AnalyseServiceImpl {
                 .setRawPredictionCol("prediction")
                 .setMetricName("areaUnderROC");
         double accuracy = evaluator.evaluate(predictions);
-        System.out.println("/**********************    Accuracy: " + Double.toString(accuracy));
+        System.out.println("/********************** Found Model Accuracy : " + Double.toString(accuracy));
 
         //save
-        lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodelNumber2");
+        lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodel");
+
+        System.out.println("SAVED");
+        System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
         /*******************summary (REMOVE)*****************/
         //summaries
@@ -747,10 +742,10 @@ public class AnalyseServiceImpl {
 
 
         /*******************READ MODEL OUTPUT*****************/
-        LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
-        Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
+        //LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
+        //Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
-        Dataset<Row> res = model1.transform(input);
+        Dataset<Row> res = lrModel.transform(indexed); //training used to output
 
         List<Row> rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
@@ -758,12 +753,12 @@ public class AnalyseServiceImpl {
             rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
         }
 
-        System.out.println("/*******************Outputs begin*****************/");
+        System.out.println("*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
         for (Row r : res.select("prediction").collectAsList()) {
             System.out.println("Trending -> " + r.get(0));
         }
-        System.out.println("/*******************Outputs begin*****************/");
+        System.out.println("*******************Outputs begin*****************");
 
 
         /*ArrayList<ArrayList> results = new ArrayList<>();
@@ -838,7 +833,6 @@ public class AnalyseServiceImpl {
              i < requestData.size();
              i++) {
             List<Object> row = new ArrayList<>();
-            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
@@ -968,89 +962,52 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        //save to database
-
-        //split data
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
-        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
-        Dataset<Row> trainSetDF = split[0];
-        Dataset<Row> testSetDF = split[1];
-
-
-        //display
-        itemsDF.show();
-        System.out.println("/*******************Train Set*****************/");
-        trainSetDF.show();
-        System.out.println("/*******************Test Set*****************/");
-        testSetDF.show();
 
 
         /*******************SETUP PIPELINE*****************/
-        /*******************SETUP MODEL*****************/
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
                 .setOutputCol("features");
-
-        Dataset<Row> testDF = assembler.transform(trainSetDF);
 
         StringIndexer indexer = new StringIndexer()
                 .setInputCol("IsTrending")
                 .setOutputCol("label");
 
+        Dataset<Row> testDF = assembler.transform(trainingDF); //testing new input data
         Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
-
         indexed.show();
 
-        //model
-        //LogisticRegression lr = new LogisticRegression() //estimator
-                //.setMaxIter(10)
-                //.setRegParam(0.3)
-                //.setElasticNetParam(0.8);
+        /*******************LOAD MODEL*****************/
+        /**************Analyse Accuracy************/
 
-        // Fit the model
-        //LogisticRegressionModel lrModel = lr.fit(indexed);
-
-        /******************Analyse Model Accuracy**************/
         //test
-        /*Dataset<Row> test = assembler.transform(testSetDF);
-        test = indexer.fit(test).transform(test);*/
+        /*Dataset<Row> parquetModel = sparkTrends.read().parquet("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel/data/part-00000-a6345197-7a7a-4bc0-b55d-db32697b7e4e-c000.snappy.parquet");
+        parquetModel.show();
+        System.out.println("*******************Found parquet Model*****************");*/
 
         //Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel
-        Dataset<Row> parquetModel = sparkTrends.read().parquet("../models/SteveLogisticRegesionmodel/data/part-00000-a6345197-7a7a-4bc0-b55d-db32697b7e4e-c000.snappy.parquet");
-
-        LogisticRegressionModel lrModel = LogisticRegressionModel.load("../models/SteveLogisticRegesionmodel");
-        Dataset<Row> getPrediction =  lrModel.transform(indexed);
-
-        System.out.println("/*******************Found Model*****************/");
-        parquetModel.show();
-        System.out.println("/*******************Predictions*****************/");
-        getPrediction.show();
-
-
-        /*for (Row r : trainSetDF.select("isTrending").collectAsList()) {
-            System.out.println("Trending -> " + r.get(0));
-        }*/
-
-
+        LogisticRegressionModel lrModel = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/RhuliLogisticRegesionmodel");
+        Dataset<Row> res = lrModel.transform(indexed);
 
         BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
                 .setLabelCol("label")
                 .setRawPredictionCol("prediction")
                 .setMetricName("areaUnderROC");
-        double accuracy = evaluator.evaluate(parquetModel);
+        double accuracy = evaluator.evaluate(res);
         System.out.println("/********************Found Model Accuracy : " + Double.toString(accuracy));
 
-        //save
-        //lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodelNumber2");
-
+        /*input.show();
+        /System.out.println("*******************Steve Predictions*****************");
+        /res1.show();
+        /System.out.println("*******************RES 1 : Predictions*****************");
+        /res.show();
+        /System.out.println("*******************RES 2 : Predictions*****************");
+        /res3.show();
+        //ystem.out.println("*******************RES 3 : Predictions*****************");*/
 
         /*******************READ MODEL OUTPUT*****************/
-
-        //LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
-        Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
-
-        Dataset<Row> res = lrModel.transform(input);
 
         List<Row> rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
