@@ -29,7 +29,7 @@ import 'leaflet-geometryutil/src/leaflet.geometryutil.js';
 import 'leaflet-draw/dist/leaflet.draw.js';
 
 const Demo = (props) => (
-    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
+    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js" />
 );
 const pretoria_position = [-25.731340, 28.218370];
 
@@ -91,7 +91,6 @@ function MapCard(props) {
         const control = geosearch();
 
         control.addTo(map);
-
     }, []);
 
     const _created = (e) => console.log(e);
@@ -101,47 +100,47 @@ function MapCard(props) {
     return (
         <>
             <Card
-                id="map_card"
-                title="Map"
+              id="map_card"
+              title="Map"
                 // extra={<p/>}
             >
                 {/* <p>Card content</p> */}
                 <Map
-                    id="map_container_div"
-                    center={pretoria_position}
-                    zoom={9}
-                    scrollWheelZoom
-                    ref={mapRef}
+                  id="map_container_div"
+                  center={pretoria_position}
+                  zoom={9}
+                  scrollWheelZoom
+                  ref={mapRef}
                 >
                     <LayersControl
-                        position="topright"
-                        collapsed={false}
+                      position="topright"
+                      collapsed={false}
                     >
                         <LayersControl.BaseLayer name="osm b&w">
                             <TileLayer
-                                attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                              attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                              url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
                         <LayersControl.BaseLayer name="osm colour" checked>
                             <TileLayer
-                                attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                              attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
                         </LayersControl.BaseLayer>
                         <LayersControl.BaseLayer name="google">
                             <TileLayer
-                                attribution="google"
-                                url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  "
+                              attribution="google"
+                              url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  "
                             />
                         </LayersControl.BaseLayer>
 
                         <LayersControl.Overlay name="drawn items" checked>
                             <FeatureGroup>
                                 <EditControl
-                                    position="topleft"
-                                    onCreated={_created}
-                                    draw={{}}
+                                  position="topleft"
+                                  onCreated={_created}
+                                  draw={{}}
                                 />
                             </FeatureGroup>
                         </LayersControl.Overlay>
@@ -150,11 +149,11 @@ function MapCard(props) {
                     {/* Display the City markers onto the map */}
                     {data_from_backend.map((city, idx) => (
                         <CircleMarker
-                            center={[city.lat, city.lng]}
-                            icon={markerIcon}
-                            key={idx}
-                            className={city.classname}
-                            onClick={() => {
+                          center={[city.lat, city.lng]}
+                          icon={markerIcon}
+                          key={idx}
+                          className={city.classname}
+                          onClick={() => {
                                 showCircleData(city.classname, data_from_backend);
                             }}
                         />
