@@ -180,12 +180,12 @@ public class UserServiceImpl {
     }
 
     /**
-     * This function allows a user to request to be an admin. It will register the user as normal
-     * but it will send an admin user an email containing the details of the user that wants to
-     * register as an admin. The admin will decide whether or not go through with it.
+     * This function allows a user to request to be an admin. It will send an admin user an
+     * email containing the details of the user that wants to request to be an admin.
+     * The admin will decide whether or not go through with the request.
      * @param request This class contains the details of the user.
      * @return This class entails if the registration of the user was successful or not.
-     * @throws Exception This is thrown if the request is invalid.
+     * @throws InvalidRequestException This is thrown if the request is invalid.
      */
     @Transactional
     public RequestAdminResponse requestAdmin(RequestAdminRequest request) throws InvalidRequestException {
