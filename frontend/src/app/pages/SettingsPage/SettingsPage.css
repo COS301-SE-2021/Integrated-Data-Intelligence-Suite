@@ -41,6 +41,10 @@ main .outer-container#settings-container{
 
 }
 
+.bodyDiv .ant-row{
+    height: 100vh;
+    flex-flow: unset;
+}
 
 
 .back-button{
