@@ -33,10 +33,12 @@ import org.apache.spark.sql.types.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import scala.Function1;
 
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.*;
@@ -127,11 +129,11 @@ public class AnalyseServiceImpl {
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
         //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
@@ -983,9 +985,13 @@ public class AnalyseServiceImpl {
         /**************Analyse Accuracy************/
 
         //test
-        /*Dataset<Row> parquetModel = sparkTrends.read().parquet("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel/data/part-00000-a6345197-7a7a-4bc0-b55d-db32697b7e4e-c000.snappy.parquet");
+        Dataset<Row> parquetModel = sparkTrends.read().parquet("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel/data/part-00000-a6345197-7a7a-4bc0-b55d-db32697b7e4e-c000.snappy.parquet");
         parquetModel.show();
-        System.out.println("*******************Found parquet Model*****************");*/
+
+        //Function1<Dataset<Row>> func = new Function1<indexed>;
+
+        Dataset<Row> res2 = parquetModel.toDF();
+        System.out.println("*******************Found parquet Model*****************");
 
         //Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel
         LogisticRegressionModel lrModel = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/RhuliLogisticRegesionmodel");
@@ -997,6 +1003,12 @@ public class AnalyseServiceImpl {
                 .setMetricName("areaUnderROC");
         double accuracy = evaluator.evaluate(res);
         System.out.println("/********************Found Model Accuracy : " + Double.toString(accuracy));
+
+
+        res.show();
+        System.out.println("******************RES 1****************");
+        res2.show();
+        System.out.println("******************RES 2****************");
 
         /*input.show();
         /System.out.println("*******************Steve Predictions*****************");
@@ -1021,6 +1033,13 @@ public class AnalyseServiceImpl {
             System.out.println("Trending -> " + r.get(0));
         }
         System.out.println("/*******************Outputs begin*****************/");
+
+
+
+        res2.show();
+        System.out.println("******************RES 2****************");
+        res.show();
+        System.out.println("******************RES 1****************");
 
 
         ArrayList<ArrayList> results = new ArrayList<>();
