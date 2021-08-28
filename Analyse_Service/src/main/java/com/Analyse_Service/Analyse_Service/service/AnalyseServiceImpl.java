@@ -21,6 +21,8 @@ import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
+import org.apache.spark.ml.evaluation.RegressionEvaluator;
+import org.apache.spark.ml.evaluation.RegressionEvaluator$;
 import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.Tokenizer;
@@ -668,6 +670,7 @@ public class AnalyseServiceImpl {
                 .setOutputCol("features");
         */
 
+        MlflowClient client = new MlflowClient("http://localhost:5000/");
         MlflowContext mlflow = new MlflowContext();
         ActiveRun run = mlflow.startRun("LogisticRegression_Run");
 
@@ -692,7 +695,7 @@ public class AnalyseServiceImpl {
                 .setStages(new PipelineStage[] {assembler,indexer,lr});
 
         // Fit the pipeline to training documents.
-        PipelineModel model = pipeline.fit(trainSetDF);
+        PipelineModel lrModel = pipeline.fit(trainSetDF);
         */
 
         Dataset<Row> trainedDF = assembler.transform(trainSetDF);
@@ -706,29 +709,47 @@ public class AnalyseServiceImpl {
 
 
 
-
         /******************ANALYSE MODEL**************/
         /*******************SAVE MODEL*****************/
+
         //test
         Dataset<Row> testedDF = assembler.transform(testSetDF);
         testedDF = indexer.fit(testedDF).transform(testedDF);
 
+        //1
+        lrModel.summary();
+
+
+        //2
+        lrModel.evaluate(testedDF);
+
+        //3
         Dataset<Row> predictions = lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
         System.out.println("*****************Predictions Of Test Data*****************");
 
 
-        for (Row r : trainSetDF.select("isTrending").collectAsList()) {
-            System.out.println("Trending -> " + r.get(0));
-        }
-
-
-        BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
+        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
                 .setLabelCol("label")
                 .setRawPredictionCol("prediction")
                 .setMetricName("areaUnderROC");
-        double accuracy = evaluator.evaluate(predictions);
+
+        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+
+
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+                .setLabelCol("label")
+                .setPredictionCol("prediction");
+
+
+
         System.out.println("/********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+
+        //for (Row r : trainSetDF.select("isTrending").collectAsList()) {
+        //    System.out.println("Trending -> " + r.get(0));
+        //}
+
 
         //save
         lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodel");
@@ -740,10 +761,12 @@ public class AnalyseServiceImpl {
         run.logParam("alpha", "0.5");
         //run.logParam("l1_ratio", l1_ratio);
         run.logMetric("MSE", 0.0);
+        //run.logMetric("", binaryClassificationEvaluator);
         //run.logMetric("rmse", rmse);
         //run.logMetric("r2", r2);
         //run.logMetric("mae", mae);
         //run.setTag();
+
 
 
         run.endRun();
