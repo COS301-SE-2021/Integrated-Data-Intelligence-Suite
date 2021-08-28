@@ -472,16 +472,18 @@ public class AnalyseServiceImpl {
 
         LogManager.getRootLogger().setLevel(Level.ERROR);
 
-        //Logger rootLoggerM = LogManager.getRootLogger();
-        //rootLoggerM.setLevel(Level.ERROR);
 
+        /*
+        Logger rootLoggerM = LogManager.getRootLogger();
+        rootLoggerM.setLevel(Level.ERROR);
 
-        /*Logger rootLoggerL = Logger.getRootLogger();
+        Logger rootLoggerL = Logger.getRootLogger();
         rootLoggerL.setLevel(Level.ERROR);
 
         Logger.getLogger("org.apache").setLevel(Level.ERROR);
         Logger.getLogger("org").setLevel(Level.ERROR);
-        Logger.getLogger("akka").setLevel(Level.ERROR);*/
+        Logger.getLogger("akka").setLevel(Level.ERROR);
+        */
 
         SparkSession sparkTrends = SparkSession
                 .builder()
@@ -568,7 +570,6 @@ public class AnalyseServiceImpl {
         //List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
         Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
 
-
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
@@ -649,6 +650,11 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Test Set*****************/");
         testSetDF.show();
 
+        /***********************SETUP MLFLOW***********************/
+
+
+
+
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
         //features
@@ -659,7 +665,12 @@ public class AnalyseServiceImpl {
         HashingTF hashingTF = new HashingTF()
                 .setNumFeatures(1000)
                 .setInputCol(tokenizer.getOutputCol())
-                .setOutputCol("features");*/
+                .setOutputCol("features");
+        */
+
+        MlflowContext mlflow = new MlflowContext();
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run");
+
 
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
@@ -669,22 +680,11 @@ public class AnalyseServiceImpl {
                 .setInputCol("IsTrending")
                 .setOutputCol("label");
 
-        Dataset<Row> testDF = assembler.transform(trainSetDF);
-        Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
 
-        indexed.show();
-
-        //model
-        LogisticRegression lr = new LogisticRegression() //estimator
+        LogisticRegression lr = new LogisticRegression() //model - estimator
                 .setMaxIter(10)
                 .setRegParam(0.3)
                 .setElasticNetParam(0.8);
-
-        // Fit the model
-        LogisticRegressionModel lrModel = lr.fit(indexed);
-        // Print the coefficients and intercept for logistic regression
-        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
-
 
         /*
         //pipeline
@@ -692,19 +692,30 @@ public class AnalyseServiceImpl {
                 .setStages(new PipelineStage[] {assembler,indexer,lr});
 
         // Fit the pipeline to training documents.
-        PipelineModel model = pipeline.fit(trainSetDF);*/
+        PipelineModel model = pipeline.fit(trainSetDF);
+        */
+
+        Dataset<Row> trainedDF = assembler.transform(trainSetDF);
+        trainedDF = indexer.fit(trainedDF).transform(trainedDF);
 
 
 
-        /******************Analyse Model Accuracy**************/
+        // Fit the model
+        LogisticRegressionModel lrModel = lr.fit(trainedDF);
+        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());  // Print coefficients and intercept
+
+
+
+
+        /******************ANALYSE MODEL**************/
         /*******************SAVE MODEL*****************/
         //test
-        Dataset<Row> test = assembler.transform(testSetDF);
-        test = indexer.fit(test).transform(test);
+        Dataset<Row> testedDF = assembler.transform(testSetDF);
+        testedDF = indexer.fit(testedDF).transform(testedDF);
 
-        Dataset<Row> predictions = lrModel.transform(test); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        Dataset<Row> predictions = lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
-        System.out.println("/*******************Predictions*****************///");
+        System.out.println("*****************Predictions Of Test Data*****************");
 
 
         for (Row r : trainSetDF.select("isTrending").collectAsList()) {
@@ -724,6 +735,34 @@ public class AnalyseServiceImpl {
 
         System.out.println("SAVED");
         System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+
+        run.logParam("alpha", "0.5");
+        //run.logParam("l1_ratio", l1_ratio);
+        run.logMetric("MSE", 0.0);
+        //run.logMetric("rmse", rmse);
+        //run.logMetric("r2", r2);
+        //run.logMetric("mae", mae);
+        //run.setTag();
+
+
+        run.endRun();
+
+
+
+        /***********************SETUP MLFLOW***********************/
+
+
+
+
+
+
+
+
+
+
+
+
 
         /*******************summary (REMOVE)*****************/
         //summaries
@@ -754,7 +793,7 @@ public class AnalyseServiceImpl {
         //LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
         //Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
-        Dataset<Row> res = lrModel.transform(indexed); //training used to output
+        Dataset<Row> res = lrModel.transform(trainedDF); //trained data used to output
 
         List<Row> rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
@@ -1799,6 +1838,9 @@ public class AnalyseServiceImpl {
         /**setUI**/
         //client.getModelVersionDownloadUri();
         //run.getArtifactUri();
+
+
+
 
 
     }
