@@ -1760,8 +1760,8 @@ public class AnalyseServiceImpl {
         //logging
         //run.logParam();
 
-        /**Clinet**/
-        MlflowClient client = new MlflowClient();
+        /**Clinet (network)**/
+        MlflowClient client = new MlflowClient("http://localhost:5000/");
         //client.createRun();
         //client.logParam();
 
@@ -1794,6 +1794,13 @@ public class AnalyseServiceImpl {
             client.logParam(runInfo.getRunId(), "hello", "world");
             client.setTerminated(runInfo.getRunId());
         }
+
+        /***NETWORKING***/
+        /**setUI**/
+        //client.getModelVersionDownloadUri();
+        //run.getArtifactUri();
+
+
     }
 }
 
