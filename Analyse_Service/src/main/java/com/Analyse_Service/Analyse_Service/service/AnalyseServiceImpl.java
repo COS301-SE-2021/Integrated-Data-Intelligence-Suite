@@ -34,6 +34,10 @@ import org.apache.spark.sql.types.*;
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
+import org.mlflow.api.proto.Service.RunInfo;
+import org.mlflow.api.proto.Service.Experiment;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.Function1;
@@ -1752,23 +1756,44 @@ public class AnalyseServiceImpl {
     public void mlFlowTest(){
 
         /**ActiveRuns**/
-        ActiveRun run ;
+        //ActiveRun run ;
         //logging
         //run.logParam();
 
         /**Clinet**/
         MlflowClient client = new MlflowClient();
-        client.createRun();
-
+        //client.createRun();
         //client.logParam();
 
         /**Context**/
         MlflowContext context = new MlflowContext();
-        client = context.getClient();
-        run= context.startRun();
+        //client = context.getClient();
 
 
+        /***PROCESS FUNCTIONALTY***/
+        /**Running**/
+        MlflowContext mlflow = new MlflowContext();
+        ActiveRun run = mlflow.startRun("run-name");
+        run.logParam("alpha", "0.5");
+        run.logMetric("MSE", 0.0);
+        //run.setTag();
+        run.endRun();
 
+        /**Performance check**/
+        //MlflowClient client = new MlflowClient();
+        RunInfo runInfo = client.createRun();
+        for (int epoch = 0; epoch < 3; epoch ++) {
+            client.logMetric(runInfo.getRunId(), "quality", 2 * epoch, System.currentTimeMillis(), epoch);
+        }
+
+        /**Experiments Managing **/
+        List<Experiment> list =  client.listExperiments();
+
+        for(int i=0; i<list.size();i++){
+            runInfo = client.createRun(list.get(i).getExperimentId());
+            client.logParam(runInfo.getRunId(), "hello", "world");
+            client.setTerminated(runInfo.getRunId());
+        }
     }
 }
 
