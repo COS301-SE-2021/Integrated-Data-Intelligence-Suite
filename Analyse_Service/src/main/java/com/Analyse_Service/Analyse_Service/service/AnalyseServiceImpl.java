@@ -31,6 +31,9 @@ import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
+import org.mlflow.tracking.ActiveRun;
+import org.mlflow.tracking.MlflowClient;
+import org.mlflow.tracking.MlflowContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.Function1;
@@ -1738,6 +1741,35 @@ public class AnalyseServiceImpl {
         return new SaveAIModelResponse(true);
     }
 
+
+    /*******************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     */
+
+    public void mlFlowTest(){
+
+        /**ActiveRuns**/
+        ActiveRun run ;
+        //logging
+        //run.logParam();
+
+        /**Clinet**/
+        MlflowClient client = new MlflowClient();
+        client.createRun();
+
+        //client.logParam();
+
+        /**Context**/
+        MlflowContext context = new MlflowContext();
+        client = context.getClient();
+        run= context.startRun();
+
+
+
+    }
 }
 
 
