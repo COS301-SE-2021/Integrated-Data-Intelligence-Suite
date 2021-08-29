@@ -139,11 +139,11 @@ public class AnalyseServiceImpl {
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
         //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
@@ -671,10 +671,10 @@ public class AnalyseServiceImpl {
                 .setOutputCol("features");
         */
 
-        MlflowClient client = new MlflowClient("http://localhost:5000/");
-        MlflowContext mlflow = new MlflowContext();
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run");
 
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run");
 
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
@@ -762,16 +762,22 @@ public class AnalyseServiceImpl {
 
 
         //param
-        run.logParam("MaxIter", "0.3");
-        run.logParam("setRegParam" ,"0.3");
-        run.logParam("setElasticNetParam" , "0.8");
+        client.logParam(run.getId(),"MaxIter", "10");
+        client.logParam(run.getId(),"setRegParam" ,"0.3");
+        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+        //run.logParam("MaxIter", "10");
+        //run.logParam("setRegParam" ,"0.3");
+        //run.logParam("setElasticNetParam" , "0.8");
 
         //metrics
-        run.logMetric("areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        run.logMetric("MSE", 0.0);
+        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        //run.logMetric("areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        //run.logMetric("MSE", 0.0);
 
         //custom tags
-        run.setTag("Accuracy", String.valueOf(accuracy));
+
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));
 
         //run.logParam("alpha", "0.5");
         //run.logParam("l1_ratio", l1_ratio);
@@ -781,6 +787,8 @@ public class AnalyseServiceImpl {
         //run.logMetric("r2", r2);
         //run.logMetric("mae", mae);
         //run.setTag();
+
+
 
 
 
