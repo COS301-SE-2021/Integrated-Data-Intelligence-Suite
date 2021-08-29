@@ -30,6 +30,7 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 
+import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
@@ -736,10 +737,12 @@ public class AnalyseServiceImpl {
 
         double accuracy = binaryClassificationEvaluator.evaluate(predictions);
 
+        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
 
-        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+
+        /*RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
                 .setLabelCol("label")
-                .setPredictionCol("prediction");
+                .setPredictionCol("prediction");*/
 
 
 
@@ -758,9 +761,21 @@ public class AnalyseServiceImpl {
         System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
 
-        run.logParam("alpha", "0.5");
-        //run.logParam("l1_ratio", l1_ratio);
+        //param
+        run.logParam("MaxIter", "0.3");
+        run.logParam("setRegParam" ,"0.3");
+        run.logParam("setElasticNetParam" , "0.8");
+
+        //metrics
+        run.logMetric("areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
         run.logMetric("MSE", 0.0);
+
+        //custom tags
+        run.setTag("Accuracy", String.valueOf(accuracy));
+
+        //run.logParam("alpha", "0.5");
+        //run.logParam("l1_ratio", l1_ratio);
+        //run.logMetric("MSE", 0.0);
         //run.logMetric("", binaryClassificationEvaluator);
         //run.logMetric("rmse", rmse);
         //run.logMetric("r2", r2);
