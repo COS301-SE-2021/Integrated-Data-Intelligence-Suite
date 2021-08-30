@@ -86,7 +86,7 @@ function MapCard(props) {
     function _created(e) {
         console.log('================_created() start==========');
         console.log(e);
-        let layers = L;
+        const layers = L;
         console.log(layers);
         console.log('================_created() End==========');
     }
@@ -100,22 +100,13 @@ function MapCard(props) {
               title="Map"
                 // extra={<p/>}
             >
-                {/* <p>Card content</p> */}
                 <Map
-<<<<<<< HEAD
-                    id="map_container_div"
-                    center={pretoria_position}
-                    zoom={9}
-                    scrollWheelZoom
-                    ref={mapRef}
-                    animate
-=======
                   id="map_container_div"
                   center={pretoria_position}
                   zoom={9}
                   scrollWheelZoom
                   ref={mapRef}
->>>>>>> origin/feature-ui
+                  animate
                 >
                     <LayersControl
                       position="topright"

@@ -3,10 +3,9 @@ import L, { map } from 'leaflet';
 // import 'leaflet-geometryutil/src/leaflet.geometryutil.js';
 // import 'leaflet-draw/dist/leaflet.draw.js';
 
-let layers = L.layerGroup();
+const layers = L.layerGroup();
 
 export function getDatapointsWithinBoundsOfLayer(e) {
-
     const features = [];
     // map.eachLayer(function (layer) {
     //     if (layer instanceof L.Marker) {
@@ -23,5 +22,4 @@ export function getDatapointsWithinBoundsOfLayer(e) {
     console.log();
     console.log('=======Layers within Map=======');
     console.log(layers);
-
 }

@@ -100,6 +100,7 @@
     "object-curly-newline": "warn",
     "no-multiple-empty-lines": "warn",
     "arrow-parens": "warn",
-    "prefer-arrow-callback": "off"
+    "prefer-arrow-callback": "off",
+    "no-return-assign": "off"
   }
 }

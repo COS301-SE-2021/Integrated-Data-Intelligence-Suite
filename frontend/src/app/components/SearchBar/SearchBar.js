@@ -47,11 +47,10 @@ class SearchBar extends React.Component {
         fetch(url, requestOptions)
             .then((response) => response.json())
             .then((json) => {
-                // remove or stop the loading icon
-                this.handleTextChange(json);
                 this.setState((prevState) => ({ showLoadingIcon: false }));
+                // remove or stop the loading icon
+                // this.handleTextChange(json);
 
-                // JSON response from API
             });
     }
 

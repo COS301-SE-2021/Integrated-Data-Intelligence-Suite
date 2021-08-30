@@ -81,7 +81,7 @@ const AddDataSource = () => {
                                   onChange={(e)=>handleFieldChange(index, e)}
                                 />
                             </div>
-                            <CloseCircleTwoTone twoToneColor={"#FF0800"} className="close-button" onClick={(e)=>handleRemoveField(index, e)} />
+                            <CloseCircleTwoTone twoToneColor="#FF0800" className="close-button" onClick={(e)=>handleRemoveField(index, e)} />
                         </div>
                     ))
                 )}
