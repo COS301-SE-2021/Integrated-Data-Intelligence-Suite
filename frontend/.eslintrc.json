@@ -55,7 +55,10 @@
     "import/no-named-as-default-member": "warn",
     "import/no-named-as-default": "warn",
     "react/no-unescaped-entities": "warn",
-    "react/jsx-indent": [2,4],
+    "react/jsx-indent": [
+      2,
+      4
+    ],
     "padded-blocks": "warn",
     "indent": "off",
     "react/jsx-tag-spacing": "warn",
@@ -96,9 +99,7 @@
     "prefer-const": "warn",
     "object-curly-newline": "warn",
     "no-multiple-empty-lines": "warn",
-    "arrow-parens": "warn"
-
-
-
+    "arrow-parens": "warn",
+    "prefer-arrow-callback": "off"
   }
 }

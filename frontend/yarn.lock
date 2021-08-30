@@ -5977,7 +5977,7 @@ cytoscape-layout-utilities@^1.1.1:
     convex-minkowski-sum "^1.0.0"
     d3-delaunay "^5.3.0"
 
-cytoscape@^3.19.0:
+cytoscape@^3.19.0, cytoscape@^3.2.19:
   version "3.19.1"
   resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.19.1.tgz#034fb5e5de7e6b9b7c948a48da8ab7037d430f69"
   integrity sha512-fQSymoCzmDF5dejZqv94WXQUnI3cVZfaHWFQR+Q9RhJ6LzEs7dtkwgFYaoklsbXcrXz0uCGx4i3vQ0FiuOUu9Q==
@@ -12411,6 +12411,14 @@ react-chrono@^1.10.1:
     "@emotion/styled" "^11.3.0"
     classnames "^2.3.1"
     focus-visible "^5.2.0"
+
+react-cytoscapejs@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-cytoscapejs/-/react-cytoscapejs-1.2.1.tgz#ccce46acabf4f0c41dce9070743854f92b0dc050"
+  integrity sha512-8exVCetpzyGCAKuRjXPWGjFCnb22boZ3SXUPpPB/+wQI8Q8BwkT1URN3A7J1Czvj1qAbShh5QQ514mBUp7i7kw==
+  dependencies:
+    cytoscape "^3.2.19"
+    prop-types "^15.6.2"
 
 react-dev-utils@^11.0.3:
   version "11.0.4"

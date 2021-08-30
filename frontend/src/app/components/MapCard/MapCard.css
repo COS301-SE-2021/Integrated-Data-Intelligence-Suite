@@ -46,7 +46,15 @@
     50%{
         stroke-width: 1em;
     }
-    
+
+}
+
+
+/**/
+div.leaflet-top.leaflet-left,
+> div.geocoder-control.leaflet-control.geocoder-control-expanded,
+> div.geocoder-control-suggestions.leaflet-bar[style]{
+    border:  3px solid red !important;
 }
 
 
