@@ -31,6 +31,8 @@ import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 
 import org.apache.spark.ml.param.ParamMap;
+import org.apache.spark.ml.tuning.CrossValidator;
+import org.apache.spark.ml.tuning.CrossValidatorModel;
 import org.apache.spark.ml.tuning.ParamGridBuilder;
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
 import org.apache.spark.mllib.evaluation.RegressionMetrics;
@@ -738,6 +740,12 @@ public class AnalyseServiceImpl {
         paramGridBuilder.addGrid(lr.fitIntercept());
         ParamMap[] paramMaps = paramGridBuilder.build();
 
+
+        CrossValidator crossValidator = new CrossValidator()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps).setNumFolds(2);
+
         /*for (Row r : trainSetDF.select("isTrending").collectAsList()) {
         //    System.out.println("Trending -> " + r.get(0));
         //}
@@ -755,8 +763,9 @@ public class AnalyseServiceImpl {
         ActiveRun run = mlflow.startRun("LogisticRegression_Run");
 
 
+        CrossValidatorModel lrModel = crossValidator.fit(trainSetDF);
 
-        Dataset<Row> predictions =null ; //lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
         System.out.println("*****************Predictions Of Test Data*****************");
 
@@ -765,7 +774,7 @@ public class AnalyseServiceImpl {
         double accuracy = binaryClassificationEvaluator.evaluate(predictions);
         BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
         RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-        
+
         System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
 
