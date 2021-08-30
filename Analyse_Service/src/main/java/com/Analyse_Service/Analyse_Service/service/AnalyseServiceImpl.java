@@ -641,12 +641,6 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        //save to database
-
-
-
-
-
 
         //TODO:
         //split data
@@ -725,10 +719,10 @@ public class AnalyseServiceImpl {
         RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
                 .setLabelCol("label")
                 .setPredictionCol("prediction")
-                .setMetricName("meanSquaredError")
-                .setMetricName("rootMeanSquaredError")
-                .setMetricName("meanAbsoluteError")
-                .setMetricName("explainedVariance");
+                .setMetricName("mse") //meanSquaredError
+                .setMetricName("rmse") //rootMeanSquaredError
+                .setMetricName("mae") //meanAbsoluteError
+                .setMetricName("r2"); //r^2, variance
 
 
 
@@ -759,8 +753,16 @@ public class AnalyseServiceImpl {
         /***********************SETUP MLFLOW***********************/
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
+        String experimentID = client.createExperiment("LogisticRegression_Experiment");
+        RunInfo runInfo = client.createRun(experimentID);
+
+
         MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run");
+
+
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+
+
 
 
         CrossValidatorModel lrModel = crossValidator.fit(trainSetDF);
