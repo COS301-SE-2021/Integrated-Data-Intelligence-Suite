@@ -87,10 +87,25 @@ public class VisualizeServiceImpl {
             throw new InvalidRequestException("Arraylist is null");
         }
 
+        /**Setup Data**/
+
         ArrayList<ArrayList> reqData = request.getDataList();
+
+        /*for (int i = 0; i < reqData.size(); i++) {
+            for (int j = 0; j < reqData.get(i).size(); j++) {
+                System.out.println("LINE CHECK HERE");
+                System.out.println(reqData.get(i).get(j).toString());
+                String newLine = reqData.get(i).get(j).toString().replace(' ','_');
+                System.out.println(newLine);
+                reqData.get(i).set(j,newLine);
+            }
+        }*/
+
+
+        /**Setup Relationship Data**/
         ArrayList<Graph> output = new ArrayList<>();
 
-        ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
+        //ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
         ArrayList<String[]> Relationships = new ArrayList<>();
 
         System.out.println("Row count : " +  reqData.size());
