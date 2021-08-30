@@ -6,9 +6,11 @@ import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
 import com.Import_Service.Import_Service.exception.InvalidNewsRequestException;
 import com.Import_Service.Import_Service.exception.InvalidTwitterRequestException;
+import com.Import_Service.Import_Service.request.AddAPISourceRequest;
 import com.Import_Service.Import_Service.request.ImportDataRequest;
 import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
 import com.Import_Service.Import_Service.request.ImportTwitterRequest;
+import com.Import_Service.Import_Service.response.AddAPISourceResponse;
 import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
@@ -258,4 +260,25 @@ public class ImportServiceImpl {
         return new ImportDataResponse(list);
     }
 
+    //====================== Adding API sources ======================
+
+    /**
+     * This method will be used to add a new APIs request source to the system.
+     * Which will then be used for fetching data from innumerable APIs.
+     * @param request This contains all the necessary attributes to store
+     *                and use the API call.
+     * @return This will return whether or not the adding of a new API source was
+     *         successful.
+     * @throws Exception This is thrown if the request is null or contains any null values
+     */
+    public AddAPISourceResponse addAPISource(AddAPISourceRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidImporterRequestException("The request cannot be null");
+        }
+        if(request.getAuthorization() == null || request.getMethod() == null || request.getUrl() == null || request.getParameters() == null) {
+            throw new InvalidImporterRequestException("The request cannot contain null attributes");
+        }
+
+        return null;
+    }
 }
