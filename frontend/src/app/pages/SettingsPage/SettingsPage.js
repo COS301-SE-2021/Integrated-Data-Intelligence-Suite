@@ -5,6 +5,7 @@ import {
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import Permissions from '../PermissionsPage/Permissions';
+import AddDataSource from '../AddDataSourcePage/AddDataSource';
 
 const { Content } = Layout;
 
@@ -50,6 +51,9 @@ const SettingsPage = () => {
                       <Divider />
 
                       <div id="Account" className="option" onClick={() => setComponent('Account')}>Account</div>
+                      <Divider />
+
+                      <div id="Add Source" className="option" onClick={() => setComponent('Add Source')}>Add Source</div>
                   </Col>
                   <Col style={{ padding: '0 0px 30px 0', backgroundColor: '#eff0f0' }} className="right-column" flex="auto">
                       <div className="top-padding"><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
@@ -61,6 +65,7 @@ const SettingsPage = () => {
                       </div>
             )}
                       { component === 'Account' && setActive(component) && <div><h1>Page not implemented</h1></div>}
+                      { component === 'Add Source' && setActive(component) && <AddDataSource /> }
                   </Col>
               </Row>
           </Content>

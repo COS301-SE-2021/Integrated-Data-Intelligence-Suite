@@ -1,0 +1,99 @@
+.data-source div.row{
+    display:grid;
+    grid-template-columns: repeat(21,1fr);
+    grid-gap: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: normal;
+}
+
+.data-source div.col.left{
+    grid-column: 1/11;
+}
+
+.data-source div.col.left input{
+    font-weight: 600;
+}
+.data-source div.col.right{
+    grid-column: 11/21;
+}
+.data-source div.col{
+    padding: 10px;
+}
+
+.data-source div.col input{
+    width: 100%;
+    padding: 10px;
+    color: black;
+    border: #5C5C5C;
+
+}
+
+.data-source div.col input:focus{
+    border-color: #1C8EFA;
+}
+
+.data-source form{
+    display: flow-root;
+    line-height: normal;
+}
+
+.data-source .row .btn{
+    background: none;
+    border: none;
+    line-height: normal;
+    margin: 10px;
+    color: #FF0800;
+    font-weight: 600;
+    font-size: 20px;
+    align-content: center;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+
+.data-source form .btn-primary{
+    line-height: normal;
+    margin-left: 30px;
+    padding: 10px;
+    font-weight: 600;
+    background: #5773FA;
+    border: #5773FA;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.data-source .row .close-button{
+    font-size: 25px;
+    padding-top: 20px;
+    font-weight: 600;
+
+}
+.data-source .btn{
+    border-width: 1px;;
+}
+
+.data-source form .select{
+    background: #5773FA;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 30px;
+    font-weight: 600;
+}
+
+.data-source .btn:hover{
+    transition: ease-in-out .5s;
+    color: black;
+}
+
+.data-source .btn.submit:hover{
+    background:#1C8EFA;
+    color: black;
+    border-color: #FF0800;
+    transition: ease-in-out .5s;
+}
+
+.data-source .select:hover{
+    color: black;
+}
