@@ -662,11 +662,6 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Test Set*****************/");
         testSetDF.show();
 
-        /***********************SETUP MLFLOW***********************/
-
-
-
-
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
         //features
@@ -679,11 +674,6 @@ public class AnalyseServiceImpl {
                 .setInputCol(tokenizer.getOutputCol())
                 .setOutputCol("features");
         */
-
-
-        MlflowClient client = new MlflowClient("http://localhost:5000");
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run");
 
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
@@ -706,9 +696,8 @@ public class AnalyseServiceImpl {
         Pipeline pipeline = new Pipeline();
         pipeline.setStages(new PipelineStage[] {assembler,indexer,lr});
 
-        // Fit the pipeline to training documents.
+        /* Fit the pipeline to training documents.
         //PipelineModel lrModel = pipeline.fit(trainSetDF);
-
 
         // Fit the model
         //Dataset<Row> trainedDF = assembler.transform(trainSetDF);
@@ -716,33 +705,20 @@ public class AnalyseServiceImpl {
 
         //LogisticRegressionModel lrModel = lr.fit(trainedDF);
         //System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());  // Print coefficients and intercept
+        */
 
-        /******************ANALYSE MODEL**************/
-        /*******************SAVE MODEL*****************/
-
+        /******************EVALUATE/ANALYSE MODEL**************/
 
         //test TODO: do with pipline
-        Dataset<Row> testedDF = assembler.transform(testSetDF);
-        testedDF = indexer.fit(testedDF).transform(testedDF);
+        //Dataset<Row> testedDF = assembler.transform(testSetDF);
+        //testedDF = indexer.fit(testedDF).transform(testedDF);
 
-
-        //Run Accuracy Of Model
-        //lrModel.summary().accuracy;
-        double accuracy = 0;//pipeline.getStages()[2].evaluate(testedDF).accuracy();
-
-        Dataset<Row> predictions =null ; //lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
-        predictions.show();
-        System.out.println("*****************Predictions Of Test Data*****************");
 
         //evaluators
         BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
                 .setLabelCol("label")
                 .setRawPredictionCol("prediction")
                 .setMetricName("areaUnderROC");
-
-        //double accuracy = binaryClassificationEvaluator.evaluate(predictions);
-
-        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
 
         RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
                 .setLabelCol("label")
@@ -752,8 +728,7 @@ public class AnalyseServiceImpl {
                 .setMetricName("meanAbsoluteError")
                 .setMetricName("explainedVariance");
 
-        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-        System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
 
         //parameterGrid
         ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
@@ -762,10 +737,6 @@ public class AnalyseServiceImpl {
         paramGridBuilder.addGrid(lr.elasticNetParam(),  new double[] {lr.getElasticNetParam()});
         paramGridBuilder.addGrid(lr.fitIntercept());
         ParamMap[] paramMaps = paramGridBuilder.build();
-
-
-
-
 
         /*for (Row r : trainSetDF.select("isTrending").collectAsList()) {
         //    System.out.println("Trending -> " + r.get(0));
@@ -776,6 +747,26 @@ public class AnalyseServiceImpl {
 
         //System.out.println("SAVED");
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));*/
+
+        /***********************SETUP MLFLOW***********************/
+
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run");
+
+
+
+        Dataset<Row> predictions =null ; //lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        predictions.show();
+        System.out.println("*****************Predictions Of Test Data*****************");
+
+
+
+        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+        
+        System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
 
         //param
