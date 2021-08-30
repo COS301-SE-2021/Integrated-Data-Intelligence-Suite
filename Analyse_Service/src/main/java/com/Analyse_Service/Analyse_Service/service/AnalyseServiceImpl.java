@@ -31,6 +31,7 @@ import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
+import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
@@ -638,6 +639,12 @@ public class AnalyseServiceImpl {
 
         //save to database
 
+
+
+
+
+
+        //TODO:
         //split data
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
@@ -699,53 +706,46 @@ public class AnalyseServiceImpl {
         PipelineModel lrModel = pipeline.fit(trainSetDF);
         */
 
+        // Fit the model
         Dataset<Row> trainedDF = assembler.transform(trainSetDF);
         trainedDF = indexer.fit(trainedDF).transform(trainedDF);
 
-
-
-        // Fit the model
         LogisticRegressionModel lrModel = lr.fit(trainedDF);
         System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());  // Print coefficients and intercept
-
-
 
         /******************ANALYSE MODEL**************/
         /*******************SAVE MODEL*****************/
 
-        //test
+
+        //test TODO: do with pipline
         Dataset<Row> testedDF = assembler.transform(testSetDF);
         testedDF = indexer.fit(testedDF).transform(testedDF);
 
-        //1
-        lrModel.summary();
 
+        //Run Accuracy Of Model
+        //lrModel.summary().accuracy;
+        double accuracy = lrModel.evaluate(testedDF).accuracy();
 
-        //2
-        lrModel.evaluate(testedDF);
-
-        //3
         Dataset<Row> predictions = lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
         System.out.println("*****************Predictions Of Test Data*****************");
 
-
+        //evaluators
         BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
                 .setLabelCol("label")
                 .setRawPredictionCol("prediction")
                 .setMetricName("areaUnderROC");
 
-        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        //double accuracy = binaryClassificationEvaluator.evaluate(predictions);
 
         BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
 
-
-        /*RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
                 .setLabelCol("label")
-                .setPredictionCol("prediction");*/
+                .setPredictionCol("prediction")
+                .setMetricName("meanSquaredError");
 
-
-
+        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
         System.out.println("/********************** Found Model Accuracy : " + Double.toString(accuracy));
 
 
@@ -755,10 +755,10 @@ public class AnalyseServiceImpl {
 
 
         //save
-        lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodel");
+        //lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodel");
 
-        System.out.println("SAVED");
-        System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+        //System.out.println("SAVED");
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
 
         //param
@@ -771,8 +771,16 @@ public class AnalyseServiceImpl {
 
         //metrics
         client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+
+
+
+
         //run.logMetric("areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        //run.logMetric("MSE", 0.0);
+        //run.logMetric("MSE", regressionMetrics);
 
         //custom tags
 
