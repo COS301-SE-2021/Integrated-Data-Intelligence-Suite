@@ -30,6 +30,8 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 
+import org.apache.spark.ml.param.ParamMap;
+import org.apache.spark.ml.tuning.ParamGridBuilder;
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
 import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
@@ -692,26 +694,28 @@ public class AnalyseServiceImpl {
                 .setOutputCol("label");
 
 
+
+
         LogisticRegression lr = new LogisticRegression() //model - estimator
                 .setMaxIter(10)
                 .setRegParam(0.3)
                 .setElasticNetParam(0.8);
 
-        /*
+
         //pipeline
-        Pipeline pipeline = new Pipeline()
-                .setStages(new PipelineStage[] {assembler,indexer,lr});
+        Pipeline pipeline = new Pipeline();
+        pipeline.setStages(new PipelineStage[] {assembler,indexer,lr});
 
         // Fit the pipeline to training documents.
-        PipelineModel lrModel = pipeline.fit(trainSetDF);
-        */
+        //PipelineModel lrModel = pipeline.fit(trainSetDF);
+
 
         // Fit the model
-        Dataset<Row> trainedDF = assembler.transform(trainSetDF);
-        trainedDF = indexer.fit(trainedDF).transform(trainedDF);
+        //Dataset<Row> trainedDF = assembler.transform(trainSetDF);
+        //trainedDF = indexer.fit(trainedDF).transform(trainedDF);
 
-        LogisticRegressionModel lrModel = lr.fit(trainedDF);
-        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());  // Print coefficients and intercept
+        //LogisticRegressionModel lrModel = lr.fit(trainedDF);
+        //System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());  // Print coefficients and intercept
 
         /******************ANALYSE MODEL**************/
         /*******************SAVE MODEL*****************/
@@ -724,9 +728,9 @@ public class AnalyseServiceImpl {
 
         //Run Accuracy Of Model
         //lrModel.summary().accuracy;
-        double accuracy = lrModel.evaluate(testedDF).accuracy();
+        double accuracy = 0;//pipeline.getStages()[2].evaluate(testedDF).accuracy();
 
-        Dataset<Row> predictions = lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        Dataset<Row> predictions =null ; //lrModel.transform(testedDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
         System.out.println("*****************Predictions Of Test Data*****************");
 
@@ -743,28 +747,42 @@ public class AnalyseServiceImpl {
         RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
                 .setLabelCol("label")
                 .setPredictionCol("prediction")
-                .setMetricName("meanSquaredError");
+                .setMetricName("meanSquaredError")
+                .setMetricName("rootMeanSquaredError")
+                .setMetricName("meanAbsoluteError")
+                .setMetricName("explainedVariance");
 
         RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-        System.out.println("/********************** Found Model Accuracy : " + Double.toString(accuracy));
+        System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+        //parameterGrid
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+
+        paramGridBuilder.addGrid(lr.regParam(),  new double[] {lr.getRegParam()});
+        paramGridBuilder.addGrid(lr.elasticNetParam(),  new double[] {lr.getElasticNetParam()});
+        paramGridBuilder.addGrid(lr.fitIntercept());
+        ParamMap[] paramMaps = paramGridBuilder.build();
 
 
-        //for (Row r : trainSetDF.select("isTrending").collectAsList()) {
+
+
+
+        /*for (Row r : trainSetDF.select("isTrending").collectAsList()) {
         //    System.out.println("Trending -> " + r.get(0));
         //}
-
 
         //save
         //lrModel.write().overwrite().save("C:/Users/user pc/Desktop/models/RhuliLogisticRegesionmodel");
 
         //System.out.println("SAVED");
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));*/
 
 
         //param
         client.logParam(run.getId(),"MaxIter", "10");
         client.logParam(run.getId(),"setRegParam" ,"0.3");
         client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+
         //run.logParam("MaxIter", "10");
         //run.logParam("setRegParam" ,"0.3");
         //run.logParam("setElasticNetParam" , "0.8");
@@ -776,74 +794,23 @@ public class AnalyseServiceImpl {
         client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
         client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
 
-
-
-
         //run.logMetric("areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
         //run.logMetric("MSE", regressionMetrics);
-
-        //custom tags
-
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        //run.setTag("Accuracy", String.valueOf(accuracy));
-
-        //run.logParam("alpha", "0.5");
-        //run.logParam("l1_ratio", l1_ratio);
-        //run.logMetric("MSE", 0.0);
-        //run.logMetric("", binaryClassificationEvaluator);
         //run.logMetric("rmse", rmse);
         //run.logMetric("r2", r2);
         //run.logMetric("mae", mae);
-        //run.setTag();
 
-
-
+        //custom tags
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));
 
 
         run.endRun();
 
-
-
         /***********************SETUP MLFLOW***********************/
 
 
-
-
-
-
-
-
-
-
-
-
-
-        /*******************summary (REMOVE)*****************/
-        //summaries
-        /* BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
-
-        // Obtain the loss per iteration.
-        double[] objectiveHistory = trainingSummary.objectiveHistory();
-        for (double lossPerIteration : objectiveHistory) {
-            System.out.println(lossPerIteration);
-        }
-        //System.out.println("******************SomeStuff****************")'
-
-        //Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
-        Dataset<Row> roc = trainingSummary.roc();
-        roc.show();
-        roc.select("FPR").show();
-        System.out.println(trainingSummary.areaUnderROC());
-
-        // Get the threshold corresponding to the maximum F-Measure and rerun LogisticRegression with this selected threshold.
-        Dataset<Row> fMeasure = trainingSummary.fMeasureByThreshold();
-        double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
-        double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
-                .select("threshold").head().getDouble(0);
-        lrModel.setThreshold(bestThreshold);*/
-
-
-        /*******************READ MODEL OUTPUT*****************/
+        /*******************READ MODEL OUTPUT*****************
         //LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
         //Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
 
@@ -869,7 +836,7 @@ public class AnalyseServiceImpl {
             r.add(rawResults.get(i).get(0).toString());
             r.add(Double.parseDouble(rawResults.get(i).get(1).toString()));
             results.add(r);
-        }*/
+        }
 
         ArrayList<ArrayList> results = new ArrayList<>();
         for (int i = 0;
@@ -892,8 +859,9 @@ public class AnalyseServiceImpl {
 
 
             results.add(r);
-        }
+        }*/
 
+        ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results);
     }
 
