@@ -8,14 +8,8 @@ import com.Import_Service.Import_Service.exception.InvalidImporterRequestExcepti
 import com.Import_Service.Import_Service.exception.InvalidNewsRequestException;
 import com.Import_Service.Import_Service.exception.InvalidTwitterRequestException;
 import com.Import_Service.Import_Service.repository.ApiSourceRepository;
-import com.Import_Service.Import_Service.request.AddAPISourceRequest;
-import com.Import_Service.Import_Service.request.ImportDataRequest;
-import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
-import com.Import_Service.Import_Service.request.ImportTwitterRequest;
-import com.Import_Service.Import_Service.response.AddAPISourceResponse;
-import com.Import_Service.Import_Service.response.ImportDataResponse;
-import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
-import com.Import_Service.Import_Service.response.ImportTwitterResponse;
+import com.Import_Service.Import_Service.request.*;
+import com.Import_Service.Import_Service.response.*;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -266,7 +260,7 @@ public class ImportServiceImpl {
         return new ImportDataResponse(list);
     }
 
-    //====================== Adding API sources ======================
+    //====================== API sources functionality ======================
 
     /**
      * This method will be used to add a new APIs request source to the system.
@@ -281,11 +275,11 @@ public class ImportServiceImpl {
         if(request == null) {
             throw new InvalidImporterRequestException("The request cannot be null");
         }
-        if(request.getAuthorization() == null || request.getMethod() == null || request.getUrl() == null || request.getParameters() == null) {
+        if(request.getAuthorization() == null || request.getMethod() == null || request.getUrl() == null || request.getParameters() == null || request.getName() == null) {
             throw new InvalidImporterRequestException("The request cannot contain null attributes");
         }
 
-        APISource newSource = new APISource(request.getUrl(), request.getMethod(), request.getAuthorization(), request.getParameters());
+        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getAuthorization(), request.getParameters());
 
         APISource savedSource = apiSourceRepository.save(newSource);
 
@@ -297,4 +291,22 @@ public class ImportServiceImpl {
         }
     }
 
+    /**
+     * This method will be used to edit an existing API source. The user will be allowed
+     * to change all the attributes of a given API source.
+     * @param request This class will contain all attributes for an API source including
+     *                attributes that haven't been changed.
+     * @return This will return whether or not editing an API source was successful.
+     * @throws Exception This will be thrown if the request is invalid.
+     */
+    public EditAPISourceResponse editAPISource(EditAPISourceRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidImporterRequestException("The request cannot be null");
+        }
+        if(request.getAuthorization() == null || request.getMethod() == null || request.getUrl() == null || request.getParameters() == null || request.getName() == null) {
+            throw new InvalidImporterRequestException("The request cannot contain null attributes");
+        }
+
+        return null;
+    }
 }
