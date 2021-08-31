@@ -105,6 +105,7 @@ class ChartPage extends Component {
                                                 <IndicatorCard
                                                     indicatorTitle={'Average Sentiment'}
                                                     indicatorValue={'Very Bad'}
+                                                    percentChange={"-27%"}
                                                     graphComponent={(
                                                         <IndicatorLineGraph
                                                             graphData={LineGraphDataNegative}
@@ -112,10 +113,10 @@ class ChartPage extends Component {
                                                     )}
                                                 />
 
-
                                                 <IndicatorCard
                                                     indicatorTitle={'Number of Mentions'}
                                                     indicatorValue={'246K'}
+                                                    percentChange={"+69%"}
                                                     graphComponent={(
                                                         <IndicatorLineGraph
                                                             graphData={LineGraphDataPositive}

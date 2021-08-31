@@ -12,7 +12,6 @@ function IndicatorCard(props) {
                 title={props.indicatorTitle}
                 className={'indicator-card'}
             >
-
                 <div className={'indicator-content-container'}>
                     <div className={'indicator-value-container'}>
                         {props.indicatorValue}
@@ -23,7 +22,7 @@ function IndicatorCard(props) {
                             <ArrowUpOutlined/>
                         </div>
                         <div className={'percentage-value-container'}>
-                            +69%
+                            {props.percentChange}
                         </div>
                     </div>
                 </div>

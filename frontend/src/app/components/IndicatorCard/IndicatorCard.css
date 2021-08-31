@@ -9,7 +9,7 @@
 
 
 .indicator-content-container {
-    /*border:3px solid red;*/
+    /*border: 3px solid red;*/
     float: left;
     width: 100%;
 }
@@ -24,6 +24,18 @@
 
 .indicator-card > .ant-card-head {
     border-bottom: 0;
+}
+
+.indicator-card > .ant-card-body {
+    /*padding: 1%;*/
+    padding-top: 0;
+}
+
+.indicator-card
+> div.ant-card-head
+> div.ant-card-head-wrapper
+> div.ant-card-head-title {
+    color: grey;
 }
 
 
