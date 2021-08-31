@@ -41,6 +41,7 @@ import org.apache.spark.ml.tuning.CrossValidatorModel;
 import org.apache.spark.ml.tuning.ParamGridBuilder;
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
 import org.apache.spark.mllib.evaluation.RegressionMetrics;
+import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
@@ -1706,19 +1707,23 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("Text is null");
         }
 
+        /*******************SETUP SPARK*****************/
 
-        SparkSession spark = SparkSession
+        SparkSession sparkNlpProperties = SparkSession
                 .builder()
-                .appName("PipelineExample")
-                .config("spark.master", "local")
+                .appName("NlpProperties")
+                .master("local")
                 .getOrCreate();
 
-        Dataset<Row> data = spark.read().format("csv")
-                .option("inferSchema", "true")
-                .option("header", "true")
-                .option("multiLine", "true")
-                .option("escape", "\"")
-                .load("data.csv");
+
+        StructType schema = new StructType( new StructField[]{
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),});
+
+        List<Row> dataList = new ArrayList<>();
+        Row row = RowFactory.create(request.getText());
+        dataList.add(row);
+        Dataset<Row> data =  sparkNlpProperties.createDataFrame(dataList, schema);
+
 
         DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
 
