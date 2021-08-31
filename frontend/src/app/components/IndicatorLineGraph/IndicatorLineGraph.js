@@ -10,16 +10,15 @@ function IndicatorLineGraph(props) {
                     <VictoryLine
                         interpolation="natural"
                         style={{
-                            data: { stroke: '#c43a31' },
+                            data: { stroke: '#25bda8' },
                             parent: { border: '1px solid #ccc' }
                         }}
                         data={props.graphData}
                     />
 
                     <VictoryAxis
-                        crossAxis
-                        // theme={VictoryTheme.material}
                         standalone={false}
+                        tickValues={['May', 'June', 'July', 'Aug', 'Sept']}
                         style={{
                             ticks: { stroke: 'transparent' },
                             // tickLabels: { fill: 'transparent' }
