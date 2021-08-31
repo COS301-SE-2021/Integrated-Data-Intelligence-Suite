@@ -3,7 +3,7 @@ package com.Import_Service.Import_Service.dataclass;
 import javax.persistence.*;
 import java.util.Map;
 
-@Entity
+@Entity(name = "apisource")
 @Table(name = "apisource")
 public class APISource {
 
@@ -19,6 +19,7 @@ public class APISource {
 
     private String method;
 
+    @Column(name = "header_auth")
     private String authorization;
 
     @ElementCollection
@@ -34,6 +35,10 @@ public class APISource {
         this.method = method;
         this.authorization = authorization;
         this.parameters = parameters;
+    }
+
+    public APISource() {
+
     }
 
     public Long getId() {
