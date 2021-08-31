@@ -1,11 +1,13 @@
 package com.Import_Service.Import_Service.service;
 
+import com.Import_Service.Import_Service.dataclass.APISource;
 import com.Import_Service.Import_Service.dataclass.DataSource;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
 import com.Import_Service.Import_Service.exception.InvalidNewsRequestException;
 import com.Import_Service.Import_Service.exception.InvalidTwitterRequestException;
+import com.Import_Service.Import_Service.repository.ApiSourceRepository;
 import com.Import_Service.Import_Service.request.AddAPISourceRequest;
 import com.Import_Service.Import_Service.request.ImportDataRequest;
 import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
@@ -15,6 +17,7 @@ import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,9 @@ public class ImportServiceImpl {
 
     @Value("${newsApi.apikey}")
     private String newsToken;
+
+    @Autowired
+    private ApiSourceRepository apiSourceRepository;
 
     public ImportServiceImpl() {
     }
@@ -279,6 +285,16 @@ public class ImportServiceImpl {
             throw new InvalidImporterRequestException("The request cannot contain null attributes");
         }
 
-        return null;
+        APISource newSource = new APISource(request.getUrl(), request.getMethod(), request.getAuthorization(), request.getParameters());
+
+        APISource savedSource = apiSourceRepository.save(newSource);
+
+        if(newSource == savedSource) {
+            return new AddAPISourceResponse(true, "Successfully saved request");
+        }
+        else {
+            return new AddAPISourceResponse(false, "Failed to save request");
+        }
     }
+
 }

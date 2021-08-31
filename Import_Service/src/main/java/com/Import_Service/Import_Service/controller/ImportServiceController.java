@@ -3,9 +3,11 @@ package com.Import_Service.Import_Service.controller;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
+import com.Import_Service.Import_Service.request.AddAPISourceRequest;
 import com.Import_Service.Import_Service.request.ImportDataRequest;
 import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
 import com.Import_Service.Import_Service.request.ImportTwitterRequest;
+import com.Import_Service.Import_Service.response.AddAPISourceResponse;
 import com.Import_Service.Import_Service.response.ImportDataResponse;
 import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
 import com.Import_Service.Import_Service.response.ImportTwitterResponse;
@@ -173,5 +175,8 @@ public class ImportServiceController {
         return lst.toString();
     }
 
-
+    @PostMapping(value = "/addApiSource")
+    public @ResponseBody AddAPISourceResponse addApiSource(@RequestBody AddAPISourceRequest request) throws Exception {
+        return service.addAPISource(request);
+    }
 }
