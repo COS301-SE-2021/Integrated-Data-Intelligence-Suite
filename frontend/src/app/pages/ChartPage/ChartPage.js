@@ -16,6 +16,9 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
 import useGet from '../../functions/useGet';
 import IndicatorCard from '../../components/IndicatorCard/IndicatorCard';
+import LineGraphDataPositive from '../../Mocks/LineGraphDataPositive.json';
+import LineGraphDataNegative from '../../Mocks/LineGraphDataNegative.json';
+import IndicatorLineGraph from '../../components/IndicatorLineGraph/IndicatorLineGraph';
 
 const {
     Title,
@@ -102,10 +105,22 @@ class ChartPage extends Component {
                                                 <IndicatorCard
                                                     indicatorTitle={'Average Sentiment'}
                                                     indicatorValue={'Very Bad'}
+                                                    graphComponent={(
+                                                        <IndicatorLineGraph
+                                                            graphData={LineGraphDataNegative}
+                                                        />
+                                                    )}
                                                 />
+
+
                                                 <IndicatorCard
                                                     indicatorTitle={'Number of Mentions'}
                                                     indicatorValue={'246K'}
+                                                    graphComponent={(
+                                                        <IndicatorLineGraph
+                                                            graphData={LineGraphDataPositive}
+                                                        />
+                                                    )}
                                                 />
                                                 <IndicatorCard
                                                     indicatorTitle={'Statistic 3'}

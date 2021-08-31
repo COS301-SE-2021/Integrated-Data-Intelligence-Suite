@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card } from 'antd';
 import './IndicatorCard.css';
 import { ArrowUpOutlined } from '@ant-design/icons';
+import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 
 function IndicatorCard(props) {
 
@@ -26,12 +27,8 @@ function IndicatorCard(props) {
                         </div>
                     </div>
                 </div>
-
-                <div className={'graph-container'}>
-                    Line Graph here
-                </div>
+                {props.graphComponent}
             </Card>
-
         </>
     );
 }

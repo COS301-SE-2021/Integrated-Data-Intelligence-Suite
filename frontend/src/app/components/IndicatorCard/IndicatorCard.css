@@ -16,7 +16,7 @@
 
 
 #indicator-container > .indicator-card {
-    border: 2px solid red;
+    /*border: 2px solid red;*/
     width: 25%;
     float: left;
     margin-right: 2%;
@@ -102,7 +102,7 @@
 }
 
 .graph-container {
-    border: 2px solid black;
+    /*border: 2px solid black;*/
     float: left;
     width: 100%;
 }
