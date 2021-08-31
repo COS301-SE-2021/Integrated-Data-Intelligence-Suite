@@ -10,7 +10,7 @@ function IndicatorLineGraph(props) {
                     <VictoryLine
                         interpolation="natural"
                         style={{
-                            data: { stroke: '#25bda8' },
+                            data: { stroke: (props.lineColor) },
                             parent: { border: '1px solid #ccc' }
                         }}
                         data={props.graphData}

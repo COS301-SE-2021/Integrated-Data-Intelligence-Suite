@@ -19,6 +19,8 @@ import IndicatorCard from '../../components/IndicatorCard/IndicatorCard';
 import LineGraphDataPositive from '../../Mocks/LineGraphDataPositive.json';
 import LineGraphDataNegative from '../../Mocks/LineGraphDataNegative.json';
 import IndicatorLineGraph from '../../components/IndicatorLineGraph/IndicatorLineGraph';
+import PieChart from '../../components/PieChart/PieChart';
+import PieChartMockData from '../../Mocks/PieChartDataMock.json';
 
 const {
     Title,
@@ -105,10 +107,12 @@ class ChartPage extends Component {
                                                 <IndicatorCard
                                                     indicatorTitle={'Average Sentiment'}
                                                     indicatorValue={'Very Bad'}
-                                                    percentChange={"-27%"}
+                                                    showArrow
+                                                    percentChange={'-27%'}
                                                     graphComponent={(
                                                         <IndicatorLineGraph
                                                             graphData={LineGraphDataNegative}
+                                                            lineColor={'#EF062D'}
                                                         />
                                                     )}
                                                 />
@@ -116,16 +120,23 @@ class ChartPage extends Component {
                                                 <IndicatorCard
                                                     indicatorTitle={'Number of Mentions'}
                                                     indicatorValue={'246K'}
-                                                    percentChange={"+69%"}
+                                                    percentChange={'+69%'}
+                                                    showArrow
                                                     graphComponent={(
                                                         <IndicatorLineGraph
                                                             graphData={LineGraphDataPositive}
+                                                            lineColor={'#009966'}
                                                         />
                                                     )}
                                                 />
                                                 <IndicatorCard
                                                     indicatorTitle={'Statistic 3'}
-                                                    indicatorValue={'246K'}
+                                                    showArrow={false}
+                                                    graphComponent={(
+                                                        <PieChart
+                                                            graphData={PieChartMockData}
+                                                        />
+                                                    )}
                                                 />
                                             </div>
 
