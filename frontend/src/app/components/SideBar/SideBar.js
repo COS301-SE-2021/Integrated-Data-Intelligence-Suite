@@ -43,7 +43,7 @@ class SideBar extends React.Component {
                     >
 
                         <Menu.Item key="2" icon={<BarChartOutlined />} onClick={() => this.setActive('2')}>
-                            Charts
+                            Analytics
                             <Link to="/" />
                         </Menu.Item>
 

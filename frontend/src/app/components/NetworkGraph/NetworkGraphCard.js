@@ -164,32 +164,31 @@ class NetworkGraphCard extends React.Component {
             this.setState({ dataToBeDisplayed: this.props.text[1] });
             console.log('i reached here');
         }
-
     }
 
     render() {
         return (
             <>
                 <Card
-                    id="network_card"
-                    title="Network Graph"
-                    style={{ border: '3px solid black' }}
+                  id="network_card"
+                  title="Network Graph"
+                  style={{ border: '3px solid black' }}
                 >
                     <CytoscapeComponent
-                        elements={this.state.dataToBeDisplayed}
-                        stylesheet={network_stylesheet}
-                        layout={this.layout}
-                        style={{
+                      elements={this.state.dataToBeDisplayed}
+                      stylesheet={network_stylesheet}
+                      layout={this.layout}
+                      style={{
                             width: '100%',
                             height: '400px',
                         }}
-                        cy={(cy) => {
-                            this.ref = cy
-                            this.cy = cy
-                            cy.on('add', 'node', _evt => {
-                                cy.layout(this.layout).run()
-                                cy.fit()
-                            })
+                      cy={(cy) => {
+                            this.ref = cy;
+                            this.cy = cy;
+                            cy.on('add', 'node', (_evt) => {
+                                cy.layout(this.layout).run();
+                                cy.fit();
+                            });
                         }}
                     />
                 </Card>

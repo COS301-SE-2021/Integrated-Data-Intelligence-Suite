@@ -15,10 +15,11 @@ import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
 import useGet from '../../functions/useGet';
+import IndicatorCard from '../../components/IndicatorCard/IndicatorCard';
 
 const {
     Title,
-    Text
+    Text,
 } = Typography;
 const {
     Header,
@@ -88,27 +89,63 @@ class ChartPage extends Component {
                                         />
                                     </Header>
 
-
                                     {/* The Map Graph */}
                                     <Content id="content_section">
                                         <Layout
                                             id="map_card_content_layout_div"
                                             className="map_card"
                                         >
-                                            <Content
-                                                id="map_card_content"
-                                                className="map_card"
+
+                                            <div
+                                                id={'indicator-container'}
+                                            >
+
+                                                <IndicatorCard
+                                                    indicatorTitle={'Average Sentiment'}
+                                                    indicatorValue={'Very Bad'}
+                                                />
+                                                <IndicatorCard
+                                                    indicatorTitle={'Number of Mentions'}
+                                                    indicatorValue={'246K'}
+                                                />
+                                                <IndicatorCard
+                                                    indicatorTitle={'Statistic 3'}
+                                                    indicatorValue={'246K'}
+                                                />
+
+                                            </div>
+
+                                            <Card
+                                                // title="Geo location analysis"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: 0
+                                                }}
+
                                             >
                                                 <MapCard text={this.state.text}/>
-                                            </Content>
 
-                                            <Sider
-                                                id="map_card_sidebar"
-                                                className="map_card"
-                                                style={{ display: 'none' }}
-                                            >
-                                                <DetailsCard/>
-                                            </Sider>
+
+                                                {/*<div*/}
+                                                {/*    style={{*/}
+                                                {/*        width: '20%',*/}
+                                                {/*        height: '300px',*/}
+                                                {/*        float: 'left',*/}
+                                                {/*        border: '3px solid blue',*/}
+                                                {/*    }}*/}
+                                                {/*>*/}
+                                                {/*    right Sided*/}
+                                                {/*</div>*/}
+
+                                            </Card>
+
+                                            {/* <Sider */}
+                                            {/*    id="map_card_sidebar" */}
+                                            {/*    className="map_card" */}
+                                            {/*    style={{ display: 'none' }} */}
+                                            {/* > */}
+                                            {/*    <DetailsCard/> */}
+                                            {/* </Sider> */}
                                         </Layout>
 
                                         {/* The Network Graph */}

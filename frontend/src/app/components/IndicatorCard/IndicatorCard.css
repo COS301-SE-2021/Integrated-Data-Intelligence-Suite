@@ -1,0 +1,33 @@
+#indicator-container {
+    /*border: 3px solid black;*/
+    height: 100%;
+    width: 100%;
+    margin-bottom:2%;
+    padding:0;
+    border:0;
+}
+
+
+#indicator-container > .indicator-card {
+    /*border: 2px solid red;*/
+    width: 25%;
+    float: left;
+    margin-right: 2%;
+}
+
+
+.arrow-icon-container{
+    border:2px solid blue;
+    width: 40%;
+    float: left;
+}
+
+.indicator-value-container{
+    border:2px solid red;
+    width:60%;
+    float:left;
+}
+
+.percentage-value-container{
+    border: 2px solid yellow;
+}

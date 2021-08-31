@@ -21,11 +21,12 @@
 *
 */
 #content_section {
-    padding: 5%;
+    padding: 3%;
     background: #EFF0F0;
     color: #000000;
     /*height: 206px;*/
     border: 0;
+    /*border:3px solid blue;*/
 
     /*Scrolling Functionality*/
     max-height: 100vh;
@@ -72,17 +73,15 @@
 *
  */
 #inner_layout_div ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
 }
 
 #inner_layout_div ::-webkit-scrollbar-track {
-    /*-webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.3);*/
     border-radius: 10px;
 }
 
 #inner_layout_div ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    /*-webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.5);*/
     background-color: #c5bfbf;
 }
 

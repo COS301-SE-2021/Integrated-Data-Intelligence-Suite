@@ -76,11 +76,11 @@ function MapCard(props) {
         const { current = {} } = mapRef;
         const { leafletElement: map } = current;
 
-        if (!map) return;
+        // if (!map) return;
 
-        const control = geosearch();
-
-        control.addTo(map);
+        // const control = geosearch();
+        //
+        // control.addTo(map);
     }, []);
 
     function _created(e) {
@@ -95,67 +95,61 @@ function MapCard(props) {
     let poly;
     return (
         <>
-            <Card
-              id="map_card"
-              title="Map"
-                // extra={<p/>}
+            <Map
+              id="map_container_div"
+              center={pretoria_position}
+              zoom={2}
+              scrollWheelZoom
+              ref={mapRef}
+              animate
             >
-                <Map
-                  id="map_container_div"
-                  center={pretoria_position}
-                  zoom={9}
-                  scrollWheelZoom
-                  ref={mapRef}
-                  animate
+                <LayersControl
+                  position="topright"
+                  collapsed
                 >
-                    <LayersControl
-                      position="topright"
-                      collapsed={false}
-                    >
-                        <LayersControl.BaseLayer name="osm b&w">
-                            <TileLayer
-                              attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                              url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
-                            />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="osm colour" checked>
-                            <TileLayer
-                              attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
-                        </LayersControl.BaseLayer>
-                        <LayersControl.BaseLayer name="google">
-                            <TileLayer
-                              attribution="google"
-                              url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  "
-                            />
-                        </LayersControl.BaseLayer>
-
-                        <LayersControl.Overlay name="drawn items" checked>
-                            <FeatureGroup>
-                                <EditControl
-                                  position="topleft"
-                                  onCreated={_created}
-                                  draw={{}}
-                                />
-                            </FeatureGroup>
-                        </LayersControl.Overlay>
-                    </LayersControl>
-
-                    {/* Display the City markers onto the map */}
-                    {data_from_backend.map((city, idx) => (
-                        <CircleMarker
-                          center={[city.lat, city.lng]}
-                          icon={markerIcon}
-                          key={idx}
-                          className={city.classname}
-                          onClick={() => {
-                                showCircleData(city.classname, data_from_backend);
-                            }}
+                    <LayersControl.BaseLayer name="osm b&w">
+                        <TileLayer
+                          attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                         />
-                    ))}
-                </Map>
-            </Card>
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer name="osm colour" checked>
+                        <TileLayer
+                          attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer name="google">
+                        <TileLayer
+                          attribution="google"
+                          url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  "
+                        />
+                    </LayersControl.BaseLayer>
+
+                    <LayersControl.Overlay name="drawn items" checked>
+                        <FeatureGroup>
+                            <EditControl
+                              position="topleft"
+                              onCreated={_created}
+                              draw={{}}
+                            />
+                        </FeatureGroup>
+                    </LayersControl.Overlay>
+                </LayersControl>
+
+                {/* Display the City markers onto the map */}
+                {data_from_backend.map((city, idx) => (
+                    <CircleMarker
+                      center={[city.lat, city.lng]}
+                      icon={markerIcon}
+                      key={idx}
+                      className={city.classname}
+                      onClick={() => {
+                            showCircleData(city.classname, data_from_backend);
+                        }}
+                    />
+                ))}
+            </Map>
         </>
     );
 }
