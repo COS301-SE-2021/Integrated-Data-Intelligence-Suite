@@ -7,9 +7,11 @@ import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepos
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
+
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -27,7 +29,6 @@ import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
-
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
@@ -1448,6 +1449,8 @@ public class AnalyseServiceImpl {
         Properties properties = new Properties();
         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
         properties.setProperty("annotators", pipelineProperties);
+        //properties.setProperty("ner.applyFineGrained", "true");
+        //pipeline.addAnnotator(new TokensRegexNERAnnotator("additional.rules", true));
         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
         CoreDocument coreDocument = new CoreDocument(request.getText());
         stanfordCoreNLP.annotate(coreDocument);
