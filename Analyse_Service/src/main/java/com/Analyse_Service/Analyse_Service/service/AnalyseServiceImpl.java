@@ -11,7 +11,13 @@ import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.Finisher;
 import com.johnsnowlabs.nlp.annotators.LemmatizerModel;
 import com.johnsnowlabs.nlp.annotators.Normalizer;
+import com.johnsnowlabs.nlp.annotators.ner.NamedEntity;
+import com.johnsnowlabs.nlp.annotators.ner.NerApproach;
+import com.johnsnowlabs.nlp.annotators.ner.NerConverter;
+import com.johnsnowlabs.nlp.annotators.ner.dl.NerDLModel;
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetector;
+import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
+import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
@@ -1717,7 +1723,7 @@ public class AnalyseServiceImpl {
 
 
         StructType schema = new StructType( new StructField[]{
-                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),});
+                        new StructField("text", DataTypes.StringType, false, Metadata.empty()),});
 
         List<Row> dataList = new ArrayList<>();
         Row row = RowFactory.create(request.getText());
@@ -1729,20 +1735,35 @@ public class AnalyseServiceImpl {
 
         SentenceDetector sentence_detector = (SentenceDetector) ((SentenceDetector) new SentenceDetector().setInputCols(new String[] {"document"})).setOutputCol("sentence");
 
-        //Tokenizer tokenizer = (Tokenizer)((Tokenizer) new Tokenizer().setInputCols(new String[] {"sentence"})).setOutputCol("token");
+        Tokenizer tokenizer = (Tokenizer)((Tokenizer) new Tokenizer().setInputCol("sentence")).setOutputCol("token");
 
-        Normalizer normalizer = (Normalizer)((Normalizer) new Normalizer().setInputCols(new String[]{"token"})).setOutputCol("normalized");
+        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().setInputCols(new String[]{"token"})).setOutputCol("Checked");
 
-        LemmatizerModel lemmatizer = (LemmatizerModel)((LemmatizerModel) LemmatizerModel.pretrained("lemma_antbnc", "en", "public/models").setInputCols(new String[]{"normalized"})).setOutputCol("lemma");
+        WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().setInputCols(new String[] {"sentence", "token"})).setOutputCol("embeddings");
 
-        Finisher finisher = new Finisher().setInputCols(new String[]{"document", "lemma"}).setOutputCols(new String[]{"document", "lemma"});
+        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().setInputCols(new String[] {"sentence", "token", "embeddings"})).setOutputCol("ner");
 
-        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector, /*tokenizer,*/ normalizer, lemmatizer, finisher});
+        NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"sentence", "checked", "ner"})).setOutputCol("chunk");
+
+
+        //Normalizer normalizer = (Normalizer)((Normalizer) new Normalizer().setInputCols(new String[]{"token"})).setOutputCol("normalized");
+
+        //LemmatizerModel lemmatizer = (LemmatizerModel)((LemmatizerModel) LemmatizerModel.pretrained("lemma_antbnc", "en", "public/models").setInputCols(new String[]{"normalized"})).setOutputCol("lemma");
+
+        //Finisher finisher = new Finisher().setInputCols(new String[]{"document", "lemma"}).setOutputCols(new String[]{"document", "lemma"});
+
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector, tokenizer,checker ,embeddings ,ner , converter /*normalizer, lemmatizer, finisher*/});
 
 // Fit the pipeline to training documents.
         PipelineModel pipelineFit = pipeline.fit(data);
-        Dataset<Row> dataet = pipelineFit.transform(data);
+        Dataset<Row> results = pipelineFit.transform(data);
 
+
+        data.show();
+        System.out.println("OLD DATA");
+
+        results.show();
+        System.out.println("NEW DATA");
 
 
         /**setup analyser**
