@@ -99,7 +99,6 @@ class ChartPage extends Component {
                                             <div
                                                 id={'indicator-container'}
                                             >
-
                                                 <IndicatorCard
                                                     indicatorTitle={'Average Sentiment'}
                                                     indicatorValue={'Very Bad'}
@@ -112,7 +111,6 @@ class ChartPage extends Component {
                                                     indicatorTitle={'Statistic 3'}
                                                     indicatorValue={'246K'}
                                                 />
-
                                             </div>
 
                                             <Card

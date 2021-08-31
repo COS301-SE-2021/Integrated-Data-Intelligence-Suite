@@ -9,20 +9,26 @@ function IndicatorCard(props) {
         <>
             <Card
                 title={props.indicatorTitle}
-                // extra={<p>14%</p>}
                 className={'indicator-card'}
             >
-                <div className={'indicator-value-container'}>
-                    {props.indicatorValue}
+
+                <div className={'indicator-content-container'}>
+                    <div className={'indicator-value-container'}>
+                        {props.indicatorValue}
+                    </div>
+
+                    <div className={'amount-changed-container'}>
+                        <div className={'arrow-icon-container'}>
+                            <ArrowUpOutlined/>
+                        </div>
+                        <div className={'percentage-value-container'}>
+                            +69%
+                        </div>
+                    </div>
                 </div>
 
-                <div className={'amount-changed-container'}>
-                    <div className={'arrow-icon-container'}>
-                        <ArrowUpOutlined/>
-                    </div>
-                    <div className={'percentage-value-container'}>
-                        +10%
-                    </div>
+                <div className={'graph-container'}>
+                    Line Graph here
                 </div>
             </Card>
 
