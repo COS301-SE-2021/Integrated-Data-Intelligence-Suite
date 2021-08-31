@@ -7,6 +7,11 @@ import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepos
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
+import com.johnsnowlabs.nlp.DocumentAssembler;
+import com.johnsnowlabs.nlp.Finisher;
+import com.johnsnowlabs.nlp.annotators.LemmatizerModel;
+import com.johnsnowlabs.nlp.annotators.Normalizer;
+import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetector;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
@@ -1701,6 +1706,37 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("Text is null");
         }
 
+
+        SparkSession spark = SparkSession
+                .builder()
+                .appName("PipelineExample")
+                .config("spark.master", "local")
+                .getOrCreate();
+
+        Dataset<Row> data = spark.read().format("csv")
+                .option("inferSchema", "true")
+                .option("header", "true")
+                .option("multiLine", "true")
+                .option("escape", "\"")
+                .load("data.csv");
+
+        DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
+
+        SentenceDetector sentence_detector = (SentenceDetector) ((SentenceDetector) new SentenceDetector().setInputCols(new String[] {"document"})).setOutputCol("sentence");
+
+        //Tokenizer tokenizer = (Tokenizer)((Tokenizer) new Tokenizer().setInputCols(new String[] {"sentence"})).setOutputCol("token");
+
+        Normalizer normalizer = (Normalizer)((Normalizer) new Normalizer().setInputCols(new String[]{"token"})).setOutputCol("normalized");
+
+        LemmatizerModel lemmatizer = (LemmatizerModel)((LemmatizerModel) LemmatizerModel.pretrained("lemma_antbnc", "en", "public/models").setInputCols(new String[]{"normalized"})).setOutputCol("lemma");
+
+        Finisher finisher = new Finisher().setInputCols(new String[]{"document", "lemma"}).setOutputCols(new String[]{"document", "lemma"});
+
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector, /*tokenizer,*/ normalizer, lemmatizer, finisher});
+
+// Fit the pipeline to training documents.
+        PipelineModel pipelineFit = pipeline.fit(data);
+        Dataset<Row> dataet = pipelineFit.transform(data);
 
 
 
