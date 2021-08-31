@@ -14,10 +14,12 @@ import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -271,6 +273,7 @@ public class ImportServiceImpl {
      *         successful.
      * @throws Exception This is thrown if the request is null or contains any null values
      */
+    @Transactional
     public AddAPISourceResponse addAPISource(AddAPISourceRequest request) throws Exception {
         if(request == null) {
             throw new InvalidImporterRequestException("The request cannot be null");
@@ -300,6 +303,7 @@ public class ImportServiceImpl {
      * @throws Exception This will be thrown if the request is invalid.
      */
     public EditAPISourceResponse editAPISource(EditAPISourceRequest request) throws Exception {
+        //TODO
         if(request == null) {
             throw new InvalidImporterRequestException("The request cannot be null");
         }
@@ -308,5 +312,23 @@ public class ImportServiceImpl {
         }
 
         return null;
+
+
+    }
+
+    /**
+     * This method will return a list of all the APISources saved in the database.
+     * @return This class contains whether or not the retrieving process was successful
+     * or not and the list of APISources
+     */
+    public GetAllAPISourcesResponse getAllAPISources() {
+        List<APISource> sources = apiSourceRepository.findAll();
+
+        if(sources.isEmpty()) {
+            return new GetAllAPISourcesResponse(false, "There are no saved API sources", sources);
+        }
+        else {
+            return new GetAllAPISourcesResponse(true, "Successfully retrieved all sources", sources);
+        }
     }
 }
