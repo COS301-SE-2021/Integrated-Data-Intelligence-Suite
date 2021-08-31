@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class AddAPISourceRequest {
 
+    private String name;
+
     private String url;
 
     private String method;
@@ -16,11 +18,20 @@ public class AddAPISourceRequest {
 
     }
 
-    public AddAPISourceRequest(String url, String method, String authorization, Map<String, String> parameters) {
+    public AddAPISourceRequest(String name, String url, String method, String authorization, Map<String, String> parameters) {
+        this.name = name;
         this.url = url;
         this.method = method;
         this.authorization = authorization;
         this.parameters = parameters;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUrl() {

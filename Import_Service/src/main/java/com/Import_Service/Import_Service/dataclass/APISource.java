@@ -12,6 +12,9 @@ public class APISource {
     @Column(name = "id")
     private Long id;
 
+    @Column(unique = true)
+    private String name;
+
     private String url;
 
     private String method;
@@ -25,11 +28,8 @@ public class APISource {
     @Column(name = "param_value")
     private Map<String, String> parameters;
 
-    public APISource() {
-
-    }
-
-    public APISource(String url, String method, String authorization, Map<String, String> parameters) {
+    public APISource(String name, String url, String method, String authorization, Map<String, String> parameters) {
+        this.name = name;
         this.url = url;
         this.method = method;
         this.authorization = authorization;
@@ -74,5 +74,13 @@ public class APISource {
 
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
