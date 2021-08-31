@@ -1701,7 +1701,10 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("Text is null");
         }
 
-        /**setup analyser**/
+
+
+
+        /**setup analyser**
         Properties properties = new Properties();
         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
         properties.setProperty("annotators", pipelineProperties);
@@ -1711,7 +1714,7 @@ public class AnalyseServiceImpl {
 
         //List<CoreSentence> coreSentences = coreDocument.sentences();
 
-        /**output of analyser**/
+        /**output of analyser**
         List<CoreSentence> coreSentences = coreDocument.sentences();
         List<CoreLabel> coreLabels = coreDocument.tokens();
         ArrayList<String> row = new ArrayList<>();
@@ -1754,9 +1757,9 @@ public class AnalyseServiceImpl {
             row.add(em.text());
             row.add(em.entityType());
             nameEntities.add(row);
-        }
+        }*/
 
-        FindNlpPropertiesResponse response = new FindNlpPropertiesResponse(sentiment, partOfSpeech, nameEntities);
+        FindNlpPropertiesResponse response = null;//new FindNlpPropertiesResponse(sentiment, partOfSpeech, nameEntities);
         return response;
     }
 
