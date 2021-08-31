@@ -1,9 +1,12 @@
 /*************************************************************/
 /********************* Sidebar(Left)  ***************************/
-#sidebar_div {
+#sidebar_div[style] {
     background: white;
     border-right: 0.2em solid #E8E8E9;
     /*border: 3px solid #5873f9;*/
+    width: 168px !important;
+    min-width: 0 !important;
+    max-width: 168px !important;
 }
 
 #sidebar_menu {
@@ -33,14 +36,14 @@
 /*When a Sidebar Menu item when it has been selected(clicked)*/
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
-    background: #5873f9;
+    background: #4BB5D2;
     color: white;
 }
 
 /*When a Sidebar Menu item when it has been Hovered over*/
 #sidebar_menu > li.ant-menu-item-active {
     border: 0;
-    color: #5873f9;
+    color: #4BB5D2;
 }
 
 /*Hovering over a menu item that has been selected*/

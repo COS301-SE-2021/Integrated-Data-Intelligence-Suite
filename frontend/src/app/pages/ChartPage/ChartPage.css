@@ -5,15 +5,15 @@
     best to give that component its own file.
 */
 #top_bar {
-    background: #ffffff;
+    background: #eff0f0;
     color: #000000;
     height: 89px;
     /*padding: 0 1%;*/
     padding: 0;
     margin: 0;
     /*border: 3px solid red;*/
-    /*border: 0;*/
-    border-bottom: 0.2em solid #E8E8E9;
+    border: 0;
+    /*border-bottom: 0.2em solid #E8E8E9;*/
     overflow: hidden;
 }
 

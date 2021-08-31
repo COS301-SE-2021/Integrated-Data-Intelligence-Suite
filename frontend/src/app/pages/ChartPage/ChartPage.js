@@ -73,18 +73,21 @@ class ChartPage extends Component {
                                 id="outer_layout"
                                 className="chart-page"
                             >
-                                <Header id="top_bar">
-                                    {/* <Title level={1}>Chart Page Title</Title> */}
-                                    <SearchBar
-                                        text={this.state.text}
-                                        handleTextChange={this.handleTextChange}
-                                    />
-                                    <UserInfoCard
-                                        name="s"
-                                    />
-                                </Header>
+
+                                <SideBar/>
+
                                 <Layout id="inner_layout_div">
-                                    <SideBar/>
+                                    <Header id="top_bar">
+                                        {/* <Title level={1}>Chart Page Title</Title> */}
+                                        <SearchBar
+                                            text={this.state.text}
+                                            handleTextChange={this.handleTextChange}
+                                        />
+                                        <UserInfoCard
+                                            name="s"
+                                        />
+                                    </Header>
+
 
                                     {/* The Map Graph */}
                                     <Content id="content_section">
