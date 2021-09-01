@@ -4,14 +4,14 @@ import { VictoryAxis, VictoryChart, VictoryPie } from 'victory';
 function PieChart(props) {
     return (
         <>
-            <div className={'graph-container'}>
+            <div className="graph-container">
                 <VictoryPie
-                    colorScale={['#FF0000', '#ff7707', '#FFFF00', '#138808', '#00E000']}
-                    data={props.graphData}
-                    innerRadius={100}
-                    padAngle={2.8}
-                    height={400}
-                    width={500}
+                  colorScale={['#FF0000', '#ff7707', '#FFFF00', '#138808', '#00E000']}
+                  data={props.graphData}
+                  innerRadius={100}
+                  padAngle={2.8}
+                  height={400}
+                  width={500}
                 />
             </div>
         </>
@@ -19,4 +19,3 @@ function PieChart(props) {
 }
 
 export default PieChart;
-

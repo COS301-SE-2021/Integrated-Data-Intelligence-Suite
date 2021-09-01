@@ -3900,7 +3900,7 @@
     classnames "^2.3.1"
     prop-types "^15.6.2"
 
-"@visx/responsive@2.1.0":
+"@visx/responsive@2.1.0", "@visx/responsive@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@visx/responsive/-/responsive-2.1.0.tgz#fe98d7de61b4ed1b0e2a12d92b70d5d02844d1e6"
   integrity sha512-QgkMP7TXNU2S81PgNrbQXlCvBwtXEO4pij149yVMorOc7/MV4lElIxQvlWuvtmjrIbip2hWHmeFgqFw40cxUTw==
@@ -3911,7 +3911,7 @@
     prop-types "^15.6.1"
     resize-observer-polyfill "1.5.1"
 
-"@visx/scale@2.1.0":
+"@visx/scale@2.1.0", "@visx/scale@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@visx/scale/-/scale-2.1.0.tgz#a5f1b9f1a6ac0580ade87852fd4022d51049261b"
   integrity sha512-oXAOmAgVFOAYnReoywe1hIn30+iaqqczQXTlXeQbpPwc6C/CwW34Yc0D/WYpWUVMze02cYQ4AAT2feh4aUHucw==
@@ -3941,7 +3941,7 @@
     lodash "^4.17.15"
     prop-types "^15.5.10"
 
-"@visx/text@2.1.0":
+"@visx/text@2.1.0", "@visx/text@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@visx/text/-/text-2.1.0.tgz#ccdf27832f8b9d846a8fdec5adad807515682448"
   integrity sha512-8vdnzoP75lIkDUHfmshcdn+Ic3K9l+HveGTZBVNu3qCSWLn2/F61HpA6BLRSg/vzxMhNav+hoBkBgRRYe8R7mw==
@@ -4011,7 +4011,7 @@
     d3-voronoi "^1.1.2"
     prop-types "^15.6.1"
 
-"@visx/wordcloud@2.1.0":
+"@visx/wordcloud@2.1.0", "@visx/wordcloud@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@visx/wordcloud/-/wordcloud-2.1.0.tgz#b624c535a7ac3fb4dd52add22f84df08d2656564"
   integrity sha512-xjWRfixb39KLV/7088ljJpb8DjYLtcGSImtuhLEGuQcMXY0GaXnzESMR5J4v+8wwiIixRDsTgf0+D/aN9Ek0Bg==
