@@ -1,10 +1,10 @@
 #indicator-container {
-    /*border: 3px solid black;*/
     height: 100%;
     width: 100%;
     margin-bottom: 2%;
     padding: 0;
     border: 0;
+    background: #eff0f0;
 }
 
 
@@ -17,9 +17,12 @@
 
 #indicator-container > .indicator-card {
     /*border: 2px solid red;*/
+    border: 0.1em solid #e8e8e9;
+
     width: 25%;
     float: left;
     margin-right: 2%;
+    border-radius: 3%;
 }
 
 .indicator-card > .ant-card-head {

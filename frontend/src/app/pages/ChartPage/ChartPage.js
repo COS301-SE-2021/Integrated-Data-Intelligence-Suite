@@ -18,9 +18,11 @@ import useGet from '../../functions/useGet';
 import IndicatorCard from '../../components/IndicatorCard/IndicatorCard';
 import LineGraphDataPositive from '../../Mocks/LineGraphDataPositive.json';
 import LineGraphDataNegative from '../../Mocks/LineGraphDataNegative.json';
-import IndicatorLineGraph from '../../components/IndicatorLineGraph/IndicatorLineGraph';
+import LineGraph from '../../components/LineGraph/LineGraph';
 import PieChart from '../../components/PieChart/PieChart';
 import PieChartMockData from '../../Mocks/PieChartDataMock.json';
+import BarGraphMockData from '../../Mocks/BarGraphDataMock.json';
+import BarGraph from '../../components/BarGraph/BarGraph';
 
 const {
     Title,
@@ -79,9 +81,7 @@ class ChartPage extends Component {
                                 id="outer_layout"
                                 className="chart-page"
                             >
-
                                 <SideBar/>
-
                                 <Layout id="inner_layout_div">
                                     <Header id="top_bar">
                                         {/* <Title level={1}>Chart Page Title</Title> */}
@@ -94,13 +94,11 @@ class ChartPage extends Component {
                                         />
                                     </Header>
 
-                                    {/* The Map Graph */}
                                     <Content id="content_section">
                                         <Layout
                                             id="map_card_content_layout_div"
                                             className="map_card"
                                         >
-
                                             <div
                                                 id={'indicator-container'}
                                             >
@@ -110,7 +108,7 @@ class ChartPage extends Component {
                                                     showArrow
                                                     percentChange={'-27%'}
                                                     graphComponent={(
-                                                        <IndicatorLineGraph
+                                                        <LineGraph
                                                             graphData={LineGraphDataNegative}
                                                             lineColor={'#EF062D'}
                                                         />
@@ -123,14 +121,14 @@ class ChartPage extends Component {
                                                     percentChange={'+69%'}
                                                     showArrow
                                                     graphComponent={(
-                                                        <IndicatorLineGraph
+                                                        <LineGraph
                                                             graphData={LineGraphDataPositive}
                                                             lineColor={'#009966'}
                                                         />
                                                     )}
                                                 />
                                                 <IndicatorCard
-                                                    indicatorTitle={'Statistic 3'}
+                                                    indicatorTitle={'Total Sentiment'}
                                                     showArrow={false}
                                                     graphComponent={(
                                                         <PieChart
@@ -140,29 +138,30 @@ class ChartPage extends Component {
                                                 />
                                             </div>
 
-                                            <Card
-                                                // title="Geo location analysis"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: 0
-                                                }}
+                                            <div>
+                                                <Card
+                                                    id={'map-card'}
+                                                    title="World Map"
+                                                    // style={{
+                                                    //     width: '100%',
+                                                    //     padding: 0
+                                                    // }}
+                                                >
+                                                    <MapCard text={this.state.text}/>
+                                                </Card>
 
-                                            >
-                                                <MapCard text={this.state.text}/>
+                                                <IndicatorCard
+                                                    cardID={'top-country-indicator-card'}
+                                                    indicatorTitle={'Engagement by Location'}
+                                                    showArrow={false}
+                                                    graphComponent={(
+                                                        <BarGraph
+                                                            graphData={BarGraphMockData}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
 
-
-                                                {/*<div*/}
-                                                {/*    style={{*/}
-                                                {/*        width: '20%',*/}
-                                                {/*        height: '300px',*/}
-                                                {/*        float: 'left',*/}
-                                                {/*        border: '3px solid blue',*/}
-                                                {/*    }}*/}
-                                                {/*>*/}
-                                                {/*    right Sided*/}
-                                                {/*</div>*/}
-
-                                            </Card>
 
                                             {/* <Sider */}
                                             {/*    id="map_card_sidebar" */}
@@ -204,7 +203,6 @@ class ChartPage extends Component {
                                                 />
                                             </Content>
                                         </Layout>
-
                                     </Content>
                                 </Layout>
                             </Layout>
