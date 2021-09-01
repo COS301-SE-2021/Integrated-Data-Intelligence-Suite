@@ -1,7 +1,18 @@
 #map-card {
-    width: 65%;
+    width: 66%;
     padding: 0;
     float: left;
+    /*padding: 0.4%;*/
+    border-top-left-radius: 2%;
+    border-bottom-left-radius: 2%;
+    border-top: 0.1em solid #e8e8e9;
+    border-bottom: 0.1em solid #e8e8e9;
+    border-left: 0.1em solid #e8e8e9;
+    border-right: 0.1em solid #e8e8e9;
+    /*border-right: 0;*/
+    height: 27.3em;
+
+
 }
 
 #map-card
@@ -19,9 +30,10 @@
 }
 
 #map-card > div.ant-card-body {
-    padding: 1%;
+    padding: 0;
+    margin:0;
     border: 0;
-    /*border-radius: 2%;*/
+    border-radius: 2%;
     /*border:2px solid orange;*/
     background: white;
 }
@@ -42,8 +54,8 @@
 
 /* The div contains the Actual Map component */
 #map_container_div {
-    height: 300px;
-    /*height: 100%;*/
+    /*height: 300px;*/
+    height: 27em;
     width: 100%;
     /*border: 3px solid yellow;*/
     /*border: 0;*/
