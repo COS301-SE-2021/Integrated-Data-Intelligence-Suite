@@ -9,6 +9,7 @@ function IndicatorCard(props) {
             <Card
                 title={props.indicatorTitle}
                 className={'indicator-card'}
+                id={props.cardID}
             >
                 <div className={'indicator-content-container'}>
                     <div className={'indicator-value-container'}>

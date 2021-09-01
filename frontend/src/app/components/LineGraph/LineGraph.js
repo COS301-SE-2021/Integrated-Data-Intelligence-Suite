@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from 'victory';
 import LineGraphDataPositive from '../../Mocks/LineGraphDataPositive.json';
 
-function IndicatorLineGraph(props) {
+function LineGraph(props) {
     return (
         <>
             <div className={'graph-container'}>
@@ -14,6 +14,8 @@ function IndicatorLineGraph(props) {
                             parent: { border: '1px solid #ccc' }
                         }}
                         data={props.graphData}
+                        // height={300}
+                        // width={500}
                     />
 
                     <VictoryAxis
@@ -30,5 +32,5 @@ function IndicatorLineGraph(props) {
     );
 }
 
-export default IndicatorLineGraph;
+export default LineGraph;
 

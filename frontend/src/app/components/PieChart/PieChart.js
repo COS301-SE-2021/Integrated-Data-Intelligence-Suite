@@ -9,7 +9,9 @@ function PieChart(props) {
                     colorScale={['#FF0000', '#ff7707', '#FFFF00', '#138808', '#00E000']}
                     data={props.graphData}
                     innerRadius={100}
-                    padAngle={3}
+                    padAngle={2.8}
+                    height={400}
+                    width={500}
                 />
             </div>
         </>
