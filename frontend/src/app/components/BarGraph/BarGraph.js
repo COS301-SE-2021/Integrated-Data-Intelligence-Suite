@@ -19,7 +19,7 @@ function BarGraph(props) {
 
                     <VictoryAxis
                         standalone={false}
-                        tickValues={['May', 'June', 'July', 'Aug', 'Sept']}
+                        tickValues={['Canada', 'USA', 'Germany', 'SA', 'Brazil']}
                         style={{
                             ticks: { stroke: 'transparent' },
                             // tickLabels: { fill: 'transparent' }

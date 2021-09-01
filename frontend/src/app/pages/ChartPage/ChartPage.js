@@ -23,6 +23,7 @@ import PieChart from '../../components/PieChart/PieChart';
 import PieChartMockData from '../../Mocks/PieChartDataMock.json';
 import BarGraphMockData from '../../Mocks/BarGraphDataMock.json';
 import BarGraph from '../../components/BarGraph/BarGraph';
+import InfoDiv from '../../components/InfoDiv/InfoDiv';
 
 const {
     Title,
@@ -166,11 +167,7 @@ class ChartPage extends Component {
                                                     {/*    indicatorTitle={'Engagement by Location'}*/}
                                                     {/*    showArrow={false}*/}
                                                     {/*/>*/}
-                                                    <div>
-                                                        Top 5 countries account for
-                                                        <p>77%</p>
-                                                        of engagement
-                                                    </div>
+                                                    <InfoDiv infoValue={'77%'}/>
                                                     <IndicatorCard
                                                         cardID={'top-country-indicator-card'}
                                                         indicatorTitle={'Engagement by Location'}
