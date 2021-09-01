@@ -36,8 +36,8 @@ main .outer-container#settings-container{
     padding-top: 50px;
 }
 
-.ant-col .right-column{
-    background: #eff0f0;
+.bodyDiv .ant-col .right-column{
+    background: #5773FA;
 
 }
 
@@ -48,13 +48,29 @@ main .outer-container#settings-container{
 
 
 .back-button{
-    margin: 15px 15px 100px 0;
+    margin: 15px 15px 15px 0;
     font-size: 30px;
     float: right;
     position: relative;
 }
 
 
-.ant-col>div.ant-divider{
+.ant-col div.ant-divider{
     border-color: #5873f9;
 }
+
+.component-title{
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #5773FA;
+    padding-left: 30px;
+    line-height: 3.5em;
+}
+
+
+/*.bodyDiv .outer-container .row{*/
+/*    background: linear-gradient(176deg, #1c8efa 70%, #000000 calc(70% + 2px));*/
+/*}*/
+
+
