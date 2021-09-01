@@ -190,11 +190,6 @@ public class ImportServiceController {
             params.put(paramObj.getString("parameter"), paramObj.getString("value"));
         }
 
-        System.out.println(name);
-        System.out.println(url);
-        System.out.println(method);
-        System.out.println(searchKey);
-        System.out.println(auth);
         AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, AuthorizationType.bearer, auth, params);
         return service.addAPISource(request);
     }
