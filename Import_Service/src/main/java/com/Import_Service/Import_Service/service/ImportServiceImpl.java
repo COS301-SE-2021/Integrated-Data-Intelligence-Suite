@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ImportServiceImpl {
@@ -302,6 +303,7 @@ public class ImportServiceImpl {
      * @return This will return whether or not editing an API source was successful.
      * @throws Exception This will be thrown if the request is invalid.
      */
+    @Transactional
     public EditAPISourceResponse editAPISource(EditAPISourceRequest request) throws Exception {
         //TODO
         if(request == null) {
@@ -329,6 +331,27 @@ public class ImportServiceImpl {
         }
         else {
             return new GetAllAPISourcesResponse(true, "Successfully retrieved all sources", sources);
+        }
+    }
+
+    /**
+     * This method is used to retrieve a specific API source based on the Id of an API source.
+     * @param request This contains the Id of an APISource that is being requested.
+     * @return This will return whether or not editing an API source was successful and APISource if it found one.
+     * @throws Exception This will be thrown if the request is invalid.
+     */
+    public GetAPISourceByIdResponse getAPISourceById(GetAPISourceByIdRequest request) throws Exception {
+        if(request == null || request.getId() == null) {
+            throw new InvalidImporterRequestException("The request is invalid");
+        }
+
+        Optional<APISource> source = apiSourceRepository.findById(request.getId());
+
+        if(source.isPresent()) {
+            return new GetAPISourceByIdResponse(true, "Retrieved API source", source.get());
+        }
+        else {
+            return new GetAPISourceByIdResponse(false, "Failed to fetch API source", null);
         }
     }
 }
