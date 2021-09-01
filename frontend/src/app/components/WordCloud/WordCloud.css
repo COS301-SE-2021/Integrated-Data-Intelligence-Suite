@@ -1,7 +1,9 @@
 #word-cloud-grid-container {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     display: grid;
     grid-template-columns: auto auto auto;
+    border: 0;
+    background: #eff0f0;
 
 
 }
