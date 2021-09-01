@@ -8,19 +8,26 @@ import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRe
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import com.johnsnowlabs.nlp.DocumentAssembler;
+import com.johnsnowlabs.nlp.EmbeddingsFinisher;
 import com.johnsnowlabs.nlp.Finisher;
 import com.johnsnowlabs.nlp.annotators.LemmatizerModel;
 import com.johnsnowlabs.nlp.annotators.Normalizer;
+import com.johnsnowlabs.nlp.annotators.Tokenizer;
+import com.johnsnowlabs.nlp.annotators.TokenizerModel;
 import com.johnsnowlabs.nlp.annotators.ner.NamedEntity;
 import com.johnsnowlabs.nlp.annotators.ner.NerApproach;
 import com.johnsnowlabs.nlp.annotators.ner.NerConverter;
 import com.johnsnowlabs.nlp.annotators.ner.dl.NerDLModel;
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetector;
+import com.johnsnowlabs.nlp.annotators.sentence_detector_dl.SentenceDetectorDLModel;
 import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
+import com.johnsnowlabs.nlp.pretrained.PretrainedPipeline;
+
+
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -36,7 +43,7 @@ import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.evaluation.RegressionEvaluator$;
 import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.StringIndexer;
-import org.apache.spark.ml.feature.Tokenizer;
+
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
@@ -1723,27 +1730,64 @@ public class AnalyseServiceImpl {
 
 
         StructType schema = new StructType( new StructField[]{
-                        new StructField("text", DataTypes.StringType, false, Metadata.empty()),});
+                new StructField("text", DataTypes.StringType, false, Metadata.empty())});
+        //createDataset(text, Encoders.STRING()).toDF("text");
 
         List<Row> dataList = new ArrayList<>();
         Row row = RowFactory.create(request.getText());
         dataList.add(row);
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(dataList, schema);
+
+        Dataset<Row> data =  sparkNlpProperties.createDataFrame(dataList,schema).toDF();
+        //data.show();
+        //System.out.println("Data checkup 1");
 
 
         DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
+        Dataset<Row> data2 = document_assembler.transform(data);
+        data2.show();
+        System.out.println("Data checkup 2");
 
-        SentenceDetector sentence_detector = (SentenceDetector) ((SentenceDetector) new SentenceDetector().setInputCols(new String[] {"document"})).setOutputCol("sentence");
+        //SentenceDetector sentence_detector = (SentenceDetector) ((SentenceDetector) new SentenceDetector().setInputCols(new String[] {"document"})).setOutputCol("sentence");
+        SentenceDetectorDLModel sentence_detector = (SentenceDetectorDLModel) ((SentenceDetectorDLModel) new SentenceDetectorDLModel().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence"); //"sentence_detector_dl", "en"
+        //.pretrained("sentence_detector_dl", "en")
+        //sentence_detector.setExplodeSentences(true);
+        Dataset<Row> data3 = sentence_detector.transform(data2);
+        data3.show();
+        System.out.println("Data checkup 3");
 
-        Tokenizer tokenizer = (Tokenizer)((Tokenizer) new Tokenizer().setInputCol("sentence")).setOutputCol("token");
+        TokenizerModel tokenizer =  ((Tokenizer) ((Tokenizer) new Tokenizer().setInputCols(new String[] {"document"})) .setOutputCol("token")).fit(data3);
+        //TokenizerModel tokenizer = (TokenizerModel) ((TokenizerModel) new TokenizerModel().pretrained().setInputCols(new String[] {"sentence"})).setOutputCol("token");
+        Dataset<Row> data4 = tokenizer.transform(data3);
+        data4.show();
+        System.out.println("Data checkup 4");
 
-        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().setInputCols(new String[]{"token"})).setOutputCol("Checked");
 
-        WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().setInputCols(new String[] {"sentence", "token"})).setOutputCol("embeddings");
+        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
+        Dataset<Row> data5 = checker.transform(data4);
+        data5.show();
+        System.out.println("Data checkup 5");
 
-        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().setInputCols(new String[] {"sentence", "token", "embeddings"})).setOutputCol("ner");
+        WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().pretrained().setInputCols(new String[] {"document", "token"})).setOutputCol("embeddings");
+        //embeddings.setDimension(4);
+        Dataset<Row> data6 = embeddings.transform(data5);
+        data6.show();
+        System.out.println("Data checkup 6");
 
-        NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"sentence", "checked", "ner"})).setOutputCol("chunk");
+        //EmbeddingsFinisher embeddingsFinisher = new EmbeddingsFinisher().setInputCols(new String[] {"embeddings"}).setOutputCols(new String[] {"finishedembeddings"});
+        //Dataset<Row> data9 = embeddings.transform(data6);
+        //data9.show();
+        //System.out.println("Data checkup 9");
+
+
+        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().pretrained().setInputCols(new String[] {"document", "token", "embeddings"})).setOutputCol("ner");
+        Dataset<Row> data7 = ner.transform(data6);
+        data7.show();
+        System.out.println("Data checkup 7");
+
+        NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"document", "token", "ner"})).setOutputCol("chunk");
+        Dataset<Row> data8 = converter.transform(data7);
+        data8.show();
+        System.out.println("Data checkup 8");
 
 
         //Normalizer normalizer = (Normalizer)((Normalizer) new Normalizer().setInputCols(new String[]{"token"})).setOutputCol("normalized");
@@ -1752,7 +1796,7 @@ public class AnalyseServiceImpl {
 
         //Finisher finisher = new Finisher().setInputCols(new String[]{"document", "lemma"}).setOutputCols(new String[]{"document", "lemma"});
 
-        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector, tokenizer,checker ,embeddings ,ner , converter /*normalizer, lemmatizer, finisher*/});
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker ,embeddings ,ner , converter /*normalizer, lemmatizer, finisher*/});
 
 // Fit the pipeline to training documents.
         PipelineModel pipelineFit = pipeline.fit(data);
