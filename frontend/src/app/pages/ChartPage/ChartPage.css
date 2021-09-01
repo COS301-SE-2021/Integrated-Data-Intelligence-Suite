@@ -85,8 +85,24 @@
     background-color: #c5bfbf;
 }
 
-#inner_layout_div ::-webkit-scrollbar-thumb:active{
+#inner_layout_div ::-webkit-scrollbar-thumb:active {
     color: red;
+}
+
+#map-details-container {
+    /*border: 3px solid blue;*/
+    float: left;
+    width: 31%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /*display: grid;*/
+    min-height: 26.5em;
+    max-height: 26.5em;
+}
+/*Hiding the scrollbar in the map-details-container*/
+#map-details-container::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
 }
 
 

@@ -138,7 +138,7 @@ class ChartPage extends Component {
                                                 />
                                             </div>
 
-                                            <div>
+                                            <div id={'map-card-container'}>
                                                 <Card
                                                     id={'map-card'}
                                                     title="World Map"
@@ -150,16 +150,38 @@ class ChartPage extends Component {
                                                     <MapCard text={this.state.text}/>
                                                 </Card>
 
-                                                <IndicatorCard
-                                                    cardID={'top-country-indicator-card'}
-                                                    indicatorTitle={'Engagement by Location'}
-                                                    showArrow={false}
-                                                    graphComponent={(
-                                                        <BarGraph
-                                                            graphData={BarGraphMockData}
-                                                        />
-                                                    )}
-                                                />
+                                                <div id={'map-details-container'}>
+                                                    <IndicatorCard
+                                                        cardID={'top-country-indicator-card'}
+                                                        indicatorTitle={'Engagement by Location'}
+                                                        showArrow={false}
+                                                        graphComponent={(
+                                                            <BarGraph
+                                                                graphData={BarGraphMockData}
+                                                            />
+                                                        )}
+                                                    />
+                                                    {/*<IndicatorCard*/}
+                                                    {/*    cardID={'top-country-indicator-card'}*/}
+                                                    {/*    indicatorTitle={'Engagement by Location'}*/}
+                                                    {/*    showArrow={false}*/}
+                                                    {/*/>*/}
+                                                    <div>
+                                                        Top 5 countries account for
+                                                        <p>77%</p>
+                                                        of engagement
+                                                    </div>
+                                                    <IndicatorCard
+                                                        cardID={'top-country-indicator-card'}
+                                                        indicatorTitle={'Engagement by Location'}
+                                                        showArrow={false}
+                                                        graphComponent={(
+                                                            <BarGraph
+                                                                graphData={BarGraphMockData}
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
                                             </div>
 
 

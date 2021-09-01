@@ -86,7 +86,12 @@
 
 #top-country-indicator-card {
     /*border: 3px solid red;*/
-    width: 30%;
+    width: 100%;
     float: left;
     position: relative;
+}
+
+#map-card-container {
+    /*border: 3px solid black;*/
+    max-height: 30em;
 }
