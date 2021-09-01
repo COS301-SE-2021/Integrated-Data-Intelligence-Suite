@@ -1,36 +1,70 @@
+
+.data-source{
+    border:none;
+    /* align-self: center; */
+
+    /*Aligning it Horizontally in the Center*/
+    width: 100%;
+    max-width: 800px;
+    min-height: 300px;
+    /*border: 1px solid red;*/
+    padding: 30px;
+
+    /* Aligning it Vertically in the center  */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: white;
+}
 .data-source div.row{
     display:grid;
     grid-template-columns: repeat(21,1fr);
-    grid-gap: 10px;
+    /*grid-gap: 10px;*/
     padding-left: 20px;
     padding-right: 20px;
     line-height: normal;
+    padding-bottom: 0;
 }
 
 .data-source div.col.left{
-    grid-column: 1/11;
+    grid-column: 1/6;
 }
 
 .data-source div.col.left input{
     font-weight: 600;
 }
 .data-source div.col.right{
-    grid-column: 11/21;
+    grid-column: 6/21;
 }
 .data-source div.col{
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 .data-source div.col input{
     width: 100%;
+    padding: 5px;
+    color: black;
+    background: #EFF0F0;
+    border: 1px solid #E8E8E9;
+    border-radius: 5px;
+
+}
+
+.data-source div.col.disabled input{
+    width: 100%;
     padding: 10px;
     color: black;
-    border: #5C5C5C;
+    background: none;
+    border: none;
+    font-size: 14px;
 
 }
 
 .data-source div.col input:focus{
-    border-color: #1C8EFA;
+    border: 1px solid #5773FA;
 }
 
 .data-source form{
@@ -65,7 +99,7 @@
 
 .data-source .row .close-button{
     font-size: 25px;
-    padding-top: 20px;
+    padding-top: 8px;
     font-weight: 600;
 
 }
@@ -78,8 +112,9 @@
     border: none;
     border-radius: 5px;
     padding: 5px;
-    margin-left: 30px;
+    margin-left: 10px;
     font-weight: 600;
+    width: 120px;
 }
 
 .data-source .btn:hover{
