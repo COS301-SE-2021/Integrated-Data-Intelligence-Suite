@@ -24,6 +24,7 @@ import PieChartMockData from '../../Mocks/PieChartDataMock.json';
 import BarGraphMockData from '../../Mocks/BarGraphDataMock.json';
 import BarGraph from '../../components/BarGraph/BarGraph';
 import InfoDiv from '../../components/InfoDiv/InfoDiv';
+import '../../components/WordCloud/WordCloud.css';
 
 const {
     Title,
@@ -143,10 +144,6 @@ class ChartPage extends Component {
                                                 <Card
                                                     id={'map-card'}
                                                     title="World Map"
-                                                    // style={{
-                                                    //     width: '100%',
-                                                    //     padding: 0
-                                                    // }}
                                                 >
                                                     <MapCard text={this.state.text}/>
                                                 </Card>
@@ -190,6 +187,43 @@ class ChartPage extends Component {
                                             {/*    <DetailsCard/> */}
                                             {/* </Sider> */}
                                         </Layout>
+
+                                        <Layout
+                                            id={'word-cloud-layout'}
+                                        >
+
+                                            <div
+                                                id={'word-cloud-grid-container'}
+                                            >
+
+                                                <div
+                                                    id={'word-cloud-item'}
+                                                    className={'word-cloud-grid-item'}
+                                                >
+                                                    Word Cloud Diagram
+                                                </div>
+
+                                                <div
+                                                    id={'stat1-item'}
+                                                    className={'word-cloud-grid-item'}
+                                                >
+                                                    number of mentions
+                                                </div>
+                                                <div
+                                                    id={'stat2-item'}
+                                                    className={'word-cloud-grid-item'}
+                                                >
+                                                    locations where its been mentioned
+                                                </div>
+                                                <div
+                                                    id={'stat3-item'}
+                                                    className={'word-cloud-grid-item'}
+                                                >
+                                                    timeline thingy
+                                                </div>
+                                            </div>
+                                        </Layout>
+
 
                                         {/* The Network Graph */}
                                         <Layout

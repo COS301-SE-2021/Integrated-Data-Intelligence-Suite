@@ -1,3 +1,11 @@
+#map_card_content_layout_div {
+    /*border: 3px solid black;*/
+    border: 0;
+    background: #eff0f0;
+    margin-bottom: 2%;
+}
+
+
 #map-card {
     width: 66%;
     padding: 0;
@@ -31,7 +39,7 @@
 
 #map-card > div.ant-card-body {
     padding: 0;
-    margin:0;
+    margin: 0;
     border: 0;
     border-radius: 2%;
     /*border:2px solid orange;*/
@@ -49,7 +57,7 @@
     /*width: 700px;*/
     /*width: 100%;*/
     padding: 0;
-    margin: 0;
+    margin-bottom: 0;
 }
 
 /* The div contains the Actual Map component */
