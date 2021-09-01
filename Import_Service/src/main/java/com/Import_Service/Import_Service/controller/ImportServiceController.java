@@ -3,21 +3,21 @@ package com.Import_Service.Import_Service.controller;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
-import com.Import_Service.Import_Service.request.AddAPISourceRequest;
-import com.Import_Service.Import_Service.request.ImportDataRequest;
-import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
-import com.Import_Service.Import_Service.request.ImportTwitterRequest;
-import com.Import_Service.Import_Service.response.AddAPISourceResponse;
-import com.Import_Service.Import_Service.response.ImportDataResponse;
-import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
-import com.Import_Service.Import_Service.response.ImportTwitterResponse;
+import com.Import_Service.Import_Service.request.*;
+import com.Import_Service.Import_Service.response.*;
+import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import org.json.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 @RestController
@@ -176,7 +176,36 @@ public class ImportServiceController {
     }
 
     @PostMapping(value = "/addApiSource")
-    public @ResponseBody AddAPISourceResponse addApiSource(@RequestBody AddAPISourceRequest request) throws Exception {
+    public @ResponseBody AddAPISourceResponse addApiSource(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        String name = obj.getString("name");
+        String url = obj.getString("url");
+        String method = obj.getString("method");
+        String searchKey = obj.getString("searchKey");
+        String auth = obj.getString("authorization");
+        Map<String, String> params = new LinkedHashMap<>();
+        JSONArray paramsArray = obj.getJSONArray("parameters");
+        for(int i = 0; i < paramsArray.length(); i++) {
+            JSONObject paramObj = paramsArray.getJSONObject(i);
+            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
+        }
+
+        System.out.println(name);
+        System.out.println(url);
+        System.out.println(method);
+        System.out.println(searchKey);
+        System.out.println(auth);
+        AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, AuthorizationType.bearer, auth, params);
         return service.addAPISource(request);
+    }
+
+    @GetMapping(value = "/getAllSources")
+    public @ResponseBody GetAllAPISourcesResponse getAllAPISources() {
+        return service.getAllAPISources();
+    }
+
+    @PostMapping(value = "/getSourceById")
+    public @ResponseBody GetAPISourceByIdResponse getAPISourceById(@RequestBody GetAPISourceByIdRequest request) throws Exception {
+        return service.getAPISourceById(request);
     }
 }
