@@ -1,7 +1,7 @@
 package com.Import_Service.Import_Service.service;
 
 import com.Import_Service.Import_Service.dataclass.APISource;
-import com.Import_Service.Import_Service.dataclass.DataSource;
+import com.Import_Service.Import_Service.rri.DataSource;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
@@ -283,7 +283,13 @@ public class ImportServiceImpl {
             throw new InvalidImporterRequestException("The request cannot contain null attributes");
         }
 
-        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getAuthorization(), request.getParameters());
+        Optional<APISource> findByName = apiSourceRepository.findAPISourceByName(request.getName());
+
+        if(findByName.isPresent()) {
+            return new AddAPISourceResponse(false, "A source with the same name already exists");
+        }
+
+        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getAuthorization(), request.getParameters());
 
         APISource savedSource = apiSourceRepository.save(newSource);
 

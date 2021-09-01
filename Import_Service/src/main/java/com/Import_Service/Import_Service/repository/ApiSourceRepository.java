@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface ApiSourceRepository extends JpaRepository<APISource, Long> {
+
+    @Query("SELECT s FROM apisource s WHERE s.name = :name")
+    Optional<APISource> findAPISourceByName(@Param("name") String name);
 
     @Modifying
     @Query("UPDATE apisource u SET u.url = :newUrl WHERE u.id = :id")
