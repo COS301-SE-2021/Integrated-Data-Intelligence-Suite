@@ -28,15 +28,15 @@ const UserPermissions = () => {
       username: user.username,
       newPermission: permission,
     };
-    console.log('userdata ', user.user);
-    console.log('body is ', requestBody);
+    // console.log('userdata ', user.user);
+    // console.log('body is ', requestBody);
     fetch('http://localhost:9000/changePermission', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     })
       .then(() => {
-        console.log('uploaded');
+        // console.log('uploaded');
         history.go(-1);
       });
   };
@@ -73,8 +73,8 @@ const UserPermissions = () => {
                   </select>
                   <br />
 
-                  {!submit && <button disabled className="disabled">submit</button>}
-                  {submit && <button className="enabled">submit</button>}
+                  {!submit && <button type={'submit'} disabled className="disabled">submit</button>}
+                  {submit && <button type={'submit'} className="enabled">submit</button>}
 
               </form>
           </div>
