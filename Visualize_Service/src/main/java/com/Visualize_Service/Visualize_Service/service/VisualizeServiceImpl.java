@@ -13,6 +13,7 @@ import java.util.Random;
 
 @Service
 public class VisualizeServiceImpl {
+
     public VisualizeDataResponse visualizeData(VisualizeDataRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
@@ -41,7 +42,6 @@ public class VisualizeServiceImpl {
 
         outputData.add(mapResponse.mapGraphArray);
 
-
         //network graph
         CreateNetworkGraphRequest networkRequest = new CreateNetworkGraphRequest(request.getRelationshipList());
         CreateNetworkGraphResponse networkResponse =  this.createNetworkGraph(networkRequest);
@@ -64,7 +64,6 @@ public class VisualizeServiceImpl {
 
         return new VisualizeDataResponse( outputData );
     }
-
 
 
     public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request) throws InvalidRequestException{
@@ -266,8 +265,8 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.getWordBank() == null){
-            throw new InvalidRequestException("wordBank object is null");
+        if (request.dataList == null){
+            throw new InvalidRequestException("Arraylist object is null");
         }
         Graph newGraph = new Graph();
         return null;
@@ -440,8 +439,6 @@ public class VisualizeServiceImpl {
     }
 
 
-
-
     public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateMapGraphRequest Object is null");
@@ -476,7 +473,6 @@ public class VisualizeServiceImpl {
 
         return new CreateMapGraphResponse(output);
     }
-
 
 
     public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
