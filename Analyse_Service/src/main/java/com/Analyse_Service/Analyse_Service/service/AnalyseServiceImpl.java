@@ -123,9 +123,16 @@ public class AnalyseServiceImpl {
         ArrayList<ParsedData> dataList = request.getDataList();
         ArrayList<ArrayList> parsedDatalist = new ArrayList<>();
 
-        for (int i = 0;
-             i < dataList.size();
-             i++) {
+        ArrayList<String> nlpText = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            nlpText.add(dataList.get(i).getTextMessage());
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(nlpText);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+
+
+        for (int i = 0; i < dataList.size(); i++) {
             //String row = "";
 
             String text = dataList.get(i).getTextMessage();
@@ -135,8 +142,8 @@ public class AnalyseServiceImpl {
             String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
             String likes = String.valueOf(dataList.get(i).getLikes());
 
-            FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(text);
-            FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(text);
+            //FindNlpPropertiesResponse findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
 
             //FindSentimentRequest sentimentRequest = new FindSentimentRequest(dataList.get(i).getTextMessage());
             //FindSentimentResponse sentimentResponse = this.findSentiment(sentimentRequest);
@@ -150,10 +157,10 @@ public class AnalyseServiceImpl {
             rowOfParsed.add(location);
             rowOfParsed.add(formattedDate);
             rowOfParsed.add(likes);
-            rowOfParsed.add(findNlpPropertiesResponse);
-            System.out.println("THE MAIN GUY HERE");
-            System.out.println(findNlpPropertiesResponse.getSentiment());
-            System.out.println(findNlpPropertiesResponse.getNamedEntities());
+            rowOfParsed.add(findNlpPropertiesResponse.get(i));
+            //System.out.println("THE MAIN GUY HERE");
+            //System.out.println(findNlpPropertiesResponse.getSentiment());
+            //System.out.println(findNlpPropertiesResponse.getNamedEntities());
 
             parsedDatalist.add(rowOfParsed);
         }
@@ -169,8 +176,8 @@ public class AnalyseServiceImpl {
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
@@ -183,7 +190,7 @@ public class AnalyseServiceImpl {
                 null,
                 null,
                 null,
-                null,
+                findTrendsResponse.getPattenList(),
                 null);
 
         /*return new AnalyseDataResponse(
@@ -1713,7 +1720,7 @@ public class AnalyseServiceImpl {
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindNlpPropertiesResponse findNlpProperties(FindNlpPropertiesRequest request)
+    public ArrayList<FindNlpPropertiesResponse> findNlpProperties(FindNlpPropertiesRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
@@ -1946,7 +1953,7 @@ public class AnalyseServiceImpl {
                 String foundEntity = innerEntityRowData.get(i);
                 System.out.println(foundEntity);
 
-                nameEntityText = innerTextRowData.get(entityIndex).toString();
+                nameEntityText = innerTextRowData.get(entityIndex);
 
                 if (innerEntityRowData.get(i).equals("B-PER") || innerEntityRowData.get(i).equals("I-PER")) {
                     nameEntityType = "Person";
@@ -1973,7 +1980,7 @@ public class AnalyseServiceImpl {
 
         System.out.println("List of final values- entity array : " + nameEntities);
 
-
+        new FindNlpPropertiesResponse(sentiment,  nameEntities);
 
 
         /**setup analyser**
@@ -2031,7 +2038,8 @@ public class AnalyseServiceImpl {
             nameEntities.add(row);
         }*/
 
-        return new FindNlpPropertiesResponse(sentiment,  nameEntities);
+        ArrayList<FindNlpPropertiesResponse> response = null;
+        return response;
     }
 
     /**
