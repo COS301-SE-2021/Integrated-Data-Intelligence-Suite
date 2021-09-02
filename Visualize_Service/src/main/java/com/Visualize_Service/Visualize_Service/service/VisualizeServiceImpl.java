@@ -178,8 +178,28 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
-        Graph newGraph = new Graph();
-        return null;
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            float number = Float.parseFloat(reqData.get(i).get(6).toString());
+
+            BarGraph outp = new BarGraph();
+            outp.x = String.valueOf(i);
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateBarGraphResponse(output);
     }
 
     public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request) throws InvalidRequestException{
