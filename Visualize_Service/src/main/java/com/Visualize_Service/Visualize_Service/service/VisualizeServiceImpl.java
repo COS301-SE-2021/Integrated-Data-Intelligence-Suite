@@ -51,10 +51,15 @@ public class VisualizeServiceImpl {
         CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
         outputData.add(timelineResponse.timelineGraphArray);
 
-        //Line graph
+        //Line graph Sentiments
         CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getRelationshipList());
         CreateLineGraphSentimentsResponse lineResponse =  this.createLineGraphSentiments(lineRequest);
         outputData.add(lineResponse.LineGraphArray);
+
+        //Line graph Interactions
+        CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getRelationshipList());
+        CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
+        outputData.add(lineInteractionsResponse.LineGraphArray);
 
         //Bar graph
         CreateBarGraphRequest barRequest = new CreateBarGraphRequest(request.getTrendList());
