@@ -31,6 +31,7 @@ import VisxBarStackGraph from '../../components/visxBarStackGraph/visxBarStackGr
 import VisxAreaGraph from '../../components/visxAreaGraph/visxAreaGraph';
 import VisxAreaStackGraph from '../../components/visxAreaStackGraph/visxAreaStackGraph';
 import VisxBarGraph from '../../components/visxBarGraph/visxBarGraph';
+import VisxBarGroupGraph from '../../components/visxBarGroupGraph/visxBarGroup';
 
 const {
     Title,
@@ -207,7 +208,7 @@ class ChartPage extends Component {
                                                   id="stat1-item"
                                                   className="word-cloud-grid-item"
                                                 >
-                                                    <VisxBarGraph/>
+                                                    <VisxBarGroupGraph/>
                                                 </div>
                                                 <div
                                                   id="stat2-item"
