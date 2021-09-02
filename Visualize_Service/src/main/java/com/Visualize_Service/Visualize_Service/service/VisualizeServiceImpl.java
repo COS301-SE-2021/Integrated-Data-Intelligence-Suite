@@ -268,8 +268,28 @@ public class VisualizeServiceImpl {
         if (request.dataList == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
-        Graph newGraph = new Graph();
-        return null;
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        String text ="";
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> texts= (ArrayList<String>) reqData.get(i).get(5);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < texts.size(); j++) {
+                text +=" "+ texts.get(j).toString();
+            }
+
+        }
+
+        WordCloudGraph out = new WordCloudGraph();
+        out.words = text;
+
+        System.out.println(out.words);
+        output.add(out);
+
+
+        return new CreateWordCloudGraphResponse(output);
     }
 
 
