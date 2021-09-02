@@ -151,7 +151,9 @@ public class AnalyseServiceImpl {
             rowOfParsed.add(formattedDate);
             rowOfParsed.add(likes);
             rowOfParsed.add(findNlpPropertiesResponse);
-
+            System.out.println("THE MAIN GUY HERE");
+            System.out.println(findNlpPropertiesResponse.getSentiment());
+            System.out.println(findNlpPropertiesResponse.getNamedEntities());
 
             parsedDatalist.add(rowOfParsed);
         }
@@ -167,8 +169,8 @@ public class AnalyseServiceImpl {
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
@@ -181,7 +183,7 @@ public class AnalyseServiceImpl {
                 null,
                 null,
                 null,
-                findTrendsResponse.getPattenList(),
+                null,
                 null);
 
         /*return new AnalyseDataResponse(
@@ -1866,7 +1868,7 @@ public class AnalyseServiceImpl {
         WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //value
         List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
 
-        String sentiment ="Positive";
+        String sentiment ="no sentiment";
         if (innerSentimentRowData.get(0).equals("pos")) {
             sentiment = "Positive";
         }
@@ -1900,31 +1902,21 @@ public class AnalyseServiceImpl {
         Dataset<Row> nerDataset = results.select(col("ner.result"));
         Dataset<Row> chunkDataset = results.select(col("chunk.result"));
 
-        List<Row> textRowData = nerDataset.collectAsList();
-        List<Row> entityRowData = chunkDataset.collectAsList();
+        List<Row> textRowData = chunkDataset.collectAsList();
+        List<Row> entityRowData = nerDataset.collectAsList();
+
 
         Row textRow = textRowData.get(0);
-        Row entityRow = entityRowData .get(0);
+        Row entityRow = entityRowData.get(0);
 
         WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
         WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
 
-        List<String[]> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
-        List<String[]> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
+        List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
+        List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
 
         System.out.println("List of - text array : " + innerTextRowData);
         System.out.println("List of - entity array : " + innerEntityRowData);
-
-
-        List<Row> innerTextRowData2 = JavaConversions.seqAsJavaList(wrappedArrayText);
-        List<Row> innerEntityRowData2 = JavaConversions.seqAsJavaList(wrappedArrayEntity);
-
-        System.out.println("List of - text array2 : " + innerTextRowData2);
-        System.out.println("List of - entity array2 : " + innerEntityRowData2);
-
-        System.out.println("List of values - text array2 : " + innerTextRowData2.get(1));
-        System.out.println("List of values- entity array2 : " + innerEntityRowData2.get(0));
-
 
         //System.out.println("List of Size - text array : " + innerTextRowData.size());
         System.out.println("List of values - text array : " + innerTextRowData.get(0));
@@ -1937,27 +1929,51 @@ public class AnalyseServiceImpl {
 
         String nameEntityText = "";
         String nameEntityType = "";
-
-        if (innerSentimentRowData.get(0).equals("B-PER") || innerSentimentRowData.get(0).equals("I-PER")) {
-            nameEntityType = "Person";
-        }
-        else if(innerSentimentRowData.get(0).equals("B-ORG") || innerSentimentRowData.get(0).equals("I-ORG")){
-            nameEntityType = "Organisation";
-        }
-        else if(innerSentimentRowData.get(0).equals("B-LOC") || innerSentimentRowData.get(0).equals("I-LOC")){
-            nameEntityType = "Location";
-        }
-        else if(innerSentimentRowData.get(0).equals("B-MISC") || innerSentimentRowData.get(0).equals("I-MISC")){
-            nameEntityType = "Miscellaneous";
-        }
-
-
-
-
-
-
         ArrayList<String> nameEntityRow = new ArrayList<>(); //text, entity
         ArrayList<ArrayList> nameEntities = new ArrayList<>();
+        int entityIndex = 0;
+
+        for(int i = 0; i < innerEntityRowData.size();i++){
+            System.out.println(innerEntityRowData.get(i));
+
+            if(entityIndex >= innerTextRowData.size()){ //all entities found
+                break;
+            }
+
+            if(innerEntityRowData.get(i).equals("O") == false){ //finds entity
+
+                System.out.println("FOUNDITGIRL : ");
+                String foundEntity = innerEntityRowData.get(i);
+                System.out.println(foundEntity);
+
+                nameEntityText = innerTextRowData.get(entityIndex).toString();
+
+                if (innerEntityRowData.get(i).equals("B-PER") || innerEntityRowData.get(i).equals("I-PER")) {
+                    nameEntityType = "Person";
+                }
+                else if(innerEntityRowData.get(i).equals("B-ORG") || innerEntityRowData.get(i).equals("I-ORG")){
+                    nameEntityType = "Organisation";
+                }
+                else if(innerEntityRowData.get(i).equals("B-LOC") || innerEntityRowData.get(i).equals("I-LOC")){
+                    nameEntityType = "Location";
+                }
+                else if(innerEntityRowData.get(i).equals("B-MISC") || innerEntityRowData.get(i).equals("I-MISC")){
+                    nameEntityType = "Miscellaneous";
+                }
+
+                nameEntityRow = new ArrayList<>();
+                nameEntityRow.add(nameEntityText);
+                nameEntityRow.add(nameEntityType);
+                nameEntities.add(nameEntityRow);
+                entityIndex = entityIndex +1;
+            }
+        }
+
+        //nameEntities.add(nameEntityRow);
+
+        System.out.println("List of final values- entity array : " + nameEntities);
+
+
 
 
         /**setup analyser**
@@ -2015,7 +2031,7 @@ public class AnalyseServiceImpl {
             nameEntities.add(row);
         }*/
 
-        return null;//new FindNlpPropertiesResponse(sentiment,  nameEntities);
+        return new FindNlpPropertiesResponse(sentiment,  nameEntities);
     }
 
     /**
