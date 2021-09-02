@@ -1079,6 +1079,74 @@ public class AnalyseServiceImpl {
         Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
         indexed.show();
 
+
+        /*******************Summary*****************/
+        //model
+       /* LogisticRegression lr = new LogisticRegression() //estimator
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8);
+
+        // Fit the model
+        LogisticRegressionModel lrModel = lr.fit(indexed);
+        // Print the coefficients and intercept for logistic regression
+        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
+
+
+        //pipeline
+        Pipeline pipeline = new Pipeline()
+                .setStages(new PipelineStage[] {assembler,indexer,lr});
+
+        // Fit the pipeline to training documents.
+        PipelineModel model = pipeline.fit(trainSetDF);
+
+
+
+        /******************Analyse Model Accuracy**************/
+        //test
+       /*  Dataset<Row> test = null;
+
+        Dataset<Row> predictions = model.transform(testSetDF);
+        predictions.show();
+        System.out.println("/*******************Predictions*****************///");
+
+
+      /*  for (Row r : trainSetDF.select("isTrending").collectAsList())
+            System.out.println("Trending -> " + r.get(0));
+
+
+        BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+        double accuracy = evaluator.evaluate(predictions);
+        System.out.println("/**********************    Accuracy: "+ Double.toString(accuracy));
+
+        /*******************summary (REMOVE)*****************/
+        //summaries
+        /* BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
+
+        // Obtain the loss per iteration.
+        double[] objectiveHistory = trainingSummary.objectiveHistory();
+        for (double lossPerIteration : objectiveHistory) {
+            System.out.println(lossPerIteration);
+        }
+        //System.out.println("******************SomeStuff****************")'
+
+        //Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
+        Dataset<Row> roc = trainingSummary.roc();
+        roc.show();
+        roc.select("FPR").show();
+        System.out.println(trainingSummary.areaUnderROC());
+
+        // Get the threshold corresponding to the maximum F-Measure and rerun LogisticRegression with this selected threshold.
+        Dataset<Row> fMeasure = trainingSummary.fMeasureByThreshold();
+        double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
+        double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
+                .select("threshold").head().getDouble(0);
+        lrModel.setThreshold(bestThreshold);*/
+
+
         /*******************LOAD MODEL*****************/
         /**************Analyse Accuracy************/
 
