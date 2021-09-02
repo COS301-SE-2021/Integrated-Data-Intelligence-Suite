@@ -26,8 +26,8 @@ import BarGraph from '../../components/BarGraph/BarGraph';
 import InfoDiv from '../../components/InfoDiv/InfoDiv';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
-import VisxLineGraph from '../../vsixLineGraph/VisxLineGraph';
-import VisxBarStack from '../../visxBarStack/visxBarStack';
+import VisxLineGraph from '../../components/vsixLineGraph/VisxLineGraph';
+import VisxBarStack from '../../components/visxBarStack/visxBarStack';
 
 const {
     Title,

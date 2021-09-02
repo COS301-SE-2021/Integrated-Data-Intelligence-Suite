@@ -86,7 +86,6 @@ function VisxLineGraph(props) {
                         //The k
                         <div>
                             {/*First Line*/}
-
                             <div
                                 style={{
                                     color: colorScale(Object.keys(tooltipData.datumByKey)[0])
@@ -102,7 +101,7 @@ function VisxLineGraph(props) {
                                 }
                             </div>
 
-
+                            {/*Second Line*/}
                             <div
                                 style={{
                                     color: colorScale(Object.keys(tooltipData.datumByKey)[1])
