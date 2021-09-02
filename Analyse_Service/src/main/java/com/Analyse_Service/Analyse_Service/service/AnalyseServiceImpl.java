@@ -510,13 +510,8 @@ public class AnalyseServiceImpl {
             System.out.println(averageLikes.get(i).toString());
         }
 
-        //itemsDF.show();
-        //System.out.println("*****************ITEMDF****************");
-
         List<Row> trainSet = new ArrayList<>();
-        for (int i = 0;
-             i < minSize;
-             i++) {
+        for (int i = 0; i < minSize; i++) {
             double trending = 0.0;
             if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
                 trending = 1.0;
@@ -542,6 +537,15 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP PIPELINE MODEL *****************/
         //features
+        /*Tokenizer tokenizer = new Tokenizer()
+                .setInputCol("text")
+                .setOutputCol("words");
+
+        HashingTF hashingTF = new HashingTF()
+                .setNumFeatures(1000)
+                .setInputCol(tokenizer.getOutputCol())
+                .setOutputCol("features");*/
+
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
                 .setOutputCol("features");
@@ -709,13 +713,10 @@ public class AnalyseServiceImpl {
 
         LogManager.getRootLogger().setLevel(Level.ERROR);
 
-        //Logger rootLoggerM = LogManager.getRootLogger();
-        //rootLoggerM.setLevel(Level.ERROR);
-
-
-        /*Logger rootLoggerL = Logger.getRootLogger();
+        /*Logger rootLoggerM = LogManager.getRootLogger();
+        rootLoggerM.setLevel(Level.ERROR);
+        Logger rootLoggerL = Logger.getRootLogger();
         rootLoggerL.setLevel(Level.ERROR);
-
         Logger.getLogger("org.apache").setLevel(Level.ERROR);
         Logger.getLogger("org").setLevel(Level.ERROR);
         Logger.getLogger("akka").setLevel(Level.ERROR);*/
@@ -737,7 +738,6 @@ public class AnalyseServiceImpl {
 
         for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
@@ -773,107 +773,6 @@ public class AnalyseServiceImpl {
                 trendsData.add(trendRow );
             }
         }
-        //System.out.println(trendsData);
-        /*Example of input ArrayList of Tweets
-
-         * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
-         * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
-         * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
-         * [Google is a great place, hatfield, 20/05/20201, 45644],
-         * [i like Microsoft, hatfield, 20/05/20201, 34]
-         *
-         *
-         * */
-        /* Example output of trendsData
-            [[Elon Musk, PERSON, hatfield, 20/05/20201, 456, Neutral],
-            [Google, ORGANIZATION, hatfield, 20/05/20201, 456, Neutral],
-            [Elon Musk, PERSON, hatfield, 20/05/20201, 44, Neutral],
-            [Amazon, ORGANIZATION, hatfield, 20/05/20201, 44, Neutral],
-            [Elon Musk, PERSON, hatfield, 20/05/20201, 22, Positive],
-            [Google, ORGANIZATION, hatfield, 20/05/20201, 45644, Positive],
-            [Microsoft, ORGANIZATION, hatfield, 20/05/20201, 34, Neutral]]
-        */
-
-        /*ArrayList<ArrayList> structureData = new ArrayList<>();
-
-        ArrayList<String> FoundEntities = new ArrayList<>();
-        ArrayList<Float> Totallikes = new ArrayList<>();
-
-        for (int k = 0; k < trendsData.size(); k++){
-            ArrayList<String> r = new ArrayList<>();
-            String en = trendsData.get(k).get(0).toString();//Entity name eg. Elon Musk
-            Float likes = Float.parseFloat(trendsData.get(k).get(4).toString()); // geting Number of likes
-
-            if (structureData.isEmpty()){
-                FoundEntities.add(en);//Registering Enitiy eg. Elon Musk
-                Totallikes.add(likes);
-                r.add("0");// is Trending
-                r.add(trendsData.get(k).get(1).toString());//Entity type
-                r.add("1");//Frequency of Enitity in dataset
-                r.add("1");// Rate of tweets per hour
-                r.add(Float.toString(likes));// average likes
-                structureData.add(r);
-            }else{
-                boolean found = false;
-                int pos = 0;
-                /********Check if Entity is in the list of registerd enitities **********/
-                /*for (int x = 0; x < FoundEntities.size(); x++){
-                    if (en.equals(FoundEntities.get(x))){
-                        found = true;
-                        pos = FoundEntities.indexOf(en);
-                        break;
-                    }
-                }
-
-                if (found){
-                    ArrayList<String> temp = structureData.get(pos);
-                    int freq = Integer.parseInt(temp.get(2));
-                    freq++;
-                    temp.set(2,Integer.toString(freq));   ///increasing frequecy
-
-                    float avglikes = Totallikes.get(pos) + likes;
-                    Totallikes.set(pos,avglikes);
-                    avglikes = avglikes/freq;
-                    temp.set(4,Float.toString(avglikes));///changing average
-
-                    structureData.set(pos,temp);
-                }else {
-                    FoundEntities.add(en); //Registering Enitiy eg. Elon Musk
-                    Totallikes.add(likes);
-                    r.add("0");// is Trending
-                    r.add(trendsData.get(k).get(1).toString());//Entity type
-                    r.add("1");//Frequency of Enitity in dataset
-                    r.add("1");// Rate of tweets per hour
-                    r.add(Float.toString(likes));// average likes
-                    structureData.add(r);
-                }
-            }
-        }
-        /*System.out.println(FoundEntities);
-        System.out.println(Totallikes);
-        System.out.println(structureData);*/
-
-        /*Example output of Found Enities , Total Likes  structureData
-            Found Enities
-            1.Elon Musk,
-            2.Google,
-            3.Amazon,
-            4.Microsoft
-
-            Total Likes
-            1) 522.0,
-            2) 46100.0,
-            3) 44.0,
-            4) 34.0
-
-            structureData
-            1. [0, PERSON, 3, 1, 174.0],
-            2. [0, ORGANIZATION, 2, 1, 23050.0],
-            3. [0, ORGANIZATION, 1, 1, 44.0],
-            4. [0, ORGANIZATION, 1, 1, 34.0]]
-
-         */
-
 
         /*******************SETUP DATAFRAME*****************/
 
@@ -900,19 +799,13 @@ public class AnalyseServiceImpl {
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
-        //List<Row> strData = null; ///TODO Need to convert structureData Arraylist to of type ListRow
         Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-
         List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
-        //namedEntities.get(0); /*name entity*/
-        //namedEntities.get(1); /*name type*/
-        //namedEntities.get(2); /*name type-number*/
-        //namedEntities.get(3);/*name frequency*/
 
         List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
         averageLikes.get(1); //average likes
@@ -960,140 +853,22 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        //save to database
-
-        //split data
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
-        Dataset<Row> [] split = trainingDF.randomSplit((new double[]{0.7, 0.3}),5043);
 
-        Dataset<Row> trainSetDF = split[0];
-        Dataset<Row> testSetDF = split[1];
+        /*******************LOAD & READ MODEL*****************/
+        LogisticRegressionModel lrModel = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        Dataset<Row> result = lrModel.transform(trainingDF);
 
-
-        //display
-        itemsDF.show();
-        System.out.println("/*******************Train Set*****************/");
-        trainSetDF.show();
-        System.out.println("/*******************Test Set*****************/");
-        testSetDF.show();
-
-        /*******************SETUP PIPELINE*****************/
-        /*******************SETUP MODEL*****************/
-        //features
-        /*Tokenizer tokenizer = new Tokenizer()
-                .setInputCol("text")
-                .setOutputCol("words");
-
-        HashingTF hashingTF = new HashingTF()
-                .setNumFeatures(1000)
-                .setInputCol(tokenizer.getOutputCol())
-                .setOutputCol("features");*/
-
-        VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"EntityTypeNumber","Frequency", "AverageLikes"})
-                .setOutputCol("features");
-
-        Dataset<Row> testDF = assembler.transform(trainSetDF);
-
-        StringIndexer indexer = new StringIndexer()
-                .setInputCol("IsTrending")
-                .setOutputCol("label");
-
-        Dataset<Row> indexed = indexer.fit(testDF).transform(testDF);
-
-        indexed.show();
-
-        //model
-       /* LogisticRegression lr = new LogisticRegression() //estimator
-                .setMaxIter(10)
-                .setRegParam(0.3)
-                .setElasticNetParam(0.8);
-
-        // Fit the model
-        LogisticRegressionModel lrModel = lr.fit(indexed);
-        // Print the coefficients and intercept for logistic regression
-        System.out.println("Coefficients: " + lrModel.coefficients() + " Intercept: " + lrModel.intercept());
-
-
-        //pipeline
-        Pipeline pipeline = new Pipeline()
-                .setStages(new PipelineStage[] {assembler,indexer,lr});
-
-        // Fit the pipeline to training documents.
-        PipelineModel model = pipeline.fit(trainSetDF);
-
-
-
-        /******************Analyse Model Accuracy**************/
-        //test
-       /*  Dataset<Row> test = null;
-
-        Dataset<Row> predictions = model.transform(testSetDF);
-        predictions.show();
-        System.out.println("/*******************Predictions*****************///");
-
-
-      /*  for (Row r : trainSetDF.select("isTrending").collectAsList())
-            System.out.println("Trending -> " + r.get(0));
-
-
-        BinaryClassificationEvaluator evaluator = new BinaryClassificationEvaluator()
-                .setLabelCol("label")
-                .setRawPredictionCol("prediction")
-                .setMetricName("areaUnderROC");
-        double accuracy = evaluator.evaluate(predictions);
-        System.out.println("/**********************    Accuracy: "+ Double.toString(accuracy));
-
-        /*******************summary (REMOVE)*****************/
-        //summaries
-        /* BinaryLogisticRegressionTrainingSummary trainingSummary = lrModel.binarySummary();
-
-        // Obtain the loss per iteration.
-        double[] objectiveHistory = trainingSummary.objectiveHistory();
-        for (double lossPerIteration : objectiveHistory) {
-            System.out.println(lossPerIteration);
-        }
-        //System.out.println("******************SomeStuff****************")'
-
-        //Obtain the receiver-operating characteristic as a dataframe and areaUnderROC.
-        Dataset<Row> roc = trainingSummary.roc();
-        roc.show();
-        roc.select("FPR").show();
-        System.out.println(trainingSummary.areaUnderROC());
-
-        // Get the threshold corresponding to the maximum F-Measure and rerun LogisticRegression with this selected threshold.
-        Dataset<Row> fMeasure = trainingSummary.fMeasureByThreshold();
-        double maxFMeasure = fMeasure.select(functions.max("F-Measure")).head().getDouble(0);
-        double bestThreshold = fMeasure.where(fMeasure.col("F-Measure").equalTo(maxFMeasure))
-                .select("threshold").head().getDouble(0);
-        lrModel.setThreshold(bestThreshold);*/
-
-
-        /*******************READ MODEL OUTPUT*****************/
-        LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
-        Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
-
-        Dataset<Row> res = model1.transform(input);
-
-        List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         if( rawResults.isEmpty())
-            rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+            rawResults = result.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
 
-        System.out.println("/*******************Outputs begin*****************/");
+        /*System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
-        for (Row r : res.select("prediction").collectAsList())
+        for (Row r : result.select("prediction").collectAsList())
             System.out.println("Trending -> " + r.get(0));
-        System.out.println("/*******************Outputs begin*****************/");
-
-
-        /*ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < rawResults.size(); i++) {
-            ArrayList<Object> r = new ArrayList<>();
-            r.add(rawResults.get(i).get(0).toString());
-            r.add(Double.parseDouble(rawResults.get(i).get(1).toString()));
-            results.add(r);
-        }*/
+        System.out.println("/*******************Outputs begin*****************");*/
 
         ArrayList<ArrayList> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
