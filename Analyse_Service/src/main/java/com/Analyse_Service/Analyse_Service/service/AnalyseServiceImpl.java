@@ -1858,13 +1858,14 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL DATA*****************/
 
+        //sentiment
         Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
 
         List<Row> sentimentRowData = sentimentDataset.collectAsList();
         Row sentimentRow = sentimentRowData.get(0);
         WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //value
-
         List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
+
         String sentiment ="Positive";
         if (innerSentimentRowData.get(0).equals("pos")) {
             sentiment = "Positive";
@@ -1887,7 +1888,6 @@ public class AnalyseServiceImpl {
         sentiment = innerSentimentRow;
         System.out.println("*********SENTIMENT FOUND : " + sentiment);*/
 
-
         /*for (int i = 0; i < sentimentRow.size(); i++) {
 
             Row rows = sentimentRow.get(i);
@@ -1896,11 +1896,66 @@ public class AnalyseServiceImpl {
             //results.add(rawResults.get(i).get(0).toString());//name
         }*/
 
+        //Named entity recognised
+        Dataset<Row> nerDataset = results.select(col("ner.result"));
+        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
 
+        List<Row> textRowData = nerDataset.collectAsList();
+        List<Row> entityRowData = chunkDataset.collectAsList();
+
+        Row textRow = textRowData.get(0);
+        Row entityRow = entityRowData .get(0);
+
+        WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
+        WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
+
+        List<String[]> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
+        List<String[]> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
+
+        System.out.println("List of - text array : " + innerTextRowData);
+        System.out.println("List of - entity array : " + innerEntityRowData);
+
+
+        List<Row> innerTextRowData2 = JavaConversions.seqAsJavaList(wrappedArrayText);
+        List<Row> innerEntityRowData2 = JavaConversions.seqAsJavaList(wrappedArrayEntity);
+
+        System.out.println("List of - text array2 : " + innerTextRowData2);
+        System.out.println("List of - entity array2 : " + innerEntityRowData2);
+
+        System.out.println("List of values - text array2 : " + innerTextRowData2.get(1));
+        System.out.println("List of values- entity array2 : " + innerEntityRowData2.get(0));
+
+
+        //System.out.println("List of Size - text array : " + innerTextRowData.size());
+        System.out.println("List of values - text array : " + innerTextRowData.get(0));
+        //System.out.println("List of Size - entity array : " + innerEntityRowData.size());
+        System.out.println("List of values- entity array : " + innerEntityRowData.get(0));
+
+        //System.out.println("List of value[0] - text array : " + innerTextRowData.get(0)[0]);
+        //System.out.println("List of value[0]- entity array : " + innerEntityRowData.get(0)[0]);
 
 
         String nameEntityText = "";
         String nameEntityType = "";
+
+        if (innerSentimentRowData.get(0).equals("B-PER") || innerSentimentRowData.get(0).equals("I-PER")) {
+            nameEntityType = "Person";
+        }
+        else if(innerSentimentRowData.get(0).equals("B-ORG") || innerSentimentRowData.get(0).equals("I-ORG")){
+            nameEntityType = "Organisation";
+        }
+        else if(innerSentimentRowData.get(0).equals("B-LOC") || innerSentimentRowData.get(0).equals("I-LOC")){
+            nameEntityType = "Location";
+        }
+        else if(innerSentimentRowData.get(0).equals("B-MISC") || innerSentimentRowData.get(0).equals("I-MISC")){
+            nameEntityType = "Miscellaneous";
+        }
+
+
+
+
+
+
         ArrayList<String> nameEntityRow = new ArrayList<>(); //text, entity
         ArrayList<ArrayList> nameEntities = new ArrayList<>();
 
