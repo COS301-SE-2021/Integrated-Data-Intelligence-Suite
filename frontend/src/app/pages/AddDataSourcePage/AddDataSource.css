@@ -60,6 +60,7 @@
     background: none;
     border: none;
     font-size: 14px;
+    text-transform: capitalize;
 
 }
 
@@ -72,7 +73,7 @@
     line-height: normal;
 }
 
-.data-source .row .btn{
+.data-source .row .close-button{
     background: none;
     border: none;
     line-height: normal;
@@ -82,7 +83,6 @@
     font-size: 20px;
     align-content: center;
     text-align: center;
-    /*border: 1px solid black;*/
 }
 
 
@@ -93,22 +93,28 @@
     font-weight: 600;
     background: #5773FA;
     border: #5773FA;
+    color: white;
     border-radius: 5px;
     margin-top: 10px;
 }
 
-.data-source .row .close-button{
-    font-size: 25px;
-    padding-top: 8px;
-    font-weight: 600;
+.data-source form .btn.submit{
+    float: right;
+    margin-right: 9%;
+}
+
+.data-source .row .back-button{
+    grid-column: 20/21;
 
 }
 .data-source .btn{
-    border-width: 1px;;
+    border-width: 1px;
+    color: white;
 }
 
 .data-source form .select{
     background: #5773FA;
+    color: white;
     border: none;
     border-radius: 5px;
     padding: 5px;
@@ -132,3 +138,4 @@
 .data-source .select:hover{
     color: black;
 }
+

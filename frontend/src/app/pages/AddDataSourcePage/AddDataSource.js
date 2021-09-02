@@ -23,14 +23,11 @@ function getSource(id) {
             id: null,
             name: '',
             method: 'GET',
-            url: 'https://twitter.com/',
-            searchKey: 'q',
-            authType: 'apiKey',
-            authorization: 'token-value',
-            parameters: [
-                { parameter: 'lang', value: 'EN', errors: { parameter: '', value: '' } },
-                { parameter: 'date', value: '2020-12-01', errors: { parameter: '', value: '' } },
-            ],
+            url: '',
+            searchKey: '',
+            authType: 'None',
+            authorization: '',
+            parameters: [],
         };
 }
 
@@ -133,6 +130,7 @@ const AddDataSource = () => {
             { dataSource && authType === null && setAuthType(dataSource.authType)}
             { dataSource && token === null && setToken(dataSource.authorization)}
             <form>
+                <div className={'row'}><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
                 { method && (
                     <div className="row">
                         <div className="col left">
@@ -175,8 +173,8 @@ const AddDataSource = () => {
                                 // className={
                                 //     item.errors.value ? 'form-control invalid' : 'form-control'
                                 // }
-                              name="token"
-                              placeholder="token"
+                              name="Token"
+                              placeholder="Token"
                               value={token}
                                 // style={{ display: (auth.type === 'None' ? 'none' : 'block') }}
                               onChange={(e)=>setToken(e.target.value)}
@@ -189,8 +187,8 @@ const AddDataSource = () => {
                         <div className="col left disabled">
                             <input
                               type="text"
-                              name="parameter"
-                              placeholder="parameter"
+                              name="Parameter"
+                              placeholder="Parameter"
                               value="Name"
                               disabled
                             />
@@ -201,7 +199,7 @@ const AddDataSource = () => {
                                 // className={
                                 //     item.errors.value ? 'form-control invalid' : 'form-control'
                                 // }
-                              name="name"
+                              name="Name"
                               placeholder="Name"
                               value={name}
                               onChange={(e)=>setName(e.target.value)}
@@ -214,8 +212,8 @@ const AddDataSource = () => {
                         <div className="col left disabled">
                             <input
                               type="text"
-                              name="parameter"
-                              placeholder="parameter"
+                              name="Parameter"
+                              placeholder="Parameter"
                               value="URL"
                               disabled
                             />
@@ -226,8 +224,8 @@ const AddDataSource = () => {
                                 // className={
                                 //     item.errors.value ? 'form-control invalid' : 'form-control'
                                 // }
-                              name="value"
-                              placeholder="value"
+                              name="URL"
+                              placeholder="URL"
                               value={url}
                               onChange={(e)=>setUrl(e.target.value)}
                             />
@@ -252,7 +250,7 @@ const AddDataSource = () => {
                                 //     item.errors.value ? 'form-control invalid' : 'form-control'
                                 // }
                               name="value"
-                              placeholder="value"
+                              placeholder="Query Key"
                               value={queryKey}
                               onChange={(e)=>setQueryKey(e.target.value)}
                             />
@@ -269,7 +267,7 @@ const AddDataSource = () => {
                                         item.errors.parameter ? 'form-control invalid' : 'form-control'
                                     }
                                   name="parameter"
-                                  placeholder="parameter"
+                                  placeholder="Parameter"
                                   value={item.parameter}
                                   onChange={(e)=>handleFieldChange(index, e)}
                                 />
@@ -282,7 +280,7 @@ const AddDataSource = () => {
                                         item.errors.value ? 'form-control invalid' : 'form-control'
                                     }
                                   name="value"
-                                  placeholder="value"
+                                  placeholder="Value"
                                   value={item.value}
                                   onChange={(e)=>handleFieldChange(index, e)}
                                 />
