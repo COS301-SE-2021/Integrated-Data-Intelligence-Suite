@@ -184,6 +184,7 @@ public class ImportServiceController {
         String method = obj.getString("method");
         String searchKey = obj.getString("searchKey");
         String auth = obj.getString("authorization");
+        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
         Map<String, String> params = new LinkedHashMap<>();
         JSONArray paramsArray = obj.getJSONArray("parameters");
         for(int i = 0; i < paramsArray.length(); i++) {
@@ -191,7 +192,7 @@ public class ImportServiceController {
             params.put(paramObj.getString("parameter"), paramObj.getString("value"));
         }
 
-        AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, AuthorizationType.bearer, auth, params);
+        AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, authType, auth, params);
         return service.addAPISource(request);
     }
 
