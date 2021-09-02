@@ -111,7 +111,7 @@ const accessors = {
 const points1 = Mock.genRandomNormalPoints();
 const points2 = Mock.genRandomNormalPoints();
 
-export default function VisxBarStack(props) {
+export default function VisxBarStackGraph(props) {
     // noinspection RequiredAttributes
     return (
         <XYChart

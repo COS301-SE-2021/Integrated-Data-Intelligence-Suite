@@ -27,8 +27,9 @@ import InfoDiv from '../../components/InfoDiv/InfoDiv';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
 import VisxLineGraph from '../../components/vsixLineGraph/VisxLineGraph';
-import VisxBarStack from '../../components/visxBarStack/visxBarStack';
-import VisxAreaGraph from '../../components/vsixAreaGraph/visxAreaGraph';
+import VisxBarStackGraph from '../../components/visxBarStackGraph/visxBarStackGraph';
+import VisxAreaGraph from '../../components/visxAreaGraph/visxAreaGraph';
+import VisxAreaStackGraph from '../../components/visxAreaStackGraph/visxAreaStackGraph';
 
 const {
     Title,
@@ -205,7 +206,7 @@ class ChartPage extends Component {
                                                   id="stat1-item"
                                                   className="word-cloud-grid-item"
                                                 >
-                                                    <VisxAreaGraph/>
+                                                    <VisxAreaStackGraph/>
                                                 </div>
                                                 <div
                                                   id="stat2-item"
