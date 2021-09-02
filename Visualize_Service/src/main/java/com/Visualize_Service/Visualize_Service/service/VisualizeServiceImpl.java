@@ -101,6 +101,18 @@ public class VisualizeServiceImpl {
     }
 
 
+    public CreatePieChartGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getWordBank() == null){
+            throw new InvalidRequestException("wordBank object is null");
+        }
+        Graph newGraph = new Graph();
+        return null;
+    }
+
+
     public CreateNetworkGraphResponse createNetworkGraph(CreateNetworkGraphRequest request) throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
