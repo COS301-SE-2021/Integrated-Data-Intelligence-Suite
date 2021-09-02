@@ -475,6 +475,8 @@ public class AnalyseServiceImpl {
             for (int j=0; j< namedEntities.size(); j++){
                 //row.add(isTrending)
                 row = new ArrayList<>();
+                row.add(requestData.get(i).get(0).toString());
+
                 row.add(namedEntities.get(j).get(0).toString()); //entity-name
                 row.add(namedEntities.get(j).get(1).toString()); //entity-type
                 if (types.isEmpty()){// entity-typeNumber
@@ -616,6 +618,7 @@ public class AnalyseServiceImpl {
 
         StructType schema2 = new StructType(
                 new StructField[]{
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
@@ -841,6 +844,14 @@ public class AnalyseServiceImpl {
                 sents.add(rawSents.get(j).get(0).toString());
             }
             r.add(sents);
+
+            ArrayList<String> texts =new ArrayList<>();
+            List<Row> rawtexts = itemsDF.select("Text").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawtexts.toString());
+            for (int j = 0; j < rawtexts.size(); j++) {
+                texts.add(rawtexts.get(j).get(0).toString());
+            }
+            r.add(texts);
 
             results.add(r);
 
