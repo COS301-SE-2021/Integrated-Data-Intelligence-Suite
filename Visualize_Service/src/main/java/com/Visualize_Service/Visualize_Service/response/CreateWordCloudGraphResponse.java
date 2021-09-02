@@ -5,13 +5,13 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class CreateWordCloudGraphResponse {
-    public String words;
+    public ArrayList<Graph> words;
 
-    public CreateWordCloudGraphResponse(String words){
+    public CreateWordCloudGraphResponse(ArrayList<Graph> words){
         this.words = words;
     }
 
-    public String getLineGraphArray(){
+    public ArrayList<Graph> getWordGraphArray(){
         return words;
     }
 }
