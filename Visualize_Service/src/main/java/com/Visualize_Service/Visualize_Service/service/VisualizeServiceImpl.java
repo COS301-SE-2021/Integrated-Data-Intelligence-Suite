@@ -78,6 +78,17 @@ public class VisualizeServiceImpl {
         return null;
     }
 
+    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request) throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        Graph newGraph = new Graph();
+        return null;
+    }
+
 
     public CreateNetworkGraphResponse createNetworkGraph(CreateNetworkGraphRequest request) throws InvalidRequestException{
         if (request == null) {
