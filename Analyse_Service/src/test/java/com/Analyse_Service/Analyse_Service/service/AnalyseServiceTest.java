@@ -192,7 +192,7 @@ public class AnalyseServiceTest {
         ArrayList<String> text = new ArrayList<>();;
         text.add("test text for function");
         FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
-        FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
+        ArrayList<FindNlpPropertiesResponse> testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 
