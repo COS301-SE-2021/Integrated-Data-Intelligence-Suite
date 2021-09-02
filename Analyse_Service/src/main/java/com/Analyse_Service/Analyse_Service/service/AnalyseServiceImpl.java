@@ -612,7 +612,6 @@ public class AnalyseServiceImpl {
                         new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
         });
 
         StructType schema2 = new StructType(
@@ -634,12 +633,11 @@ public class AnalyseServiceImpl {
 
         //group named entity
 
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber","Sentiment").count().collectAsList(); //frequency
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
         namedEntities.get(0); /*name entity*/
         namedEntities.get(1); /*name type*/
         namedEntities.get(2); /*name type-number*/
-        namedEntities.get(3); /*Sentiment*/
-        namedEntities.get(4); /*name frequency*/
+        namedEntities.get(3);/*name frequency*/
 
         List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
         averageLikes.get(1); //average likes
@@ -672,7 +670,7 @@ public class AnalyseServiceImpl {
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < minSize; i++){
             double trending = 0.0;
-            if (Integer.parseInt(namedEntities.get(i).get(4).toString()) >= 4 ){
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4 ){
                 trending = 1.0;
             }
             Row trainRow = RowFactory.create(
@@ -680,10 +678,9 @@ public class AnalyseServiceImpl {
                     namedEntities.get(i).get(0).toString(),
                     namedEntities.get(i).get(1).toString(),
                     Double.parseDouble(namedEntities.get(i).get(2).toString()),
-                    Double.parseDouble(namedEntities.get(i).get(4).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
                     rate.get(i).get(1).toString(),
-                    Double.parseDouble(averageLikes.get(i).get(1).toString()),
-                    namedEntities.get(i).get(3).toString()
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
             );
             trainSet.add(trainRow);
         }
@@ -803,10 +800,10 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> res = model1.transform(input);
 
-        List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes","Sentiment").filter(col("prediction").equalTo(1.0)).collectAsList();
+        List<Row> rawResults = res.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
         if( rawResults.isEmpty())
-            rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes","Sentiment").filter(col("Frequency").geq(2.0)).collectAsList();
+            rawResults = res.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
 
         System.out.println("/*******************Outputs begin*****************/");
         System.out.println(rawResults.toString());
@@ -837,9 +834,16 @@ public class AnalyseServiceImpl {
             r.add(locs);
             r.add( rawResults.get(i).get(3).toString());
             r.add( rawResults.get(i).get(4).toString());
-            r.add( rawResults.get(i).get(5).toString());
+            ArrayList<String> sents =new ArrayList<>();
+            List<Row> rawSents = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawSents.toString());
+            for (int j = 0; j < rawSents.size(); j++) {
+                sents.add(rawSents.get(j).get(0).toString());
+            }
+            r.add(sents);
 
             results.add(r);
+
         }
 
         return new TrainFindTrendsResponse(results);
