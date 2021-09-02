@@ -3,13 +3,13 @@ package com.Analyse_Service.Analyse_Service.request;
 import java.util.ArrayList;
 
 public class FindNlpPropertiesRequest {
-    String text;
+    ArrayList<String> text;
 
-    public FindNlpPropertiesRequest(String text){
+    public FindNlpPropertiesRequest(ArrayList<String> text){
         this.text = text;
     }
 
-    public String getText(){
+    public ArrayList<String> getText(){
         return text;
     }
 
