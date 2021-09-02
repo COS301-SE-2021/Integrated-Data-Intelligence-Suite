@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { useHistory, useParams } from 'react-router-dom';
 
-function getSource(id) {
+/*function getSource(id) {
     const re = /^[0-9]+((-)([0-9])+)*$/;
     if (re.exec(id)) {
         return {
             id,
             name: `source${id}`,
             method: 'POST',
-            authType: 'Bearer',
+            authType: 'bearer',
             authorization: `token${id}`,
             url: 'https://twitter.com/',
             searchKey: 'query',
@@ -25,11 +25,62 @@ function getSource(id) {
             method: 'GET',
             url: '',
             searchKey: '',
-            authType: 'None',
+            authType: 'none',
             authorization: '',
             parameters: [],
         };
-}
+}*/
+
+const getSource = (id, structure) => {
+    const [data, setData] = useState(null);
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const abortCont = new AbortController();
+        const requestBody = {
+            id,
+        };
+
+        fetch('http://localhost:9001/Import/getSourceById',
+            {
+                signal: abortCont.signal,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody),
+            })
+            .then((res) => {
+                if (!res.ok) {
+                    throw Error(res.error());
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log('data is here', data);
+                console.log('structure looks like ', data.source)
+                if (data.success) {
+                    setData(data.source);
+                } else {
+                    setData(structure);
+                }
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                if (err.name === 'AbortError') console.log('Fetch Aborted');
+                else {
+                    // console.log(err.message)
+                    // setError(err.message);
+                    setData(structure);
+                    setError(null);
+                    setIsPending(false);
+                }
+            });
+
+        return () => abortCont.abort();
+    }, [id]);
+    return { data, isPending, error };
+};
 
 const AddDataSource = () => {
     const { id } = useParams();
@@ -42,7 +93,31 @@ const AddDataSource = () => {
     const [queryKey, setQueryKey] = useState(null);
     const [method, setMethod] = useState(null);
 
-    const dataSource = getSource(id);
+    const structure = {
+            id: null,
+            name: '',
+            method: 'GET',
+            url: '',
+            searchKey: '',
+            authType: 'none',
+            authorization: '',
+            parameters: [],
+        };
+    // const {data: dataSource, isPending, error } = getSource(id, structure);
+
+    const dataSource = {
+        id,
+        name: `source${id}`,
+        method: 'POST',
+        authType: 'bearer',
+        authorization: `token${id}`,
+        url: 'https://twitter.com/',
+        searchKey: 'query',
+        parameters: [
+            { parameter: 'lang', value: `EN ${id}`, errors: { parameter: '', value: '' } },
+            { parameter: 'date', value: `2020-12-01 ${id}`, errors: { parameter: '', value: '' } },
+        ],
+    };
 
     const prevIsValid = () => {
         if (form.length === 0) {
@@ -51,19 +126,21 @@ const AddDataSource = () => {
 
         const someEmpty = form.some((item)=>item.parameter === '' || item.value === '');
 
-        if (someEmpty) {
-            form.map((item, index)=>{
-                const allPrev = [...form];
-                if (form[index].parameter === '') {
-                    allPrev[index].errors.parameter = 'parameter is required';
-                }
-               if (form[index].value === '') {
-                    allPrev[index].errors.value = 'value is required';
-                }
-               setForm(allPrev);
-               return item;
-            });
-        }
+        //TODO display error
+
+        // if (someEmpty) {
+        //     form.map((item, index)=>{
+        //         const allPrev = [...form];
+        //         if (form[index].parameter === '') {
+        //             allPrev[index].errors.parameter = 'parameter is required';
+        //         }
+        //        if (form[index].value === '') {
+        //             allPrev[index].errors.value = 'value is required';
+        //         }
+        //        setForm(allPrev);
+        //        return item;
+        //     });
+        // }
 
         return !someEmpty;
     };
@@ -95,11 +172,6 @@ const AddDataSource = () => {
                 }
 
                 const newForm = { ...item, [event.target.name]: event.target.value };
-
-                newForm.errors = {
-                        ...item.errors,
-                        [event.target.name]: event.target.value.length > 0 ? null : `${[event.target.name]} Is required`,
-                    };
                 return newForm;
         }));
     };
@@ -120,9 +192,17 @@ const AddDataSource = () => {
         event.preventDefault();
         event.persist();
     };
+
+    // const setErrorField = (lst) =>{
+    //     for (let lstKey in lst) {
+    //         lstKey.errors = {
+    //             parameter
+    //         }
+    //     }
+    // }
     return (
         <div className="data-source">
-            { dataSource && form === null && setForm(dataSource.parameters)}
+            {/*{ dataSource && form === null && setErrorField([dataSource.parameters])}*/}
             { dataSource && method === null && setMethod(dataSource.method)}
             { dataSource && name === null && setName(dataSource.name)}
             { dataSource && url === null && setUrl(dataSource.url) }
@@ -160,8 +240,8 @@ const AddDataSource = () => {
                               value={authType}
                               onChange={(e) => changeAuthType(e.target.value)}
                             >
-                                <option value="None">None</option>
-                                <option value="Bearer">Bearer</option>
+                                <option value="none">None</option>
+                                <option value="bearer">Bearer</option>
                                 <option value="apiKey">Api Key</option>
                             </select>
                         </div>
