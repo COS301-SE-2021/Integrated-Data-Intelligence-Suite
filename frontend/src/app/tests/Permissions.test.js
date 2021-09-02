@@ -1,12 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Permissions from "../pages/PermissionsPage/Permissions";
-import {unmountComponentAtNode} from "react-dom";
+import { unmountComponentAtNode } from 'react-dom';
+import Permissions from '../pages/PermissionsPage/Permissions';
 
 let container = null;
 beforeEach(() => {
   // setup a DOM element as a render target
-  container = document.createElement("div");
+  container = document.createElement('div');
   document.body.appendChild(container);
 });
 
@@ -17,10 +17,9 @@ afterEach(() => {
   container = null;
 });
 
-
 it('renders correctly', () => {
-    const tree = renderer
-        .create(<Permissions/>)
-        .toJSON();
-    expect(tree).toMatchSnapshot();
+  const tree = renderer
+    .create(<Permissions />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
 });
