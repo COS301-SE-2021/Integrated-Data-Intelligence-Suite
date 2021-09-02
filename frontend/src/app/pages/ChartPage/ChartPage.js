@@ -26,6 +26,8 @@ import BarGraph from '../../components/BarGraph/BarGraph';
 import InfoDiv from '../../components/InfoDiv/InfoDiv';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
+import VisxLineGraph from '../../vsixLineGraph/VisxLineGraph';
+import VisxBarStack from '../../visxBarStack/visxBarStack';
 
 const {
     Title,
@@ -195,7 +197,6 @@ class ChartPage extends Component {
                                                   id="word-cloud-item"
                                                   className="word-cloud-grid-item"
                                                 >
-                                                    Word Cloud Diagram
                                                     <WordCloud />
                                                 </div>
 
@@ -203,7 +204,7 @@ class ChartPage extends Component {
                                                   id="stat1-item"
                                                   className="word-cloud-grid-item"
                                                 >
-                                                    number of mentions
+                                                    <VisxLineGraph/>
                                                 </div>
                                                 <div
                                                   id="stat2-item"
