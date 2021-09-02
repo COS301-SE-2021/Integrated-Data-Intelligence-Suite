@@ -21,6 +21,7 @@ import java.util.Map;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/Import", produces = "application/json")
 public class ImportServiceController {
 
