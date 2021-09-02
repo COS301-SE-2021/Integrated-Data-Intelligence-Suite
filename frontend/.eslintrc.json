@@ -41,6 +41,7 @@
     "no-shadow": [
       "off"
     ],
+    "linebreak-style": 0,
     "no-sequences": "off",
     "no-multi-assign": "off",
     "no-tabs": "off",
