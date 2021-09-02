@@ -8,6 +8,7 @@ import UserPermissions from './pages/UserPermissionsPage/UserPermissions';
 import Permissions from './pages/PermissionsPage/Permissions';
 import LogoutPage from './pages/LogoutPage/LogoutPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
+import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
 import './App.scss';
 
 class App extends Component {
@@ -41,6 +42,10 @@ class App extends Component {
 
                 <Route exact path="/settings">
                     <SettingsPage />
+                </Route>
+
+                <Route path="/settings/source/:id">
+                    <AddDataSource />
                 </Route>
 
                 <Route path="/user/:id">
