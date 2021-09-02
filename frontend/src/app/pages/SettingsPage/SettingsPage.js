@@ -48,13 +48,10 @@ const SettingsPage = () => {
                   <Col style={{ padding: '30px 10px' }} className="left-column" flex="160px">
 
                       { user && user.isAdmin && <div id="Permissions" className="option active" onClick={() => setComponent('Permissions')}>Permissions</div>}
-                      {user && user.isAdmin && <Divider />}
 
                       <div id="Profile" className="option" onClick={() => setComponent('Profile')}>Profile</div>
-                      <Divider />
 
                       <div id="Account" className="option" onClick={() => setComponent('Account')}>Account</div>
-                      <Divider />
 
                       <div id="Data Sources" className="option" onClick={() => setComponent('Data Sources')}>Data Sources</div>
                   </Col>

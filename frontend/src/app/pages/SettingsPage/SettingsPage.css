@@ -1,4 +1,16 @@
+:root{
+    --left-section-color: white;
+    --button-color: #5873f9;
+    --button-text-color: white;
 
+    --main-color-1: white;
+    --main-color-2: darkgrey;
+    --main-color-3: #5873f9;
+
+    --active-bg-color: #5873f9;
+    --active-text-color: white;
+
+}
 main .outer-container#settings-container{
     /*border: 2px solid ;*/
 
@@ -13,17 +25,11 @@ main .outer-container#settings-container{
 }
 
 .ant-col>div.option.active{
-    background: #5873f9;
+    background: var(--active-bg-color);
     border-radius: 5px;
-    color: white;
+    color: var(--active-text-color);
 }
 
-.bodyDiv .header{
-    background: white;
-    display: inline-flex;
-    /*width: 100vw;*/
-    align-items: end;
-}
 
 .top-padding{
     width: 100%;
@@ -36,10 +42,6 @@ main .outer-container#settings-container{
     padding-top: 50px;
 }
 
-.bodyDiv .ant-col .right-column{
-    background: #5773FA;
-
-}
 
 .bodyDiv .ant-row{
     height: 100vh;
@@ -56,16 +58,18 @@ main .outer-container#settings-container{
 
 
 .ant-col div.ant-divider{
-    border-color: #5873f9;
+    border-color: var(--main-color-1);
+    line-height: normal;
 }
 
 .component-title{
     font-size: 20px;
     font-weight: 600;
     text-transform: uppercase;
-    color: #5773FA;
+    color: var(--main-color-3);
     padding-left: 30px;
     line-height: 3.5em;
+    margin-bottom: 10px;
 }
 
 
