@@ -52,8 +52,8 @@ export default function VisxAreaGraph(props) {
     return (
         <>
             <XYChart
-                height={300}
-                width={400}
+                height={200}
+                width={250}
                 xScale={{ type: 'band' }}
                 yScale={{ type: 'linear' }}
                 id={'ssssss'}
@@ -115,7 +115,7 @@ export default function VisxAreaGraph(props) {
 
                 <Tooltip
                     snapTooltipToDatumX
-                    snapTooltipToDatumY
+                    // snapTooltipToDatumY
                     showVerticalCrosshair
                     // showSeriesGlyphs
                     renderTooltip={({

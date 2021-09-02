@@ -134,11 +134,16 @@ class ChartPage extends Component {
                                                     indicatorTitle="Number of Mentions"
                                                     indicatorValue="246K"
                                                     percentChange="+69%"
+                                                    cardID={'num-mentions-card'}
                                                     showArrow
                                                     graphComponent={(
-                                                        <LineGraph
-                                                            graphData={LineGraphDataPositive}
-                                                            lineColor="#009966"
+                                                        <VisxAreaGraph
+                                                            graphData={visxAreaMockData}
+                                                            showSecondLine={false}
+                                                            showXAxis={false}
+                                                            showYAxis={false}
+                                                            idName={'num-mentions-area-graph'}
+                                                            tooltipKeyColor={'green'}
                                                         />
                                                     )}
                                                 />
