@@ -96,12 +96,60 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
-        Graph newGraph = new Graph();
-        return null;
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+        ArrayList<String> listSent = new ArrayList<>();
+        ArrayList<ArrayList> out = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < sents.size(); j++) {
+                if (listSent.isEmpty()){
+                    listSent.add(sents.get(j));
+                    ArrayList<Object> r = new ArrayList<>();
+                    r.add(sents.get(j));
+                    r.add(1);
+                    out.add(r);
+                }else {
+                    if (listSent.contains(sents.get(j))){
+                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
+                        int val=Integer.parseInt(r.get(1).toString());
+                        val++;
+                        r.set(1,val);
+                        out.set(listSent.indexOf(sents.get(j)),r);
+                    }else {
+                        listSent.add(sents.get(j));
+                        ArrayList<Object> r = new ArrayList<>();
+                        r.add(sents.get(j));
+                        r.add(1);
+                        out.add(r);
+                    }
+                }
+            }
+        }
+
+
+
+        for (ArrayList o : out) {
+            //System.out.println(o);
+            PieChartGraph temp = new PieChartGraph();
+            temp.label = o.get(0).toString();
+            temp.x = o.get(0).toString() + "s";
+            temp.y = o.get(1).toString();
+
+            System.out.println("Label: "+ temp.label);
+            System.out.println("x: "+ temp.x);
+            System.out.println("y: "+ temp.y);
+            output.add(temp);
+        }
+        return new CreatePieChartGraphResponse(output);
     }
 
 
-    public CreatePieChartGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
+    public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
