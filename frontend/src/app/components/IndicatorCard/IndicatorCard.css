@@ -1,0 +1,125 @@
+#indicator-container {
+    height: 100%;
+    width: 100%;
+    margin-bottom: 2%;
+    padding: 0;
+    border: 0;
+    background: #eff0f0;
+}
+
+
+.indicator-content-container {
+    /*border: 3px solid red;*/
+    float: left;
+    width: 100%;
+}
+
+
+#indicator-container > .indicator-card {
+    /*border: 2px solid red;*/
+    border: 0.1em solid #e8e8e9;
+
+    width: 25%;
+    float: left;
+    margin-right: 2%;
+    border-radius: 3%;
+}
+
+.indicator-card > .ant-card-head {
+    border-bottom: 0;
+}
+
+.indicator-card > .ant-card-body {
+    /*padding: 1%;*/
+    padding-top: 0;
+}
+
+.indicator-card
+> div.ant-card-head
+> div.ant-card-head-wrapper
+> div.ant-card-head-title {
+    color: grey;
+}
+
+
+.arrow-icon-container {
+    /*border: 2px solid blue;*/
+    /*width: 40%;*/
+    float: left;
+}
+
+.indicator-value-container {
+    /*border: 2px solid red;*/
+    /*width: 60%;*/
+    float: left;
+    font-size: 1.2em;
+    margin-right: 3%;
+}
+
+.percentage-value-container {
+    /*border: 2px solid yellow;*/
+    /*width: 100%;*/
+    float: left;
+}
+
+.amount-changed-container {
+    /*border: 2px solid green;*/
+    /*border: 0;*/
+    float: left;
+}
+
+
+/*color of the arrow icon of the first indicator-card*/
+.indicator-card:nth-child(1)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.arrow-icon-container
+> span.anticon.anticon-arrow-up
+> svg {
+    color: #EF062D;
+    transform: rotate(180deg);
+    width: 1.8em;
+    height: 1.8em;
+
+}
+
+/*percentage value in the first indicator-card*/
+.indicator-card:nth-child(1)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.percentage-value-container {
+    color: #EF062D;
+}
+
+
+/*arrow icon of the Second indicator-card*/
+.indicator-card:nth-child(2)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.arrow-icon-container
+> span.anticon.anticon-arrow-up
+> svg {
+    color: #009966;
+    width: 1.8em;
+    height: 1.8em;
+}
+
+/*percentage-value of the Second indicator-card*/
+.indicator-card:nth-child(2)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.percentage-value-container {
+    color: #009966;
+}
+
+.graph-container {
+    /*border: 2px solid black;*/
+    float: left;
+    width: 100%;
+}
+
+

@@ -1,0 +1,107 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "ignorePatterns": [
+    "src/app/tests",
+    "src/app/Mocks",
+    "src/app/resources",
+    "src/app/components/MapCard/leaflet/",
+    "src/reportWebVitals.js",
+    "src/index.js"
+  ],
+  "rules": {
+    "no-undef": [
+      "off"
+    ],
+    "no-underscore-dangle": [
+      "off"
+    ],
+    "no-shadow": [
+      "off"
+    ],
+    "linebreak-style": 0,
+    "no-sequences": "off",
+    "no-multi-assign": "off",
+    "no-tabs": "off",
+    "react/jsx-filename-extension": "off",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "react/button-has-type": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "no-unused-vars": "warn",
+    "no-plusplus": "warn",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-named-as-default": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react/jsx-indent": [
+      2,
+      4
+    ],
+    "padded-blocks": "warn",
+    "indent": "off",
+    "react/jsx-tag-spacing": "warn",
+    "react/jsx-curly-brace-presence": "warn",
+    "no-else-return": "warn",
+    "no-constant-condition": "warn",
+    "react/destructuring-assignment": "warn",
+    "camelcase": "warn",
+    "max-len": "warn",
+    "import/prefer-default-export": "warn",
+    "react/no-direct-mutation-state": "warn",
+    "eqeqeq": "warn",
+    "react/prop-types": "warn",
+    "react/jsx-key": "warn",
+    "prefer-destructuring": "warn",
+    "react/no-this-in-sfc": "warn",
+    "import/order": "warn",
+    "react/no-array-index-key": "warn",
+    "import/extensions": "warn",
+    "import/no-extraneous-dependencies": "warn",
+    "react/prefer-stateless-function": "warn",
+    "object-curly-spacing": "warn",
+    "comma-dangle": "warn",
+    "arrow-spacing": "off",
+    "space-infix-ops": "warn",
+    "react/state-in-constructor": "warn",
+    "react/jsx-indent-props": "warn",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "eol-last": "warn",
+    "jsx-quotes": "warn",
+    "quotes": "warn",
+    "semi": "warn",
+    "spaced-comment": "warn",
+    "no-useless-constructor": "warn",
+    "react/no-unused-state": "warn",
+    "react/no-access-state-in-setstate": "warn",
+    "prefer-template": "warn",
+    "prefer-const": "warn",
+    "object-curly-newline": "warn",
+    "no-multiple-empty-lines": "warn",
+    "arrow-parens": "warn",
+    "prefer-arrow-callback": "off",
+    "no-return-assign": "off"
+  }
+}
