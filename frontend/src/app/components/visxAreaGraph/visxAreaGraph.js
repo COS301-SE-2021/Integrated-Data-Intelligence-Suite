@@ -83,7 +83,6 @@ export default function VisxAreaGraph(props) {
                     )
                 }
 
-
                 <AnimatedGrid
                     columns={false}
                     rows={false}

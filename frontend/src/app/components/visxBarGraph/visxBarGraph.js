@@ -3,10 +3,6 @@ import { AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip } f
 import cityTemperature, { CityTemperature } from '@visx/mock-data/lib/mocks/cityTemperature';
 import * as Mock from '@visx/mock-data';
 
-export type XYChartProps = {
-    width: number;
-    height: number;
-};
 
 const data1 = [
     {
