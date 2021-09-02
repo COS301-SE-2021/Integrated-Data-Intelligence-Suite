@@ -33,21 +33,32 @@ import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
+import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.StringIndexer;
 //import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
+import org.apache.spark.ml.param.ParamMap;
+import org.apache.spark.ml.tuning.CrossValidator;
+import org.apache.spark.ml.tuning.CrossValidatorModel;
+import org.apache.spark.ml.tuning.ParamGridBuilder;
+import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
+import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
+import org.mlflow.tracking.ActiveRun;
+import org.mlflow.tracking.MlflowClient;
+import org.mlflow.tracking.MlflowContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,7 +83,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public AnalyseDataResponse analyzeData(AnalyseDataRequest request)
-            throws InvalidRequestException {
+            throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
@@ -370,6 +381,320 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindTrendsResponse trainFindTrends(TrainFindTrendsRequest request)
+            throws InvalidRequestException, IOException {
+
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsRequest Object is null");
+        }
+        if (request.getDataList() == null) {
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        logger.setLevel(Level.ERROR);
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> trendsData = new ArrayList<>();
+        ArrayList<ArrayList> requestData = request.getDataList();
+
+        ArrayList<String> types = new ArrayList<>();
+
+        for (int i = 0; i < requestData.size(); i++) {
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for (int j = 0;  j < namedEntities.size();  j++) {
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()) {// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                }
+                else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    }
+                    else {
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                row.add(requestData.get(i).get(1).toString());//location
+                row.add(requestData.get(i).get(2).toString());//date
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
+                row.add(sentiment);//sentiment
+
+                Row trendRow = RowFactory.create(row.toArray());
+                trendsData.add(trendRow);
+            }
+        }
+
+        /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
+                });
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                });
+
+
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+        //group named entity
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        averageLikes.get(1); //average likes
+
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        rate.get(1); //rate ???
+
+        //training set
+        int minSize = 0;
+        if (namedEntities.size() > averageLikes.size()) {
+            minSize = averageLikes.size();
+        }
+        else {
+            minSize = namedEntities.size();
+        }
+
+        if (minSize > rate.size()) {
+            minSize = rate.size();
+        }
+
+
+        System.out.println("NameEntity : " + namedEntities.size());
+        for (int i = 0; i < namedEntities.size(); i++) {
+            System.out.println(namedEntities.get(i).toString());
+        }
+
+        System.out.println("AverageLikes : " + averageLikes.size());
+        for (int i = 0; i < averageLikes.size(); i++) {
+            System.out.println(averageLikes.get(i).toString());
+        }
+
+        //itemsDF.show();
+        //System.out.println("*****************ITEMDF****************");
+
+        List<Row> trainSet = new ArrayList<>();
+        for (int i = 0;
+             i < minSize;
+             i++) {
+            double trending = 0.0;
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
+                trending = 1.0;
+            }
+            Row trainRow = RowFactory.create(
+                    trending,
+                    namedEntities.get(i).get(0).toString(),
+                    namedEntities.get(i).get(1).toString(),
+                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                    rate.get(i).get(1).toString(),
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+        //split data
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
+
+        Dataset<Row> trainSetDF = split[0];
+        Dataset<Row> testSetDF = split[1];
+
+        /*******************SETUP PIPELINE MODEL *****************/
+        //features
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
+                .setOutputCol("features");
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        //model
+        LogisticRegression lr = new LogisticRegression() //model - estimator
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8);
+
+        //pipeline
+        Pipeline pipeline = new Pipeline();
+        pipeline.setStages(new PipelineStage[] {assembler,indexer,lr});
+
+        /******************EVALUATE/ANALYSE MODEL**************/
+
+        //evaluators
+        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+                .setLabelCol("label")
+                .setPredictionCol("prediction")
+                .setMetricName("mse") //meanSquaredError
+                .setMetricName("rmse") //rootMeanSquaredError
+                .setMetricName("mae") //meanAbsoluteError
+                .setMetricName("r2"); //r^2, variance
+
+
+        //parameterGrid
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+
+        paramGridBuilder.addGrid(lr.regParam(),  new double[] {lr.getRegParam()});
+        paramGridBuilder.addGrid(lr.elasticNetParam(),  new double[] {lr.getElasticNetParam()});
+        paramGridBuilder.addGrid(lr.fitIntercept());
+        ParamMap[] paramMaps = paramGridBuilder.build();
+
+
+        CrossValidator crossValidator = new CrossValidator()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps).setNumFolds(2);
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+        String experimentID = client.createExperiment("LogisticRegression_Experiment");
+        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+
+
+        MlflowContext mlflow = new MlflowContext(client);
+
+
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+
+
+        CrossValidatorModel lrModel = crossValidator.fit(trainSetDF);
+
+        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        //predictions.show();
+        //System.out.println("*****************Predictions Of Test Data*****************");
+
+
+        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+        //param
+        client.logParam(run.getId(),"MaxIter", "10");
+        client.logParam(run.getId(),"setRegParam" ,"0.3");
+        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+
+        //metrics
+        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+
+        //custom tags
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));
+
+        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+        run.endRun();
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+
+        /*******************READ MODEL OUTPUT*****************
+         //LogisticRegressionModel model1 = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/SteveLogisticRegesionmodel");
+         //Dataset<Row> input = assembler.transform(trainingDF); //TODO this is an example of input will be changed once database is calibrated
+         Dataset<Row> res = lrModel.transform(trainedDF); //trained data used to output
+         List<Row> rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+         if (rawResults.isEmpty()) {
+         rawResults = res.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+         }
+         System.out.println("*******************Outputs begin*****************");
+         System.out.println(rawResults.toString());
+         for (Row r : res.select("prediction").collectAsList()) {
+         System.out.println("Trending -> " + r.get(0));
+         }
+         System.out.println("*******************Outputs begin*****************");
+         /*ArrayList<ArrayList> results = new ArrayList<>();
+         for (int i = 0; i < rawResults.size(); i++) {
+         ArrayList<Object> r = new ArrayList<>();
+         r.add(rawResults.get(i).get(0).toString());
+         r.add(Double.parseDouble(rawResults.get(i).get(1).toString()));
+         results.add(r);
+         }
+         ArrayList<ArrayList> results = new ArrayList<>();
+         for (int i = 0;
+         i < rawResults.size();
+         i++) {
+         ArrayList<Object> r = new ArrayList<>();
+         String en = rawResults.get(i).get(0).toString();
+         ArrayList<String> locs = new ArrayList<>();
+         List<Row> rawLocs = itemsDF.select("location").filter(col("EntityName").equalTo(en)).collectAsList();
+         System.out.println(rawLocs.toString());
+         for (int j = 0;
+         j < rawLocs.size();
+         j++) {
+         locs.add(rawLocs.get(j).get(0).toString());
+         }
+         r.add(en);
+         r.add(locs);
+         r.add(rawResults.get(i).get(3).toString());
+         r.add(rawResults.get(i).get(4).toString());
+         results.add(r);
+         }*/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+        return new TrainFindTrendsResponse(results);
+    }
+
+    /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindTrendsResponse findTrends(FindTrendsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
@@ -451,14 +776,14 @@ public class AnalyseServiceImpl {
         //System.out.println(trendsData);
         /*Example of input ArrayList of Tweets
 
-        * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
-        * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
-        * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
-        * [Google is a great place, hatfield, 20/05/20201, 45644],
-        * [i like Microsoft, hatfield, 20/05/20201, 34]
-        *
-        *
-        * */
+         * [Elon Musk works at Google, hatfield, 20/05/20201, 456],
+         * [Elon Musk works at Amazon, hatfield, 20/05/20201, 44],
+         * [Elon Musk works at awesome, hatfield, 20/05/20201, 22],
+         * [Google is a great place, hatfield, 20/05/20201, 45644],
+         * [i like Microsoft, hatfield, 20/05/20201, 34]
+         *
+         *
+         * */
         /* Example output of trendsData
             [[Elon Musk, PERSON, hatfield, 20/05/20201, 456, Neutral],
             [Google, ORGANIZATION, hatfield, 20/05/20201, 456, Neutral],
@@ -561,7 +886,7 @@ public class AnalyseServiceImpl {
                         new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
-        });
+                });
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -805,52 +1130,7 @@ public class AnalyseServiceImpl {
 
         }
 
-        return new TrainFindTrendsResponse(results);
-    }
-
-    /**
-     * This method used to find a trends(s) within a given data.
-     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
-     * @param request This is a request object which contains data required to be analysed.
-     * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FindTrendsResponse findTrends(FindTrendsRequest request)
-            throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FindTrendsRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList is null");
-        }
-
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
-
-        /*******************SETUP DATA*****************/
-
-
-        /*******************SETUP DATAFRAME*****************/
-
-
-        /*******************MANIPULATE DATAFRAME*****************/
-
-
-        /*******************SETUP PIPELINE*****************/
-        /*******************SETUP MODEL*****************/
-
-
-        /*******************READ MODEL OUTPUT*****************/
-
-
-        return new FindTrendsResponse(null);
+        return new FindTrendsResponse(results);
     }
 
 
