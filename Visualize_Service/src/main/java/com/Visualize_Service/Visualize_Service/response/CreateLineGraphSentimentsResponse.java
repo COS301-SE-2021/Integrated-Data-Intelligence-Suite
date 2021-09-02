@@ -4,9 +4,9 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 
 import java.util.ArrayList;
 
-public class CreateLineGraphResponse {
+public class CreateLineGraphSentimentsResponse {
     public ArrayList<Graph> LineGraphArray;
-    public CreateLineGraphResponse(ArrayList<Graph> LineGraphArray){
+    public CreateLineGraphSentimentsResponse(ArrayList<Graph> LineGraphArray){
         this.LineGraphArray = LineGraphArray;
     }
 

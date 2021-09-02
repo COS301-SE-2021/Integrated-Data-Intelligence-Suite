@@ -56,7 +56,7 @@ public class VisualizeServiceImpl {
 
 
         //line graph
-        CreateLineGraphRequest lineRequest = new CreateLineGraphRequest(request.getRelationshipList());
+        CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getRelationshipList());
         //CreateLineGraphResponse lineResponse =  this.createLineGraph(lineRequest);
 
         //outputData.add(lineResponse.lineGraphArray);
@@ -67,7 +67,7 @@ public class VisualizeServiceImpl {
 
 
 
-    public CreateLineGraphResponse createLineGraph(CreateLineGraphRequest request) throws InvalidRequestException{
+    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request) throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
