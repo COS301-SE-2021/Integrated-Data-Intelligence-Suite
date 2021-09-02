@@ -14,13 +14,17 @@ import com.johnsnowlabs.nlp.annotators.LemmatizerModel;
 import com.johnsnowlabs.nlp.annotators.Normalizer;
 import com.johnsnowlabs.nlp.annotators.Tokenizer;
 import com.johnsnowlabs.nlp.annotators.TokenizerModel;
+import com.johnsnowlabs.nlp.annotators.classifier.dl.SentimentDLModel;
 import com.johnsnowlabs.nlp.annotators.ner.NamedEntity;
 import com.johnsnowlabs.nlp.annotators.ner.NerApproach;
 import com.johnsnowlabs.nlp.annotators.ner.NerConverter;
 import com.johnsnowlabs.nlp.annotators.ner.dl.NerDLModel;
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetector;
+import com.johnsnowlabs.nlp.annotators.sda.pragmatic.SentimentDetector;
 import com.johnsnowlabs.nlp.annotators.sentence_detector_dl.SentenceDetectorDLModel;
 import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
+import com.johnsnowlabs.nlp.embeddings.SentenceEmbeddings;
+import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -1744,51 +1748,63 @@ public class AnalyseServiceImpl {
 
         DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
         Dataset<Row> data2 = document_assembler.transform(data);
-        data2.show();
-        System.out.println("Data checkup 2");
+        //data2.show();
+        //System.out.println("Data checkup 2");
 
         //SentenceDetector sentence_detector = (SentenceDetector) ((SentenceDetector) new SentenceDetector().setInputCols(new String[] {"document"})).setOutputCol("sentence");
         SentenceDetectorDLModel sentence_detector = (SentenceDetectorDLModel) ((SentenceDetectorDLModel) new SentenceDetectorDLModel().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence"); //"sentence_detector_dl", "en"
         //.pretrained("sentence_detector_dl", "en")
         //sentence_detector.setExplodeSentences(true);
         Dataset<Row> data3 = sentence_detector.transform(data2);
-        data3.show();
-        System.out.println("Data checkup 3");
+        //data3.show();
+        //System.out.println("Data checkup 3");
 
         TokenizerModel tokenizer =  ((Tokenizer) ((Tokenizer) new Tokenizer().setInputCols(new String[] {"document"})) .setOutputCol("token")).fit(data3);
         //TokenizerModel tokenizer = (TokenizerModel) ((TokenizerModel) new TokenizerModel().pretrained().setInputCols(new String[] {"sentence"})).setOutputCol("token");
         Dataset<Row> data4 = tokenizer.transform(data3);
-        data4.show();
-        System.out.println("Data checkup 4");
+        //data4.show();
+        //System.out.println("Data checkup 4");
 
 
         NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
         Dataset<Row> data5 = checker.transform(data4);
-        data5.show();
-        System.out.println("Data checkup 5");
+        //data5.show();
+        //System.out.println("Data checkup 5");
+
 
         WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().pretrained().setInputCols(new String[] {"document", "token"})).setOutputCol("embeddings");
         //embeddings.setDimension(4);
         Dataset<Row> data6 = embeddings.transform(data5);
-        data6.show();
-        System.out.println("Data checkup 6");
+        //data6.show();
+        //System.out.println("Data checkup 6");
 
-        //EmbeddingsFinisher embeddingsFinisher = new EmbeddingsFinisher().setInputCols(new String[] {"embeddings"}).setOutputCols(new String[] {"finishedembeddings"});
-        //Dataset<Row> data9 = embeddings.transform(data6);
+        //SentenceEmbeddings sentenceEmbeddings = (SentenceEmbeddings) ((SentenceEmbeddings) new SentenceEmbeddings().setInputCols(new String[] {"document", "embeddings"})).setOutputCol("sentence_embeddings");
+        UniversalSentenceEncoder sentenceEmbeddings = (UniversalSentenceEncoder) ((UniversalSentenceEncoder) new UniversalSentenceEncoder().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence_embeddings");
+
+        Dataset<Row> data7 = sentenceEmbeddings.transform(data6);
+        //data7.select(col("sentence_embeddings")).show(false);
+        //System.out.println("Data checkup 7");
+
+        SentimentDLModel sentimentDetector = (SentimentDLModel) ((SentimentDLModel) new SentimentDLModel().pretrained().setInputCols(new String[] {"sentence_embeddings"})).setOutputCol("sentiment");
+        //Dataset<Row> data8 = sentimentDetector.transform(data7);
+        //data8.show();
+        //System.out.println("Data checkup 8");
+
+        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().pretrained().setInputCols(new String[] {"document", "token", "embeddings"})).setOutputCol("ner");
+        //Dataset<Row> data9 = ner.transform(data8);
         //data9.show();
         //System.out.println("Data checkup 9");
 
-
-        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().pretrained().setInputCols(new String[] {"document", "token", "embeddings"})).setOutputCol("ner");
-        Dataset<Row> data7 = ner.transform(data6);
-        data7.show();
-        System.out.println("Data checkup 7");
-
         NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"document", "token", "ner"})).setOutputCol("chunk");
-        Dataset<Row> data8 = converter.transform(data7);
-        data8.show();
-        System.out.println("Data checkup 8");
+        //Dataset<Row> data10 = converter.transform(data9);
+        //data10.show();
+        //System.out.println("Data checkup 10");
 
+
+        //EmbeddingsFinisher embeddingsFinisher = new EmbeddingsFinisher().setInputCols(new String[] {"embeddings"}).setOutputCols(new String[] {"finishedembeddings"});
+        //Dataset<Row> data11 = embeddings.transform(data6);
+        //data11.show();
+        //System.out.println("Data checkup 11");
 
         //Normalizer normalizer = (Normalizer)((Normalizer) new Normalizer().setInputCols(new String[]{"token"})).setOutputCol("normalized");
 
@@ -1796,7 +1812,7 @@ public class AnalyseServiceImpl {
 
         //Finisher finisher = new Finisher().setInputCols(new String[]{"document", "lemma"}).setOutputCols(new String[]{"document", "lemma"});
 
-        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker ,embeddings ,ner , converter /*normalizer, lemmatizer, finisher*/});
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker, embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
 
 // Fit the pipeline to training documents.
         PipelineModel pipelineFit = pipeline.fit(data);
@@ -1808,6 +1824,37 @@ public class AnalyseServiceImpl {
 
         results.show();
         System.out.println("NEW DATA");
+
+        /*results.select(col("text")).show(false);
+        System.out.println("text =results");
+
+        results.select(col("document.result")).show(false);
+        System.out.println("document =results");
+
+        results.select(col("sentence.result")).show(false);
+        System.out.println("sentence =results");
+
+        results.select(col("token.result")).show(false);
+        System.out.println("token =results");
+
+        results.select(col("Checked.result")).show(false);
+        System.out.println("Checked =results");
+
+        results.select(col("embeddings.result")).show(false);
+        System.out.println("embeddings =results");*/
+
+        results.select(col("sentence_embeddings.result")).show(false);
+        System.out.println("sentence_embeddings =results");
+
+        results.select(col("sentiment.result")).show(false);
+        System.out.println("sentiment =results");
+
+        /*results.select(col("ner.result")).show(false);
+        System.out.println("ner =results");
+
+        results.select(col("chunk.result")).show(false);
+        System.out.println("chunk =results");*/
+
 
 
         /**setup analyser**
