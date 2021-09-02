@@ -68,7 +68,10 @@ import org.mlflow.api.proto.Service.Experiment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import scala.Function1;
+import scala.collection.*;
+import scala.collection.mutable.WrappedArray;
 
 
 import java.io.IOException;
@@ -536,7 +539,7 @@ public class AnalyseServiceImpl {
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
-            ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
             for (int j = 0;
@@ -928,7 +931,7 @@ public class AnalyseServiceImpl {
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
-            ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
             for (int j = 0;
@@ -1468,6 +1471,8 @@ public class AnalyseServiceImpl {
 
 
         List<Row> textData = itemsDF.select("*").collectAsList();
+
+
         /*textData.get(0); //Text
         textData.get(1); //EntityTypes
         textData.get(2); //EntityTypeNumbers
@@ -1489,13 +1494,9 @@ public class AnalyseServiceImpl {
         else
             minSize = textData.size();*/
 
-
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for (int i = 0;
-             i < textData.size();
-             i++) {
-
+        for (int i = 0; i < textData.size(); i++) {
             Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
 
             List<?> amountOfEntities = new ArrayList<>();
@@ -1559,6 +1560,7 @@ public class AnalyseServiceImpl {
 
 
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
+
 
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
@@ -1641,12 +1643,9 @@ public class AnalyseServiceImpl {
 
 
         ArrayList<String> results = new ArrayList<>();
-        for (int i = 0;
-             i < rawResults.size();
-             i++) {
+        for (int i = 0; i < rawResults.size(); i++) {
             results.add(rawResults.get(i).get(0).toString());//name
         }
-
 
         return new TrainFindAnomaliesResponse(results);
     }
@@ -1729,19 +1728,21 @@ public class AnalyseServiceImpl {
                 .master("local")
                 .getOrCreate();
 
+        /*******************SETUP DATA*****************/
 
         StructType schema = new StructType( new StructField[]{
                 new StructField("text", DataTypes.StringType, false, Metadata.empty())});
         //createDataset(text, Encoders.STRING()).toDF("text");
 
-        List<Row> dataList = new ArrayList<>();
+        List<Row> nlpPropertiesData = new ArrayList<>();
         Row row = RowFactory.create(request.getText());
-        dataList.add(row);
+        nlpPropertiesData.add(row);
 
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(dataList,schema).toDF();
+        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
         //data.show();
         //System.out.println("Data checkup 1");
 
+        /*******************SETUP NLP PIPELINE MODEL*****************/
 
         DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
         Dataset<Row> data2 = document_assembler.transform(data);
@@ -1783,6 +1784,7 @@ public class AnalyseServiceImpl {
         //System.out.println("Data checkup 7");
 
         SentimentDLModel sentimentDetector = (SentimentDLModel) ((SentimentDLModel) new SentimentDLModel().pretrained().setInputCols(new String[] {"sentence_embeddings"})).setOutputCol("sentiment");
+
         //Dataset<Row> data8 = sentimentDetector.transform(data7);
         //data8.show();
         //System.out.println("Data checkup 8");
@@ -1814,6 +1816,7 @@ public class AnalyseServiceImpl {
 // Fit the pipeline to training documents.
         PipelineModel pipelineFit = pipeline.fit(data);
         Dataset<Row> results = pipelineFit.transform(data);
+
 
 
         data.show();
@@ -1852,6 +1855,54 @@ public class AnalyseServiceImpl {
         results.select(col("chunk.result")).show(false);
         System.out.println("chunk =results");*/
 
+
+        /*******************READ MODEL DATA*****************/
+
+        Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
+
+        List<Row> sentimentRowData = sentimentDataset.collectAsList();
+        Row sentimentRow = sentimentRowData.get(0);
+        WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //value
+
+        List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
+        String sentiment ="Positive";
+        if (innerSentimentRowData.get(0).equals("pos")) {
+            sentiment = "Positive";
+        }
+        else if(innerSentimentRowData.get(0).equals("neg")){
+            sentiment = "Negative";
+        }
+        else if(innerSentimentRowData.get(0).equals("neu")){
+            sentiment = "Neutral";
+        }
+
+        /*String sentiment ="";
+
+        sentiment = innerSentimentRowData.toString();
+        System.out.println("*********ARRAY FOUND : " + sentiment);
+
+        sentiment = innerSentimentRowData.get(0).toString();
+        System.out.println("*********INSIDE ARRAY FOUND : " + sentiment);
+
+        sentiment = innerSentimentRow;
+        System.out.println("*********SENTIMENT FOUND : " + sentiment);*/
+
+
+        /*for (int i = 0; i < sentimentRow.size(); i++) {
+
+            Row rows = sentimentRow.get(i);
+            sentiment = rows.get(0).toString();
+
+            //results.add(rawResults.get(i).get(0).toString());//name
+        }*/
+
+
+
+
+        String nameEntityText = "";
+        String nameEntityType = "";
+        ArrayList<String> nameEntityRow = new ArrayList<>(); //text, entity
+        ArrayList<ArrayList> nameEntities = new ArrayList<>();
 
 
         /**setup analyser**
@@ -1909,8 +1960,7 @@ public class AnalyseServiceImpl {
             nameEntities.add(row);
         }*/
 
-        FindNlpPropertiesResponse response = null;//new FindNlpPropertiesResponse(sentiment, partOfSpeech, nameEntities);
-        return response;
+        return null;//new FindNlpPropertiesResponse(sentiment,  nameEntities);
     }
 
     /**
