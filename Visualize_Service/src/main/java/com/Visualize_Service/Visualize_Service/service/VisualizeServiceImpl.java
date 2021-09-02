@@ -74,8 +74,70 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist is null");
         }
-        Graph newGraph = new Graph();
-        return null;
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+        ArrayList<String> listSent = new ArrayList<>();
+        ArrayList<ArrayList> out = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
+            //System.out.println(locs.toString());
+            listSent = new ArrayList<>();
+            out = new ArrayList<>();
+            for (int j = 0; j < sents.size(); j++) {
+                if (listSent.isEmpty()){
+                    listSent.add(sents.get(j));
+                    ArrayList<Object> r = new ArrayList<>();
+                    r.add(sents.get(j));
+                    r.add(1);
+                    out.add(r);
+                }else {
+                    if (listSent.contains(sents.get(j))){
+                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
+                        int val=Integer.parseInt(r.get(1).toString());
+                        val++;
+                        r.set(1,val);
+                        out.set(listSent.indexOf(sents.get(j)),r);
+                    }else {
+                        listSent.add(sents.get(j));
+                        ArrayList<Object> r = new ArrayList<>();
+                        r.add(sents.get(j));
+                        r.add(1);
+                        out.add(r);
+                    }
+                }
+            }
+            int temp = 0;
+            String sent = "";
+            for (ArrayList o : out) {
+               if (temp < Integer.parseInt(o.get(1).toString())) {
+                   temp = Integer.parseInt(o.get(1).toString());
+                   sent = o.get(0).toString();
+               }
+            }
+
+            float tot = sents.size() +1;
+            float number = ((float)temp)/tot * 50;
+            if (sent == "Positive")
+                number *= 2;
+            else
+                number = 100 - number*2;
+
+            LineGraph outp = new LineGraph();
+            outp.x = String.valueOf(i);
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateLineGraphSentimentsResponse(output);
     }
 
     public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request) throws InvalidRequestException{
