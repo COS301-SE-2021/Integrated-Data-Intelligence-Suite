@@ -7,7 +7,7 @@ import {
     Tooltip, AnimatedAreaSeries,
 } from '@visx/xychart';
 import { curveLinear, curveStep, curveCardinal } from '@visx/curve';
-
+import './visxAreaGraph.css';
 
 export default function VisxAreaGraph(props) {
     const data1 = [
@@ -51,39 +51,73 @@ export default function VisxAreaGraph(props) {
 
     return (
         <>
-            <XYChart height={300} width={400} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
-                <AnimatedAxis
-                    orientation="bottom"
-                    hideTicks
-                    numTicks={4}
-                    stroke={'black'}
-                />
+            <XYChart
+                height={300}
+                width={400}
+                xScale={{ type: 'band' }}
+                yScale={{ type: 'linear' }}
+                id={'ssssss'}
+            >
+                {
+                    props.showYAxis
+                    && (
+                        <AnimatedAxis
+                            orientation="bottom"
+                            hideTicks
+                            // numTicks={4}
+                            stroke={'black'}
+                            hideZero
+                        />
+                    )
+                }
+                {
+                    props.showXAxis
+                    && (
+                        <AnimatedAxis
+                            orientation="left"
+                            hideTicks
+                            numTicks={4}
+                            stroke={'black'}
+                            hideZero
+                        />
+                    )
+                }
+
+
                 <AnimatedGrid
                     columns={false}
                     rows={false}
                     numTicks={4}
                     animationTrajectory={'max'}
                 />
+
                 <AnimatedAreaSeries
                     dataKey="Line1"
-                    data={data1}
+                    data={props.graphData}
                     {...accessors}
                     fillOpacity={0.4}
                     curve={curveCardinal}
+                    className={props.idName}
+
                 />
-                <AnimatedAreaSeries
-                    dataKey="Line2"
-                    data={data2}
-                    {...accessors}
-                    fillOpacity={0.4}
-                    curve={curveCardinal}
-                />
+                {
+                    props.showSecondLine
+                    && (
+                        <AnimatedAreaSeries
+                            dataKey=" Line2"
+                            data={data2}
+                            {...accessors}
+                            fillOpacity={0.4}
+                            curve={curveCardinal}
+                        />
+                    )
+                }
 
                 <Tooltip
                     snapTooltipToDatumX
                     snapTooltipToDatumY
                     showVerticalCrosshair
-                    showSeriesGlyphs
+                    // showSeriesGlyphs
                     renderTooltip={({
                         tooltipData,
                         colorScale,
@@ -93,34 +127,39 @@ export default function VisxAreaGraph(props) {
                             {/*First Line*/}
                             <div
                                 style={{
-                                    color: colorScale(Object.keys(tooltipData.datumByKey)[0])
+                                    color: props.tooltipKeyColor
                                 }}
                             >
-
                                 {Object.keys(tooltipData.datumByKey)[0]}
                                 {': '}
-                                {
-                                    tooltipData.datumByKey.Line1 === null || tooltipData.datumByKey.Line1 === undefined
-                                        ? '–'
-                                        : tooltipData.datumByKey.Line1.datum.y
-                                }
                             </div>
+                            {
+                                tooltipData.datumByKey.Line1 === null || tooltipData.datumByKey.Line1 === undefined
+                                    ? '–'
+                                    : tooltipData.datumByKey.Line1.datum.y
+                            }
 
                             {/*Second Line*/}
-                            <div
-                                style={{
-                                    color: colorScale(Object.keys(tooltipData.datumByKey)[1])
-                                }}
-                            >
-                                <br/>
-                                {Object.keys(tooltipData.datumByKey)[1]}
-                                {': '}
-                                {
-                                    tooltipData.datumByKey.Line2 === null || tooltipData.datumByKey.Line2 === undefined
-                                        ? '–'
-                                        : tooltipData.datumByKey.Line2.datum.y
-                                }
-                            </div>
+                            {
+                                props.showSecondLine
+                                && (
+
+                                    <div
+                                        style={{
+                                            color: colorScale(Object.keys(tooltipData.datumByKey)[1])
+                                        }}
+                                    >
+                                        <br/>
+                                        {Object.keys(tooltipData.datumByKey)[1]}
+                                        {': '}
+                                        {
+                                            tooltipData.datumByKey.Line2 === null || tooltipData.datumByKey.Line2 === undefined
+                                                ? '–'
+                                                : tooltipData.datumByKey.Line2.datum.y
+                                        }
+                                    </div>
+                                )
+                            }
                         </div>
                     )}
                 />

@@ -1,0 +1,17 @@
+
+/*The area below the line*/
+.ave-sentiment-area-graph {
+    /*background: rgb(255, 0, 0);*/
+    fill: rgb(243, 76, 76) !important;
+}
+
+/*The thicc line of the area graph*/
+div#ave-sentiment-card
+> div.ant-card-body
+> svg
+> path.visx-line{
+    stroke: red;
+}
+
+
+

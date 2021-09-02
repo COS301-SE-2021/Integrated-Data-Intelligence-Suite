@@ -32,6 +32,7 @@ import VisxAreaGraph from '../../components/visxAreaGraph/visxAreaGraph';
 import VisxAreaStackGraph from '../../components/visxAreaStackGraph/visxAreaStackGraph';
 import VisxBarGraph from '../../components/visxBarGraph/visxBarGraph';
 import VisxBarGroupGraph from '../../components/visxBarGroupGraph/visxBarGroup';
+import visxAreaMockData from '../../Mocks/vsixAreaDataMock.json';
 
 const {
     Title,
@@ -116,10 +117,15 @@ class ChartPage extends Component {
                                                     indicatorValue="Very Bad"
                                                     showArrow
                                                     percentChange="-27%"
+                                                    cardID={'ave-sentiment-card'}
                                                     graphComponent={(
-                                                        <LineGraph
-                                                            graphData={LineGraphDataNegative}
-                                                            lineColor="#EF062D"
+                                                        <VisxAreaGraph
+                                                            graphData={visxAreaMockData}
+                                                            showSecondLine={false}
+                                                            showXAxis={false}
+                                                            showYAxis={false}
+                                                            idName={'ave-sentiment-area-graph'}
+                                                            tooltipKeyColor={'red'}
                                                         />
                                                     )}
                                                 />
