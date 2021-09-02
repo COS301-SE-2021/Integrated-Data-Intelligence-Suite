@@ -101,6 +101,8 @@
     "no-multiple-empty-lines": "warn",
     "arrow-parens": "warn",
     "prefer-arrow-callback": "off",
-    "no-return-assign": "off"
+    "no-return-assign": "off",
+    "react/jsx-props-no-spreading": "warn",
+    "dot-notation": "off"
   }
 }

@@ -50,29 +50,28 @@ const fixedValueGenerator = function () {
     return 0.5;
 };
 
-
 function WordCloud(props) {
     return (
         <div className="wordcloud">
             <Wordcloud
-                words={words}
-                width={800}
-                height={800}
-                font="Impact"
-                padding={2}
-                fontSize={fontSizeSetter}
-                spiral="archimedean"
-                rotate={0}
-                random={fixedValueGenerator}
+              words={words}
+              width={800}
+              height={800}
+              font="Impact"
+              padding={2}
+              fontSize={fontSizeSetter}
+              spiral="archimedean"
+              rotate={0}
+              random={fixedValueGenerator}
             >
                 {(cloudWords) => cloudWords.map((w, i) => (
                     <Text
-                        key={w.text}
-                        fill={colors[i % colors.length]}
-                        textAnchor="middle"
-                        transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-                        fontSize={w.size}
-                        fontFamily={w.font}
+                      key={w.text}
+                      fill={colors[i % colors.length]}
+                      textAnchor="middle"
+                      transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                      fontSize={w.size}
+                      fontFamily={w.font}
                     >
                         {w.text}
                     </Text>
