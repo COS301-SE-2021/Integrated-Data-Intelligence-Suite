@@ -59,28 +59,28 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When findPatternRequest is Null")
     public void findPatternNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindPattern(null));
     }
 
     @Test
     @DisplayName("When the findPattern data list is Null")
     public void findPatternDataNullList(){
-        FindPatternRequest test = new FindPatternRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(test));
+        TrainFindPatternRequest test = new TrainFindPatternRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindPattern(test));
     }
 
 
     @Test
     @DisplayName("When findRelationshipRequest is Null")
     public void findRelationshipNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindRelationship(null));
     }
 
     @Test
     @DisplayName("When the findRelationship data list is Null")
     public void findRelationshipDataNullList(){
-        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
+        TrainFindRelationshipsRequest test = new TrainFindRelationshipsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindRelationship(test));
     }
 
 
@@ -141,8 +141,8 @@ public class AnalyseServiceTest {
 
         TestList.add(row);
 
-        FindPatternRequest test = new FindPatternRequest(TestList);
-        FindPatternResponse testResults = service.findPattern(test);
+        TrainFindPatternRequest test = new TrainFindPatternRequest(TestList);
+        TrainFindPatternResponse testResults = service.trainFindPattern(test);
         Assertions.assertNotNull(testResults);
     }
 
@@ -163,8 +163,8 @@ public class AnalyseServiceTest {
         ArrayList<ArrayList> input = new ArrayList<>();
         input.add(TestList);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(input);
-        FindRelationshipsResponse testResults = service.findRelationship(test);
+        TrainFindRelationshipsRequest test = new TrainFindRelationshipsRequest(input);
+        TrainFindRelationshipsResponse testResults = service.trainFindRelationship(test);
         Assertions.assertNotNull(testResults);
     }
 
