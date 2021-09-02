@@ -27,7 +27,7 @@ exports[`renders correctly 1`] = `
       onSubmit={[Function]}
     >
       <div
-        className="ant-row ant-form-item input_item_div"
+        className="ant-row ant-form-item"
         style={Object {}}
       >
         <div
@@ -86,7 +86,7 @@ exports[`renders correctly 1`] = `
         </div>
       </div>
       <div
-        className="ant-row ant-form-item input_item_div"
+        className="ant-row ant-form-item"
         style={Object {}}
       >
         <div
@@ -135,7 +135,7 @@ exports[`renders correctly 1`] = `
                   onChange={[Function]}
                   onFocus={[Function]}
                   onKeyDown={[Function]}
-                  placeholder="password"
+                  placeholder="Password"
                   style={null}
                   type="password"
                   value=""

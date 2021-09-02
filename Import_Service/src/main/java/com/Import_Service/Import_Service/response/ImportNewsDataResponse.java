@@ -2,7 +2,7 @@ package com.Import_Service.Import_Service.response;
 
 public class ImportNewsDataResponse {
 
-    private String data;
+    String data;
 
     public ImportNewsDataResponse(String data) {
         this.data = data;
