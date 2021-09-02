@@ -172,6 +172,32 @@
 
 
 		<dependency>
+			<groupId>org.mlflow</groupId>
+			<artifactId>mlflow-client</artifactId>
+			<version>1.20.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mlflow</groupId>
+			<artifactId>mlflow-scoring</artifactId>
+			<version>1.20.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mlflow</groupId>
+			<artifactId>mlflow-spark</artifactId>
+			<version>1.20.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mlflow</groupId>
+			<artifactId>mlflow-parent</artifactId>
+			<version>1.20.0</version>
+			<type>pom</type>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.codehaus.janino</groupId>
 			<artifactId>janino</artifactId>
 			<version>3.0.16</version>

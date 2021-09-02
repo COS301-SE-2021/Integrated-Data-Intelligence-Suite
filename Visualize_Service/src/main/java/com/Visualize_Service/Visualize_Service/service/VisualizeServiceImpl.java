@@ -71,7 +71,6 @@ public class VisualizeServiceImpl {
         CreateWordCloudGraphResponse wordcloudResponse = this.createWordCloudGraph(wordcloudRequest);
         outputData.add(wordcloudResponse.words);
 
-
         return new VisualizeDataResponse( outputData );
     }
 
@@ -531,12 +530,6 @@ public class VisualizeServiceImpl {
 
         return new CreateWordCloudGraphResponse(output);
     }
-
-
-
-
-
-
 
     /******************************************************************************************************************/
 
