@@ -1,5 +1,5 @@
 .source-list{
-    padding-left: 10px;
+    padding-left: 20px;
     line-height: normal;
 }
 
@@ -41,7 +41,7 @@ button.warning{
     color: #FF0800;
 }
 
-.source-list button.standard-filled{
+.source-list .button.standard-filled{
     background: #5773FA;
     border: none;
     font-size: 16px;
@@ -49,8 +49,13 @@ button.warning{
     margin-left: 10px;
     border-radius: 5px;
     text-transform: capitalize;
+    color: white;
 }
-.source-list button.standard-filled:hover{
+.source-list .add-source{
+    margin-bottom: 20px;
+}
+
+.source-list .button.standard-filled:hover{
     background: #1C8EFA;
 
 }
