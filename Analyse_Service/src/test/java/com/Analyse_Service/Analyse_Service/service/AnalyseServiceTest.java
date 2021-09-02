@@ -189,9 +189,10 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the text is Valid")
     public void findEntitiesValidRequest() throws InvalidRequestException {
-        String text = "test text for function";
+        ArrayList<String> text = new ArrayList<>();;
+        text.add("test text for function");
         FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
-        FindNlpPropertiesResponse testResults = service.findNlpProperties(test);
+        ArrayList<FindNlpPropertiesResponse> testResults = service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 

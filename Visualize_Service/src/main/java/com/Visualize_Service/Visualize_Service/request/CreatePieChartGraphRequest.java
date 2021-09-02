@@ -1,13 +1,11 @@
 package com.Visualize_Service.Visualize_Service.request;
 
-import com.Visualize_Service.Visualize_Service.dataclass.Graph;
-
 import java.util.ArrayList;
 
-public class CreateLineGraphRequest {
+public class CreatePieChartGraphRequest {
     public ArrayList<ArrayList> dataList;
 
-    public CreateLineGraphRequest(ArrayList<ArrayList> dataList){
+    public CreatePieChartGraphRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;
     }
 

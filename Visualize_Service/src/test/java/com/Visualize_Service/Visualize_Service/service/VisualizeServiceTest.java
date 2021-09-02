@@ -92,14 +92,14 @@ public class VisualizeServiceTest {
     @Test
     @DisplayName("When createlineGraphRequest is Null")
     public void createlineGraphNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraph(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraphSentiments(null));
     }
 
     @Test
     @DisplayName("When the DataList of Line graph is Null")
     public void createlineGraphDataListNull(){
-        CreateLineGraphRequest test = new CreateLineGraphRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraph(test));
+        CreateLineGraphSentimentsRequest test = new CreateLineGraphSentimentsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraphSentiments(test));
     }
 
 
