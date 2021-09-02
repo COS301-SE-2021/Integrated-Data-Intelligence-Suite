@@ -26,9 +26,6 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.SentenceEmbeddings;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.*;
 import com.johnsnowlabs.nlp.pretrained.PretrainedPipeline;
 
 
