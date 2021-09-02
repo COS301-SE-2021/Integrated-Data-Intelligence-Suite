@@ -1,12 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { unmountComponentAtNode } from 'react-dom';
-import RegisterButton from '../components/RegisterButton/RegisterButton';
+import RegisterButton from "../pages/RegisterPage/RegisterButton";
+import {unmountComponentAtNode} from "react-dom";
 
 let container = null;
 beforeEach(() => {
   // setup a DOM element as a render target
-  container = document.createElement('div');
+  container = document.createElement("div");
   document.body.appendChild(container);
 });
 
@@ -17,9 +17,10 @@ afterEach(() => {
   container = null;
 });
 
+
 it('renders correctly', () => {
-  const tree = renderer
-    .create(<RegisterButton />)
-    .toJSON();
-  expect(tree).toMatchSnapshot();
+    const tree = renderer
+        .create(<RegisterButton/>)
+        .toJSON();
+    expect(tree).toMatchSnapshot();
 });

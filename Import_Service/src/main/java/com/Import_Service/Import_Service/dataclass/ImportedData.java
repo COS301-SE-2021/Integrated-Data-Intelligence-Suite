@@ -1,7 +1,5 @@
 package com.Import_Service.Import_Service.dataclass;
 
-import com.Import_Service.Import_Service.rri.DataSource;
-
 public class ImportedData {
     private DataSource source;
     private String data;

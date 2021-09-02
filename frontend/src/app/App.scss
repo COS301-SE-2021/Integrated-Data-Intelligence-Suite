@@ -6,14 +6,20 @@
 @import url("components/UserInfoCard/UserInfoCard.css");
 
 //Header and all its child components
-@import url("components/Header/Header.css");
+@import url("../styles/Header/Header.css");
 @import url("components/SearchBar/SearchBar.css");
 
 //Content Section and all its child components
-@import url("components/ContentSection/ContentSection.css");
+@import url("../styles/ContentSection/ContentSection.css");
+@import "../styles/Demo2/line_graph.css";
+@import "../styles/Demo2/map_graph.css";
+@import "../styles/Demo2/network_graph.css";
+@import url("../styles/Demo2/timeline_graph.css");
+@import url("../styles/Demo2/graph_list.css");
+
 
 //Footer and all its child components
-@import url("components/Footer/Footer.css");
+@import url("../styles/Footer/Footer.css");
 
 //Login Page
 //@import "../styles/LoginPage/login.css";
@@ -21,25 +27,25 @@
 //Register Page
 //@import "../styles/RegisterPage/registerPage.css";
 
+
 //Permissions Page
-@import "pages/PermissionsPage/Permissions.css";
+@import "../styles/Permissions/Permissions.css";
 //@import "../styles/UserPermissions/UserPermissions.css";
 
 //Settings Page
-@import "pages/SettingsPage/SettingsPage.css";
-
-@import "components/DataSourceList/DataSourceList.css";
-@import "pages/AddDataSourcePage/AddDataSource.css";
+@import "../styles/SettingsPage/SettingsPage.css";
 
 //Miscellaneous
 @import "../index.css";
 
 //Chart Page and all its child components
 @import '~leaflet/dist/leaflet.css';
-@import 'pages/ChartPage/ChartPage.css';
-@import 'components/MapCard/MapCardSidebar.css';
-@import 'components/MapCard/MapCard.css';
-@import 'components/DetailsCard/DetailsCard.css';
+@import 'pages/ChartPage/components/ChartPage.css';
+@import 'pages/ChartPage/components/MapCard/MapCardSidebar.css';
+@import 'pages/ChartPage/components/MapCard/MapCard.css';
+@import 'pages/ChartPage/components/DetailsCard/DetailsCard.css';
+
+
 
 @import 'components/ExitMenuTooltip/ExitMenuTooltip.css';
 
