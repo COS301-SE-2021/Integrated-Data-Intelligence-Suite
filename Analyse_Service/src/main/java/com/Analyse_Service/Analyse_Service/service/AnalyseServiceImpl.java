@@ -852,6 +852,7 @@ public class AnalyseServiceImpl {
                 texts.add(rawtexts.get(j).get(0).toString());
             }
             r.add(texts);
+            r.add( rawResults.get(i).get(2).toString());
 
             results.add(r);
 
