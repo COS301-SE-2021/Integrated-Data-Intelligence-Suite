@@ -73,14 +73,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When findRelationshipRequest is Null")
     public void findRelationshipNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindRelationship(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(null));
     }
 
     @Test
     @DisplayName("When the findRelationship data list is Null")
     public void findRelationshipDataNullList(){
-        TrainFindRelationshipsRequest test = new TrainFindRelationshipsRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindRelationship(test));
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
     }
 
 
@@ -163,8 +163,8 @@ public class AnalyseServiceTest {
         ArrayList<ArrayList> input = new ArrayList<>();
         input.add(TestList);
 
-        TrainFindRelationshipsRequest test = new TrainFindRelationshipsRequest(input);
-        TrainFindRelationshipsResponse testResults = service.trainFindRelationship(test);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(input);
+        FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
 
