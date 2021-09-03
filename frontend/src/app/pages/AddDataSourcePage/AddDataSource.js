@@ -1,35 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { useHistory, useParams } from 'react-router-dom';
-
-/*function getSource(id) {
-    const re = /^[0-9]+((-)([0-9])+)*$/;
-    if (re.exec(id)) {
-        return {
-            id,
-            name: `source${id}`,
-            method: 'POST',
-            authType: 'bearer',
-            authorization: `token${id}`,
-            url: 'https://twitter.com/',
-            searchKey: 'query',
-            parameters: [
-                { parameter: 'lang', value: `EN ${id}`, errors: { parameter: '', value: '' } },
-                { parameter: 'date', value: `2020-12-01 ${id}`, errors: { parameter: '', value: '' } },
-            ],
-        };
-    }
-        return {
-            id: null,
-            name: '',
-            method: 'GET',
-            url: '',
-            searchKey: '',
-            authType: 'none',
-            authorization: '',
-            parameters: [],
-        };
-}*/
+import {Button, message} from 'antd';
 
 const getSource = (id, structure) => {
     const [data, setData] = useState(null);
@@ -57,7 +29,7 @@ const getSource = (id, structure) => {
             })
             .then((data) => {
                 console.log('data is here', data);
-                console.log('structure looks like ', data.source)
+                console.log('structure looks like ', data.source);
                 if (data.success) {
                     setData(data.source);
                 } else {
@@ -92,6 +64,7 @@ const AddDataSource = () => {
     const [token, setToken] = useState(null);
     const [queryKey, setQueryKey] = useState(null);
     const [method, setMethod] = useState(null);
+    const [submitLoading, setSubmitLoading] = useState(false);
 
     const structure = {
             id: null,
@@ -103,21 +76,7 @@ const AddDataSource = () => {
             authorization: '',
             parameters: [],
         };
-    // const {data: dataSource, isPending, error } = getSource(id, structure);
-
-    const dataSource = {
-        id,
-        name: `source${id}`,
-        method: 'POST',
-        authType: 'bearer',
-        authorization: `token${id}`,
-        url: 'https://twitter.com/',
-        searchKey: 'query',
-        parameters: [
-            { parameter: 'lang', value: `EN ${id}`, errors: { parameter: '', value: '' } },
-            { parameter: 'date', value: `2020-12-01 ${id}`, errors: { parameter: '', value: '' } },
-        ],
-    };
+    const { data: dataSource, isPending, error } = getSource(id, structure);
 
     const prevIsValid = () => {
         if (form.length === 0) {
@@ -126,7 +85,7 @@ const AddDataSource = () => {
 
         const someEmpty = form.some((item)=>item.parameter === '' || item.value === '');
 
-        //TODO display error
+        // TODO display error
 
         // if (someEmpty) {
         //     form.map((item, index)=>{
@@ -150,11 +109,6 @@ const AddDataSource = () => {
         const inputState = {
             parameter: '',
             value: '',
-
-            errors: {
-                parameter: null,
-                value: null,
-            },
         };
 
         if (prevIsValid()) {
@@ -184,25 +138,86 @@ const AddDataSource = () => {
     };
 
     const changeAuthType = (value) =>{
-        setToken('');
+        if (value === dataSource.authType && token === '') {
+            setToken(dataSource.authorization);
+        } else if (value === 'none') {
+            setToken('');
+        }
         setAuthType(value);
     };
 
     const handleSubmit = (event) =>{
         event.preventDefault();
         event.persist();
+        setSubmitLoading(true);
+
+        const newSource = {
+            id,
+            name,
+            method,
+            url,
+            searchKey: queryKey,
+            authType,
+            authorization: token,
+            parameters: form,
+        };
+
+        console.log(newSource);
+
+        if (dataSource.id === null) {
+            const abortCont = new AbortController();
+            fetch('http://localhost:9001/Import/addApiSource',
+                {
+                    signal: abortCont.signal,
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newSource),
+                }).then((res) => {
+                if (!res.ok) {
+                    throw Error(res.error());
+                }
+                return res.json();
+            })
+                .then((data) => {
+                    setSubmitLoading(false);
+                    console.log('data is here', data);
+                    console.log('structure looks like ', data.source);
+                    if (data.success) {
+                        // history.goBack();
+                        message.success(data.message);
+                    } else {
+                        message.error(data.message);
+                    }
+
+                })
+                .catch((err) => {
+                    if (err.name === 'AbortError') console.log('Fetch Aborted');
+                    else {
+                        message.error(err.message)
+                    }
+                });
+        }
     };
 
-    // const setErrorField = (lst) =>{
-    //     for (let lstKey in lst) {
-    //         lstKey.errors = {
-    //             parameter
-    //         }
-    //     }
-    // }
+    const mapForm = (obj1) =>{
+        const params = [];
+        // eslint-disable-next-line func-names
+        obj1.forEach(function (item) {
+            // eslint-disable-next-line guard-for-in,no-restricted-syntax
+            for (const i in item) {
+                params.push({
+                    parameter: i,
+                    value: item[i],
+                });
+            }
+        });
+
+        console.log('should be correct structure now', params);
+        setForm(params);
+    };
     return (
         <div className="data-source">
-            {/*{ dataSource && form === null && setErrorField([dataSource.parameters])}*/}
+            { dataSource && form === null && mapForm([dataSource.parameters])}
             { dataSource && method === null && setMethod(dataSource.method)}
             { dataSource && name === null && setName(dataSource.name)}
             { dataSource && url === null && setUrl(dataSource.url) }
@@ -210,7 +225,7 @@ const AddDataSource = () => {
             { dataSource && authType === null && setAuthType(dataSource.authType)}
             { dataSource && token === null && setToken(dataSource.authorization)}
             <form>
-                <div className={'row'}><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
+                <div className="row"><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
                 { method && (
                     <div className="row">
                         <div className="col left">
@@ -343,35 +358,42 @@ const AddDataSource = () => {
                             <div className="col left">
                                 <input
                                   type="text"
-                                  className={
-                                        item.errors.parameter ? 'form-control invalid' : 'form-control'
-                                    }
+                                  // className={
+                                  //       item.errors.parameter ? 'form-control invalid' : 'form-control'
+                                  //   }
                                   name="parameter"
                                   placeholder="Parameter"
                                   value={item.parameter}
                                   onChange={(e)=>handleFieldChange(index, e)}
                                 />
-                                {item.errors.parameter && <div className="invalid feedback">{item.errors.parameter}</div>}
+                                {/* {item.errors.parameter && <div className="invalid feedback">{item.errors.parameter}</div>} */}
                             </div>
                             <div className="col right">
                                 <input
                                   type="text"
-                                  className={
-                                        item.errors.value ? 'form-control invalid' : 'form-control'
-                                    }
+                                  // className={
+                                  //       item.errors.value ? 'form-control invalid' : 'form-control'
+                                  //   }
                                   name="value"
                                   placeholder="Value"
                                   value={item.value}
                                   onChange={(e)=>handleFieldChange(index, e)}
                                 />
-                                {item.errors.value && <div className="invalid feedback">{item.errors.value}</div>}
+                                {/* {item.errors.value && <div className="invalid feedback">{item.errors.value}</div>} */}
 
                             </div>
                             <CloseCircleTwoTone twoToneColor="#FF0800" className="close-button" onClick={(e)=>handleRemoveField(index, e)} />
                         </div>
                     ))}
                 <button className="btn btn-primary" onClick={(e)=>handleAddParameter(e, setForm)}>Add Parameter</button>
-                <button className="btn submit btn-primary" onClick={(e)=>handleSubmit(e)}>submit</button>
+                <Button
+                  className="btn submit btn-primary"
+                  type="primary"
+                  loading={submitLoading}
+                  onClick={(e)=>handleSubmit(e)}
+                >
+                    Submit
+                </Button>
             </form>
         </div>
     );
