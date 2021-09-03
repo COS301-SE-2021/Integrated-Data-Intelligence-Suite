@@ -204,35 +204,35 @@ class ChartPage extends Component {
                                         <div id="map-card-container">
                                             <Card
                                                 id="map-card"
-                                                title="World Map"
+                                                // title="World Map"
                                             >
                                                 <MapCard text={this.state.text}/>
                                             </Card>
 
-                                            <div id="map-details-container">
-                                                <IndicatorCard
-                                                    cardID="top-country-indicator-card"
-                                                    indicatorTitle="Engagement by Location"
-                                                    showArrow={false}
-                                                    graphComponent={(
-                                                        <BarGraph
-                                                            graphData={BarGraphMockData}
-                                                        />
-                                                    )}
-                                                />
-                                                <InfoDiv infoValue="77%"/>
-                                                <IndicatorCard
-                                                    cardID="top-country-indicator-card"
-                                                    indicatorTitle="Engagement by Location"
-                                                    showArrow={false}
-                                                    graphComponent={(
-                                                        <BarGraph
-                                                            graphData={BarGraphMockData}
-                                                        />
-                                                    )}
-                                                />
-                                            </div>
+                                            {/*<div id="map-details-container">*/}
+                                            {/*</div>*/}
                                         </div>
+                                        <IndicatorCard
+                                            cardID="top-country-indicator-card"
+                                            indicatorTitle="Engagement by Location"
+                                            showArrow={false}
+                                            graphComponent={(
+                                                <BarGraph
+                                                    graphData={BarGraphMockData}
+                                                />
+                                            )}
+                                        />
+                                        <InfoDiv infoValue="77%"/>
+                                        <IndicatorCard
+                                            cardID="top-country-indicator-card"
+                                            indicatorTitle="Engagement by Location"
+                                            showArrow={false}
+                                            graphComponent={(
+                                                <BarGraph
+                                                    graphData={BarGraphMockData}
+                                                />
+                                            )}
+                                        />
 
                                         {/* <Sider */}
                                         {/*    id="map_card_sidebar" */}

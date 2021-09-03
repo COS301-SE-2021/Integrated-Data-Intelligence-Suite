@@ -24,16 +24,11 @@ function PieChart(props) {
                     />
                     <div id={props.legendID}>
                         <VictoryLegend
-                            className={'DID-uWORK'}
                             orientation={props.legendOrientation}
                             height={100}
                             // width={300}
                             gutter={20}
                             containerComponent={<VictoryContainer responsive/>}
-                            style={{
-                                border: { stroke: 'black' },
-                                title: { fontSize: 40 }
-                            }}
                             data={[
                                 {
                                     name: 'Very Bad',

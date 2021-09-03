@@ -5,11 +5,11 @@
     /*border: 3px solid black;*/
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: 10em 4em;
+    grid-template-rows: 11em 4em;
 }
 
 #total-sentiment-pie {
-    border: 3px solid red;
+    /*border: 3px solid red;*/
     grid-row-start: 1;
     grid-row-end: 1;
     grid-column-start: 2;
@@ -17,7 +17,7 @@
 }
 
 #total-sentiment-legend {
-    border: 3px solid blue;
+    /*border: 3px solid blue;*/
     grid-row-start: 2;
     grid-row-end: 2;
     grid-column-start: 1;

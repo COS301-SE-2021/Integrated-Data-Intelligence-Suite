@@ -319,9 +319,45 @@ public class ImportServiceImpl {
             throw new InvalidImporterRequestException("The request cannot contain null attributes");
         }
 
-        return null;
+        Optional<APISource> findSource = apiSourceRepository.findAPISourceByName(request.getName());
+        if(findSource.isEmpty()) {
+            return new EditAPISourceResponse(false, "Source does not exist");
+        }
+        else {
+            APISource source = findSource.get();
 
+            int changedName = apiSourceRepository.updateName(source.getId(), request.getName());
+            if(changedName == 0) {
+                return new EditAPISourceResponse(false, "Failed to update the name of the API source");
+            }
 
+            int changedUrl = apiSourceRepository.updateUrl(source.getId(), request.getUrl());
+            if(changedUrl == 0) {
+                return new EditAPISourceResponse(false, "Failed to update the URL of the API source");
+            }
+
+            int changedAuth = apiSourceRepository.updateAuth(source.getId(), request.getAuthorization());
+            if(changedAuth == 0) {
+                return new EditAPISourceResponse(false, "Failed to update the authorization code of the API source");
+            }
+
+            int changedMethod = apiSourceRepository.updateMethod(source.getId(), request.getMethod());
+            if(changedMethod == 0) {
+                return new EditAPISourceResponse(false, "Failed to update the HTTP method of the API source");
+            }
+
+            int changedType = apiSourceRepository.updateType(source.getId(), request.getAuthType());
+            if(changedType == 0) {
+                return new EditAPISourceResponse(false, "Failed to update the type of authorization of the API source");
+            }
+
+            int changedSearchKey = apiSourceRepository.updateSearchKey(source.getId(), request.getSearchKey());
+            if(changedSearchKey == 0) {
+                return new EditAPISourceResponse(false, "Failed to update the search key of the API source");
+            }
+
+            return new EditAPISourceResponse(true, "Successfully updated the API source");
+        }
     }
 
     /**
