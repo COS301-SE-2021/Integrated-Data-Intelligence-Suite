@@ -196,6 +196,26 @@ public class ImportServiceController {
         return service.addAPISource(request);
     }
 
+    @PostMapping(value = "/updateAPI")
+    public @ResponseBody EditAPISourceResponse editAPISource(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        String name = obj.getString("name");
+        String url = obj.getString("url");
+        String method = obj.getString("method");
+        String searchKey = obj.getString("searchKey");
+        String auth = obj.getString("authorization");
+        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
+        Map<String, String> params = new LinkedHashMap<>();
+        JSONArray paramsArray = obj.getJSONArray("parameters");
+        for(int i = 0; i < paramsArray.length(); i++) {
+            JSONObject paramObj = paramsArray.getJSONObject(i);
+            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
+        }
+
+        EditAPISourceRequest request = new EditAPISourceRequest(name, url, method, searchKey, authType, auth, params);
+        return service.editAPISource(request);
+    }
+
     @GetMapping(value = "/getAllSources")
     public @ResponseBody GetAllAPISourcesResponse getAllAPISources() {
         return service.getAllAPISources();
