@@ -56,7 +56,6 @@ export default function VisxAreaGraph(props) {
                 width={250}
                 xScale={{ type: 'band' }}
                 yScale={{ type: 'linear' }}
-                id={'ssssss'}
             >
                 {
                     props.showYAxis
