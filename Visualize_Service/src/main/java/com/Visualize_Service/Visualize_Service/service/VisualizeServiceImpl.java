@@ -76,7 +76,70 @@ public class VisualizeServiceImpl {
         CreateWordCloudGraphResponse wordcloudResponse = this.createWordCloudGraph(wordcloudRequest);
         outputData.add(wordcloudResponse.words);
 
+        outputData.add(this.extraBarOne(request.getTrendList()));
+        outputData.add(this.extraBartwo(request.getTrendList()));
+
+
         return new VisualizeDataResponse( outputData );
+    }
+
+    public ArrayList<Graph> extraBarOne(ArrayList<ArrayList> list){
+        ArrayList<Graph> output = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+        ArrayList<Integer> typeFreq = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            String type = list.get(i).get(2).toString();
+            if (types.contains(type)){
+                int freq = typeFreq.get(types.indexOf(type));
+                freq++;
+                typeFreq.set(types.indexOf(type),freq);
+            }else {
+                types.add(type);
+                typeFreq.add(1);
+            }
+        }
+        BarGraph bar2;
+        for (int j = 0; j < types.size(); j++) {
+            bar2 = new BarGraph();
+            bar2.x = types.get(j).toString();
+            bar2.y = typeFreq.get(j).toString();
+
+            System.out.println("x: " + bar2.x);
+            System.out.println("y: " + bar2.y);
+            output.add(bar2);
+        }
+        return output;
+    }
+
+    public ArrayList<Graph> extraBartwo(ArrayList<ArrayList> list){
+        ArrayList<Graph> output = new ArrayList<>();
+        BarGraph bar2;
+        for (int i = 0; i < list.size(); i++) {
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            double Freq = Float.parseFloat(list.get(i).get(6).toString());
+            Freq += Math.random() * (15);
+
+
+
+            bar2 = new BarGraph();
+            bar2.x = stringDate;
+            bar2.y = String.valueOf((int)Freq);
+
+            System.out.println("x: " + bar2.x);
+            System.out.println("y: " + bar2.y);
+            output.add(bar2);
+        }
+        return output;
     }
 
     public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {

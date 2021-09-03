@@ -1,6 +1,28 @@
+/*********************************************************/
+/**************** Total-Sentiment-Pie *******************/
+/*******************************************************/
 #total-sentiment-pie-container {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: 11em 4em;
 }
+
+#total-sentiment-pie {
+    /*border: 3px solid red;*/
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+#total-sentiment-legend {
+    /*border: 3px solid blue;*/
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+
+
