@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryAxis, VictoryChart, VictoryLegend, VictoryPie } from 'victory';
+import { VictoryAxis, VictoryChart, VictoryContainer, VictoryLegend, VictoryPie } from 'victory';
 import './PieChart.css';
 
 function PieChart(props) {
@@ -14,7 +14,7 @@ function PieChart(props) {
                         data={props.graphData}
                         labels={() => null}
                         innerRadius={140}
-                        padAngle={1.1}
+                        padAngle={1.3}
                         height={500}
                         width={500}
                         animate={{
@@ -22,40 +22,45 @@ function PieChart(props) {
                         }}
                         id={props.pieID}
                     />
-                    <VictoryLegend
-                        x={125}
-                        y={50}
-                        orientation={props.legendOrientation}
-                        gutter={20}
-                        style={{
-                            border: { stroke: 'black' },
-                            title: { fontSize: 20 }
-                        }}
-                        data={[
-                            {
-                                name: 'Very Bad',
-                                symbol: {
-                                    fill: '#FF0000',
+                    <div id={props.legendID}>
+                        <VictoryLegend
+                            className={'DID-uWORK'}
+                            orientation={props.legendOrientation}
+                            height={100}
+                            // width={300}
+                            gutter={20}
+                            containerComponent={<VictoryContainer responsive/>}
+                            style={{
+                                border: { stroke: 'black' },
+                                title: { fontSize: 40 }
+                            }}
+                            data={[
+                                {
+                                    name: 'Very Bad',
+                                    symbol: {
+                                        fill: '#FF0000',
+                                    }
+                                },
+                                {
+                                    name: 'Bad',
+                                    symbol: { fill: '#ff7707' }
+                                },
+                                {
+                                    name: 'Neutral',
+                                    symbol: { fill: '#FFFF00' }
+                                },
+                                {
+                                    name: 'Good',
+                                    symbol: { fill: '#138808' }
+                                },
+                                {
+                                    name: 'Very Good',
+                                    symbol: { fill: '#00E000' }
                                 }
-                            },
-                            {
-                                name: 'Bad',
-                                symbol: { fill: '#ff7707' }
-                            },
-                            {
-                                name: 'Neutral',
-                                symbol: { fill: '#FFFF00' }
-                            },
-                            {
-                                name: 'Good',
-                                symbol: { fill: '#138808' }
-                            },
-                            {
-                                name: 'Very Good',
-                                symbol: { fill: '#00E000' }
-                            }
-                        ]}
-                    />
+                            ]}
+                        />
+                    </div>
+
                 </div>
 
             </div>

@@ -147,6 +147,7 @@ class ChartPage extends Component {
                                                 />
                                             )}
                                         />
+
                                         <IndicatorCard
                                             indicatorTitle="Total Sentiment"
                                             showArrow={false}
@@ -156,12 +157,13 @@ class ChartPage extends Component {
                                                     graphData={PieChartMockData}
                                                     legendOrientation={'horizontal'}
                                                     pieID={'total-sentiment-pie'}
+                                                    legendID={'total-sentiment-legend'}
                                                 />
                                             )}
                                         />
 
                                         <IndicatorCard
-                                            indicatorTitle="Some Title"
+                                            indicatorTitle="Sentiment vs Time"
                                             showArrow={false}
                                             cardID={'sentiment-vs-time-card'}
                                             graphComponent={(
@@ -172,7 +174,7 @@ class ChartPage extends Component {
                                         {/*</div>*/}
 
                                         <IndicatorCard
-                                            indicatorTitle="Total Sentiment"
+                                            indicatorTitle="Some Title"
                                             showArrow={false}
                                             // cardID={'total-sentiment-card'}
                                             graphComponent={(
