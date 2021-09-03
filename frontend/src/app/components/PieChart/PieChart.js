@@ -14,7 +14,7 @@ function PieChart(props) {
     } else if (props.text[6].length === 0) {
         data_from_backend = [];
     } else if (props.text[6].length > 0) {
-        console.log('Reached-here-PPPPPPPP');
+        // console.log('Reached-here-PPPPPPPP');
         // console.log(props.text[7][0].words);
         console.log();
         data_from_backend = props.text[6];
