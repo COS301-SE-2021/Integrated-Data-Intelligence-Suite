@@ -174,31 +174,37 @@ class ChartPage extends Component {
                                         {/*</div>*/}
 
                                         <IndicatorCard
-                                            indicatorTitle="Some Title"
+                                            indicatorTitle="Engagement By Location"
                                             showArrow={false}
-                                            // cardID={'total-sentiment-card'}
-                                            graphComponent={(
-                                                <VisxBarGraph/>
-                                            )}
-                                        />
-
-                                        <IndicatorCard
-                                            indicatorTitle="Some Title"
-                                            showArrow={false}
-                                            // cardID={'total-sentiment-pie-card'}
-                                            graphComponent={(
-                                                <VisxBarGroupGraph/>
-                                            )}
-                                        />
-
-                                        <IndicatorCard
-                                            indicatorTitle="Some Title"
-                                            showArrow={false}
-                                            // cardID={'total-sentiment-pie-card'}
+                                            cardID={'engagement-location-card'}
                                             graphComponent={(
                                                 <VisxBarStackGraph/>
                                             )}
                                         />
+
+                                        <IndicatorCard
+                                            indicatorTitle={"Tweet Content"}
+                                            showArrow={false}
+                                            cardID={'tweet-content-card'}
+                                        />
+
+                                        {/*<IndicatorCard*/}
+                                        {/*    indicatorTitle="Frequency of Entity Type"*/}
+                                        {/*    showArrow={false}*/}
+                                        {/*    cardID={'freq-entity-type'}*/}
+                                        {/*    graphComponent={(*/}
+                                        {/*        <VisxBarGroupGraph/>*/}
+                                        {/*    )}*/}
+                                        {/*/>*/}
+
+                                        {/*<IndicatorCard*/}
+                                        {/*    indicatorTitle="Some Title"*/}
+                                        {/*    showArrow={false}*/}
+                                        {/*    // cardID={'total-sentiment-pie-card'}*/}
+                                        {/*    graphComponent={(*/}
+                                        {/*        <VisxBarStackGraph/>*/}
+                                        {/*    )}*/}
+                                        {/*/>*/}
 
 
                                         <div id="map-card-container">
@@ -212,27 +218,27 @@ class ChartPage extends Component {
                                             {/*<div id="map-details-container">*/}
                                             {/*</div>*/}
                                         </div>
-                                        <IndicatorCard
-                                            cardID="top-country-indicator-card"
-                                            indicatorTitle="Engagement by Location"
-                                            showArrow={false}
-                                            graphComponent={(
-                                                <BarGraph
-                                                    graphData={BarGraphMockData}
-                                                />
-                                            )}
-                                        />
-                                        <InfoDiv infoValue="77%"/>
-                                        <IndicatorCard
-                                            cardID="top-country-indicator-card"
-                                            indicatorTitle="Engagement by Location"
-                                            showArrow={false}
-                                            graphComponent={(
-                                                <BarGraph
-                                                    graphData={BarGraphMockData}
-                                                />
-                                            )}
-                                        />
+                                        {/*<IndicatorCard*/}
+                                        {/*    indicatorTitle="Some Title"*/}
+                                        {/*    cardID="top-country-indicator-card"*/}
+                                        {/*    showArrow={false}*/}
+                                        {/*    graphComponent={(*/}
+                                        {/*        <BarGraph*/}
+                                        {/*            graphData={BarGraphMockData}*/}
+                                        {/*        />*/}
+                                        {/*    )}*/}
+                                        {/*/>*/}
+                                        {/*<InfoDiv infoValue="77%"/>*/}
+                                        {/*<IndicatorCard*/}
+                                        {/*    cardID="top-country-indicator-card"*/}
+                                        {/*    indicatorTitle="Some Title"*/}
+                                        {/*    showArrow={false}*/}
+                                        {/*    graphComponent={(*/}
+                                        {/*        <BarGraph*/}
+                                        {/*            graphData={BarGraphMockData}*/}
+                                        {/*        />*/}
+                                        {/*    )}*/}
+                                        {/*/>*/}
 
                                         {/* <Sider */}
                                         {/*    id="map_card_sidebar" */}
@@ -248,36 +254,36 @@ class ChartPage extends Component {
                                         {/*    id="word-cloud-layout"*/}
                                         {/*>*/}
 
-                                        <div
-                                            id="word-cloud-grid-container"
-                                        >
+                                        {/*<div*/}
+                                        {/*    id="word-cloud-grid-container"*/}
+                                        {/*>*/}
 
-                                            <div
-                                                id="word-cloud-item"
-                                                className="word-cloud-grid-item"
-                                            >
-                                                <WordCloud/>
-                                            </div>
+                                        {/*    <div*/}
+                                        {/*        id="word-cloud-item"*/}
+                                        {/*        className="word-cloud-grid-item"*/}
+                                        {/*    >*/}
+                                        {/*        <WordCloud/>*/}
+                                        {/*    </div>*/}
 
-                                            <div
-                                                id="stat1-item"
-                                                className="word-cloud-grid-item"
-                                            >
-                                                <VisxBarGroupGraph/>
-                                            </div>
-                                            <div
-                                                id="stat2-item"
-                                                className="word-cloud-grid-item"
-                                            >
-                                                locations where its been mentioned
-                                            </div>
-                                            <div
-                                                id="stat3-item"
-                                                className="word-cloud-grid-item"
-                                            >
-                                                timeline thingy
-                                            </div>
-                                        </div>
+                                        {/*    <div*/}
+                                        {/*        id="stat1-item"*/}
+                                        {/*        className="word-cloud-grid-item"*/}
+                                        {/*    >*/}
+                                        {/*        <VisxBarGroupGraph/>*/}
+                                        {/*    </div>*/}
+                                        {/*    <div*/}
+                                        {/*        id="stat2-item"*/}
+                                        {/*        className="word-cloud-grid-item"*/}
+                                        {/*    >*/}
+                                        {/*        locations where its been mentioned*/}
+                                        {/*    </div>*/}
+                                        {/*    <div*/}
+                                        {/*        id="stat3-item"*/}
+                                        {/*        className="word-cloud-grid-item"*/}
+                                        {/*    >*/}
+                                        {/*        timeline thingy*/}
+                                        {/*    </div>*/}
+                                        {/*</div>*/}
                                         {/*</Layout>*/}
 
                                         {/* The Network Graph */}
@@ -285,15 +291,15 @@ class ChartPage extends Component {
                                         {/*    id="network_graph_layout_div"*/}
                                         {/*    className="network_card"*/}
                                         {/*>*/}
-                                        <Content
-                                            id="network_graph_card_content"
-                                            className="network_card"
-                                        >
-                                            <NetworkGraphCard
-                                                text={this.state.text}
-                                                key={this.state.text}
-                                            />
-                                        </Content>
+                                        {/*<Content*/}
+                                        {/*    id="network_graph_card_content"*/}
+                                        {/*    className="network_card"*/}
+                                        {/*>*/}
+                                        {/*    <NetworkGraphCard*/}
+                                        {/*        text={this.state.text}*/}
+                                        {/*        key={this.state.text}*/}
+                                        {/*    />*/}
+                                        {/*</Content>*/}
                                         {/*</Layout>*/}
 
                                         {/*/!* The timeline Graph *!/*/}
@@ -301,15 +307,15 @@ class ChartPage extends Component {
                                         {/*    id="timeline_graph_div"*/}
                                         {/*    className="timeline_card"*/}
                                         {/*>*/}
-                                        <Content
-                                            id="timeline_graph_card_content"
-                                            className="timeline_card"
-                                        >
-                                            <TimelineGraph
-                                                text={this.state.text}
-                                                key={this.state.text}
-                                            />
-                                        </Content>
+                                        {/*<Content*/}
+                                        {/*    id="timeline_graph_card_content"*/}
+                                        {/*    className="timeline_card"*/}
+                                        {/*>*/}
+                                        {/*    <TimelineGraph*/}
+                                        {/*        text={this.state.text}*/}
+                                        {/*        key={this.state.text}*/}
+                                        {/*    />*/}
+                                        {/*</Content>*/}
                                         {/*</Layout>*/}
                                     </Content>
                                 </Layout>

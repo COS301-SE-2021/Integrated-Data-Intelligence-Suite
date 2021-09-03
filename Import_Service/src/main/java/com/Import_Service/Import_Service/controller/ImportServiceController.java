@@ -199,6 +199,7 @@ public class ImportServiceController {
     @PostMapping(value = "/updateAPI")
     public @ResponseBody EditAPISourceResponse editAPISource(@RequestBody String jsonString) throws Exception {
         JSONObject obj = new JSONObject(jsonString);
+        Long id = obj.getLong("id");
         String name = obj.getString("name");
         String url = obj.getString("url");
         String method = obj.getString("method");
@@ -212,7 +213,7 @@ public class ImportServiceController {
             params.put(paramObj.getString("parameter"), paramObj.getString("value"));
         }
 
-        EditAPISourceRequest request = new EditAPISourceRequest(name, url, method, searchKey, authType, auth, params);
+        EditAPISourceRequest request = new EditAPISourceRequest(id, name, url, method, searchKey, authType, auth, params);
         return service.editAPISource(request);
     }
 

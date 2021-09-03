@@ -286,7 +286,7 @@ public class ImportServiceImpl {
         Optional<APISource> findByName = apiSourceRepository.findAPISourceByName(request.getName());
 
         if(findByName.isPresent()) {
-            return new AddAPISourceResponse(false, "A source with the same name already exists");
+            return new AddAPISourceResponse(false, "The source does not exist");
         }
 
         APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getAuthType(), request.getAuthorization(), request.getParameters());
@@ -319,7 +319,7 @@ public class ImportServiceImpl {
             throw new InvalidImporterRequestException("The request cannot contain null attributes");
         }
 
-        Optional<APISource> findSource = apiSourceRepository.findAPISourceByName(request.getName());
+        Optional<APISource> findSource = apiSourceRepository.findById(request.getId());
         if(findSource.isEmpty()) {
             return new EditAPISourceResponse(false, "Source does not exist");
         }

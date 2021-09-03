@@ -107,8 +107,9 @@ export default function VisxBarGraph(props) {
         <XYChart
             xScale={{ type: 'band' }}
             yScale={{ type: 'linear' }}
-            height={300}
-            width={300}
+            height={250}
+            width={250}
+            horizontal
         >
             <AnimatedAxis
                 orientation="bottom"
@@ -127,7 +128,7 @@ export default function VisxBarGraph(props) {
             />
 
             <Tooltip
-                snapTooltipToDatumX
+                // snapTooltipToDatumX
                 snapTooltipToDatumY
                 showVerticalCrosshair
                 renderTooltip={({

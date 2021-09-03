@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class EditAPISourceRequest {
+    private Long id;
+
     private String name;
 
     private String url;
@@ -24,7 +26,8 @@ public class EditAPISourceRequest {
 
     }
 
-    public EditAPISourceRequest(String name, String url, String method, String searchKey, AuthorizationType authType, String authorization, Map<String, String> parameters) {
+    public EditAPISourceRequest(Long id, String name, String url, String method, String searchKey, AuthorizationType authType, String authorization, Map<String, String> parameters) {
+        this.id = id;
         this.name = name;
         this.url = url;
         this.method = method;
@@ -88,5 +91,13 @@ public class EditAPISourceRequest {
 
     public void setAuthType(AuthorizationType authType) {
         this.authType = authType;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
