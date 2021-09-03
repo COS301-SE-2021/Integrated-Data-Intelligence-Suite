@@ -126,12 +126,12 @@ export default function VisxBarGroupGraph(props) {
             width={300}
         >
             <AnimatedAxis
-                orientation="top"
+                orientation="bottom"
                 hideTicks
                 numTicks={4}
                 stroke={'black'}
                 // strokeWidth={'1em'}
-                top={40}
+                // top={40}
             />
 
             <AnimatedAxis orientation={'left'}/>

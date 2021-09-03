@@ -192,7 +192,7 @@ class ChartPage extends Component {
                                         <IndicatorCard
                                             indicatorTitle="Some Title"
                                             showArrow={false}
-                                            // cardID={'total-sentiment-pie-card'}
+                                            cardID={'sentiment-vs-time-card'}
                                             graphComponent={(
                                                 <VisxLineGraph/>
                                             )}
