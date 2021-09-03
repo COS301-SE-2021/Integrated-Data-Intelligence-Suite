@@ -1,7 +1,5 @@
 import React from 'react';
 import { AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip } from '@visx/xychart';
-import cityTemperature, { CityTemperature } from '@visx/mock-data/lib/mocks/cityTemperature';
-import * as Mock from '@visx/mock-data';
 
 
 const data1 = [
@@ -102,8 +100,6 @@ const accessors = {
     yAccessor: (d) => d.y,
 };
 
-const points1 = Mock.genRandomNormalPoints();
-const points2 = Mock.genRandomNormalPoints();
 
 export default function VisxBarGraph(props) {
     // noinspection RequiredAttributes
@@ -115,12 +111,12 @@ export default function VisxBarGraph(props) {
             width={300}
         >
             <AnimatedAxis
-                orientation="top"
+                orientation="bottom"
                 hideTicks
                 numTicks={4}
                 stroke={'black'}
                 // strokeWidth={'1em'}
-                top={40}
+                // top={40}
             />
 
             <AnimatedAxis orientation={'left'}/>
