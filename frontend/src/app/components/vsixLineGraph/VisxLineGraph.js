@@ -42,6 +42,63 @@ function VisxLineGraph(props) {
         },
     ];
 
+    const data3 = [
+        {
+            x: 'jan \'21',
+            y: 30,
+        },
+        {
+            x: 'feb \'21',
+            y: 31,
+        },
+        {
+            x: 'mar \'21',
+            y: 40,
+        },
+        {
+            x: 'apr \'21',
+            y: 80,
+        },
+    ];
+
+    const data4 = [
+        {
+            x: 'jan \'21',
+            y: 30,
+        },
+        {
+            x: 'feb \'21',
+            y: 31,
+        },
+        {
+            x: 'mar \'21',
+            y: 40,
+        },
+        {
+            x: 'apr \'21',
+            y: 80,
+        },
+    ];
+
+    const data5 = [
+        {
+            x: 'jan \'21',
+            y: 30,
+        },
+        {
+            x: 'feb \'21',
+            y: 31,
+        },
+        {
+            x: 'mar \'21',
+            y: 40,
+        },
+        {
+            x: 'apr \'21',
+            y: 80,
+        },
+    ];
+
     const accessors = {
         xAccessor: (d) => d.x,
         yAccessor: (d) => d.y,
@@ -49,7 +106,12 @@ function VisxLineGraph(props) {
 
     return (
         <>
-            <XYChart height={300} width={400} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
+            <XYChart
+                height={200}
+                width={250}
+                xScale={{ type: 'band' }}
+                yScale={{ type: 'linear' }}
+            >
                 <AnimatedAxis
                     orientation="bottom"
                     hideTicks
