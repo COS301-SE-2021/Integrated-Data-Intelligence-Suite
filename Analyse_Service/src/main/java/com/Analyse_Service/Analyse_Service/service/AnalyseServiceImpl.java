@@ -146,8 +146,8 @@ public class AnalyseServiceImpl {
         TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
         TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
 
-        TrainFindRelationshipsRequest findRelationshipsRequest = new TrainFindRelationshipsRequest(parsedDatalist);
-        TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
+        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
@@ -271,7 +271,7 @@ public class AnalyseServiceImpl {
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public TrainFindRelationshipsResponse trainFindRelationship(TrainFindRelationshipsRequest request)
+    public FindRelationshipsResponse findRelationship(FindRelationshipsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
@@ -334,7 +334,9 @@ public class AnalyseServiceImpl {
                 .setMinSupport(0.10)
                 .setMinConfidence(0.6);
 
-        /******************EVALUATE/ANALYSE MODEL**************/
+        FPGrowthModel fpModel = fp.fit(itemsDF);
+
+        /******************EVALUATE/ANALYSE MODEL**************
 
         //evaluators
         BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
@@ -351,7 +353,7 @@ public class AnalyseServiceImpl {
                 .setMetricName("r2"); //r^2, variance
 
         //parameterGrid
-        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+        /*ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
 
         paramGridBuilder.addGrid(fp.minSupport(), new double[]{fp.getMinConfidence()});
         paramGridBuilder.addGrid(fp.minConfidence(), new double[]{fp.getMinConfidence()});
@@ -359,13 +361,13 @@ public class AnalyseServiceImpl {
         ParamMap[] paramMaps = paramGridBuilder.build();
 
         //validator
-        /*CrossValidator crossValidator = new CrossValidator()
+        CrossValidator crossValidator = new CrossValidator()
                 .setEstimator(pipeline)
                 .setEvaluator(regressionEvaluator)
                 .setEstimatorParamMaps(paramMaps)
-                .setNumFolds(2);*/
+                .setNumFolds(2);
 
-        /*TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
                 .setEstimator(fp)
                 .setEvaluator(regressionEvaluator)
                 .setEstimatorParamMaps(paramMaps)
@@ -373,8 +375,7 @@ public class AnalyseServiceImpl {
                 .setParallelism(2);*/
 
 
-
-        /***********************SETUP MLFLOW - SAVE ***********************/
+        /***********************SETUP MLFLOW - SAVE ***********************
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
@@ -419,7 +420,7 @@ public class AnalyseServiceImpl {
         client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
         client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
         client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());*/
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
 
         //custom tags
         //client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
@@ -431,15 +432,9 @@ public class AnalyseServiceImpl {
         /***********************SETUP MLFLOW - SAVE ***********************/
 
 
-
-
-
-
-
         /*******************READ MODEL OUTPUT*****************/
 
         List<Row> Rdata = fpModel.freqItemsets().collectAsList();
-
 
         ArrayList<ArrayList> results = new ArrayList<>();
         for (int i = 0; i < Rdata.size(); i++) {
@@ -454,7 +449,7 @@ public class AnalyseServiceImpl {
 
         sparkRelationships.stop();
 
-        return new TrainFindRelationshipsResponse(results);
+        return new FindRelationshipsResponse(results);
     }
 
 
