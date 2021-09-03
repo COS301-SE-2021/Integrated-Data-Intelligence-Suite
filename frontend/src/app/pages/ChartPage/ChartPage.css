@@ -33,7 +33,7 @@
     overflow-y: scroll;
     /*overflow-x: ;*/
     display: grid;
-    grid-template-columns: 20em 20em 20em 20em ;
+    grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: 20em auto auto auto auto auto auto auto auto auto auto;
 
 }
