@@ -134,9 +134,6 @@ public class AnalyseServiceImpl {
             rowOfParsed.add(formattedDate);
             rowOfParsed.add(likes);
             rowOfParsed.add(findNlpPropertiesResponse.get(i));
-            System.out.println("THE MAIN GUY HERE");
-            System.out.println(findNlpPropertiesResponse.get(i).getSentiment());
-            System.out.println(findNlpPropertiesResponse.get(i).getNamedEntities());
 
             parsedDatalist.add(rowOfParsed);
         }
@@ -155,8 +152,8 @@ public class AnalyseServiceImpl {
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
+        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(
@@ -1450,28 +1447,13 @@ public class AnalyseServiceImpl {
         List<Row> trainSet = new ArrayList<>();
         for(int i=0; i < textData.size(); i++){
 
-            Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
-
-            List<?> amountOfEntities = new ArrayList<>();
-            if (amountOfEntitiesObject.getClass().isArray()) {
-                amountOfEntities = Arrays.asList((Object[])amountOfEntitiesObject);
-            } else if (amountOfEntitiesObject instanceof Collection) {
-                amountOfEntities = new ArrayList<>((Collection<?>)amountOfEntitiesObject);
-            }
-
-            System.out.println("entity count");
-            System.out.println(amountOfEntities);
-
             String[] locationData = textData.get(i).get(5).toString().split(","); // location
 
             Row trainRow = RowFactory.create(
                     textData.get(i).get(0).toString(), //text
                     textData.get(i).get(1), //EntityTypes
                     textData.get(i).get(2), //EntityTypeNumbers
-                    //amountOfEntities.size(),
-                    //((ArrayList<?>) textData.get(i).get(2)).size(),//AmountOfEntities
-                    //amountOfEntities.size(), //AmountOfEntities
-                    Integer.parseInt(textData.get(i).get(3).toString()), //AmountOfEntities
+                    (int) textData.get(i).get(3), // amountOfEntities
                     textData.get(i).get(4).toString(), //Sentiment
                     textData.get(i).get(5).toString(), //Location
                     Float.parseFloat(locationData[0]),//Latitude
@@ -1480,30 +1462,29 @@ public class AnalyseServiceImpl {
                     textData.get(i).get(7) //Like
             );
 
-
             trainSet.add(trainRow);
         }
 
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
-        /*******************LOAD & READ MODEL*****************/
+        /*******************LOAD & READ MODEL*****************
         PipelineModel kmModel = PipelineModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
-        //summary.filter(col("prediction").*/
+        //summary.filter(col("prediction").
         Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
         List<Row> rawResults = Results.select("Text","prediction").collectAsList();
 
-        System.out.println("/*******************Outputs begin*****************/");
+        System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
-        System.out.println("/*******************Outputs begin*****************/");
+        System.out.println("/*******************Outputs begin*****************");
 
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
             results.add(rawResults.get(i).get(0).toString());//name
-        }
+        }*/
 
         return new FindAnomaliesResponse(null);
     }
