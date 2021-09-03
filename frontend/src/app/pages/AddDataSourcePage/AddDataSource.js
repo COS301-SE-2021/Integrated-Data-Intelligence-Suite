@@ -130,7 +130,7 @@ const AddDataSource = () => {
             { dataSource && authType === null && setAuthType(dataSource.authType)}
             { dataSource && token === null && setToken(dataSource.authorization)}
             <form>
-                <div className={'row'}><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
+                <div className="row"><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
                 { method && (
                     <div className="row">
                         <div className="col left">

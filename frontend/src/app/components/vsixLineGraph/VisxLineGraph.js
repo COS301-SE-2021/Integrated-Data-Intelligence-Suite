@@ -51,44 +51,44 @@ function VisxLineGraph(props) {
         <>
             <XYChart height={300} width={400} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
                 <AnimatedAxis
-                    orientation="bottom"
-                    hideTicks
-                    numTicks={4}
-                    stroke={'black'}
+                  orientation="bottom"
+                  hideTicks
+                  numTicks={4}
+                  stroke="black"
                     // strokeWidth={'1em'}
                 />
                 <AnimatedGrid
-                    columns={false}
-                    rows={false}
-                    numTicks={4}
-                    animationTrajectory={'max'}
+                  columns={false}
+                  rows={false}
+                  numTicks={4}
+                  animationTrajectory="max"
                 />
                 <AnimatedLineSeries
-                    dataKey="Line1"
-                    data={data1}
-                    {...accessors}
+                  dataKey="Line1"
+                  data={data1}
+                  {...accessors}
 
                 />
                 <AnimatedLineSeries
-                    dataKey="Line2"
-                    data={data2}
-                    {...accessors}
+                  dataKey="Line2"
+                  data={data2}
+                  {...accessors}
                 />
                 <Tooltip
-                    snapTooltipToDatumX
-                    snapTooltipToDatumY
-                    showVerticalCrosshair
-                    showSeriesGlyphs
-                    renderTooltip={({
+                  snapTooltipToDatumX
+                  snapTooltipToDatumY
+                  showVerticalCrosshair
+                  showSeriesGlyphs
+                  renderTooltip={({
                         tooltipData,
                         colorScale,
                     }) => (
-                        //The k
+                        // The k
                         <div>
-                            {/*First Line*/}
+                            {/* First Line */}
                             <div
-                                style={{
-                                    color: colorScale(Object.keys(tooltipData.datumByKey)[0])
+                              style={{
+                                    color: colorScale(Object.keys(tooltipData.datumByKey)[0]),
                                 }}
                             >
 
@@ -101,13 +101,13 @@ function VisxLineGraph(props) {
                                 }
                             </div>
 
-                            {/*Second Line*/}
+                            {/* Second Line */}
                             <div
-                                style={{
-                                    color: colorScale(Object.keys(tooltipData.datumByKey)[1])
+                              style={{
+                                    color: colorScale(Object.keys(tooltipData.datumByKey)[1]),
                                 }}
                             >
-                                <br/>
+                                <br />
                                 {Object.keys(tooltipData.datumByKey)[1]}
                                 {': '}
                                 {

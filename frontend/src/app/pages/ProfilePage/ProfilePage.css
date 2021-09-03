@@ -1,0 +1,40 @@
+.profile-content-section {
+    color: black;
+    width: 100%;
+    max-width: 800px;
+    min-height: 300px;
+    /*border: 1px solid red;*/
+    padding: 30px;
+
+    line-height: normal;
+    /* Aligning it Vertically in the center  */
+}
+
+.user-profile {
+    width: 100%;
+    background-color: grey;
+    height: 400px;
+    border-radius: 10px;
+}
+
+.name-info-card {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-width: 5px;
+    border-color: black;
+    border-style: solid;
+    padding-left: 60px;
+    font-size: 40px;
+}
+
+.rest-of-the-info-card {
+    border-radius: 10px;
+    border-width: 5px;
+    margin: 10px;
+    border-color: blue;
+    border-style: solid;
+    padding-left: 60px;
+    font-size: 40px;
+    height: 75%;
+    background-color: #1c8efa;
+}

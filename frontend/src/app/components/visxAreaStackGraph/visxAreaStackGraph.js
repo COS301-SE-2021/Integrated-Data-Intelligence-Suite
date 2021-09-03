@@ -52,55 +52,54 @@ export default function VisxAreaStackGraph(props) {
         <>
             <XYChart height={300} width={400} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
                 <AnimatedAxis
-                    orientation="bottom"
-                    hideTicks
-                    numTicks={4}
-                    stroke={'black'}
+                  orientation="bottom"
+                  hideTicks
+                  numTicks={4}
+                  stroke="black"
                 />
                 <AnimatedGrid
-                    columns={false}
-                    rows={false}
+                  columns={false}
+                  rows={false}
                     // numTicks={4}
-                    animationTrajectory={'max'}
+                  animationTrajectory="max"
                 />
 
                 <AnimatedAreaStack
-                    curve={curveCardinal}
+                  curve={curveCardinal}
 
                 >
 
                     <AnimatedAreaSeries
-                        dataKey="Line1"
-                        data={data1}
-                        {...accessors}
-                        fillOpacity={0.4}
+                      dataKey="Line1"
+                      data={data1}
+                      {...accessors}
+                      fillOpacity={0.4}
                         // curve={curveCardinal}
                     />
                     <AnimatedAreaSeries
-                        dataKey="Line2"
-                        data={data2}
-                        {...accessors}
-                        fillOpacity={0.4}
+                      dataKey="Line2"
+                      data={data2}
+                      {...accessors}
+                      fillOpacity={0.4}
                         // curve={curveCardinal}
                     />
                 </AnimatedAreaStack>
 
-
                 <Tooltip
-                    snapTooltipToDatumX
-                    snapTooltipToDatumY
-                    showVerticalCrosshair
+                  snapTooltipToDatumX
+                  snapTooltipToDatumY
+                  showVerticalCrosshair
                     // showSeriesGlyphs
-                    renderTooltip={({
+                  renderTooltip={({
                         tooltipData,
                         colorScale,
                     }) => (
-                        //The k
+                        // The k
                         <div>
-                            {/*First Line*/}
+                            {/* First Line */}
                             <div
-                                style={{
-                                    color: colorScale(Object.keys(tooltipData.datumByKey)[0])
+                              style={{
+                                    color: colorScale(Object.keys(tooltipData.datumByKey)[0]),
                                 }}
                             >
 
@@ -113,13 +112,13 @@ export default function VisxAreaStackGraph(props) {
                                 }
                             </div>
 
-                            {/*Second Line*/}
+                            {/* Second Line */}
                             <div
-                                style={{
-                                    color: colorScale(Object.keys(tooltipData.datumByKey)[1])
+                              style={{
+                                    color: colorScale(Object.keys(tooltipData.datumByKey)[1]),
                                 }}
                             >
-                                <br/>
+                                <br />
                                 {Object.keys(tooltipData.datumByKey)[1]}
                                 {': '}
                                 {
@@ -135,4 +134,3 @@ export default function VisxAreaStackGraph(props) {
         </>
     );
 }
-
