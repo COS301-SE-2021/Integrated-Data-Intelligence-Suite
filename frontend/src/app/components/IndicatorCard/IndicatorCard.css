@@ -22,7 +22,7 @@
     width: 25%;
     float: left;
     margin-right: 2%;
-    border-radius: 3%;
+    border-radius: 0;
 }
 
 .indicator-card > .ant-card-head {
@@ -121,5 +121,42 @@
     float: left;
     width: 100%;
 }
+
+
+/*********************************************************/
+/****************Average Sentiment Card******************/
+/*******************************************************/
+#ave-sentiment-card {
+    grid-column: 1;
+    grid-column-end: 1;
+}
+
+/*********************************************************/
+/******************Num Mentions Card*********************/
+/*******************************************************/
+#num-mentions-card {
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+/*********************************************************/
+/******************Total Sentiment Card******************/
+/*******************************************************/
+#total-sentiment-card {
+    grid-column-start: 3;
+    grid-column-end: 3;
+    /*border: 3px solid red;*/
+}
+
+/*********************************************************/
+/****************Sentiment vs Time Card******************/
+/********************************************************/
+#sentiment-vs-time-card {
+    grid-column-start: 4;
+    grid-column-end: 4;
+    /*border: 3px solid orange;*/
+}
+
+
 
 
