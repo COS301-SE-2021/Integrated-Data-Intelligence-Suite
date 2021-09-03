@@ -76,6 +76,8 @@ public class VisualizeServiceImpl {
         CreateWordCloudGraphResponse wordcloudResponse = this.createWordCloudGraph(wordcloudRequest);
         outputData.add(wordcloudResponse.words);
 
+        outputData.add(this.extraBarOne(request.getTrendList()));
+        outputData.add(this.extraBartwo(request.getTrendList()));
 
 
         return new VisualizeDataResponse( outputData );
