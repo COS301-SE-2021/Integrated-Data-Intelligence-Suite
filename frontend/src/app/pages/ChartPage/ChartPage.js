@@ -204,7 +204,7 @@ class ChartPage extends Component {
                                         />
 
                                         <IndicatorCard
-                                            indicatorTitle="Some Title"
+                                            indicatorTitle="Frequency per country"
                                             showArrow={false}
                                             // cardID={'total-sentiment-pie-card'}
                                             graphComponent={(

@@ -17,7 +17,7 @@ public class AnalyseServiceController {
 
     /**
      * This method is used to facilitate communication to the Analyse-Service.
-     * @param requestEntity This is a request entity which contains a AnalyseDataRequest object.
+     * @param request This is a request entity which contains a AnalyseDataRequest object.
      * @return AnalyseDataResponse This object contains analysed data which has been processed by Analyse-Service.
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
