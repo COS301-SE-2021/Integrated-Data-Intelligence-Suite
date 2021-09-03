@@ -120,7 +120,9 @@ class ChartPage extends Component {
                                             cardID="ave-sentiment-card"
                                             graphComponent={(
                                                 <VisxAreaGraph
-                                                    graphData={visxAreaMockData}
+                                                    graphData={this.state.text}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
                                                     showSecondLine={false}
                                                     showXAxis={false}
                                                     showYAxis={false}
@@ -138,7 +140,9 @@ class ChartPage extends Component {
                                             showArrow
                                             graphComponent={(
                                                 <VisxAreaGraph
-                                                    graphData={visxAreaMockData}
+                                                    graphData={this.state.text}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
                                                     showSecondLine={false}
                                                     showXAxis={false}
                                                     showYAxis={false}
@@ -154,7 +158,9 @@ class ChartPage extends Component {
                                             cardID="total-sentiment-card"
                                             graphComponent={(
                                                 <PieChart
-                                                    graphData={PieChartMockData}
+                                                    graphData={this.state.text}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
                                                     legendOrientation="horizontal"
                                                     pieID="total-sentiment-pie"
                                                     legendID="total-sentiment-legend"
@@ -182,11 +188,11 @@ class ChartPage extends Component {
                                             )}
                                         />
 
-                                        <IndicatorCard
-                                            indicatorTitle="Tweet Content"
-                                            showArrow={false}
-                                            cardID="tweet-content-card"
-                                        />
+                                        {/*<IndicatorCard*/}
+                                        {/*    indicatorTitle="Tweet Content"*/}
+                                        {/*    showArrow={false}*/}
+                                        {/*    cardID="tweet-content-card"*/}
+                                        {/*/>*/}
 
                                         <IndicatorCard
                                             indicatorTitle="Frequency of Entity Type"
@@ -255,7 +261,6 @@ class ChartPage extends Component {
                                             <div
                                                 id="word-cloud-grid-container"
                                             >
-
                                                 <div
                                                     id="word-cloud-item"
                                                     className="word-cloud-grid-item"
@@ -263,7 +268,6 @@ class ChartPage extends Component {
                                                     <WordCloud
                                                         text={this.state.text}
                                                         key={this.state.text}
-
                                                     />
                                                 </div>
 
