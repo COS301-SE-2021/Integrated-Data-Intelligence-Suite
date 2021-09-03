@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryAxis, VictoryChart, VictoryLegend, VictoryPie } from 'victory';
+import { VictoryAxis, VictoryChart, VictoryContainer, VictoryLegend, VictoryPie } from 'victory';
 import './PieChart.css';
 
 function PieChart(props) {
@@ -26,10 +26,13 @@ function PieChart(props) {
                         <VictoryLegend
                             className={'DID-uWORK'}
                             orientation={props.legendOrientation}
+                            height={100}
+                            // width={300}
                             gutter={20}
+                            containerComponent={<VictoryContainer responsive/>}
                             style={{
                                 border: { stroke: 'black' },
-                                title: { fontSize: 100 }
+                                title: { fontSize: 40 }
                             }}
                             data={[
                                 {
