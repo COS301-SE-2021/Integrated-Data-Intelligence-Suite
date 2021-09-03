@@ -163,41 +163,44 @@ const AddDataSource = () => {
         };
 
         console.log(newSource);
-
+        let link = '';
         if (dataSource.id === null) {
-            const abortCont = new AbortController();
-            fetch('http://localhost:9001/Import/addApiSource',
-                {
-                    signal: abortCont.signal,
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newSource),
-                }).then((res) => {
-                if (!res.ok) {
-                    throw Error(res.error());
-                }
-                return res.json();
-            })
-                .then((data) => {
-                    setSubmitLoading(false);
-                    console.log('data is here', data);
-                    console.log('structure looks like ', data.source);
-                    if (data.success) {
-                        // history.goBack();
-                        message.success(data.message);
-                    } else {
-                        message.error(data.message);
-                    }
-
-                })
-                .catch((err) => {
-                    if (err.name === 'AbortError') console.log('Fetch Aborted');
-                    else {
-                        message.error(err.message)
-                    }
-                });
+            link = 'http://localhost:9001/Import/addApiSource';
+        } else {
+            link = 'http://localhost:9001/Import/updateAPI';
         }
-    };
+        const abortCont = new AbortController();
+        fetch(link,
+            {
+                signal: abortCont.signal,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newSource),
+            }).then((res) => {
+            if (!res.ok) {
+                throw Error(res.error());
+            }
+            return res.json();
+        })
+            .then((data) => {
+                setSubmitLoading(false);
+                console.log('data is here', data);
+                console.log('structure looks like ', data.source);
+                if (data.success) {
+                    // history.goBack();
+                    message.success(data.message);
+                } else {
+                    message.error(data.message);
+                }
+
+            })
+            .catch((err) => {
+                if (err.name === 'AbortError') console.log('Fetch Aborted');
+                else {
+                    message.error(err.message)
+                }
+            });
+};
 
     const mapForm = (obj1) =>{
         const params = [];
