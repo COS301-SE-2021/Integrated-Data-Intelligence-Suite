@@ -21,6 +21,7 @@
     height: 100%;
 
 
+
 }
 
 #map-card
@@ -115,6 +116,7 @@
     /*border: 3px solid black;*/
     max-height: 30em;
     grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 2;
+    grid-column-end: 6;
+    grid-row-start: 5;
+    grid-row-end: 8;
 }
