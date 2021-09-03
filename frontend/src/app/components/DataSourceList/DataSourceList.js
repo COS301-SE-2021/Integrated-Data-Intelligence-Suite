@@ -52,48 +52,6 @@ const getAllSources = (url) => {
 const DataSourceList = () => {
     const [sources, setSources] = useState(null);
 
-/*    const sources = [
-        {
-            id: 1,
-            name: 'source1',
-            parameters: [
-                { key: 'key1', value: 'value1' },
-                { key: 'key2', value: 'value2' },
-                { key: 'key3', value: 'value3' },
-                { key: 'key4', value: 'value4' },
-                { key: 'key5', value: 'value5' },
-                { key: 'key6', value: 'value6' },
-                { key: 'key7', value: 'value7' },
-            ],
-        },
-        {
-            id: 2,
-            name: 'source2',
-            parameters: [
-                { key: 'key1', value: 'value1' },
-                { key: 'key2', value: 'value2' },
-                { key: 'key3', value: 'value3' },
-                { key: 'key4', value: 'value4' },
-                { key: 'key5', value: 'value5' },
-                { key: 'key6', value: 'value6' },
-                { key: 'key7', value: 'value7' },
-            ],
-        },
-        {
-            id: 3,
-            name: 'source3',
-            parameters: [
-                { key: 'key1', value: 'value1' },
-                { key: 'key2', value: 'value2' },
-                { key: 'key3', value: 'value3' },
-                { key: 'key4', value: 'value4' },
-                { key: 'key5', value: 'value5' },
-                { key: 'key6', value: 'value6' },
-                { key: 'key7', value: 'value7' },
-            ],
-        },
-    ];*/
-
     const {data, isPending, error } = getAllSources('http://localhost:9001/Import/getAllSources');
 
     const handleDelete = (sourceId) =>{
