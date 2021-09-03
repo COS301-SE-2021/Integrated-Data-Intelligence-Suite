@@ -127,28 +127,34 @@
 /****************Average Sentiment Card******************/
 /*******************************************************/
 #ave-sentiment-card {
-    grid-column: 1 / 2;
+    grid-column: 1;
+    grid-column-end: 1;
 }
 
 /*********************************************************/
 /******************Num Mentions Card*********************/
 /*******************************************************/
 #num-mentions-card {
-    grid-column: 2/ 4;
+    grid-column-start: 2;
+    grid-column-end: 2;
 }
 
 /*********************************************************/
 /******************Total Sentiment Card******************/
 /*******************************************************/
 #total-sentiment-card {
-    border: 3px solid red;
+    grid-column-start: 3;
+    grid-column-end: 3;
+    /*border: 3px solid red;*/
 }
 
 /*********************************************************/
 /****************Sentiment vs Time Card******************/
 /********************************************************/
 #sentiment-vs-time-card {
-    border: 3px solid orange;
+    grid-column-start: 4;
+    grid-column-end: 4;
+    /*border: 3px solid orange;*/
 }
 
 
