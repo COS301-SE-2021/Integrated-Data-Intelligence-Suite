@@ -22,9 +22,11 @@ import com.johnsnowlabs.nlp.annotators.sentence_detector_dl.SentenceDetectorDLMo
 import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -41,9 +43,7 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.ml.param.ParamMap;
-import org.apache.spark.ml.tuning.CrossValidator;
-import org.apache.spark.ml.tuning.CrossValidatorModel;
-import org.apache.spark.ml.tuning.ParamGridBuilder;
+import org.apache.spark.ml.tuning.*;
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
 import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
@@ -52,6 +52,9 @@ import org.apache.spark.sql.types.*;
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
+import org.mlflow.api.proto.Service.Experiment;
+import org.mlflow.api.proto.Service.RunInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
@@ -149,8 +152,8 @@ public class AnalyseServiceImpl {
         TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
         TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
@@ -418,7 +421,7 @@ public class AnalyseServiceImpl {
             //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
-            for (int j = 0;  j < namedEntities.size();  j++) {
+            for (int j = 0; j < namedEntities.size(); j++) {
                 //row.add(isTrending)
                 row = new ArrayList<>();
                 row.add(namedEntities.get(j).get(0).toString()); //entity-name
@@ -426,12 +429,10 @@ public class AnalyseServiceImpl {
                 if (types.isEmpty()) {// entity-typeNumber
                     row.add(0);
                     types.add(namedEntities.get(j).get(1).toString());
-                }
-                else {
+                } else {
                     if (types.contains(namedEntities.get(j).get(1).toString())) {
                         row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
-                    }
-                    else {
+                    } else {
                         row.add(types.size());
                         types.add(namedEntities.get(j).get(1).toString());
                     }
@@ -490,8 +491,7 @@ public class AnalyseServiceImpl {
         int minSize = 0;
         if (namedEntities.size() > averageLikes.size()) {
             minSize = averageLikes.size();
-        }
-        else {
+        } else {
             minSize = namedEntities.size();
         }
 
@@ -535,6 +535,12 @@ public class AnalyseServiceImpl {
         Dataset<Row> trainSetDF = split[0];
         Dataset<Row> testSetDF = split[1];
 
+        trainSetDF.show();
+        System.out.println("TRAIN ME");
+
+        testSetDF.show();
+        System.out.println("TEST ME");
+
         /*******************SETUP PIPELINE MODEL *****************/
         //features
         /*Tokenizer tokenizer = new Tokenizer()
@@ -562,7 +568,7 @@ public class AnalyseServiceImpl {
 
         //pipeline
         Pipeline pipeline = new Pipeline();
-        pipeline.setStages(new PipelineStage[] {assembler,indexer,lr});
+        pipeline.setStages(new PipelineStage[]{assembler, indexer, lr});
 
         /******************EVALUATE/ANALYSE MODEL**************/
 
@@ -580,36 +586,48 @@ public class AnalyseServiceImpl {
                 .setMetricName("mae") //meanAbsoluteError
                 .setMetricName("r2"); //r^2, variance
 
-
         //parameterGrid
         ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
 
-        paramGridBuilder.addGrid(lr.regParam(),  new double[] {lr.getRegParam()});
-        paramGridBuilder.addGrid(lr.elasticNetParam(),  new double[] {lr.getElasticNetParam()});
+        paramGridBuilder.addGrid(lr.regParam(), new double[]{lr.getRegParam()});
+        paramGridBuilder.addGrid(lr.elasticNetParam(), new double[]{lr.getElasticNetParam()});
         paramGridBuilder.addGrid(lr.fitIntercept());
         ParamMap[] paramMaps = paramGridBuilder.build();
 
 
-        CrossValidator crossValidator = new CrossValidator()
+        //validator
+        /*CrossValidator crossValidator = new CrossValidator()
                 .setEstimator(pipeline)
                 .setEvaluator(regressionEvaluator)
-                .setEstimatorParamMaps(paramMaps).setNumFolds(2);
+                .setEstimatorParamMaps(paramMaps)
+                .setNumFolds(2);*/
+
+        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setTrainRatio(0.7)  //70% : 30% ratio
+                .setParallelism(2);
 
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
-        String experimentID = client.createExperiment("LogisticRegression_Experiment");
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
 
+        Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
 
+        RunInfo runInfo = client.createRun(experimentID);
         MlflowContext mlflow = new MlflowContext(client);
-
-
         ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
 
-
-        CrossValidatorModel lrModel = crossValidator.fit(trainSetDF);
+        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
 
         Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         //predictions.show();
@@ -856,7 +874,7 @@ public class AnalyseServiceImpl {
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
 
         /*******************LOAD & READ MODEL*****************/
-        LogisticRegressionModel lrModel = LogisticRegressionModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
