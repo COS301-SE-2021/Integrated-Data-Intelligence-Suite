@@ -442,9 +442,9 @@ public class AnalyseServiceImpl {
             //row.add(Rdata.get(i).get(1).toString());
             results.add(row);
         }
-        System.out.println(results.toString());
+        //System.out.println(results.toString());
 
-        sparkRelationships.stop();
+        //sparkRelationships.stop();
 
         return new FindRelationshipsResponse(results);
     }
@@ -954,6 +954,11 @@ public class AnalyseServiceImpl {
 
         }
 
+
+        for(int i = 0; i < results.size() ; i++ ){
+            System.out.println("RESULT TREND : " + results.get(i));
+        }
+
         return new FindTrendsResponse(results);
     }
 
@@ -1211,9 +1216,9 @@ public class AnalyseServiceImpl {
                 .setOutputCol("features");
 
         KMeans km = new KMeans()
-                //.setK(2) //number of classses/clusters
                 .setFeaturesCol("features")
                 .setPredictionCol("prediction");
+                //.setK(2) //number of classses/clusters
                 //.setMaxIterations(numIterations);
 
         //pipeline
@@ -1467,7 +1472,7 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
-        /*******************LOAD & READ MODEL*****************
+        /*******************LOAD & READ MODEL*****************/
         PipelineModel kmModel = PipelineModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
@@ -1480,13 +1485,12 @@ public class AnalyseServiceImpl {
         System.out.println(rawResults.toString());
         System.out.println("/*******************Outputs begin*****************");
 
-
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
             results.add(rawResults.get(i).get(0).toString());//name
-        }*/
+        }
 
-        return new FindAnomaliesResponse(null);
+        return new FindAnomaliesResponse(results);
     }
 
 
