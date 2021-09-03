@@ -160,6 +160,15 @@ class ChartPage extends Component {
                                             )}
                                         />
 
+                                        <IndicatorCard
+                                            indicatorTitle="Some Title"
+                                            showArrow={false}
+                                            cardID={'sentiment-vs-time-card'}
+                                            graphComponent={(
+                                                <VisxLineGraph/>
+                                            )}
+                                        />
+
                                         {/*</div>*/}
 
                                         <IndicatorCard
@@ -189,14 +198,6 @@ class ChartPage extends Component {
                                             )}
                                         />
 
-                                        <IndicatorCard
-                                            indicatorTitle="Some Title"
-                                            showArrow={false}
-                                            cardID={'sentiment-vs-time-card'}
-                                            graphComponent={(
-                                                <VisxLineGraph/>
-                                            )}
-                                        />
 
                                         <div id="map-card-container">
                                             <Card
