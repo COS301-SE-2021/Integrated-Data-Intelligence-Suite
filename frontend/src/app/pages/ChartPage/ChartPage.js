@@ -140,8 +140,8 @@ class ChartPage extends Component {
                                             showArrow
                                             graphComponent={(
                                                 <VisxAreaGraph
-                                                    graphData={this.state.text}
-                                                    text={this.state.text}
+                                                    graphData={visxAreaMockData}
+                                                    text={visxAreaMockData}
                                                     key={this.state.text}
                                                     showSecondLine={false}
                                                     showXAxis={false}
