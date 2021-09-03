@@ -127,30 +127,30 @@
 /****************Average Sentiment Card******************/
 /*******************************************************/
 #ave-sentiment-card {
-    grid-column: 1;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 5;
+    /*grid-column: 1;*/
+    /*grid-column-end: 3;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
 }
 
 /*********************************************************/
 /******************Num Mentions Card*********************/
 /*******************************************************/
 #num-mentions-card {
-    grid-column-start: 3;
-    grid-column-end: 5;
-    grid-row-start: 1;
-    grid-row-end: 5;
+    /*grid-column-start: 3;*/
+    /*grid-column-end: 5;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
 }
 
 /*********************************************************/
 /******************Total Sentiment Card******************/
 /*******************************************************/
 #total-sentiment-card {
-    grid-column-start: 5;
-    grid-column-end: 7;
-    grid-row-start: 1;
-    grid-row-end: 5;
+    /*grid-column-start: 5;*/
+    /*grid-column-end: 7;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
     /*border: 3px solid red;*/
 }
 
@@ -158,10 +158,10 @@
 /****************Sentiment vs Time Card******************/
 /********************************************************/
 #sentiment-vs-time-card {
-    grid-column-start: 7;
-    grid-column-end: 9;
-    grid-row-start: 1;
-    grid-row-end: 5;
+    /*grid-column-start: 7;*/
+    /*grid-column-end: 9;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
     /*border: 3px solid orange;*/
 }
 
@@ -170,20 +170,22 @@
 /****************Engagement By Location******************/
 /********************************************************/
 #engagement-location-card {
-    grid-column-start: 6;
-    grid-column-end: 9;
-    grid-row-start: 5;
-    grid-row-end: 9;
+    /*grid-column-start: 6;*/
+    /*grid-column-end: 9;*/
+    /*grid-row-start: 5;*/
+    /*grid-row-end: 9;*/
 }
 
 /*********************************************************/
 /**************************Tweet Content******************/
 /********************************************************/
 #tweet-content-card {
-    grid-column-start: 6;
-    grid-column-end: 10;
-    grid-row-start: 10;
-    grid-row-end: 14;
+    /*grid-column-start: 6;*/
+    /*grid-column-end: 10;*/
+    /*grid-row-start: 10;*/
+    /*grid-row-end: 14;*/
+    /*grid-column: span 2;*/
+    /*grid-row: span 2;*/
 
 }
 

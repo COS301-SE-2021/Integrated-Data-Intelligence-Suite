@@ -33,11 +33,18 @@
     overflow-y: scroll;
     /*overflow-x: ;*/
     display: grid;
-    grid-template-columns:  1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 5fr));
+    grid-template-rows: repeat(6, 350px);
+    grid-gap: 1rem;
+    grid-auto-flow: dense;
     /*grid-template-rows: 20% 20% 20% 20% 20% 20% 20% 20% 20%;*/
-    grid-auto-flow: row;
+    /*grid-auto-flow: row;*/
 
+}
 
+#content_section>div{
+    max-width: 350px;
+    /*min-width: 200px;*/
 }
 
 
@@ -112,6 +119,11 @@
 #map-details-container::-webkit-scrollbar {
     width: 0; /* Remove scrollbar space */
     background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+#word-cloud-layout{
+    grid-column: span 3;
+    grid-row: span 3;
 }
 
 
