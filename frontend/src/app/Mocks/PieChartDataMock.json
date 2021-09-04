@@ -1,27 +1,22 @@
 [
   {
-    "x": "Birds",
-    "y": 100,
-    "label": "Very Negative"
+    "x": "Very Bad",
+    "y": 100
   },
   {
-    "x": "Cats",
-    "y": 35,
-    "label": "Negative"
+    "x": "Bad",
+    "y": 35
   },
   {
-    "x": "Birds",
-    "y": 55,
-    "label": "Neutral"
+    "x": "Neutral",
+    "y": 55
   },
   {
-    "x": "Dogs",
-    "y": 40,
-    "label": "Positive"
+    "x": "Good",
+    "y": 40
   },
   {
-    "x": "Birds",
-    "y": 70,
-    "label": "Very Positive"
+    "x": "Very Good",
+    "y": 70
   }
 ]

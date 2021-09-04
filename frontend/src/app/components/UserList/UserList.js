@@ -1,26 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {Popconfirm} from "antd";
+import {EditTwoTone} from "@ant-design/icons";
+
+const colors = {
+    red: '#FF120A',
+    blue: '#5773FA',
+};
+
+const iconSize = '20px';
 
 const UserList = (props) => {
   const { users } = props;
 
   return (
-      <div className="user-list">
+      <div className="source-list">
           { users.map((user) => (
-              <Link to={`user/${user.id}`}>
-                  <div className="user-preview" key={user.id}>
-                      <div>
-                          <h3>{user.firstName}</h3>
-                          <p>
-                              <span>{user.username}</span>
-                              {user.isAdmin === true && <span className="admin-tag"> admin </span>}
-                          </p>
+              <div>
+                  <div className="source-preview" key={`user-${user.id}`}>
+                      <p className="source-title">{user.firstName}</p>
+                      <div className="button-div">
+                          <p className="permission-text">{user.permission}</p>
+                          <Link className="standard button" to={`user/${user.id}`}><EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} /></Link>
                       </div>
-                      <p>
-                          {user.permission}
-                      </p>
                   </div>
-              </Link>
+              </div>
 
       ))}
       </div>

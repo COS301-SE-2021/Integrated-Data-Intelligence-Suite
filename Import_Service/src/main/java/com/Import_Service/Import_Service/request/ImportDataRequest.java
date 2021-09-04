@@ -1,8 +1,8 @@
 package com.Import_Service.Import_Service.request;
 
 public class ImportDataRequest {
-    String keyword;
-    int limit;
+    private String keyword;
+    private int limit;
 
     /**
      * Constructs a new Request with the specified details. the request is

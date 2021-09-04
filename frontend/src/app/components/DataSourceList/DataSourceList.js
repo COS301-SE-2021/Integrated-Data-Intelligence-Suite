@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Divider, Popconfirm, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
@@ -10,72 +10,52 @@ const colors = {
 
 const iconSize = '20px';
 
+const getAllSources = (url) => {
+    const [data, setData] = useState(null);
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const abortCont = new AbortController();
+
+        fetch(url, { signal: abortCont.signal })
+            .then((res) => {
+                if (!res.ok) {
+                    throw Error(res.error());
+                }
+                return res.json();
+            })
+            .then((data) => {
+                // console.log('data is here', data);
+                if (data.success) {
+                    setData(data.sources);
+                } else {
+                    setData([]);
+                }
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                if (err.name === 'AbortError') console.log('Fetch Aborted');
+                else {
+                    // console.log(err.message)
+                    setError(err.message);
+                    setIsPending(false);
+                }
+            });
+
+        return () => abortCont.abort();
+    }, [url]);
+    return { data, isPending, error };
+};
+
 const DataSourceList = () => {
-    // const { sources } = props;
+    const [sources, setSources] = useState(null);
 
-    const sources = [
-        {
-            id: 1,
-            name: 'source1',
-            parameters: [
-                { key: 'key1', value: 'value1' },
-                { key: 'key2', value: 'value2' },
-                { key: 'key3', value: 'value3' },
-                { key: 'key4', value: 'value4' },
-                { key: 'key5', value: 'value5' },
-                { key: 'key6', value: 'value6' },
-                { key: 'key7', value: 'value7' },
-            ],
-        },
-        {
-            id: 2,
-            name: 'source2',
-            parameters: [
-                { key: 'key1', value: 'value1' },
-                { key: 'key2', value: 'value2' },
-                { key: 'key3', value: 'value3' },
-                { key: 'key4', value: 'value4' },
-                { key: 'key5', value: 'value5' },
-                { key: 'key6', value: 'value6' },
-                { key: 'key7', value: 'value7' },
-            ],
-        },
-        {
-            id: 3,
-            name: 'source3',
-            parameters: [
-                { key: 'key1', value: 'value1' },
-                { key: 'key2', value: 'value2' },
-                { key: 'key3', value: 'value3' },
-                { key: 'key4', value: 'value4' },
-                { key: 'key5', value: 'value5' },
-                { key: 'key6', value: 'value6' },
-                { key: 'key7', value: 'value7' },
-            ],
-        },
-    ];
-    const deleteSource = (sourceId) => {
-        alert(`source ${sourceId} deleted`);
-    };
-
-    // const handleDelete = (dataSource) =>{
-    //     confirmAlert({
-    //         title: 'Confirm delete',
-    //         message: `Delete ${dataSource.name}?`,
-    //         buttons: [
-    //             {
-    //                 label: 'Yes',
-    //                 onClick: () => null,
-    //             },
-    //             {
-    //                 label: 'No',
-    //                 onClick: () => deleteSource(dataSource.id),
-    //             },
-    //         ],
-    //     });
-    // };
+    const {data, isPending, error } = getAllSources('http://localhost:9001/Import/getAllSources');
 
     const handleDelete = (sourceId) =>{
+        setSources((prev)=>prev.filter((item)=> item.id !== sourceId));
         message.success(`deleted ${sourceId}`);
     };
 
@@ -84,9 +64,10 @@ const DataSourceList = () => {
             <div className="add-source">
                 <Link to="/settings/source/new" className="standard-filled button">new Source</Link>
             </div>
-            { sources.map((source) =>(
+            {data && sources === null && setSources(data)}
+            {sources !== null && sources.map((source) =>(
                 <div>
-                    <div className="source-preview" key={source.id}>
+                    <div className="source-preview" key={`source ${source.id}`}>
                         <p className="source-title">{source.name}</p>
                         <div className="button-div">
                             <Link className="standard button" to={`/settings/source/${source.id}`}><EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} /></Link>
@@ -101,7 +82,6 @@ const DataSourceList = () => {
                             </Popconfirm>
                         </div>
                     </div>
-                    {/* <Divider/> */}
                 </div>
             ))}
         </div>

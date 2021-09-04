@@ -10,20 +10,136 @@ import {
 function VisxLineGraph(props) {
     const data1 = [
         {
-            x: 'jan \'21',
+            x: 'jan',
             y: 50,
         },
         {
-            x: 'feb \'21',
+            x: 'feb',
             y: 10,
         },
         {
-            x: 'mar \'21',
+            x: 'mar',
             y: 20,
+        },
+        {
+            x: 'apr',
+            y: 14,
+        },
+        {
+            x: 'may',
+            y: 19,
+        },
+        {
+            x: 'jun',
+            y: 45,
+        },
+        {
+            x: 'jul',
+            y: 53,
+        },
+        {
+            x: 'aug',
+            y: 23,
+        },
+        {
+            x: 'sept',
+            y: 13,
+        },
+        {
+            x: 'oct',
+            y: 43,
+        },
+        {
+            x: 'nov',
+            y: 63,
+        },
+    ];
+    const data2 = [
+        {
+            x: 'jan',
+            y: 40,
+        },
+        {
+            x: 'feb',
+            y: 5,
+        },
+        {
+            x: 'mar',
+            y: 10,
+        },
+        {
+            x: 'apr',
+            y: 11,
+        },
+        {
+            x: 'may',
+            y: 29,
+        },
+        {
+            x: 'jun',
+            y: 35,
+        },
+        {
+            x: 'jul',
+            y: 43,
+        },
+        {
+            x: 'aug',
+            y: 13,
+        },
+        {
+            x: 'sept',
+            y: 53,
+        },
+        {
+            x: 'oct',
+            y: 63,
+        },
+        {
+            x: 'nov',
+            y: 33,
         },
     ];
 
-    const data2 = [
+    const data3 = [
+        {
+            x: 'jan \'21',
+            y: 30,
+        },
+        {
+            x: 'feb \'21',
+            y: 31,
+        },
+        {
+            x: 'mar \'21',
+            y: 40,
+        },
+        {
+            x: 'apr \'21',
+            y: 80,
+        },
+    ];
+
+    const data4 = [
+        {
+            x: 'jan \'21',
+            y: 30,
+        },
+        {
+            x: 'feb \'21',
+            y: 31,
+        },
+        {
+            x: 'mar \'21',
+            y: 40,
+        },
+        {
+            x: 'apr \'21',
+            y: 80,
+        },
+    ];
+
+    const data5 = [
         {
             x: 'jan \'21',
             y: 30,
@@ -49,7 +165,12 @@ function VisxLineGraph(props) {
 
     return (
         <>
-            <XYChart height={300} width={400} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
+            <XYChart
+                height={200}
+                width={250}
+                xScale={{ type: 'band' }}
+                yScale={{ type: 'linear' }}
+            >
                 <AnimatedAxis
                     orientation="bottom"
                     hideTicks

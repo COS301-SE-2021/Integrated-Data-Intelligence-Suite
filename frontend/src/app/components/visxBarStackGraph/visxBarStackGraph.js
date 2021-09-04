@@ -3,101 +3,95 @@ import { AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip } f
 import cityTemperature, { CityTemperature } from '@visx/mock-data/lib/mocks/cityTemperature';
 import * as Mock from '@visx/mock-data';
 
-export type XYChartProps = {
-    width: number;
-    height: number;
-};
-
-type City = 'San Francisco' | 'New York' | 'Austin';
 const data1 = [
     {
-        x: 'jan \'21',
+        x: 'jan',
         y: 50,
     },
     {
-        x: 'feb \'21',
+        x: 'feb',
         y: 10,
     },
     {
-        x: 'mar \'21',
+        x: 'mar',
         y: 20,
     },
     {
-        x: 'apr \'21',
+        x: 'apr',
         y: 14,
     },
     {
-        x: 'may \'21',
+        x: 'may',
         y: 19,
     },
     {
-        x: 'jun \'21',
+        x: 'jun',
         y: 45,
     },
     {
-        x: 'jul \'21',
+        x: 'jul',
         y: 53,
     },
     {
-        x: 'aug \'21',
+        x: 'aug',
         y: 23,
     },
     {
-        x: 'sept \'21',
+        x: 'sept',
         y: 13,
     },
     {
-        x: 'oct \'21',
+        x: 'oct',
         y: 43,
     },
     {
-        x: 'nov \'21',
+        x: 'nov',
         y: 63,
     },
 ];
 const data2 = [
     {
-        x: 'jan \'21',
+        x: 'jan',
         y: 40,
     },
     {
-        x: 'feb \'21',
+        x: 'feb',
         y: 5,
     },
     {
-        x: 'mar \'21',
+        x: 'mar',
         y: 10,
     },
     {
-        x: 'apr \'21',
+        x: 'apr',
         y: 11,
     },
     {
-        x: 'may \'21',
+        x: 'may',
         y: 29,
     },
     {
-        x: 'jun \'21',
+        x: 'jun',
         y: 35,
     },
     {
-        x: 'jul \'21',
+        x: 'jul',
         y: 43,
     },
     {
-        x: 'aug \'21',
+        x: 'aug',
         y: 13,
     },
     {
-        x: 'sept \'21',
+        x: 'sept',
         y: 53,
     },
     {
-        x: 'oct \'21',
+        x: 'oct',
         y: 63,
     },
     {
-        x: 'nov \'21',
+        x: 'nov',
         y: 33,
     },
 ];
@@ -117,20 +111,24 @@ export default function VisxBarStackGraph(props) {
         <XYChart
             xScale={{ type: 'band' }}
             yScale={{ type: 'linear' }}
-            height={300}
-            width={300}
+            height={250}
+            width={250}
         >
             <AnimatedAxis
-                orientation="top"
+                orientation="bottom"
                 hideTicks
                 numTicks={4}
                 stroke={'black'}
                 // strokeWidth={'1em'}
-                top={40}
+                // top={40}
             />
 
-            <AnimatedAxis orientation={'left'}/>
-            <AnimatedBarStack offset={'none'}>
+            <AnimatedAxis
+                orientation={'left'}
+                hideTicks
+                numTicks={4}
+            />
+            <AnimatedBarStack>
                 <AnimatedBarSeries
                     dataKey="New York"
                     data={data1}

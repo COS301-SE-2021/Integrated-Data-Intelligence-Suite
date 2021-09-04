@@ -121,7 +121,7 @@ const RegisterPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="User name"
+                    label="Username"
                   >
                       <Input
                         id="username"
@@ -137,7 +137,7 @@ const RegisterPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="email"
+                    label="Email"
                   >
                       <Input
                         id="email"
@@ -153,7 +153,7 @@ const RegisterPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="password"
+                    label="Password"
                   >
                       <Input.Password
                         id="password"

@@ -5,7 +5,7 @@
     best to give that component its own file.
 */
 #top_bar {
-    background: #eff0f0;
+    background: #e8e8e9;
     color: #000000;
     height: 70px;
     /*padding: 0 1%;*/
@@ -22,7 +22,7 @@
 */
 #content_section {
     padding: 3%;
-    background: #EFF0F0;
+    background: #e8e8e9;
     color: #000000;
     /*height: 206px;*/
     border: 0;
@@ -31,7 +31,20 @@
     /*Scrolling Functionality*/
     max-height: 100vh;
     overflow-y: scroll;
+    /*overflow-x: ;*/
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 5fr));
+    grid-template-rows: repeat(6, 350px);
+    grid-gap: 1rem;
+    grid-auto-flow: dense;
+    /*grid-template-rows: 20% 20% 20% 20% 20% 20% 20% 20% 20%;*/
+    /*grid-auto-flow: row;*/
 
+}
+
+#content_section>div{
+    max-width: 350px;
+    /*min-width: 200px;*/
 }
 
 
@@ -60,9 +73,9 @@
     /*overflow:hidden*/
 
     overflow-x: hidden;
+    background: #e8e8e9;
+
 }
-
-
 
 
 /*
@@ -98,11 +111,19 @@
     border-bottom-right-radius: 2%;
     border-top-right-radius: 2%;
     border: 0.1em solid #E8E8E9;
+    background: #e8e8e9;
+
 }
+
 /*Hiding the scrollbar in the map-details-container*/
 #map-details-container::-webkit-scrollbar {
     width: 0; /* Remove scrollbar space */
     background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+#word-cloud-layout{
+    grid-column: span 3;
+    grid-row: span 3;
 }
 
 
