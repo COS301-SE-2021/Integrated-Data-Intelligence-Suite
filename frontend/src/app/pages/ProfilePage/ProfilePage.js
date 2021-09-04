@@ -14,6 +14,7 @@ export default function ProfilePage(props) {
                         gridRowEnd: 2
                     }}
                     cardTitle={'My Profile'}
+                    showReveal
                 />
                 <RowDivider
                     style={{

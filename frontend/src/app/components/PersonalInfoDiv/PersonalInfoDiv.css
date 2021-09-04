@@ -1,3 +1,5 @@
+
+
 #personal-info-container {
     /*border: 3px solid yellow;*/
     display: grid;
@@ -5,7 +7,7 @@
     grid-template-columns: max-content max-content auto;
     grid-template-rows: repeat(2, auto);
     row-gap: 0.5em;
-    background-color: white;
+    background-color: var(--personal-card-bg);
 }
 
 .personal-info-title {
@@ -14,7 +16,7 @@
     grid-column-start: 1;
     grid-column-end: 4;
     line-height: 1.2em !important;
-    color: black;
+    color: var(--personal-info-title);
     font-weight: 500;
     /*margin-bottom: 2%;*/
 
