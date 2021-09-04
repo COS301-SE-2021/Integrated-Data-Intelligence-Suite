@@ -1571,7 +1571,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
-        if (request.getDataList() == null) {
+        if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -1587,20 +1587,149 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
+        List<Row> anomaliesData  = new ArrayList<>();
+        ArrayList<ArrayList> requestData = request.getDataList();
+        ArrayList<String> types = new ArrayList<>();
+
+        for(int i=0; i < requestData.size(); i++){
+            List<Object> row = new ArrayList<>();
+
+            String Text = requestData.get(i).get(0).toString(); //New topic, text
+            String location = requestData.get(i).get(1).toString();
+            String date = requestData.get(i).get(2).toString();
+            int like = Integer.parseInt(requestData.get(i).get(3).toString());
+
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            row.add(sentiment);
+
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+            ArrayList<String> entityTypeNames = new ArrayList<>();
+            ArrayList<Integer> entityTypesNumbers = new ArrayList<>();
+
+            for (int j=0; j< namedEntities.size(); j++){
+
+                //row.add(namedEntities.get(j).get(0).toString()); //entity-name ---- don't use
+                //row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                entityTypeNames.add(namedEntities.get(j).get(1).toString()); //TODO: avoid repeating entities?
+
+                if (types.isEmpty()){ //entity-typeNumber
+                    //row.add(0);
+                    entityTypesNumbers.add(0); //replace
+                    types.add(namedEntities.get(j).get(1).toString());
+                }
+                else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        //row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                        entityTypesNumbers.add(types.indexOf(namedEntities.get(j).get(1).toString())); //replace
+                    }
+                    else{
+                        //row.add(types.size());
+                        entityTypesNumbers.add(types.size()); //replace
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+                }
+            }
+
+            Row anomalyRow = RowFactory.create(
+                    Text, //text
+                    entityTypeNames, //array entity name
+                    entityTypesNumbers, //array entity type
+                    entityTypesNumbers.size(), //amount of entities
+                    sentiment, //sentiment
+                    location, //location
+                    date, //date
+                    like  //like
+            );
+
+            //Row anomalyRow = RowFactory.create(row);
+            anomaliesData.add(anomalyRow);
+        }
 
         /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
+                        new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
+                });
+
+        Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema);
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
+                        new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Latitude", DataTypes.FloatType, false, Metadata.empty()),
+                        new StructField("Longitude", DataTypes.FloatType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
+                        //new StructField("AverageLikes", DataTypes.FloatType, false, Metadata.empty()),
+                });
 
 
         /*******************MANIPULATE DATAFRAME*****************/
 
-
-        /*******************SETUP PIPELINE*****************/
-        /*******************SETUP MODEL*****************/
+        //group named entity
 
 
-        /*******************READ MODEL OUTPUT*****************/
+        List<Row> textData = itemsDF.select("*").collectAsList();
 
-        return new FindAnomaliesResponse(null);
+        //training set
+        List<Row> trainSet = new ArrayList<>();
+        for(int i=0; i < textData.size(); i++){
+
+            String[] locationData = textData.get(i).get(5).toString().split(","); // location
+
+            Row trainRow = RowFactory.create(
+                    textData.get(i).get(0).toString(), //text
+                    textData.get(i).get(1), //EntityTypes
+                    textData.get(i).get(2), //EntityTypeNumbers
+                    (int) textData.get(i).get(3), // amountOfEntities
+                    textData.get(i).get(4).toString(), //Sentiment
+                    textData.get(i).get(5).toString(), //Location
+                    Float.parseFloat(locationData[0]),//Latitude
+                    Float.parseFloat(locationData[1]),//Longitude
+                    textData.get(i).get(6), //Date
+                    textData.get(i).get(7) //Like
+            );
+
+            trainSet.add(trainRow);
+        }
+
+        Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
+
+        /*******************LOAD & READ MODEL*****************/
+        PipelineModel kmModel = PipelineModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+
+        Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
+
+        //summary.filter(col("prediction").
+        Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
+        List<Row> rawResults = Results.select("Text","prediction").collectAsList();
+
+        System.out.println("/*******************Outputs begin*****************");
+        System.out.println(rawResults.toString());
+        System.out.println("/*******************Outputs begin*****************");
+
+        ArrayList<String> results = new ArrayList<>();
+        for (int i = 0; i < rawResults.size(); i++) {
+            results.add(rawResults.get(i).get(0).toString());//name
+        }
+
+        return new FindAnomaliesResponse(results);
     }
 
 
