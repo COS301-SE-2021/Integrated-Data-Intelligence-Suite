@@ -19,9 +19,9 @@
 .profile-card-body {
     /*border: 2px solid green;*/
     display: grid;
-    grid-template-rows: repeat(3,auto);
+    grid-template-rows: repeat(3, auto);
     grid-template-columns: 100%;
     background-color: white;
     border-radius: 0.9em;
-
+    padding-bottom: 4%;
 }

@@ -14,16 +14,16 @@
 #profile-card-image {
     grid-column-start: 1;
     grid-column-end: 2;
-    border: 3px solid white;
     grid-row-start: 1;
     grid-row-end: 3;
+    border: 3px solid white;
     border-radius: 50%;
     z-index: 2;
     padding: 0;
     margin-top: -42%;
     height: 150px;
     width: 150px;
-    background-color: blue;
+    background-color: yellow;
 }
 
 #profile-card-name {
