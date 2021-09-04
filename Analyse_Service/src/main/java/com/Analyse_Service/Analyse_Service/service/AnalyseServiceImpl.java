@@ -167,8 +167,8 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
-        TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
-        //TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
+        //TrainFindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
         TrainFindRelationshipsRequest findRelationshipsRequest = new TrainFindRelationshipsRequest(parsedDatalist);
         //TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
@@ -210,7 +210,7 @@ public class AnalyseServiceImpl {
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public TrainFindPatternResponse trainFindPattern(TrainFindPatternRequest request)
+    public FindPatternResponse findPattern(FindPatternRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
@@ -295,37 +295,6 @@ public class AnalyseServiceImpl {
 
         sparkPatterns.stop();*/
 
-        return new TrainFindPatternResponse(null);
-    }
-
-    /**
-     * This method used to find a pattern(s) within a given data,
-     * A pattern is found when there's a relation,trend, anamaly etc found as a patten; [relationship,trend,number_of_likes]
-     *
-     * @param request This is a request object which contains data required to be analysed.
-     * @return FindPatternResponse This object contains data of the patterns found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FindPatternResponse findPattern(FindPatternRequest request)
-            throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("AnalyzeDataRequest Object is null");
-        }
-        if (request.getDataList() == null) {
-            throw new InvalidRequestException("DataList is null");
-        }
-
-        /*******************SETUP SPARK*****************/
-
-
-        /*******************SETUP DATA*****************/
-
-
-        /*******************SETUP MODEL*****************/
-
-
-        /*******************READ MODEL OUTPUT*****************/
-
         return new FindPatternResponse(null);
     }
 
@@ -338,7 +307,7 @@ public class AnalyseServiceImpl {
      * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public TrainFindRelationshipsResponse trainFindRelationship(TrainFindRelationshipsRequest request)
+    public FindRelationshipsResponse findRelationship(FindRelationshipsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
@@ -449,44 +418,10 @@ public class AnalyseServiceImpl {
 
         sparkRelationships.stop();
 
-        return new TrainFindRelationshipsResponse(results);
+        return new FindRelationshipsResponse(results);
     }
 
-    /**
-     * This method used to find a relationship(s) within a given data
-     * A relationship is when topics are related, x is found when y is present, e.g when elon musk name pops, (bitcoin is present as-well | spacex is present as-well) [topic]
-     *
-     * @param request This is a request object which contains data required to be analysed.
-     * @return FindRelationshipsResponse This object contains data of the relationships found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FindRelationshipsResponse findRelationship(FindRelationshipsRequest request)
-            throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FindRelationshipsRequest Object is null");
-        }
-        if (request.getDataList() == null) {
-            throw new InvalidRequestException("DataList is null");
-        }
 
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkRelationships = SparkSession
-                .builder()
-                .appName("Relationships")
-                .master("local")
-                .getOrCreate();
-
-        /*******************SETUP DATA*****************/
-
-
-        /*******************SETUP MODEL*****************/
-
-
-        /*******************READ MODEL OUTPUT*****************/
-
-        return new FindRelationshipsResponse(null);
-    }
 
 
     /**
