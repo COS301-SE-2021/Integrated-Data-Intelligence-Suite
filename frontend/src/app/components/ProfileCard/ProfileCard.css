@@ -9,7 +9,7 @@
 }
 
 .profile-card-title {
-    color: #5773FA;
+    color: var(--neon-blue);
     font-size: 20px;
     font-weight: 600;
     line-height: 1.2em !important;

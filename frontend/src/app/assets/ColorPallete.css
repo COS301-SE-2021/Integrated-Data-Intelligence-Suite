@@ -1,11 +1,10 @@
 :root {
     /*Overall App*/
+    --neon-blue: #5773FA;
 
-
-
-
-
-
+    /*******************************/
+    /********Profile Page***********/
+    /*******************************/
 
     /*Personal Info Card*/
     --personal-card-bg: #efefef;

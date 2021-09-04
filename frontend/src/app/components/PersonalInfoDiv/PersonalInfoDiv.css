@@ -1,5 +1,4 @@
 
-
 #personal-info-container {
     /*border: 3px solid yellow;*/
     display: grid;
@@ -42,13 +41,13 @@
     grid-column-start: 2;
     grid-column-end: 3;
     line-height: 1.2em !important;
-    color: #5773FA;
+    color: var(--neon-blue);
     margin-left: 20%;
 
 }
 
 .personal-info-reveal:hover {
-    border-bottom: 0.1em solid #5773FA;
+    border-bottom: 0.1em solid var(--neon-blue);
 }
 
 .personal-info-edit-btn {
@@ -59,5 +58,8 @@
     grid-column-end: 4;
     line-height: 1.2em !important;
     justify-self: right;
+}
 
+.personal-info-edit-btn :hover {
+    color: var(--neon-blue);
 }
