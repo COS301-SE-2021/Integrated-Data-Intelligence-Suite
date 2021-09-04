@@ -53,6 +53,7 @@ import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.tuning.CrossValidator;
 import org.apache.spark.ml.tuning.CrossValidatorModel;
 import org.apache.spark.ml.tuning.ParamGridBuilder;
+import org.apache.spark.ml.tuning.TrainValidationSplitModel;
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
 import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.rdd.RDD;
@@ -870,6 +871,231 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
+
+
+
+    /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FindTrendsResponse findTrends(FindTrendsRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        logger.setLevel(Level.ERROR);
+
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+
+        /*Logger rootLoggerM = LogManager.getRootLogger();
+        rootLoggerM.setLevel(Level.ERROR);
+        Logger rootLoggerL = Logger.getRootLogger();
+        rootLoggerL.setLevel(Level.ERROR);
+        Logger.getLogger("org.apache").setLevel(Level.ERROR);
+        Logger.getLogger("org").setLevel(Level.ERROR);
+        Logger.getLogger("akka").setLevel(Level.ERROR);*/
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> trendsData = new ArrayList<>();
+        ArrayList<ArrayList> requestData = request.getDataList();
+
+        ArrayList<String> types = new ArrayList<>();
+
+        for(int i=0; i < requestData.size(); i++){
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for (int j=0; j< namedEntities.size(); j++){
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(requestData.get(i).get(0).toString());
+
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()){// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                }else {
+                    if (types.contains(namedEntities.get(j).get(1).toString()))
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    else{
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                row.add(requestData.get(i).get(1).toString());//location
+                row.add(requestData.get(i).get(2).toString());//date
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
+                row.add(sentiment);//sentiment
+
+                Row trendRow = RowFactory.create(row.toArray());
+                trendsData.add(trendRow );
+            }
+        }
+
+        /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending",  DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
+                });
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Location",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                });
+
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
+
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+        //group named entity
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
+
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        averageLikes.get(1); //average likes
+
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        rate.get(1); //rate ???
+
+        //training set
+        int minSize = 0;
+        if(namedEntities.size()>averageLikes.size())
+            minSize = averageLikes.size();
+        else
+            minSize = namedEntities.size();
+
+        if(minSize >rate.size() )
+            minSize =rate.size();
+
+
+        System.out.println("NameEntity : " +namedEntities.size() );
+        for(int i=0; i < namedEntities.size(); i++)
+            System.out.println(namedEntities.get(i).toString());
+
+        System.out.println("AverageLikes : " +averageLikes.size() );
+        for(int i=0; i < averageLikes.size(); i++)
+            System.out.println(averageLikes.get(i).toString());
+
+        System.out.println("*****************ITEMDF****************");
+        itemsDF.show();
+
+        List<Row> trainSet = new ArrayList<>();
+        for(int i=0; i < minSize; i++){
+            double trending = 0.0;
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4 ){
+                trending = 1.0;
+            }
+            Row trainRow = RowFactory.create(
+                    trending,
+                    namedEntities.get(i).get(0).toString(),
+                    namedEntities.get(i).get(1).toString(),
+                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                    rate.get(i).get(1).toString(),
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+
+        /*******************LOAD & READ MODEL*****************/
+        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        Dataset<Row> result = lrModel.transform(trainingDF);
+
+        List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+
+        if( rawResults.isEmpty())
+            rawResults = result.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+
+        /*System.out.println("/*******************Outputs begin*****************");
+        System.out.println(rawResults.toString());
+        for (Row r : result.select("prediction").collectAsList())
+            System.out.println("Trending -> " + r.get(0));
+        System.out.println("/*******************Outputs begin*****************");*/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+        for (int i = 0; i < rawResults.size(); i++) {
+            ArrayList<Object> r = new ArrayList<>();
+            String en = rawResults.get(i).get(0).toString();
+            ArrayList<String> locs =new ArrayList<>();
+            List<Row> rawLocs = itemsDF.select("location").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawLocs.toString());
+            for (int j = 0; j < rawLocs.size(); j++) {
+                locs.add(rawLocs.get(j).get(0).toString());
+            }
+            r.add(en);
+            r.add(locs);
+            r.add( rawResults.get(i).get(3).toString());
+            r.add( rawResults.get(i).get(4).toString());
+            ArrayList<String> sents =new ArrayList<>();
+            List<Row> rawSents = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawSents.toString());
+            for (int j = 0; j < rawSents.size(); j++) {
+                sents.add(rawSents.get(j).get(0).toString());
+            }
+            r.add(sents);
+
+            ArrayList<String> texts =new ArrayList<>();
+            List<Row> rawtexts = itemsDF.select("Text").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawtexts.toString());
+            for (int j = 0; j < rawtexts.size(); j++) {
+                texts.add(rawtexts.get(j).get(0).toString());
+            }
+            r.add(texts);
+            r.add( rawResults.get(i).get(2).toString());
+
+            results.add(r);
+
+        }
+
+
+        for(int i = 0; i < results.size() ; i++ ){
+            System.out.println("RESULT TREND : " + results.get(i));
+        }
+
+        return new FindTrendsResponse(results);
+    }
+
     /**
      * This method used to find a trends(s) within a given data.
      * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
@@ -878,7 +1104,7 @@ public class AnalyseServiceImpl {
      * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindTrendsResponse findTrends(FindTrendsRequest request)
+    public FindTrendsResponse findTrendsUnsed(FindTrendsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
