@@ -1,9 +1,12 @@
 /*************************************************************/
 /********************* Sidebar(Left)  ***************************/
-#sidebar_div {
+#sidebar_div[style] {
     background: white;
     border-right: 0.2em solid #E8E8E9;
     /*border: 3px solid #5873f9;*/
+    width: 168px !important;
+    min-width: 0 !important;
+    max-width: 168px !important;
 }
 
 #sidebar_menu {
@@ -11,7 +14,7 @@
     color: #333333;
     border: 0;
     /*border: 3px solid red;*/
-    height:87%;
+    height: 87%;
 }
 
 #sidebar_menu > li {
@@ -33,14 +36,15 @@
 /*When a Sidebar Menu item when it has been selected(clicked)*/
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
-    background: #5873f9;
+    background: #5773FA;
     color: white;
 }
 
 /*When a Sidebar Menu item when it has been Hovered over*/
 #sidebar_menu > li.ant-menu-item-active {
     border: 0;
-    color: #5873f9;
+    /*background: #5773FA;*/
+    color:#5773FA;
 }
 
 /*Hovering over a menu item that has been selected*/
@@ -68,7 +72,7 @@
     color: black !important;
     line-height: 48px;
     text-align: center;
-    background:   #5873f9 !important  ;
+    background: #5873f9 !important;
     cursor: pointer;
     transition: all 0.2s;
     /*border-radius: 10px;*/
@@ -109,6 +113,6 @@
 /*}*/
 
 [data-theme="dark"] .ant-layout-sider {
-    background: #3499ec;
+    background: #5773FA;
 }
 

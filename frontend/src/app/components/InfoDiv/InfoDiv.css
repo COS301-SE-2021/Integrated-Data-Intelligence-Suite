@@ -1,0 +1,47 @@
+#info-div-container {
+    display: grid;
+    border: 0.1em solid #eff0f0;
+    background: white;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 4em;
+    justify-content: center;
+    column-gap: 0.3em;
+    font-weight: 500;
+}
+
+
+.info-div {
+    background: white;
+    color: black;
+    width: fit-content;
+    height: 3em;
+    line-height: 2em;
+    padding: 0;
+
+}
+
+#info-value {
+    color: #4BB5D2;
+    background: white;
+    width: fit-content;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    line-height: 2em;
+    height: 3em;
+}
+
+#info-div-start {
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 1;
+}
+
+#info-div-end {
+    grid-column-start: 3;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}

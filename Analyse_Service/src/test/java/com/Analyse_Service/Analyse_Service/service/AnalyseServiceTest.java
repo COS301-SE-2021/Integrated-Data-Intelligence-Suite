@@ -59,14 +59,14 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When findPatternRequest is Null")
     public void findPatternNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindPattern(null));
     }
 
     @Test
     @DisplayName("When the findPattern data list is Null")
     public void findPatternDataNullList(){
-        FindPatternRequest test = new FindPatternRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(test));
+        TrainFindPatternRequest test = new TrainFindPatternRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.trainFindPattern(test));
     }
 
 
@@ -141,8 +141,8 @@ public class AnalyseServiceTest {
 
         TestList.add(row);
 
-        FindPatternRequest test = new FindPatternRequest(TestList);
-        FindPatternResponse testResults = service.findPattern(test);
+        TrainFindPatternRequest test = new TrainFindPatternRequest(TestList);
+        TrainFindPatternResponse testResults = service.trainFindPattern(test);
         Assertions.assertNotNull(testResults);
     }
 

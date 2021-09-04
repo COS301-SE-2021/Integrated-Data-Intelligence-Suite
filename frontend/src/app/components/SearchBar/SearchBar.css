@@ -54,11 +54,11 @@
     transform: translateY(-50%);
 }
 
-span.ant-input-wrapper.ant-input-group{
+span.ant-input-wrapper.ant-input-group {
     /*border: 2px solid black;*/
     border-radius: 1em;
     padding: 2%;
-    background-color: #EFF0F0;
+    background-color: #E8E8E9;
 }
 
 /*The actual inside of the search
@@ -69,15 +69,16 @@ span.ant-input-wrapper.ant-input-group{
     border: 0;
     padding: 5px;
     /*border-radius: 15%;*/
-    background-color: #EFF0F0 ;
+    background-color: #E8E8E9;
     border-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    float:right;
+    float: right;
     width: 80%;
 }
+
 #top_bar > .ant-input-search > .ant-input-group > input.ant-input:focus {
-   border:0;
+    border: 0;
     box-shadow: none;
 
 }
@@ -96,6 +97,7 @@ span.ant-input-wrapper.ant-input-group{
     /*left: 0;*/
     float: left;
     box-shadow: none;
+    background: #E8E8E9;
 
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
@@ -112,13 +114,23 @@ span.ant-input-wrapper.ant-input-group{
     /*--antd-wave-shadow-color: none;*/
     /*color: #5C5C5C;*/
     color: #898D8F;
-    background-color: #EFF0F0 ;
+    background: #E8E8E9 !important;
     box-shadow: none;
 }
 
 
-#top_bar > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button{
-    border:0;
+#top_bar > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button {
+    border: 0;
     box-shadow: none;
-    background-color: red ;
+    background-color: red;
+}
+#top_bar
+> .ant-input-search
+> .ant-input-group
+> .ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary).ant-btn-loading::before {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #E8E8E9 !important;
 }

@@ -5,7 +5,7 @@ import com.Import_Service.Import_Service.dataclass.ImportedData;
 import java.util.ArrayList;
 
 public class ImportDataResponse {
-    ArrayList<ImportedData> list;
+    private ArrayList<ImportedData> list;
 
     public ImportDataResponse() {
 

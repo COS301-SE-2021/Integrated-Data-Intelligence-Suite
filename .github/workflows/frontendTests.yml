@@ -4,15 +4,16 @@ name: frontend_tests
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for these branches
   push:
-    branches: [ develop(new), master ]
+    branches: [ develop, master, feature-ui ]
   pull_request:
-    branches: [ develop(new), master ]
+    branches: [ develop, master, feature-ui ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+#Tells the workflow which directory to execute the commands in 
 defaults:
   run:
     working-directory: ./frontend/

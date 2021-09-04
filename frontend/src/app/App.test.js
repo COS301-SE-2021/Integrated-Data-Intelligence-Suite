@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 // import '../Mocks/matchMedia.mock';
-import '../app/Mocks/matchMedia.mock';
+import './Mocks/matchMedia.mock';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import React from "react";
-import {BrowserRouter} from "react-router-dom";
 
 test('renders learn react link', () => {
-  render(<BrowserRouter><App/></BrowserRouter>);
+  render(<BrowserRouter><App /></BrowserRouter>);
   const linkElement = screen.getByText('Login');
   expect(linkElement).toBeTruthy();
 });
