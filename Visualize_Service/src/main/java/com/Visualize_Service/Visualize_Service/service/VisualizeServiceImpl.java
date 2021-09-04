@@ -48,7 +48,7 @@ public class VisualizeServiceImpl {
 
         //Timeline graph
         CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
-        CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
+        CreateTimelineGraphResponse timelineResponse =  this.createlineGraphTime(timelineRequest);
         outputData.add(timelineResponse.timelineGraphArray);
 
         //Line graph Sentiments
@@ -76,17 +76,196 @@ public class VisualizeServiceImpl {
         CreateWordCloudGraphResponse wordcloudResponse = this.createWordCloudGraph(wordcloudRequest);
         outputData.add(wordcloudResponse.words);
 
-        outputData.add(this.extraBarOne(request.getTrendList()));
-        outputData.add(this.extraBartwo(request.getTrendList()));
+
+        //ExtraBar graph one
+        CreateBarGraphExtraOneRequest extraBarOneRequest = new CreateBarGraphExtraOneRequest(request.getTrendList());
+        CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
+        outputData.add(extraBarOneResponse.BarGraphArray);
+
+        //ExtraBar graph two
+        CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
+        CreateBarGraphExtraTwoResponse extraBarTwoResponse = this.createBarGraphExtraTwo(extraBarTwoRequest);
+        outputData.add(extraBarTwoResponse.BarGraphArray);
 
 
         return new VisualizeDataResponse( outputData );
     }
 
-    public ArrayList<Graph> extraBarOne(ArrayList<ArrayList> list){
+
+    public CreateTimelineGraphResponse createlineGraphTime(CreateTimelineGraphRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+
+        ArrayList<String> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            TimelineGraph newGraph = new TimelineGraph();
+
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "Anomaly Detected";
+            newGraph.cardSubtitle = reqData.get(i);
+
+            output.add(newGraph);
+        }
+        return new CreateTimelineGraphResponse(output);
+    }
+
+    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request) throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("FindEntitiesRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+        ArrayList<String> listSent = new ArrayList<>();
+        ArrayList<ArrayList> out = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
+            //System.out.println(locs.toString());
+            listSent = new ArrayList<>();
+            out = new ArrayList<>();
+            for (int j = 0; j < sents.size(); j++) {
+                if (listSent.isEmpty()){
+                    listSent.add(sents.get(j));
+                    ArrayList<Object> r = new ArrayList<>();
+                    r.add(sents.get(j));
+                    r.add(1);
+                    out.add(r);
+                }else {
+                    if (listSent.contains(sents.get(j))){
+                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
+                        int val=Integer.parseInt(r.get(1).toString());
+                        val++;
+                        r.set(1,val);
+                        out.set(listSent.indexOf(sents.get(j)),r);
+                    }else {
+                        listSent.add(sents.get(j));
+                        ArrayList<Object> r = new ArrayList<>();
+                        r.add(sents.get(j));
+                        r.add(1);
+                        out.add(r);
+                    }
+                }
+            }
+            int temp = 0;
+            String sent = "";
+            for (ArrayList o : out) {
+               if (temp < Integer.parseInt(o.get(1).toString())) {
+                   temp = Integer.parseInt(o.get(1).toString());
+                   sent = o.get(0).toString();
+               }
+            }
+
+            float tot = sents.size() +1;
+            float number = ((float)temp)/tot * 50;
+            if (sent == "Positive")
+                number *= 2;
+            else
+                number = 100 - number*2;
+
+            LineGraph outp = new LineGraph();
+            outp.x = String.valueOf(i);
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateLineGraphSentimentsResponse(output);
+    }
+
+    public CreateLineGraphInteractionsResponse createLineGraphInteractions(CreateLineGraphInteractionsRequest request) throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            float number = Float.parseFloat(reqData.get(i).get(3).toString());
+
+            LineGraph outp = new LineGraph();
+            outp.x = String.valueOf(i);
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateLineGraphInteractionsResponse(output);
+    }
+
+
+    public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request) throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            float number = Float.parseFloat(reqData.get(i).get(6).toString());
+
+            BarGraph outp = new BarGraph();
+            outp.x = reqData.get(i).get(0).toString();
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateBarGraphResponse(output);
+    }
+
+    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request){
         ArrayList<Graph> output = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
         ArrayList<Integer> typeFreq = new ArrayList<>();
+
+        ArrayList<ArrayList> list = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             String type = list.get(i).get(2).toString();
@@ -109,12 +288,15 @@ public class VisualizeServiceImpl {
             System.out.println("y: " + bar2.y);
             output.add(bar2);
         }
-        return output;
+        return new CreateBarGraphExtraOneResponse (output);
     }
 
-    public ArrayList<Graph> extraBartwo(ArrayList<ArrayList> list){
+    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request){
         ArrayList<Graph> output = new ArrayList<>();
         BarGraph bar2;
+
+        ArrayList<ArrayList> list = new ArrayList<>();
+
         for (int i = 0; i < list.size(); i++) {
             Random random = new Random();
             int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
@@ -139,7 +321,67 @@ public class VisualizeServiceImpl {
             System.out.println("y: " + bar2.y);
             output.add(bar2);
         }
-        return output;
+        return new CreateBarGraphExtraTwoResponse(output);
+    }
+
+
+    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request) throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+        ArrayList<String> listSent = new ArrayList<>();
+        ArrayList<ArrayList> out = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < sents.size(); j++) {
+                if (listSent.isEmpty()){
+                    listSent.add(sents.get(j));
+                    ArrayList<Object> r = new ArrayList<>();
+                    r.add(sents.get(j));
+                    r.add(1);
+                    out.add(r);
+                }else {
+                    if (listSent.contains(sents.get(j))){
+                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
+                        int val=Integer.parseInt(r.get(1).toString());
+                        val++;
+                        r.set(1,val);
+                        out.set(listSent.indexOf(sents.get(j)),r);
+                    }else {
+                        listSent.add(sents.get(j));
+                        ArrayList<Object> r = new ArrayList<>();
+                        r.add(sents.get(j));
+                        r.add(1);
+                        out.add(r);
+                    }
+                }
+            }
+        }
+
+
+
+        for (ArrayList o : out) {
+            //System.out.println(o);
+            PieChartGraph temp = new PieChartGraph();
+            temp.label = o.get(0).toString();
+            temp.x = o.get(0).toString() + "s";
+            temp.y = o.get(1).toString();
+
+            System.out.println("Label: "+ temp.label);
+            System.out.println("x: "+ temp.x);
+            System.out.println("y: "+ temp.y);
+            output.add(temp);
+        }
+        return new CreatePieChartGraphResponse(output);
     }
 
     public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
@@ -340,232 +582,6 @@ public class VisualizeServiceImpl {
         }
 
         return new CreateNetworkGraphResponse(output);
-    }
-
-    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-
-        ArrayList<String> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            TimelineGraph newGraph = new TimelineGraph();
-
-            Random random = new Random();
-            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
-            int maxDay = (int) LocalDate.now().toEpochDay();
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-
-            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-            String stringDate=randomBirthDate.format(formatter);
-
-            newGraph.title = stringDate;
-            newGraph.cardTitle = "Anomaly Detected";
-            newGraph.cardSubtitle = reqData.get(i);
-
-            output.add(newGraph);
-        }
-        return new CreateTimelineGraphResponse(output);
-    }
-
-    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("FindEntitiesRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-        ArrayList<String> listSent = new ArrayList<>();
-        ArrayList<ArrayList> out = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
-            //System.out.println(locs.toString());
-            listSent = new ArrayList<>();
-            out = new ArrayList<>();
-            for (int j = 0; j < sents.size(); j++) {
-                if (listSent.isEmpty()){
-                    listSent.add(sents.get(j));
-                    ArrayList<Object> r = new ArrayList<>();
-                    r.add(sents.get(j));
-                    r.add(1);
-                    out.add(r);
-                }else {
-                    if (listSent.contains(sents.get(j))){
-                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
-                        int val=Integer.parseInt(r.get(1).toString());
-                        val++;
-                        r.set(1,val);
-                        out.set(listSent.indexOf(sents.get(j)),r);
-                    }else {
-                        listSent.add(sents.get(j));
-                        ArrayList<Object> r = new ArrayList<>();
-                        r.add(sents.get(j));
-                        r.add(1);
-                        out.add(r);
-                    }
-                }
-            }
-            int temp = 0;
-            String sent = "";
-            for (ArrayList o : out) {
-               if (temp < Integer.parseInt(o.get(1).toString())) {
-                   temp = Integer.parseInt(o.get(1).toString());
-                   sent = o.get(0).toString();
-               }
-            }
-
-            float tot = sents.size() +1;
-            float number = ((float)temp)/tot * 50;
-            if (sent == "Positive")
-                number *= 2;
-            else
-                number = 100 - number*2;
-
-            LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateLineGraphSentimentsResponse(output);
-    }
-
-    public CreateLineGraphInteractionsResponse createLineGraphInteractions(CreateLineGraphInteractionsRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-
-        for (int i = 0; i < reqData.size(); i++) {
-            float number = Float.parseFloat(reqData.get(i).get(3).toString());
-
-            LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateLineGraphInteractionsResponse(output);
-    }
-
-    public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-
-        for (int i = 0; i < reqData.size(); i++) {
-            float number = Float.parseFloat(reqData.get(i).get(6).toString());
-
-            BarGraph outp = new BarGraph();
-            outp.x = reqData.get(i).get(0).toString();
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateBarGraphResponse(output);
-    }
-
-    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-        ArrayList<String> listSent = new ArrayList<>();
-        ArrayList<ArrayList> out = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
-            //System.out.println(locs.toString());
-
-            for (int j = 0; j < sents.size(); j++) {
-                if (listSent.isEmpty()){
-                    listSent.add(sents.get(j));
-                    ArrayList<Object> r = new ArrayList<>();
-                    r.add(sents.get(j));
-                    r.add(1);
-                    out.add(r);
-                }else {
-                    if (listSent.contains(sents.get(j))){
-                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
-                        int val=Integer.parseInt(r.get(1).toString());
-                        val++;
-                        r.set(1,val);
-                        out.set(listSent.indexOf(sents.get(j)),r);
-                    }else {
-                        listSent.add(sents.get(j));
-                        ArrayList<Object> r = new ArrayList<>();
-                        r.add(sents.get(j));
-                        r.add(1);
-                        out.add(r);
-                    }
-                }
-            }
-        }
-
-
-
-        for (ArrayList o : out) {
-            //System.out.println(o);
-            PieChartGraph temp = new PieChartGraph();
-            temp.label = o.get(0).toString();
-            temp.x = o.get(0).toString() + "s";
-            temp.y = o.get(1).toString();
-
-            System.out.println("Label: "+ temp.label);
-            System.out.println("x: "+ temp.x);
-            System.out.println("y: "+ temp.y);
-            output.add(temp);
-        }
-        return new CreatePieChartGraphResponse(output);
     }
 
     public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
