@@ -152,8 +152,14 @@ public class AnalyseServiceImpl {
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
+        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+
         FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
         FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+
+        //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(
