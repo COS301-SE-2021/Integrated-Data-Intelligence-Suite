@@ -3,7 +3,11 @@
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: repeat(3, auto);
-    padding: 5%; /* Must Match the padding of the profile-card-display-info-container*/
+    /*padding: 5%; !* Must Match the padding of the profile-card-display-info-container*!*/
+    background-color: white;
+    margin: 4%;
+    border-radius: 0.7em;
+    padding: 1%;
 }
 
 #email-info-div {

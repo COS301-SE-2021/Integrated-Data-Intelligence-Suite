@@ -9,18 +9,18 @@ export default function PersonalInfoCard(props) {
             <div id={'personal-info-card-container'}>
                 <PersonalInfoDiv
                     id={'email-info-div'}
-                    infoTitle={'Email'}
+                    infoTitle={'EMAIL'}
                     infoContent={'KanyeWest@emerge.com'}
                 />
                 <PersonalInfoDiv
                     id={'phone-number-info-div'}
-                    infoTitle={'Phone Number'}
+                    infoTitle={'PHONE NUMBER'}
                     infoContent={'515-8008-312'}
 
                 />
                 <PersonalInfoDiv
                     id={'account-type-info-div'}
-                    infoTitle={'Account Type'}
+                    infoTitle={'ACCOUNT TYPE'}
                     infoContent={'Admin'}
                 />
             </div>

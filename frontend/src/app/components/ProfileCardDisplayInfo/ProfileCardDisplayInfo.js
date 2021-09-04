@@ -6,9 +6,9 @@ export default function ProfileCardDisplayInfo(props) {
     return (
         <>
             <div id={'profile-card-display-info-container'}>
-                <div id={'profile-card-image'}>Image</div>
+                <div id={'profile-card-image'}/>
                 <div id={'profile-card-name'}>Kanye West</div>
-                <GoVerified style={{color: '#5773FA'}} className={'verified-icon'}/>
+                <GoVerified className={'verified-icon'}/>
             </div>
         </>
     );

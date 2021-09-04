@@ -4,6 +4,6 @@
     grid-row-start: 1;
     grid-row-end: 2;
     background: black;
-    /*border-top-left-radius: 3%;*/
-    /*border-top-right-radius: 3%;*/
+    border-top-left-radius: 0.9em;
+    border-top-right-radius: 0.9em;
 }

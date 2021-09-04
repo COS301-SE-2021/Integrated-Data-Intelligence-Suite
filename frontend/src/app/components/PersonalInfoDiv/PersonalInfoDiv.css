@@ -1,8 +1,11 @@
 #personal-info-container {
-    border: 3px solid red;
+    /*border: 3px solid yellow;*/
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    /*grid-template-columns: repeat(3, auto);*/
+    grid-template-columns: max-content max-content auto;
     grid-template-rows: repeat(2, auto);
+    row-gap: 1em;
+    background-color: white;
 }
 
 .personal-info-title {
@@ -11,11 +14,13 @@
     grid-column-start: 1;
     grid-column-end: 4;
     line-height: 1.2em !important;
+    color: black;
 
 
 }
 
 .personal-info-content {
+    color: black;
     grid-row-start: 2;
     grid-row-end: 3;
     grid-column-start: 1;
@@ -30,14 +35,17 @@
     grid-column-start: 2;
     grid-column-end: 3;
     line-height: 1.2em !important;
+    color: #5773FA;
 
 }
 
 .personal-info-edit-btn {
+    color: black;
     grid-row-start: 2;
     grid-row-end: 3;
     grid-column-start: 3;
     grid-column-end: 4;
     line-height: 1.2em !important;
+    justify-self: right;
 
 }

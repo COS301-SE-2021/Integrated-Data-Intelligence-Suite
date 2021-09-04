@@ -8,7 +8,7 @@ export default function PersonalInfoDiv(props) {
                 <div className={'personal-info-title'}>{props.infoTitle}</div>
                 <div className={'personal-info-content'}>{props.infoContent}</div>
                 <div className={'personal-info-reveal'}>Reveal</div>
-                <div className={'personal-info-edit-btn'}>Edit Button</div>
+                <div className={'personal-info-edit-btn'}>Edit</div>
             </div>
         </>
     );
