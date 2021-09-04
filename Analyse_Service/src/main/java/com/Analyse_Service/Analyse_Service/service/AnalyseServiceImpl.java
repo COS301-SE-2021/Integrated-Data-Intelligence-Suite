@@ -312,7 +312,7 @@ public class AnalyseServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindRelationshipsRequest Object is null");
         }
-        if (request.getDataList() == null) {
+        if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -326,46 +326,23 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-        /*for (int i = 0; i < 100; i++) {
-            //MOCK DATASET WITH 5 "features"
-            ArrayList<String> attempt = new ArrayList<>();
-            for (int j = 0 ; j < 5 ; j++){
-                int unique = (int)(Math.random()*(9)+1);
-                String adding = Integer.toString(unique);
-                for (int k = 0; k < j; k ++)
-                    adding+= "i";
-                attempt.add(adding);
-            }
-            relationshipData.add(RowFactory.create(attempt));
-        }*/
-
-        List<Row> relationshipData = new ArrayList<>();
+        List<Row> relationshipData  = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
 
-        for (int i = 0;
-             i < requestData.size();
-             i++) {
+        for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
-            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(requestData.get(i).get(0).toString());
+
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
-            for (int j = 0;
-                 j < namedEntities.size();
-                 j++) {
-
-            }
-
             row = new ArrayList<>();
-            for (int j = 0;
-                 j < namedEntities.size();
-                 j++) {
+            for (int j=0; j< namedEntities.size(); j++){
                 if (row.isEmpty()) {
                     row.add(namedEntities.get(j).get(0).toString()); //entity-name
                 }
                 else {
-                    if (!row.contains(namedEntities.get(j).get(0).toString())) {
+                    if(!row.contains(namedEntities.get(j).get(0).toString())) {
                         row.add(namedEntities.get(j).get(0).toString()); //entity-name
                     }
                 }
@@ -379,8 +356,8 @@ public class AnalyseServiceImpl {
 
         System.out.println(relationshipData);
 
-        StructType schema = new StructType(new StructField[]{new StructField(
-                "Tweets", DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
+        StructType schema = new StructType(new StructField[]{ new StructField(
+                "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
         Dataset<Row> itemsDF = sparkRelationships.createDataFrame(relationshipData, schema);
@@ -388,35 +365,100 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP MODEL*****************/
 
-        FPGrowthModel model = new FPGrowth()
+        FPGrowth fp = new FPGrowth()
                 .setItemsCol("Tweets")
                 .setMinSupport(0.10)
-                .setMinConfidence(0.6)
-                .fit(itemsDF);
+                .setMinConfidence(0.6);
 
-        model.freqItemsets().show();
+        FPGrowthModel fpModel = fp.fit(itemsDF);
+
+        /******************EVALUATE/ANALYSE MODEL**************
+         //evaluators
+         BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
+         .setLabelCol("label")
+         .setRawPredictionCol("prediction")
+         .setMetricName("areaUnderROC");
+         RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+         .setLabelCol("label")
+         .setPredictionCol("prediction")
+         .setMetricName("mse") //meanSquaredError
+         .setMetricName("rmse") //rootMeanSquaredError
+         .setMetricName("mae") //meanAbsoluteError
+         .setMetricName("r2"); //r^2, variance
+         //parameterGrid
+         /*ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+         paramGridBuilder.addGrid(fp.minSupport(), new double[]{fp.getMinConfidence()});
+         paramGridBuilder.addGrid(fp.minConfidence(), new double[]{fp.getMinConfidence()});
+         ParamMap[] paramMaps = paramGridBuilder.build();
+         //validator
+         CrossValidator crossValidator = new CrossValidator()
+         .setEstimator(pipeline)
+         .setEvaluator(regressionEvaluator)
+         .setEstimatorParamMaps(paramMaps)
+         .setNumFolds(2);
+         TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+         .setEstimator(fp)
+         .setEvaluator(regressionEvaluator)
+         .setEstimatorParamMaps(paramMaps)
+         .setTrainRatio(0.7)  //70% : 30% ratio
+         .setParallelism(2);*/
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************
+         MlflowClient client = new MlflowClient("http://localhost:5000");
+         Optional<Experiment> foundExperiment = client.getExperimentByName("FPGrowth_Experiment");
+         String experimentID = "";
+         if (foundExperiment.isEmpty() == true){
+         experimentID = client.createExperiment("FPGrowth_Experiment");
+         }
+         else{
+         experimentID = foundExperiment.get().getExperimentId();
+         }
+         RunInfo runInfo = client.createRun(experimentID);
+         MlflowContext mlflow = new MlflowContext(client);
+         ActiveRun run = mlflow.startRun("FPGrowth_Run", runInfo.getRunId());
+         //TrainValidationSplitModel lrModel = trainValidationSplit.fit(itemsDF);
+         FPGrowthModel fpModel = fp.fit(itemsDF);
+         Dataset<Row> predictions = fpModel.transform(itemsDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+         //predictions.show();
+         //System.out.println("*****************Predictions Of Test Data*****************");
+         //double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+         //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+         //RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+         //param
+         client.logParam(run.getId(),"setMinSupport", "0.10");
+         client.logParam(run.getId(),"setMinConfidence" ,"0.6");
+         //client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+         //metrics
+         /*client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+         client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+         client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+         client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+         client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+         //custom tags
+         //client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+         //run.setTag("Accuracy", String.valueOf(accuracy));
+         run.endRun();
+         /***********************SETUP MLFLOW - SAVE ***********************/
+
 
         /*******************READ MODEL OUTPUT*****************/
 
-        List<Row> Rdata = model.freqItemsets().collectAsList();
-
+        List<Row> Rdata = fpModel.freqItemsets().collectAsList();
 
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0;
-             i < Rdata.size();
-             i++) {
+        for (int i = 0; i < Rdata.size(); i++) {
             ArrayList<String> row = new ArrayList<>();
-            for (int j = 0;
-                 j < Rdata.get(i).getList(0).size();
-                 j++) {
+            for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
                 row.add(Rdata.get(i).getList(0).get(j).toString());
             }
             //row.add(Rdata.get(i).get(1).toString());
             results.add(row);
         }
-        System.out.println(results.toString());
+        //System.out.println(results.toString());
 
-        sparkRelationships.stop();
+        //sparkRelationships.stop();
 
         return new FindRelationshipsResponse(results);
     }
