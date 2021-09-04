@@ -67,14 +67,14 @@ public class VisualizeServiceImpl {
         outputData.add(barResponse.BarGraphArray);
 
         //PieChart graph
-        CreatePieChartGraphRequest piechartRequest = new CreatePieChartGraphRequest(request.getTrendList());
-        CreatePieChartGraphResponse piechartResponse =  this.createPieChartGraph(piechartRequest);
-        outputData.add(piechartResponse.PieChartGraphArray);
+        CreatePieChartGraphRequest pieChartRequest = new CreatePieChartGraphRequest(request.getTrendList());
+        CreatePieChartGraphResponse pieChartResponse =  this.createPieChartGraph(pieChartRequest);
+        outputData.add(pieChartResponse.PieChartGraphArray);
 
         //WordCloud graph
-        CreateWordCloudGraphRequest wordcloudRequest = new CreateWordCloudGraphRequest(request.getTrendList());
-        CreateWordCloudGraphResponse wordcloudResponse = this.createWordCloudGraph(wordcloudRequest);
-        outputData.add(wordcloudResponse.words);
+        CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getTrendList());
+        CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
+        outputData.add(wordCloudResponse.words);
 
 
         //ExtraBar graph one
@@ -260,15 +260,22 @@ public class VisualizeServiceImpl {
         return new CreateBarGraphResponse(output);
     }
 
-    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request){
+    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request) throws InvalidRequestException {
+
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+
         ArrayList<Graph> output = new ArrayList<>();
         ArrayList<String> types = new ArrayList<>();
         ArrayList<Integer> typeFreq = new ArrayList<>();
 
-        ArrayList<ArrayList> list = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            String type = list.get(i).get(2).toString();
+        for (int i = 0; i < reqData.size(); i++) {
+            String type = reqData.get(i).get(2).toString();
             if (types.contains(type)){
                 int freq = typeFreq.get(types.indexOf(type));
                 freq++;
@@ -291,13 +298,22 @@ public class VisualizeServiceImpl {
         return new CreateBarGraphExtraOneResponse (output);
     }
 
-    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request){
+    //no text over time/dates
+    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request) throws InvalidRequestException {
+
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+
+
         ArrayList<Graph> output = new ArrayList<>();
         BarGraph bar2;
 
-        ArrayList<ArrayList> list = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < reqData.size(); i++) {
             Random random = new Random();
             int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
             int maxDay = (int) LocalDate.now().toEpochDay();
@@ -308,9 +324,8 @@ public class VisualizeServiceImpl {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
             String stringDate=randomBirthDate.format(formatter);
 
-            double Freq = Float.parseFloat(list.get(i).get(6).toString());
+            double Freq = Float.parseFloat(reqData.get(i).get(6).toString());
             Freq += Math.random() * (15);
-
 
 
             bar2 = new BarGraph();
