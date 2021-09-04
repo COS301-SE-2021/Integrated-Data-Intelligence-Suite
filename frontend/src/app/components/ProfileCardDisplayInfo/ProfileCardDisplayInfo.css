@@ -44,4 +44,5 @@
     grid-row-end: 2;
     height: 20px;
     width: 20px;
+    align-self: center;
 }
