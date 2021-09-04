@@ -1,0 +1,15 @@
+#profile-page-container {
+    border: 3px solid black;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
+.right-column {
+    border: 3px solid yellow;
+    padding-left: 30px !important;
+}
+
+.component-title {
+    padding-left: 0 !important;
+}

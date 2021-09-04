@@ -6,6 +6,7 @@ import {CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone} from '@ant-design/
 import { useHistory } from 'react-router-dom';
 import DataSourceList from '../../components/DataSourceList/DataSourceList';
 import Permissions from '../PermissionsPage/Permissions';
+import ProfilePage from '../ProfilePage/ProfilePage';
 // import AddDataSource from '../AddDataSourcePage/AddDataSource';
 
 const { Content } = Layout;
@@ -64,7 +65,7 @@ const SettingsPage = () => {
                               {/*<CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} />*/}
                           </div>
                           { component === 'Permissions' && user && user.isAdmin && setActive(component) && <Permissions />}
-                          { component === 'Profile' && setActive(component) && <div><h1>Page not implemented</h1></div>}
+                          { component === 'Profile' && setActive(component) && <ProfilePage/>}
                           { component === 'Account' && setActive(component) && <div><h1>Page not implemented</h1></div>}
                           { component === 'Data Sources' && setActive(component) && <DataSourceList /> }
                       </div>
