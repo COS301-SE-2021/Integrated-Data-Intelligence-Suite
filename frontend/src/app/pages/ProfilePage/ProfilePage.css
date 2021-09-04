@@ -1,12 +1,14 @@
 #profile-page-container {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
+    border: 0;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows:  auto auto auto auto auto auto;
 }
 
 .right-column {
-    border: 3px solid yellow;
+    /*border: 3px solid yellow;*/
+    /*border:0 !important;*/
     padding-left: 30px !important;
 }
 

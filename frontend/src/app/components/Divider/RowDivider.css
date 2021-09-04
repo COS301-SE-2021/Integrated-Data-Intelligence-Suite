@@ -1,0 +1,7 @@
+.row-divider {
+    border: 1px solid #5C5C5C !important;
+    background: #5C5C5C;
+    height: 2px;
+    margin-top: 6%;
+    margin-bottom: 6%;
+}
