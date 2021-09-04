@@ -1295,11 +1295,11 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindAnomaliesResponse trainFindAnomalies(TrainFindAnomaliesRequest request)
-            throws InvalidRequestException {
+            throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
-        if (request.getDataList() == null) {
+        if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
 
@@ -1315,19 +1315,11 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
 
-        List<Row> anomaliesData = new ArrayList<>();
+        List<Row> anomaliesData  = new ArrayList<>();
         ArrayList<ArrayList> requestData = request.getDataList();
         ArrayList<String> types = new ArrayList<>();
 
-        /*text //0
-        location //1
-        formattedDate//2
-        likes//3
-        findNlpPropertiesResponse//4*/
-
-        for (int i = 0;
-             i < requestData.size();
-             i++) {
+        for(int i=0; i < requestData.size(); i++){
             List<Object> row = new ArrayList<>();
 
             String Text = requestData.get(i).get(0).toString(); //New topic, text
@@ -1335,7 +1327,6 @@ public class AnalyseServiceImpl {
             String date = requestData.get(i).get(2).toString();
             int like = Integer.parseInt(requestData.get(i).get(3).toString());
 
-            //FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(Text);
             FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
 
             String sentiment = findNlpPropertiesResponse.getSentiment();
@@ -1345,15 +1336,13 @@ public class AnalyseServiceImpl {
             ArrayList<String> entityTypeNames = new ArrayList<>();
             ArrayList<Integer> entityTypesNumbers = new ArrayList<>();
 
-            for (int j = 0;
-                 j < namedEntities.size();
-                 j++) {
+            for (int j=0; j< namedEntities.size(); j++){
 
                 //row.add(namedEntities.get(j).get(0).toString()); //entity-name ---- don't use
                 //row.add(namedEntities.get(j).get(1).toString()); //entity-type
                 entityTypeNames.add(namedEntities.get(j).get(1).toString()); //TODO: avoid repeating entities?
 
-                if (types.isEmpty()) { //entity-typeNumber
+                if (types.isEmpty()){ //entity-typeNumber
                     //row.add(0);
                     entityTypesNumbers.add(0); //replace
                     types.add(namedEntities.get(j).get(1).toString());
@@ -1363,7 +1352,7 @@ public class AnalyseServiceImpl {
                         //row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
                         entityTypesNumbers.add(types.indexOf(namedEntities.get(j).get(1).toString())); //replace
                     }
-                    else {
+                    else{
                         //row.add(types.size());
                         entityTypesNumbers.add(types.size()); //replace
                         types.add(namedEntities.get(j).get(1).toString());
@@ -1391,12 +1380,12 @@ public class AnalyseServiceImpl {
         StructType schema = new StructType(
                 new StructField[]{
                         new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType, true), false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
                         new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date",DataTypes.StringType, false, Metadata.empty()),
                         //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
@@ -1406,8 +1395,8 @@ public class AnalyseServiceImpl {
         StructType schema2 = new StructType(
                 new StructField[]{
                         new StructField("Text", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType, true), false, Metadata.empty()),
-                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType, true), false, Metadata.empty()),
+                        new StructField("EntityTypes", new ArrayType(DataTypes.StringType,true), false, Metadata.empty()),
+                        new StructField("EntityTypeNumbers", new ArrayType(DataTypes.IntegerType,true), false, Metadata.empty()),
                         new StructField("AmountOfEntities", DataTypes.IntegerType, false, Metadata.empty()),
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
@@ -1426,71 +1415,23 @@ public class AnalyseServiceImpl {
 
         List<Row> textData = itemsDF.select("*").collectAsList();
 
-
-        /*textData.get(0); //Text
-        textData.get(1); //EntityTypes
-        textData.get(2); //EntityTypeNumbers
-        textData.get(3); //AmountOfEntities
-
-        textData.get(4); //Sentiment
-        textData.get(5); //Location
-        textData.get(6); //Date
-        textData.get(7); //Like*/
-
-
-        //List<Row> locationData = itemsDF.select(split(col("Location"),",")).collectAsList();
-        //locationData.get(0); /*Latitude*/ locationData.get(1); //Longitude
-
-
-        /*int minSize = 0;
-        if(textData.size()>locationData.size())
-            minSize = locationData.size();
-        else
-            minSize = textData.size();*/
-
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for (int i = 0; i < textData.size(); i++) {
+        for(int i=0; i < textData.size(); i++){
+
             Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
 
             List<?> amountOfEntities = new ArrayList<>();
             if (amountOfEntitiesObject.getClass().isArray()) {
-                amountOfEntities = Arrays.asList((Object[]) amountOfEntitiesObject);
-            }
-            else if (amountOfEntitiesObject instanceof Collection) {
-                amountOfEntities = new ArrayList<>((Collection<?>) amountOfEntitiesObject);
+                amountOfEntities = Arrays.asList((Object[])amountOfEntitiesObject);
+            } else if (amountOfEntitiesObject instanceof Collection) {
+                amountOfEntities = new ArrayList<>((Collection<?>)amountOfEntitiesObject);
             }
 
             System.out.println("entity count");
             System.out.println(amountOfEntities);
 
-
-
-            /*List<Row> da = itemsDF.select("Date").filter(col("EntityName").equalTo(name)).collectAsList();
-            ArrayList<String> dates = new ArrayList<>();
-            for(int j =0; j<  da.size(); j++)
-                dates.add(da.get(0).toString());*/
-
-            //System.out.println("Location");
-            //System.out.println(textData.get(i).get(4).toString());
-
             String[] locationData = textData.get(i).get(5).toString().split(","); // location
-
-            //System.out.println(locationData.get(i).get(0).toString());
-            //Latitude
-            //Float.parseFloat(locationData.get(i).get(1).toString()),//Longitude
-
-
-            /*System.out.println(textData.get(i).get(0).toString());
-            System.out.println(textData.get(i).get(1).toString());
-            System.out.println(textData.get(i).get(2));
-            System.out.println(amountOfEntities.size());
-            System.out.println( textData.get(i).get(4).toString());
-            System.out.println(textData.get(i).get(5).toString());
-            System.out.println(Float.parseFloat(locationData[0]));
-            System.out.println(Float.parseFloat(locationData[1]));
-            System.out.println(textData.get(i).get(6));
-            System.out.println(textData.get(i).get(7));*/
 
             Row trainRow = RowFactory.create(
                     textData.get(i).get(0).toString(), //text
@@ -1512,9 +1453,7 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
-
 
         /*******************SETUP PIPELINE*****************/
         /*******************SETUP MODEL*****************/
@@ -1525,82 +1464,97 @@ public class AnalyseServiceImpl {
                 .setInputCols(new String[]{"AmountOfEntities", "Latitude", "Latitude", "Like"})
                 .setOutputCol("features");
 
-        Dataset<Row> testDF = assembler.transform(trainingDF);
-
-        //model
-        /*int numClusters = 2; //number of classses
-        int numIterations = 20;
-        KMeansModel clusters = KMeans.train(testDF, numClusters, numIterations);*/
-
         KMeans km = new KMeans()
-                //.setK(2) //number of classses/clusters
                 .setFeaturesCol("features")
                 .setPredictionCol("prediction");
+        //.setK(2) //number of classses/clusters
         //.setMaxIterations(numIterations);
 
-        KMeansModel kmModel = km.fit(testDF);
-
-        Dataset<Row> summary = kmModel.summary().predictions();
-
-        summary.show();
-
-
-        System.out.println("*******************************************************************************************");
-        System.out.println(Arrays.stream(kmModel.summary().clusterSizes()).toArray());
-        System.out.println("***************************************SUMMARY*********************************************");
-        System.out.println("*******************************************************************************************");
-        System.out.println("*******************************************************************************************");
-
-
-        //summary.filter(col("prediction").
-
-
         //pipeline
-        //Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] {assembler,km});
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] {assembler,km});
 
-        // Fit the pipeline to training documents.
-        //PipelineModel model = pipeline.fit(trainingDF);
+        /******************EVALUATE/ANALYSE MODEL**************/
 
-        /*******************summary (REMOVE)*****************/
-        //summary
-        /*System.out.println("Cluster centers:");
-        for (Vector center: clusters.clusterCenters()) {
-            System.out.println(" " + center);
+        /*evaluators
+        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+                .setLabelCol("label")
+                .setPredictionCol("prediction")
+                .setMetricName("mse") //meanSquaredError
+                .setMetricName("rmse") //rootMeanSquaredError
+                .setMetricName("mae") //meanAbsoluteError
+                .setMetricName("r2"); //r^2, variance
+        //parameterGrid
+        /*ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+        /*paramGridBuilder.addGrid(km. .regParam(), new double[]{lr.getRegParam()});
+        paramGridBuilder.addGrid(km.elasticNetParam(), new double[]{lr.getElasticNetParam()});
+        paramGridBuilder.addGrid(km.fitIntercept());
+        ParamMap[] paramMaps = paramGridBuilder.build();
+        //validator
+        CrossValidator crossValidator = new CrossValidator()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setNumFolds(2);
+        /*TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setTrainRatio(0.7)  //70% : 30% ratio
+                .setParallelism(2);*/
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        Optional<Experiment> foundExperiment = client.getExperimentByName("KMeans_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("KMeans_Experiment");
         }
-        double cost = clusters.computeCost(parsedData.rdd());
-        System.out.println("Cost: " + cost);
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
 
-        // Evaluate clustering by computing Within Set Sum of Squared Errors
-        double WSSSE = clusters.computeCost(parsedData.rdd());
-        System.out.println("Within Set Sum of Squared Errors = " + WSSSE);*/
+        RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("KMeans_Run", runInfo.getRunId());
 
-        // Save and load model
-        /*clusters.save(anomaliesSparkContext.sc(), "target/org/apache/spark/JavaKMeansExample/KMeansModel");
-        KMeansModel sameModel = KMeansModel.load(anomaliesSparkContext.sc(),
-             "target/org/apache/spark/JavaKMeansExample/KMeansModel");*/
+        //KMeans model = pipeline.getStages()[1];
+        PipelineModel kmModel =  pipeline.fit(trainingDF);
 
-        /*******************READ MODEL OUTPUT*****************/
+        /*Dataset<Row> predictions = kmModel.transform(trainingDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        //predictions.show();
+        //System.out.println("*****************Predictions Of Test Data*****************");
+        //double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        //RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+        //param
+        /*client.logParam(run.getId(),"MaxIter", "10");
+        client.logParam(run.getId(),"setRegParam" ,"0.3");
+        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+        //metrics
+        //client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        /*client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+        //custom tags
+        //client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        /*ArrayList<ArrayList> results = new ArrayList<>();
-        Dataset<Row> input = assembler.transform(testSetDF); //TODO this is an example of input will be changed once database is calibrated
+        kmModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
-        Dataset<Row> res = lrModel.transform(input);
+        run.endRun();
 
-        List<Row> rawResults = res.select("EntityName","prediction").collectAsList();*/
-
-        Dataset<Row> Results = summary.select("Text", "prediction").filter(col("prediction").$greater(0));
-        List<Row> rawResults = Results.select("Text", "prediction").collectAsList();
-
-        System.out.println("/*******************Outputs begin*****************/");
-        System.out.println(rawResults.toString());
-        System.out.println("/*******************Outputs begin*****************/");
-
+        /***********************SETUP MLFLOW - SAVE ***********************/
 
         ArrayList<String> results = new ArrayList<>();
-        for (int i = 0; i < rawResults.size(); i++) {
-            results.add(rawResults.get(i).get(0).toString());//name
-        }
-
         return new TrainFindAnomaliesResponse(results);
     }
 
