@@ -6,7 +6,8 @@ export default function ProfileCard(props) {
     return (
         <>
             <div id={'profile-card-container'}>
-                Profile Card Container
+                <div className={'profile-card-title'}>{props.cardTitle}</div>
+                <div className={'profile-card-main-section'}>main section</div>
             </div>
 
         </>

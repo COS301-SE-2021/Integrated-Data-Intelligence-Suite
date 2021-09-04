@@ -1,7 +1,22 @@
 #profile-card-container {
     /*grid-row-start: 1;*/
     /*grid-row-end: 2;*/
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     /*border:0;*/
     display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 3em auto;
+}
+
+.profile-card-title {
+    color: #5773FA;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2em !important;
+    /*border: 1px solid black*/
+}
+
+.profile-card-main-section {
+    /*border: 2px solid green;*/
+
 }

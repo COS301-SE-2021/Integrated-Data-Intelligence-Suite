@@ -13,6 +13,7 @@ export default function ProfilePage(props) {
                         gridRowStart: 1,
                         gridRowEnd: 2
                     }}
+                    cardTitle={'My Profile'}
                 />
                 <RowDivider
                     style={{
@@ -26,6 +27,7 @@ export default function ProfilePage(props) {
                         gridRowStart: 3,
                         gridRowEnd: 4
                     }}
+                    cardTitle={'Password and Authentication'}
                 />
                 <RowDivider/>
 
