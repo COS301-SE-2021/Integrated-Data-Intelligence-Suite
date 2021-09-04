@@ -168,30 +168,39 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
+        /*****FIND****/
+
+        //FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
         //TrainFindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
-        TrainFindRelationshipsRequest findRelationshipsRequest = new TrainFindRelationshipsRequest(parsedDatalist);
-        //TrainFindRelationshipsResponse findRelationshipsResponse = this.trainFindRelationship(findRelationshipsRequest);
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
+        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
+        //GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
+        //GetPredictionResponse getPredictionResponse = this.GetPredictions(getPredictionRequest);
+
+        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+
+        //FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
+        //FindAnomaliesResponse findAnomaliesResponse = this.FindAnomalies(findAnomaliesRequest);
+
+        /*****TRAIN****/
+
+        //TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
         TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
-
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
-        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
-
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
         return new AnalyseDataResponse(
                 null,
                 null,
                 null,
-                findTrendsResponse.getPattenList(),
+                null,
                 null);
 
         /*return new AnalyseDataResponse(
@@ -379,6 +388,7 @@ public class AnalyseServiceImpl {
          .setLabelCol("label")
          .setRawPredictionCol("prediction")
          .setMetricName("areaUnderROC");
+
          RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
          .setLabelCol("label")
          .setPredictionCol("prediction")
@@ -386,17 +396,20 @@ public class AnalyseServiceImpl {
          .setMetricName("rmse") //rootMeanSquaredError
          .setMetricName("mae") //meanAbsoluteError
          .setMetricName("r2"); //r^2, variance
+
          //parameterGrid
-         /*ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+         ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
          paramGridBuilder.addGrid(fp.minSupport(), new double[]{fp.getMinConfidence()});
          paramGridBuilder.addGrid(fp.minConfidence(), new double[]{fp.getMinConfidence()});
          ParamMap[] paramMaps = paramGridBuilder.build();
+
          //validator
          CrossValidator crossValidator = new CrossValidator()
          .setEstimator(pipeline)
          .setEvaluator(regressionEvaluator)
          .setEstimatorParamMaps(paramMaps)
          .setNumFolds(2);
+
          TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
          .setEstimator(fp)
          .setEvaluator(regressionEvaluator)
@@ -415,9 +428,11 @@ public class AnalyseServiceImpl {
          else{
          experimentID = foundExperiment.get().getExperimentId();
          }
+
          RunInfo runInfo = client.createRun(experimentID);
          MlflowContext mlflow = new MlflowContext(client);
          ActiveRun run = mlflow.startRun("FPGrowth_Run", runInfo.getRunId());
+
          //TrainValidationSplitModel lrModel = trainValidationSplit.fit(itemsDF);
          FPGrowthModel fpModel = fp.fit(itemsDF);
          Dataset<Row> predictions = fpModel.transform(itemsDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
