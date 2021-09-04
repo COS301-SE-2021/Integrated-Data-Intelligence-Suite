@@ -7,6 +7,8 @@
     grid-template-rows: repeat(2, auto);
     /*border: 1px solid red;*/
     padding: 5%;
+    padding-bottom: 2%;
+    background: white;
 }
 
 #profile-card-image {
@@ -34,6 +36,8 @@
     line-height: 2em !important;
     color: black;
     font-weight: 600;
+    margin-right: 10%;
+    margin-left: 8%;
 }
 
 .verified-icon {
