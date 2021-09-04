@@ -2,39 +2,46 @@
     grid-row-start: 2;
     grid-row-end: 3;
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    /*grid-template-columns: repeat(3, auto);*/
+    grid-template-columns: 151px max-content max-content;
     grid-template-rows: repeat(2, auto);
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     padding: 5%;
 }
 
 #profile-card-image {
     grid-column-start: 1;
     grid-column-end: 2;
-    border: 3px solid orange;
+    border: 3px solid white;
     grid-row-start: 1;
     grid-row-end: 3;
     border-radius: 50%;
     z-index: 2;
-    padding: 0%;
-    margin-top: -34%;
+    padding: 0;
+    margin-top: -42%;
     height: 150px;
     width: 150px;
+    background-color: blue;
 }
 
 #profile-card-name {
-    border: 3px solid green;
+    /*border: 3px solid green;*/
+    width: fit-content;
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
     line-height: 2em !important;
+    color: black;
+    font-weight: 600;
 }
 
 .verified-icon {
-    border: 3px solid red;
+    /*border: 3px solid red;*/
     grid-column-start: 3;
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
+    height: 20px;
+    width: 20px;
 }
