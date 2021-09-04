@@ -16,7 +16,10 @@
     /*border: 1px solid black*/
 }
 
-.profile-card-main-section {
+.profile-card-body {
     /*border: 2px solid green;*/
+    display: grid;
+    grid-template-rows: repeat(3,auto);
+    grid-template-columns: 100%;
 
 }

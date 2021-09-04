@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProfilePage.css';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
-import RowDivider from '../../components/Divider/RowDivider';
+import RowDivider from '../../components/RowDivider/RowDivider';
 
 export default function ProfilePage(props) {
 
