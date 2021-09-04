@@ -1,0 +1,22 @@
+#personal-info-card-container {
+    border: 3px solid black;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, auto);
+    padding: 5%; /* Must Match the padding of the profile-card-display-info-container*/
+}
+
+#email-info-div {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#phone-number-info-div {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#account-type-info-div {
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
