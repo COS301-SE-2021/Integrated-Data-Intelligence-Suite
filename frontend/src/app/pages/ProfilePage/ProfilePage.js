@@ -7,6 +7,7 @@ export default function ProfilePage(props) {
 
     return (
         <>
+            <title>My mom</title>
             <div id={'profile-page-container'}>
                 <ProfileCard
                     style={{
