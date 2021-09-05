@@ -787,6 +787,8 @@ public class AnalyseServiceImpl {
 
         RunInfo runInfo = client.createRun(experimentID);
         MlflowContext mlflow = new MlflowContext(client);
+
+
         ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
 
 
@@ -2445,10 +2447,6 @@ public class AnalyseServiceImpl {
         /**setUI**/
         //client.getModelVersionDownloadUri();
         //run.getArtifactUri();
-
-
-
-
 
     }
 }
