@@ -93,15 +93,17 @@
     /*margin: 16px;*/
     margin: 0;
     /*background: rgb(252, 0, 64);*/
-    line-height: 3px;
+    /*line-height: 3px;*/
     /*border: 3px solid black;*/
     /*display: grid;*/
     /*grid-template-columns: 100%;*/
     /*grid-template-rows: 100%;*/
     background: white;
-    background-image: url("../../assets/athena-logo.png") !important;
+    /*background-image: url("../../assets/athena-logo.png") !important;*/
     background-size: cover;
     background-position: center;
+    color:black;
+    /*align-content: center;*/
 }
 
 #logo-image[style] {

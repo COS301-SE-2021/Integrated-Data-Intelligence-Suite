@@ -37,30 +37,31 @@ class HomePage extends Component {
     }
 
     render() {
-            return (
-                <>
-                    <Switch>
-                        <Route exact path="/">
-                            <Layout
-                              id="outer_layout"
-                              className="chart-page"
-                            >
+        return (
+            <>
+                <Switch>
+                    <Route exact path="/">
+                        <Layout
+                            id="outer_layout"
+                            className="chart-page"
+                        >
+                            <SideBar/>
+
+                            <Layout id="inner_layout_div">
                                 <Header id="top_bar">
                                     {/* <Title level={1}>Home</Title> */}
 
                                     <UserInfoCard
-                                      name="s"
+                                        name="s"
                                     />
                                 </Header>
-                                <Layout id="inner_layout_div">
-                                    <SideBar />
-                                </Layout>
-
                             </Layout>
-                        </Route>
-                    </Switch>
-                </>
-            );
+
+                        </Layout>
+                    </Route>
+                </Switch>
+            </>
+        );
     }
 }
 

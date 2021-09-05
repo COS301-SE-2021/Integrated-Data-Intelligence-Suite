@@ -47,7 +47,7 @@ class SideBar extends React.Component {
                     id="sidebar_div"
                 >
                     <div id="logo">
-                        <div id={'logo-image'}/>
+                        logo
                     </div>
                     <Menu
                         id="sidebar_menu"
@@ -55,7 +55,6 @@ class SideBar extends React.Component {
                         defaultSelectedKeys={active || '1'}
                         mode="inline"
                     >
-
                         <Menu.Item
                             key="1"
                             icon={<AiOutlineHome/>}
@@ -65,14 +64,13 @@ class SideBar extends React.Component {
                             <Link to="/"/>
                         </Menu.Item>
 
-
                         <Menu.Item
                             key="2"
                             icon={<BarChartOutlined/>}
                             onClick={() => this.setActive('2')}
                         >
                             Analytics
-                            <Link to="/"/>
+                            <Link to="/chart"/>
                         </Menu.Item>
 
                         <Menu.Item
