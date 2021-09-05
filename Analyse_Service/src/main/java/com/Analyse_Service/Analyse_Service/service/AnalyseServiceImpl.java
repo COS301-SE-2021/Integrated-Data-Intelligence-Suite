@@ -833,6 +833,8 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));
 
+
+
         try {
             lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
 
@@ -841,6 +843,8 @@ public class AnalyseServiceImpl {
         }catch (Exception e){
            e.printStackTrace();
         }
+
+        //client
 
         run.endRun();
 
@@ -1133,7 +1137,7 @@ public class AnalyseServiceImpl {
      * @return FindTrendsResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FindTrendsResponse findTrendsUnsed(FindTrendsRequest request)
+    public FindTrendsResponse findTrendsUnused(FindTrendsRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
