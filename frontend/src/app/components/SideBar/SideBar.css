@@ -53,8 +53,8 @@
 
 /*Hovering over a menu item that has been selected*/
 #sidebar_menu > li.ant-menu-item-active.ant-menu-item-selected {
-    border: 0;
-    color: white;
+    /*border: 0;*/
+    /*color: white;*/
 }
 
 
