@@ -75,6 +75,7 @@ import scala.collection.*;
 import scala.collection.mutable.WrappedArray;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -690,6 +691,8 @@ public class AnalyseServiceImpl {
                 .setOutputCol("features");
         */
 
+
+
         VectorAssembler assembler = new VectorAssembler()
                 .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
                 .setOutputCol("features");
@@ -772,23 +775,26 @@ public class AnalyseServiceImpl {
         /***********************SETUP MLFLOW***********************/
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
-        String experimentID = client.createExperiment("LogisticRegression_Experiment");
+
+        Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
         RunInfo runInfo = client.createRun(experimentID);
-
-
         MlflowContext mlflow = new MlflowContext(client);
-
-
         ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
-
-
 
 
         CrossValidatorModel lrModel = crossValidator.fit(trainSetDF);
 
         Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         predictions.show();
-        System.out.println("*****************Predictions Of Test Data*****************");
+        //System.out.println("*****************Predictions Of Test Data*****************");
 
 
 
@@ -796,7 +802,7 @@ public class AnalyseServiceImpl {
         BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
         RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
 
-        System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
 
         //param
@@ -825,6 +831,14 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));
 
+        try {
+            lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            client.logArtifact(run.getId(), modelFile);
+        }catch (Exception e){
+           e.printStackTrace();
+        }
 
         run.endRun();
 
@@ -885,8 +899,6 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results);
     }
-
-
 
 
     /**
@@ -1973,15 +1985,6 @@ public class AnalyseServiceImpl {
         return new FindAnomaliesResponse(results);
     }
 
-
-    /*******************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     */
-
-
     /**
      * This method used to find an entity of a statement i.e sentiments/parts of speech
      *
@@ -2330,6 +2333,15 @@ public class AnalyseServiceImpl {
 
         return response;
     }
+
+
+    /*******************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     * *****************************************************************************************************************
+     */
+
 
     /**
      * This method used to fetch the parsed data from the database
