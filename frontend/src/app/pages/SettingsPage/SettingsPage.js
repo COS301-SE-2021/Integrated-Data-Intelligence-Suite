@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Layout, Row, Col, Divider,
 } from 'antd';
-import {CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone} from '@ant-design/icons';
+import { CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import DataSourceList from '../../components/DataSourceList/DataSourceList';
 import Permissions from '../PermissionsPage/Permissions';

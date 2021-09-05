@@ -47,7 +47,7 @@ export default function LoginPage(props) {
                     permission: 'IMPORTING',
                 };
                 localStorage.setItem('user', JSON.stringify(localuser));
-                history.push('/chart');
+                history.push('/');
             } else {
                 const requestOptions = {
                     method: 'POST',
@@ -59,7 +59,7 @@ export default function LoginPage(props) {
                     .then((json) => {
                         if (json.success) {
                             localStorage.setItem('user', json.id);
-                            history.push('/chart');
+                            history.push('/');
                         } else {
                             alert(json.message);
                         }
