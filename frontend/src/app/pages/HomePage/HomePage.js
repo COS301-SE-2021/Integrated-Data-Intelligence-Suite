@@ -32,15 +32,11 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.setState({
-            user: null,
+            user: true,
         });
     }
 
     render() {
-        if (true) {
-            return <Redirect to="/chart" />;
-        }
-        if (this.state.user) {
             return (
                 <>
                     <Switch>
@@ -65,8 +61,6 @@ class HomePage extends Component {
                     </Switch>
                 </>
             );
-        }
-        return <Redirect to="/login" />;
     }
 }
 

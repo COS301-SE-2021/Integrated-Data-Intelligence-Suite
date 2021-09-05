@@ -18,7 +18,7 @@ class SideBar extends React.Component {
 
         this.state = {
             collapsed: false,
-            active: '2',
+            active: '1',
         };
 
         this.setActive = (value) => {
@@ -52,7 +52,7 @@ class SideBar extends React.Component {
                     <Menu
                         id="sidebar_menu"
                         theme="light"
-                        defaultSelectedKeys={active || '2'}
+                        defaultSelectedKeys={active || '1'}
                         mode="inline"
                     >
 
