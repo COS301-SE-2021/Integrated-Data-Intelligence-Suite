@@ -63,6 +63,7 @@
     justify-content: center;
     align-items: center;
     background: #27818e;
+    z-index: 2;
 
 }
 
@@ -72,6 +73,8 @@
     grid-template-rows: 100%;
     grid-template-columns: 50% 50%;
     background-color: white;
+    z-index: 2;
+
 }
 
 #login-card {
@@ -107,6 +110,53 @@
     background-size: cover;
 }
 
+/***********************************************/
+/******************Custom Bg********************/
+/***********************************************/
+#login-custom-bg {
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background: white;
+    /*border: 3px solid red;*/
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
+#top-left-block {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background-color: white;
+}
+
+#top-right-block {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background: #27818e;
+
+}
+
+#bottom-right-block {
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    background: #27818e;
+}
+
+#bottom-left-block {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    background: #27818e;
+}
 
 
 
