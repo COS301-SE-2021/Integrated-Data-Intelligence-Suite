@@ -7,6 +7,9 @@
     /*width: 168px !important;*/
     /*min-width: 0 !important;*/
     /*max-width: 190px !important;*/
+    width: 160px !important;
+    min-width: 0 !important;
+    max-width: 160px !important;
 }
 
 #sidebar_menu {
@@ -57,7 +60,6 @@
     /*color: white;*/
 }
 
-
 /**/
 #sidebar_menu > li.ant-menu-item::after {
     border: 0;
@@ -76,7 +78,9 @@
     /*max-width: 190px !important;*/
     background: white;
     color: black;
-
+    width: 80px !important;
+    min-width: 0 !important;
+    max-width: 160px !important;
 }
 
 #outer_layout {
@@ -85,7 +89,6 @@
 }
 
 #logo {
-
     height: 10%;
     /*margin: 16px;*/
     margin: 0;
@@ -99,7 +102,6 @@
     background-image: url("../../assets/athena-logo.png") !important;
     background-size: cover;
     background-position: center;
-
 }
 
 #logo-image[style] {
