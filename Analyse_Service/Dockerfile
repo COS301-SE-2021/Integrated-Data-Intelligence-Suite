@@ -4,6 +4,16 @@ COPY ${JAR_FILE} Analyse_Service.jar
 ENTRYPOINT ["java", "-jar", "/Analyse_Service.jar"]
 EXPOSE 9003
 
+
+#FROM openjdk:16-alpine3.13
+#WORKDIR /app
+#COPY .mvn/ .mvn
+#COPY mvnw pom.xml ./
+#RUN ./mvnw dependency:go-offline
+#COPY src ./src
+#CMD ["./mvnw", "spring-boot:run"]
+
+
 FROM continuumio/miniconda:4.5.4
 
 RUN pip install mlflow>=1.0 \
