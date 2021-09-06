@@ -52,7 +52,7 @@ class SideBar extends React.Component {
                     <Menu
                         id="sidebar_menu"
                         theme="light"
-                        defaultSelectedKeys={active || '1'}
+                        defaultSelectedKeys={active}
                         mode="inline"
                     >
                         <Menu.Item
