@@ -29,7 +29,7 @@ class SearchBar extends React.Component {
 
     // Runs when the search button is clicked
     onSearch(values) {
-        //this.handleTextChange(template_json);
+        this.handleTextChange(template_json);
 
         // Show loading icon while API request is waiting for data
         this.setState((prevState) => ({ showLoadingIcon: true }));
@@ -49,7 +49,7 @@ class SearchBar extends React.Component {
             .then((json) => {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
                 // remove or stop the loading icon
-                this.handleTextChange(json);
+                // this.handleTextChange(json);
             });
     }
 
