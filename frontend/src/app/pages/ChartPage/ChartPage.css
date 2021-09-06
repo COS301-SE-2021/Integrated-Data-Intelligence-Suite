@@ -5,7 +5,7 @@
     best to give that component its own file.
 */
 #top_bar {
-    background: #e8e8e9;
+    background: var(--light-gray);
     color: #000000;
     height: 70px;
     /*padding: 0 1%;*/
@@ -42,7 +42,7 @@
 
 }
 
-#content_section>div{
+#content_section > div {
     max-width: 350px;
     /*min-width: 200px;*/
 }
@@ -112,7 +112,6 @@
     border-top-right-radius: 2%;
     border: 0.1em solid #E8E8E9;
     background: #e8e8e9;
-
 }
 
 /*Hiding the scrollbar in the map-details-container*/
@@ -121,9 +120,28 @@
     background: transparent; /* Optional: just make scrollbar invisible */
 }
 
-#word-cloud-layout{
+#word-cloud-layout {
     grid-column: span 3;
     grid-row: span 3;
+}
+
+
+/*The div that contains the entire content section*/
+#content-section {
+    display: grid;
+    border: 3px solid black;
+    max-height: 100vh;
+    overflow-y: scroll;
+    padding: 6%;
+    background: var(--light-gray);
+}
+
+#indicator-card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /*3 columns, one for each indicator card */
+    grid-template-rows: 100%; /*1 single row*/
+    border: 3px solid blue;
+    background: var(--light-gray);
 }
 
 
