@@ -3,17 +3,15 @@ version: '3.8'
 
 #Define services
 services:
-
   #PostgreSQL Database for the application
   database:
-    #image: "postgres:11"
-    image: "postgres:9.6-alpine"
     container_name: emerge-database
+    image: "postgres:9.6-alpine"
+    #image: "postgres:13-alpine"
+
     #Volume mounted for database for the storage
     volumes:
       - database-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432 # Forward the exposed port 5432 on the container to port 5432 on the host machine
 
     #Environment variable for DB name, user and password
     environment:
@@ -21,36 +19,150 @@ services:
       - POSTGRES_USER=emerge
       - POSTGRES_PASSWORD=emerge0000
 
-  #Back-end Spring Boot Applications
-  backend:
-    #The docker file in scrum-app build the jar and provides the docker image with the following name.
-    build: ./Analyse_Service
-    container_name: Analyse_Service
+    ports:
+      - 5432:5432 # Forward the exposed port 5432 on the container to port 5432 on the host machine
 
+
+  registry_service:
+    container_name: registry_service
+    image: registry_service
+
+    build: ./Registry_Service
+
+    environment:
+      - DB_SERVER=database
+      - POSTGRES_DB=emerge-database
+      - POSTGRES_USER=emerge
+      - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+      - 8761:8761
+    links:
+      - database
+
+
+
+
+  import_service:
+    container_name: import_service
+    image: import_service
+
+    build: ./Import_Service
+
+    environment:
+      - DB_SERVER=database
+      - POSTGRES_DB=emerge-database
+      - POSTGRES_USER=emerge
+      - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+        - 9001:9001
+    links:
+      - database
+
+  parse_service:
+    container_name: parse_service
+    image: parse_service
+
+    build: ./Parse_Service
+
+    environment:
+      - DB_SERVER=database
+      - POSTGRES_DB=emerge-database
+      - POSTGRES_USER=emerge
+      - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+      - 9002:9002
+    links:
+      - database
+
+  #Back-end Spring Boot Applications
+  analyse_service:
+    #The docker file in Analyse_Service build the jar and provides the docker image with the following name.
+    container_name: analyse_Service
+    image: analyse_service
+
+    build: ./Analyse_Service
     #Environment variables for Spring Boot Application.
     environment:
       - DB_SERVER=database
       - POSTGRES_DB=emerge-database
       - POSTGRES_USER=emerge
       - POSTGRES_PASSWORD=emerge0000
-    ports:
-      #- 9003:9003
-      - 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
 
+    ports:
+      - 9003:9003
+      #- 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
     links:
       - database
 
-  #Fron-end Angular Application
-  frontend:
-    container_name: user-interface
+
+  visualize_service:
+    container_name: visualize_service
+    image: visualize_service
+
+    build: ./Visualize_Service
+
+    environment:
+      - DB_SERVER=database
+      - POSTGRES_DB=emerge-database
+      - POSTGRES_USER=emerge
+      - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+      - 9004:9004
+    links:
+      - database
+
+  user_service:
+    container_name: user_service
+    image: user_service
+
+    build: ./User_Service
+
+    environment:
+      - DB_SERVER=database
+      - POSTGRES_DB=emerge-database
+      - POSTGRES_USER=emerge
+      - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+      - 9005:9005
+    links:
+      - database
+
+
+  gateway_service:
+    container_name: gateway_service
+    image: gateway_service
+
+    build: ./Gateway_Service
+
+    environment:
+      - DB_SERVER=database
+      - POSTGRES_DB=emerge-database
+      - POSTGRES_USER=emerge
+      - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+      - 9000:9000
+    links:
+      - database
+
+
+  #Fron-end
+  user-interface:
+    container_name: User-Interface
     image: user-interface
 
     build: #./frontend
       target: development
+
     ports:
       - 3000:3000
     links:
-      - backend
+      - gateway_service
 
 #Volumes for DB data
 volumes:
