@@ -259,7 +259,7 @@
 				</executions>
 
 				<configuration>
-					<repository>emerge_services/analyse_service</repository>
+					<repository>teamemerge/analyse_service</repository>
 					<tag>${project.version}</tag>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 
