@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:11-jdk-alpine
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} User_Service.jar
 ENTRYPOINT ["java", "-jar", "/User_Service.jar"]
