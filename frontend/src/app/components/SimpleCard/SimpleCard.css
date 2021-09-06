@@ -1,0 +1,28 @@
+.simple-card-container {
+    border: 1px solid red;
+    /*border:0;*/
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 3em auto; /* Row 1 = title, Row 2 = body*/
+    height: 100%;
+
+}
+
+.simple-card-title {
+    color: var(--neon-blue);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2em !important;
+    background: var(--light-gray);
+}
+
+.simple-card-body {
+    border: 2px solid green;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    /*background-color: white;*/
+    /*border-radius: 0.9em;*/
+    padding-bottom: 4%;
+    height: 100%;
+}
