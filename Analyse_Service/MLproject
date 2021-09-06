@@ -1,0 +1,16 @@
+name: My Project
+
+docker_env:
+  image: teamemerge/mlflow_project:1.0.0
+
+entry_points:
+  main:
+    parameters:
+      data_file: path
+      regularization: {type: float, default: 0.1}
+    command: "java -jar /Analyse_Service.jar"
+    #command: "python train.py -r {regularization} {data_file}"
+  #validate:
+  #  parameters:
+  #   data_file: path
+  #  command: "python validate.py {data_file}"
