@@ -1,12 +1,12 @@
-#FROM node:14-alpine AS development
-FROM node:latest-alpine AS development
-ENV NODE_ENV development
+#FROM node:latest-alpine AS development
+FROM node:14-alpine
+ENV NODE_ENV=production
 # Add a work directory
 WORKDIR /app
 # Cache and Install dependencies
 COPY package.json .
 COPY yarn.lock .
-RUN yarn install
+RUN yarn install --production
 # Copy app files
 COPY . .
 # Expose port
