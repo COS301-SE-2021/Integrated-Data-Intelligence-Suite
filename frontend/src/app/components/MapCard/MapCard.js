@@ -30,7 +30,7 @@ import 'leaflet-geometryutil/src/leaflet.geometryutil.js';
 import 'leaflet-draw/dist/leaflet.draw.js';
 
 const Demo = (props) => (
-    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js" />
+    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js"/>
 );
 const pretoria_position = [-25.731340, 28.218370];
 
@@ -96,12 +96,12 @@ function MapCard(props) {
     return (
         <>
             <Map
-              id="map_container_div"
-              center={pretoria_position}
-              zoom={2}
-              scrollWheelZoom
-              ref={mapRef}
-              animate
+                id="map_container_div"
+                center={pretoria_position}
+                zoom={2}
+                scrollWheelZoom
+                ref={mapRef}
+                animate
             >
                 {/* <LayersControl */}
                 {/*  position="topright" */}
@@ -115,8 +115,8 @@ function MapCard(props) {
                 {/* </LayersControl.BaseLayer> */}
                 {/* <LayersControl.BaseLayer name="osm colour" checked> */}
                 <TileLayer
-                  attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {/* </LayersControl.BaseLayer> */}
                 {/* <LayersControl.BaseLayer name="google"> */}
@@ -129,9 +129,11 @@ function MapCard(props) {
                 {/* <LayersControl.Overlay name="drawn items" checked> */}
                 <FeatureGroup>
                     <EditControl
-                      position="topleft"
-                      onCreated={_created}
-                      draw={{}}
+                        position="topleft"
+                        onCreated={_created}
+                        draw={{
+                            circlemarker: false
+                        }}
                     />
                 </FeatureGroup>
                 {/* </LayersControl.Overlay> */}
@@ -140,11 +142,11 @@ function MapCard(props) {
                 {/* Display the City markers onto the map */}
                 {data_from_backend.map((city, idx) => (
                     <CircleMarker
-                      center={[city.lat, city.lng]}
-                      icon={markerIcon}
-                      key={idx}
-                      className={city.classname}
-                      onClick={() => {
+                        center={[city.lat, city.lng]}
+                        icon={markerIcon}
+                        key={idx}
+                        className={city.classname}
+                        onClick={() => {
                             showCircleData(city.classname, data_from_backend);
                         }}
                     />
