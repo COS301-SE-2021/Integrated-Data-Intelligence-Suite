@@ -1,7 +1,7 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
 import com.Gateway_Service.Gateway_Service.rri.Permission;
-import org.codehaus.jackson.annotate.JsonProperty;
+//import org.codehaus.jackson.annotate.JsonProperty;
 
 public class RegisterRequest {
     String username;

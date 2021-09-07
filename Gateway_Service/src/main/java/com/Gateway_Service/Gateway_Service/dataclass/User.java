@@ -1,9 +1,10 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
 import com.Gateway_Service.Gateway_Service.rri.Permission;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+//import org.hibernate.annotations.GenericGenerator;
+//import javax.persistence.*;
+
 import java.util.UUID;
 
 
