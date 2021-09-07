@@ -177,7 +177,7 @@ export default class UberLineGraph extends React.Component {
                         <LineMarkSeries
                             data={series[1].data}
                             style={{
-                                strokeWidth: '1px'
+                                strokeWidth: '0.5px'
                             }}
                             lineStyle={{ stroke: 'lightblue' }}
                             markStyle={{ stroke: 'blue' }}
