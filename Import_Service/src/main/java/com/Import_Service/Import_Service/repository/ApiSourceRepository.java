@@ -1,6 +1,7 @@
 package com.Import_Service.Import_Service.repository;
 
 import com.Import_Service.Import_Service.dataclass.APISource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,4 +34,5 @@ public interface ApiSourceRepository extends JpaRepository<APISource, Long> {
     @Modifying
     @Query("UPDATE apisource u SET u.parameters = :newParams WHERE u.id = :id")
     int updateParams(@Param("id") Long id, @Param("newParams") Map<String, String> newParams);
+
 }
