@@ -1,7 +1,5 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
-import com.Parse_Service.Parse_Service.dataclass.ParsedData;
-
 import java.util.ArrayList;
 
 public class ParseImportedDataResponse {
