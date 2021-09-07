@@ -205,4 +205,13 @@ public class ImportServiceController {
     public @ResponseBody GetAPISourceByIdResponse getAPISourceById(@RequestBody GetAPISourceByIdRequest request) throws Exception {
         return service.getAPISourceById(request);
     }
+
+    @PostMapping(value="/deleteSourceById")
+    public @ResponseBody DeleteSourceResponse deleteSourceById(@RequestBody DeleteSourceRequest request) {
+        try {
+            return service.deleteSourceByID(request);
+        } catch (InvalidImporterRequestException e) {
+            return new DeleteSourceResponse(false, e.getMessage());
+        }
+    }
 }
