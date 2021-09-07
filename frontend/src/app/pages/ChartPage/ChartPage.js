@@ -35,6 +35,9 @@ import VisxBarGroupGraph from '../../components/visxBarGroupGraph/visxBarGroup';
 import visxAreaMockData from '../../Mocks/vsixAreaDataMock.json';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import SimpleSection from '../../components/SimpleSection/SimpleSection';
+import AreaGraph from '../../components/AreaGraph/AreaGraph';
+import { Simple } from 'leaflet/src/geo/crs/CRS.Simple';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 
 const {
@@ -74,11 +77,6 @@ class ChartPage extends Component {
         this.state = { text: '' };
         this.state.user = getLocalUser();
     }
-
-    // componentDidMount() {
-    //     // this.state.text=retrieveData()
-    //
-    // }
 
     handleTextChange(newText) {
         this.setState(({ text: newText }));
@@ -328,73 +326,87 @@ class ChartPage extends Component {
                                     {/*    </Layout>*/}
                                     {/*</Content>*/}
                                     <div id={'content-section'}>
-                                        <SimpleCard
+                                        <SimpleSection
                                             cardTitle={'Overview'}
+                                            cardID={'row-1'}
                                         >
-
                                             <div
                                                 id={'indicator-card-container'}
                                             >
                                                 <IndicatorCard
-                                                    indicatorTitle="Average Sentiment"
-                                                    indicatorValue="Very Bad"
-                                                    showArrow
-                                                    percentChange="-27%"
-                                                    cardID="ave-sentiment-card"
-                                                    graphComponent={(
-                                                        <VisxAreaGraph
-                                                            graphData={this.state.text}
-                                                            text={this.state.text}
-                                                            key={this.state.text}
-                                                            showSecondLine={false}
-                                                            showXAxis={false}
-                                                            showYAxis={false}
-                                                            idName="ave-sentiment-area-graph"
-                                                            tooltipKeyColor="red"
-                                                        />
-                                                    )}
+                                                    indicatorTitle={'Metric 1'}
                                                 />
 
                                                 <IndicatorCard
-                                                    indicatorTitle="Number of Mentions"
-                                                    indicatorValue="246K"
-                                                    percentChange="+69%"
-                                                    cardID="num-mentions-card"
-                                                    showArrow
-                                                    graphComponent={(
-                                                        <VisxAreaGraph
-                                                            graphData={this.state.text}
-                                                            text={this.state.text}
-                                                            key={this.state.text}
-                                                            showSecondLine={false}
-                                                            showXAxis={false}
-                                                            showYAxis={false}
-                                                            idName="num-mentions-area-graph"
-                                                            tooltipKeyColor="green"
-                                                        />
-                                                    )}
+                                                    indicatorTitle={'Metric 2'}
                                                 />
 
                                                 <IndicatorCard
-                                                    indicatorTitle="Total Sentiment"
-                                                    showArrow={false}
-                                                    cardID="total-sentiment-card"
-                                                    graphComponent={(
-                                                        <PieChart
-                                                            graphData={this.state.text}
-                                                            text={this.state.text}
-                                                            key={this.state.text}
-                                                            legendOrientation="horizontal"
-                                                            pieID="total-sentiment-pie"
-                                                            legendID="total-sentiment-legend"
-                                                        />
-                                                    )}
+                                                    indicatorTitle={'Metric 3'}
                                                 />
                                             </div>
-                                        </SimpleCard>
+                                        </SimpleSection>
 
-                                        {/*<SimpleCard cardTitle={'Location'} />*/}
-                                        {/*<SimpleCard cardTitle={'Word Cloud'} />*/}
+                                        <SimpleSection
+                                            cardTitle={'Location'}
+                                            cardID={'row-2'}
+                                        >
+                                            <div>
+
+                                                <div id={'map-metric-container'}>
+                                                    {/*<Card*/}
+                                                    {/*    id="map-card"*/}
+                                                    {/*>*/}
+
+                                                    <MapCard text={this.state.text}/>
+                                                    {/*</Card>*/}
+                                                    <IndicatorCard
+                                                        indicatorTitle={'Map Metric 1'}
+                                                        cardID={'map-metric'}
+                                                    />
+                                                </div>
+                                                <IndicatorCard
+                                                    indicatorTitle={'Map Metric 2'}
+                                                    cardID={'complex-graph'}
+                                                />
+                                            </div>
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                            cardTitle={'Textual Analysis'}
+                                            cardID={'row-3'}
+                                        >
+                                            <SimpleCard
+                                                cardTitle={'Word Cloud'}
+                                                cardID={'word-cloud-card'}
+                                            >
+                                                <WordCloud
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
+                                            </SimpleCard>
+
+                                            <div id={'word-cloud-graph-container'}>
+                                                <SimpleCard
+                                                    cardTitle={'word-graph-1'}
+                                                    cardID={'word-graph-1'}
+                                                >
+                                                    Word Graph1
+                                                </SimpleCard>
+
+                                                <SimpleCard
+                                                    cardTitle={'word-graph-2'}
+                                                    cardID={'word-graph-2'}
+                                                >
+                                                    Word Graph 2
+                                                </SimpleCard>
+                                            </div>
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                            cardTitle={'Network'}
+                                            cardID={'row-4'}
+                                        />
                                     </div>
                                 </Layout>
                             </Layout>
@@ -402,8 +414,14 @@ class ChartPage extends Component {
                     </Switch>
                 </>
             );
+        } else {
+            return (
+                <>
+                    <Redirect to="/login"/>
+                </>
+            );
         }
-        return <Redirect to="/login"/>;
+
     }
 }
 
