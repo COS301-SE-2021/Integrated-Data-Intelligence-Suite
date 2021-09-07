@@ -168,6 +168,8 @@ public class GatewayServiceController {
     }
 
 
+
+
     /**
      * This method is used to facilitate communication to all the Services.
      * Outputs data related to a topic/key.
