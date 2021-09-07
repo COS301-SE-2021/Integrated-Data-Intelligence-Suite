@@ -6,7 +6,7 @@ services:
   #PostgreSQL Database for the application
   database:
     container_name: emerge-database
-    image: "postgres:9.6-alpine"
+    image: postgres:10-alpine
     #image: "postgres:13-alpine"
 
     #Volume mounted for database for the storage
@@ -25,7 +25,7 @@ services:
 
   registry_service:
     container_name: registry_service
-    image: registry_service
+    image: emerge_services/registry_service
 
     build: ./Registry_Service
 
@@ -45,7 +45,7 @@ services:
 
   import_service:
     container_name: import_service
-    image: import_service
+    image: emerge_services/import_service
 
     build: ./Import_Service
 
@@ -62,7 +62,7 @@ services:
 
   parse_service:
     container_name: parse_service
-    image: parse_service
+    image: emerge_services/parse_service
 
     build: ./Parse_Service
 
@@ -81,7 +81,7 @@ services:
   analyse_service:
     #The docker file in Analyse_Service build the jar and provides the docker image with the following name.
     container_name: analyse_Service
-    image: analyse_service
+    image: emerge_services/analyse_service
 
     build: ./Analyse_Service
     #Environment variables for Spring Boot Application.
@@ -100,7 +100,7 @@ services:
 
   visualize_service:
     container_name: visualize_service
-    image: visualize_service
+    image: emerge_services/visualize_service
 
     build: ./Visualize_Service
 
@@ -117,7 +117,7 @@ services:
 
   user_service:
     container_name: user_service
-    image: user_service
+    image: emerge_services/user_service
 
     build: ./User_Service
 
@@ -135,7 +135,7 @@ services:
 
   gateway_service:
     container_name: gateway_service
-    image: gateway_service
+    image: emerge_services/gateway_service
 
     build: ./Gateway_Service
 
@@ -151,13 +151,14 @@ services:
       - database
 
 
-  #Fron-end
+
+  #Front-end
   user-interface:
     container_name: User-Interface
-    image: user-interface
+    image: emerge_services/user-interface
 
-    build: #./frontend
-      target: development
+    build: ./frontend
+      #target: development
 
     ports:
       - 3000:3000
