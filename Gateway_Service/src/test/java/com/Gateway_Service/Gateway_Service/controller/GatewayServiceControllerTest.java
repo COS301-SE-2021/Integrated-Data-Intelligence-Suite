@@ -1,6 +1,6 @@
 package com.Gateway_Service.Gateway_Service.controller;
 
-import com.Analyse_Service.Analyse_Service.controller.AnalyseServiceController;
+
 import com.Gateway_Service.Gateway_Service.GatewayServiceApplication;
 import com.Gateway_Service.Gateway_Service.service.AnalyseService;
 import com.Gateway_Service.Gateway_Service.service.ImportService;
