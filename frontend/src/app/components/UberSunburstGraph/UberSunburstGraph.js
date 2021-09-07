@@ -79,12 +79,14 @@ export default class UberSunburstGraph extends React.Component {
                         if (clicked) {
                             return;
                         }
-                        const path = getKeyPath(node)
-                            .reverse();
+
+                        const path = getKeyPath(node).reverse();
+
                         const pathAsMap = path.reduce((res, row) => {
                             res[row] = true;
                             return res;
                         }, {});
+
                         this.setState({
                             finalValue: path[path.length - 1],
                             pathValue: path.join(' > '),
