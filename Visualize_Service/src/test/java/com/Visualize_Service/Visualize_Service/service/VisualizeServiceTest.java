@@ -32,7 +32,7 @@ public class VisualizeServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(null));
     }
 
-    @Test
+    /*@Test
     @DisplayName("When the PatternList is Null")
     public void visualizeDataPatternListNull(){
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
@@ -41,7 +41,7 @@ public class VisualizeServiceTest {
         ArrayList<String> testlist4 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
-    }
+    }*/
 
     @Test
     @DisplayName("When the RelationshipList is Null")
@@ -54,7 +54,7 @@ public class VisualizeServiceTest {
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
-    @Test
+    /*@Test
     @DisplayName("When the PredictionList is Null")
     public void visualizeDataPredictionListNull(){
         ArrayList<ArrayList> testlist1 = new ArrayList<>();
@@ -63,7 +63,7 @@ public class VisualizeServiceTest {
         ArrayList<String> testlist4 = new ArrayList<>();
         VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null,testlist3,testlist4);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
-    }
+    }*/
 
     @Test
     @DisplayName("When the TrendsList is Null")
