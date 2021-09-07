@@ -148,7 +148,7 @@ public class AnalyseServiceTest {
 
 
 
-    @Test
+    /*@Test
     @DisplayName("When the data list is Valid")
     public void findRelationshipValidRequest() throws InvalidRequestException {
         ArrayList<String> TestList = new ArrayList<>();
@@ -166,7 +166,7 @@ public class AnalyseServiceTest {
         FindRelationshipsRequest test = new FindRelationshipsRequest(input);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
-    }
+    }*/
 
     @Test
     @DisplayName("When the data list is Valid")

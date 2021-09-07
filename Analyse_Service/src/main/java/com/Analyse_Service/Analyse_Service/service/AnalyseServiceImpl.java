@@ -180,22 +180,22 @@ public class AnalyseServiceImpl {
         //GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
         //GetPredictionResponse getPredictionResponse = this.GetPredictions(getPredictionRequest);
 
-        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        //FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
-        //FindAnomaliesResponse findAnomaliesResponse = this.FindAnomalies(findAnomaliesRequest);
+        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
+        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
         /*****TRAIN****/
 
         //TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
         return new AnalyseDataResponse(
                 null,
