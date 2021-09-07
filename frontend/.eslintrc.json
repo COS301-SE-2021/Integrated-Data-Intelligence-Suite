@@ -106,6 +106,7 @@
     "react/jsx-props-no-spreading": "warn",
     "dot-notation": "off",
     "arrow-body-style": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-confusing-arrow": "off"
   }
 }
