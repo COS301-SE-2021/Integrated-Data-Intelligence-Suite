@@ -140,13 +140,6 @@
     row-gap: 13%;
 }
 
-#indicator-card-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /*3 columns, one for each indicator card */
-    grid-template-rows: 100%; /*1 single row*/
-    /*border: 3px solid red;*/
-    background: var(--light-gray);
-}
 
 
 /*******************************************/
@@ -155,6 +148,15 @@
 #row-1 {
     grid-row-start: 1;
     grid-row-end: 2;
+}
+
+#indicator-card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /*3 columns, one for each indicator card */
+    grid-template-rows: 100%; /*1 single row*/
+    /*border: 3px solid red;*/
+    background: var(--light-gray);
+    column-gap: 10px;
 }
 
 /*******************************************/
@@ -178,6 +180,7 @@
     display: grid;
     grid-template-columns: 60% 40%;
     grid-template-rows: 100%;
+    column-gap: 10px;
 }
 
 

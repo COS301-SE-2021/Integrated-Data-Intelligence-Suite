@@ -10,15 +10,13 @@ let data_from_backend;
 let words_from_backend = [];
 
 function wordFreq(text) {
-
     if (typeof text !== 'undefined') {
-
         const words = text.replace(/\./g, '')
             .split(/\s/);
         const freqMap = {};
         let _i = 0;
         const words_1 = words;
-        console.log("There maybe an error here");
+        console.log('There maybe an error here');
         for (; _i < words_1.length; _i++) {
             const w = words_1[_i];
             if (!freqMap[w]) {
@@ -39,7 +37,6 @@ function wordFreq(text) {
     }
 
     return null;
-
 }
 
 function getRotationDegree() {
@@ -64,7 +61,6 @@ const fixedValueGenerator = function () {
 };
 
 function WordCloud(props) {
-
     if (typeof props.text === 'undefined') {
         data_from_backend = [];
     } else if (typeof props.text[7] === 'undefined') {
@@ -83,25 +79,25 @@ function WordCloud(props) {
     return (
         <div className="wordcloud">
             <Wordcloud
-                key={words_from_backend}
-                words={words_from_backend}
-                width={200}
-                height={200}
-                font="Impact"
-                padding={2}
-                fontSize={fontSizeSetter}
-                spiral="archimedean"
-                rotate={0}
-                random={fixedValueGenerator}
+              key={words_from_backend}
+              words={words_from_backend}
+              width={200}
+              height={200}
+              font="Impact"
+              padding={2}
+              fontSize={fontSizeSetter}
+              spiral="archimedean"
+              rotate={0}
+              random={fixedValueGenerator}
             >
                 {(cloudWords) => cloudWords.map((w, i) => (
                     <Text
-                        key={w.text}
-                        fill={colors[i % colors.length]}
-                        textAnchor="middle"
-                        transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-                        fontSize={w.size}
-                        fontFamily={w.font}
+                      key={w.text}
+                      fill={colors[i % colors.length]}
+                      textAnchor="middle"
+                      transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                      fontSize={w.size}
+                      fontFamily={w.font}
                     >
                         {w.text}
                     </Text>

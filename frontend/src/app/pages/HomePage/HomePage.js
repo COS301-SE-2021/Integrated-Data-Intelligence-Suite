@@ -42,17 +42,17 @@ class HomePage extends Component {
                 <Switch>
                     <Route exact path="/">
                         <Layout
-                            id="outer_layout"
-                            className="chart-page"
+                          id="outer_layout"
+                          className="chart-page"
                         >
-                            <SideBar/>
+                            <SideBar />
 
                             <Layout id="inner_layout_div">
                                 <Header id="top_bar">
                                     {/* <Title level={1}>Home</Title> */}
 
                                     <UserInfoCard
-                                        name="s"
+                                      name="s"
                                     />
                                 </Header>
                             </Layout>

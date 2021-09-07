@@ -41,7 +41,7 @@
     border: 0;
     /*background: #5773FA;*/
     color: var(--neon-blue);
-    border-right: 3px solid #5773FA;
+    /*border-left: 3px solid #5773FA;*/
     background: white;
 
 }
@@ -51,7 +51,7 @@
     /*border: 0;*/
     /*background: #5773FA;*/
     color: #5773FA;
-    border-right: 3px solid #5773FA;
+    /*border-left: 3px solid #5773FA;*/
 }
 
 /*Hovering over a menu item that has been selected*/

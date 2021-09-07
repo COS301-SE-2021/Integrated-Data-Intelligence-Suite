@@ -4,7 +4,7 @@ import './ProfileCardBanner.css';
 export default function ProfileCardBanner(props) {
     return (
         <>
-            <div className={'profile-card-banner'}/>
+            <div className="profile-card-banner" />
         </>
     );
 }

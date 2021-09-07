@@ -1,9 +1,11 @@
 import { Menu, Layout } from 'antd';
-import { BarChartOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+ BarChartOutlined, HomeOutlined, LaptopOutlined, SettingOutlined,
+} from '@ant-design/icons';
 import React, { Component } from 'react';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
-import UserInfoCard from '../UserInfoCard/UserInfoCard';
 import { AiOutlineHeart, AiOutlineHome } from 'react-icons/all';
+import UserInfoCard from '../UserInfoCard/UserInfoCard';
 
 const {
     Header,
@@ -11,6 +13,7 @@ const {
     Sider,
     Content,
 } = Layout;
+const { SubMenu } = Menu;
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -34,61 +37,61 @@ class SideBar extends React.Component {
     render() {
         const {
             collapsed,
-            active
+            active,
         } = this.state;
         console.log('active comp ', active);
         return (
             <>
 
                 <Sider
-                    collapsible
-                    collapsed={collapsed}
-                    onCollapse={this.onCollapse}
-                    id="sidebar_div"
+                  collapsible
+                  collapsed={collapsed}
+                  onCollapse={this.onCollapse}
+                  id="sidebar_div"
                 >
                     <div id="logo">
                         logo
                     </div>
                     <Menu
-                        id="sidebar_menu"
-                        theme="light"
-                        defaultSelectedKeys={active}
-                        mode="inline"
+                      id="sidebar_menu"
+                      theme="light"
+                      defaultSelectedKeys={active}
+                      mode="inline"
                     >
                         <Menu.Item
-                            key="1"
-                            icon={<AiOutlineHome/>}
-                            onClick={() => this.setActive('1')}
+                          key="1"
+                          icon={<AiOutlineHome />}
+                          onClick={() => this.setActive('1')}
                         >
                             Home
-                            <Link to="/"/>
+                            <Link to="/" />
                         </Menu.Item>
 
                         <Menu.Item
-                            key="2"
-                            icon={<BarChartOutlined/>}
-                            onClick={() => this.setActive('2')}
+                          key="2"
+                          icon={<BarChartOutlined />}
+                          onClick={() => this.setActive('2')}
                         >
                             Analytics
-                            <Link to="/chart"/>
+                            <Link to="/chart" />
                         </Menu.Item>
 
                         <Menu.Item
-                            key="3"
-                            icon={<SettingOutlined/>}
-                            onClick={() => this.setActive('3')}
+                          key="3"
+                          icon={<SettingOutlined />}
+                          onClick={() => this.setActive('3')}
                         >
                             Settings
-                            <Link to="/settings"/>
+                            <Link to="/settings" />
                         </Menu.Item>
 
                         <Menu.Item
-                            key="4"
-                            icon={<AiOutlineHeart/>}
-                            onClick={() => this.setActive('4')}
+                          key="4"
+                          icon={<AiOutlineHeart />}
+                          onClick={() => this.setActive('4')}
                         >
                             Credits
-                            <Link to="/"/>
+                            <Link to="/" />
                         </Menu.Item>
 
                     </Menu>

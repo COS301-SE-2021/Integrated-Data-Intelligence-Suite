@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { useHistory, useParams } from 'react-router-dom';
-import {Button, message} from 'antd';
+import { Button, message } from 'antd';
 
 const getSource = (id, structure) => {
     const [data, setData] = useState(null);
@@ -192,12 +192,11 @@ const AddDataSource = () => {
                 } else {
                     message.error(data.message);
                 }
-
             })
             .catch((err) => {
                 if (err.name === 'AbortError') console.log('Fetch Aborted');
                 else {
-                    message.error(err.message)
+                    message.error(err.message);
                 }
             });
 };
