@@ -8,7 +8,7 @@ import {
     LineSeries,
     VerticalRectSeries,
     DiscreteColorLegend,
-    Crosshair
+    Crosshair, LineMarkSeries
 } from 'react-vis';
 
 /**
@@ -174,8 +174,13 @@ export default class UberLineGraph extends React.Component {
                             onNearestX={this._nearestXHandler}
                             {...(series[0].disabled ? { opacity: 0.2 } : null)}
                         />
-                        <LineSeries
+                        <LineMarkSeries
                             data={series[1].data}
+                            style={{
+                                strokeWidth: '1px'
+                            }}
+                            lineStyle={{ stroke: 'lightblue' }}
+                            markStyle={{ stroke: 'blue' }}
                             curve="curveMonotoneX"
                             {...(series[1].disabled ? { opacity: 0.2 } : null)}
                         />
