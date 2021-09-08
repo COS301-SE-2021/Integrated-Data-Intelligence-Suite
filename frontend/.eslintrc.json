@@ -107,6 +107,7 @@
     "dot-notation": "off",
     "arrow-body-style": "off",
     "no-param-reassign": "off",
-    "no-confusing-arrow": "off"
+    "no-confusing-arrow": "off",
+    "react/jsx-no-bind": "off"
   }
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider, Popconfirm, message } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
@@ -52,7 +52,7 @@ const getAllSources = (url) => {
 const DataSourceList = () => {
     const [sources, setSources] = useState(null);
 
-    const {data, isPending, error } = getAllSources('http://localhost:9001/Import/getAllSources');
+    const { data, isPending, error } = getAllSources('http://localhost:9001/Import/getAllSources');
 
     const handleDelete = (sourceId) =>{
         setSources((prev)=>prev.filter((item)=> item.id !== sourceId));

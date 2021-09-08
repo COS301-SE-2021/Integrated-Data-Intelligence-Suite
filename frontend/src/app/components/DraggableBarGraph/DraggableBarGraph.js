@@ -41,7 +41,7 @@ const DATA = [
     },
 ];
 
-class DraggableBarGraph extends React.Component {
+export default class DraggableBarGraph extends React.Component {
     state = {
         selectionStart: null,
         selectionEnd: null
@@ -81,16 +81,23 @@ class DraggableBarGraph extends React.Component {
             }, () => this.getAverageY());
         };
 
+        const barGraphHasBeenClicked = (d, { event }) => {
+            console.log('A bar graph has been clicked Below is the D value and event:');
+            console.log(d);
+            console.log(event);
+            console.log();
+        };
+
         return (
             <div>
                 <XYPlot width={500} height={300}>
-                    <XAxis />
-                    <YAxis />
+                    <XAxis/>
+                    <YAxis/>
                     <VerticalRectSeries
-                      data={DATA}
-                      stroke="white"
-                      colorType="literal"
-                      getColor={(d) => {
+                        data={DATA}
+                        stroke="white"
+                        colorType="literal"
+                        getColor={d => {
                             if (selectionStart === null || selectionEnd === null) {
                                 return '#1E96BE';
                             }
@@ -104,11 +111,11 @@ class DraggableBarGraph extends React.Component {
                     />
 
                     <Highlight
-                      color="#829AE3"
-                      drag
-                      enableY={false}
-                      onDrag={updateDragState}
-                      onDragEnd={updateDragState}
+                        color="#829AE3"
+                        drag
+                        enableY={false}
+                        onDrag={updateDragState}
+                        onDragEnd={updateDragState}
                     />
                 </XYPlot>
 
@@ -117,10 +124,9 @@ class DraggableBarGraph extends React.Component {
                     {`${Math.floor(selectionStart * 100) / 100},`}
                     <b>selectionEnd:</b>
                     {`${Math.floor(selectionEnd * 100) / 100},`}
+                    <b>Average of Y Values of Highlighted Bar Graphs</b>
                 </div>
             </div>
         );
     }
 }
-
-export default DraggableBarGraph;
