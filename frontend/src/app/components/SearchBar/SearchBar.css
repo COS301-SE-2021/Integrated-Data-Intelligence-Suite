@@ -43,20 +43,22 @@
     /*border: 2px solid black;*/
     border: 0;
 
-    width: 18%;
+    width: 70vh;
     float: left;
     position: relative;
-    margin-left: 2%;
+    margin-left: 30%;
 
     /* Vertically Aligning it the middle*/
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+    border-radius: 25px;
+    box-shadow : 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 span.ant-input-wrapper.ant-input-group {
     /*border: 2px solid black;*/
-    border-radius: 1em;
+    border-radius: 25px;
     padding: 2%;
     background-color: #E8E8E9;
 }

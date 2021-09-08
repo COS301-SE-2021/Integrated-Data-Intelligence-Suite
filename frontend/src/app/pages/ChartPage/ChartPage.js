@@ -266,25 +266,6 @@ class ChartPage extends Component {
 
                                                     />
                                                 </div>
-
-                                                <div
-                                                    id="stat1-item"
-                                                    className="word-cloud-grid-item"
-                                                >
-                                                    <VisxBarGroupGraph/>
-                                                </div>
-                                                <div
-                                                    id="stat2-item"
-                                                    className="word-cloud-grid-item"
-                                                >
-                                                    locations where its been mentioned
-                                                </div>
-                                                <div
-                                                    id="stat3-item"
-                                                    className="word-cloud-grid-item"
-                                                >
-                                                    timeline thingy
-                                                </div>
                                             </div>
                                         </Layout>
 
