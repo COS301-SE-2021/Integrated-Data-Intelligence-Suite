@@ -60,7 +60,7 @@ span.ant-input-wrapper.ant-input-group {
     /*border: 2px solid black;*/
     border-radius: 25px;
     padding: 2%;
-    background-color: #E8E8E9;
+    background-color: white;
 }
 
 /*The actual inside of the search
@@ -71,7 +71,7 @@ span.ant-input-wrapper.ant-input-group {
     border: 0;
     padding: 5px;
     /*border-radius: 15%;*/
-    background-color: #E8E8E9;
+    background-color: white;
     border-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -115,8 +115,11 @@ span.ant-input-wrapper.ant-input-group {
     /*border-radius: 12%;*/
     /*--antd-wave-shadow-color: none;*/
     /*color: #5C5C5C;*/
+    /*
     color: #898D8F;
-    background: #E8E8E9 !important;
+     */
+    color: black;
+    background: white !important;
     box-shadow: none;
 }
 
