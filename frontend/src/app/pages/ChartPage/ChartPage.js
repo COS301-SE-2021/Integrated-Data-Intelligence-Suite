@@ -108,19 +108,19 @@ class ChartPage extends Component {
                     <Switch>
                         <Route exact path="/chart">
                             <Layout
-                                id="outer_layout"
-                                className="chart-page"
+                              id="outer_layout"
+                              className="chart-page"
                             >
-                                <SideBar/>
+                                <SideBar />
                                 <Layout id="inner_layout_div">
                                     <Header id="top_bar">
                                         {/* <Title level={1}>Chart Page Title</Title> */}
                                         <SearchBar
-                                            text={this.state.text}
-                                            handleTextChange={this.handleTextChange}
+                                          text={this.state.text}
+                                          handleTextChange={this.handleTextChange}
                                         />
                                         <UserInfoCard
-                                            name="s"
+                                          name="s"
                                         />
                                     </Header>
 
@@ -346,60 +346,59 @@ class ChartPage extends Component {
                                     {/* </Content> */}
                                     <div id="content-section">
                                         <SimpleSection
-                                            cardTitle="Overview"
-                                            cardID="row-1"
+                                          cardTitle="Overview"
+                                          cardID="row-1"
                                         >
                                             <div
-                                                id="indicator-card-container"
+                                              id="indicator-card-container"
                                             >
-                                                <div id={'overview-col-left'}>
+                                                <div id="overview-col-left">
                                                     <SimpleCard
-                                                        cardTitle="Number Of Mentions"
-                                                        cardID="overview-metric-1"
+                                                      cardTitle="Number Of Mentions"
+                                                      cardID="overview-metric-1"
                                                     >
-                                                        <UberLineGraph/>
+                                                        <UberLineGraph />
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                        cardTitle="Number of countries engaging"
-                                                        cardID="overview-metric-2"
+                                                      cardTitle="Number of countries engaging"
+                                                      cardID="overview-metric-2"
                                                     >
-                                                        <UberLineGraph/>
+                                                        <UberLineGraph />
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                        cardTitle="Overall Sentiment"
-                                                        cardID="overview-metric-3"
+                                                      cardTitle="Overall Sentiment"
+                                                      cardID="overview-metric-3"
                                                     >
-                                                        <UberLineGraph/>
+                                                        <UberLineGraph />
                                                     </SimpleCard>
                                                 </div>
 
                                                 <div
-                                                    id={'overview-col-right'}
+                                                  id="overview-col-right"
                                                 >
                                                     <SimpleCard
-                                                        cardTitle={'Number of Relationships found'}
-                                                        cardID={'overview-metric-4'}
+                                                      cardTitle="Number of Relationships found"
+                                                      cardID="overview-metric-4"
                                                     >
-                                                        <UberLineGraph/>
+                                                        <UberLineGraph />
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                        cardTitle={'Metric 5'}
-                                                        cardID={'overview-metric-5'}
+                                                      cardTitle="Metric 5"
+                                                      cardID="overview-metric-5"
                                                     >
-                                                        <UberLineGraph/>
+                                                        <UberLineGraph />
                                                     </SimpleCard>
                                                 </div>
-
 
                                             </div>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Location"
-                                            cardID="row-2"
+                                          cardTitle="Location"
+                                          cardID="row-2"
                                         >
                                             <div>
 
@@ -408,45 +407,52 @@ class ChartPage extends Component {
                                                     {/*    id="map-card" */}
                                                     {/* > */}
 
-                                                    <MapCard text={this.state.text}/>
+                                                    <MapCard text={this.state.text} />
                                                     {/* </Card> */}
-                                                    <IndicatorCard
-                                                        indicatorTitle="Map Metric 1"
-                                                        cardID="map-metric"
-                                                    />
+                                                    {/* <IndicatorCard */}
+                                                    {/*  indicatorTitle="Map Metric 1" */}
+                                                    {/*  cardID="map-metric" */}
+                                                    {/* /> */}
+                                                    <DraggableBarGraph />
+                                                    {/*<SimpleCard*/}
+                                                    {/*  cardTitle="Map Metric 1"*/}
+                                                    {/*  cardID="map-metric"*/}
+                                                    {/*>*/}
+                                                    {/*    */}
+                                                    {/*</SimpleCard>*/}
                                                 </div>
                                                 <IndicatorCard
-                                                    indicatorTitle="Map Metric 2"
-                                                    cardID="complex-graph"
+                                                  indicatorTitle="Map Metric 2"
+                                                  cardID="complex-graph"
                                                 />
                                             </div>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Textual Analysis"
-                                            cardID="row-3"
+                                          cardTitle="Textual Analysis"
+                                          cardID="row-3"
                                         >
                                             <SimpleCard
-                                                cardTitle="Word Cloud"
-                                                cardID="word-cloud-card"
+                                              cardTitle="Word Cloud"
+                                              cardID="word-cloud-card"
                                             >
                                                 <WordCloud
-                                                    text={this.state.text}
-                                                    key={this.state.text}
+                                                  text={this.state.text}
+                                                  key={this.state.text}
                                                 />
                                             </SimpleCard>
 
                                             <div id="word-cloud-graph-container">
                                                 <SimpleCard
-                                                    cardTitle="word-graph-1"
-                                                    cardID="word-graph-1"
+                                                  cardTitle="word-graph-1"
+                                                  cardID="word-graph-1"
                                                 >
                                                     Word Graph1
                                                 </SimpleCard>
 
                                                 <SimpleCard
-                                                    cardTitle="word-graph-2"
-                                                    cardID="word-graph-2"
+                                                  cardTitle="word-graph-2"
+                                                  cardID="word-graph-2"
                                                 >
                                                     Word Graph 2
                                                 </SimpleCard>
@@ -454,8 +460,8 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Network"
-                                            cardID="row-4"
+                                          cardTitle="Network"
+                                          cardID="row-4"
                                         />
                                     </div>
                                 </Layout>
@@ -467,7 +473,7 @@ class ChartPage extends Component {
         }
         return (
             <>
-                <Redirect to="/login"/>
+                <Redirect to="/login" />
             </>
         );
     }
