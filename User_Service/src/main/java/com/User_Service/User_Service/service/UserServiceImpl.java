@@ -32,14 +32,6 @@ public class UserServiceImpl {
 
     }
 
-    @Autowired
-    public void setRepository(UserRepository repository) {
-        this.repository = repository;
-    }
-
-
-
-
     /**
      * This function logs the user in.
      * @param request This class contains the user information for login.
