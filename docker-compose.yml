@@ -1,26 +1,33 @@
-# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+#Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 version: '3.8'
 
 #Define services
 services:
   #PostgreSQL Database for the application
   database:
+
     container_name: emerge-database
     image: postgres:10-alpine
     #image: "postgres:13-alpine"
 
-    #Volume mounted for database for the storage
-    volumes:
-      - database-data:/var/lib/postgresql/data
 
     #Environment variable for DB name, user and password
     environment:
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
       - POSTGRES_PASSWORD=emerge0000
+      - PGDATA=/var/lib/postgresql/data
+      #- POSTGRES_DB:emerge-database
+      #- POSTGRES_USER:emerge
+
+
+    #Volume mounted for database for the storage
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - database-data:/docker-entrypoint-initdb.d/emerge_database.sh
 
     ports:
       - 5432:5432 # Forward the exposed port 5432 on the container to port 5432 on the host machine
+
+    restart: unless-stopped
 
 
   registry_service:
@@ -30,10 +37,10 @@ services:
     build: ./Registry_Service
 
     environment:
-      - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+      - DB_SERVER:database
+      #- POSTGRES_DB=emerge-database
+      #- POSTGRES_USER=emerge
+      #- POSTGRES_PASSWORD=emerge0000
 
     ports:
       - 8761:8761
@@ -51,9 +58,9 @@ services:
 
     environment:
       - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+      #- POSTGRES_DB=emerge-database
+      #- POSTGRES_USER=emerge
+      #- POSTGRES_PASSWORD=emerge0000
 
     ports:
         - 9001:9001
@@ -68,9 +75,9 @@ services:
 
     environment:
       - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+      #- POSTGRES_DB:emerge=database
+      #- POSTGRES_USER=emerge
+      #- POSTGRES_PASSWORD=emerge0000
 
     ports:
       - 9002:9002
@@ -84,12 +91,13 @@ services:
     image: emerge_services/analyse_service
 
     build: ./Analyse_Service
+
     #Environment variables for Spring Boot Application.
     environment:
       - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+      #- POSTGRES_DB=emerge-database
+      #- POSTGRES_USER=emerge
+      #- POSTGRES_PASSWORD=emerge0000
 
     ports:
       - 9003:9003
@@ -106,9 +114,9 @@ services:
 
     environment:
       - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+      #- POSTGRES_DB=emerge-database
+      #- POSTGRES_USER=emerge
+      #- POSTGRES_PASSWORD=emerge0000
 
     ports:
       - 9004:9004
@@ -123,7 +131,7 @@ services:
 
     environment:
       - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
+      - POSTGRES_DB=UserServiceDatabase
       - POSTGRES_USER=emerge
       - POSTGRES_PASSWORD=emerge0000
 
@@ -141,9 +149,9 @@ services:
 
     environment:
       - DB_SERVER=database
-      - POSTGRES_DB=emerge-database
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+      #- POSTGRES_DB=emerge-database
+      #- POSTGRES_USER=emerge
+      #- POSTGRES_PASSWORD=emerge0000
 
     ports:
       - 9000:9000
@@ -169,3 +177,4 @@ services:
 volumes:
   #scrum-data:
   database-data:
+  pgdata:
