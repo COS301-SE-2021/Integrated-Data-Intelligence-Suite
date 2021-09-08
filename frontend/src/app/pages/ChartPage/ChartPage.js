@@ -40,6 +40,7 @@ import AreaGraph from '../../components/AreaGraph/AreaGraph';
 import { Simple } from 'leaflet/src/geo/crs/CRS.Simple';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import UberLineGraph from '../../components/UberLineGraph/UberLineGraph';
+import DraggableBarGraph from "../../components/DraggableBarGraph/DraggableBarGraph";
 
 const {
     Title,
@@ -360,8 +361,9 @@ class ChartPage extends Component {
                                                 <SimpleCard
                                                   cardTitle="Metric 2"
                                                   cardID="overview-metric-2"
-
-                                                />
+                                                >
+                                                    <DraggableBarGraph/>
+                                                </SimpleCard>
 
                                                 <SimpleCard
                                                   cardTitle="Metric 3"
