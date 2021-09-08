@@ -52,12 +52,12 @@ public class VisualizeServiceImpl {
         outputData.add(timelineResponse.timelineGraphArray);
 
         //Line graph Sentiments
-        CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getRelationshipList());
+        CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
         CreateLineGraphSentimentsResponse lineResponse =  this.createLineGraphSentiments(lineRequest);
         outputData.add(lineResponse.LineGraphArray);
 
         //Line graph Interactions
-        CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getRelationshipList());
+        CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
         CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
         outputData.add(lineInteractionsResponse.LineGraphArray);
 

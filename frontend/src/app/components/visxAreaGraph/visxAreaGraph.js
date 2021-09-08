@@ -49,6 +49,22 @@ export default function VisxAreaGraph(props) {
         yAccessor: (d) => d.y,
     };
 
+    let data_from_backend;
+    console.log(props.text);
+
+    if (typeof props.text === 'undefined') {
+        data_from_backend = [];
+    } else if (typeof props.text[3] === 'undefined') {
+        data_from_backend = [];
+    } else if (props.text[3].length === 0) {
+        data_from_backend = [];
+    } else if (props.text[3].length > 0) {
+        console.log('Reached-here-PPPPPPPP');
+        // console.log(props.text[7][0].words);
+        console.log();
+        data_from_backend = props.text[3];
+    }
+
     return (
         <>
             <XYChart
@@ -91,7 +107,8 @@ export default function VisxAreaGraph(props) {
 
                 <AnimatedAreaSeries
                     dataKey="Line1"
-                    data={props.graphData}
+                    data={data_from_backend}
+                    key={props.text}
                     {...accessors}
                     fillOpacity={0.4}
                     curve={curveCardinal}

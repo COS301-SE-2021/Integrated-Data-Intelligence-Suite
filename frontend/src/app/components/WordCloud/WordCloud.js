@@ -55,8 +55,8 @@ const fontScale = scaleLog({
     range: [10, 100],
 });
 const fontSizeSetter = function (datum) {
-    console.log(datum);
-    console.log(fontScale(datum.value));
+    // console.log(datum);
+    // console.log(fontScale(datum.value));
     return fontScale(datum.value);
 };
 const fixedValueGenerator = function () {
@@ -72,12 +72,12 @@ function WordCloud(props) {
     } else if (props.text[7].length === 0) {
         data_from_backend = [];
     } else if (props.text[7].length > 0) {
-        console.log("Reached-here");
+        // console.log("Reached-here");
         // console.log(props.text[7][0].words);
         data_from_backend = props.text[7][0].words;
         words_from_backend = wordFreq(data_from_backend);
-        console.log("XXXXXX___XXXXXX");
-        console.log(words_from_backend);
+        // console.log("XXXXXX___XXXXXX");
+        // console.log(words_from_backend);
     }
 
     return (
