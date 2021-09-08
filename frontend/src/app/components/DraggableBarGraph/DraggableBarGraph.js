@@ -39,7 +39,7 @@ const DATA = [
     }
 ];
 
-class DraggableBarGraph extends React.Component {
+export default class DraggableBarGraph extends React.Component {
     state = {
         selectionStart: null,
         selectionEnd: null
@@ -50,10 +50,18 @@ class DraggableBarGraph extends React.Component {
             selectionStart,
             selectionEnd
         } = this.state;
+
         const updateDragState = area => this.setState({
             selectionStart: area && area.left,
             selectionEnd: area && area.right
         });
+
+        const barGraphHasBeenClicked = (d, { event }) => {
+            console.log('A bar graph has been clicked Below is the D value and event:');
+            console.log(d);
+            console.log(event);
+            console.log();
+        };
 
         return (
             <div>
@@ -91,10 +99,9 @@ class DraggableBarGraph extends React.Component {
                     {`${Math.floor(selectionStart * 100) / 100},`}
                     <b>selectionEnd:</b>
                     {`${Math.floor(selectionEnd * 100) / 100},`}
+                    <b>Average of Y Values of Highlighted Bar Graphs</b>
                 </div>
             </div>
         );
     }
 }
-
-export default DraggableBarGraph;
