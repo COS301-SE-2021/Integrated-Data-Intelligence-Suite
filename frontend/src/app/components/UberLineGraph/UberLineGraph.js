@@ -8,8 +8,42 @@ import {
     LineSeries,
     VerticalRectSeries,
     DiscreteColorLegend,
-    Crosshair, LineMarkSeries
+    Crosshair, LineMarkSeries, VerticalRectSeriesCanvas
 } from 'react-vis';
+
+const mock_data = [
+    {
+        title: 'Monday',
+        x: 0,
+        y: 8,
+        isCurrentDay: 'no',
+    },
+    {
+        title: 'Tuesday',
+        x: 1,
+        y: 5,
+        isCurrentDay: 'no',
+    },
+    {
+        title: 'Wednesday',
+        x: 2,
+        y: 4,
+        isCurrentDay: 'no',
+    },
+    {
+        title: 'Thursday',
+        x: 3,
+        y: 9,
+        isCurrentDay: 'yes',
+    },
+    {
+        title: 'Friday',
+        x: 4,
+        y: 13,
+        isCurrentDay: 'no',
+    }
+];
+const colour_pallete = ['#FF991F', '#DAF9FB'];
 
 /**
  * Get the array of x and y pairs.
@@ -20,11 +54,11 @@ import {
  */
 function getRandomSeriesData(total) {
     const result = [];
-    let lastY = Math.random() * 40 - 20;
+    let lastY = Math.round(Math.random() * 40 - 20);
     let y;
     const firstY = lastY;
     for (let i = 0; i < Math.max(total, 3); i++) {
-        y = Math.random() * firstY - firstY / 2 + lastY;
+        y = Math.round(Math.random() * firstY - firstY / 2 + lastY);
         result.push({
             left: i,
             top: y
@@ -37,21 +71,17 @@ function getRandomSeriesData(total) {
 export default class UberLineGraph extends React.Component {
     constructor(props) {
         super(props);
-        const totalValues = Math.random() * 50;
+        const totalValues = 5;
         this.state = {
             crosshairValues: [],
             series: [
                 {
-                    title: 'Apples',
+                    title: props.crossHairTitle,
                     disabled: false,
-                    data: getRandomSeriesData(totalValues)
-                },
-                {
-                    title: 'Bananas',
-                    disabled: false,
-                    data: getRandomSeriesData(totalValues)
+                    data: mock_data
                 }
-            ]
+            ],
+            index: null
         };
     }
 
@@ -65,8 +95,8 @@ export default class UberLineGraph extends React.Component {
         const { series } = this.state;
         return values.map((v, i) => {
             return {
-                title: series[i].title,
-                value: v.top
+                title: '',
+                value: ''
             };
         });
     };
@@ -79,21 +109,9 @@ export default class UberLineGraph extends React.Component {
      */
     _formatCrosshairTitle = values => {
         return {
-            title: 'X',
-            value: values[0].left
+            title: values[0].title,
+            value: values[0].y
         };
-    };
-
-    /**
-     * Click handler for the legend.
-     * @param {Object} item Clicked item of the legend.
-     * @param {number} i Index of the legend.
-     * @private
-     */
-    _legendClickHandler = (item, i) => {
-        const { series } = this.state;
-        series[i].disabled = !series[i].disabled;
-        this.setState({ series });
     };
 
     /**
@@ -101,56 +119,44 @@ export default class UberLineGraph extends React.Component {
      * @private
      */
     _mouseLeaveHandler = () => {
-        this.setState({ crosshairValues: [] });
+        this.setState({
+            crosshairValues: [],
+            index: null
+        });
     };
 
-    /**
-     * Event handler for onNearestX.
-     * @param {Object} value Selected value.
-     * @param {number} index Index of the series.
-     * @private
-     */
     _nearestXHandler = (value, { index }) => {
         const { series } = this.state;
         this.setState({
-            crosshairValues: series.map(s => s.data[index])
+            crosshairValues: series.map(s => s.data[index]),
+            index
         });
-    };
-
-    _updateButtonClicked = () => {
-        const { series } = this.state;
-        const totalValues = Math.random() * 50;
-        series.forEach(s => {
-            s.data = getRandomSeriesData(totalValues);
-        });
-        this.setState({ series });
     };
 
     render() {
         const {
             series,
-            crosshairValues
+            crosshairValues,
+            index
         } = this.state;
+
+        const data_with_color = mock_data.map((d, i) => ({
+            ...d,
+            stroke: Number(i === index) ? 0 : 1
+        }));
+
+        console.log(data_with_color);
         return (
             <div className="example-with-click-me">
-                <div className="legend">
-                    <DiscreteColorLegend
-                        onItemClick={this._legendClickHandler}
-                        width={180}
-                        items={series}
-                    />
-                </div>
-
                 <div className="chart">
                     <FlexibleWidthXYPlot
                         animation
-                        getX={d => d.left}
-                        getY={d => d.top}
+                        getX={d => d.x}
+                        getY={d => d.y}
                         onMouseLeave={this._mouseLeaveHandler}
-                        xDomain={[-0.5, series[0].data.length - 1]}
-                        height={300}
+                        height={200}
+
                     >
-                        <HorizontalGridLines/>
                         <YAxis
                             className="cool-custom-name"
                             tickSizeInner={0}
@@ -161,40 +167,25 @@ export default class UberLineGraph extends React.Component {
                             tickSizeInner={0}
                             tickSizeOuter={8}
                         />
-                        <VerticalRectSeries
-                            data={series[0].data.map(({
-                                left,
-                                top
-                            }) => ({
-                                x0: left - 0.5,
-                                left: left + 0.5,
-                                top
-                            }))}
-                            stroke="white"
-                            onNearestX={this._nearestXHandler}
-                            {...(series[0].disabled ? { opacity: 0.2 } : null)}
-                        />
                         <LineMarkSeries
-                            data={series[1].data}
+                            data={data_with_color}
+                            colorType="literal"
                             style={{
                                 strokeWidth: '0.5px'
                             }}
-                            lineStyle={{ stroke: 'lightblue' }}
-                            markStyle={{ stroke: 'blue' }}
+                            // lineStyle={{ stroke: 'lightblue' }}
+                            // markStyle={{ stroke: 'yellow' }}
                             curve="curveMonotoneX"
-                            {...(series[1].disabled ? { opacity: 0.2 } : null)}
-                        />
-                        <Crosshair
-                            itemsFormat={this._formatCrosshairItems}
-                            titleFormat={this._formatCrosshairTitle}
-                            values={crosshairValues}
+                            {...(series[0].disabled ? { opacity: 0.2 } : null)}
+                            onNearestX={this._nearestXHandler}
+                            colorRange={colour_pallete}
                         />
                     </FlexibleWidthXYPlot>
                 </div>
 
-                <button className="click-me" onClick={this._updateButtonClicked}>
-                    Click to update
-                </button>
+                {/*<button className="click-me" onClick={this._updateButtonClicked}>*/}
+                {/*    Click to update*/}
+                {/*</button>*/}
             </div>
         );
     }
