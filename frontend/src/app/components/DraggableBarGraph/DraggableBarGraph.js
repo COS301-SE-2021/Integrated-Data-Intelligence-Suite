@@ -1,6 +1,6 @@
 import React from 'react';
 import {
- XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight,
+    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, Crosshair,
 } from 'react-vis';
 
 const DATA = [
@@ -42,29 +42,32 @@ const DATA = [
 ];
 
 export default class DraggableBarGraph extends React.Component {
-    state = {
-        selectionStart: null,
-        selectionEnd: null
-    };
+    constructor() {
+        super();
+        this.state = {
+            selectionStart: null,
+            selectionEnd: null,
+            crosshairValues: [],
+        };
+    }
 
     getAverageY() {
         if (this.state.selectionStart && this.state.selectionEnd) {
-
-            let lowerBound = Math.floor(this.state.selectionStart);
-            let upperBound = Math.ceil(this.state.selectionEnd) + 1;
+            const lowerBound = Math.floor(this.state.selectionStart);
+            const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
             let sum = 0;
-            let lst = Object.values(DATA).filter((item) => {
+            const lst = Object.values(DATA).filter((item) => {
                 if (item.x > lowerBound && item.x < upperBound) {
                     sum += item.y;
-                    return true
+                    return true;
                 }
-                return false
-            })
+                return false;
+            });
 
-            sum /= lst.length
-            console.log(lst)
-            console.log(sum)
+            sum /= lst.length;
+            console.log(lst);
+            console.log(sum);
         }
     }
 
@@ -90,14 +93,14 @@ export default class DraggableBarGraph extends React.Component {
 
         return (
             <div>
-                <XYPlot width={500} height={300}>
-                    <XAxis/>
-                    <YAxis/>
+                <XYPlot onMouseLeave={() => this.setState({ crosshairValues: [] })} width={500} height={300}>
+                    <XAxis />
+                    <YAxis />
                     <VerticalRectSeries
-                        data={DATA}
-                        stroke="white"
-                        colorType="literal"
-                        getColor={d => {
+                      data={DATA}
+                      stroke="white"
+                      colorType="literal"
+                      getColor={(d) => {
                             if (selectionStart === null || selectionEnd === null) {
                                 return '#1E96BE';
                             }
@@ -108,14 +111,19 @@ export default class DraggableBarGraph extends React.Component {
 
                             return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
                         }}
+                      onNearestX={(value, { index }) => this.setState({ crosshairValues: [{x: value.x }] })}
                     />
 
                     <Highlight
-                        color="#829AE3"
-                        drag
-                        enableY={false}
-                        onDrag={updateDragState}
-                        onDragEnd={updateDragState}
+                      color="#829AE3"
+                      drag
+                      enableY={false}
+                      onDrag={updateDragState}
+                      onDragEnd={updateDragState}
+                    />
+                    <Crosshair
+                        values={this.state.crosshairValues}
+                        className={'test-class-name'}
                     />
                 </XYPlot>
 
