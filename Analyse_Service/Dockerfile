@@ -6,6 +6,13 @@ CMD ["mvn", "clean", "package"]
 #mvn spring-boot:run
 
 
+#3.9.6-alpine
+FROM python:3.7.0
+RUN pip install mlflow==1.20.1
+ENTRYPOINT ["mlflow", "server"]
+#CMD ["mlflow", "ui"]
+
+
 FROM amazoncorretto:11-alpine-jdk
 #ARG JAR_FILE=target/*.jar
 #COPY --from=build ${JAR_FILE} Analyse_Service.jar
@@ -22,11 +29,7 @@ ENTRYPOINT ["java", "-jar", "Analyse_Service.jar"]
 #}
 
 
-#3.9.6-alpine
-FROM python:3.7.0
-RUN pip install mlflow==1.20.1
-ENTRYPOINT ["mlflow", "server"]
-CMD ["mlflow", "ui"]
+
 
 
 #FROM openjdk:11-jdk-alpine
