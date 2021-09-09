@@ -89,13 +89,6 @@ export default class DraggableBarGraph extends React.Component {
             }, () => this.getAverageY());
         };
 
-        // const barGraphHasBeenClicked = (d, { event }) => {
-        //     console.log('A bar graph has been clicked Below is the D value and event:');
-        //     console.log(d);
-        //     console.log(event);
-        //     console.log();
-        // };
-
         return (
             <div className="uber-bar-graph-container">
                 { selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}

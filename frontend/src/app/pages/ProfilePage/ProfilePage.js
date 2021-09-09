@@ -6,32 +6,21 @@ import RowDivider from '../../components/RowDivider/RowDivider';
 export default function ProfilePage(props) {
     return (
         <>
-            <title>My mom</title>
             <div id="profile-page-container">
                 <ProfileCard
-                  style={{
+                    style={{
                         gridRowStart: 1,
                         gridRowEnd: 2,
                     }}
-                  cardTitle="My Profile"
-                  showReveal
+                    cardTitle="My Profile"
+                    showReveal
                 />
                 <RowDivider
-                  style={{
+                    style={{
                         gridRowStart: 2,
                         gridRowEnd: 3,
                     }}
                 />
-
-                <ProfileCard
-                  style={{
-                        gridRowStart: 3,
-                        gridRowEnd: 4,
-                    }}
-                  cardTitle="Password and Authentication"
-                />
-                <RowDivider />
-
             </div>
         </>
     );

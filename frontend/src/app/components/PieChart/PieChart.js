@@ -83,7 +83,7 @@ export default class PieChart extends React.Component {
                             events={[{
                                 target: 'data',
                                 eventHandlers: {
-                                    onClick: () => {
+                                    onMouseOver: () => {
                                         return [
                                             {
                                                 target: 'data',
