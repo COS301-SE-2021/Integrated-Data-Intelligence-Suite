@@ -60,7 +60,7 @@ public class VisualizeServiceImpl {
 
         //Timeline(Anomaly)                               <- D
         // scatter plot * tentative                       <-
-        // Map Metric 2 (Number of tweets over time )     <-
+        // Map Metric 2 (Number of tweets over time )     <- D
 
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
