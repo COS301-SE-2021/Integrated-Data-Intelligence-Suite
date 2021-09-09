@@ -48,7 +48,7 @@ public class VisualizeServiceImpl {
 
         //Timeline graph
         CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
-        CreateTimelineGraphResponse timelineResponse =  this.createlineGraphTime(timelineRequest);
+        CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
         outputData.add(timelineResponse.timelineGraphArray);
 
         //Line graph Sentiments
@@ -92,7 +92,7 @@ public class VisualizeServiceImpl {
     }
 
 
-    public CreateTimelineGraphResponse createlineGraphTime(CreateTimelineGraphRequest request) throws InvalidRequestException {
+    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
