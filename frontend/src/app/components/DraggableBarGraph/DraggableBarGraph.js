@@ -96,7 +96,7 @@ export default class DraggableBarGraph extends React.Component {
 
         return (
             <div>
-                <XYPlot width={500} height={300}>
+                <XYPlot width={300} height={300}>
                     <XAxis/>
                     <YAxis/>
                     <VerticalRectSeries

@@ -25,7 +25,7 @@ export default class GraphWithBrushAndZoom extends React.Component {
         return (
             <div>
                 <VictoryChart
-                    width={550}
+                    width={750}
                     height={300}
                     scale={{ x: 'time' }}
                     containerComponent={(
@@ -80,7 +80,7 @@ export default class GraphWithBrushAndZoom extends React.Component {
                 </VictoryChart>
 
                 <VictoryChart
-                    width={550}
+                    width={750}
                     height={90}
                     scale={{ x: 'time' }}
                     padding={{

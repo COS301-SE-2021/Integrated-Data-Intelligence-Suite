@@ -355,33 +355,24 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Location"
+                                            cardTitle=""
                                             cardID="row-2"
                                         >
-                                            <div>
+                                            <div id={'location-section'}>
                                                 <div id="map-metric-container">
-                                                    {/* <Card */}
-                                                    {/*    id="map-card" */}
-                                                    {/* > */}
+                                                    <SimpleCard
+                                                        cardTitle={'World Map'}
+                                                        cardID={'world-map'}
+                                                    >
+                                                        <MapCard text={this.state.text}/>
+                                                    </SimpleCard>
 
-                                                    <MapCard text={this.state.text}/>
-                                                    {/* </Card> */}
-                                                    {/* <IndicatorCard */}
-                                                    {/*  indicatorTitle="Map Metric 1" */}
-                                                    {/*  cardID="map-metric" */}
-                                                    {/* /> */}
                                                     <SimpleCard
                                                         cardTitle={'Map Metric 1'}
                                                         cardID={'map-metric-1'}
                                                     >
                                                         <DraggableBarGraph/>
                                                     </SimpleCard>
-                                                    {/*<SimpleCard*/}
-                                                    {/*  cardTitle="Map Metric 1"*/}
-                                                    {/*  cardID="map-metric"*/}
-                                                    {/*>*/}
-                                                    {/*    */}
-                                                    {/*</SimpleCard>*/}
                                                 </div>
                                                 <SimpleCard
                                                     cardTitle="Map Metric 2"
