@@ -1,6 +1,6 @@
 import { Menu, Layout } from 'antd';
 import {
- BarChartOutlined, HomeOutlined, LaptopOutlined, SettingOutlined,
+    BarChartOutlined, HomeOutlined, LaptopOutlined, SettingOutlined,
 } from '@ant-design/icons';
 import React, { Component } from 'react';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
@@ -44,54 +44,52 @@ class SideBar extends React.Component {
             <>
 
                 <Sider
-                  collapsible
-                  collapsed={collapsed}
-                  onCollapse={this.onCollapse}
-                  id="sidebar_div"
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={this.onCollapse}
+                    id="sidebar_div"
                 >
-                    <div id="logo">
-                        logo
-                    </div>
+                    <div id="logo"/>
                     <Menu
-                      id="sidebar_menu"
-                      theme="light"
-                      defaultSelectedKeys={active}
-                      mode="inline"
+                        id="sidebar_menu"
+                        theme="light"
+                        defaultSelectedKeys={active}
+                        mode="inline"
                     >
                         <Menu.Item
-                          key="1"
-                          icon={<AiOutlineHome />}
-                          onClick={() => this.setActive('1')}
+                            key="1"
+                            icon={<AiOutlineHome/>}
+                            onClick={() => this.setActive('1')}
                         >
                             Home
-                            <Link to="/" />
+                            <Link to="/"/>
                         </Menu.Item>
 
                         <Menu.Item
-                          key="2"
-                          icon={<BarChartOutlined />}
-                          onClick={() => this.setActive('2')}
+                            key="2"
+                            icon={<BarChartOutlined/>}
+                            onClick={() => this.setActive('2')}
                         >
                             Analytics
-                            <Link to="/chart" />
+                            <Link to="/chart"/>
                         </Menu.Item>
 
                         <Menu.Item
-                          key="3"
-                          icon={<SettingOutlined />}
-                          onClick={() => this.setActive('3')}
+                            key="3"
+                            icon={<SettingOutlined/>}
+                            onClick={() => this.setActive('3')}
                         >
                             Settings
-                            <Link to="/settings" />
+                            <Link to="/settings"/>
                         </Menu.Item>
 
                         <Menu.Item
-                          key="4"
-                          icon={<AiOutlineHeart />}
-                          onClick={() => this.setActive('4')}
+                            key="4"
+                            icon={<AiOutlineHeart/>}
+                            onClick={() => this.setActive('4')}
                         >
                             Credits
-                            <Link to="/" />
+                            <Link to="/"/>
                         </Menu.Item>
 
                     </Menu>
