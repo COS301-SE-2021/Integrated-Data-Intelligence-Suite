@@ -2,66 +2,22 @@ import React from 'react';
 import {
     XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, Crosshair, Hint,
 } from 'react-vis';
-
-const DATA = [
-    {
-        classname: 'circle1',
-        x0: 0,
-        x: 1,
-        y: 1,
-    },
-    {
-        classname: 'circle2',
-        x0: 1,
-        x: 2,
-        y: 2,
-    },
-    {
-        classname: 'circle3',
-        x0: 2,
-        x: 3,
-        y: 10,
-    },
-    {
-        classname: 'circle1',
-        x0: 3,
-        x: 4,
-        y: 6,
-    },
-    {
-        classname: 'circle1',
-        x0: 4,
-        x: 5,
-        y: 5,
-    },
-    {
-        classname: 'circle3',
-        x0: 5,
-        x: 6,
-        y: 3,
-    },
-    {
-        classname: 'circle2',
-        x0: 6,
-        x: 7,
-        y: 1,
-    },
-];
+import { data } from 'browserslist';
+import { DATA } from '../../Mocks/BarGraphMock';
 
 function highlightMapPoints(highlighted_points) {
     const old_highlighted_points = document.getElementsByClassName('chosen_circle');
     for (let i = 0; i < old_highlighted_points.length; i++) {
-        old_highlighted_points[i].classList.remove('chosen_circle')
+        old_highlighted_points[i].classList.remove('chosen_circle');
     }
 
     for (let i = 0; i < highlighted_points.length; i++) {
-        const points_to_change = document.getElementsByClassName(highlighted_points[i].classname)
+        const points_to_change = document.getElementsByClassName(highlighted_points[i].classname);
         for (let j = 0; j < points_to_change.length; j++) {
-            console.log(points_to_change[j])
-            points_to_change[j].classList.add('chosen_circle')
+            console.log(points_to_change[j]);
+            points_to_change[j].classList.add('chosen_circle');
         }
     }
-
 }
 
 export default class DraggableBarGraph extends React.Component {
@@ -71,7 +27,20 @@ export default class DraggableBarGraph extends React.Component {
             selectionStart: null,
             selectionEnd: null,
             average: '',
+            dataPoints: [],
         };
+
+        // TODO change data to [] or correct value from text array
+        if (typeof props.text === 'undefined') {
+            this.setState({ dataPoints: DATA });
+        } else if (typeof props.text[0] === 'undefined') {
+            // some error message
+            this.setState({ dataPoints: DATA });
+        } else if (props.text[0].length === 0) {
+            this.setState({ dataPoints: DATA });
+        } else if (props.text[0].length > 0) {
+            this.setState({ dataPoints: DATA });
+        }
     }
 
     getAverageY() {
@@ -115,7 +84,7 @@ export default class DraggableBarGraph extends React.Component {
 
         return (
             <div className="uber-bar-graph-container">
-                {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}
+                {/* {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>} */}
                 <div className="bar-graph-plot">
                     <XYPlot width={300} height={200}>
                         <XAxis />
@@ -143,6 +112,7 @@ export default class DraggableBarGraph extends React.Component {
                           enableY={false}
                           onDrag={updateDragState}
                           onDragEnd={updateDragState}
+
                         />
                         {this.state.hoveredNode && selectionEnd && (
                             <Hint
