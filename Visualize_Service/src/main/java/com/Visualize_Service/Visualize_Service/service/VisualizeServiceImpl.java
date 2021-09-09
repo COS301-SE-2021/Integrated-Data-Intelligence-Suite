@@ -188,6 +188,24 @@ public class VisualizeServiceImpl {
         return new GetTotalTrendsResponse(output);
     }
 
+    public GetTotalAnomaliesResponse getTotalAnomalies(GetTotalAnomaliesRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
+        }
+        if (request.getDataList() == null) {
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<String> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        WordCloudGraph out = new WordCloudGraph();
+        out.words = String.valueOf(reqData.size());
+        output.add(out);
+        System.out.println(out.words);
+        return new GetTotalAnomaliesResponse(output);
+    }
+
+
 
 
     public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
