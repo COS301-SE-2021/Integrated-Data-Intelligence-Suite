@@ -42,7 +42,6 @@ import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import UberLineGraph from '../../components/UberLineGraph/UberLineGraph';
 import UberSunburstGraph from '../../components/UberSunburstGraph/UberSunburstGraph';
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
-import UberBarGraph from '../../components/UberBarGraph/UberBarGraph';
 import OverviewSection from '../../components/OverviewSection/OverviewSection';
 
 const {
@@ -348,7 +347,7 @@ class ChartPage extends Component {
                                     {/* </Content> */}
                                     <div id="content-section">
                                         <SimpleSection
-                                            cardTitle=" "
+                                            cardTitle="Overview"
                                             cardID="row-1"
                                         >
                                             <OverviewSection/>
@@ -359,6 +358,7 @@ class ChartPage extends Component {
                                             cardID="row-2"
                                         >
                                             <div>
+
                                                 <div id="map-metric-container">
                                                     {/* <Card */}
                                                     {/*    id="map-card" */}
@@ -366,10 +366,17 @@ class ChartPage extends Component {
 
                                                     <MapCard text={this.state.text}/>
                                                     {/* </Card> */}
-                                                    <IndicatorCard
-                                                        indicatorTitle="Map Metric 1"
-                                                        cardID="map-metric"
-                                                    />
+                                                    {/* <IndicatorCard */}
+                                                    {/*  indicatorTitle="Map Metric 1" */}
+                                                    {/*  cardID="map-metric" */}
+                                                    {/* /> */}
+                                                    <DraggableBarGraph/>
+                                                    {/*<SimpleCard*/}
+                                                    {/*  cardTitle="Map Metric 1"*/}
+                                                    {/*  cardID="map-metric"*/}
+                                                    {/*>*/}
+                                                    {/*    */}
+                                                    {/*</SimpleCard>*/}
                                                 </div>
                                                 <IndicatorCard
                                                     indicatorTitle="Map Metric 2"
@@ -409,10 +416,10 @@ class ChartPage extends Component {
                                             </div>
                                         </SimpleSection>
 
-                                        {/*<SimpleSection*/}
-                                        {/*    cardTitle="Network"*/}
-                                        {/*    cardID="row-4"*/}
-                                        {/*/>*/}
+                                        <SimpleSection
+                                            cardTitle="Network"
+                                            cardID="row-4"
+                                        />
                                     </div>
                                 </Layout>
                             </Layout>
