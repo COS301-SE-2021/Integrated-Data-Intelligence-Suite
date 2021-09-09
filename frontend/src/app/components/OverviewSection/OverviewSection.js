@@ -3,6 +3,7 @@ import './OverviewSection.css';
 import SimpleCard from '../SimpleCard/SimpleCard';
 import UberBarGraph from '../UberBarGraph/UberBarGraph';
 import PieChart from '../PieChart/PieChart';
+import ValueWithPercentChange from '../ValueWithPercentChange/ValueWithPercentChange';
 
 export default class OverviewSection extends React.Component {
     constructor(props) {
@@ -17,28 +18,40 @@ export default class OverviewSection extends React.Component {
                         cardTitle="Total Likes"
                         cardID="overview-metric-1"
                     >
-                        45,541,14
+                        <ValueWithPercentChange
+                            isIncreasing
+                            rawValue={'1,214,312'}
+                        />
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Trends"
                         cardID="overview-metric-3"
                     >
-                        5,413
+                        <ValueWithPercentChange
+                            isIncreasing={false}
+                            rawValue={'23'}
+                        />
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Average Sentiment"
                         cardID="overview-metric-2"
                     >
-                        bad
+                        <ValueWithPercentChange
+                            isIncreasing={false}
+                            rawValue={'bad'}
+                        />
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Anomalies"
                         cardID="overview-metric-4"
                     >
-                        2100
+                        <ValueWithPercentChange
+                            isIncreasing
+                            rawValue={'16'}
+                        />
                     </SimpleCard>
                 </div>
 
