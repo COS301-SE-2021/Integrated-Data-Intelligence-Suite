@@ -8,6 +8,7 @@ import UserPermissions from "./pages/UserPermissionsPage/UserPermissions";
 import Permissions from "./pages/PermissionsPage/Permissions";
 import LogoutPage from "./pages/LogoutPage/LogoutPage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
+import VerifyPage from "./pages/VerifyPage/VerifyPage";
 import './App.scss';
 
 class App extends Component {
@@ -27,6 +28,10 @@ class App extends Component {
 
                     <Route exact path='/register'>
                         <RegisterPage/>
+                    </Route>
+
+                    <Route exact path='/verify'>
+                        <VerifyPage/>
                     </Route>
 
                     <Route exact path='/chart'>

@@ -71,9 +71,10 @@ const RegisterPage = () => {
                     return response.json()
                 }).then(json => {
                     if(json.success) {
-                        history.push('/');
+                        alert(json.message);
+                        history.push('/verify');
                     }else{
-                        alert(json.message)
+                        alert(json.message);
                     }
                 });
 
