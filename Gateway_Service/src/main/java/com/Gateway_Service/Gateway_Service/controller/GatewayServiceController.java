@@ -112,11 +112,8 @@ public class GatewayServiceController {
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 
-    /**
-     * This the endpoint for registering the user as an admin.
-     * @param form This is the body sent by POST
-     * @return This is the response http entity.
-     */
+
+    /*
     @PostMapping(value = "/user/requestAdmin",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
@@ -125,7 +122,7 @@ public class GatewayServiceController {
         RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
-
+    */
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
@@ -146,6 +143,14 @@ public class GatewayServiceController {
         LoginResponse response = userClient.login(request);
         System.out.println(response.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/verify",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
+        VerifyAccountResponse response = userClient.verifyAccount(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     /**

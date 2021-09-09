@@ -106,12 +106,13 @@ public class UserService {
      * @param userRequest This class contains all the information of the user to be saved.
      * @return This class contains the information if the saving of the user was successful.
      */
+    /*
     public RegisterAdminResponse requestAdmin(RegisterAdminRequest userRequest) {
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RegisterRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/register", HttpMethod.POST, requestEntity, RegisterResponse.class);
-        return responseEntity.getBody();*/
+        return responseEntity.getBody();
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -127,6 +128,26 @@ public class UserService {
             e.printStackTrace();
         }
         RegisterAdminResponse userResponse = restTemplate.postForObject("http://User-Service/User/requestAdmin", request, RegisterAdminResponse.class);
+
+        return userResponse;
+    }
+    */
+
+    public VerifyAccountResponse verifyAccount(VerifyAccountRequest userRequest) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        VerifyAccountResponse userResponse = restTemplate.postForObject("http://User-Service/User/verifyAccount", request, VerifyAccountResponse.class);
 
         return userResponse;
     }
