@@ -25,10 +25,10 @@
     grid-template-rows: 100%;
     grid-template-columns: repeat(4, 1fr);
     column-gap: 2%;
-    background: var(--light-gray);
-    /*border: 2px solid #e8e8e9;*/
-    /*border-radius: 10px;*/
-    /*padding: 5px;*/
+    background: white;
+    border: 2px solid #e8e8e9;
+    border-radius: 10px;
+    padding: 28px;
     height: max-content;
     /*height: 284px;*/
 }
@@ -40,10 +40,12 @@
     grid-row-end: 2;
 
     height: fit-content;
-    padding: 25px;
+    /*padding: 25px;*/
     /*padding-left: 11px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
+    border-right: 1px solid lightgrey;
+
 
 }
 
@@ -59,11 +61,13 @@
     grid-row-start: 1;
     grid-row-end: 2;
     height: fit-content;
-    padding: 25px;
+    /*padding: 25px;*/
     /*padding-left: 11px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
     margin: 0;
+    border-right: 1px solid lightgrey;
+
 }
 
 #overview-metric-2 > .simple-card-title {
@@ -80,9 +84,11 @@
     grid-row-end: 2;
 
     height: fit-content;
-    padding: 25px;
+    /*padding: 25px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
+    border-right: 1px solid lightgrey;
+
 }
 
 #overview-metric-3 > .simple-card-title {
@@ -100,7 +106,7 @@
     grid-row-end: 2;
 
     height: fit-content;
-    padding: 25px;
+    /*padding: 25px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
 }
