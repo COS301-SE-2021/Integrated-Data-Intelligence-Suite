@@ -58,16 +58,17 @@ export default class DraggableBarGraph extends React.Component {
 
             let sum = 0;
             let yMax = -1000;
-            const lst = Object.values(DATA).filter((item) => {
-                if (yMax < item.y) {
-                    yMax = item.y;
-                }
-                if (item.x > lowerBound && item.x < upperBound) {
-                    sum += item.y;
-                    return true;
-                }
-                return false;
-            });
+            const lst = Object.values(DATA)
+                .filter((item) => {
+                    if (yMax < item.y) {
+                        yMax = item.y;
+                    }
+                    if (item.x > lowerBound && item.x < upperBound) {
+                        sum += item.y;
+                        return true;
+                    }
+                    return false;
+                });
 
             sum /= lst.length;
             this.state.hoveredNode = {
@@ -93,23 +94,16 @@ export default class DraggableBarGraph extends React.Component {
             }, () => this.getAverageY());
         };
 
-        // const barGraphHasBeenClicked = (d, { event }) => {
-        //     console.log('A bar graph has been clicked Below is the D value and event:');
-        //     console.log(d);
-        //     console.log(event);
-        //     console.log();
-        // };
-
         return (
             <div>
                 <XYPlot width={500} height={300}>
-                    <XAxis />
-                    <YAxis />
+                    <XAxis/>
+                    <YAxis/>
                     <VerticalRectSeries
-                      data={DATA}
-                      stroke="white"
-                      colorType="literal"
-                      getColor={(d) => {
+                        data={DATA}
+                        stroke="white"
+                        colorType="literal"
+                        getColor={(d) => {
                             if (selectionStart === null || selectionEnd === null) {
                                 return '#1E96BE';
                             }
@@ -123,16 +117,19 @@ export default class DraggableBarGraph extends React.Component {
                     />
 
                     <Highlight
-                      color="#829AE3"
-                      drag
-                      enableY={false}
-                      onDrag={updateDragState}
-                      onDragEnd={updateDragState}
+                        color="#829AE3"
+                        drag
+                        enableY={false}
+                        onDrag={updateDragState}
+                        onDragEnd={updateDragState}
                     />
-                    { this.state.hoveredNode && selectionEnd && (
+                    {this.state.hoveredNode && selectionEnd && (
                         <Hint
-                          align={{ horizontal: 'left', vertical: 'top' }}
-                          value={{
+                            align={{
+                                horizontal: 'left',
+                                vertical: 'top'
+                            }}
+                            value={{
                                 x: this.state.hoveredNode.x,
                                 y: this.state.hoveredNode.y,
                                 Average: this.state.hoveredNode.value,

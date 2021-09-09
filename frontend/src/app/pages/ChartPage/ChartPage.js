@@ -43,6 +43,7 @@ import UberLineGraph from '../../components/UberLineGraph/UberLineGraph';
 import UberSunburstGraph from '../../components/UberSunburstGraph/UberSunburstGraph';
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
 import OverviewSection from '../../components/OverviewSection/OverviewSection';
+import GraphWithBrushAndZoom from '../../components/GraphWithBrushAndZoom/GraphWithBrushAndZoom';
 
 const {
     Title,
@@ -358,7 +359,6 @@ class ChartPage extends Component {
                                             cardID="row-2"
                                         >
                                             <div>
-
                                                 <div id="map-metric-container">
                                                     {/* <Card */}
                                                     {/*    id="map-card" */}
@@ -378,10 +378,12 @@ class ChartPage extends Component {
                                                     {/*    */}
                                                     {/*</SimpleCard>*/}
                                                 </div>
-                                                <IndicatorCard
-                                                    indicatorTitle="Map Metric 2"
-                                                    cardID="complex-graph"
-                                                />
+                                                <SimpleCard
+                                                    cardTitle="Map Metric 2"
+                                                    cardID="map-metric-2"
+                                                >
+                                                    <GraphWithBrushAndZoom/>
+                                                </SimpleCard>
                                             </div>
                                         </SimpleSection>
 
