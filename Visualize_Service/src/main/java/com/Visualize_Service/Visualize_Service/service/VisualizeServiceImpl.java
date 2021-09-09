@@ -106,8 +106,21 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null) {
             throw new InvalidRequestException("Arraylist is null");
         }
-        String output = "";
-        return new GetTotalInteractionResponse(null);
+        String outputs = "";
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+        int Tot = 0;
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> Like = (ArrayList<String>) reqData.get(i).get(7);
+            for (String lk : Like){
+                Tot += Integer.parseInt(lk);
+            }
+        }
+        WordCloudGraph out = new WordCloudGraph();
+        out.words = String.valueOf(Tot);
+        output.add(out);
+        System.out.println(out.words);
+        return new GetTotalInteractionResponse(output);
     }
 
     public GetMostProminentSentimentResponse getMostProminentSentiment(GetMostProminentSentimentRequest request) throws InvalidRequestException {
