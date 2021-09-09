@@ -47,7 +47,7 @@ export default class DraggableBarGraph extends React.Component {
         this.state = {
             selectionStart: null,
             selectionEnd: null,
-            hoveredNode: null,
+            average: "",
         };
     }
 
@@ -56,28 +56,23 @@ export default class DraggableBarGraph extends React.Component {
             const lowerBound = Math.floor(this.state.selectionStart);
             const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
-            let sum = 0;
+            let avg = 0;
             let yMax = -1000;
-            const lst = Object.values(DATA)
-                .filter((item) => {
-                    if (yMax < item.y) {
-                        yMax = item.y;
-                    }
-                    if (item.x > lowerBound && item.x < upperBound) {
-                        sum += item.y;
-                        return true;
-                    }
-                    return false;
-                });
+            const lst = Object.values(DATA).filter((item) => {
+                if (yMax < item.y) {
+                    yMax = item.y;
+                }
+                if (item.x > lowerBound && item.x < upperBound) {
+                    avg += item.y;
+                    return true;
+                }
+                return false;
+            });
 
-            sum /= lst.length;
-            this.state.hoveredNode = {
-                x: DATA[0].x0,
-                y: yMax,
-                value: sum,
-            };
+            avg /= lst.length;
+            this.setState({ average: avg });
             console.log(lst);
-            console.log(sum);
+            console.log(avg);
         }
     }
 
@@ -95,15 +90,17 @@ export default class DraggableBarGraph extends React.Component {
         };
 
         return (
-            <div>
-                <XYPlot width={300} height={300}>
-                    <XAxis/>
-                    <YAxis/>
-                    <VerticalRectSeries
-                        data={DATA}
-                        stroke="white"
-                        colorType="literal"
-                        getColor={(d) => {
+            <div className="uber-bar-graph-container">
+                { selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}
+                <div className="bar-graph-plot">
+                    <XYPlot width={300} height={150}>
+                        <XAxis />
+                        <YAxis />
+                        <VerticalRectSeries
+                          data={DATA}
+                          stroke="white"
+                          colorType="literal"
+                          getColor={(d) => {
                             if (selectionStart === null || selectionEnd === null) {
                                 return '#1E96BE';
                             }
