@@ -1,0 +1,127 @@
+/*******************************************/
+/******************Overview*****************/
+/*******************************************/
+#row-1 {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-template-rows: 0em auto;
+}
+
+#indicator-card-container {
+    display: grid;
+    grid-template-columns: 100%; /*2 columns, left column, right column */
+    grid-template-rows: 50% 50%; /*1 single row*/
+    /*border: 3px solid red;*/
+    background: var(--light-gray);
+    row-gap: 10px;
+}
+
+/*The left side of the overview section*/
+#overview-col-left {
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 4%;
+}
+
+#overview-metric-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    height: fit-content;
+    padding: 15px;
+    padding-left: 11px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    background: white;
+
+}
+
+#overview-metric-1 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+}
+
+#overview-metric-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    height: fit-content;
+    padding: 15px;
+    padding-left: 11px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    background: white;
+}
+
+#overview-metric-2 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+
+    text-align: left;
+}
+
+#overview-metric-3 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+}
+
+#overview-metric-3 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    height: fit-content;
+    padding: 15px;
+    padding-left: 11px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    background: white;
+}
+
+/*The right side of the overview section*/
+#overview-col-right {
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+}
+
+#overview-metric-4 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#overview-metric-5 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+
+/*********************************************************/
+/**************** Total-Sentiment-Pie *******************/
+/*******************************************************/
+#total-sentiment-pie-container {
+    border: 3px solid black;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 11em 4em;
+}
+
+#total-sentiment-pie {
+    /*border: 3px solid red;*/
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+#total-sentiment-legend {
+    /*border: 3px solid blue;*/
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
