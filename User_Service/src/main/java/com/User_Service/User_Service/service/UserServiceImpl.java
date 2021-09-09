@@ -48,11 +48,13 @@ public class UserServiceImpl {
 
 
     /**
-     * This function logs the user in.
+     * This function logs the user in. The user will not be able to log in to the system
+     * if he/she is not verified.
      * @param request This class contains the user information for login.
      *                It contains the email of the user and password set
      *                by the user when registering their account.
-     * @return This returns a response contains the exit code**
+     * @return This returns a response containing information if the login attempt
+     *         was successful or not.
      */
     public LoginResponse login(LoginRequest request) throws NoSuchAlgorithmException, InvalidRequestException, InvalidKeySpecException {
         if(request == null) {
@@ -105,6 +107,7 @@ public class UserServiceImpl {
     /**
      * This function registers the user to the platform. It creates a new user and stores that user class to the
      * database using persistence. Advanced password security using PBKDF2WithHmacSHA1 algorithm.
+     * It will also send an email notification to the user containing their verification code.
      * @param request This class contains the user information to store the user within the system.
      * @return This returns a response contains if the registration of the user was successful.
      */
