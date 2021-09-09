@@ -36,6 +36,14 @@ public class VisualizeServiceImpl {
 
         ArrayList<ArrayList> outputData = new ArrayList<>();
 
+
+        //***********************Overview Section*************************//
+
+        //total likes
+        //most prominent Sentiment
+        //Number of trends
+        //NUmber of anomalys
+
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
         CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
@@ -90,6 +98,18 @@ public class VisualizeServiceImpl {
 
         return new VisualizeDataResponse( outputData );
     }
+
+    public GetTotalInteractionResponse getTotalInteraction(GetTotalInteractionRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
+        }
+        if (request.getDataList() == null) {
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        String output = "";
+        return new GetTotalInteractionResponse(null);
+    }
+
 
 
     public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
