@@ -22,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class UserServiceImpl {
@@ -30,9 +31,7 @@ public class UserServiceImpl {
     private UserRepository repository;
 
     @Autowired
-    private JavaMailSender emailSender;
-
-    private final Integer staticCode = 123456;
+    private NotificationServiceImpl notificationService;
 
     private final boolean mock = false;
 
@@ -69,6 +68,9 @@ public class UserServiceImpl {
         }
         else {
             User user = existingUser.get();
+            if(!user.getVerified()) {
+                return new LoginResponse("This account is not verified. Please verify to get access to the system", false);
+            }
             //password validation
             String[] parts = user.getPassword().split(":");
             int iterations = Integer.parseInt(parts[0]);
@@ -152,23 +154,6 @@ public class UserServiceImpl {
         newUser.setVerified(false);
         newUser.setVerificationCode(verificationCode);
 
-        if(!mock) {
-            String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
-            emailText += newUser.getVerificationCode() + "\n";
-
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("emergenoreply@gmail.com");
-            message.setTo(newUser.getEmail());
-            message.setSubject("Integrated Data Intelligence Suite Registration");
-            message.setText(emailText);
-
-            try {
-                emailSender.send(message);
-            } catch (MailException e) {
-                return new RegisterResponse(false, "An error has occured while sending an the activation code to user.");
-            }
-        }
-
         //Storing the user in the database
         User checkIfSaved = repository.save(newUser);
 
@@ -176,7 +161,25 @@ public class UserServiceImpl {
             return new RegisterResponse(false, "Registration failed");
         }
 
-        return new RegisterResponse(true, "Registration successful");
+        if(!mock) {
+            String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
+            emailText += newUser.getVerificationCode() + "\n";
+
+            String to = newUser.getEmail();
+            String from = "emergenoreply@gmail.com";
+            String subject = "Integrated Data Intelligence Suite Registration";
+
+            SendEmailNotificationRequest emailRequest = new SendEmailNotificationRequest(emailText, to, from, subject);
+
+            try {
+                CompletableFuture<SendEmailNotificationResponse> emailResponse  = notificationService.sendEmailNotification(emailRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new RegisterResponse(false, "An error has occurred while sending an the activation code to user. Exception in email sender was thrown.");
+            }
+        }
+
+        return new RegisterResponse(true, "Registration successful. An email will be sent shortly containing your registration details.");
     }
 
     /**
@@ -229,7 +232,7 @@ public class UserServiceImpl {
                 adminEmails = admins.toArray(adminEmails);
                 message.setTo(adminEmails);
             }
-            emailSender.send(message);
+            //emailSender.send(message);
             return new RequestAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
         }
         else {
