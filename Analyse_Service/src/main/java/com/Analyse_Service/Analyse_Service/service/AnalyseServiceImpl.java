@@ -7,6 +7,8 @@ import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepos
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.EmbeddingsFinisher;
 import com.johnsnowlabs.nlp.Finisher;
@@ -63,8 +65,12 @@ import org.apache.spark.sql.types.*;
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
+//import org.mlflow.api.proto.Service.*;
 import org.mlflow.api.proto.Service.RunInfo;
 import org.mlflow.api.proto.Service.Experiment;
+import org.mlflow.api.proto.Service.LogModel.*;
+//import org.mlflow.api.proto.Service.LogModelOrBuilder.*;
+import org.mlflow.api.proto.ModelRegistry.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +80,8 @@ import scala.Function1;
 import scala.collection.*;
 import scala.collection.mutable.WrappedArray;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -180,22 +188,22 @@ public class AnalyseServiceImpl {
         //GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
         //GetPredictionResponse getPredictionResponse = this.GetPredictions(getPredictionRequest);
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
-        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        //FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
+        //FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
         /*****TRAIN****/
 
         //TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
         //TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
 
-        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
-        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
         return new AnalyseDataResponse(
                 null,
@@ -835,17 +843,64 @@ public class AnalyseServiceImpl {
 
 
 
+        File modelFile = null;
         try {
             lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
 
-            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-            client.logArtifact(run.getId(), modelFile);
+            modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            //client.logArtifact(run.getId(), modelFile);
         }catch (Exception e){
            e.printStackTrace();
         }
 
-        //client
 
+
+
+
+
+
+
+
+        if(modelFile  != null) {
+
+            ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+            mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+            ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+            String jsonString=ow.writeValueAsString(modelFile);
+
+            //String jsonString = String.valueOf(modelFile);
+
+            //mlflow api
+            //LogModel.newBuilder();
+            Builder build = org.mlflow.api.proto.Service.LogModel.newBuilder();
+            build.setModelJson(jsonString);
+
+            //LogModel.Response response;
+
+
+            //File modelFileDownlaod = client.do .downloadArtifacts(run.getId());
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //client
         run.endRun();
 
         /***********************SETUP MLFLOW***********************/
