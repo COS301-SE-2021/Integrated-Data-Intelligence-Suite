@@ -118,6 +118,7 @@
     "operator-assignment": "off",
     "lines-between-class-members": "off",
     "react/jsx-curly-newline": "off",
-    "object-shorthand": "off"
+    "object-shorthand": "off",
+    "class-methods-use-this": "off"
   }
 }
