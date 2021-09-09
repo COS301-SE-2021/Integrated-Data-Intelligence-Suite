@@ -135,6 +135,7 @@
     max-height: 100vh;
     max-width: 100vw;
     overflow-y: scroll;
+    overflow-x: hidden;
     padding: 6%;
     padding-top: 2%;
     background: var(--light-gray);
@@ -154,21 +155,48 @@
     grid-template-rows: repeat(2, auto);
 }
 
+#world-map > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+}
+
+
 #map-metric-container {
     grid-row-start: 1;
     grid-row-end: 2;
 
     /*Internal display of the map-metric-container*/
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
-    column-gap: 20px;
+    column-gap: 10px;
 }
 
 
 #complex-graph {
     grid-row-start: 2;
     grid-row-end: 3;
+}
+
+#map-metric-1 > .simple-card-title {
+    padding: 10px;
+    /*padding-left: 0px;*/
+    text-align: left;
+
+}
+
+#map-metric-2 > .simple-card-title {
+    padding: 10px;
+    /*padding-left: 0px;*/
+    text-align: left;
+}
+
+#location-section {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 100%;
+    row-gap: 10px;
 }
 
 
