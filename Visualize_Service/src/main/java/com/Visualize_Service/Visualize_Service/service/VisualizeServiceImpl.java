@@ -39,10 +39,28 @@ public class VisualizeServiceImpl {
 
         //***********************Overview Section*************************//
 
-        //total likes
-        //most prominent Sentiment
-        //Number of trends
-        //NUmber of anomalys
+        //total likes                                     <- D
+        //most prominent Sentiment                        <- D
+        //Number of trends                                <- D
+        //NUmber of anomalys                              <- D
+
+        //Bar Graph(Average Interaction)                  <- D
+        //PieChart(Overall section)                       <- D
+        // Bar Graph(total Engagement in each location)   <-
+
+        //map                                             <- D
+        //frequecy of tweets in trend                     <- D
+
+        //word cloud                                      <- D*
+        //word cloud pie chart                            <-
+        //word cloud sunburst                             <-
+
+        //Network graph1(Relationships)                   <- D
+        // Network graph 2(Patterns)                      <-
+
+        //Timeline(Anomaly)                               <- D
+        // scatter plot * tentative                       <-
+        // Map Metric 2 (Number of tweets over time )     <-
 
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
@@ -357,7 +375,7 @@ public class VisualizeServiceImpl {
         return new CreateLineGraphInteractionsResponse(output);
     }
 
-
+    //frequecy of tweets in trend
     public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request) throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -389,6 +407,7 @@ public class VisualizeServiceImpl {
         return new CreateBarGraphResponse(output);
     }
 
+    //Fregency of entity type
     public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request) throws InvalidRequestException {
 
         if (request == null) {
