@@ -956,6 +956,13 @@ public class AnalyseServiceImpl {
             r.add(texts);
             r.add( rawResults.get(i).get(2).toString());
 
+            ArrayList<String> likes =new ArrayList<>();
+            List<Row> rawlikes = itemsDF.select("Likes").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawlikes.toString());
+            for (int j = 0; j < rawlikes.size(); j++) {
+                likes.add(rawlikes.get(j).get(0).toString());
+            }
+            r.add(likes);
             results.add(r);
 
         }
