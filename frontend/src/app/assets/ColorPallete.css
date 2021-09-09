@@ -1,7 +1,9 @@
 :root {
     /*Overall App*/
     --neon-blue: #5773FA;
-    --light-gray: #f4f7fc;
+    /*--light-gray: #f4f7fc;*/
+    --light-gray: #F1F2F8;
+    --amount-increasing: #00b074;
 
     /*******************************/
     /********Profile Page***********/
