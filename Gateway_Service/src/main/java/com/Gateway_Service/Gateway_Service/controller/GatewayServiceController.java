@@ -145,10 +145,11 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/verify",
+    @PostMapping(value = "/user/verify",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
+        System.out.println("Verifying User: " + request.getEmail());
         VerifyAccountResponse response = userClient.verifyAccount(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

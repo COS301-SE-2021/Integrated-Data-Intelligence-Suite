@@ -153,7 +153,7 @@ public class UserServiceImpl {
         newUser.setVerificationCode(verificationCode);
 
         if(!mock) {
-            String emailText = "Thank you for signing up. Your verification code is:\n";
+            String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
             emailText += newUser.getVerificationCode() + "\n";
 
             SimpleMailMessage message = new SimpleMailMessage();
@@ -243,6 +243,7 @@ public class UserServiceImpl {
      * @param request This class contains the information of the user.
      * @return The return class returns if the verification process was successful**
      */
+    @Transactional
     public VerifyAccountResponse verifyAccount(VerifyAccountRequest request) throws Exception {
         if(request == null) {
             throw new InvalidRequestException("The request is null.");
