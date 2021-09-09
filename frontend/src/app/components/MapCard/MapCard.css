@@ -69,7 +69,7 @@
 /* The div contains the Actual Map component */
 #map_container_div {
     height: 320px;
-    width: 91%;
+    width: 100%;
     /*border: 3px solid yellow;*/
     /*border: 0;*/
     padding: 0;

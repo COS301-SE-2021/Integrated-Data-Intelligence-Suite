@@ -17,21 +17,21 @@ export default class OverviewSection extends React.Component {
                         cardTitle="Number Of Mentions"
                         cardID="overview-metric-1"
                     >
-                        <UberBarGraph/>
+                        45,541,14
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Locations Engaged"
                         cardID="overview-metric-3"
                     >
-                        <UberBarGraph/>
+                        5,413
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Overall Sentiment"
                         cardID="overview-metric-2"
                     >
-                        <PieChart/>
+                        bad
                     </SimpleCard>
                 </div>
 
