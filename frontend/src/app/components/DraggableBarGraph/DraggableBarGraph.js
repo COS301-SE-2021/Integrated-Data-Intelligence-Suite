@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, Crosshair,
+    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, Crosshair, Hint,
 } from 'react-vis';
 
 const DATA = [
@@ -48,6 +48,7 @@ export default class DraggableBarGraph extends React.Component {
             selectionStart: null,
             selectionEnd: null,
             crosshairValues: [],
+            hoveredNode: null,
         };
     }
 
@@ -57,7 +58,11 @@ export default class DraggableBarGraph extends React.Component {
             const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
             let sum = 0;
+            let yMax = -1000
             const lst = Object.values(DATA).filter((item) => {
+                if (yMax < item.y) {
+                    yMax = item.y;
+                }
                 if (item.x > lowerBound && item.x < upperBound) {
                     sum += item.y;
                     return true;
@@ -66,6 +71,11 @@ export default class DraggableBarGraph extends React.Component {
             });
 
             sum /= lst.length;
+            this.state.hoveredNode = {
+                x: DATA[0].x0,
+                y: yMax,
+                value: sum,
+            }
             console.log(lst);
             console.log(sum);
         }
@@ -93,7 +103,7 @@ export default class DraggableBarGraph extends React.Component {
 
         return (
             <div>
-                <XYPlot onMouseLeave={() => this.setState({ crosshairValues: [] })} width={500} height={300}>
+                <XYPlot width={500} height={300}>
                     <XAxis />
                     <YAxis />
                     <VerticalRectSeries
@@ -111,7 +121,6 @@ export default class DraggableBarGraph extends React.Component {
 
                             return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
                         }}
-                      onNearestX={(value, { index }) => this.setState({ crosshairValues: [{x: value.x }] })}
                     />
 
                     <Highlight
@@ -121,10 +130,15 @@ export default class DraggableBarGraph extends React.Component {
                       onDrag={updateDragState}
                       onDragEnd={updateDragState}
                     />
-                    <Crosshair
-                        values={this.state.crosshairValues}
-                        className={'test-class-name'}
-                    />
+                    { this.state.hoveredNode && selectionEnd && (
+                        <Hint
+                          value={{
+                                x: this.state.hoveredNode.x,
+                                y: this.state.hoveredNode.y,
+                                Average: this.state.hoveredNode.value,
+                            }}
+                        />
+                    )}
                 </XYPlot>
 
                 <div>
