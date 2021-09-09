@@ -172,7 +172,7 @@ public class UserServiceImpl {
         //Storing the user in the database
         User checkIfSaved = repository.save(newUser);
 
-        if(checkIfSaved == newUser) {
+        if(checkIfSaved != newUser) {
             return new RegisterResponse(false, "Registration failed");
         }
 
