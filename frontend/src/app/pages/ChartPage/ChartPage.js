@@ -42,6 +42,8 @@ import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import UberLineGraph from '../../components/UberLineGraph/UberLineGraph';
 import UberSunburstGraph from '../../components/UberSunburstGraph/UberSunburstGraph';
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
+import UberBarGraph from '../../components/UberBarGraph/UberBarGraph';
+import OverviewSection from '../../components/OverviewSection/OverviewSection';
 
 const {
     Title,
@@ -346,55 +348,10 @@ class ChartPage extends Component {
                                     {/* </Content> */}
                                     <div id="content-section">
                                         <SimpleSection
-                                            cardTitle="Overview"
+                                            cardTitle=" "
                                             cardID="row-1"
                                         >
-                                            <div
-                                                id="indicator-card-container"
-                                            >
-                                                <div id={'overview-col-left'}>
-                                                    <SimpleCard
-                                                        cardTitle="Number Of Mentions"
-                                                        cardID="overview-metric-1"
-                                                    >
-                                                        <UberLineGraph/>
-                                                    </SimpleCard>
-
-                                                    <SimpleCard
-                                                        cardTitle="Number of countries engaging"
-                                                        cardID="overview-metric-2"
-                                                    >
-                                                        <UberLineGraph/>
-                                                    </SimpleCard>
-
-                                                    <SimpleCard
-                                                        cardTitle="Overall Sentiment"
-                                                        cardID="overview-metric-3"
-                                                    >
-                                                        <UberLineGraph/>
-                                                    </SimpleCard>
-                                                </div>
-
-                                                <div
-                                                    id={'overview-col-right'}
-                                                >
-                                                    <SimpleCard
-                                                        cardTitle={'Number of Relationships found'}
-                                                        cardID={'overview-metric-4'}
-                                                    >
-                                                        <UberLineGraph/>
-                                                    </SimpleCard>
-
-                                                    <SimpleCard
-                                                        cardTitle={'Metric 5'}
-                                                        cardID={'overview-metric-5'}
-                                                    >
-                                                        <UberLineGraph/>
-                                                    </SimpleCard>
-                                                </div>
-
-
-                                            </div>
+                                            <OverviewSection/>
                                         </SimpleSection>
 
                                         <SimpleSection
@@ -402,7 +359,6 @@ class ChartPage extends Component {
                                             cardID="row-2"
                                         >
                                             <div>
-
                                                 <div id="map-metric-container">
                                                     {/* <Card */}
                                                     {/*    id="map-card" */}
@@ -453,10 +409,10 @@ class ChartPage extends Component {
                                             </div>
                                         </SimpleSection>
 
-                                        <SimpleSection
-                                            cardTitle="Network"
-                                            cardID="row-4"
-                                        />
+                                        {/*<SimpleSection*/}
+                                        {/*    cardTitle="Network"*/}
+                                        {/*    cardID="row-4"*/}
+                                        {/*/>*/}
                                     </div>
                                 </Layout>
                             </Layout>
