@@ -47,7 +47,7 @@ export default class DraggableBarGraph extends React.Component {
         this.state = {
             selectionStart: null,
             selectionEnd: null,
-            hoveredNode: null,
+            average: "",
         };
     }
 
@@ -56,27 +56,23 @@ export default class DraggableBarGraph extends React.Component {
             const lowerBound = Math.floor(this.state.selectionStart);
             const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
-            let sum = 0;
+            let avg = 0;
             let yMax = -1000;
             const lst = Object.values(DATA).filter((item) => {
                 if (yMax < item.y) {
                     yMax = item.y;
                 }
                 if (item.x > lowerBound && item.x < upperBound) {
-                    sum += item.y;
+                    avg += item.y;
                     return true;
                 }
                 return false;
             });
 
-            sum /= lst.length;
-            this.state.hoveredNode = {
-                x: DATA[0].x0,
-                y: yMax,
-                value: sum,
-            };
+            avg /= lst.length;
+            this.setState({ average: avg });
             console.log(lst);
-            console.log(sum);
+            console.log(avg);
         }
     }
 
@@ -101,15 +97,17 @@ export default class DraggableBarGraph extends React.Component {
         // };
 
         return (
-            <div>
-                <XYPlot width={500} height={300}>
-                    <XAxis />
-                    <YAxis />
-                    <VerticalRectSeries
-                      data={DATA}
-                      stroke="white"
-                      colorType="literal"
-                      getColor={(d) => {
+            <div className="uber-bar-graph-container">
+                { selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}
+                <div className="bar-graph-plot">
+                    <XYPlot width={300} height={150}>
+                        <XAxis />
+                        <YAxis />
+                        <VerticalRectSeries
+                          data={DATA}
+                          stroke="white"
+                          colorType="literal"
+                          getColor={(d) => {
                             if (selectionStart === null || selectionEnd === null) {
                                 return '#1E96BE';
                             }
@@ -120,34 +118,25 @@ export default class DraggableBarGraph extends React.Component {
 
                             return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
                         }}
-                    />
-
-                    <Highlight
-                      color="#829AE3"
-                      drag
-                      enableY={false}
-                      onDrag={updateDragState}
-                      onDragEnd={updateDragState}
-                    />
-                    { this.state.hoveredNode && selectionEnd && (
-                        <Hint
-                          align={{ horizontal: 'left', vertical: 'top' }}
-                          value={{
-                                x: this.state.hoveredNode.x,
-                                y: this.state.hoveredNode.y,
-                                Average: this.state.hoveredNode.value,
-                            }}
                         />
-                    )}
-                </XYPlot>
 
-                {/* <div> */}
-                {/*    <b>selectionStart:</b> */}
-                {/*    {`${Math.floor(selectionStart * 100) / 100},`} */}
-                {/*    <b>selectionEnd:</b> */}
-                {/*    {`${Math.floor(selectionEnd * 100) / 100},`} */}
-                {/*    <b>Average of Y Values of Highlighted Bar Graphs</b> */}
-                {/* </div> */}
+                        <Highlight
+                          color="#829AE3"
+                          drag
+                          enableY={false}
+                          onDrag={updateDragState}
+                          onDragEnd={updateDragState}
+                        />
+                    </XYPlot>
+
+                    {/* <div> */}
+                    {/*    <b>selectionStart:</b> */}
+                    {/*    {`${Math.floor(selectionStart * 100) / 100},`} */}
+                    {/*    <b>selectionEnd:</b> */}
+                    {/*    {`${Math.floor(selectionEnd * 100) / 100},`} */}
+                    {/*    <b>Average of Y Values of Highlighted Bar Graphs</b> */}
+                    {/* </div> */}
+                </div>
             </div>
         );
     }
