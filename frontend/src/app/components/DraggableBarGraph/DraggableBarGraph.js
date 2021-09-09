@@ -5,41 +5,64 @@ import {
 
 const DATA = [
     {
+        classname: 'circle1',
         x0: 0,
         x: 1,
         y: 1,
     },
     {
+        classname: 'circle2',
         x0: 1,
         x: 2,
         y: 2,
     },
     {
+        classname: 'circle3',
         x0: 2,
         x: 3,
         y: 10,
     },
     {
+        classname: 'circle1',
         x0: 3,
         x: 4,
         y: 6,
     },
     {
+        classname: 'circle1',
         x0: 4,
         x: 5,
         y: 5,
     },
     {
+        classname: 'circle3',
         x0: 5,
         x: 6,
         y: 3,
     },
     {
+        classname: 'circle2',
         x0: 6,
         x: 7,
         y: 1,
     },
 ];
+
+function highlightMapPoints(highlighted_points) {
+    const old_highlighted_points = document.getElementsByClassName('chosen_circle');
+    for (let i = 0; i < old_highlighted_points.length; i++) {
+        old_highlighted_points[i].classList.remove('chosen_circle')
+    }
+
+    for (let i = 0; i < highlighted_points.length; i++) {
+        const points_to_change = document.getElementsByClassName(highlighted_points[i].classname)
+        for (let j = 0; j < points_to_change.length; j++) {
+            console.log(points_to_change[j])
+            points_to_change[j].classList.add('chosen_circle')
+        }
+    }
+
+}
 
 export default class DraggableBarGraph extends React.Component {
     constructor(props) {
@@ -57,14 +80,13 @@ export default class DraggableBarGraph extends React.Component {
             const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
             let avg = 0;
-            let yMax = -1000;
+
+            // const highlighted_classes = []
             const lst = Object.values(DATA)
                 .filter((item) => {
-                    if (yMax < item.y) {
-                        yMax = item.y;
-                    }
                     if (item.x > lowerBound && item.x < upperBound) {
                         avg += item.y;
+                        // highlighted_classes.push(item.classname);
                         return true;
                     }
                     return false;
@@ -74,6 +96,7 @@ export default class DraggableBarGraph extends React.Component {
             this.setState({ average: avg });
             console.log(lst);
             console.log(avg);
+            highlightMapPoints(lst);
         }
     }
 
@@ -94,14 +117,14 @@ export default class DraggableBarGraph extends React.Component {
             <div className="uber-bar-graph-container">
                 {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}
                 <div className="bar-graph-plot">
-                    <XYPlot width={300} height={150}>
-                        <XAxis/>
-                        <YAxis/>
+                    <XYPlot width={300} height={200}>
+                        <XAxis />
+                        <YAxis />
                         <VerticalRectSeries
-                            data={DATA}
-                            stroke="white"
-                            colorType="literal"
-                            getColor={(d) => {
+                          data={DATA}
+                          stroke="white"
+                          colorType="literal"
+                          getColor={(d) => {
                                 if (selectionStart === null || selectionEnd === null) {
                                     return '#1E96BE';
                                 }
@@ -115,19 +138,19 @@ export default class DraggableBarGraph extends React.Component {
                         />
 
                         <Highlight
-                            color="#829AE3"
-                            drag
-                            enableY={false}
-                            onDrag={updateDragState}
-                            onDragEnd={updateDragState}
+                          color="#829AE3"
+                          drag
+                          enableY={false}
+                          onDrag={updateDragState}
+                          onDragEnd={updateDragState}
                         />
                         {this.state.hoveredNode && selectionEnd && (
                             <Hint
-                                align={{
+                              align={{
                                     horizontal: 'left',
-                                    vertical: 'top'
+                                    vertical: 'top',
                                 }}
-                                value={{
+                              value={{
                                     x: this.state.hoveredNode.x,
                                     y: this.state.hoveredNode.y,
                                     Average: this.state.hoveredNode.value,
