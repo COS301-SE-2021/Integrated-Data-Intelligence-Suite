@@ -159,8 +159,6 @@ export default class UberLineGraph extends React.Component {
                     >
                         <YAxis
                             className="cool-custom-name"
-                            tickSizeInner={0}
-                            tickSizeOuter={8}
                         />
                         <XAxis
                             className="even-cooler-custom-name"
