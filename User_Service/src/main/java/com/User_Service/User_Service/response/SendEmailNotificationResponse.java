@@ -1,14 +1,14 @@
 package com.User_Service.User_Service.response;
 
-public class SendNotificationResponse {
+public class SendEmailNotificationResponse {
     private String message;
     private boolean success;
 
-    public SendNotificationResponse() {
+    public SendEmailNotificationResponse() {
 
     }
 
-    public SendNotificationResponse(String message, boolean success) {
+    public SendEmailNotificationResponse(boolean success, String message) {
         this.message = message;
         this.success = success;
     }
