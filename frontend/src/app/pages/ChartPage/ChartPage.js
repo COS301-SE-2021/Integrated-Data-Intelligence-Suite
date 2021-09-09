@@ -370,7 +370,12 @@ class ChartPage extends Component {
                                                     {/*  indicatorTitle="Map Metric 1" */}
                                                     {/*  cardID="map-metric" */}
                                                     {/* /> */}
-                                                    <DraggableBarGraph/>
+                                                    <SimpleCard
+                                                        cardTitle={'Map Metric 1'}
+                                                        cardID={'map-metric-1'}
+                                                    >
+                                                        <DraggableBarGraph/>
+                                                    </SimpleCard>
                                                     {/*<SimpleCard*/}
                                                     {/*  cardTitle="Map Metric 1"*/}
                                                     {/*  cardID="map-metric"*/}
