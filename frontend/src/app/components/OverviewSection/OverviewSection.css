@@ -24,16 +24,24 @@
     display: grid;
     grid-template-rows: 100%;
     grid-template-columns: repeat(3, 1fr);
-    column-gap: 4%;
+    /*column-gap: 4%;*/
+    background: #ffffff;;
+    border: 2px solid #e8e8e9;
+    border-radius: 10px;
+    padding: 5px;
+    height: 284px;
 }
 
 #overview-metric-1 {
     grid-column-start: 1;
     grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
     height: fit-content;
     padding: 15px;
     padding-left: 11px;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
 
 }
@@ -47,17 +55,19 @@
 #overview-metric-2 {
     grid-column-start: 2;
     grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
     height: fit-content;
     padding: 15px;
     padding-left: 11px;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
+    margin: 0;
 }
 
 #overview-metric-2 > .simple-card-title {
     padding: 10px;
     padding-left: 0px;
-
     text-align: left;
 }
 
@@ -65,15 +75,19 @@
     padding: 10px;
     padding-left: 0px;
     text-align: left;
+
 }
 
 #overview-metric-3 {
     grid-column-start: 3;
     grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
     height: fit-content;
     padding: 15px;
     padding-left: 11px;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
     background: white;
 }
 
@@ -102,11 +116,25 @@
 /*********************************************************/
 /**************** Total-Sentiment-Pie *******************/
 /*******************************************************/
+.pie-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 30% 70%;
+    height: 200px;
+    margin: 0;
+}
+
+#sum-of-slices {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+
 #total-sentiment-pie-container {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: 11em 4em;
+    grid-template-rows: 100%;
 }
 
 #total-sentiment-pie {

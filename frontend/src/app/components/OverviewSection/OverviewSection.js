@@ -22,14 +22,14 @@ export default class OverviewSection extends React.Component {
 
                     <SimpleCard
                         cardTitle="Locations Engaged"
-                        cardID="overview-metric-2"
+                        cardID="overview-metric-3"
                     >
                         <UberBarGraph/>
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Overall Sentiment"
-                        cardID="overview-metric-3"
+                        cardID="overview-metric-2"
                     >
                         <PieChart/>
                     </SimpleCard>

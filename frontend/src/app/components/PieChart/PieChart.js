@@ -63,18 +63,19 @@ export default class PieChart extends React.Component {
 
         return (
             <>
-                <div className="graph-container">
+                <div className="pie-container">
+                    <div className={'sum-of-slices'}>{this.state.sumOfSlices}</div>
                     <div
                         id="total-sentiment-pie-container"
                     >
                         <VictoryPie
-                            colorScale={['#FF0000', '#ff7707', '#FFFF00', '#138808', '#00E000']}
+                            colorScale={['#FF0000', '#FFFF00', '#00E000']}
                             data={PieChartMock}
                             labels={() => null}
-                            // innerRadius={140}
-                            padAngle={1.5}
-                            height={700}
-                            width={700}
+                            innerRadius={69}
+                            padAngle={5.5}
+                            height={300}
+                            width={300}
                             animate={{
                                 duration: 500,
                             }}
@@ -98,42 +99,40 @@ export default class PieChart extends React.Component {
                                 }
                             }]}
                         />
-                        <div id={this.props.legendID}>
-                            <VictoryLegend
-                                orientation={this.props.legendOrientation}
-                                height={100}
-                                // width={300}
-                                gutter={20}
-                                containerComponent={<VictoryContainer responsive/>}
-                                data={[
-                                    {
-                                        name: 'Very Bad',
-                                        symbol: {
-                                            fill: '#FF0000',
-                                        },
-                                    },
-                                    {
-                                        name: 'Bad',
-                                        symbol: { fill: '#ff7707' },
-                                    },
-                                    {
-                                        name: 'Neutral',
-                                        symbol: { fill: '#FFFF00' },
-                                    },
-                                    {
-                                        name: 'Good',
-                                        symbol: { fill: '#138808' },
-                                    },
-                                    {
-                                        name: 'Very Good',
-                                        symbol: { fill: '#00E000' },
-                                    },
-                                ]}
-                            />
-                        </div>
-
+                        {/*<div id={this.props.legendID}>*/}
+                        {/*    <VictoryLegend*/}
+                        {/*        orientation={this.props.legendOrientation}*/}
+                        {/*        height={100}*/}
+                        {/*        // width={300}*/}
+                        {/*        gutter={20}*/}
+                        {/*        containerComponent={<VictoryContainer responsive/>}*/}
+                        {/*        data={[*/}
+                        {/*            {*/}
+                        {/*                name: 'Very Bad',*/}
+                        {/*                symbol: {*/}
+                        {/*                    fill: '#FF0000',*/}
+                        {/*                },*/}
+                        {/*            },*/}
+                        {/*            {*/}
+                        {/*                name: 'Bad',*/}
+                        {/*                symbol: { fill: '#ff7707' },*/}
+                        {/*            },*/}
+                        {/*            {*/}
+                        {/*                name: 'Neutral',*/}
+                        {/*                symbol: { fill: '#FFFF00' },*/}
+                        {/*            },*/}
+                        {/*            {*/}
+                        {/*                name: 'Good',*/}
+                        {/*                symbol: { fill: '#138808' },*/}
+                        {/*            },*/}
+                        {/*            {*/}
+                        {/*                name: 'Very Good',*/}
+                        {/*                symbol: { fill: '#00E000' },*/}
+                        {/*            },*/}
+                        {/*        ]}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
                     </div>
-                    <div>{this.state.sumOfSlices}</div>
                 </div>
             </>
         );
