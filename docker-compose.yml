@@ -99,9 +99,10 @@ services:
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
 
+    # Forward the exposed port 8080 on the container to port 8080 on the host machine
     ports:
       - 9003:9003
-      #- 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+
     links:
       - database
 
@@ -175,6 +176,5 @@ services:
 
 #Volumes for DB data
 volumes:
-  #scrum-data:
   database-data:
   pgdata:

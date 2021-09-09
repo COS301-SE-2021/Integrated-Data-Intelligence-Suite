@@ -68,7 +68,7 @@ import org.mlflow.tracking.MlflowContext;
 //import org.mlflow.api.proto.Service.*;
 import org.mlflow.api.proto.Service.RunInfo;
 import org.mlflow.api.proto.Service.Experiment;
-import org.mlflow.api.proto.Service.LogModel.*;
+import org.mlflow.api.proto.Service.LogMetric.*;
 //import org.mlflow.api.proto.Service.LogModelOrBuilder.*;
 import org.mlflow.api.proto.ModelRegistry.*;
 
@@ -82,9 +82,11 @@ import scala.collection.mutable.WrappedArray;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.CodedOutputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -848,7 +850,7 @@ public class AnalyseServiceImpl {
             lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
 
             modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-            //client.logArtifact(run.getId(), modelFile);
+            client.logArtifact(run.getId(), modelFile);
         }catch (Exception e){
            e.printStackTrace();
         }
@@ -861,8 +863,7 @@ public class AnalyseServiceImpl {
 
 
 
-        if(modelFile  != null) {
-
+        /*if(modelFile  != null) {
             ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
             mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
             mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
@@ -874,15 +875,31 @@ public class AnalyseServiceImpl {
 
             //mlflow api
             //LogModel.newBuilder();
-            Builder build = org.mlflow.api.proto.Service.LogModel.newBuilder();
-            build.setModelJson(jsonString);
+            Builder build = org.mlflow.api.proto.Service.LogMetric.newBuilder();
+            //build.setModelJson(jsonString);
+            build.setRunId(run.getId());
+            build.setKey("areaUnderROC");
+            build.setValue( binaryClassificationMetrics.areaUnderROC());
+            build.setTimestamp(new Date().getTime());
+            org.mlflow.api.proto.Service.LogMetric metriclOutput = build.build();
+
+            //metriclOutput.getDescriptorForType()
+
+            //GeneratedMessageV3.FieldAccessorTable table = metriclOutput.internalGetFieldAccessorTable() ;
+
+            //CodedOutputStream stream = null;
+            //metriclOutput.writeTo(stream);
+
+
+
+            //org.mlflow.api.proto.Service.LogModel modelOutput = build.build();
 
             //LogModel.Response response;
 
 
             //File modelFileDownlaod = client.do .downloadArtifacts(run.getId());
 
-        }
+        }*/
 
 
 
