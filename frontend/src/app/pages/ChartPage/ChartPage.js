@@ -348,7 +348,7 @@ class ChartPage extends Component {
                                     {/* </Content> */}
                                     <div id="content-section">
                                         <SimpleSection
-                                            cardTitle="Overview"
+                                            cardTitle=""
                                             cardID="row-1"
                                         >
                                             <OverviewSection/>

@@ -47,7 +47,7 @@ export default class DraggableBarGraph extends React.Component {
         this.state = {
             selectionStart: null,
             selectionEnd: null,
-            average: "",
+            average: '',
         };
     }
 
@@ -58,16 +58,17 @@ export default class DraggableBarGraph extends React.Component {
 
             let avg = 0;
             let yMax = -1000;
-            const lst = Object.values(DATA).filter((item) => {
-                if (yMax < item.y) {
-                    yMax = item.y;
-                }
-                if (item.x > lowerBound && item.x < upperBound) {
-                    avg += item.y;
-                    return true;
-                }
-                return false;
-            });
+            const lst = Object.values(DATA)
+                .filter((item) => {
+                    if (yMax < item.y) {
+                        yMax = item.y;
+                    }
+                    if (item.x > lowerBound && item.x < upperBound) {
+                        avg += item.y;
+                        return true;
+                    }
+                    return false;
+                });
 
             avg /= lst.length;
             this.setState({ average: avg });
@@ -91,57 +92,58 @@ export default class DraggableBarGraph extends React.Component {
 
         return (
             <div className="uber-bar-graph-container">
-                { selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}
+                {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>}
                 <div className="bar-graph-plot">
                     <XYPlot width={300} height={150}>
-                        <XAxis />
-                        <YAxis />
+                        <XAxis/>
+                        <YAxis/>
                         <VerticalRectSeries
-                          data={DATA}
-                          stroke="white"
-                          colorType="literal"
-                          getColor={(d) => {
-                            if (selectionStart === null || selectionEnd === null) {
-                                return '#1E96BE';
-                            }
-                            const inX = d.x >= selectionStart && d.x <= selectionEnd;
-                            const inX0 = d.x0 >= selectionStart && d.x0 <= selectionEnd;
-                            const inStart = selectionStart >= d.x0 && selectionStart <= d.x;
-                            const inEnd = selectionEnd >= d.x0 && selectionEnd <= d.x;
+                            data={DATA}
+                            stroke="white"
+                            colorType="literal"
+                            getColor={(d) => {
+                                if (selectionStart === null || selectionEnd === null) {
+                                    return '#1E96BE';
+                                }
+                                const inX = d.x >= selectionStart && d.x <= selectionEnd;
+                                const inX0 = d.x0 >= selectionStart && d.x0 <= selectionEnd;
+                                const inStart = selectionStart >= d.x0 && selectionStart <= d.x;
+                                const inEnd = selectionEnd >= d.x0 && selectionEnd <= d.x;
 
-                            return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
-                        }}
-                    />
-
-                    <Highlight
-                        color="#829AE3"
-                        drag
-                        enableY={false}
-                        onDrag={updateDragState}
-                        onDragEnd={updateDragState}
-                    />
-                    {this.state.hoveredNode && selectionEnd && (
-                        <Hint
-                            align={{
-                                horizontal: 'left',
-                                vertical: 'top'
-                            }}
-                            value={{
-                                x: this.state.hoveredNode.x,
-                                y: this.state.hoveredNode.y,
-                                Average: this.state.hoveredNode.value,
+                                return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
                             }}
                         />
-                    )}
-                </XYPlot>
 
-                {/* <div> */}
-                {/*    <b>selectionStart:</b> */}
-                {/*    {`${Math.floor(selectionStart * 100) / 100},`} */}
-                {/*    <b>selectionEnd:</b> */}
-                {/*    {`${Math.floor(selectionEnd * 100) / 100},`} */}
-                {/*    <b>Average of Y Values of Highlighted Bar Graphs</b> */}
-                {/* </div> */}
+                        <Highlight
+                            color="#829AE3"
+                            drag
+                            enableY={false}
+                            onDrag={updateDragState}
+                            onDragEnd={updateDragState}
+                        />
+                        {this.state.hoveredNode && selectionEnd && (
+                            <Hint
+                                align={{
+                                    horizontal: 'left',
+                                    vertical: 'top'
+                                }}
+                                value={{
+                                    x: this.state.hoveredNode.x,
+                                    y: this.state.hoveredNode.y,
+                                    Average: this.state.hoveredNode.value,
+                                }}
+                            />
+                        )}
+                    </XYPlot>
+
+                    {/* <div> */}
+                    {/*    <b>selectionStart:</b> */}
+                    {/*    {`${Math.floor(selectionStart * 100) / 100},`} */}
+                    {/*    <b>selectionEnd:</b> */}
+                    {/*    {`${Math.floor(selectionEnd * 100) / 100},`} */}
+                    {/*    <b>Average of Y Values of Highlighted Bar Graphs</b> */}
+                    {/* </div> */}
+                </div>
             </div>
         );
     }

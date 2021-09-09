@@ -23,7 +23,7 @@
 
     display: grid;
     grid-template-rows: 100%;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     /*column-gap: 4%;*/
     background: #ffffff;;
     border: 2px solid #e8e8e9;
@@ -91,27 +91,25 @@
     background: white;
 }
 
-/*The right side of the overview section*/
-#overview-col-right {
-    grid-row-start: 2;
-    grid-row-end: 3;
-
-    display: grid;
-    grid-template-rows: 100%;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 10px;
-}
-
 #overview-metric-4 {
-    grid-column-start: 1;
-    grid-column-end: 2;
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    height: fit-content;
+    padding: 15px;
+    padding-left: 11px;
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
+    background: white;
 }
 
-#overview-metric-5 {
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
+#overview-metric-4 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
 
+}
 
 /*********************************************************/
 /**************** Total-Sentiment-Pie *******************/

@@ -14,24 +14,31 @@ export default class OverviewSection extends React.Component {
             <>
                 <div id={'overview-col-left'}>
                     <SimpleCard
-                        cardTitle="Number Of Mentions"
+                        cardTitle="Total Likes"
                         cardID="overview-metric-1"
                     >
                         45,541,14
                     </SimpleCard>
 
                     <SimpleCard
-                        cardTitle="Locations Engaged"
+                        cardTitle="Trends"
                         cardID="overview-metric-3"
                     >
                         5,413
                     </SimpleCard>
 
                     <SimpleCard
-                        cardTitle="Overall Sentiment"
+                        cardTitle="Average Sentiment"
                         cardID="overview-metric-2"
                     >
                         bad
+                    </SimpleCard>
+
+                    <SimpleCard
+                        cardTitle="Anomalies"
+                        cardID="overview-metric-4"
+                    >
+                        2100
                     </SimpleCard>
                 </div>
 
