@@ -58,7 +58,7 @@ export default class DraggableBarGraph extends React.Component {
             const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
             let sum = 0;
-            let yMax = -1000
+            let yMax = -1000;
             const lst = Object.values(DATA).filter((item) => {
                 if (yMax < item.y) {
                     yMax = item.y;
@@ -75,7 +75,7 @@ export default class DraggableBarGraph extends React.Component {
                 x: DATA[0].x0,
                 y: yMax,
                 value: sum,
-            }
+            };
             console.log(lst);
             console.log(sum);
         }
@@ -132,6 +132,7 @@ export default class DraggableBarGraph extends React.Component {
                     />
                     { this.state.hoveredNode && selectionEnd && (
                         <Hint
+                          align={{ horizontal: 'left', vertical: 'top' }}
                           value={{
                                 x: this.state.hoveredNode.x,
                                 y: this.state.hoveredNode.y,
