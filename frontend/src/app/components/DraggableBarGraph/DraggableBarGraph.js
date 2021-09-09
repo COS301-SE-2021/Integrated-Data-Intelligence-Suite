@@ -42,12 +42,11 @@ const DATA = [
 ];
 
 export default class DraggableBarGraph extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectionStart: null,
             selectionEnd: null,
-            crosshairValues: [],
             hoveredNode: null,
         };
     }
@@ -58,7 +57,7 @@ export default class DraggableBarGraph extends React.Component {
             const upperBound = Math.ceil(this.state.selectionEnd) + 1;
 
             let sum = 0;
-            let yMax = -1000
+            let yMax = -1000;
             const lst = Object.values(DATA).filter((item) => {
                 if (yMax < item.y) {
                     yMax = item.y;
@@ -75,7 +74,7 @@ export default class DraggableBarGraph extends React.Component {
                 x: DATA[0].x0,
                 y: yMax,
                 value: sum,
-            }
+            };
             console.log(lst);
             console.log(sum);
         }
@@ -94,12 +93,12 @@ export default class DraggableBarGraph extends React.Component {
             }, () => this.getAverageY());
         };
 
-        const barGraphHasBeenClicked = (d, { event }) => {
-            console.log('A bar graph has been clicked Below is the D value and event:');
-            console.log(d);
-            console.log(event);
-            console.log();
-        };
+        // const barGraphHasBeenClicked = (d, { event }) => {
+        //     console.log('A bar graph has been clicked Below is the D value and event:');
+        //     console.log(d);
+        //     console.log(event);
+        //     console.log();
+        // };
 
         return (
             <div>
@@ -132,6 +131,7 @@ export default class DraggableBarGraph extends React.Component {
                     />
                     { this.state.hoveredNode && selectionEnd && (
                         <Hint
+                          align={{ horizontal: 'left', vertical: 'top' }}
                           value={{
                                 x: this.state.hoveredNode.x,
                                 y: this.state.hoveredNode.y,
@@ -141,13 +141,13 @@ export default class DraggableBarGraph extends React.Component {
                     )}
                 </XYPlot>
 
-                <div>
-                    <b>selectionStart:</b>
-                    {`${Math.floor(selectionStart * 100) / 100},`}
-                    <b>selectionEnd:</b>
-                    {`${Math.floor(selectionEnd * 100) / 100},`}
-                    <b>Average of Y Values of Highlighted Bar Graphs</b>
-                </div>
+                {/* <div> */}
+                {/*    <b>selectionStart:</b> */}
+                {/*    {`${Math.floor(selectionStart * 100) / 100},`} */}
+                {/*    <b>selectionEnd:</b> */}
+                {/*    {`${Math.floor(selectionEnd * 100) / 100},`} */}
+                {/*    <b>Average of Y Values of Highlighted Bar Graphs</b> */}
+                {/* </div> */}
             </div>
         );
     }
