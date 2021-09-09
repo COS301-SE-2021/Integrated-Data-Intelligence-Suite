@@ -140,23 +140,25 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
-        TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
-        TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
+        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
         FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
-        TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
+        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
-
         FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
         FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+
+        /*************************************************/
+
+        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
         //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
@@ -167,7 +169,7 @@ public class AnalyseServiceImpl {
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList()) ;
+                findAnomaliesResponse.getPattenList());
     }
 
 
@@ -178,7 +180,7 @@ public class AnalyseServiceImpl {
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public TrainFindPatternResponse trainFindPattern(TrainFindPatternRequest request)
+    public FindPatternResponse findPattern(FindPatternRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
@@ -263,7 +265,7 @@ public class AnalyseServiceImpl {
 
         sparkPatterns.stop();*/
 
-        return new TrainFindPatternResponse(null);
+        return new FindPatternResponse(null);
     }
 
 
