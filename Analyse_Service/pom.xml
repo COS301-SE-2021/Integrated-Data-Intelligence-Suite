@@ -183,7 +183,7 @@
 			<version>1.20.0</version>
 		</dependency>
 
-		<dependency>
+		<!--dependency>
 			<groupId>org.mlflow</groupId>
 			<artifactId>mlflow-scoring</artifactId>
 			<version>1.20.0</version>
@@ -200,7 +200,7 @@
 			<artifactId>mlflow-parent</artifactId>
 			<version>1.20.0</version>
 			<type>pom</type>
-		</dependency>
+		</dependency-->
 
 
 
