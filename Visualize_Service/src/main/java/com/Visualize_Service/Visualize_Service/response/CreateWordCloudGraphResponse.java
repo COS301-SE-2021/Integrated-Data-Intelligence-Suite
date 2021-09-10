@@ -7,8 +7,11 @@ import java.util.ArrayList;
 public class CreateWordCloudGraphResponse {
     public ArrayList<Graph> words;
 
-    public CreateWordCloudGraphResponse(ArrayList<Graph> words){
+    public ArrayList<String> wordList;
+
+    public CreateWordCloudGraphResponse(ArrayList<Graph> words, ArrayList<String> wordList){
         this.words = words;
+        this.wordList = wordList;
     }
 
     public ArrayList<Graph> getWordGraphArray(){

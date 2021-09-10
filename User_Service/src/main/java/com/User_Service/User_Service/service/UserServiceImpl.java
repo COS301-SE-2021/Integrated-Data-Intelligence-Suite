@@ -6,8 +6,12 @@ import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
+import org.apache.commons.lang.RandomStringUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +21,19 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class UserServiceImpl {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private NotificationServiceImpl notificationService;
+
+    private final boolean mock = false;
 
     public UserServiceImpl() {
 
@@ -41,9 +48,13 @@ public class UserServiceImpl {
 
 
     /**
-     * This function logs the user in.
+     * This function logs the user in. The user will not be able to log in to the system
+     * if he/she is not verified.
      * @param request This class contains the user information for login.
-     * @return This returns a response contains the exit code**
+     *                It contains the email of the user and password set
+     *                by the user when registering their account.
+     * @return This returns a response containing information if the login attempt
+     *         was successful or not.
      */
     public LoginResponse login(LoginRequest request) throws NoSuchAlgorithmException, InvalidRequestException, InvalidKeySpecException {
         if(request == null) {
@@ -59,6 +70,9 @@ public class UserServiceImpl {
         }
         else {
             User user = existingUser.get();
+            if(!user.getVerified()) {
+                return new LoginResponse("This account is not verified. Please verify to get access to the system", false);
+            }
             //password validation
             String[] parts = user.getPassword().split(":");
             int iterations = Integer.parseInt(parts[0]);
@@ -93,6 +107,7 @@ public class UserServiceImpl {
     /**
      * This function registers the user to the platform. It creates a new user and stores that user class to the
      * database using persistence. Advanced password security using PBKDF2WithHmacSHA1 algorithm.
+     * It will also send an email notification to the user containing their verification code.
      * @param request This class contains the user information to store the user within the system.
      * @return This returns a response contains if the registration of the user was successful.
      */
@@ -105,7 +120,7 @@ public class UserServiceImpl {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
         if(repository == null) {
-            System.out.println("repository is null");
+            System.out.println("Repository is null");
         }
         System.out.println(request.getUsername());
         Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
@@ -134,10 +149,99 @@ public class UserServiceImpl {
 
         //Creating User
         User newUser = new User(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail(), hashedPass, Permission.VIEWING);
-        //Storing the user in the database
-        repository.save(newUser);
 
-        return new RegisterResponse(true, "Registration successful");
+        //Creating a verification code for the user to verify their account
+        String verificationCode = RandomStringUtils.random(64, true, true);
+
+        //Initializing their verified status to false and setting user's verification code
+        newUser.setVerified(false);
+        newUser.setVerificationCode(verificationCode);
+
+        //Storing the user in the database
+        User checkIfSaved = repository.save(newUser);
+
+        if(checkIfSaved != newUser) {
+            return new RegisterResponse(false, "Registration failed");
+        }
+
+        if(!mock) {
+            String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
+            emailText += newUser.getVerificationCode() + "\n";
+
+            String to = newUser.getEmail();
+            String from = "emergenoreply@gmail.com";
+            String subject = "Integrated Data Intelligence Suite Registration";
+
+            SendEmailNotificationRequest emailRequest = new SendEmailNotificationRequest(emailText, to, from, subject);
+
+            try {
+                CompletableFuture<SendEmailNotificationResponse> emailResponse  = notificationService.sendEmailNotification(emailRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new RegisterResponse(false, "An error has occurred while sending an the activation code to user. Exception in email sender was thrown.");
+            }
+        }
+
+        return new RegisterResponse(true, "Registration successful. An email will be sent shortly containing your registration details.");
+    }
+
+    /**
+     * This function allows a user to request to be an admin. It will send an admin user an
+     * email containing the details of the user that wants to request to be an admin.
+     * The admin will decide whether or not go through with the request.
+     * @param request This class contains the details of the user.
+     * @return This class entails if the registration of the user was successful or not.
+     * @throws InvalidRequestException This is thrown if the request is invalid.
+     */
+    @Transactional
+    public RequestAdminResponse requestAdmin(RequestAdminRequest request) throws InvalidRequestException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+
+        if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
+            throw new InvalidRequestException("One or more attributes of the register request is null.");
+        }
+
+        Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
+        if(usersByEmail.isPresent()) {
+            User user = usersByEmail.get();
+
+            if(user.getAdmin()) {
+                return new RequestAdminResponse(false, "The user is already an admin.");
+            }
+
+            String emailText = "A user has requested to be an admin. Please verify their details.\n";
+            emailText += "Name: " + user.getFirstName() + "\n";
+            emailText += "Surname: " + user.getLastName() + "\n";
+            emailText += "Email: " + user.getEmail() + "\n";
+            emailText += "Username: " + user.getUsername() + "\n";
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("emergenoreply@gmail.com");
+            message.setSubject("Admin Request");
+            message.setText(emailText);
+
+            ArrayList<User> adminUsers = repository.findUsersByAdmin();
+            ArrayList<String> admins = new ArrayList<String>();
+            String[] adminEmails = new String[adminUsers.size()];
+            if(adminUsers.isEmpty()) {
+                message.setTo("shreymandalia@gmail.com");
+            }
+            else {
+                for (User adminUser : adminUsers) {
+                    admins.add(adminUser.getEmail());
+                }
+                adminEmails = admins.toArray(adminEmails);
+                message.setTo(adminEmails);
+            }
+            //emailSender.send(message);
+            return new RequestAdminResponse(true, "Registration as admin successful. Your admin status will be updated when a current admin has verified your credentials.");
+        }
+        else {
+            return new RequestAdminResponse(false, "The user does not exist");
+        }
+
     }
 
     /**
@@ -145,8 +249,37 @@ public class UserServiceImpl {
      * @param request This class contains the information of the user.
      * @return The return class returns if the verification process was successful**
      */
-    public VerifyAccountResponse verifyAccount(VerifyAccountRequest request) {
-        return null;
+    @Transactional
+    public VerifyAccountResponse verifyAccount(VerifyAccountRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null.");
+        }
+
+        Optional<User> userCheck = repository.findUserByEmail(request.getEmail());
+
+        if(userCheck.isEmpty()) {
+            return new VerifyAccountResponse(false, "User does not exist");
+        }
+        else {
+            User user = userCheck.get();
+
+            if(user.getVerified()) {
+                return new VerifyAccountResponse(false, "This account has already been verified");
+            }
+
+            if(request.getVerificationCode().equals(user.getVerificationCode())) {
+                int success = repository.verifyUser(user.getId());
+                if(success == 0) {
+                    return new VerifyAccountResponse(false, "Unable to verify account");
+                }
+                else {
+                    return new VerifyAccountResponse(true, "Successfully verified account");
+                }
+            }
+            else {
+                return new VerifyAccountResponse(false, "Verification code is incorrect");
+            }
+        }
     }
 
     /**
@@ -199,8 +332,22 @@ public class UserServiceImpl {
      * @param request This is the request for the use case.
      * @return This class will contain the current user logged on.
      */
-    public GetCurrentUserResponse getCurrentUser(GetCurrentUserRequest request) {
-        return null;
+    public GetCurrentUserResponse getCurrentUser(GetCurrentUserRequest request) throws InvalidRequestException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        if(request.getId() == null) {
+            throw new InvalidRequestException("The request contains null");
+        }
+
+        Optional<User> currentUser = repository.findUserById(UUID.fromString(request.getId()));
+
+        if(currentUser.isPresent()) {
+            return new GetCurrentUserResponse(true, "Succesfully returned current user", currentUser.get().getFirstName(), currentUser.get().getLastName(), currentUser.get().getUsername(), currentUser.get().getEmail(), currentUser.get().getAdmin());
+        }
+        else {
+            return new GetCurrentUserResponse(false, "User does not exist.");
+        }
     }
 
     /**
@@ -212,7 +359,7 @@ public class UserServiceImpl {
     @Transactional
     public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
         if(request == null) {
-            throw new InvalidRequestException("The register request is null");
+            throw new InvalidRequestException("The Manage Permissions request is null");
         }
         if(request.getUsername() == null  || request.getNewPermission() == null) {
             throw new InvalidRequestException("One or more attributes of the register request is null");

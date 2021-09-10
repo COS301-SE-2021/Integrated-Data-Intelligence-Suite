@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
+
 import HomePage from './pages/HomePage/HomePage';
 import ChartPage from './pages/ChartPage/ChartPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
@@ -9,6 +10,7 @@ import Permissions from './pages/PermissionsPage/Permissions';
 import LogoutPage from './pages/LogoutPage/LogoutPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
+import VerifyPage from "./pages/VerifyPage/VerifyPage";
 import './App.scss';
 
 class App extends Component {
@@ -32,9 +34,14 @@ class App extends Component {
                         <ChartPage />
                     </Route>
 
-                    <Route exact path="/permissions">
-                        <Permissions />
-                    </Route>
+                <Route exact path="/verify">
+                    <VerifyPage />
+                </Route>
+
+                <Route exact path="/permissions">
+                    <Permissions />
+                </Route>
+
 
                     <Route exact path="/logout">
                         <LogoutPage />

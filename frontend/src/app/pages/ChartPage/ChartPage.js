@@ -127,6 +127,7 @@ class ChartPage extends Component {
                                         />
                                     </Header>
 
+
                                     {/* <Content id="content_section"> */}
                                     {/*    /!* <Layout *!/ */}
                                     {/*    /!*    id="map_card_content_layout_div" *!/ */}
@@ -191,6 +192,7 @@ class ChartPage extends Component {
                                     {/*        )} */}
                                     {/*    /> */}
 
+
                                     {/*    <IndicatorCard */}
                                     {/*        indicatorTitle="Sentiment vs Time" */}
                                     {/*        showArrow={false} */}
@@ -211,6 +213,7 @@ class ChartPage extends Component {
                                     {/*        )} */}
                                     {/*    /> */}
 
+
                                     {/*    /!*<IndicatorCard*!/ */}
                                     {/*    /!*    indicatorTitle="Tweet Content"*!/ */}
                                     {/*    /!*    showArrow={false}*!/ */}
@@ -225,6 +228,7 @@ class ChartPage extends Component {
                                     {/*            <VisxBarGroupGraph/> */}
                                     {/*        )} */}
                                     {/*    /> */}
+
 
                                     {/*    <IndicatorCard */}
                                     {/*        indicatorTitle="Frequency per country" */}

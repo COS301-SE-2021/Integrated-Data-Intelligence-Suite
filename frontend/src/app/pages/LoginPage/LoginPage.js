@@ -203,8 +203,18 @@ export default function LoginPage(props) {
                     </div>
                     <div id="login-card-svg-bg" />
 
-                </div>
-            </div>
-        </>
-    );
-}
+              <Divider className="or_divider">
+                  OR
+              </Divider>
+
+              <Form.Item>
+                  Cannot login?
+                  <Link to="/verify">
+                      <a className="register_link" href="#">Click here to verify account!</a>
+                  </Link>
+              </Form.Item>
+          </form>
+
+      </Card>
+  );
+};
