@@ -812,22 +812,21 @@ public class VisualizeServiceImpl {
 
     private String getLocation(double latitude , double longitude){
         ArrayList<String> provinces = new ArrayList<>();
-        provinces.add("Eastern Cape");  //0
-        provinces.add("Free State");  //1
-        provinces.add("Garden Route"); //2
-        provinces.add("Gauteng"); //3
-        provinces.add("KwaZulu Natal"); //4
-        provinces.add("Limpopo"); //5
+        provinces.add("Western Cape"); //0
+        provinces.add("Northern Cape"); //1
+        provinces.add("North West"); //2
+        provinces.add("Free State");  //3
+        provinces.add("Eastern Cape");  //4
+        provinces.add("KwaZulu Natal"); //5
         provinces.add("Mpumalanga"); //6
-        provinces.add("North West"); //7
-        provinces.add("Northern Cape"); //8
-        provinces.add("Western Cape"); //9
+        provinces.add("Gauteng"); //7
+        provinces.add("Limpopo"); //8
 
 
         ArrayList<double[]> box = new ArrayList<>();
         double[] codinateValue = null;
 
-        //Western Cape
+        /**Western Cape**/
         //-32.105816, 18.325114 - tl
         codinateValue = new double[2];
         codinateValue[0] = -32.105816;
@@ -856,49 +855,49 @@ public class VisualizeServiceImpl {
             return provinces.get(9);
         }
 
-        //Northern Cape
+        /**Northern Cape**/
         //-28.617306, 16.515919 - tl
         //-25.758013, 24.738063 - tr
         //-31.615170, 18.218633 - bl
         //-30.532062, 25.165362 - br
 
-        //North West
+        /**North West**/
         //-25.458714, 22.868166 - tl
         //-24.772334, 27.020998 - tr
         //-27.941580, 24.702883 - bl
         //-26.888332, 27.339602 - br
 
-        //Free State
+        /**Free State**/
         //-28.667645, 24.106132 - tl
         //-26.605363, 26.665158 - tr
         //-28.027116, 29.557151 - bl
         //-30.520515, 24.934890 - br
 
-        //Eastern Cape
+        /**Eastern Cape**/
         //-32.029244, 24.449780 - tl
         //-30.050545, 28.986950 - tr
         //-31.427866, 23.514043 - bl
         //-31.382586, 29.793336 - br
 
-        //KwaZulu Natal
+        /**KwaZulu Natal**/
         //-27.487467, 29.720804 - tl
         //-26.861960, 32.873880 - tr
         //-30.485275, 29.149515 - bl
         //-30.768887, 30.379984 - br
 
-        //Mpumalanga
+        /**Mpumalanga**/
         //-25.133998, 29.050638 - tl
         //-24.505796, 30.995218 - tr
         //-31.427866, 23.514043 - bl
         //-27.224009, 31.214945 - br
 
-        //Gauteng
+        /**Gauteng**/
         //-25.600567, 27.842142 - tl
         //-25.153889, 28.819925 - tr
         //-26.705037, 27.182963 - bl
         //-26.773717, 28.314554 - br
 
-        //Limpopo
+        /**Limpopo**/
         //-22.487459, 28.725519 - tl
         //-22.393532, 31.275307 - tr
         //-24.722124, 26.471358 - bl
@@ -909,7 +908,27 @@ public class VisualizeServiceImpl {
 
     private boolean isInBox(ArrayList<double[]> box, double latitude, double longitude) {
 
-        return false;
+        double[] topLeft = box.get(0);
+        double[] topRight = box.get(1);
+        double[] bottomLeft = box.get(2);
+        double[] bottomRight = box.get(3);
+
+
+        //check latitude
+        if ( (latitude  < bottomLeft[0]) || (latitude <  bottomRight[0]) )
+            return false;
+
+        if ( (latitude > topLeft[0]) || (latitude > topRight[0]) )
+            return false;
+
+        //check longitude
+        if ( (longitude < topLeft[1]) || (longitude < bottomLeft[1]) )
+            return false;
+
+        if ( (longitude > topRight[1]) || (longitude > bottomRight[1]) )
+            return false;
+
+        return true;
     }
 
 
