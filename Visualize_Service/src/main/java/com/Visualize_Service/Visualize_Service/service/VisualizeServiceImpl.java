@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class VisualizeServiceImpl {
@@ -806,41 +804,80 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        /*if (request.dataList == null){
+        if (request.dataList == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
-        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<String> wordList = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
 
-        ArrayList<String> wordList = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
-            //System.out.println(locs.toString());
+        HashMap<String, Integer> wordMap = new HashMap<>();
 
-            for (int j = 0; j < texts.size(); j++) {
-                String[] words = texts.get(j).toString().split(" ");
-                for(int k =0; k < words.length ; k++){
-                    if (filterdCloud.contains(words[k]) == false){
-                        wordList.add(words[k]);
-                    }
-                }
+        //ArrayList<String> wordList = new ArrayList<>();
+        for (int i = 0; i < wordList.size(); i++) {
+            if (wordMap.containsKey(wordList.get(i)) == false) {
+                wordMap.put(wordList.get(i), 1);
+            } else {
+                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
             }
         }
 
-        String text =wordList.get(0);
-        for(int i =1; i < wordList.size(); i++){
-            text = text + " " + wordList.get(i);
+
+        // Sort the list by values
+        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+
+        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
+        for (Map.Entry<String, Integer> values : list) {
+            finalHash.put(values.getKey(), values.getValue());
         }
 
-        WordCloudGraph out = new WordCloudGraph();
-        out.words = text;
 
-        System.out.println(out.words);
-        output.add(out);*/
+        //count word frequency
+        int totalCount = 0;
+        int sumCount = 0;
+
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            totalCount = totalCount + set.getValue();
+        }
+
+        //output
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            sumCount = sumCount + set.getValue();
+
+            if(((sumCount /totalCount)*100) < 75) {
+
+                PieChartGraph out = new PieChartGraph();
+                out.label = set.getKey();
+                out.x = set.getKey();
+                out.y = String.valueOf(set.getValue()/totalCount*100);
+
+                //System.out.println(out.words);
+                output.add(out);
+            }
+            else{
+                PieChartGraph out = new PieChartGraph();
+                out.label = "the rest";
+                out.x = "the rest";
+                out.y = String.valueOf(((totalCount - (sumCount+ set.getValue())) / totalCount) *100);
+
+                //System.out.println(out.words);
+                output.add(out);
+
+                break;
+            }
+        }
 
 
-        return new CreateWordCloudPieChartGraphResponse();
+        return new CreateWordCloudPieChartGraphResponse(output);
     }
 
     /*************************************************HELPER***********************************************************/
