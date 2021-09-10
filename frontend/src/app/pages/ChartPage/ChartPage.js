@@ -22,7 +22,7 @@ import LineGraph from '../../components/LineGraph/LineGraph';
 import PieChart from '../../components/PieChart/PieChart';
 import PieChartMockData from '../../Mocks/PieChartDataMock.json';
 import BarGraphMockData from '../../Mocks/BarGraphDataMock.json';
-import BarGraph from '../../components/BarGraph/BarGraph';
+import BarGraph from '../../components/BarGraph/VictoryBarGraph';
 import InfoDiv from '../../components/InfoDiv/InfoDiv';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
@@ -44,6 +44,7 @@ import UberSunburstGraph from '../../components/UberSunburstGraph/UberSunburstGr
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
 import OverviewSection from '../../components/OverviewSection/OverviewSection';
 import GraphWithBrushAndZoom from '../../components/GraphWithBrushAndZoom/GraphWithBrushAndZoom';
+import OverviewGraphSection from '../../components/OverviewGraphSection/OverviewGraphSection';
 
 const {
     Title,
@@ -356,9 +357,9 @@ class ChartPage extends Component {
 
                                         <SimpleSection
                                             cardTitle=""
-                                            cardID={"row-2"}
+                                            cardID={'row-2'}
                                         >
-                                            xxx
+                                            <OverviewGraphSection/>
                                         </SimpleSection>
 
                                         <SimpleSection

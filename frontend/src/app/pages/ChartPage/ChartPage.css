@@ -143,16 +143,7 @@
 }
 
 
-/*******************************************/
-/*******************Row 2*****************/
-/**********Graph Overview Section***********/
-#overview-graph-section {
 
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 100%;
-    border:3px solid black;
-}
 
 /*******************************************/
 /******************Row 3********************/
