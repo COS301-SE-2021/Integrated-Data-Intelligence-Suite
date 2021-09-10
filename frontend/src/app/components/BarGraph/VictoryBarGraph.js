@@ -40,8 +40,8 @@ export default function VictoryBarGraph(props) {
                 labelComponent={(
                     <VictoryTooltip
                         constrainToVisibleArea
-                        flyoutHeight={20}
-                        flyoutWidth={20}
+                        flyoutHeight={40}
+                        flyoutWidth={40}
                     />
                 )}
                 events={[
