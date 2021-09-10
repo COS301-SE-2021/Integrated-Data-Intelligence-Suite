@@ -79,6 +79,7 @@
     /*border-top-left-radius: 3%;*/
     /*border-bottom-left-radius: 3%;*/
     border-radius: 10px;
+    border: 2px solid var(--border-color);
 }
 
 /*
