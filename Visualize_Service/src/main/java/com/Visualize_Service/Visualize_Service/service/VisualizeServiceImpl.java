@@ -1186,7 +1186,7 @@ public class VisualizeServiceImpl {
         filterdCloud.add("did");	filterdCloud.add("get");	filterdCloud.add("come");	filterdCloud.add("made");	filterdCloud.add("may");
         filterdCloud.add("take");	filterdCloud.add("know");	filterdCloud.add("live");	filterdCloud.add("give");	filterdCloud.add("think");
         filterdCloud.add("say");	filterdCloud.add("help");	filterdCloud.add("tell");	filterdCloud.add("follow");	filterdCloud.add("came");
-        filterdCloud.add("want");	filterdCloud.add("show");	filterdCloud.add("set");	filterdCloud.add("put	does");
+        filterdCloud.add("want");	filterdCloud.add("show");	filterdCloud.add("set");	filterdCloud.add("put");	filterdCloud.add("does");
         filterdCloud.add("must");	filterdCloud.add("ask");	filterdCloud.add("went");	filterdCloud.add("read");	filterdCloud.add("need");
         filterdCloud.add("move");	filterdCloud.add("try");	filterdCloud.add("change");	filterdCloud.add("play");	filterdCloud.add("spell");
         filterdCloud.add("found");	filterdCloud.add("study");	filterdCloud.add("learn");	filterdCloud.add("should");	filterdCloud.add("add");
@@ -1203,14 +1203,14 @@ public class VisualizeServiceImpl {
         filterdCloud.add("sentence");	filterdCloud.add("man");	filterdCloud.add("line");	filterdCloud.add("boy");	filterdCloud.add("farm");
         filterdCloud.add("end");	filterdCloud.add("men");	filterdCloud.add("land");	filterdCloud.add("home");	filterdCloud.add("hand");
         filterdCloud.add("picture");	filterdCloud.add("air");	filterdCloud.add("animal");	filterdCloud.add("house");	filterdCloud.add("page");
-        filterdCloud.add("letter");	filterdCloud.add("point");	filterdCloud.add("mother");	filterdCloud.add("answer	America");
-        filterdCloud.add("world");	filterdCloud.add("food");	filterdCloud.add("country	plant	school");
+        filterdCloud.add("letter");	filterdCloud.add("point");	filterdCloud.add("mother");	filterdCloud.add("answer");
+        filterdCloud.add("world");	filterdCloud.add("food");	filterdCloud.add("country");	filterdCloud.add("plant");	filterdCloud.add("school");
         filterdCloud.add("father");	filterdCloud.add("tree");	filterdCloud.add("city");	filterdCloud.add("earth	eye");
         filterdCloud.add("head");	filterdCloud.add("story");	filterdCloud.add("example");	filterdCloud.add("life");	filterdCloud.add("paper");
         filterdCloud.add("group");	filterdCloud.add("children");	filterdCloud.add("side");	filterdCloud.add("feet");	filterdCloud.add("car");
         filterdCloud.add("mile");	filterdCloud.add("night");	filterdCloud.add("sea");	filterdCloud.add("river");	filterdCloud.add("state");
         filterdCloud.add("book");	filterdCloud.add("idea");	filterdCloud.add("face");	filterdCloud.add("girl");
-        filterdCloud.add("mountain");	filterdCloud.add("list");	filterdCloud.add("song");	filterdCloud.add("family");
+        filterdCloud.add("list");	filterdCloud.add("song");	filterdCloud.add("family");
 
         filterdCloud.add("he");	filterdCloud.add("a");	filterdCloud.add("one");	filterdCloud.add("all");	filterdCloud.add("an");
         filterdCloud.add("each");	filterdCloud.add("other");	filterdCloud.add("many");	filterdCloud.add("some");	filterdCloud.add("two");
@@ -1235,9 +1235,9 @@ public class VisualizeServiceImpl {
         filterdCloud.add("of");	filterdCloud.add("to");	filterdCloud.add("in");	filterdCloud.add("for");	filterdCloud.add("on");
         filterdCloud.add("with");	filterdCloud.add("at");	filterdCloud.add("from");	filterdCloud.add("by");	filterdCloud.add("about");
         filterdCloud.add("into");	filterdCloud.add("down");	filterdCloud.add("over");	filterdCloud.add("after");	filterdCloud.add("through");
-        filterdCloud.add("between	under");	filterdCloud.add("along");	filterdCloud.add("until");	filterdCloud.add("without");
+        filterdCloud.add("between");	filterdCloud.add("under");	filterdCloud.add("along");	filterdCloud.add("until");	filterdCloud.add("without");
 
-        filterdCloud.add("you");	filterdCloud.add("that");	filterdCloud.add("it");	filterdCloud.add("he");	filterdCloud.add("his");
+        filterdCloud.add("you");	filterdCloud.add("that");	filterdCloud.add("it");	filterdCloud.add("his");
         filterdCloud.add("they");	filterdCloud.add("I");	filterdCloud.add("this");	filterdCloud.add("what");	filterdCloud.add("we");
         filterdCloud.add("your");	filterdCloud.add("which");	filterdCloud.add("she");	filterdCloud.add("their");	filterdCloud.add("them");
         filterdCloud.add("these");	filterdCloud.add("her");	filterdCloud.add("him");	filterdCloud.add("my");	filterdCloud.add("who");
