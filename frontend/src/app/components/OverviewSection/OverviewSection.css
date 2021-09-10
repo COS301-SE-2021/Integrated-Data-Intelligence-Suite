@@ -5,6 +5,7 @@
     grid-row-start: 1;
     grid-row-end: 2;
     grid-template-rows: 0em auto;
+    margin-bottom: 0;
 }
 
 #indicator-card-container {
