@@ -2,10 +2,10 @@ package com.Visualize_Service.Visualize_Service.request;
 
 import java.util.ArrayList;
 
-public class CreateNetworkGraphRequest {
+public class CreateRelationshipGraphRequest {
     public ArrayList<ArrayList> dataList;
 
-    public CreateNetworkGraphRequest(ArrayList<ArrayList> dataList){
+    public CreateRelationshipGraphRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;
     }
 
