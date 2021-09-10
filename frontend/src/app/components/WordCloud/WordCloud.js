@@ -86,9 +86,6 @@ const getWindowSize = function () {
     return 200;
 };
 
-
-
-
 function WordCloud(props) {
     if (typeof props.text === 'undefined') {
         data_from_backend = [];
@@ -107,12 +104,12 @@ function WordCloud(props) {
     const [windowWidth, setWindowWidth] = useState(getWindowSize());
 
     return (
-        <div className="wordcloud">
+        <div className="wordcloud" id="word-cloud-outer-container">
             <Wordcloud
               key={words_from_backend}
               words={words_from_backend}
-              width={windowWidth * 0.8}
-              height={windowWidth * 0.6}
+              width={windowWidth}
+              height={windowWidth}
               font="Impact"
               padding={2}
               fontSize={fontSizeSetter}
