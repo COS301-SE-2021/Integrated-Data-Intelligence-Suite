@@ -811,6 +811,7 @@ public class VisualizeServiceImpl {
     }
 
     private String getLocation(double latitude , double longitude){
+        String output = "";
         ArrayList<String> provinces = new ArrayList<>();
         provinces.add("Western Cape"); //0
         provinces.add("Northern Cape"); //1
@@ -823,90 +824,153 @@ public class VisualizeServiceImpl {
         provinces.add("Limpopo"); //8
 
 
-        ArrayList<double[]> box = new ArrayList<>();
-        double[] codinateValue = null;
-
         /**Western Cape**/
-        //-32.105816, 18.325114 - tl
-        codinateValue = new double[2];
-        codinateValue[0] = -32.105816;
-        codinateValue[1] = 18.325114;
-        box.add(codinateValue);
-
-        //-31.427866, 23.514043 - tr
-        codinateValue = new double[2];
-        codinateValue[0] = -31.427866;
-        codinateValue[1] = 23.514043;
-        box.add(codinateValue);
-
-        //-34.668590, 19.536993 - bl
-        codinateValue = new double[2];
-        codinateValue[0] = -34.668590;
-        codinateValue[1] = 19.536993;
-        box.add(codinateValue);
-
-        //-33.979034, 23.689824 - br
-        codinateValue = new double[2];
-        codinateValue[0] = -31.427866;
-        codinateValue[1] = 23.514043;
-        box.add(codinateValue);
+        double box[][] = new double[][] {
+                {-32.105816, 18.325114}, //-32.105816, 18.325114 - tl
+                {-31.427866, 23.514043}, //-31.427866, 23.514043 - tr
+                {-34.668590, 19.536993}, //-34.668590, 19.536993 - bl
+                {-33.979034, 23.514043} //-33.979034, 23.689824 - br
+        };
 
         if( isInBox(box,latitude,longitude) ){
-            return provinces.get(9);
+            output = "Western Cape";
         }
 
         /**Northern Cape**/
-        //-28.617306, 16.515919 - tl
-        //-25.758013, 24.738063 - tr
-        //-31.615170, 18.218633 - bl
-        //-30.532062, 25.165362 - br
+
+        box = new double[][]{
+                {-28.617306, 16.515919}, //-28.617306, 16.515919 - tl
+                {-25.758013, 24.738063}, //-25.758013, 24.738063 - tr
+                {-31.615170, 18.218633}, //-31.615170, 18.218633 - bl
+                {-30.532062, 25.165362} //-30.532062, 25.165362 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "Northern Cape";
+        }
 
         /**North West**/
-        //-25.458714, 22.868166 - tl
-        //-24.772334, 27.020998 - tr
-        //-27.941580, 24.702883 - bl
-        //-26.888332, 27.339602 - br
+
+        box = new double[][]{
+                {-25.458714, 22.868166}, //-25.458714, 22.868166 - tl
+                {-24.772334, 27.020998}, //-24.772334, 27.020998 - tr
+                {-27.941580, 24.702883}, //-27.941580, 24.702883 - bl
+                {-26.888332, 27.339602} //-26.888332, 27.339602 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "North West";
+        }
 
         /**Free State**/
-        //-28.667645, 24.106132 - tl
-        //-26.605363, 26.665158 - tr
-        //-28.027116, 29.557151 - bl
-        //-30.520515, 24.934890 - br
+
+        box = new double[][]{
+                {-28.667645, 24.106132}, //-28.667645, 24.106132 - tl
+                {-26.605363, 26.665158}, //-26.605363, 26.665158 - tr
+                {-28.027116, 29.557151}, //-28.027116, 29.557151 - bl
+                {-30.520515, 24.934890} //-30.520515, 24.934890 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "Free State";
+        }
 
         /**Eastern Cape**/
-        //-32.029244, 24.449780 - tl
-        //-30.050545, 28.986950 - tr
-        //-31.427866, 23.514043 - bl
-        //-31.382586, 29.793336 - br
+
+        box = new double[][]{
+                {-32.029244, 24.449780}, //-32.029244, 24.449780 - tl
+                {-30.050545, 28.986950}, //-30.050545, 28.986950 - tr
+                {-31.427866, 23.514043}, //-31.427866, 23.514043 - bl
+                {-31.382586, 29.793336} //-31.382586, 29.793336 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "Eastern Cape";
+        }
 
         /**KwaZulu Natal**/
-        //-27.487467, 29.720804 - tl
-        //-26.861960, 32.873880 - tr
-        //-30.485275, 29.149515 - bl
-        //-30.768887, 30.379984 - br
+
+        box = new double[][]{
+                {-27.487467, 29.720804}, //-27.487467, 29.720804 - tl
+                {-26.861960, 32.873880}, //-26.861960, 32.873880 - tr
+                {-30.485275, 29.149515}, //-30.485275, 29.149515 - bl
+                {-30.768887, 30.379984} //-30.768887, 30.379984 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "KwaZulu Natal";
+        }
 
         /**Mpumalanga**/
-        //-25.133998, 29.050638 - tl
-        //-24.505796, 30.995218 - tr
-        //-31.427866, 23.514043 - bl
-        //-27.224009, 31.214945 - br
+
+        box = new double[][]{
+                {-25.133998, 29.050638}, //-25.133998, 29.050638 - tl
+                {-24.505796, 30.995218}, //-24.505796, 30.995218 - tr
+                {-31.427866, 23.514043}, //-31.427866, 23.514043 - bl
+                {-27.224009, 31.214945} //-27.224009, 31.214945 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "Mpumalanga";
+        }
 
         /**Gauteng**/
-        //-25.600567, 27.842142 - tl
-        //-25.153889, 28.819925 - tr
-        //-26.705037, 27.182963 - bl
-        //-26.773717, 28.314554 - br
+
+        box = new double[][]{
+                {-25.600567, 27.842142}, //-25.600567, 27.842142 - tl
+                {-25.153889, 28.819925}, //-25.153889, 28.819925 - tr
+                {-26.705037, 27.182963}, //-26.705037, 27.182963 - bl
+                {-26.773717, 28.314554} //-26.773717, 28.314554 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "Gauteng";
+        }
 
         /**Limpopo**/
-        //-22.487459, 28.725519 - tl
-        //-22.393532, 31.275307 - tr
-        //-24.722124, 26.471358 - bl
-        //-24.284997, 31.737225 - br
 
-        return "";
+        box = new double[][]{
+                {-22.487459, 28.725519}, //-22.487459, 28.725519 - tl
+                {-22.393532, 31.275307}, //-22.393532, 31.275307 - tr
+                {-24.722124, 26.471358}, //-24.722124, 26.471358 - bl
+                {-24.284997, 31.737225} //-24.284997, 31.737225 - br
+        };
+
+        if( isInBox(box,latitude,longitude) ){
+            output = "Limpopo";
+        }
+
+        return output;
     }
 
-    private boolean isInBox(ArrayList<double[]> box, double latitude, double longitude) {
+    private boolean isInBox(double[][] box2, double latitude, double longitude) {
+
+        ArrayList<double[]> box = new ArrayList<>();
+
+        double[] codinateValue = new double[2];
+        //-32.105816, 18.325114 - tl
+        codinateValue[0] = box2[0][0];
+        codinateValue[1] = box2[0][1];
+        box.add(codinateValue);
+
+        codinateValue = new double[2];
+        //-31.427866, 23.514043 - tr
+        codinateValue[0] = box2[1][0];
+        codinateValue[1] = box2[1][1];
+        box.add(codinateValue);
+
+        codinateValue = new double[2];
+        //-34.668590, 19.536993 - bl
+        codinateValue[0] = box2[2][0];
+        codinateValue[1] = box2[2][1];
+        box.add(codinateValue);
+
+        codinateValue = new double[2];
+        //-33.979034, 23.689824 - br
+        codinateValue[0] = box2[3][0];
+        codinateValue[1] = box2[3][1];
+        box.add(codinateValue);
+
 
         double[] topLeft = box.get(0);
         double[] topRight = box.get(1);
@@ -915,14 +979,14 @@ public class VisualizeServiceImpl {
 
 
         //check latitude
-        if ( (latitude  < bottomLeft[0]) || (latitude <  bottomRight[0]) )
+        if ( (latitude  < bottomLeft[0]) || (latitude <  bottomRight[0]) ) //first points
             return false;
 
         if ( (latitude > topLeft[0]) || (latitude > topRight[0]) )
             return false;
 
         //check longitude
-        if ( (longitude < topLeft[1]) || (longitude < bottomLeft[1]) )
+        if ( (longitude < topLeft[1]) || (longitude < bottomLeft[1]) ) //second points
             return false;
 
         if ( (longitude > topRight[1]) || (longitude > bottomRight[1]) )
