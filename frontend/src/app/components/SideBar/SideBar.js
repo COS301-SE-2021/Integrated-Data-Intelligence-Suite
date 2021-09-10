@@ -42,9 +42,8 @@ class SideBar extends React.Component {
         console.log('active comp ', active);
         return (
             <>
-
                 <Sider
-                    collapsible
+                    collapsible={false}
                     collapsed={collapsed}
                     onCollapse={this.onCollapse}
                     id="sidebar_div"

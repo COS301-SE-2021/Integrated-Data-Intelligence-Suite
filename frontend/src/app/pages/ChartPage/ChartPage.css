@@ -147,6 +147,14 @@
 /******************Row 3********************/
 /***************Location Row****************/
 /********************************************/
+#location-section {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    row-gap: 10px;
+    height: min-content;
+}
+
 #row-3 {
     grid-row-start: 3;
     grid-row-end: 4;
@@ -172,6 +180,7 @@
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
     column-gap: 10px;
+    height: 340px;
 }
 
 #complex-graph {
@@ -181,9 +190,10 @@
 
 #map-metric-1 > .simple-card-title {
     padding: 10px;
-    /*padding-left: 0px;*/
     text-align: left;
-
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
 }
 
 #map-metric-2 > .simple-card-title {
@@ -192,11 +202,15 @@
     text-align: left;
 }
 
-#location-section {
+#world-map {
     display: grid;
-    grid-template-rows: 50% 50%;
     grid-template-columns: 100%;
-    row-gap: 10px;
+    grid-template-rows: 0 auto;
+    border-radius: 10px;
+}
+
+#world-map > .simple-card-body {
+    background: var(--light-gray);
 }
 
 /*********************************************/
