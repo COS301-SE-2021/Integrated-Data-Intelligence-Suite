@@ -166,6 +166,20 @@
     grid-template-rows: repeat(2, auto);
 }
 
+/*#row-3 #map-metric-container #map-metric-1{*/
+/*    border: 2px solid var(--border-color);*/
+/*    background: white;*/
+/*    padding: 10px;*/
+/*    border-radius: 10px;*/
+/*}*/
+
+#word-cloud-graph-container> .simple-card-container{
+    border: 2px solid var(--border-color);
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 #world-map > .simple-card-title {
     padding: 10px;
     padding-left: 0px;
@@ -253,9 +267,6 @@
 #word-cloud-outer-container{
     display: flex;
     align-content: center;
-    /*display: grid;*/
-    /*grid-template-columns: 100%;*/
-    /*grid-template-rows: 100%;*/
 
 }
 
@@ -311,6 +322,7 @@
     display: grid;
     grid-template-rows: 0 auto;
     grid-template-columns: 100%;
+    padding-bottom: 30px;
 }
 
 #row-5 > .simple-section-body {
@@ -318,6 +330,13 @@
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: 100%;
     column-gap: 10px;
+}
+
+#row-5> .simple-section-body .simple-card-container{
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid 2px var(--border-color);
 }
 
 #network-graph-entities {

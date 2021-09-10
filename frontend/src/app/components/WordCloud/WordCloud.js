@@ -109,7 +109,7 @@ function WordCloud(props) {
               key={words_from_backend}
               words={words_from_backend}
               width={windowWidth}
-              height={windowWidth}
+              height={windowWidth * 0.8}
               font="Impact"
               padding={2}
               fontSize={fontSizeSetter}
