@@ -5,7 +5,13 @@ import UberBarGraph from '../UberBarGraph/UberBarGraph';
 import PieChart from '../PieChart/PieChart';
 import ValueWithPercentChange from '../ValueWithPercentChange/ValueWithPercentChange';
 
+let num_of_anomalies = null;
+let overall_sentiment = null;
+let trends_value = null;
+let total_likes = null;
+
 export default class OverviewSection extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = { dataToBeDisplayed: [] };
@@ -22,15 +28,20 @@ export default class OverviewSection extends React.Component {
             this.setState({ dataToBeDisplayed: [] });
             console.log('array is empty');
         } else if (this.props.text[0].length > 0) {
-            // this.theData = this.props.text[1];
+            console.log('myron im here');
+            console.log(this.state.dataToBeDisplayed);
             this.setState({
                 dataToBeDisplayed: [
-                    this.props.text[0].words,
-                    this.props.text[1].words,
-                    this.props.text[2].words,
-                    this.props.text[3].words
+                    this.props.text[0],
+                    this.props.text[1],
+                    this.props.text[2],
+                    this.props.text[3]
                 ]
             });
+            total_likes = this.props.text[0][0].words;
+            overall_sentiment = this.props.text[1][0].words;
+            num_of_anomalies = this.props.text[2][0].words;
+            trends_value = this.props.text[3][0].words;
         }
     }
 
@@ -45,7 +56,8 @@ export default class OverviewSection extends React.Component {
                         <ValueWithPercentChange
                             isIncreasing
                             // rawValue={'1,214,312'}
-                            rawValue={this.state.dataToBeDisplayed[0]}
+                            rawValue={total_likes}
+                            key={total_likes}
                         />
                     </SimpleCard>
 
@@ -56,7 +68,9 @@ export default class OverviewSection extends React.Component {
                         <ValueWithPercentChange
                             isIncreasing={false}
                             // rawValue={'23'}
-                            rawValue={this.state.dataToBeDisplayed[2]}
+                            rawValue={trends_value}
+                            key={total_likes}
+
                         />
                     </SimpleCard>
 
@@ -67,7 +81,8 @@ export default class OverviewSection extends React.Component {
                         <ValueWithPercentChange
                             isIncreasing={false}
                             // rawValue={'bad'}
-                            rawValue={this.state.dataToBeDisplayed[1]}
+                            rawValue={overall_sentiment}
+                            key={total_likes}
                         />
                     </SimpleCard>
 
@@ -78,7 +93,8 @@ export default class OverviewSection extends React.Component {
                         <ValueWithPercentChange
                             isIncreasing
                             // rawValue={'16'}
-                            rawValue={this.state.dataToBeDisplayed[3]}
+                            rawValue={num_of_anomalies}
+                            key={total_likes}
                         />
                     </SimpleCard>
                 </div>
