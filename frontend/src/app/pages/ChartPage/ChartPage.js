@@ -356,6 +356,13 @@ class ChartPage extends Component {
 
                                         <SimpleSection
                                             cardTitle=""
+                                            cardID={"row-1.5"}
+                                        >
+                                            xxx
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                            cardTitle=""
                                             cardID="row-2"
                                         >
                                             <div id={'location-section'}>
