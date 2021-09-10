@@ -76,13 +76,13 @@ export default class PieChart extends React.Component {
                       id="total-sentiment-pie-container"
                     >
                         <VictoryPie
-                          colorScale={['#FF0000', '#FFFF00', '#00E000']}
+                          colorScale={['#FF0000', '#FFFF00', '#00a800']}
                           data={this.state.data_points}
-                          labels={() => null}
-                          innerRadius={69}
+                          labels={({ datum }) => datum.x}
+                          innerRadius={100}
                           padAngle={5.5}
-                          height={300}
-                          width={300}
+                          width={400}
+                          style={{ labels: { fontSize: 45, padding: 20 } }}
                           animate={{
                                 duration: 500,
                             }}
@@ -94,15 +94,28 @@ export default class PieChart extends React.Component {
                                         return [
                                             {
                                                 target: 'data',
-                                                mutation: ({ style }) => {
-                                                    this._changeSliceSum(style.fill === '#c43a31');
-                                                    return style.fill === '#c43a31'
-                                                        ? null
-                                                        : { style: { fill: '#c43a31' } };
+                                                mutation: (props) => {
+                                                    // this._changeSliceSum(props.style.fill === '#c43a31');
+                                                    // return style.fill === '#c43a31'
+                                                    //     ? null
+                                                    //     : { style: { fill: '#c43a31' } };
+                                                    return {
+                                                        style: { ...props.style, fill: '#5773FA' },
+                                                    };
                                                 },
                                             },
                                         ];
                                     },
+                                    onMouseOut: () => {
+                                        return [
+                                            {
+                                                target: 'data',
+                                                mutation: () =>{
+                                                    return null;
+                                                }
+                                            }
+                                        ]
+                                    }
                                 },
                             }]}
                         />
