@@ -68,7 +68,9 @@ const RegisterPage = () => {
       fetch('/user/register', requestOptions)
         .then((response) => response.json()).then((json) => {
           if (json.success) {
-            history.push('/');
+            alert(json.message);
+            localStorage.setItem("email", values.email);
+            history.push('/verify');
           } else {
             alert(json.message);
           }
