@@ -154,6 +154,15 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @PostMapping(value = "/user/resend",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<VerifyAccountResponse> resendCode(@RequestBody String body) {
+        System.out.println(body);
+        VerifyAccountResponse response = new VerifyAccountResponse(true, "This is a test for resend");
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
     /**
      * This the endpoint for changing the permission of a user
      * @param request This is the body send by POST
