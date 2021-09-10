@@ -60,7 +60,6 @@
     border-top: 2px solid var(--grey-border-color);
     border-left: 2px solid var(--grey-border-color);
     border-right: 2px solid var(--grey-border-color);
-
 }
 
 #overview-graph-metric-2 > .simple-card-body {
@@ -88,8 +87,6 @@
     border-left: 2px solid var(--grey-border-color);
     border-right: 2px solid var(--grey-border-color);
     color: var(--simple-card-title-color);
-
-
 }
 
 #overview-graph-metric-3 > .simple-card-body {

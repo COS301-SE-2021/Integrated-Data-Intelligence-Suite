@@ -147,6 +147,13 @@
 /******************Row 3********************/
 /***************Location Row****************/
 /********************************************/
+#location-section {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    row-gap: 10px;
+    height: min-content;
+}
 
 #row-3 {
     grid-row-start: 3;
@@ -164,7 +171,6 @@
     text-align: left;
 }
 
-
 #map-metric-container {
     grid-row-start: 1;
     grid-row-end: 2;
@@ -174,8 +180,8 @@
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
     column-gap: 10px;
+    height: 340px;
 }
-
 
 #complex-graph {
     grid-row-start: 2;
@@ -184,9 +190,15 @@
 
 #map-metric-1 > .simple-card-title {
     padding: 10px;
-    /*padding-left: 0px;*/
     text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
 
+#map-metric-1 > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 #map-metric-2 > .simple-card-title {
@@ -195,15 +207,19 @@
     text-align: left;
 }
 
-#location-section {
+#world-map {
     display: grid;
-    grid-template-rows: 50% 50%;
     grid-template-columns: 100%;
-    row-gap: 10px;
+    grid-template-rows: 0 auto;
+    border-radius: 10px;
+}
+
+#world-map > .simple-card-body {
+    background: var(--light-gray);
 }
 
 /*********************************************/
-/******************Row 3********************/
+/******************Row 4********************/
 /******************Word Cloud*****************/
 /********************************************/
 #row-4 {
@@ -262,7 +278,6 @@
     grid-column-start: 2;
     grid-column-end: 3;
 
-
     /*Display of the body of the container*/
     display: grid;
     /*grid-template-columns: 100%;*/
@@ -285,12 +300,50 @@
 }
 
 
-/*******************************************/
+/*********************************************/
+/******************Row 5********************/
 /******************Network*****************/
 /*******************************************/
 #row-5 {
     grid-row-start: 5;
     grid-row-end: 6;
+    display: grid;
+    grid-template-rows: 0 auto;
+    grid-template-columns: 100%;
+}
+
+#row-5 > .simple-section-body {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: 100%;
+    column-gap: 10px;
+}
+
+#network-graph-entities {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#network-graph-entities > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+#network-graph-patterns > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+
+}
+
+#network-graph-patterns {
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 

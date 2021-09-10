@@ -1,7 +1,7 @@
 .uber-bar-graph-container {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 30% 70%;
+    grid-template-rows: auto;
     /*border: 3px solid red;*/
 }
 

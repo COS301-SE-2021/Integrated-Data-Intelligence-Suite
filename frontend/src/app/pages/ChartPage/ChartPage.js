@@ -369,25 +369,25 @@ class ChartPage extends Component {
                                             <div id={'location-section'}>
                                                 <div id="map-metric-container">
                                                     <SimpleCard
-                                                        cardTitle={'World Map'}
+                                                        cardTitle={''}
                                                         cardID={'world-map'}
                                                     >
                                                         <MapCard text={this.state.text}/>
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                        cardTitle={'Map Metric 1'}
+                                                        cardTitle={'Tweet Frequency'}
                                                         cardID={'map-metric-1'}
                                                     >
                                                         <DraggableBarGraph text={this.state.text}/>
                                                     </SimpleCard>
                                                 </div>
-                                                <SimpleCard
-                                                    cardTitle="Map Metric 2"
-                                                    cardID="map-metric-2"
-                                                >
-                                                    <GraphWithBrushAndZoom/>
-                                                </SimpleCard>
+                                                {/*<SimpleCard*/}
+                                                {/*    cardTitle="Map Metric 2"*/}
+                                                {/*    cardID="map-metric-2"*/}
+                                                {/*>*/}
+                                                {/*    <GraphWithBrushAndZoom/>*/}
+                                                {/*</SimpleCard>*/}
                                             </div>
                                         </SimpleSection>
 
@@ -423,9 +423,29 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Network"
+                                            cardTitle=""
                                             cardID="row-5"
-                                        />
+                                        >
+                                            <SimpleCard
+                                                cardTitle="Relationship Between Entities"
+                                                cardID="network-graph-entities"
+                                            >
+                                                <NetworkGraphCard
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
+                                            </SimpleCard>
+
+                                            <SimpleCard
+                                                cardTitle="Relationship Between Entities"
+                                                cardID="network-graph-patterns"
+                                            >
+                                                <NetworkGraphCard
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
+                                            </SimpleCard>
+                                        </SimpleSection>
                                     </div>
                                 </Layout>
                             </Layout>
