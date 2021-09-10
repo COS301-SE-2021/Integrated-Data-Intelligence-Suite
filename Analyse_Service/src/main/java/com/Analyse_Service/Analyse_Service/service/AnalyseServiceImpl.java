@@ -140,20 +140,24 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
-        TrainFindPatternRequest findPatternRequest = new TrainFindPatternRequest(parsedDatalist); //TODO
-        TrainFindPatternResponse findPatternResponse = this.trainFindPattern(findPatternRequest);
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
+        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
         FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        TrainGetPredictionRequest getPredictionRequest = new TrainGetPredictionRequest(parsedDatalist); //TODO
-        TrainGetPredictionResponse getPredictionResponse = this.trainGetPredictions(getPredictionRequest);
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
+        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
         FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
         FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
         FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+
+
+        /*************************************************/
+
 
         //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
@@ -163,11 +167,11 @@ public class AnalyseServiceImpl {
 
 
         return new AnalyseDataResponse(
-                findPatternResponse.getPattenList(),
+                findPatternResponse.getPattenList(),//null,null,null,null);
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList()) ;
+                findAnomaliesResponse.getPattenList());
     }
 
 
@@ -178,7 +182,7 @@ public class AnalyseServiceImpl {
      * @return FindPatternResponse This object contains data of the patterns found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public TrainFindPatternResponse trainFindPattern(TrainFindPatternRequest request)
+    public FindPatternResponse findPattern(FindPatternRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
@@ -263,7 +267,86 @@ public class AnalyseServiceImpl {
 
         sparkPatterns.stop();*/
 
-        return new TrainFindPatternResponse(null);
+        SparkSession sparkPatterns = SparkSession
+                .builder()
+                .appName("Patterns")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> patternData  = new ArrayList<>();
+        ArrayList<ArrayList> requestData = request.getDataList();
+
+        for(int i=0; i < requestData.size(); i++){
+            List<Object> row = new ArrayList<>();
+
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4);
+
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            row = new ArrayList<>();
+            for (int j=0; j< namedEntities.size(); j++){
+                if (row.isEmpty()) {
+                    row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                }
+                else {
+                    if(!row.contains(namedEntities.get(j).get(0).toString())) {
+                        row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                    }
+                }
+
+            }
+            if (!row.isEmpty()) {
+                Row relationshipRow = RowFactory.create(row);
+                patternData.add(relationshipRow);
+            }
+        }
+        System.out.println("Hereisthepatterndata");
+        System.out.println(patternData);
+
+        StructType schema = new StructType(new StructField[]{ new StructField(
+                "Entities",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
+        });
+
+        Dataset<Row> itemsDF = sparkPatterns.createDataFrame(patternData, schema);
+        itemsDF.show();
+
+        /*******************SETUP MODEL*****************/
+
+        FPGrowth fp = new FPGrowth()
+                .setItemsCol("Entities")
+                .setMinSupport(0.10)
+                .setMinConfidence(0.10);
+
+        FPGrowthModel fpModel = fp.fit(itemsDF);
+
+
+        fpModel.freqItemsets().show();
+        fpModel.associationRules().show();
+
+        List<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
+        ArrayList<ArrayList> results = new ArrayList<>();
+
+        for (int i = 0; i < pData.size(); i++) {
+            ArrayList<String> row = new ArrayList<>();
+
+            for (int j = 0; j < pData.get(i).getList(0).size(); j++)
+                row.add(pData.get(i).getList(0).get(j).toString()); //1) antecedent, feq
+
+            for (int k = 0; k < pData.get(i).getList(1).size(); k++)
+                row.add(pData.get(i).getList(1).get(k).toString()); //2) consequent
+
+            row.add(pData.get(i).get(2).toString()); //3) confidence
+            //row.add(pData.get(i).get(3).toString()); //4) support
+            results.add(row);
+        }
+        for (ArrayList o: results) {
+            System.out.println(o.toString());
+        }
+
+        sparkPatterns.stop();
+        return new FindPatternResponse(results);
     }
 
 
@@ -437,6 +520,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
+        fpModel.freqItemsets().show();
         List<Row> Rdata = fpModel.freqItemsets().collectAsList();
 
         ArrayList<ArrayList> results = new ArrayList<>();
@@ -956,6 +1040,13 @@ public class AnalyseServiceImpl {
             r.add(texts);
             r.add( rawResults.get(i).get(2).toString());
 
+            ArrayList<String> likes =new ArrayList<>();
+            List<Row> rawlikes = itemsDF.select("Likes").filter(col("EntityName").equalTo(en)).collectAsList();
+            System.out.println(rawlikes.toString());
+            for (int j = 0; j < rawlikes.size(); j++) {
+                likes.add(rawlikes.get(j).get(0).toString());
+            }
+            r.add(likes);
             results.add(r);
 
         }

@@ -4,14 +4,11 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 
 import java.util.ArrayList;
 
-public class CreateWordCloudGraphResponse {
+public class GetTotalTrendsResponse {
     public ArrayList<Graph> words;
 
-    public ArrayList<String> wordList;
-
-    public CreateWordCloudGraphResponse(ArrayList<Graph> words, ArrayList<String> wordList){
+    public GetTotalTrendsResponse(ArrayList<Graph> words){
         this.words = words;
-        this.wordList = wordList;
     }
 
     public ArrayList<Graph> getWordGraphArray(){
