@@ -356,14 +356,14 @@ class ChartPage extends Component {
 
                                         <SimpleSection
                                             cardTitle=""
-                                            cardID={"row-1.5"}
+                                            cardID={"row-2"}
                                         >
                                             xxx
                                         </SimpleSection>
 
                                         <SimpleSection
                                             cardTitle=""
-                                            cardID="row-2"
+                                            cardID="row-3"
                                         >
                                             <div id={'location-section'}>
                                                 <div id="map-metric-container">
@@ -392,7 +392,7 @@ class ChartPage extends Component {
 
                                         <SimpleSection
                                             cardTitle="Textual Analysis"
-                                            cardID="row-3"
+                                            cardID="row-4"
                                         >
                                             <SimpleCard
                                                 cardTitle="Word Cloud"
@@ -423,7 +423,7 @@ class ChartPage extends Component {
 
                                         <SimpleSection
                                             cardTitle="Network"
-                                            cardID="row-4"
+                                            cardID="row-5"
                                         />
                                     </div>
                                 </Layout>

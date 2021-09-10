@@ -130,7 +130,7 @@
 #content-section {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(6, auto);
     /*border: 3px solid black;*/
     max-height: 100vh;
     max-width: 100vw;
@@ -143,21 +143,23 @@
 }
 
 
+/*******************************************/
+/*******************Row 2*****************/
+/**********Graph Overview Section***********/
+#overview-graph-section {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 100%;
+    border:3px solid black;
+}
 
 /*******************************************/
-/******************Row 1.5*****************/
-/*******************************************/
-
-
-
-
-
-/*******************************************/
-/******************Location*****************/
-/*******************************************/
-#row-2 {
-    grid-row-start: 2;
-    grid-row-end: 3;
+/******************Row 3********************/
+/***************Location Row****************/
+#row-3 {
+    grid-row-start: 3;
+    grid-row-end: 4;
 
     /*Internal Display of the row 2*/
     display: grid;
@@ -212,9 +214,9 @@
 /*********************************************/
 /******************Word Cloud*****************/
 /********************************************/
-#row-3 {
-    grid-row-start: 3;
-    grid-row-end: 4;
+#row-4 {
+    grid-row-start: 4;
+    grid-row-end: 5;
     /*border: 3px solid black;*/
 
     /*Display of the Body of the Word Cloud Section*/
@@ -224,7 +226,7 @@
     grid-template-columns: 100%;
 }
 
-#row-3 > .simple-section-body {
+#row-4 > .simple-section-body {
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: repeat(2, auto);
@@ -262,9 +264,9 @@
 /*******************************************/
 /******************Network*****************/
 /*******************************************/
-#row-4 {
-    grid-row-start: 4;
-    grid-row-end: 5;
+#row-5 {
+    grid-row-start: 5;
+    grid-row-end: 6;
 }
 
 
