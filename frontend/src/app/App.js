@@ -10,7 +10,7 @@ import Permissions from './pages/PermissionsPage/Permissions';
 import LogoutPage from './pages/LogoutPage/LogoutPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
-import VerifyPage from "./pages/VerifyPage/VerifyPage";
+import VerifyPage from './pages/VerifyPage/VerifyPage';
 import './App.scss';
 
 class App extends Component {
@@ -19,44 +19,44 @@ class App extends Component {
             <>
                 <Switch>
                     <Route exact path="/">
-                        <HomePage />
+                        <HomePage/>
                     </Route>
 
                     <Route exact path="/login">
-                        <LoginPage />
+                        <LoginPage/>
                     </Route>
 
                     <Route exact path="/register">
-                        <RegisterPage />
+                        <RegisterPage/>
                     </Route>
 
                     <Route exact path="/chart">
-                        <ChartPage />
+                        <ChartPage/>
                     </Route>
 
-                <Route exact path="/verify">
-                    <VerifyPage />
-                </Route>
+                    <Route exact path="/verify">
+                        <VerifyPage/>
+                    </Route>
 
-                <Route exact path="/permissions">
-                    <Permissions />
-                </Route>
+                    <Route exact path="/permissions">
+                        <Permissions/>
+                    </Route>
 
 
                     <Route exact path="/logout">
-                        <LogoutPage />
+                        <LogoutPage/>
                     </Route>
 
                     <Route exact path="/settings">
-                        <SettingsPage />
+                        <SettingsPage/>
                     </Route>
 
                     <Route path="/settings/source/:id">
-                        <AddDataSource />
+                        <AddDataSource/>
                     </Route>
 
                     <Route path="/user/:id">
-                        <UserPermissions />
+                        <UserPermissions/>
                     </Route>
 
                     <Route path="*">
