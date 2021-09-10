@@ -117,9 +117,9 @@ public class VisualizeServiceImpl {
         outputData.add(wordCloudResponse.words);
 
         //WordCloud Piechart Todo
-        /*CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest();
+        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(wordCloudResponse.wordList);
         CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
-        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
 
         /*
@@ -1223,17 +1223,29 @@ public class VisualizeServiceImpl {
 
 
         //check latitude
-        if ( (latitude  < bottomLeft[0]) || (latitude <  bottomRight[0]) ) //first points
+        double maxBottom =  bottomLeft[0];
+        if(bottomRight[0] > maxBottom)
+            maxBottom = bottomRight[0];
+        if ( latitude < maxBottom) //first points
             return false;
 
-        if ( (latitude > topLeft[0]) || (latitude > topRight[0]) )
+        double maxTop =  topLeft[0];
+        if(topRight[0] > maxBottom)
+            maxTop = topRight[0];
+        if ( latitude > maxTop )
             return false;
 
         //check longitude
-        if ( (longitude < topLeft[1]) || (longitude < bottomLeft[1]) ) //second points
+        double maxLeft =  topLeft[1];
+        if(bottomLeft[1] > maxBottom)
+            maxLeft = topRight[1];
+        if ( longitude < maxLeft ) //second points
             return false;
 
-        if ( (longitude > topRight[1]) || (longitude > bottomRight[1]) )
+        double maxRight =  topRight[1];
+        if(bottomRight[1] > maxBottom)
+            maxRight = topRight[1];
+        if ( longitude > maxRight )
             return false;
 
         return true;
