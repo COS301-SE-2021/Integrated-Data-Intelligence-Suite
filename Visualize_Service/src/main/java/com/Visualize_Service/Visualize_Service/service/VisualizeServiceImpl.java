@@ -9,10 +9,15 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 @Service
 public class VisualizeServiceImpl {
+
+    private HashSet<String> filterdCloud = new HashSet<String>();
+
+
 
     public VisualizeDataResponse visualizeData(VisualizeDataRequest request) throws InvalidRequestException {
         if (request == null) {
@@ -757,15 +762,29 @@ public class VisualizeServiceImpl {
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-        String text ="";
+        if(filterdCloud.isEmpty() == true) {
+            setCloud();
+        }
+
+
+        ArrayList<String> wordList = new ArrayList<>();
         for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> texts= (ArrayList<String>) reqData.get(i).get(5);
+            ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
             //System.out.println(locs.toString());
 
             for (int j = 0; j < texts.size(); j++) {
-                text +=" "+ texts.get(j).toString();
+                String[] words = texts.get(j).toString().split(" ");
+                for(int k =0; k < words.length ; k++){
+                    if (filterdCloud.contains(words[k]) == false){
+                        wordList.add(words[k]);
+                    }
+                }
             }
+        }
 
+        String text =wordList.get(0);
+        for(int i =1; i < wordList.size(); i++){
+            text = text + " " + wordList.get(i);
         }
 
         WordCloudGraph out = new WordCloudGraph();
@@ -775,8 +794,10 @@ public class VisualizeServiceImpl {
         output.add(out);
 
 
-        return new CreateWordCloudGraphResponse(output);
+        return new CreateWordCloudGraphResponse(output,wordList);
     }
+
+
 
     /*************************************************HELPER***********************************************************/
 
@@ -993,6 +1014,10 @@ public class VisualizeServiceImpl {
             return false;
 
         return true;
+    }
+
+    private void setCloud() {
+        filterdCloud.add("");
     }
 
 
