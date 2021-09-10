@@ -1,0 +1,32 @@
+/*******************************************/
+/*******************Row 2*****************/
+/**********Graph Overview Section***********/
+#overview-graph-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 100%;
+    border: 3px solid black;
+}
+
+#overview-graph-metric-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#overview-graph-metric-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+}
+
+#overview-graph-metric-3 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+}

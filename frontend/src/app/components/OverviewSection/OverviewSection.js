@@ -54,25 +54,6 @@ export default class OverviewSection extends React.Component {
                         />
                     </SimpleCard>
                 </div>
-
-
-                {/*<div*/}
-                {/*    id={'overview-col-right'}*/}
-                {/*>*/}
-                {/*    <SimpleCard*/}
-                {/*        cardTitle={'Number of Relationships found'}*/}
-                {/*        cardID={'overview-metric-4'}*/}
-                {/*    >*/}
-                {/*        <UberLineGraph/>*/}
-                {/*    </SimpleCard>*/}
-
-                {/*    <SimpleCard*/}
-                {/*        cardTitle={'Metric 5'}*/}
-                {/*        cardID={'overview-metric-5'}*/}
-                {/*    >*/}
-                {/*        <PieChart/>*/}
-                {/*    </SimpleCard>*/}
-                {/*</div>*/}
             </>
         );
     }
