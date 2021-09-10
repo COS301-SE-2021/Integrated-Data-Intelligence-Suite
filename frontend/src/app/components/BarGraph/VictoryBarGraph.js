@@ -2,7 +2,7 @@ import React from 'react';
 import { VictoryChart, VictoryBar, VictoryTooltip } from 'victory';
 
 // Color States
-const COLOR_DEFAULT = 'red';
+const COLOR_DEFAULT = '#4666FF';
 const COLOR_NOTHOVER = 'gray';
 
 // Test Data
@@ -30,6 +30,16 @@ export default function VictoryBarGraph(props) {
     return (
         <VictoryChart>
             <VictoryBar
+                animate={{
+                    duration: 1000,
+                    onLoad: { duration: 500 }
+                }}
+                cornerRadius={15}
+                alignment="middle"
+                padding={{
+                    top: 20,
+                    bottom: 60
+                }}
                 domain={{
                     x: [0, 5],
                     y: [0, 5]
@@ -42,6 +52,13 @@ export default function VictoryBarGraph(props) {
                         constrainToVisibleArea
                         flyoutHeight={40}
                         flyoutWidth={40}
+                        flyoutPadding={10}
+                        flyoutStyle={{
+                            stroke: "#4666FF",
+                            strokeWidth: 2,
+                            fill: "white",
+                        }}
+                        style={{ fill: "#4666FF" }}
                     />
                 )}
                 events={[
