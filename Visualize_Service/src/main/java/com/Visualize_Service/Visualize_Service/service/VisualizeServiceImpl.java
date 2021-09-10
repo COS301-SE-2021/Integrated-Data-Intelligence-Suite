@@ -50,7 +50,7 @@ public class VisualizeServiceImpl {
 
         //Bar Graph(Average Interaction)                  <- D
         //PieChart(Overall section)                       <- D
-        // Bar Graph(total Engagement in each location)   <- *
+        // Bar Graph(total Engagement in each location)   <- D
 
         //map                                             <- D
         //frequecy of tweets in trend                     <- D
@@ -66,59 +66,103 @@ public class VisualizeServiceImpl {
         // scatter plot * tentative                       <-
         // Map Metric 2 (Number of tweets over time )     <- D
 
+        //total likes
         GetTotalInteractionRequest totalInteractionRequest = new GetTotalInteractionRequest(request.getTrendList());
+        GetTotalInteractionResponse totalInteractionResponse = this.getTotalInteraction(totalInteractionRequest);
+        outputData.add(totalInteractionResponse.words);
 
+        //most prominent Sentiment
+        GetMostProminentSentimentRequest mostProminentSentimentRequest = new GetMostProminentSentimentRequest(request.getTrendList());
+        GetMostProminentSentimentResponse mostProminentSentimentResponse = this.getMostProminentSentiment(mostProminentSentimentRequest);
+        outputData.add(mostProminentSentimentResponse.words);
+
+        //Number of trends
+        GetTotalTrendsRequest totalTrendsRequest = new GetTotalTrendsRequest(request.getTrendList());
+        GetTotalTrendsResponse totalTrendsResponse = this.getTotalTrends(totalTrendsRequest);
+        outputData.add(totalTrendsResponse.words);
+
+        //NUmber of anomalys
+        GetTotalAnomaliesRequest totalAnomaliesRequest = new GetTotalAnomaliesRequest(request.getAnomalyList());
+        GetTotalAnomaliesResponse totalAnomaliesResponse = this.getTotalAnomalies(totalAnomaliesRequest);
+        outputData.add(totalAnomaliesResponse.words);
+
+        //Line graph Interactions (Bar graph now)(Average Interaction)
+        CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
+        CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
+        outputData.add(lineInteractionsResponse.LineGraphArray);
+
+        //PieChart graph(Overall section)
+        CreatePieChartGraphRequest pieChartRequest = new CreatePieChartGraphRequest(request.getTrendList());
+        CreatePieChartGraphResponse pieChartResponse =  this.createPieChartGraph(pieChartRequest);
+        outputData.add(pieChartResponse.PieChartGraphArray);
+
+        //ExtraBar graph one Bar Graph(total Engagement in each location)
+        CreateBarGraphExtraOneRequest extraBarOneRequest = new CreateBarGraphExtraOneRequest(request.getTrendList());
+        CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
+        outputData.add(extraBarOneResponse.BarGraphArray);
 
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
         CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
         outputData.add(mapResponse.mapGraphArray);
 
-        //Network graph
-        CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
-        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest);
-        outputData.add(relationResponse.NetworkGraphArray);
-
-        //Timeline graph
-        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
-        CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
-        outputData.add(timelineResponse.timelineGraphArray);
-
-        //Line graph Sentiments
-        CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
-        CreateLineGraphSentimentsResponse lineResponse =  this.createLineGraphSentiments(lineRequest);
-        outputData.add(lineResponse.LineGraphArray);
-
-        //Line graph Interactions
-        CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
-        CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
-        outputData.add(lineInteractionsResponse.LineGraphArray);
-
-        //Bar graph
+        //Bar graph frequecy of tweets in trend
         CreateBarGraphRequest barRequest = new CreateBarGraphRequest(request.getTrendList());
         CreateBarGraphResponse barResponse =  this.createBarGraph(barRequest);
         outputData.add(barResponse.BarGraphArray);
-
-        //PieChart graph
-        CreatePieChartGraphRequest pieChartRequest = new CreatePieChartGraphRequest(request.getTrendList());
-        CreatePieChartGraphResponse pieChartResponse =  this.createPieChartGraph(pieChartRequest);
-        outputData.add(pieChartResponse.PieChartGraphArray);
 
         //WordCloud graph
         CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getTrendList());
         CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
         outputData.add(wordCloudResponse.words);
 
+        //WordCloud Piechart Todo
+        /*CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest();
+        CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
 
-        //ExtraBar graph one
-        CreateBarGraphExtraOneRequest extraBarOneRequest = new CreateBarGraphExtraOneRequest(request.getTrendList());
-        CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
-        outputData.add(extraBarOneResponse.BarGraphArray);
 
-        //ExtraBar graph two
+        /*
+        ToDo: Sunburst
+
+
+         */
+
+        //Network graph (Relationships)
+        CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
+        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest);
+        outputData.add(relationResponse.NetworkGraphArray);
+
+        //Network graph (Patterns)
+        CreatePatternGraphRequest patternGraphRequest = new CreatePatternGraphRequest(request.getPatternList());
+        CreatePatternGraphResponse patternGraphResponse =  this.createPatternGraph(patternGraphRequest);
+        outputData.add(patternGraphResponse.NetworkGraphArray);
+
+
+        //Timeline graph
+        CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
+        CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
+        outputData.add(timelineResponse.timelineGraphArray);
+
+
+
+
+
+        /*
+        ToDo: Scatter plot
+
+
+         */
+
+        //Map Metric 2 (Number of tweets over time )
         CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
         CreateBarGraphExtraTwoResponse extraBarTwoResponse = this.createBarGraphExtraTwo(extraBarTwoRequest);
         outputData.add(extraBarTwoResponse.BarGraphArray);
+
+        //Line graph Sentiments ~ not in use
+       /*CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
+        CreateLineGraphSentimentsResponse lineResponse =  this.createLineGraphSentiments(lineRequest);
+        outputData.add(lineResponse.LineGraphArray);*/
 
 
         return new VisualizeDataResponse( outputData );
