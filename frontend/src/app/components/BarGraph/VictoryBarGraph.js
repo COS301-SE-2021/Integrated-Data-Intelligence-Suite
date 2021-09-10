@@ -3,7 +3,7 @@ import { VictoryChart, VictoryBar, VictoryTooltip } from 'victory';
 
 // Color States
 const COLOR_DEFAULT = '#4666FF';
-const COLOR_NOTHOVER = 'gray';
+const COLOR_NOTHOVER = '#CAD0E3';
 
 // Test Data
 const SampleData = [
