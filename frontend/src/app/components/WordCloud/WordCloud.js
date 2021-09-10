@@ -86,6 +86,9 @@ const getWindowSize = function () {
     return 200;
 };
 
+
+
+
 function WordCloud(props) {
     if (typeof props.text === 'undefined') {
         data_from_backend = [];
