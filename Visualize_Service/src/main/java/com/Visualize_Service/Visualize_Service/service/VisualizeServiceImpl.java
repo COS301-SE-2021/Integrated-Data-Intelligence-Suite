@@ -66,6 +66,9 @@ public class VisualizeServiceImpl {
         // scatter plot * tentative                       <-
         // Map Metric 2 (Number of tweets over time )     <- D
 
+        GetTotalInteractionRequest totalInteractionRequest = new GetTotalInteractionRequest(request.getTrendList());
+
+
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
         CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
@@ -414,7 +417,7 @@ public class VisualizeServiceImpl {
         return new CreateBarGraphResponse(output);
     }
 
-    //Fregency of entity type
+    //Engagment by location
     public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request) throws InvalidRequestException {
 
         if (request == null) {
@@ -426,25 +429,40 @@ public class VisualizeServiceImpl {
         ArrayList<ArrayList> reqData = request.getDataList();
 
         ArrayList<Graph> output = new ArrayList<>();
-        ArrayList<String> types = new ArrayList<>();
-        ArrayList<Integer> typeFreq = new ArrayList<>();
 
+        BarGraph bar2;
+
+
+        ArrayList<String> province = new ArrayList<>();
+        ArrayList<Integer> provfrq  = new ArrayList<>();
         for (int i = 0; i < reqData.size(); i++) {
-            String type = reqData.get(i).get(2).toString();
-            if (types.contains(type)){
-                int freq = typeFreq.get(types.indexOf(type));
-                freq++;
-                typeFreq.set(types.indexOf(type),freq);
-            }else {
-                types.add(type);
-                typeFreq.add(1);
+            ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < locs.size(); j++) {
+
+
+                String [] latlon = locs.get(j).toString().split(",");
+                String prov= getLocation(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
+                if (prov.equals("")){
+                    prov = "Northern Cape";
+                }
+                if (province.contains(prov)){
+                    int frq = provfrq.get(province.indexOf(prov)).intValue();
+                    frq++;
+                    provfrq.set(province.indexOf(prov),frq);
+                }else{
+                    province.add(prov);
+                    provfrq.add(1);
+                }
+
+
             }
         }
-        BarGraph bar2;
-        for (int j = 0; j < types.size(); j++) {
+        for (int j = 0; j < province.size(); j++) {
             bar2 = new BarGraph();
-            bar2.x = types.get(j).toString();
-            bar2.y = typeFreq.get(j).toString();
+            bar2.x = province.get(j).toString();
+            bar2.y = provfrq.get(j).toString();
 
             System.out.println("x: " + bar2.x);
             System.out.println("y: " + bar2.y);
