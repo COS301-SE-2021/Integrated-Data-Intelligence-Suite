@@ -1,0 +1,239 @@
+#indicator-container {
+    height: 100%;
+    width: 100%;
+    margin-bottom: 2%;
+    padding: 0;
+    border: 0;
+    background: #e8e8e9;
+}
+
+
+.indicator-content-container {
+    /*border: 3px solid red;*/
+    float: left;
+    width: 100%;
+}
+
+
+#indicator-container > .indicator-card {
+    /*border: 2px solid red;*/
+    border: 0.1em solid #e8e8e9;
+
+    width: 25%;
+    float: left;
+    margin-right: 2%;
+    border-radius: 0;
+}
+
+.indicator-card > .ant-card-head {
+    border-bottom: 0;
+    /*background: #408ec6;*/
+}
+
+.indicator-card > .ant-card-body {
+    /*padding: 1%;*/
+    padding-top: 0;
+}
+
+.indicator-card
+> div.ant-card-head
+> div.ant-card-head-wrapper
+> div.ant-card-head-title {
+    color: white;
+}
+
+
+.arrow-icon-container {
+    /*border: 2px solid blue;*/
+    /*width: 40%;*/
+    float: left;
+}
+
+.indicator-value-container {
+    /*border: 2px solid red;*/
+    /*width: 60%;*/
+    float: left;
+    font-size: 1.2em;
+    margin-right: 3%;
+}
+
+.percentage-value-container {
+    /*border: 2px solid yellow;*/
+    /*width: 100%;*/
+    float: left;
+}
+
+.amount-changed-container {
+    /*border: 2px solid green;*/
+    /*border: 0;*/
+    float: left;
+}
+
+
+/*color of the arrow icon of the first indicator-card*/
+.indicator-card:nth-child(1)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.arrow-icon-container
+> span.anticon.anticon-arrow-up
+> svg {
+    color: #EF062D;
+    transform: rotate(180deg);
+    width: 1.8em;
+    height: 1.8em;
+
+}
+
+/*percentage value in the first indicator-card*/
+.indicator-card:nth-child(1)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.percentage-value-container {
+    color: #EF062D;
+}
+
+
+/*arrow icon of the Second indicator-card*/
+.indicator-card:nth-child(2)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.arrow-icon-container
+> span.anticon.anticon-arrow-up
+> svg {
+    color: #009966;
+    width: 1.8em;
+    height: 1.8em;
+}
+
+/*percentage-value of the Second indicator-card*/
+.indicator-card:nth-child(2)
+> div.ant-card-body
+> div.indicator-content-container
+> div.amount-changed-container
+> div.percentage-value-container {
+    color: #009966;
+}
+
+.graph-container {
+    /*border: 2px solid black;*/
+    float: left;
+    width: 100%;
+}
+
+
+/*********************************************************/
+/****************Average Sentiment Card******************/
+/*******************************************************/
+#ave-sentiment-card {
+    /*grid-column: 1;*/
+    /*grid-column-end: 3;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
+}
+
+#ave-sentiment-card > div.ant-card-head {
+    background-color: #ff3333;
+}
+
+/*********************************************************/
+/******************Num Mentions Card*********************/
+/*******************************************************/
+#num-mentions-card {
+    /*grid-column-start: 3;*/
+    /*grid-column-end: 5;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
+}
+
+#num-mentions-card > div.ant-card-head {
+    background-color: #009933;
+}
+
+/*********************************************************/
+/******************Total Sentiment Card******************/
+/*******************************************************/
+#total-sentiment-card {
+    /*grid-column-start: 5;*/
+    /*grid-column-end: 7;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
+    /*border: 3px solid red;*/
+}
+
+#total-sentiment-card > div.ant-card-head {
+    background-color: #408ec6;
+}
+
+/*********************************************************/
+/****************Sentiment vs Time Card******************/
+/********************************************************/
+#sentiment-vs-time-card {
+    /*grid-column-start: 7;*/
+    /*grid-column-end: 9;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
+    /*border: 3px solid orange;*/
+}
+
+#sentiment-vs-time-card > div.ant-card-head {
+    background-color: #ed3572;
+}
+
+/*********************************************************/
+/****************Engagement By Location******************/
+/********************************************************/
+#engagement-location-card {
+    /*grid-column-start: 6;*/
+    /*grid-column-end: 9;*/
+    /*grid-row-start: 5;*/
+    /*grid-row-end: 9;*/
+}
+
+#engagement-location-card > div.ant-card-head {
+    background-color: #d72631;
+}
+
+/*********************************************************/
+/**************************Tweet Content******************/
+/********************************************************/
+#tweet-content-card {
+    /*grid-column-start: 6;*/
+    /*grid-column-end: 10;*/
+    /*grid-row-start: 10;*/
+    /*grid-row-end: 14;*/
+    /*grid-column: span 2;*/
+    /*grid-row: span 2;*/
+
+}
+
+#tweet-content-card > div.ant-card-head {
+    background-color: #d72631;
+}
+
+/*********************************************************/
+/********************Frequency of Entity******************/
+/********************************************************/
+
+#freq-entity-type {
+    /*grid-column: 1;*/
+    /*grid-column-end: 3;*/
+    /*grid-row-start: 1;*/
+    /*grid-row-end: 5;*/
+}
+
+#freq-entity-type > div.ant-card-head {
+    background-color: #ff3333;
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,125 @@
+#map_card_content_layout_div {
+    /*border: 3px solid black;*/
+    border: 0;
+    background: #e8e8e9;
+    margin-bottom: 2%;
+}
+
+
+#map-card {
+    width: 100%;
+    padding: 0;
+    float: left;
+    /*padding: 0.4%;*/
+    /*border-top-left-radius: 2%;*/
+    /*border-bottom-left-radius: 2%;*/
+    border-top: 0.1em solid #e8e8e9;
+    border-bottom: 0.1em solid #e8e8e9;
+    border-left: 0.1em solid #e8e8e9;
+    border-right: 0.1em solid #e8e8e9;
+    /*border-right: 0;*/
+    height: 100%;
+
+
+
+}
+
+#map-card
+> div.ant-card-head
+> div.ant-card-head-wrapper
+> div.ant-card-head-title {
+    color: #5C5C5C;
+    font-weight: 800;
+}
+
+#map-card > div.ant-card-head {
+    border: 0;
+    background: white;
+    /*padding: 0;*/
+}
+
+#map-card > div.ant-card-body {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 2%;
+    /*border:2px solid orange;*/
+    background: white;
+}
+
+
+/* the parent div of the entire map card
+    its child is the map card
+*/
+#map_card {
+    border: 3px solid green;
+    /*border: 0;*/
+    height: 100%;
+    /*width: 700px;*/
+    /*width: 100%;*/
+    padding: 0;
+    margin-bottom: 0;
+}
+
+/* The div contains the Actual Map component */
+#map_container_div {
+    /*height: 300px;*/
+    height: 700px;
+    width: 180%;
+    /*border: 3px solid yellow;*/
+    /*border: 0;*/
+    padding: 0;
+    float: left;
+    position: relative;
+    margin-right: 1%;
+    /*border-top-left-radius: 3%;*/
+    /*border-bottom-left-radius: 3%;*/
+    /*border-radius: 1.5%;*/
+}
+
+/*
+* The body of the Map Card
+*/
+#map_card > .ant-card-body {
+    padding: 0;
+}
+
+
+/*The circle that has been clicked*/
+.chosen_circle {
+    fill: red;
+    fill-opacity: 1;
+    animation: chosenCircleExpandShrink infinite 2s;
+}
+
+/*The beeping animation when a circle has clicked*/
+@keyframes chosenCircleExpandShrink {
+    0% {
+        stroke-width: 0.5em;
+    }
+
+    50% {
+        stroke-width: 1em;
+    }
+
+}
+
+
+#top-country-indicator-card {
+    /*border: 3px solid red;*/
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+#map-card-container {
+    /*border: 3px solid black;*/
+    max-height: 30em;
+    grid-column: 1/span 2;
+    grid-row: 1/span 2;
+
+    /*grid-column-start: 1;*/
+    /*grid-column-end: 6;*/
+    /*grid-row-start: 5;*/
+    /*grid-row-end: 8;*/
+}

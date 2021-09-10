@@ -1,27 +1,27 @@
 package com.Import_Service.Import_Service.controller;
 
-
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
 import com.Import_Service.Import_Service.exception.InvalidImporterRequestException;
-import com.Import_Service.Import_Service.request.ImportDataRequest;
-import com.Import_Service.Import_Service.request.ImportNewsDataRequest;
-import com.Import_Service.Import_Service.request.ImportTwitterRequest;
-import com.Import_Service.Import_Service.response.ImportDataResponse;
-import com.Import_Service.Import_Service.response.ImportNewsDataResponse;
-import com.Import_Service.Import_Service.response.ImportTwitterResponse;
+import com.Import_Service.Import_Service.request.*;
+import com.Import_Service.Import_Service.response.*;
+import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
-import org.apache.tomcat.jni.Local;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.json.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/Import", produces = "application/json")
 public class ImportServiceController {
 
@@ -40,7 +40,6 @@ public class ImportServiceController {
      */
     @PostMapping(value = "/importData")
     public @ResponseBody ImportDataResponse importData(@RequestBody ImportDataRequest request) throws Exception{
-        //ImportDataRequest request = requestEntity.getBody();
 
         if(request == null) {
             throw new InvalidImporterRequestException("Request object is null.");
@@ -59,7 +58,6 @@ public class ImportServiceController {
     @PostMapping(value = "/getTwitterDataJson")
     public @ResponseBody ImportTwitterResponse getTwitterDataJson(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        //ImportTwitterRequest request = requestEntity.getBody();
         return service.getTwitterDataJson(request);
     }
 
@@ -72,7 +70,6 @@ public class ImportServiceController {
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody ImportTwitterResponse importDatedData(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        //ImportTwitterRequest request = requestEntity.getBody();
         return service.importDatedData(request);
     }
 
@@ -85,19 +82,21 @@ public class ImportServiceController {
      */
     @GetMapping(value = "test/twitter/{key}")
     public String testTwitter(@PathVariable String key){
-        ImportTwitterResponse res = null;
+        ImportTwitterResponse res;
         try{
             res = service.getTwitterDataJson(new ImportTwitterRequest(key));
         } catch (Exception e) {
             return "{\"data\": \""+e.getMessage()+"\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+        if(res == null){
+            return "{\"data\": \"No data found.\"}";
+        }
 
         return res.getJsonData();
     }
 
     /**
-     * This function retrieves twitter data basd on a search key and date.
+     * This function retrieves twitter data based on a search key and date.
      *
      * @param key a phrase or sentence used as a search query
      * @param from the date at which the search should start. Date is in the form YYYY-MM-DD
@@ -106,7 +105,7 @@ public class ImportServiceController {
      */
     @GetMapping(value = "test/twitter/{key}/{from}/{to}")
     public String testTwitterTwo(@PathVariable String key, @PathVariable String from, @PathVariable String to){
-        ImportTwitterResponse res = null;
+        ImportTwitterResponse res;
         try{
             LocalDate fromDate = LocalDate.parse(from);
             LocalDate toDate = LocalDate.parse(to);
@@ -114,7 +113,9 @@ public class ImportServiceController {
         } catch (Exception e) {
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+        if(res == null){
+            return "{\"data\": \"No data found.\"}";
+        }
 
         return res.getJsonData();
     }
@@ -127,14 +128,16 @@ public class ImportServiceController {
      */
     @GetMapping(value="test/news/{key}")
     public String testNewsAPI(@PathVariable String key){
-        ImportNewsDataResponse res = null;
+        ImportNewsDataResponse res;
         try {
             res = service.importNewsData(new ImportNewsDataRequest(key));
         } catch (Exception e) {
 
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+        if(res == null) {
+            return "{\"data\": \"No data found.\"}";
+        }
 
 
         return res.getData();
@@ -149,16 +152,18 @@ public class ImportServiceController {
      */
     @GetMapping(value="test/all/{key}")
     public  String searchData(@PathVariable String key){
-        ImportDataResponse res = null;
-        String retString = "";
+        ImportDataResponse res;
         try{
-            res = service.importData(new ImportDataRequest("bitcoin", 100));
+            res = service.importData(new ImportDataRequest(key, 100));
 
         } catch (ImporterException e) {
 
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
-        if(res == null) return "{\"data\": \"No data found.\"}";
+
+        if(res == null) {
+            return "{\"data\": \"No data found.\"}";
+        }
 
         ArrayList<String> lst = new ArrayList<>();
 
@@ -171,5 +176,54 @@ public class ImportServiceController {
         return lst.toString();
     }
 
+    @PostMapping(value = "/addApiSource")
+    public @ResponseBody AddAPISourceResponse addApiSource(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        String name = obj.getString("name");
+        String url = obj.getString("url");
+        String method = obj.getString("method");
+        String searchKey = obj.getString("searchKey");
+        String auth = obj.getString("authorization");
+        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
+        Map<String, String> params = new LinkedHashMap<>();
+        JSONArray paramsArray = obj.getJSONArray("parameters");
+        for(int i = 0; i < paramsArray.length(); i++) {
+            JSONObject paramObj = paramsArray.getJSONObject(i);
+            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
+        }
 
+        AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, authType, auth, params);
+        return service.addAPISource(request);
+    }
+
+    @PostMapping(value = "/updateAPI")
+    public @ResponseBody EditAPISourceResponse editAPISource(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        Long id = obj.getLong("id");
+        String name = obj.getString("name");
+        String url = obj.getString("url");
+        String method = obj.getString("method");
+        String searchKey = obj.getString("searchKey");
+        String auth = obj.getString("authorization");
+        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
+        Map<String, String> params = new LinkedHashMap<>();
+        JSONArray paramsArray = obj.getJSONArray("parameters");
+        for(int i = 0; i < paramsArray.length(); i++) {
+            JSONObject paramObj = paramsArray.getJSONObject(i);
+            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
+        }
+
+        EditAPISourceRequest request = new EditAPISourceRequest(id, name, url, method, searchKey, authType, auth, params);
+        return service.editAPISource(request);
+    }
+
+    @GetMapping(value = "/getAllSources")
+    public @ResponseBody GetAllAPISourcesResponse getAllAPISources() {
+        return service.getAllAPISources();
+    }
+
+    @PostMapping(value = "/getSourceById")
+    public @ResponseBody GetAPISourceByIdResponse getAPISourceById(@RequestBody GetAPISourceByIdRequest request) throws Exception {
+        return service.getAPISourceById(request);
+    }
 }
