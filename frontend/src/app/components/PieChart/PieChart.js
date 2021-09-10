@@ -70,19 +70,20 @@ export default class PieChart extends React.Component {
     render() {
         return (
             <>
-                <div className="pie-container">
-                    <div className="sum-of-slices">{this.state.sumOfSlices}</div>
+                <div className="pie-container" id="textual">
+                    <div className="sum-of-slices" style={{ color: 'white' }}>{this.state.sumOfSlices}</div>
                     <div
                       id="total-sentiment-pie-container"
                     >
                         <VictoryPie
                           colorScale={['#FF0000', '#FFFF00', '#00a800']}
                           data={this.state.data_points}
-                          labels={({ datum }) => datum.x}
-                          innerRadius={100}
+                          labels={({ datum }) => `${datum.x} ${datum.y}%`}
+                          innerRadius={70}
                           padAngle={5.5}
-                          width={400}
-                          style={{ labels: { fontSize: 45, padding: 20 } }}
+                          width={200}
+                          height={200}
+                          style={{ labels: { fontSize: 16, padding: 25 } }}
                           animate={{
                                 duration: 500,
                             }}
@@ -95,7 +96,7 @@ export default class PieChart extends React.Component {
                                             {
                                                 target: 'data',
                                                 mutation: (props) => {
-                                                    // this._changeSliceSum(props.style.fill === '#c43a31');
+                                                    // this._changeSliceSum(style.fill === '#c43a31');
                                                     // return style.fill === '#c43a31'
                                                     //     ? null
                                                     //     : { style: { fill: '#c43a31' } };
@@ -112,10 +113,10 @@ export default class PieChart extends React.Component {
                                                 target: 'data',
                                                 mutation: () =>{
                                                     return null;
-                                                }
-                                            }
-                                        ]
-                                    }
+                                                },
+                                            },
+                                        ];
+                                    },
                                 },
                             }]}
                         />
