@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import './SearchBar.css';
-import template_json from '../../resources/graphStructures/message.json';
+import template_json from '../../Mocks/messageMock.json';
 
 const { Search } = Input;
 

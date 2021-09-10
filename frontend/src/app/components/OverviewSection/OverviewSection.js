@@ -8,6 +8,30 @@ import ValueWithPercentChange from '../ValueWithPercentChange/ValueWithPercentCh
 export default class OverviewSection extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { dataToBeDisplayed: [] };
+    }
+
+    componentDidMount() {
+        // //Adding nodes to the layout
+        if (typeof this.props.text[0] === 'undefined') {
+            // some error message
+            this.setState({ dataToBeDisplayed: [] });
+            console.log('array is undefined');
+        } else if (this.props.text[0].length === 0) {
+            // Some error
+            this.setState({ dataToBeDisplayed: [] });
+            console.log('array is empty');
+        } else if (this.props.text[0].length > 0) {
+            // this.theData = this.props.text[1];
+            this.setState({
+                dataToBeDisplayed: [
+                    this.props.text[0].words,
+                    this.props.text[1].words,
+                    this.props.text[2].words,
+                    this.props.text[3].words
+                ]
+            });
+        }
     }
 
     render() {
@@ -20,7 +44,8 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing
-                            rawValue={'1,214,312'}
+                            // rawValue={'1,214,312'}
+                            rawValue={this.state.dataToBeDisplayed[0]}
                         />
                     </SimpleCard>
 
@@ -30,7 +55,8 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
-                            rawValue={'23'}
+                            // rawValue={'23'}
+                            rawValue={this.state.dataToBeDisplayed[2]}
                         />
                     </SimpleCard>
 
@@ -40,7 +66,8 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
-                            rawValue={'bad'}
+                            // rawValue={'bad'}
+                            rawValue={this.state.dataToBeDisplayed[1]}
                         />
                     </SimpleCard>
 
@@ -50,7 +77,8 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing
-                            rawValue={'16'}
+                            // rawValue={'16'}
+                            rawValue={this.state.dataToBeDisplayed[3]}
                         />
                     </SimpleCard>
                 </div>

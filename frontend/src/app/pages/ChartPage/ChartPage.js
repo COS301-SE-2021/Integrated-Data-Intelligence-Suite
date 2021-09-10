@@ -356,14 +356,20 @@ class ChartPage extends Component {
                                             cardTitle=""
                                             cardID="row-1"
                                         >
-                                            <OverviewSection/>
+                                            <OverviewSection
+                                                text={this.state.text}
+                                                key={this.state.text}
+                                            />
                                         </SimpleSection>
 
                                         <SimpleSection
                                             cardTitle=""
                                             cardID={'row-2'}
                                         >
-                                            <OverviewGraphSection/>
+                                            <OverviewGraphSection
+                                                text={this.state.text}
+                                                key={this.state.text}
+                                            />
                                         </SimpleSection>
 
                                         <SimpleSection
@@ -386,12 +392,6 @@ class ChartPage extends Component {
                                                         <DraggableBarGraph text={this.state.text}/>
                                                     </SimpleCard>
                                                 </div>
-                                                {/*<SimpleCard*/}
-                                                {/*    cardTitle="Map Metric 2"*/}
-                                                {/*    cardID="map-metric-2"*/}
-                                                {/*>*/}
-                                                {/*    <GraphWithBrushAndZoom/>*/}
-                                                {/*</SimpleCard>*/}
                                             </div>
                                         </SimpleSection>
 

@@ -109,7 +109,7 @@ export default function VictoryBarGraph(props) {
                         }
                     }
                 ]}
-                data={SampleData}
+                data={this.props.text}
             />
         </VictoryChart>
     );
