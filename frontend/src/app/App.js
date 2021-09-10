@@ -34,10 +34,10 @@ class App extends Component {
                     <ChartPage />
                 </Route>
 
-                <Route exact path='/verify'>
-                    <VerifyPage/>
+                <Route exact path="/verify">
+                    <VerifyPage />
                 </Route>
-      
+
                 <Route exact path="/permissions">
                     <Permissions />
                 </Route>

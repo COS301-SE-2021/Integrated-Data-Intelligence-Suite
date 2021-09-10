@@ -122,14 +122,14 @@ const LoginPage = () => {
                   </Link>
               </Form.Item>
 
-              <Divider className={'or_divider'}>
-                    OR
-                </Divider>
+              <Divider className="or_divider">
+                  OR
+              </Divider>
 
               <Form.Item>
                   Cannot login?
-                  <Link to={"/verify"}>
-                      <a className={"register_link"} href="#">Click here to verify account!</a>
+                  <Link to="/verify">
+                      <a className="register_link" href="#">Click here to verify account!</a>
                   </Link>
               </Form.Item>
           </form>
