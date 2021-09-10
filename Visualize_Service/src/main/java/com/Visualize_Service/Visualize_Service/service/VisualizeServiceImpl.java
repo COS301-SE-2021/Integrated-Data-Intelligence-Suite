@@ -60,7 +60,7 @@ public class VisualizeServiceImpl {
         //word cloud sunburst                             <-
 
         //Network graph1(Relationships)                   <- D
-        // Network graph 2(Patterns)                      <-
+        // Network graph 2(Patterns)                      <- D
 
         //Timeline(Anomaly)                               <- D
         // scatter plot * tentative                       <-
@@ -768,154 +768,69 @@ public class VisualizeServiceImpl {
 
         ArrayList<ArrayList> reqData = request.getDataList();
 
-        /*for (int i = 0; i < reqData.size(); i++) {
-            for (int j = 0; j < reqData.get(i).size(); j++) {
-                System.out.println("LINE CHECK HERE");
-                System.out.println(reqData.get(i).get(j).toString());
-                String newLine = reqData.get(i).get(j).toString().replace(' ','_');
-                System.out.println(newLine);
-                reqData.get(i).set(j,newLine);
-            }
-        }*/
 
-
-        /**Setup Relationship Data**/
+        /**Setup Pattern Data**/
         ArrayList<Graph> output = new ArrayList<>();
 
-        //ArrayList<EdgeNetworkGraph> foundRelationships = new ArrayList<>();
-        ArrayList<String[]> Relationships = new ArrayList<>();
 
-        System.out.println("Row count : " +  reqData.size());
 
         for (int i = 0; i < reqData.size(); i++) {
 
             //System.out.println("String count : " + reqData.get(i).size());
-            for (int j = 0; j < reqData.get(i).size(); j++) { //strings, (one, two, three)
-                System.out.println(reqData.get(i).toString());
-                System.out.println();
+            String mainNode = reqData.get(i).get(reqData.get(i).size()-2).toString();
+            String confidence = reqData.get(i).get(reqData.get(i).size()-1).toString();
+            for (int j = 0; j < reqData.get(i).size() -2; j++) { //strings, (one, two, three)
 
-                String idOne = reqData.get(i).get(j).toString();
-                for (int k = 0; k < reqData.get(i).size(); k++) { //compares with other values, in same row
-                    String idTwo = reqData.get(i).get(k).toString();
+                String node = reqData.get(i).get(j).toString();
 
-                    if(reqData.get(i).size() <= 1)  //ignores one value data
-                        continue;
+                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
 
-                    //System.out.println("Checking : " + idOne + " : " + idTwo);
-                    if (idOne.equals(idTwo) == false) { //not the same value
-                        //System.out.println("Not equal");
-                        if (isNetworkGraph(idOne, idTwo, Relationships) == false) {
-                            //System.out.println("add graph");
-                            //first node
-                            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+                nodeGraphOne.setData(node);
+                nodeGraphOne.setPosition(10, 10);
 
-                            nodeGraphOne.setData(idOne);
-                            nodeGraphOne.setPosition(10, 10);
+                //second node
+                NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
 
-                            //second node
-                            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                nodeGraphTwo.setData(mainNode);
+                nodeGraphTwo.setPosition(50, 5);
 
-                            nodeGraphTwo.setData(idTwo);
-                            nodeGraphTwo.setPosition(50, 5);
+                //edge node
+                EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+                edgeGraph.setData("Pattern found between with a confidence of : " + confidence , node, mainNode);
 
-                            //edge node
-                            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-                            edgeGraph.setData("Relationship found between", idOne, idTwo);
+                //add graphs to output
+                output.add(nodeGraphOne);
+                output.add(nodeGraphTwo);
+                output.add(edgeGraph);
 
-                            //add graphs to output
-                            output.add(nodeGraphOne);
-                            output.add(nodeGraphTwo);
-                            output.add(edgeGraph);
-
-                            //foundRelationships.add(edgeGraph);
-                            String[] values = new String[]{idOne, idTwo};
-                            Relationships.add(values);
-                        }
-                    }
-                }
             }
         }
 
         if( output.isEmpty()) {
 
-            //ONE
+            String mainNode = "Tweet messages";
+            String confidence = "0.75";
+            String node = "Jack Dorsey";
+
             NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("Blue Origin");
+
+            nodeGraphOne.setData(node);
             nodeGraphOne.setPosition(10, 10);
 
             //second node
             NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("@SpaceX");
+
+            nodeGraphTwo.setData(mainNode);
             nodeGraphTwo.setPosition(50, 5);
 
             //edge node
             EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "Blue Origin", "@SpaceX");
+            edgeGraph.setData("Pattern found between with a confidence of : " + confidence , node, mainNode);
 
             //add graphs to output
             output.add(nodeGraphOne);
             output.add(nodeGraphTwo);
             output.add(edgeGraph);
-
-            //TWO
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("NASA");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("@SpaceX");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "NASA", "@SpaceX");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
-
-            //THREE
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("NASA");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("Elon Musk");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "NASA", "Elon Musk");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
-
-            //FOUR
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("engineer");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("Elon Musk");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "engineer", "Elon Musk");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
         }
 
         return new CreatePatternGraphResponse(output);
