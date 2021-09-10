@@ -407,18 +407,18 @@ class ChartPage extends Component {
 
                                             <div id="word-cloud-graph-container">
                                                 <SimpleCard
+                                                    cardTitle="Dominant words"
+                                                    cardID="word-graph-2"
+                                                >
+                                                    <PieChart/>
+                                                </SimpleCard>
+                                                <SimpleCard
                                                     cardTitle="word-graph-1"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
                                                 </SimpleCard>
 
-                                                <SimpleCard
-                                                    cardTitle="word-graph-2"
-                                                    cardID="word-graph-2"
-                                                >
-                                                    <PieChart/>
-                                                </SimpleCard>
                                             </div>
                                         </SimpleSection>
 
