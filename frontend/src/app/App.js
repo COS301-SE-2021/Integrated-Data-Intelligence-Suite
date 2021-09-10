@@ -14,25 +14,25 @@ import VerifyPage from "./pages/VerifyPage/VerifyPage";
 import './App.scss';
 
 class App extends Component {
-  render() {
-    return (
-        <>
-            <Switch>
-                <Route exact path="/">
-                    <HomePage />
-                </Route>
+    render() {
+        return (
+            <>
+                <Switch>
+                    <Route exact path="/">
+                        <HomePage />
+                    </Route>
 
-                <Route exact path="/login">
-                    <LoginPage />
-                </Route>
+                    <Route exact path="/login">
+                        <LoginPage />
+                    </Route>
 
-                <Route exact path="/register">
-                    <RegisterPage />
-                </Route>
+                    <Route exact path="/register">
+                        <RegisterPage />
+                    </Route>
 
-                <Route exact path="/chart">
-                    <ChartPage />
-                </Route>
+                    <Route exact path="/chart">
+                        <ChartPage />
+                    </Route>
 
                 <Route exact path="/verify">
                     <VerifyPage />
@@ -42,32 +42,33 @@ class App extends Component {
                     <Permissions />
                 </Route>
 
-                <Route exact path="/logout">
-                    <LogoutPage />
-                </Route>
 
-                <Route exact path="/settings">
-                    <SettingsPage />
-                </Route>
+                    <Route exact path="/logout">
+                        <LogoutPage />
+                    </Route>
 
-                <Route path="/settings/source/:id">
-                    <AddDataSource />
-                </Route>
+                    <Route exact path="/settings">
+                        <SettingsPage />
+                    </Route>
 
-                <Route path="/user/:id">
-                    <UserPermissions />
-                </Route>
+                    <Route path="/settings/source/:id">
+                        <AddDataSource />
+                    </Route>
 
-                <Route path="*">
-                    <div>
-                        <h2>Page not Found</h2>
-                        <Link to="/"> back to home page</Link>
-                    </div>
-                </Route>
-            </Switch>
-        </>
-    );
-  }
+                    <Route path="/user/:id">
+                        <UserPermissions />
+                    </Route>
+
+                    <Route path="*">
+                        <div>
+                            <h2>Page not Found</h2>
+                            <Link to="/"> back to home page</Link>
+                        </div>
+                    </Route>
+                </Switch>
+            </>
+        );
+    }
 }
 
 export default App;

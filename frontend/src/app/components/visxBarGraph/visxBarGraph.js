@@ -1,6 +1,7 @@
 import React from 'react';
-import { AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip } from '@visx/xychart';
-
+import {
+ AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip,
+} from '@visx/xychart';
 
 const data1 = [
     {
@@ -100,38 +101,37 @@ const accessors = {
     yAccessor: (d) => d.y,
 };
 
-
 export default function VisxBarGraph(props) {
     // noinspection RequiredAttributes
     return (
         <XYChart
-            xScale={{ type: 'band' }}
-            yScale={{ type: 'linear' }}
-            height={250}
-            width={250}
-            horizontal
+          xScale={{ type: 'band' }}
+          yScale={{ type: 'linear' }}
+          height={250}
+          width={250}
+          horizontal
         >
             <AnimatedAxis
-                orientation="bottom"
-                hideTicks
-                numTicks={4}
-                stroke={'black'}
+              orientation="bottom"
+              hideTicks
+              numTicks={4}
+              stroke="black"
                 // strokeWidth={'1em'}
                 // top={40}
             />
 
-            <AnimatedAxis orientation={'left'}/>
+            <AnimatedAxis orientation="left" />
             <AnimatedBarSeries
-                dataKey="Line1"
-                data={data1}
-                {...accessors}
+              dataKey="Line1"
+              data={data1}
+              {...accessors}
             />
 
             <Tooltip
                 // snapTooltipToDatumX
-                snapTooltipToDatumY
-                showVerticalCrosshair
-                renderTooltip={({
+              snapTooltipToDatumY
+              showVerticalCrosshair
+              renderTooltip={({
                     tooltipData,
                     colorScale,
                 }) => (

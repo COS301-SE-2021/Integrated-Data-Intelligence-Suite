@@ -1,0 +1,165 @@
+/*******************************************/
+/******************Overview*****************/
+/*******************************************/
+#row-1 {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-template-rows: 0em auto;
+    margin-bottom: 0;
+}
+
+#indicator-card-container {
+    display: grid;
+    grid-template-columns: 100%; /*2 columns, left column, right column */
+    grid-template-rows: 50% 50%; /*1 single row*/
+    /*border: 3px solid red;*/
+    background: var(--light-gray);
+    row-gap: 10px;
+}
+
+/*The left side of the overview section*/
+#overview-col-left {
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 2%;
+    background: white;
+    border: 2px solid #e8e8e9;
+    border-radius: 10px;
+    padding: 28px;
+    height: max-content;
+    /*height: 284px;*/
+}
+
+#overview-metric-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    height: fit-content;
+    /*padding: 25px;*/
+    /*padding-left: 11px;*/
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
+    background: white;
+    border-right: 1px solid lightgrey;
+
+
+}
+
+#overview-metric-1 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+    color: darkgrey;
+}
+
+#overview-metric-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    height: fit-content;
+    /*padding: 25px;*/
+    /*padding-left: 11px;*/
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
+    background: white;
+    margin: 0;
+    border-right: 1px solid lightgrey;
+
+}
+
+#overview-metric-2 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+    color: darkgrey;
+}
+
+
+#overview-metric-3 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    height: fit-content;
+    /*padding: 25px;*/
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
+    background: white;
+    border-right: 1px solid lightgrey;
+
+}
+
+#overview-metric-3 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+    color: darkgrey;
+
+}
+
+
+#overview-metric-4 {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    height: fit-content;
+    /*padding: 25px;*/
+    /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
+    background: white;
+}
+
+#overview-metric-4 > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+    color: darkgrey;
+}
+
+
+/*********************************************************/
+/**************** Total-Sentiment-Pie *******************/
+/*******************************************************/
+.pie-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 30% 70%;
+    height: 200px;
+    margin: 0;
+}
+
+#sum-of-slices {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+
+#total-sentiment-pie-container {
+    /*border: 3px solid black;*/
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 100%;
+}
+
+#total-sentiment-pie {
+    /*border: 3px solid red;*/
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+#total-sentiment-legend {
+    /*border: 3px solid blue;*/
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+

@@ -131,7 +131,9 @@ function MapCard(props) {
                     <EditControl
                       position="topleft"
                       onCreated={_created}
-                      draw={{}}
+                      draw={{
+                            circlemarker: false,
+                        }}
                     />
                 </FeatureGroup>
                 {/* </LayersControl.Overlay> */}

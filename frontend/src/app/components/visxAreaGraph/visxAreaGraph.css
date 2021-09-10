@@ -33,6 +33,14 @@ div#num-mentions-card
     fill: rgb(40, 204, 102) !important;
 }
 
+#this-glyph{
+    position: absolute !important;
+    r: 10 !important;
+    border: 3px solid blue;
+    clip: auto;
+    z-index: 99999999999999;
+}
+
 
 
 

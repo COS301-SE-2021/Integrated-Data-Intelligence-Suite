@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {Popconfirm} from "antd";
-import {EditTwoTone} from "@ant-design/icons";
+import { Popconfirm } from 'antd';
+import { EditTwoTone } from '@ant-design/icons';
 
 const colors = {
     red: '#FF120A',

@@ -73,8 +73,8 @@ const UserPermissions = () => {
                   </select>
                   <br />
 
-                  {!submit && <button type={'submit'} disabled className="disabled">submit</button>}
-                  {submit && <button type={'submit'} className="enabled">submit</button>}
+                  {!submit && <button type="submit" disabled className="disabled">submit</button>}
+                  {submit && <button type="submit" className="enabled">submit</button>}
 
               </form>
           </div>

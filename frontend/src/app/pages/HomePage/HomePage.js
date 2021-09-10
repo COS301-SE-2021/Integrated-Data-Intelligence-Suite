@@ -32,23 +32,22 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.setState({
-            user: null,
+            user: true,
         });
     }
 
     render() {
-        if (true) {
-            return <Redirect to="/chart" />;
-        }
-        if (this.state.user) {
-            return (
-                <>
-                    <Switch>
-                        <Route exact path="/">
-                            <Layout
-                              id="outer_layout"
-                              className="chart-page"
-                            >
+        return (
+            <>
+                <Switch>
+                    <Route exact path="/">
+                        <Layout
+                          id="outer_layout"
+                          className="chart-page"
+                        >
+                            <SideBar />
+
+                            <Layout id="inner_layout_div">
                                 <Header id="top_bar">
                                     {/* <Title level={1}>Home</Title> */}
 
@@ -56,17 +55,13 @@ class HomePage extends Component {
                                       name="s"
                                     />
                                 </Header>
-                                <Layout id="inner_layout_div">
-                                    <SideBar />
-                                </Layout>
-
                             </Layout>
-                        </Route>
-                    </Switch>
-                </>
-            );
-        }
-        return <Redirect to="/login" />;
+
+                        </Layout>
+                    </Route>
+                </Switch>
+            </>
+        );
     }
 }
 

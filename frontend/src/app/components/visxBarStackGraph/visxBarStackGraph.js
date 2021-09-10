@@ -1,5 +1,7 @@
 import React from 'react';
-import { AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip } from '@visx/xychart';
+import {
+ AnimatedBarSeries, AnimatedBarStack, XYChart, AnimatedAxis, Tooltip,
+} from '@visx/xychart';
 import cityTemperature, { CityTemperature } from '@visx/mock-data/lib/mocks/cityTemperature';
 import * as Mock from '@visx/mock-data';
 
@@ -96,7 +98,6 @@ const data2 = [
     },
 ];
 
-
 const accessors = {
     xAccessor: (d) => d.x,
     yAccessor: (d) => d.y,
@@ -109,43 +110,43 @@ export default function VisxBarStackGraph(props) {
     // noinspection RequiredAttributes
     return (
         <XYChart
-            xScale={{ type: 'band' }}
-            yScale={{ type: 'linear' }}
-            height={250}
-            width={250}
+          xScale={{ type: 'band' }}
+          yScale={{ type: 'linear' }}
+          height={250}
+          width={250}
         >
             <AnimatedAxis
-                orientation="bottom"
-                hideTicks
-                numTicks={4}
-                stroke={'black'}
+              orientation="bottom"
+              hideTicks
+              numTicks={4}
+              stroke="black"
                 // strokeWidth={'1em'}
                 // top={40}
             />
 
             <AnimatedAxis
-                orientation={'left'}
-                hideTicks
-                numTicks={4}
+              orientation="left"
+              hideTicks
+              numTicks={4}
             />
             <AnimatedBarStack>
                 <AnimatedBarSeries
-                    dataKey="New York"
-                    data={data1}
-                    {...accessors}
+                  dataKey="New York"
+                  data={data1}
+                  {...accessors}
                 />
                 <AnimatedBarSeries
-                    dataKey="San Francisco"
-                    data={data2}
-                    {...accessors}
+                  dataKey="San Francisco"
+                  data={data2}
+                  {...accessors}
                 />
             </AnimatedBarStack>
 
             <Tooltip
-                snapTooltipToDatumX
-                snapTooltipToDatumY
-                showVerticalCrosshair
-                renderTooltip={({
+              snapTooltipToDatumX
+              snapTooltipToDatumY
+              showVerticalCrosshair
+              renderTooltip={({
                     tooltipData,
                     colorScale,
                 }) => (
