@@ -423,9 +423,29 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Network"
+                                            cardTitle=""
                                             cardID="row-5"
-                                        />
+                                        >
+                                            <SimpleCard
+                                                cardTitle="Relationship Between Entities"
+                                                cardID="network-graph-entities"
+                                            >
+                                                <NetworkGraphCard
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
+                                            </SimpleCard>
+
+                                            <SimpleCard
+                                                cardTitle="Relationship Between Entities"
+                                                cardID="network-graph-patterns"
+                                            >
+                                                <NetworkGraphCard
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
+                                            </SimpleCard>
+                                        </SimpleSection>
                                     </div>
                                 </Layout>
                             </Layout>
