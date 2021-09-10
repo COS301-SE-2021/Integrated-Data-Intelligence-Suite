@@ -155,7 +155,9 @@ public class AnalyseServiceImpl {
         FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
         FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
+
         /*************************************************/
+
 
         //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
@@ -1574,7 +1576,8 @@ public class AnalyseServiceImpl {
 
         //summary.filter(col("prediction").
         Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
-        List<Row> rawResults = Results.select("Text","prediction").collectAsList();
+        Dataset<Row> rawResults2 = Results.select("Text","prediction");
+        List<Row> rawResults = rawResults2.select("Text").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
@@ -1582,7 +1585,8 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
-            results.add(rawResults.get(i).get(0).toString());//name
+            if(rawResults.get(i).get(0) != null)
+                results.add(rawResults.get(i).get(0).toString());//name
         }
 
         return new FindAnomaliesResponse(results);

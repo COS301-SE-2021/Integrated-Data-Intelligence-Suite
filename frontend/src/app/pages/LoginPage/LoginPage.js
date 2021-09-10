@@ -122,12 +122,15 @@ const LoginPage = () => {
                   </Link>
               </Form.Item>
 
-              <Form.Item
-                className="forgot_password_link_container"
-              >
-                  <a className="forgot_password_link" href="">
-                      Forgot password
-                  </a>
+              <Divider className={'or_divider'}>
+                    OR
+                </Divider>
+
+              <Form.Item>
+                  Cannot login?
+                  <Link to={"/verify"}>
+                      <a className={"register_link"} href="#">Click here to verify account!</a>
+                  </Link>
               </Form.Item>
           </form>
 

@@ -6,22 +6,14 @@ import com.User_Service.User_Service.repository.UserRepository;
 import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -270,9 +262,9 @@ public class UserServiceTest {
         Assertions.assertEquals("Registration successful", response.getMessage());
     }
 
-    /*
-    ============================Login tests============================
-    */
+
+    //============================Login tests============================
+
 
     @Test
     @DisplayName("If_LoginRequest_Is_Null")
@@ -358,15 +350,66 @@ public class UserServiceTest {
 
         //test
 
-        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
+        LoginRequest request = new LoginRequest("email@test.com", "passwordTest");
         LoginResponse response = service.login(request);
 
         when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(testUser));
         Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
         Assertions.assertNotNull(foundUser);
 
-        Assertions.assertEquals("Incorrect password", response.getMessage());
+        Assertions.assertEquals("Successfully logged in", response.getMessage());
 
     }
 
+//===================== RegisterAdmin tests =====================
+
+    @Test
+    @DisplayName("If_RegisterAdminRequest_Is_Null")
+    public void registerAdminRequestNull() {
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(null));
+    }
+
+    @Test
+    @DisplayName("If_RegisterAdminRequest_Contains_Null_Attributes")
+    public void registerAdminRequestAtribTest() {
+        RequestAdminRequest requestAllNull = new RequestAdminRequest(null,null,null,null,null);
+        RequestAdminRequest requestUsernameNull = new RequestAdminRequest("username", "first" , "last", "pass", "email@test.com");
+        RequestAdminRequest requestFirstNameNull = new RequestAdminRequest("username", null , "last", "pass", "email@test.com");
+        RequestAdminRequest requestLastNameNull = new RequestAdminRequest("username", "first" , null, "pass", "email@test.com");
+        RequestAdminRequest requestPasswordNull = new RequestAdminRequest("username", "first" , "last", null, "email@test.com");
+        RequestAdminRequest requestEmailNull = new RequestAdminRequest("username", "first" , "last", "pass", null);
+
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestAllNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestUsernameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestFirstNameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestLastNameNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestPasswordNull));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestEmailNull));
+    }
+
+//===================== verifyAccount tests =====================
+
+    @Test
+    @DisplayName("If_User_Does_Not_Exist")
+    public void verifyUserDoesNotExist() throws Exception {
+//        VerifyAccountRequest request = new VerifyAccountRequest("missingEmail@notexist.com");
+//        VerifyAccountResponse response = service.verifyAccount(request);
+//
+//        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+//        Assertions.assertNull(foundUser);
+//
+//        Assertions.assertEquals("User does not exist", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_User_Already_Verified")
+    public void userAlreadyVerified() throws Exception {
+//        VerifyAccountRequest request = new VerifyAccountRequest("missingEmail@notexist.com");
+//        VerifyAccountResponse response = service.verifyAccount(request);
+//
+//        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+//        Assertions.assertNull(foundUser);
+//
+//        Assertions.assertEquals("This account has already been verified", response.getMessage());
+    }
 }

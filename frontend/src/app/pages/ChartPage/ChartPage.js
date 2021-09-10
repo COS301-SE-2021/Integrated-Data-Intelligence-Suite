@@ -120,9 +120,7 @@ class ChartPage extends Component {
                                             cardID="ave-sentiment-card"
                                             graphComponent={(
                                                 <VisxAreaGraph
-                                                    graphData={this.state.text}
-                                                    text={this.state.text}
-                                                    key={this.state.text}
+                                                    graphData={visxAreaMockData}
                                                     showSecondLine={false}
                                                     showXAxis={false}
                                                     showYAxis={false}
@@ -140,9 +138,7 @@ class ChartPage extends Component {
                                             showArrow
                                             graphComponent={(
                                                 <VisxAreaGraph
-                                                    graphData={this.state.text}
-                                                    text={this.state.text}
-                                                    key={this.state.text}
+                                                    graphData={visxAreaMockData}
                                                     showSecondLine={false}
                                                     showXAxis={false}
                                                     showYAxis={false}
@@ -158,9 +154,7 @@ class ChartPage extends Component {
                                             cardID="total-sentiment-card"
                                             graphComponent={(
                                                 <PieChart
-                                                    graphData={this.state.text}
-                                                    text={this.state.text}
-                                                    key={this.state.text}
+                                                    graphData={PieChartMockData}
                                                     legendOrientation="horizontal"
                                                     pieID="total-sentiment-pie"
                                                     legendID="total-sentiment-legend"
@@ -188,11 +182,11 @@ class ChartPage extends Component {
                                             )}
                                         />
 
-                                        {/*<IndicatorCard*/}
-                                        {/*    indicatorTitle="Tweet Content"*/}
-                                        {/*    showArrow={false}*/}
-                                        {/*    cardID="tweet-content-card"*/}
-                                        {/*/>*/}
+                                        <IndicatorCard
+                                            indicatorTitle="Tweet Content"
+                                            showArrow={false}
+                                            cardID="tweet-content-card"
+                                        />
 
                                         <IndicatorCard
                                             indicatorTitle="Frequency of Entity Type"
@@ -204,7 +198,7 @@ class ChartPage extends Component {
                                         />
 
                                         <IndicatorCard
-                                            indicatorTitle="Frequency per country"
+                                            indicatorTitle="Some Title"
                                             showArrow={false}
                                             // cardID={'total-sentiment-pie-card'}
                                             graphComponent={(
@@ -261,6 +255,7 @@ class ChartPage extends Component {
                                             <div
                                                 id="word-cloud-grid-container"
                                             >
+
                                                 <div
                                                     id="word-cloud-item"
                                                     className="word-cloud-grid-item"
@@ -268,6 +263,7 @@ class ChartPage extends Component {
                                                     <WordCloud
                                                         text={this.state.text}
                                                         key={this.state.text}
+
                                                     />
                                                 </div>
 
