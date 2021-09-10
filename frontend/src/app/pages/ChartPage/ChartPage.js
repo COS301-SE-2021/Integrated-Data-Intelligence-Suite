@@ -378,7 +378,7 @@ class ChartPage extends Component {
                                                         cardTitle={'Map Metric 1'}
                                                         cardID={'map-metric-1'}
                                                     >
-                                                        <DraggableBarGraph/>
+                                                        <DraggableBarGraph text={this.state.text}/>
                                                     </SimpleCard>
                                                 </div>
                                                 <SimpleCard
@@ -416,7 +416,7 @@ class ChartPage extends Component {
                                                     cardTitle="word-graph-2"
                                                     cardID="word-graph-2"
                                                 >
-                                                    Word Graph 2
+                                                    <PieChart/>
                                                 </SimpleCard>
                                             </div>
                                         </SimpleSection>
