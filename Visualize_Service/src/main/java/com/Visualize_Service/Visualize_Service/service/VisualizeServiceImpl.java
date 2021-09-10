@@ -778,7 +778,7 @@ public class VisualizeServiceImpl {
         return new CreateWordCloudGraphResponse(output);
     }
 
-    /******************************************************************************************************************/
+    /*************************************************HELPER***********************************************************/
 
     private boolean isNetworkGraph(String idOne, String idTwo,ArrayList<String[]> Relationships ) {
 
@@ -809,6 +809,110 @@ public class VisualizeServiceImpl {
 
         return false;
     }
+
+    private String getLocation(double latitude , double longitude){
+        ArrayList<String> provinces = new ArrayList<>();
+        provinces.add("Eastern Cape");  //0
+        provinces.add("Free State");  //1
+        provinces.add("Garden Route"); //2
+        provinces.add("Gauteng"); //3
+        provinces.add("KwaZulu Natal"); //4
+        provinces.add("Limpopo"); //5
+        provinces.add("Mpumalanga"); //6
+        provinces.add("North West"); //7
+        provinces.add("Northern Cape"); //8
+        provinces.add("Western Cape"); //9
+
+
+        ArrayList<double[]> box = new ArrayList<>();
+        double[] codinateValue = null;
+
+        //Western Cape
+        //-32.105816, 18.325114 - tl
+        codinateValue = new double[2];
+        codinateValue[0] = -32.105816;
+        codinateValue[1] = 18.325114;
+        box.add(codinateValue);
+
+        //-31.427866, 23.514043 - tr
+        codinateValue = new double[2];
+        codinateValue[0] = -31.427866;
+        codinateValue[1] = 23.514043;
+        box.add(codinateValue);
+
+        //-34.668590, 19.536993 - bl
+        codinateValue = new double[2];
+        codinateValue[0] = -34.668590;
+        codinateValue[1] = 19.536993;
+        box.add(codinateValue);
+
+        //-33.979034, 23.689824 - br
+        codinateValue = new double[2];
+        codinateValue[0] = -31.427866;
+        codinateValue[1] = 23.514043;
+        box.add(codinateValue);
+
+        if( isInBox(box,latitude,longitude) ){
+            return provinces.get(9);
+        }
+
+        //Northern Cape
+        //-28.617306, 16.515919 - tl
+        //-25.758013, 24.738063 - tr
+        //-31.615170, 18.218633 - bl
+        //-30.532062, 25.165362 - br
+
+        //North West
+        //-25.458714, 22.868166 - tl
+        //-24.772334, 27.020998 - tr
+        //-27.941580, 24.702883 - bl
+        //-26.888332, 27.339602 - br
+
+        //Free State
+        //-28.667645, 24.106132 - tl
+        //-26.605363, 26.665158 - tr
+        //-28.027116, 29.557151 - bl
+        //-30.520515, 24.934890 - br
+
+        //Eastern Cape
+        //-32.029244, 24.449780 - tl
+        //-30.050545, 28.986950 - tr
+        //-31.427866, 23.514043 - bl
+        //-31.382586, 29.793336 - br
+
+        //KwaZulu Natal
+        //-27.487467, 29.720804 - tl
+        //-26.861960, 32.873880 - tr
+        //-30.485275, 29.149515 - bl
+        //-30.768887, 30.379984 - br
+
+        //Mpumalanga
+        //-25.133998, 29.050638 - tl
+        //-24.505796, 30.995218 - tr
+        //-31.427866, 23.514043 - bl
+        //-27.224009, 31.214945 - br
+
+        //Gauteng
+        //-25.600567, 27.842142 - tl
+        //-25.153889, 28.819925 - tr
+        //-26.705037, 27.182963 - bl
+        //-26.773717, 28.314554 - br
+
+        //Limpopo
+        //-22.487459, 28.725519 - tl
+        //-22.393532, 31.275307 - tr
+        //-24.722124, 26.471358 - bl
+        //-24.284997, 31.737225 - br
+
+        return "";
+    }
+
+    private boolean isInBox(ArrayList<double[]> box, double latitude, double longitude) {
+
+        return false;
+    }
+
+
 
 
 }
