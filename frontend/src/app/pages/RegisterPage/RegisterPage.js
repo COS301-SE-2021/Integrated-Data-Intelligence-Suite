@@ -72,6 +72,7 @@ const RegisterPage = () => {
                 }).then(json => {
                     if(json.success) {
                         alert(json.message);
+                        localStorage.setItem("email", values.email);
                         history.push('/verify');
                     }else{
                         alert(json.message);
