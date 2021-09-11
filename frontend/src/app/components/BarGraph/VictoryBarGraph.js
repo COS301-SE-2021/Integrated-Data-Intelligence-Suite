@@ -27,6 +27,9 @@ const SampleData = [
 
 export default function VictoryBarGraph(props) {
 
+    console.log("inside victory bar graph");
+    // console.log(this.props);
+
     return (
         <VictoryChart>
             <VictoryBar
