@@ -6,7 +6,7 @@ const COLOR_DEFAULT = '#4666FF';
 const COLOR_NOTHOVER = '#CAD0E3';
 
 // Test Data
-const SampleData = [
+let SampleData = [
     {
         x: 1,
         y: 2
@@ -44,8 +44,8 @@ export default function VictoryBarGraph(props) {
                     bottom: 60
                 }}
                 domain={{
-                    x: [0, 5],
-                    y: [0, 5]
+                    x: [0, 11],
+                    // y: [0, 5]
                 }}
                 name="bars"
                 style={{ data: { fill: COLOR_DEFAULT } }}
@@ -57,11 +57,11 @@ export default function VictoryBarGraph(props) {
                         flyoutWidth={40}
                         flyoutPadding={10}
                         flyoutStyle={{
-                            stroke: "#4666FF",
+                            stroke: '#4666FF',
                             strokeWidth: 2,
-                            fill: "white",
+                            fill: 'white',
                         }}
-                        style={{ fill: "#4666FF" }}
+                        style={{ fill: '#4666FF' }}
                     />
                 )}
                 events={[
@@ -112,7 +112,10 @@ export default function VictoryBarGraph(props) {
                         }
                     }
                 ]}
-                data={this.props.text}
+                // data={this.props.text}
+                // key={this.props.text}
+
+                // samples={10}
             />
         </VictoryChart>
     );

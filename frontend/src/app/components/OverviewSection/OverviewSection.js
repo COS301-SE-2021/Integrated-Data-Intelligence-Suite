@@ -55,7 +55,6 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing
-                            // rawValue={'1,214,312'}
                             rawValue={total_likes}
                             key={total_likes}
                         />
@@ -67,10 +66,8 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
-                            // rawValue={'23'}
                             rawValue={trends_value}
                             key={total_likes}
-
                         />
                     </SimpleCard>
 
@@ -80,7 +77,6 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
-                            // rawValue={'bad'}
                             rawValue={overall_sentiment}
                             key={total_likes}
                         />
@@ -92,7 +88,6 @@ export default class OverviewSection extends React.Component {
                     >
                         <ValueWithPercentChange
                             isIncreasing
-                            // rawValue={'16'}
                             rawValue={num_of_anomalies}
                             key={total_likes}
                         />

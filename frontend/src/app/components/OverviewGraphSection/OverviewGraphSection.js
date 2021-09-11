@@ -4,6 +4,9 @@ import SimpleCard from '../SimpleCard/SimpleCard';
 import VictoryBarGraph from '../BarGraph/VictoryBarGraph';
 import PieWithCustomLabels from '../PieWithCustomLabels/PieWithCustomLabels';
 
+let _average_interaction = null;
+let _pie_chart_data = null;
+let _engagement_data = null;
 export default class OverviewGraphSection extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +32,11 @@ export default class OverviewGraphSection extends React.Component {
                     this.props.text[6].words,
                 ]
             });
+            _average_interaction = this.props.text[4];
+            _pie_chart_data = this.props.text[5];
+            _engagement_data = this.props.text[6];
+            console.log(this.props)
+            console.log(_engagement_data);
         }
     }
 
@@ -41,8 +49,8 @@ export default class OverviewGraphSection extends React.Component {
                         cardID="overview-graph-metric-1"
                     >
                         <VictoryBarGraph
-                            text={this.state.dataToBeDisplayed}
-                            key={this.state.dataToBeDisplayed}
+                            text={_average_interaction}
+                            key={_average_interaction}
                         />
                     </SimpleCard>
 
@@ -51,8 +59,8 @@ export default class OverviewGraphSection extends React.Component {
                         cardID="overview-graph-metric-2"
                     >
                         <PieWithCustomLabels
-                            text={this.state.dataToBeDisplayed}
-                            key={this.state.dataToBeDisplayed}
+                            text={_pie_chart_data}
+                            key={_pie_chart_data}
                         />
                     </SimpleCard>
 
@@ -61,8 +69,8 @@ export default class OverviewGraphSection extends React.Component {
                         cardID="overview-graph-metric-3"
                     >
                         <VictoryBarGraph
-                            text={this.state.dataToBeDisplayed}
-                            key={this.state.dataToBeDisplayed}
+                            text={_engagement_data}
+                            key={_engagement_data}
                         />
                     </SimpleCard>
                 </div>
