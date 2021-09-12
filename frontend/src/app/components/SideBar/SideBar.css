@@ -18,46 +18,51 @@
     border: 0;
     /*border: 3px solid red;*/
     height: 87%;
+    padding: 10px;
 }
 
 #sidebar_menu > li {
-    padding-left: 24px;
+    /*padding-left: 24px;*/
     /*border: 2px solid red;*/
     width: 100%;
     /*margin-left: 12px;*/
-    margin-right: 0px;
-    margin-bottom: 14px;
+    /*margin-right: 0px;*/
+    /*margin-bottom: 14px;*/
     margin-top: 8px;
-    padding-right: 24px;
-    /*border-radius: 6px;*/
-    padding-bottom: 11px;
-    padding-top: 10px;
+    /*padding-right: 24px;*/
+    border-radius: 6px;
+    /*padding-bottom: 11px;*/
+    /*padding-top: 10px;*/
     height: 45px;
     background: transparent;
 }
 
-/*When a Sidebar Menu item when it has been selected(clicked)*/
+/*When a Sidebar Menu item when it has been selected(clicked on)*/
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
-    /*background: #5773FA;*/
-    color: var(--neon-blue);
+    background: #5773FA;
+    /*color: var(--neon-blue);*/
+    color: white
     /*border-left: 3px solid #5773FA;*/
-    background: white;
+    /*background: white;*/
 
 }
 
 /*When a Sidebar Menu item when it has been Hovered over*/
 #sidebar_menu > li.ant-menu-item-active {
     /*border: 0;*/
-    /*background: #5773FA;*/
-    color: #5773FA;
+    background: #a0adfd;
+    /*color: #5773FA;*/
+    color: white;
     /*border-left: 3px solid #5773FA;*/
 }
 
-/*Hovering over a menu item that has been selected*/
+/*Hovering over a menu item that is active or selected*/
 #sidebar_menu > li.ant-menu-item-active.ant-menu-item-selected {
     /*border: 0;*/
     /*color: white;*/
+    color: white;
+    background: #5773FA;
 }
 
 /**/
@@ -102,7 +107,7 @@
     /*background-image: url("../../assets/athena-logo.png") !important;*/
     background-size: cover;
     background-position: center;
-    color:black;
+    color: black;
     /*align-content: center;*/
 }
 
