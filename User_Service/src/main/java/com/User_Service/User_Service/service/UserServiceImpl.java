@@ -1,5 +1,6 @@
 package com.User_Service.User_Service.service;
 
+import com.User_Service.User_Service.config.ConfigProperties;
 import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.repository.UserRepository;
@@ -33,18 +34,19 @@ public class UserServiceImpl {
     @Autowired
     private NotificationServiceImpl notificationService;
 
+    @Autowired
+    private final ConfigProperties config;
+
     private final boolean mock = false;
 
-    public UserServiceImpl() {
-
+    public UserServiceImpl(ConfigProperties config) {
+        this.config = config;
     }
 
     @Autowired
     public void setRepository(UserRepository repository) {
         this.repository = repository;
     }
-
-
 
 
     /**
@@ -119,10 +121,20 @@ public class UserServiceImpl {
         if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
+
         if(repository == null) {
             System.out.println("Repository is null");
         }
-        System.out.println(request.getUsername());
+
+        //email domain check
+        if(config.isAllowAnyDomain()) {
+            String[] domain = request.getEmail().split("@");
+
+            if(!domain[1].equals(config.getEmailDomain())) {
+                return new RegisterResponse(false, "You are not authorized to register");
+            }
+        }
+
         Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
         if(usersByUsername.isPresent()) {
             return new RegisterResponse(false, "Username has been taken");
