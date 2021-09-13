@@ -198,7 +198,7 @@ public class AnalyseServiceTest {
 
     /******************************************Repository Functional Test**********************************************/
 
-    @Test
+    /*@Test
     @DisplayName("fetch saveAIModel from database")
     public void fetchSaveAIModelFromDatabase() throws AnalyzerException {
         //set test data
@@ -219,7 +219,7 @@ public class AnalyseServiceTest {
         //test
         Assertions.assertEquals(saveModel,testModel);
         Assertions.assertTrue(testResults.getModelSave());
-    }
+    }*/
 
 
 }
