@@ -6,6 +6,13 @@ WORKDIR /app
 # Cache and Install dependencies
 COPY package.json .
 COPY yarn.lock .
+
+ARG REACT_APP_BACKEND_HOST
+ENV REACT_APP_BACKEND_HOST $REACT_APP_BACKEND_HOST
+
+ARG REACT_APP_BACKEND_PORT
+ENV REACT_APP_BACKEND_PORT $REACT_APP_BACKEND_PORT
+
 RUN yarn install --production
 # Copy app files
 COPY . .
