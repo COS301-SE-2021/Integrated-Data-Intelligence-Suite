@@ -53,7 +53,7 @@ const LoginPage = () => {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(values)
                 };
-                fetch('/user/login', requestOptions)
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/login`, requestOptions)
                     .then(response => {
                         return response.json()
                     }).then(json => {
