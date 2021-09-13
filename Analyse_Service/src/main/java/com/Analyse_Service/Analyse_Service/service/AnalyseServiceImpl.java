@@ -35,11 +35,10 @@ import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
-import org.apache.spark.ml.feature.HashingTF;
-import org.apache.spark.ml.feature.StringIndexer;
+import org.apache.spark.ml.feature.*;
 //import org.apache.spark.ml.feature.Tokenizer;
-import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.ml.param.ParamMap;
@@ -844,6 +843,208 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATA*****************/
         List<Row> trendsData = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
+        for (int i = 0; i < requestData.size(); i++) {
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for (int j = 0; j < namedEntities.size(); j++) {
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()) {// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                } else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    } else {
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                row.add(requestData.get(i).get(1).toString());//location
+                row.add(requestData.get(i).get(2).toString());//date
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
+                row.add(sentiment);//sentiment
+
+                Row trendRow = RowFactory.create(row.toArray());
+                trendsData.add(trendRow);
+            }
+        }
+
+        /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
+                });
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                });
+
+
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+        //group named entity
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        averageLikes.get(1); //average likes
+
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        rate.get(1); //rate ???
+
+        //training set
+        int minSize = 0;
+        if (namedEntities.size() > averageLikes.size()) {
+            minSize = averageLikes.size();
+        } else {
+            minSize = namedEntities.size();
+        }
+
+        if (minSize > rate.size()) {
+            minSize = rate.size();
+        }
+
+
+        System.out.println("NameEntity : " + namedEntities.size());
+        for (int i = 0; i < namedEntities.size(); i++) {
+            System.out.println(namedEntities.get(i).toString());
+        }
+
+        System.out.println("AverageLikes : " + averageLikes.size());
+        for (int i = 0; i < averageLikes.size(); i++) {
+            System.out.println(averageLikes.get(i).toString());
+        }
+
+        List<Row> trainSet = new ArrayList<>();
+        for (int i = 0; i < minSize; i++) {
+            double trending = 0.0;
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
+                trending = 1.0;
+            }
+            Row trainRow = RowFactory.create(
+                    trending,
+                    namedEntities.get(i).get(0).toString(),
+                    namedEntities.get(i).get(1).toString(),
+                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                    rate.get(i).get(1).toString(),
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+        //split data
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
+
+        Dataset<Row> trainSetDF = split[0];
+        Dataset<Row> testSetDF = split[1];
+
+        trainSetDF.show();
+        System.out.println("TRAIN ME");
+
+        testSetDF.show();
+        System.out.println("TEST ME");
+
+        /*******************SETUP PIPELINE MODEL *****************/
+        //features
+        /*Tokenizer tokenizer = new Tokenizer()
+                .setInputCol("text")
+                .setOutputCol("words");
+
+        HashingTF hashingTF = new HashingTF()
+                .setNumFeatures(1000)
+                .setInputCol(tokenizer.getOutputCol())
+                .setOutputCol("features");*/
+
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
+                .setOutputCol("features");
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        StringIndexer labelIndexer = new StringIndexer()
+                .setInputCol("label")
+                .setOutputCol("indexedLabel");
+
+        VectorIndexer featureIndexer = new VectorIndexer()
+                .setInputCol("features")
+                .setOutputCol("indexedFeatures")
+                .setMaxCategories(3); // features with > 4 distinct values are treated as continuous.
+
+        //model
+        DecisionTreeClassifier dt = new DecisionTreeClassifier()
+                .setLabelCol("indexedLabel")
+                .setFeaturesCol("indexedFeatures");
+
+        //pipeline
+        Pipeline pipeline = new Pipeline();
+        pipeline.setStages(new PipelineStage[]{assembler, indexer,labelIndexer,featureIndexer, dt});
+
+        /******************EVALUATE/ANALYSE MODEL**************/
+
+        MulticlassClassificationEvaluator devaluator = new MulticlassClassificationEvaluator()
+                .setLabelCol("indexedLabel")
+                .setPredictionCol("prediction")
+                .setMetricName("accuracy");
+
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+
+        paramGridBuilder.addGrid(dt.maxDepth(), new int[]{dt.getMaxDepth()});
+        paramGridBuilder.addGrid(dt.maxBins(), new int[]{dt.getMaxBins()});
+        ParamMap[] paramMaps = paramGridBuilder.build();
+
+
+        //validator
+        /*CrossValidator crossValidator = new CrossValidator()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setNumFolds(2);*/
+
+        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+                .setEstimator(pipeline)
+                .setEvaluator(devaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setTrainRatio(0.7)  //70% : 30% ratio
+                .setParallelism(2);
+
+        TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
+
+        Dataset<Row> predictions = dtModel.transform(testSetDF);
+
+        double daccuracy = devaluator.evaluate(predictions);
+        System.out.println("Accuracy :" + daccuracy);
+        System.out.println("Test Error = " + (1.0 - daccuracy));
     }
 
     /**
