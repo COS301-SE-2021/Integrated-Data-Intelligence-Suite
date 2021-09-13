@@ -1,0 +1,33 @@
+#apiVersion: v1
+#kind: Secret
+#etadata:
+# name: app-secret-tls
+#  namespace: default
+#type: kubernetes.io.tls
+#data:
+#  tls.crt: base64 encoded cert
+#  tls.key: base64 encoded key
+
+
+
+#requires ingress controller : minikube addons enable ingress
+#apiVersion: networking.k8s.io/v1beta1
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: idis-ingress
+  namespace: user-interface
+spec:
+  #tls:
+  #-hosts:
+  #  - idis.com
+  #  secretname: app-secret-tls
+  rules:
+    - host: idis.com
+      http:
+        paths:
+          - backend:
+              serviceName: user-interface-svc
+              servicePort: 3000
+
+
