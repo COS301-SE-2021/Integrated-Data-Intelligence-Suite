@@ -50,6 +50,10 @@ class SearchBar extends React.Component {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
                 // remove or stop the loading icon
                 // this.handleTextChange(json);
+            }).catch((err) => {
+                this.setState((prevState) => ({ showLoadingIcon: false }));
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
             });
     }
 

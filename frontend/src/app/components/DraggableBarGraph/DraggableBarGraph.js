@@ -1,30 +1,29 @@
 import React from 'react';
 import {
-    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, Crosshair, Hint,
+    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight,
 } from 'react-vis';
-import { data } from 'browserslist';
-import { OLD_DATA, DATA } from '../../Mocks/BarGraphMock';
+
+import { DATA } from '../../Mocks/BarGraphMock';
 
 const index = 8;
 const colors = {
     primary: '#5873f9',
     secondary: '#12939A',
-}
+};
 
-function highlightMapPoints(highlighted_points) {
-    const old_highlighted_points = document.getElementsByClassName('chosen_circle');
-    for (let i = 0; i < old_highlighted_points.length; i++) {
-        old_highlighted_points[i].classList.remove('chosen_circle');
+function highlightMapPoints(highlightedPoints) {
+    const oldHighlightedPoints = document.getElementsByClassName('chosen_circle');
+    for (let i = 0; i < oldHighlightedPoints.length; i += 1) {
+        oldHighlightedPoints[i].classList.remove('chosen_circle');
     }
 
-    for (let i = 0; i < highlighted_points.length; i++) {
-        const points_to_change = document.getElementsByClassName(highlighted_points[i].classname);
-        for (let j = 0; j < points_to_change.length; j++) {
-            points_to_change[j].classList.add('chosen_circle');
+    for (let i = 0; i < highlightedPoints.length; i += 1) {
+        const pointsToChange = document.getElementsByClassName(highlightedPoints[i].classname);
+        for (let j = 0; j < pointsToChange.length; j += 1) {
+            pointsToChange[j].classList.add('chosen_circle');
         }
     }
 }
-
 
 export default class DraggableBarGraph extends React.Component {
     constructor(props) {
@@ -35,12 +34,14 @@ export default class DraggableBarGraph extends React.Component {
             dataToBeDisplayed: null,
         };
     }
-    static getDerivedStateFromProps(props, state) {
-        if (props.text[index] && props.text[index].length > 0) {
-            const dataPoints = Object.values(props.text[index]).map((item, i) => ({
-                x0: i, x: i + 1, y: item.y, classname: item.x,
-            }));
-            return { dataToBeDisplayed: dataPoints };
+    static getDerivedStateFromProps(props) {
+        if (props.text !== null) {
+            if (props.text[index] && props.text[index].length > 0) {
+                const dataPoints = Object.values(props.text[index]).map((item, i) => ({
+                    x0: i, x: i + 1, y: item.y, classname: item.x,
+                }));
+                return { dataToBeDisplayed: dataPoints };
+            }
         }
         return { dataToBeDisplayed: DATA };
     }
