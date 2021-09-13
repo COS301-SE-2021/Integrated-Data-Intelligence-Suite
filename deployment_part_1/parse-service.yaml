@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parse-service
+  labels:
+    app: parse-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parse-service
+  template:
+    metadata:
+      labels:
+        app: parse-service
+    spec:
+      containers:
+        - name: parse-service
+          image: teamemerge/parse_service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9002
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: parse-service-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: parse-service
+  ports:
+    - port: 80
+      targetPort: 9002
+
+
