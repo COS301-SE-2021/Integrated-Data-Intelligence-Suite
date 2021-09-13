@@ -23,6 +23,7 @@ export default function VisxAreaGraph(props) {
             x: 'mar \'21',
             y: 20,
         },
+
     ];
 
     const data2 = [
@@ -68,20 +69,20 @@ export default function VisxAreaGraph(props) {
     return (
         <>
             <XYChart
-                height={200}
-                width={250}
-                xScale={{ type: 'band' }}
-                yScale={{ type: 'linear' }}
+              height={200}
+              width={250}
+              xScale={{ type: 'band' }}
+              yScale={{ type: 'linear' }}
             >
                 {
                     props.showYAxis
                     && (
                         <AnimatedAxis
-                            orientation="bottom"
-                            hideTicks
+                          orientation="bottom"
+                          hideTicks
                             // numTicks={4}
-                            stroke={'black'}
-                            hideZero
+                          stroke="black"
+                          hideZero
                         />
                     )
                 }
@@ -89,60 +90,64 @@ export default function VisxAreaGraph(props) {
                     props.showXAxis
                     && (
                         <AnimatedAxis
-                            orientation="left"
-                            hideTicks
-                            numTicks={4}
-                            stroke={'black'}
-                            hideZero
+                          orientation="left"
+                          hideTicks
+                          numTicks={4}
+                          stroke="black"
+                          hideZero
                         />
                     )
                 }
 
                 <AnimatedGrid
-                    columns={false}
-                    rows={false}
-                    numTicks={4}
-                    animationTrajectory={'max'}
+                  columns={false}
+                  rows={false}
+                  numTicks={4}
+                  animationTrajectory="max"
                 />
 
                 <AnimatedAreaSeries
-                    dataKey="Line1"
-                    data={data_from_backend}
-                    key={props.text}
-                    {...accessors}
-                    fillOpacity={0.4}
-                    curve={curveCardinal}
-                    className={props.idName}
+                  dataKey="Line1"
+                  data={data2}
+                  key={props.text}
+                  {...accessors}
+                  fillOpacity={0.4}
+                  curve={curveCardinal}
+                  className={props.idName}
 
                 />
                 {
                     props.showSecondLine
                     && (
                         <AnimatedAreaSeries
-                            dataKey=" Line2"
-                            data={data2}
-                            {...accessors}
-                            fillOpacity={0.4}
-                            curve={curveCardinal}
+                          dataKey=" Line2"
+                          data={data2}
+                          {...accessors}
+                          fillOpacity={0.4}
+                          curve={curveCardinal}
                         />
                     )
                 }
 
                 <Tooltip
-                    snapTooltipToDatumX
-                    // snapTooltipToDatumY
-                    showVerticalCrosshair
-                    // showSeriesGlyphs
-                    renderTooltip={({
+                  snapTooltipToDatumX
+                  showVerticalCrosshair
+                  showDatumGlyph
+                  glyphStyle={({
+                        r: 20,
+                        glyphName: 'me-myron',
+                        className: 'glyph-class',
+                        id: 'this-glyph',
+                    })}
+                  renderTooltip={({
                         tooltipData,
                         colorScale,
                     }) => (
-                        //The k
                         <div>
-                            {/*First Line*/}
+                            {/* First Line */}
                             <div
-                                style={{
-                                    color: props.tooltipKeyColor
+                              style={{
+                                    color: props.tooltipKeyColor,
                                 }}
                             >
                                 {Object.keys(tooltipData.datumByKey)[0]}
@@ -154,17 +159,17 @@ export default function VisxAreaGraph(props) {
                                     : tooltipData.datumByKey.Line1.datum.y
                             }
 
-                            {/*Second Line*/}
+                            {/* Second Line */}
                             {
                                 props.showSecondLine
                                 && (
 
                                     <div
-                                        style={{
-                                            color: colorScale(Object.keys(tooltipData.datumByKey)[1])
+                                      style={{
+                                            color: colorScale(Object.keys(tooltipData.datumByKey)[1]),
                                         }}
                                     >
-                                        <br/>
+                                        <br />
                                         {Object.keys(tooltipData.datumByKey)[1]}
                                         {': '}
                                         {
@@ -182,4 +187,3 @@ export default function VisxAreaGraph(props) {
         </>
     );
 }
-

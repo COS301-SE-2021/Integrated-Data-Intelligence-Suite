@@ -58,15 +58,11 @@ const markerIcon = new L.Icon({
 
 function MapCard(props) {
     let data_from_backend;
-    if (typeof props.text === 'undefined') {
+    const index = 7;
+    if (typeof props.text === 'undefined' || typeof props.text[index] === 'undefined' || props.text[index].length === 0) {
         data_from_backend = [];
-    } else if (typeof props.text[0] === 'undefined') {
-        // some error message
-        data_from_backend = [];
-    } else if (props.text[0].length === 0) {
-        data_from_backend = [];
-    } else if (props.text[0].length > 0) {
-        data_from_backend = props.text[0];
+    } else if (props.text[index].length > 0) {
+        data_from_backend = props.text[index];
     }
     const [mapLayers, setMapLayers] = useState([]);
 
@@ -131,7 +127,9 @@ function MapCard(props) {
                     <EditControl
                       position="topleft"
                       onCreated={_created}
-                      draw={{}}
+                      draw={{
+                            circlemarker: false,
+                        }}
                     />
                 </FeatureGroup>
                 {/* </LayersControl.Overlay> */}
@@ -143,9 +141,9 @@ function MapCard(props) {
                       center={[city.lat, city.lng]}
                       icon={markerIcon}
                       key={idx}
-                      className={city.classname}
+                      className={city.statistic_1}
                       onClick={() => {
-                            showCircleData(city.classname, data_from_backend);
+                            showCircleData(city.stastic_1, data_from_backend);
                         }}
                     />
                 ))}

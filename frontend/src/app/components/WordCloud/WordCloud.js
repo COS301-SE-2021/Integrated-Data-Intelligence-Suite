@@ -4,21 +4,37 @@ import { scaleLog } from '@visx/scale';
 import { Wordcloud } from '@visx/wordcloud';
 import { totoAfricaLyrics } from '../../Mocks/WordCloudMock';
 
-const colors = ['#143059', '#2F6B9A', '#82a6c2'];
-
+// const colors = ['#143059', '#2F6B9A', '#82a6c2'];
+const colors = [
+    '#25bd52',
+    '#786e64',
+    '#8e8073',
+    '#e66c85',
+    '#244a99',
+    '#be8abf',
+    '#b3b456',
+    '#d79525',
+    '#bd6341',
+    '#709a04',
+    '#5fa7c8',
+    '#f3cd6c',
+    '#FF0800',
+    '#5fa7c8',
+];
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 let data_from_backend;
 let words_from_backend = [];
 
 function wordFreq(text) {
-
     if (typeof text !== 'undefined') {
-
         const words = text.replace(/\./g, '')
             .split(/\s/);
         const freqMap = {};
         let _i = 0;
         const words_1 = words;
-        console.log("There maybe an error here");
+        console.log('There maybe an error here');
         for (; _i < words_1.length; _i++) {
             const w = words_1[_i];
             if (!freqMap[w]) {
@@ -39,7 +55,6 @@ function wordFreq(text) {
     }
 
     return null;
-
 }
 
 function getRotationDegree() {
@@ -52,19 +67,26 @@ const words = wordFreq(totoAfricaLyrics);
 
 const fontScale = scaleLog({
     domain: [Math.min(...words.map((w) => w.value)), Math.max(...words.map((w) => w.value))],
-    range: [10, 100],
+    range: [20, 200],
 });
 const fontSizeSetter = function (datum) {
     // console.log(datum);
-    // console.log(fontScale(datum.value));
+    console.log('scaling...');
+    console.log(fontScale(datum.value));
     return fontScale(datum.value);
 };
 const fixedValueGenerator = function () {
     return 0.5;
 };
 
-function WordCloud(props) {
+const getWindowSize = function () {
+    if (window.innerWidth > 500) {
+        return Math.floor(window.innerWidth * 0.35);
+    }
+    return 200;
+};
 
+function WordCloud(props) {
     if (typeof props.text === 'undefined') {
         data_from_backend = [];
     } else if (typeof props.text[7] === 'undefined') {
@@ -79,29 +101,30 @@ function WordCloud(props) {
         // console.log("XXXXXX___XXXXXX");
         // console.log(words_from_backend);
     }
+    const [windowWidth, setWindowWidth] = useState(getWindowSize());
 
     return (
-        <div className="wordcloud">
+        <div className="wordcloud" id="word-cloud-outer-container">
             <Wordcloud
-                key={words_from_backend}
-                words={words_from_backend}
-                width={800}
-                height={800}
-                font="Impact"
-                padding={2}
-                fontSize={fontSizeSetter}
-                spiral="archimedean"
-                rotate={0}
-                random={fixedValueGenerator}
+              key={words_from_backend}
+              words={words_from_backend}
+              width={windowWidth}
+              height={windowWidth * 0.8}
+              font="Impact"
+              padding={2}
+              fontSize={fontSizeSetter}
+              spiral="archimedean"
+              rotate={0}
+              random={fixedValueGenerator}
             >
                 {(cloudWords) => cloudWords.map((w, i) => (
                     <Text
-                        key={w.text}
-                        fill={colors[i % colors.length]}
-                        textAnchor="middle"
-                        transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-                        fontSize={w.size}
-                        fontFamily={w.font}
+                      key={w.text}
+                      fill={colors[getRndInteger(0, colors.length)]}
+                      textAnchor="middle"
+                      transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                      fontSize={w.size}
+                      fontFamily={w.font}
                     >
                         {w.text}
                     </Text>

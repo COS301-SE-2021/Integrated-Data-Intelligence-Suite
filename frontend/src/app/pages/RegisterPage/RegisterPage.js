@@ -6,7 +6,7 @@ import {
   Form, Input, Button, Checkbox, Card, Divider,
 } from 'antd';
 import RegisterButton from '../../components/RegisterButton/RegisterButton';
-import './registerPage.css';
+import './RegisterPage.css';
 
 // Validation Function
 const validate = (values) => {

@@ -158,7 +158,6 @@ public class AnalyseServiceImpl {
 
         /*************************************************/
 
-
         //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
