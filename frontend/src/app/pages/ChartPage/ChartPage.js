@@ -50,6 +50,7 @@ const {
     Title,
     Text,
 } = Typography;
+
 const {
     Header,
     Footer,
@@ -372,6 +373,7 @@ class ChartPage extends Component {
                                             />
                                         </SimpleSection>
 
+                                        {/*
                                         <SimpleSection
                                             cardTitle=""
                                             cardID="row-3"
@@ -450,6 +452,8 @@ class ChartPage extends Component {
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
+                                        */}
+
                                     </div>
                                 </Layout>
                             </Layout>
