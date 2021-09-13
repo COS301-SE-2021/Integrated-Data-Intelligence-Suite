@@ -16,6 +16,6 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 60000, initialDelay = 5000)
     public void fetchData() {
-        log.info("Fetching data, current time is: {}", dateFormat.format(new Date()));
+        //log.info("Fetching data, current time is: {}", dateFormat.format(new Date()));
     }
 }

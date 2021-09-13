@@ -36,6 +36,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     Permission permission;
 
+    String verificationCode;
+
+    Boolean isVerified;
+
     public User() {
 
     }
@@ -47,6 +51,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.isAdmin = false;
+        this.isVerified = false;
         this.permission = permission;
     }
 
@@ -112,6 +117,22 @@ public class User {
 
     public void setPermission(Permission permission) {
         this.permission = permission;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,9 +44,26 @@ public class UserServiceController {
         return service.register(request);
     }
 
+    @PostMapping(value = "/requestAdmin")
+    public @ResponseBody
+    RequestAdminResponse registerAdmin(@RequestBody RequestAdminRequest request) throws Exception {
+        //RegisterRequest request = requestEntity.getBody();
+        return service.requestAdmin(request);
+    }
+
     @PostMapping(value = "/login")
     public @ResponseBody LoginResponse login(@RequestBody LoginRequest request) throws Exception {
         //LoginRequest request = requestEntity.getBody();
         return service.login(request);
+    }
+
+    @PostMapping(value = "/getCurrentUser", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody GetCurrentUserResponse getCurrentUser(@RequestBody GetCurrentUserRequest request) throws Exception {
+        return service.getCurrentUser(request);
+    }
+
+    @PostMapping(value = "/verifyAccount")
+    public @ResponseBody VerifyAccountResponse verifyAccount(@RequestBody VerifyAccountRequest request) throws Exception {
+        return service.verifyAccount(request);
     }
 }

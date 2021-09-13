@@ -43,22 +43,24 @@
     /*border: 2px solid black;*/
     border: 0;
 
-    width: 18%;
+    width: 70vh;
     float: left;
     position: relative;
-    margin-left: 2%;
+    margin-left: 30%;
 
     /* Vertically Aligning it the middle*/
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+    border-radius: 25px;
+    box-shadow : 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-span.ant-input-wrapper.ant-input-group{
+span.ant-input-wrapper.ant-input-group {
     /*border: 2px solid black;*/
-    border-radius: 1em;
+    border-radius: 25px;
     padding: 2%;
-    background-color: #EFF0F0;
+    background-color: white;
 }
 
 /*The actual inside of the search
@@ -69,15 +71,16 @@ span.ant-input-wrapper.ant-input-group{
     border: 0;
     padding: 5px;
     /*border-radius: 15%;*/
-    background-color: #EFF0F0 ;
+    background-color: white;
     border-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    float:right;
+    float: right;
     width: 80%;
 }
+
 #top_bar > .ant-input-search > .ant-input-group > input.ant-input:focus {
-   border:0;
+    border: 0;
     box-shadow: none;
 
 }
@@ -96,6 +99,7 @@ span.ant-input-wrapper.ant-input-group{
     /*left: 0;*/
     float: left;
     box-shadow: none;
+    background: #E8E8E9;
 
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
@@ -111,14 +115,27 @@ span.ant-input-wrapper.ant-input-group{
     /*border-radius: 12%;*/
     /*--antd-wave-shadow-color: none;*/
     /*color: #5C5C5C;*/
+    /*
     color: #898D8F;
-    background-color: #EFF0F0 ;
+     */
+    color: black;
+    background: white !important;
     box-shadow: none;
 }
 
 
-#top_bar > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button{
-    border:0;
+#top_bar > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button {
+    border: 0;
     box-shadow: none;
-    background-color: red ;
+    background-color: red;
+}
+#top_bar
+> .ant-input-search
+> .ant-input-group
+> .ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary).ant-btn-loading::before {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #E8E8E9 !important;
 }

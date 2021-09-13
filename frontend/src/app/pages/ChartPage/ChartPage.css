@@ -5,7 +5,7 @@
     best to give that component its own file.
 */
 #top_bar {
-    background: #eff0f0;
+    background: var(--light-gray);
     color: #000000;
     height: 70px;
     /*padding: 0 1%;*/
@@ -14,7 +14,7 @@
     /*border: 3px solid red;*/
     border: 0;
     /*border-bottom: 0.2em solid #E8E8E9;*/
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 /*
@@ -22,7 +22,7 @@
 */
 #content_section {
     padding: 3%;
-    background: #EFF0F0;
+    background: #e8e8e9;
     color: #000000;
     /*height: 206px;*/
     border: 0;
@@ -31,7 +31,21 @@
     /*Scrolling Functionality*/
     max-height: 100vh;
     overflow-y: scroll;
+    /*overflow-x: ;*/
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 5fr));
+    grid-template-rows: repeat(6, 350px);
+    grid-gap: 1rem;
+    grid-auto-flow: dense;
+    /*grid-template-rows: 20% 20% 20% 20% 20% 20% 20% 20% 20%;*/
+    /*grid-auto-flow: row;*/
 
+}
+
+#content_section > div {
+    max-width: 350px;
+    /*min-width: 200px;*/
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 
@@ -60,9 +74,9 @@
     /*overflow:hidden*/
 
     overflow-x: hidden;
+    background: #e8e8e9;
+
 }
-
-
 
 
 /*
@@ -98,13 +112,259 @@
     border-bottom-right-radius: 2%;
     border-top-right-radius: 2%;
     border: 0.1em solid #E8E8E9;
+    background: #e8e8e9;
 }
+
 /*Hiding the scrollbar in the map-details-container*/
 #map-details-container::-webkit-scrollbar {
     width: 0; /* Remove scrollbar space */
     background: transparent; /* Optional: just make scrollbar invisible */
 }
 
+#word-cloud-layout {
+    grid-column: span 3;
+    grid-row: span 3;
+}
+
+
+/*The div that contains the entire content section*/
+#content-section {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(6, auto);
+    /*border: 3px solid black;*/
+    max-height: 100vh;
+    max-width: 100vw;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 6%;
+    padding-top: 2%;
+    background: var(--light-gray);
+    row-gap: 13%;
+}
+
+
+/*******************************************/
+/******************Row 3********************/
+/***************Location Row****************/
+/********************************************/
+#location-section {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    row-gap: 10px;
+    height: min-content;
+}
+
+#row-3 {
+    grid-row-start: 3;
+    grid-row-end: 4;
+
+    /*Internal Display of the row 2*/
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, auto);
+}
+
+/*#row-3 #map-metric-container #map-metric-1{*/
+/*    border: 2px solid var(--border-color);*/
+/*    background: white;*/
+/*    padding: 10px;*/
+/*    border-radius: 10px;*/
+/*}*/
+
+#word-cloud-graph-container> .simple-card-container{
+    border: 2px solid var(--border-color);
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#world-map > .simple-card-title {
+    padding: 10px;
+    padding-left: 0px;
+    text-align: left;
+}
+
+#map-metric-container {
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    /*Internal display of the map-metric-container*/
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    column-gap: 10px;
+    height: 340px;
+}
+
+#complex-graph {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#map-metric-1 > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+#map-metric-1 > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#map-metric-2 > .simple-card-title {
+    padding: 10px;
+    /*padding-left: 0px;*/
+    text-align: left;
+}
+
+#world-map {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 0 auto;
+    border-radius: 10px;
+}
+
+#world-map > .simple-card-body {
+    background: var(--light-gray);
+}
+
+/*********************************************/
+/******************Row 4********************/
+/******************Word Cloud*****************/
+/********************************************/
+#row-4 {
+    grid-row-start: 4;
+    grid-row-end: 5;
+    /*border: 3px solid black;*/
+
+    /*Display of the Body of the Word Cloud Section*/
+    /**/
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, auto);
+}
+
+#row-4 > .simple-section-body {
+    display: grid;
+    grid-template-columns: 65% 35%;
+    grid-template-rows: 100%;
+    column-gap: 10px;
+}
+
+#word-cloud-card {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid 2px var(--border-color);
+}
+#word-cloud-outer-container{
+    display: flex;
+    align-content: center;
+
+}
+
+#word-cloud-outer-container>div{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#word-cloud-card svg{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.simple-section-body svg{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+#word-cloud-graph-container {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
+    /*Display of the body of the container*/
+    display: grid;
+    /*grid-template-columns: 100%;*/
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10px;
+}
+
+#word-graph-1 {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#word-graph-2 {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    background: white;
+    border-radius: 10px;
+}
+
+
+/*********************************************/
+/******************Row 5********************/
+/******************Network*****************/
+/*******************************************/
+#row-5 {
+    grid-row-start: 5;
+    grid-row-end: 6;
+    display: grid;
+    grid-template-rows: 0 auto;
+    grid-template-columns: 100%;
+    padding-bottom: 30px;
+}
+
+#row-5 > .simple-section-body {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: 100%;
+    column-gap: 10px;
+}
+
+#row-5> .simple-section-body .simple-card-container{
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid 2px var(--border-color);
+}
+
+#network-graph-entities {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#network-graph-entities > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+#network-graph-patterns > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+
+}
+
+#network-graph-patterns {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
 
 
 

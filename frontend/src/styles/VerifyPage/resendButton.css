@@ -1,0 +1,20 @@
+.inline {
+    display: inline;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: serif;
+    float: right;
+}
+.ant-btn > .ant-btn-primary > .link-button:focus {
+    outline: none;
+}
+.ant-btn > .ant-btn-primary > .link-button:active {
+    color:red;
+}

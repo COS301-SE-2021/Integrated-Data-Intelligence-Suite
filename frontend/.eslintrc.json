@@ -102,6 +102,23 @@
     "no-multiple-empty-lines": "warn",
     "arrow-parens": "warn",
     "prefer-arrow-callback": "off",
-    "no-return-assign": "off"
+    "no-return-assign": "off",
+    "react/jsx-props-no-spreading": "warn",
+    "dot-notation": "off",
+    "arrow-body-style": "off",
+    "no-param-reassign": "off",
+    "no-confusing-arrow": "off",
+    "react/jsx-no-bind": "off",
+    "no-case-declarations": "off",
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off",
+    "no-use-before-define": "off",
+    "operator-linebreak": "off",
+    "no-nested-ternary": "off",
+    "operator-assignment": "off",
+    "lines-between-class-members": "off",
+    "react/jsx-curly-newline": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off"
   }
 }

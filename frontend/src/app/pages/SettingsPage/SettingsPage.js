@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import {
   Layout, Row, Col, Divider,
 } from 'antd';
-import { CloseCircleTwoTone } from '@ant-design/icons';
+import { CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import DataSourceList from '../../components/DataSourceList/DataSourceList';
 import Permissions from '../PermissionsPage/Permissions';
+import ProfilePage from '../ProfilePage/ProfilePage';
 // import AddDataSource from '../AddDataSourcePage/AddDataSource';
 
 const { Content } = Layout;
@@ -55,14 +56,16 @@ const SettingsPage = () => {
 
                       <div id="Data Sources" className="option" onClick={() => setComponent('Data Sources')}>Data Sources</div>
                   </Col>
-                  <Col style={{ padding: '0 0px 30px 0', backgroundColor: colorOne }} className="right-column" flex="600px">
+                  <Col style={{ padding: '0 0px 30px 0', backgroundColor: colorOne, maxWidth: '700px' }} className="right-column" flex="60%">
                       <div>
                           <div className="component-title">
                               {component}
-                              <CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} />
+                              <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.go(-1)} />
+                              {/* <CloseOutlined className="back-button" onClick={() => history.go(-1)} /> */}
+                              {/* <CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /> */}
                           </div>
                           { component === 'Permissions' && user && user.isAdmin && setActive(component) && <Permissions />}
-                          { component === 'Profile' && setActive(component) && <div><h1>Page not implemented</h1></div>}
+                          { component === 'Profile' && setActive(component) && <ProfilePage />}
                           { component === 'Account' && setActive(component) && <div><h1>Page not implemented</h1></div>}
                           { component === 'Data Sources' && setActive(component) && <DataSourceList /> }
                       </div>

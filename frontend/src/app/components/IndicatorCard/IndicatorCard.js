@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card } from 'antd';
-import './IndicatorCard.css';
 import { ArrowUpOutlined } from '@ant-design/icons';
+import './IndicatorCard.css';
 
 function IndicatorCard(props) {
     return (

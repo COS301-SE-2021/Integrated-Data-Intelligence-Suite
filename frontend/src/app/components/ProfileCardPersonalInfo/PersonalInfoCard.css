@@ -1,0 +1,32 @@
+
+
+#personal-info-card-container {
+    margin: 4%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, auto);
+    /*padding: 5%; !* Must Match the padding of the profile-card-display-info-container*!*/
+    border-radius: 0.7em;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    grid-row-gap: 1.5em;
+    background-color: var(--personal-card-bg);
+    border: 3px solid var(--personal-card-bg);
+}
+
+#email-info-div {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#phone-number-info-div {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#account-type-info-div {
+    grid-row-start: 3;
+    grid-row-end: 4;
+}

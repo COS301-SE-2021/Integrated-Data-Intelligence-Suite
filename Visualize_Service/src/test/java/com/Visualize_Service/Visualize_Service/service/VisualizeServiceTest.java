@@ -92,28 +92,28 @@ public class VisualizeServiceTest {
     @Test
     @DisplayName("When createlineGraphRequest is Null")
     public void createlineGraphNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraph(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraphSentiments(null));
     }
 
     @Test
     @DisplayName("When the DataList of Line graph is Null")
     public void createlineGraphDataListNull(){
-        CreateLineGraphRequest test = new CreateLineGraphRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraph(test));
+        CreateLineGraphSentimentsRequest test = new CreateLineGraphSentimentsRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createLineGraphSentiments(test));
     }
 
 
     @Test
     @DisplayName("When createNetworkGraphRequest is Null")
     public void createNetworkGraphNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createNetworkGraph(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createRelationGraph(null));
     }
 
     @Test
     @DisplayName("When the DataList of Network graph is Null")
     public void createNetworkGraphDataListNull(){
-        CreateNetworkGraphRequest test = new CreateNetworkGraphRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createNetworkGraph(test));
+        CreateRelationshipGraphRequest test = new CreateRelationshipGraphRequest(null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createRelationGraph(test));
     }
 
     @Test

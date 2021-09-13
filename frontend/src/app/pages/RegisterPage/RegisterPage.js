@@ -6,7 +6,7 @@ import {
   Form, Input, Button, Checkbox, Card, Divider,
 } from 'antd';
 import RegisterButton from '../../components/RegisterButton/RegisterButton';
-import './registerPage.css';
+import './RegisterPage.css';
 
 // Validation Function
 const validate = (values) => {
@@ -68,7 +68,9 @@ const RegisterPage = () => {
       fetch('/user/register', requestOptions)
         .then((response) => response.json()).then((json) => {
           if (json.success) {
-            history.push('/');
+            alert(json.message);
+            localStorage.setItem("email", values.email);
+            history.push('/verify');
           } else {
             alert(json.message);
           }
@@ -121,7 +123,7 @@ const RegisterPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="User name"
+                    label="Username"
                   >
                       <Input
                         id="username"
@@ -137,7 +139,7 @@ const RegisterPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="email"
+                    label="Email"
                   >
                       <Input
                         id="email"
@@ -153,7 +155,7 @@ const RegisterPage = () => {
                   </Form.Item>
 
                   <Form.Item
-                    label="password"
+                    label="Password"
                   >
                       <Input.Password
                         id="password"

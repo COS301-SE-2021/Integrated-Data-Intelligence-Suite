@@ -14,7 +14,7 @@
 }
 
 #word-cloud-item {
-    background: yellow;
+    /*background: yellow;*/
     grid-column-start: 1;
     grid-column-end: 4;
     grid-row-start: 1;
@@ -24,7 +24,7 @@
 }
 
 #stat1-item {
-    background: orange;
+    /*background: orange;*/
     grid-column-start: 1;
     grid-column-end: 1;
     grid-row-start: 2;
@@ -33,7 +33,7 @@
 }
 
 #stat2-item {
-    background: green;
+    /*background: green;*/
     grid-column-start: 2;
     grid-column-end: 2;
     grid-row-start: 2;
@@ -41,7 +41,7 @@
 }
 
 #stat3-item {
-    background: deeppink;
+    /*background: deeppink;*/
     grid-column-start: 3;
     grid-column-end: 3;
     grid-row-start: 2;

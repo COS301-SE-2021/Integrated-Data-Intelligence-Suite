@@ -171,8 +171,8 @@ class NetworkGraphCard extends React.Component {
             <>
                 <Card
                   id="network_card"
-                  title="Network Graph"
-                  style={{ border: '3px solid black' }}
+                  title=""
+                  style={{ border: '0' }}
                 >
                     <CytoscapeComponent
                       elements={this.state.dataToBeDisplayed}
