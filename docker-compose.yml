@@ -36,8 +36,8 @@ services:
 
     build: ./Registry_Service
 
-    environment:
-      - DB_SERVER:database
+    #environment:
+    #  - DB_SERVER:database
       #- POSTGRES_DB=emerge-database
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
@@ -56,8 +56,8 @@ services:
 
     build: ./Import_Service
 
-    environment:
-      - DB_SERVER=database
+    #environment:
+    #  - DB_SERVER=database
       #- POSTGRES_DB=emerge-database
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
@@ -73,8 +73,8 @@ services:
 
     build: ./Parse_Service
 
-    environment:
-      - DB_SERVER=database
+    #environment:
+    #  - DB_SERVER=database
       #- POSTGRES_DB:emerge=database
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
@@ -93,8 +93,8 @@ services:
     build: ./Analyse_Service
 
     #Environment variables for Spring Boot Application.
-    environment:
-      - DB_SERVER=database
+    #environment:
+    #  - DB_SERVER=database
       #- POSTGRES_DB=emerge-database
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
@@ -113,8 +113,8 @@ services:
 
     build: ./Visualize_Service
 
-    environment:
-      - DB_SERVER=database
+    #environment:
+    #  - DB_SERVER=database
       #- POSTGRES_DB=emerge-database
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
@@ -130,11 +130,11 @@ services:
 
     build: ./User_Service
 
-    environment:
-      - DB_SERVER=database
-      - POSTGRES_DB=UserServiceDatabase
-      - POSTGRES_USER=emerge
-      - POSTGRES_PASSWORD=emerge0000
+    #environment:
+    #  - DB_SERVER=database
+    #  - POSTGRES_DB=UserServiceDatabase
+    #  - POSTGRES_USER=emerge
+    #  - POSTGRES_PASSWORD=emerge0000
 
     ports:
       - 9005:9005
@@ -148,8 +148,8 @@ services:
 
     build: ./Gateway_Service
 
-    environment:
-      - DB_SERVER=database
+    #environment:
+    #  - DB_SERVER=database
       #- POSTGRES_DB=emerge-database
       #- POSTGRES_USER=emerge
       #- POSTGRES_PASSWORD=emerge0000
@@ -166,13 +166,21 @@ services:
     container_name: User-Interface
     image: teamemerge/user_interface
 
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_BACKEND_HOST: ${REACT_APP_BACKEND_HOST}
+        REACT_APP_BACKEND_PORT: ${REACT_APP_BACKEND_PORT}
       #target: development
 
     ports:
       - 3000:3000
     links:
       - gateway_service
+
+    environment:
+      - REACT_APP_BACKEND_HOST=localhost
+        REACT_APP_BACKEND_PORT=9000
 
 #Volumes for DB data
 volumes:
