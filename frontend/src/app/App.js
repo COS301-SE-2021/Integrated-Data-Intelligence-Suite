@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
-
 import HomePage from './pages/HomePage/HomePage';
 import ChartPage from './pages/ChartPage/ChartPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
@@ -12,6 +11,7 @@ import SettingsPage from './pages/SettingsPage/SettingsPage';
 import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
 import VerifyPage from './pages/VerifyPage/VerifyPage';
 import './App.scss';
+import CreditsPage from './pages/CreditsPage/CreditsPage';
 
 class App extends Component {
     render() {
@@ -42,7 +42,6 @@ class App extends Component {
                         <Permissions/>
                     </Route>
 
-
                     <Route exact path="/logout">
                         <LogoutPage/>
                     </Route>
@@ -57,6 +56,10 @@ class App extends Component {
 
                     <Route path="/user/:id">
                         <UserPermissions/>
+                    </Route>
+
+                    <Route exact path={'/credits'}>
+                        <CreditsPage/>
                     </Route>
 
                     <Route path="*">
