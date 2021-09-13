@@ -66,7 +66,7 @@ const RegisterPage = () => {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(values)
             };
-            fetch('/user/register', requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/register`, requestOptions)
                 .then(response => {
                     return response.json()
                 }).then(json => {

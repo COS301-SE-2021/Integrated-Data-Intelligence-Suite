@@ -48,8 +48,9 @@ class SearchBar extends Component {
             body: JSON.stringify(obj)
         };
         const url = '/main/' + values;
+
         // console.log(requestOptions)
-        fetch(url, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}` + url, requestOptions)
             .then(response => {
                 return response.json()
             }).then(json => {

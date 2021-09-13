@@ -28,7 +28,7 @@ const UserPermissions = () => {
         }
         console.log("userdata ",user.user);
         console.log("body is ", requestBody)
-        fetch('http://localhost:9000/changePermission',{
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/changePermission`,{
             method:"POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(requestBody)

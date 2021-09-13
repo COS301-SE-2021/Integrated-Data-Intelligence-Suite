@@ -10,7 +10,7 @@ const useGet = (url) => {
 
         const abortCont = new AbortController();
 
-        fetch("http://localhost:9000"+url, { signal: abortCont.signal })
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`+url, { signal: abortCont.signal })
             .then(res => {
                 if(!res.ok){
                     console.log(res)
