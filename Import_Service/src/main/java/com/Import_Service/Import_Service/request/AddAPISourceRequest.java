@@ -1,5 +1,6 @@
 package com.Import_Service.Import_Service.request;
 
+import com.Import_Service.Import_Service.rri.ApiType;
 import com.Import_Service.Import_Service.rri.AuthorizationType;
 
 import java.util.HashMap;
@@ -19,6 +20,8 @@ public class AddAPISourceRequest {
     private String authorization;
 
     private AuthorizationType authType;
+
+    private ApiType type;
 
     private Map<String, String> parameters = new LinkedHashMap<>();
 
@@ -100,5 +103,13 @@ public class AddAPISourceRequest {
 
     public void setAuthType(AuthorizationType authType) {
         this.authType = authType;
+    }
+
+    public ApiType getType() {
+        return type;
+    }
+
+    public void setType(ApiType type) {
+        this.type = type;
     }
 }
