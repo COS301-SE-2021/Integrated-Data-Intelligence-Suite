@@ -19,7 +19,7 @@ public class ScheduledCleanup {
 
     @Async
     @Scheduled(cron = "0 0 4 * * *")
-    public void fetchData() {
+    public void performCleanup() {
         log.info("Performing database cleanup, current time is: {}", dateFormat.format(new Date()));
     }
 }
