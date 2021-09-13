@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analyse-service
+  labels:
+    app: analyse-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analyse-service
+  template:
+    metadata:
+      labels:
+        app: analyse-service
+    spec:
+      containers:
+        - name: analyse-service
+          image: teamemerge/analyse_service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9003
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analyse-service-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: analyse-service
+  ports:
+    - port: 80
+      targetPort: 9003
+
+
