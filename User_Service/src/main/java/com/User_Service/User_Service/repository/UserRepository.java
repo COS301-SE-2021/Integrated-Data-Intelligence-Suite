@@ -27,8 +27,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT s FROM users s WHERE s.isAdmin = true")
     ArrayList<User> findUsersByAdmin();
 
-    @Query("SELECT s FROM users s ORDER BY s.dateCreated ASC")
-    ArrayList<User> findAllByOrderByDateCreatedAsc();
+    @Query("SELECT s FROM users s WHERE s.isVerified = false ORDER BY s.dateCreated ASC")
+    ArrayList<User> findAllByIsVerifiedFalseOrderByDateCreatedAsc();
 
     @Modifying
     @Query("UPDATE users u SET u.permission = :perm WHERE u.id = :id")
