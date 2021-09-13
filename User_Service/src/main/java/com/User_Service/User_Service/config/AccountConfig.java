@@ -6,7 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class AccountConfig {
 
     /**
-     * The number of days to wait before a unverified user is deleted
+     * The number of days to wait before a unverified user is deleted.
+     * Defaulted to 1 day
      */
     private Integer maxWaitInDays = 1;
 
