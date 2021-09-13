@@ -72,12 +72,12 @@
     [
         {
             "x": "Positives",
-            "y": "76",
+            "y": 124,
             "label": "Positive"
         },
         {
             "x": "Negatives",
-            "y": "10",
+            "y": 50,
             "label": "Negative"
         }
     ],
