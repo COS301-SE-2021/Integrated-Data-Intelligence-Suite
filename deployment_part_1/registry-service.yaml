@@ -1,0 +1,84 @@
+#podname-{replica-index}.{serviceName}.default.svc.cluster.local
+
+#config map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-configmap
+data:
+  eureka_service_address: http://eureka-0.eureka:8761/eureka
+
+---
+#headless service
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka
+  labels:
+    app: eureka
+spec:
+  clusterIP : None
+  selector:
+    app: eureka
+  ports:
+    - port: 8761
+      name: eureka
+
+
+---
+#stateful set
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka
+spec:
+  serviceName: "eureka"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eureka
+  template:
+    metadata:
+      labels:
+        app: eureka
+    spec:
+      containers:
+        - name: eureka
+          image: teamemerge/registry_service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
+          env:
+            - name: EUREKA_SERVER_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-configmap
+                  key: eureka_service_address
+
+
+---
+#service
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-loadbalancer
+  labels:
+    app: eureka
+spec:
+  type: NodePort
+  selector:
+    app: eureka
+  ports:
+    - port: 80
+      targetPort: 8761
+
+
+
+
+
+
+
+
+
+
+
