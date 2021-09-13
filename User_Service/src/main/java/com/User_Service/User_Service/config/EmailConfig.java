@@ -3,7 +3,7 @@ package com.User_Service.User_Service.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("email")
-public class ConfigProperties {
+public class EmailConfig {
     /**
      * This is the domain that will be checked
      */

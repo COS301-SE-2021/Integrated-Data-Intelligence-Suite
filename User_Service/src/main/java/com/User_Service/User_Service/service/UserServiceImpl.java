@@ -1,6 +1,6 @@
 package com.User_Service.User_Service.service;
 
-import com.User_Service.User_Service.config.ConfigProperties;
+import com.User_Service.User_Service.config.EmailConfig;
 import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.repository.UserRepository;
@@ -10,9 +10,7 @@ import com.User_Service.User_Service.rri.Permission;
 import org.apache.commons.lang.RandomStringUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +33,11 @@ public class UserServiceImpl {
     private NotificationServiceImpl notificationService;
 
     @Autowired
-    private final ConfigProperties config;
+    private final EmailConfig config;
 
     private final boolean mock = false;
 
-    public UserServiceImpl(ConfigProperties config) {
+    public UserServiceImpl(EmailConfig config) {
         this.config = config;
     }
 
@@ -169,6 +167,9 @@ public class UserServiceImpl {
         newUser.setVerified(false);
         newUser.setVerificationCode(verificationCode);
 
+        //Setting date the user registered
+        newUser.setDateCreated(new Date());
+
         //Storing the user in the database
         User checkIfSaved = repository.save(newUser);
 
@@ -176,7 +177,7 @@ public class UserServiceImpl {
             return new RegisterResponse(false, "Registration failed");
         }
 
-        if(!mock) {
+        if(!mock) { //to be removed before deployment
             String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
             emailText += newUser.getVerificationCode() + "\n";
 
