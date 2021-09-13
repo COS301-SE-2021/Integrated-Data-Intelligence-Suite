@@ -21,7 +21,7 @@ class SideBar extends React.Component {
 
         this.state = {
             collapsed: false,
-            active: '1',
+            active: 1,
         };
 
         this.setActive = (value) => {
@@ -32,6 +32,11 @@ class SideBar extends React.Component {
             console.log(`IsCOllapsed: ${collapsed}`);
             this.setState({ collapsed });
         };
+    }
+
+    componentDidMount() {
+        // this.setActive(this.props.currentPage);
+        this.setState({active: this.props.currentPage});
     }
 
     render() {
@@ -52,7 +57,7 @@ class SideBar extends React.Component {
                     <Menu
                         id="sidebar_menu"
                         theme="light"
-                        defaultSelectedKeys={active}
+                        defaultSelectedKeys={this.props.currentPage}
                         mode="inline"
                     >
                         <Menu.Item
@@ -88,9 +93,8 @@ class SideBar extends React.Component {
                             onClick={() => this.setActive('4')}
                         >
                             Credits
-                            <Link to="/"/>
+                            <Link to="/credits"/>
                         </Menu.Item>
-
                     </Menu>
                 </Sider>
             </>
