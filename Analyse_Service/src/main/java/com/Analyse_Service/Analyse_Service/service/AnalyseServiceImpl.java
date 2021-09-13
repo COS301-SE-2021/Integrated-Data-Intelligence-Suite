@@ -829,6 +829,23 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
+    public void TrainFindTrendsDecisionTree( ArrayList<ArrayList> requestData){
+        /*******************SETUP SPARK*****************/
+        logger.setLevel(Level.ERROR);
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
+
+        /*******************SETUP DATA*****************/
+        List<Row> trendsData = new ArrayList<>();
+    }
+
     /**
      * This method used to find a trends(s) within a given data.
      * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
