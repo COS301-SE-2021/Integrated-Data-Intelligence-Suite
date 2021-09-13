@@ -8,7 +8,7 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-      hostname: eureka-0
+    hostname: eureka-0
   client:
     fetch-registry: true
     register-with-eureka: true
