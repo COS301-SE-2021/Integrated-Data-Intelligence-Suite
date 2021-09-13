@@ -125,7 +125,7 @@ public class UserServiceImpl {
         }
 
         //email domain check
-        if(config.isAllowAnyDomain()) {
+        if(!config.isAllowAnyDomain()) {
             String[] domain = request.getEmail().split("@");
 
             if(!domain[1].equals(config.getEmailDomain())) {
