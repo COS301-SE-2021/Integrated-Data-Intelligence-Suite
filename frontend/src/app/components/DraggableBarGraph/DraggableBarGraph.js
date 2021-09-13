@@ -3,7 +3,7 @@ import {
     XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, Crosshair, Hint,
 } from 'react-vis';
 import { data } from 'browserslist';
-import { DATA } from '../../Mocks/BarGraphMock';
+import { OLD_DATA, DATA } from '../../Mocks/BarGraphMock';
 
 function highlightMapPoints(highlighted_points) {
     const old_highlighted_points = document.getElementsByClassName('chosen_circle');
@@ -19,6 +19,7 @@ function highlightMapPoints(highlighted_points) {
         }
     }
 }
+const index = 8;
 
 export default class DraggableBarGraph extends React.Component {
     constructor(props) {
@@ -27,22 +28,18 @@ export default class DraggableBarGraph extends React.Component {
             selectionStart: null,
             selectionEnd: null,
             average: '',
-            dataPoints: [],
+            dataToBeDisplayed: [],
         };
-
-        // TODO change data to [] or correct value from text array
-        if (typeof props.text === 'undefined') {
-            this.setState({ dataPoints: DATA });
-        } else if (typeof props.text[0] === 'undefined') {
-            // some error message
-            this.setState({ dataPoints: DATA });
-        } else if (props.text[0].length === 0) {
-            this.setState({ dataPoints: DATA });
-        } else if (props.text[0].length > 0) {
-            this.setState({ dataPoints: DATA });
+    }
+    componentDidMount() {
+        if (this.props.text === '') {
+            this.setState({ dataToBeDisplayed: OLD_DATA });
+        } else if (this.props.text[index] && this.props.text[index] > 0) {
+            this.setState({ dataToBeDisplayed: DATA });
+        } else {
+            this.setState({ dataToBeDisplayed: OLD_DATA });
         }
     }
-
     getAverageY() {
         if (this.state.selectionStart && this.state.selectionEnd) {
             const lowerBound = Math.floor(this.state.selectionStart);
@@ -51,7 +48,7 @@ export default class DraggableBarGraph extends React.Component {
             let avg = 0;
 
             // const highlighted_classes = []
-            const lst = Object.values(DATA)
+            const lst = Object.values(this.state.dataToBeDisplayed)
                 .filter((item) => {
                     if (item.x > lowerBound && item.x < upperBound) {
                         avg += item.y;
@@ -66,6 +63,26 @@ export default class DraggableBarGraph extends React.Component {
             console.log(lst);
             console.log(avg);
             highlightMapPoints(lst);
+        }
+    }
+
+    updateGraph() {
+        if (this.props.text[index] && this.props.text[index].length > 0) {
+            console.log(this.props.text[7]);
+            console.log(this.props.text[8]);
+
+            const lst = Object.values(this.props.text[index]).map((item, i) => {
+                return {
+                    x0: i,
+                    x: i + 1,
+                    y: item.y,
+                    classname: `classname${i}`,
+                    tweet: item.x,
+                };
+            });
+            console.log(lst);
+        } else {
+            console.log('not a good check');
         }
     }
 
@@ -85,49 +102,70 @@ export default class DraggableBarGraph extends React.Component {
         return (
             <div className="uber-bar-graph-container">
                 {/* {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>} */}
+                {/* { this.props.text !== '' && this.updateGraph() } */}
                 <div className="bar-graph-plot">
-                    <XYPlot width={300} height={200}>
-                        <XAxis />
-                        <YAxis />
-                        <VerticalRectSeries
-                          data={DATA}
-                          stroke="white"
-                          colorType="literal"
-                          getColor={(d) => {
-                                if (selectionStart === null || selectionEnd === null) {
-                                    return '#1E96BE';
-                                }
-                                const inX = d.x >= selectionStart && d.x <= selectionEnd;
-                                const inX0 = d.x0 >= selectionStart && d.x0 <= selectionEnd;
-                                const inStart = selectionStart >= d.x0 && selectionStart <= d.x;
-                                const inEnd = selectionEnd >= d.x0 && selectionEnd <= d.x;
+                    { this.props.text !== '' && (
+                        <XYPlot width={300} height={200}>
+                            <XAxis />
+                            <YAxis />
+                            <VerticalRectSeries
+                              data={Object.values(this.props.text[index]).map((item, i) => ({ x0: i, x: i + 1, y: item.y, tweet: item.x }))}
+                              stroke="white"
+                              colorType="literal"
+                              getColor={(d) => {
+                                    if (selectionStart === null || selectionEnd === null) {
+                                        return '#1E96BE';
+                                    }
+                                    const inX = d.x >= selectionStart && d.x <= selectionEnd;
+                                    const inX0 = d.x - 1 >= selectionStart && d.x - 1 <= selectionEnd;
+                                    const inStart = selectionStart >= d.x - 1 && selectionStart <= d.x;
+                                    const inEnd = selectionEnd >= d.x - 1 && selectionEnd <= d.x;
 
-                                return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
-                            }}
-                        />
-
-                        <Highlight
-                          color="#829AE3"
-                          drag
-                          enableY={false}
-                          onDrag={updateDragState}
-                          onDragEnd={updateDragState}
-
-                        />
-                        {this.state.hoveredNode && selectionEnd && (
-                            <Hint
-                              align={{
-                                    horizontal: 'left',
-                                    vertical: 'top',
-                                }}
-                              value={{
-                                    x: this.state.hoveredNode.x,
-                                    y: this.state.hoveredNode.y,
-                                    Average: this.state.hoveredNode.value,
+                                    return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
                                 }}
                             />
-                        )}
-                    </XYPlot>
+
+                            <Highlight
+                              color="#829AE3"
+                              drag
+                              enableY={false}
+                              onDrag={updateDragState}
+                              onDragEnd={updateDragState}
+
+                            />
+                        </XYPlot>
+                    )}
+                    { this.props.text === '' && (
+                        <XYPlot width={300} height={200}>
+                            <XAxis />
+                            <YAxis />
+                            <VerticalRectSeries
+                                data={DATA}
+                                stroke="white"
+                                colorType="literal"
+                                getColor={(d) => {
+                                    if (selectionStart === null || selectionEnd === null) {
+                                        return '#1E96BE';
+                                    }
+                                    const inX = d.x >= selectionStart && d.x <= selectionEnd;
+                                    const inX0 = d.x - 1 >= selectionStart && d.x - 1 <= selectionEnd;
+                                    const inStart = selectionStart >= d.x - 1 && selectionStart <= d.x;
+                                    const inEnd = selectionEnd >= d.x - 1 && selectionEnd <= d.x;
+
+                                    return inStart || inEnd || inX || inX0 ? '#12939A' : '#1E96BE';
+                                }}
+                            />
+
+                            <Highlight
+                                color="#829AE3"
+                                drag
+                                enableY={false}
+                                // onDrag={updateDragState}
+                                // onDragEnd={updateDragState}
+
+                            />
+                        </XYPlot>
+                    )}
 
                     {/* <div> */}
                     {/*    <b>selectionStart:</b> */}

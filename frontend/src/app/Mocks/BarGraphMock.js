@@ -1,4 +1,4 @@
-export const DATA = [
+const DATA = [
     {
         classname: 'circle1',
         x0: 0,
@@ -42,3 +42,38 @@ export const DATA = [
         y: 1,
     },
 ];
+
+const OLD_DATA = [
+    {
+        classname: 'circle1',
+        x0: 0,
+        x: 0,
+        y: 0,
+    },
+    {
+        classname: 'circle1',
+        x0: 0,
+        x: 0,
+        y: 0,
+    },
+    {
+        classname: 'circle1',
+        x0: 0,
+        x: 0,
+        y: 0,
+    },
+    {
+        classname: 'circle1',
+        x0: 0,
+        x: 0,
+        y: 0,
+    },
+    {
+        classname: 'circle1',
+        x0: 0,
+        x: 0,
+        y: 0,
+    },
+];
+
+export {DATA, OLD_DATA}
