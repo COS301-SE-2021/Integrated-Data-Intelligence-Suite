@@ -40,8 +40,8 @@ export default class OverviewSection extends React.Component {
             });
             total_likes = this.props.text[0][0].words;
             overall_sentiment = this.props.text[1][0].words;
-            num_of_anomalies = this.props.text[2][0].words;
-            trends_value = this.props.text[3][0].words;
+            num_of_anomalies = this.props.text[3][0].words;
+            trends_value = this.props.text[2][0].words;
         }
     }
 
