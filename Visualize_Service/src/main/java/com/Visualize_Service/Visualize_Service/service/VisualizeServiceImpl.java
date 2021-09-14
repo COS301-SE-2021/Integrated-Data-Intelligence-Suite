@@ -1004,7 +1004,7 @@ public class VisualizeServiceImpl {
         System.out.println(totalCount);
 
         if(totalCount ==0){
-            throw new InvalidRequestException("Number of cloud objects equals zero ");
+            throw new InvalidRequestException("Number of cloud objects equals zero");
         }
 
         //output
@@ -1017,11 +1017,12 @@ public class VisualizeServiceImpl {
 
 
             //if((((float)sumCount /totalCount)*100) < 65.0f) {
-            if( (((float) set.getValue())/totalCount*100) > 1.0f){
+            if( (((float) set.getValue())/totalCount*100) > 1.5f){
                 PieChartGraph out = new PieChartGraph();
                 out.label = set.getKey();
                 out.x = set.getKey();
-                out.y = Math.round(((double) set.getValue())/totalCount*100.00);
+                out.y = ((double) set.getValue())/totalCount*100.00;
+                out.y = (double) Math.round(out.y *100) /100;
 
                 System.out.println("CLOUD VALUES HERE");
                 System.out.println(out.y);
@@ -1034,7 +1035,8 @@ public class VisualizeServiceImpl {
                 out.label = "the rest";
                 out.x = "the rest";
                 //DecimalFormat df = new DecimalFormat("#.##");
-                out.y = Math.round(((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00);
+                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
+                out.y = (double) Math.round(out.y *100) /100;
 
                 System.out.println("CLOUD VALUES HERE - Rest");
                 System.out.println(out.y);
