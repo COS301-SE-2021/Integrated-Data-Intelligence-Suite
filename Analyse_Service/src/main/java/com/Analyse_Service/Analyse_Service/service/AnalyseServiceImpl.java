@@ -344,7 +344,7 @@ public class AnalyseServiceImpl {
             System.out.println(o.toString());
         }
 
-        sparkPatterns.stop();
+        //sparkPatterns.stop();
         return new FindPatternResponse(results);
     }
 
