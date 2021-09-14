@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text } from '@visx/text';
+import React, { useEffect, useState } from 'react';
+import { getStringWidth, Text } from '@visx/text';
 import { scaleLog } from '@visx/scale';
 import { Wordcloud } from '@visx/wordcloud';
 import { totoAfricaLyrics } from '../../Mocks/WordCloudMock';
@@ -24,8 +24,9 @@ const colors = [
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-let data_from_backend;
-let words_from_backend = [];
+const index = 9;
+// let data_from_backend;
+// const words_from_backend = [];
 
 function wordFreq(text) {
     if (typeof text !== 'undefined') {
@@ -66,8 +67,8 @@ function getRotationDegree() {
 const words = wordFreq(totoAfricaLyrics);
 
 const fontScale = scaleLog({
-    domain: [Math.min(...words.map((w) => w.value)), Math.max(...words.map((w) => w.value))],
-    range: [20, 200],
+    domain: [1, 10000],
+    range: [18, 250],
 });
 const fontSizeSetter = function (datum) {
     // console.log(datum);
@@ -86,33 +87,46 @@ const getWindowSize = function () {
     return 200;
 };
 
-function WordCloud(props) {
-    if (typeof props.text === 'undefined') {
-        data_from_backend = [];
-    } else if (typeof props.text[7] === 'undefined') {
-        data_from_backend = [];
-    } else if (props.text[7].length === 0) {
-        data_from_backend = [];
-    } else if (props.text[7].length > 0) {
-        // console.log("Reached-here");
-        // console.log(props.text[7][0].words);
-        data_from_backend = props.text[7][0].words;
-        words_from_backend = wordFreq(data_from_backend);
-        // console.log("XXXXXX___XXXXXX");
-        // console.log(words_from_backend);
+const getDataFromProps = function (dataArray) {
+    if (dataArray) {
+        if (dataArray[index] && dataArray[index].length > 0) {
+            return wordFreq(dataArray[index][0].words);
+        }
     }
+    return words;
+};
+
+function WordCloud(props) {
+    const [wordsArray, setWordsArray] = useState(words);
     const [windowWidth, setWindowWidth] = useState(getWindowSize());
+
+    useEffect(()=>{
+        const lst = getDataFromProps(props.text);
+        console.log('works array found to be ');
+        console.log(lst);
+        setWordsArray(lst);
+
+        // function handleResize() {
+        //     setWindowWidth(getStringWidth());
+        //     const lst = getDataFromProps(props.text);
+        //     console.log('works array found to be ');
+        //     console.log(lst);
+        //     setWordsArray(lst);
+        // }
+
+        // window.addEventListener('resize', handleResize);
+    }, [props.text]);
 
     return (
         <div className="wordcloud" id="word-cloud-outer-container">
             <Wordcloud
-              key={words_from_backend}
-              words={words_from_backend}
+              key={wordsArray}
+              words={wordsArray}
               width={windowWidth}
               height={windowWidth * 0.8}
               font="Impact"
               padding={2}
-              fontSize={fontSizeSetter}
+              fontSize={(datum) => fontScale(datum.value)}
               spiral="archimedean"
               rotate={0}
               random={fixedValueGenerator}
