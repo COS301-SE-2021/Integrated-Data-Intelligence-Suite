@@ -34,10 +34,10 @@ function wordFreq(text) {
             .split(/\s/);
         const freqMap = {};
         let _i = 0;
-        const words_1 = words;
+        const words_1 = words.filter((str) => str.length > 3);
         console.log('There maybe an error here');
         for (; _i < words_1.length; _i++) {
-            const w = words_1[_i];
+            const w = words_1[_i].toLowerCase();
             if (!freqMap[w]) {
                 freqMap[w] = 0;
             }
@@ -46,13 +46,16 @@ function wordFreq(text) {
 
         console.log('HEre lies a freq map');
         console.log(freqMap);
-        return Object.keys(freqMap)
+        const max = Math.max(...Object.values(freqMap));
+        const lst = Object.keys(freqMap)
             .map(function (word) {
                 return ({
                     text: word,
-                    value: freqMap[word],
+                    value: Math.floor((freqMap[word] / max) * 50),
                 });
             });
+        console.log(lst);
+        return lst;
     }
 
     return null;
