@@ -828,6 +828,7 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
+
     public void TrainFindTrendsDecisionTree( ArrayList<ArrayList> requestData){
         /*******************SETUP SPARK*****************/
         logger.setLevel(Level.ERROR);
@@ -1045,6 +1046,110 @@ public class AnalyseServiceImpl {
         double daccuracy = devaluator.evaluate(predictions);
         System.out.println("Accuracy :" + daccuracy);
         System.out.println("Test Error = " + (1.0 - daccuracy));
+
+
+
+
+        /**
+         *
+         *
+         * ****************EVALUATE/ANALYSE MODEL************
+         *
+         *
+         * **
+
+        //evaluators
+        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+                .setLabelCol("label")
+                .setPredictionCol("prediction")
+                .setMetricName("mse") //meanSquaredError
+                .setMetricName("rmse") //rootMeanSquaredError
+                .setMetricName("mae") //meanAbsoluteError
+                .setMetricName("r2"); //r^2, variance
+
+        //parameterGrid
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+
+        paramGridBuilder.addGrid(lr.regParam(), new double[]{lr.getRegParam()});
+        paramGridBuilder.addGrid(lr.elasticNetParam(), new double[]{lr.getElasticNetParam()});
+        paramGridBuilder.addGrid(lr.fitIntercept());
+        ParamMap[] paramMaps = paramGridBuilder.build();
+
+
+        //validator
+        /*CrossValidator crossValidator = new CrossValidator()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setNumFolds(2);*\/
+
+        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setTrainRatio(0.7)  //70% : 30% ratio
+                .setParallelism(2);
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************
+
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
+        RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+
+        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
+
+        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        //predictions.show();
+        //System.out.println("*****************Predictions Of Test Data*****************");
+
+
+        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+        //param
+        client.logParam(run.getId(),"MaxIter", "10");
+        client.logParam(run.getId(),"setRegParam" ,"0.3");
+        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+
+        //metrics
+        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+
+        //custom tags
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));
+
+        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+        run.endRun();
+
+        /***********************SETUP MLFLOW - SAVE ***********************
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+        return new TrainFindTrendsResponse(results);*/
     }
 
     /**
