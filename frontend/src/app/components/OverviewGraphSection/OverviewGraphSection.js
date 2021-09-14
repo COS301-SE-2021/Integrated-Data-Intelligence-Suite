@@ -51,6 +51,8 @@ export default class OverviewGraphSection extends React.Component {
                         <VictoryBarGraph
                             text={_average_interaction}
                             key={_average_interaction}
+                            xAxisLabel={'Month'}
+                            yAxisLabel={'Interactions'}
                         />
                     </SimpleCard>
 
@@ -71,6 +73,8 @@ export default class OverviewGraphSection extends React.Component {
                         <VictoryBarGraph
                             text={_engagement_data}
                             key={_engagement_data}
+                            xAxisLabel={'Provinces'}
+                            yAxisLabel={'Engagement'}
                         />
                     </SimpleCard>
                 </div>
