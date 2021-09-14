@@ -1,6 +1,8 @@
 package com.Import_Service.Import_Service.service;
 
 import com.Import_Service.Import_Service.dataclass.APISource;
+import com.Import_Service.Import_Service.rri.ApiType;
+import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.rri.DataSource;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
@@ -16,12 +18,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ImportServiceImpl {
@@ -214,7 +214,7 @@ public class ImportServiceImpl {
      * @throws ImporterException when request object contains invalid parameters or any of the
      *                           data sources does not successfully execute
      */
-    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
+    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException, IOException {
 
         if(request == null) {
             throw new InvalidImporterRequestException("Request object is null.");
@@ -260,6 +260,58 @@ public class ImportServiceImpl {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
         }
 
+        //Fetching api sources from database
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request req;
+        List<APISource> sources = apiSourceRepository.findAll();
+        if(!sources.isEmpty()) {
+            for(APISource s : sources) {
+                String apiUrl = s.getUrl();
+                if(apiUrl.charAt(apiUrl.length()-1) != '?') {
+                    apiUrl += "?";
+                }
+
+                apiUrl += s.getSearchKey() + "=" + keyword;
+
+                Map<String, String> params = s.getParameters();
+
+                for (Map.Entry<String, String> entry: params.entrySet()) {
+                    apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
+                }
+
+                if(s.getAuthType() == AuthorizationType.apiKey) {
+                    apiUrl += "&apiKey=" + s.getAuthorization();
+
+                    req = new Request.Builder()
+                            .url(apiUrl)
+                            .method(s.getMethod(), null)
+                            .build();
+                }
+                else if (s.getAuthType() == AuthorizationType.bearer) {
+                    req = new Request.Builder()
+                            .addHeader("Authorization", "Bearer " + s.getAuthorization())
+                            .url(apiUrl)
+                            .method(s.getMethod(), null)
+                            .build();
+                }
+                else {
+                    req = new Request.Builder()
+                            .url(apiUrl)
+                            .method(s.getMethod(), null)
+                            .build();
+                }
+
+                Response response = client.newCall(req).execute();
+
+                if(!response.isSuccessful()){
+                    throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(response.body()).string());
+                }
+
+                list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
+            }
+        }
+
         return new ImportDataResponse(list);
     }
 
@@ -289,7 +341,7 @@ public class ImportServiceImpl {
             return new AddAPISourceResponse(false, "The source does not exist");
         }
 
-        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getAuthType(), request.getAuthorization(), request.getParameters());
+        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getType(), request.getAuthType(), request.getAuthorization(), request.getParameters());
 
         APISource savedSource = apiSourceRepository.save(newSource);
 

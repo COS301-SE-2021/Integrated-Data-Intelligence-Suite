@@ -156,7 +156,7 @@ public class ImportServiceController {
         try{
             res = service.importData(new ImportDataRequest(key, 100));
 
-        } catch (ImporterException e) {
+        } catch (Exception e) {
 
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
