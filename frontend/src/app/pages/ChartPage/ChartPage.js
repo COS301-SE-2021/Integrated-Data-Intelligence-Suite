@@ -127,127 +127,7 @@ class ChartPage extends Component {
                                             name="s"
                                         />
                                     </Header>
-
-
-                                    {/* <Content id="content_section"> */}
-                                    {/*    /!* <Layout *!/ */}
-                                    {/*    /!*    id="map_card_content_layout_div" *!/ */}
-                                    {/*    /!*    className="map_card" *!/ */}
-                                    {/*    /!* > *!/ */}
-                                    {/*    /!* <div *!/ */}
-                                    {/*    /!*    id="indicator-container" *!/ */}
-                                    {/*    /!* > *!/ */}
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Average Sentiment" */}
-                                    {/*        indicatorValue="Very Bad" */}
-                                    {/*        showArrow */}
-                                    {/*        percentChange="-27%" */}
-                                    {/*        cardID="ave-sentiment-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxAreaGraph */}
-                                    {/*                graphData={this.state.text} */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*                showSecondLine={false} */}
-                                    {/*                showXAxis={false} */}
-                                    {/*                showYAxis={false} */}
-                                    {/*                idName="ave-sentiment-area-graph" */}
-                                    {/*                tooltipKeyColor="red" */}
-                                    {/*            /> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Number of Mentions" */}
-                                    {/*        indicatorValue="246K" */}
-                                    {/*        percentChange="+69%" */}
-                                    {/*        cardID="num-mentions-card" */}
-                                    {/*        showArrow */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxAreaGraph */}
-                                    {/*                graphData={this.state.text} */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*                showSecondLine={false} */}
-                                    {/*                showXAxis={false} */}
-                                    {/*                showYAxis={false} */}
-                                    {/*                idName="num-mentions-area-graph" */}
-                                    {/*                tooltipKeyColor="green" */}
-                                    {/*            /> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Total Sentiment" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="total-sentiment-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <PieChart */}
-                                    {/*                graphData={this.state.text} */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*                legendOrientation="horizontal" */}
-                                    {/*                pieID="total-sentiment-pie" */}
-                                    {/*                legendID="total-sentiment-legend" */}
-                                    {/*            /> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Sentiment vs Time" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="sentiment-vs-time-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxLineGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    /!* </div> *!/ */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Engagement By Location" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="engagement-location-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxBarStackGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-
-                                    {/*    /!*<IndicatorCard*!/ */}
-                                    {/*    /!*    indicatorTitle="Tweet Content"*!/ */}
-                                    {/*    /!*    showArrow={false}*!/ */}
-                                    {/*    /!*    cardID="tweet-content-card"*!/ */}
-                                    {/* /> */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Frequency of Entity Type" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="freq-entity-type" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxBarGroupGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Frequency per country" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        // cardID={'total-sentiment-pie-card'} */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxBarStackGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    <div id="map-card-container"> */}
-                                    {/*        <Card */}
-                                    {/*            id="map-card" */}
-                                    {/*            // title="World Map" */}
-                                    {/*        > */}
-                                    {/*            <MapCard text={this.state.text}/> */}
-                                    {/*        </Card> */}
-
+                                    
                                     {/*        /!* <div id="map-details-container"> *!/ */}
                                     {/*        /!* </div> *!/ */}
                                     {/*    </div> */}
@@ -373,7 +253,7 @@ class ChartPage extends Component {
                                             />
                                         </SimpleSection>
 
-                                        {/*
+                                        {/*/!**/}
                                         <SimpleSection
                                             cardTitle=""
                                             cardID="row-3"
@@ -443,7 +323,7 @@ class ChartPage extends Component {
                                             </SimpleCard>
 
                                             <SimpleCard
-                                                cardTitle="Relationship Between Entities"
+                                                cardTitle="Relationship Between Patterns"
                                                 cardID="network-graph-patterns"
                                             >
                                                 <NetworkGraphCard
@@ -452,7 +332,7 @@ class ChartPage extends Component {
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
-                                        */}
+                                        {/**!/*/}
 
                                     </div>
                                 </Layout>
