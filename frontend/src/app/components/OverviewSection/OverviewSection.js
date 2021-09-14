@@ -50,7 +50,7 @@ export default class OverviewSection extends React.Component {
             <>
                 <div id={'overview-col-left'}>
                     <SimpleCard
-                        cardTitle="Total Likes"
+                        cardTitle="Total Interaction"
                         cardID="overview-metric-1"
                     >
                         <ValueWithPercentChange
@@ -72,7 +72,7 @@ export default class OverviewSection extends React.Component {
                     </SimpleCard>
 
                     <SimpleCard
-                        cardTitle="Average Sentiment"
+                        cardTitle="Overall Sentiment"
                         cardID="overview-metric-2"
                     >
                         <ValueWithPercentChange
