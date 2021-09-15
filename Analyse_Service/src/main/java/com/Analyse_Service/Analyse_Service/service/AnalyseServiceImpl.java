@@ -44,6 +44,7 @@ import org.apache.spark.ml.fpm.FPGrowthModel;
 import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.tuning.*;
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
+import org.apache.spark.mllib.evaluation.MulticlassMetrics;
 import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
@@ -159,6 +160,9 @@ public class AnalyseServiceImpl {
 
         //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
         //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+
+        TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDatalist);
+        this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
         //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
         //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
@@ -829,7 +833,7 @@ public class AnalyseServiceImpl {
     }
 
 
-    public void TrainFindTrendsDecisionTree( ArrayList<ArrayList> requestData){
+    public void trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request) throws IOException {
         /*******************SETUP SPARK*****************/
         logger.setLevel(Level.ERROR);
         LogManager.getRootLogger().setLevel(Level.ERROR);
@@ -843,7 +847,11 @@ public class AnalyseServiceImpl {
         sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
+
+
+        ArrayList<ArrayList> requestData = request.getDataList();
         List<Row> trendsData = new ArrayList<>();
+
         ArrayList<String> types = new ArrayList<>();
 
         for (int i = 0; i < requestData.size(); i++) {
@@ -1013,7 +1021,7 @@ public class AnalyseServiceImpl {
 
         /******************EVALUATE/ANALYSE MODEL**************/
 
-        MulticlassClassificationEvaluator devaluator = new MulticlassClassificationEvaluator()
+        MulticlassClassificationEvaluator multiclassClassificationEvaluator = new MulticlassClassificationEvaluator()
                 .setLabelCol("indexedLabel")
                 .setPredictionCol("prediction")
                 .setMetricName("accuracy");
@@ -1034,76 +1042,20 @@ public class AnalyseServiceImpl {
 
         TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
                 .setEstimator(pipeline)
-                .setEvaluator(devaluator)
-                .setEstimatorParamMaps(paramMaps)
-                .setTrainRatio(0.7)  //70% : 30% ratio
-                .setParallelism(2);
-
-        TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
-
-        Dataset<Row> predictions = dtModel.transform(testSetDF);
-
-        double daccuracy = devaluator.evaluate(predictions);
-        System.out.println("Accuracy :" + daccuracy);
-        System.out.println("Test Error = " + (1.0 - daccuracy));
-
-
-
-
-        /**
-         *
-         *
-         * ****************EVALUATE/ANALYSE MODEL************
-         *
-         *
-         * **
-
-        //evaluators
-        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
-                .setLabelCol("label")
-                .setRawPredictionCol("prediction")
-                .setMetricName("areaUnderROC");
-
-        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
-                .setLabelCol("label")
-                .setPredictionCol("prediction")
-                .setMetricName("mse") //meanSquaredError
-                .setMetricName("rmse") //rootMeanSquaredError
-                .setMetricName("mae") //meanAbsoluteError
-                .setMetricName("r2"); //r^2, variance
-
-        //parameterGrid
-        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
-
-        paramGridBuilder.addGrid(lr.regParam(), new double[]{lr.getRegParam()});
-        paramGridBuilder.addGrid(lr.elasticNetParam(), new double[]{lr.getElasticNetParam()});
-        paramGridBuilder.addGrid(lr.fitIntercept());
-        ParamMap[] paramMaps = paramGridBuilder.build();
-
-
-        //validator
-        /*CrossValidator crossValidator = new CrossValidator()
-                .setEstimator(pipeline)
-                .setEvaluator(regressionEvaluator)
-                .setEstimatorParamMaps(paramMaps)
-                .setNumFolds(2);*\/
-
-        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
-                .setEstimator(pipeline)
-                .setEvaluator(regressionEvaluator)
+                .setEvaluator(multiclassClassificationEvaluator)
                 .setEstimatorParamMaps(paramMaps)
                 .setTrainRatio(0.7)  //70% : 30% ratio
                 .setParallelism(2);
 
 
-        /***********************SETUP MLFLOW - SAVE ***********************
+        /***********************SETUP MLFLOW - SAVE ***********************/
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        Optional<Experiment> foundExperiment = client.getExperimentByName("DecisionTree_Experiment");
         String experimentID = "";
         if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("LogisticRegression_Experiment");
+            experimentID = client.createExperiment("DecisionTree_Experiment");
         }
         else{
             experimentID = foundExperiment.get().getExperimentId();
@@ -1111,38 +1063,53 @@ public class AnalyseServiceImpl {
 
         RunInfo runInfo = client.createRun(experimentID);
         MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+        ActiveRun run = mlflow.startRun("DecisionTree_Run", runInfo.getRunId());
 
-        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
 
-        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
+
+        Dataset<Row> predictions = dtModel.transform(testSetDF);
         //predictions.show();
         //System.out.println("*****************Predictions Of Test Data*****************");
 
+        double accuracy = multiclassClassificationEvaluator.evaluate(predictions);
+        System.out.println("Accuracy :" + accuracy);
+        System.out.println("Test Error = " + (1.0 - accuracy));
 
-        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
-        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
-        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+        //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        MulticlassMetrics multiclassMetrics = multiclassClassificationEvaluator.getMetrics(predictions);
 
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
-        //param
-        client.logParam(run.getId(),"MaxIter", "10");
-        client.logParam(run.getId(),"setRegParam" ,"0.3");
-        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
 
         //metrics
-        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
-        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
-        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+        client.logMetric(run.getId(),"Accuracy" ,multiclassMetrics.accuracy());
+        client.logMetric(run.getId(),"Precision" , multiclassMetrics.weightedPrecision());
+        client.logMetric(run.getId(),"Recall" , multiclassMetrics.weightedRecall());
+
+        client.logMetric(run.getId(),"F-measure" ,multiclassMetrics.weightedFMeasure());
+        client.logMetric(run.getId(),"True positive rate" ,multiclassMetrics.weightedTruePositiveRate());
+        client.logMetric(run.getId(),"False positive rate" ,multiclassMetrics.weightedFalsePositiveRate());
+
+
+        for(int i =0; i < multiclassMetrics.labels().length - 1; i++) {
+            client.logMetric(run.getId(), "Precision by label", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            client.logMetric(run.getId(), "Recall by label", multiclassMetrics.recall(multiclassMetrics.labels()[i]));
+            client.logMetric(run.getId(), "True positive rate by label", multiclassMetrics.truePositiveRate(multiclassMetrics.labels()[i]));
+            client.logMetric(run.getId(), "F-measure by label", multiclassMetrics.fMeasure(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(), "Subset Accuracy", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(),"Micro precision" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(),"Micro recall" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(),"Micro F1 Measure" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+        }
+
+
+        client.logMetric(run.getId(),"Hamming loss" , multiclassMetrics.hammingLoss());
 
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        //run.setTag("Accuracy", String.valueOf(accuracy));
 
-        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        dtModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
 
         run.endRun();
 
