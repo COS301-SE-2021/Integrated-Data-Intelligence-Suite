@@ -9,8 +9,24 @@ import PieCustomLabel from '../PieCustomLabel/PieCustomLabel';
 import PieDataMock from '../../Mocks/PieChartMock';
 
 const index = 10;
+const colors = [
+    '#25bd52',
+    '#786e64',
+    '#8e8073',
+    '#e66c85',
+    '#244a99',
+    '#be8abf',
+    '#b3b456',
+    '#d79525',
+    '#bd6341',
+    '#709a04',
+    '#5fa7c8',
+    '#f3cd6c',
+    '#FF0800',
+    '#5fa7c8',
+];
+
 let sum_of_slices = 0;
-let data_from_backend;
 
 export default class PieChart extends React.Component {
     constructor(props) {
@@ -23,7 +39,7 @@ export default class PieChart extends React.Component {
         if (typeof props.text === 'undefined' || typeof props.text[index] === 'undefined' || props.text[index].length === 0) {
             this.setState({ data_points: PieDataMock() });
         } else if (props.text[index].length > 0) {
-            this.setState({ data_points: props.text[index]});
+            this.setState({ data_points: props.text[index] });
         }
     }
 
@@ -34,7 +50,7 @@ export default class PieChart extends React.Component {
                 // console.log("comparing data")
                 // console.log(PieChartMock);
                 // console.log(props.text[index]);
-                return { data_points: props.text[index] }
+                return { data_points: props.text[index] };
             }
         }
         return { data_points: PieDataMock() };
@@ -102,10 +118,10 @@ export default class PieChart extends React.Component {
                 {this.state.data_points && (
                     <VictoryPie
                       style={{ labels: { fill: 'darkgrey', fontWeight: 600 } }}
-                      colorScale={['#5873f9', '#FFFF00', '#00a800']}
+                      colorScale={colors}
                       innerRadius={100}
                       labelRadius={120}
-                      labels={({ datum }) => [datum.x]}
+                      labels={({ datum }) => [datum.x, `${datum.y}%`]}
                       labelComponent={<PieCustomLabel />}
                       data={this.state.data_points}
                     />
