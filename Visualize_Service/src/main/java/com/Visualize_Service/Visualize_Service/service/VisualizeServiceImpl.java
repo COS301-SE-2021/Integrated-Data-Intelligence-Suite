@@ -333,7 +333,7 @@ public class VisualizeServiceImpl {
 
             LineGraph outp = new LineGraph();
             outp.x = reqData.get(i).get(0).toString();
-            outp.y = String.valueOf((int) number);
+            outp.y = (int) number;
 
             System.out.println("x: "+outp.x);
             System.out.println("y: "+outp.y);
@@ -453,7 +453,7 @@ public class VisualizeServiceImpl {
         for (int j = 0; j < province.size(); j++) {
             bar2 = new BarGraph();
             bar2.x = province.get(j).toString();
-            bar2.y = provfrq.get(j).toString();
+            bar2.y = Integer.parseInt(provfrq.get(j).toString());
 
             System.out.println("x: " + bar2.x);
             System.out.println("y: " + bar2.y);
@@ -520,7 +520,7 @@ public class VisualizeServiceImpl {
 
             BarGraph outp = new BarGraph();
             outp.x = reqData.get(i).get(0).toString();
-            outp.y = String.valueOf((int) number);
+            outp.y = (int) number;
 
             System.out.println("x: "+outp.x);
             System.out.println("y: "+outp.y);
@@ -1011,7 +1011,7 @@ public class VisualizeServiceImpl {
 
             bar2 = new BarGraph();
             bar2.x = stringDate;
-            bar2.y = String.valueOf((int)Freq);
+            bar2.y = (int)Freq;
 
             System.out.println("x: " + bar2.x);
             System.out.println("y: " + bar2.y);
@@ -1083,7 +1083,7 @@ public class VisualizeServiceImpl {
 
             LineGraph outp = new LineGraph();
             outp.x = String.valueOf(i);
-            outp.y = String.valueOf((int) number);
+            outp.y = (int) number;
 
             System.out.println("x: "+outp.x);
             System.out.println("y: "+outp.y);
