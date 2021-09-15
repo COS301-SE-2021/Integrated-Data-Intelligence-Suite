@@ -69,14 +69,14 @@ export default class OverviewGraphSection extends React.Component {
                     </SimpleCard>
 
                     <SimpleCard
-                        cardTitle="Engagement per Location"
+                        cardTitle="Engagement per Province"
                         cardID="overview-graph-metric-3"
                     >
                         <VictoryBarGraph
                             text={_engagement_data}
                             key={_engagement_data}
-                            xAxisLabel={'Provinces'}
-                            yAxisLabel={'Engagement'}
+                            xAxisLabel={''}
+                            yAxisLabel={''}
                         />
                     </SimpleCard>
                 </div>

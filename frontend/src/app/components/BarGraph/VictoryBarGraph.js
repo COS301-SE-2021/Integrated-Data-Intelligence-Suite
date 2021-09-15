@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryBar, VictoryTooltip, VictoryAxis } from 'victory';
+import { VictoryChart, VictoryBar, VictoryTooltip, VictoryAxis, VictoryLabel } from 'victory';
 
 // Color States
 const COLOR_DEFAULT = '#4666FF';
@@ -47,6 +47,14 @@ export default class VictoryBarGraph extends React.Component {
             >
                 <VictoryAxis
                     label={this.props.xAxisLabel}
+                    style={{
+                        tickLabels: {
+                            angle: 45,
+                            textAnchor: 'start'
+                        }
+                    }}
+                    fixLabelOverlap
+                    axisLabelComponent={<VictoryLabel dx={-12}/>}
                 />
 
                 <VictoryAxis

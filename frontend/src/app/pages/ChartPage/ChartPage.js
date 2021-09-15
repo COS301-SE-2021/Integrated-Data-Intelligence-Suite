@@ -234,7 +234,10 @@ class ChartPage extends Component {
                                                 cardTitle="Line Graph"
                                                 cardID="anomaly-line-graph"
                                             >
-                                                Line Graph
+                                                <GraphWithBrushAndZoom
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
                                             </SimpleCard>
                                         </SimpleSection>
                                         {/**!/*/}
