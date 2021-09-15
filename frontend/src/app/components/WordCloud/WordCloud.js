@@ -34,7 +34,7 @@ function wordFreq(text) {
             .split(/\s/);
         const freqMap = {};
         let _i = 0;
-        const words_1 = words.filter((str) => str.length > 3);
+        const words_1 = words;
         console.log('There maybe an error here');
         for (; _i < words_1.length; _i++) {
             const w = words_1[_i].toLowerCase();

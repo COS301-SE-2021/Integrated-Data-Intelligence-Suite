@@ -4,13 +4,29 @@ import {
 } from 'victory';
 import './PieChart.css';
 import PieChartMock from '../../Mocks/PieChartDataMock.json';
-import {DATA} from "../../Mocks/BarGraphMock";
-import PieCustomLabel from "../PieCustomLabel/PieCustomLabel";
-import PieDataMock from "../../Mocks/PieChartMock";
+import { DATA } from '../../Mocks/BarGraphMock';
+import PieCustomLabel from '../PieCustomLabel/PieCustomLabel';
+import PieDataMock from '../../Mocks/PieChartMock';
 
 const index = 10;
+const colors = [
+    '#25bd52',
+    '#786e64',
+    '#8e8073',
+    '#e66c85',
+    '#244a99',
+    '#be8abf',
+    '#b3b456',
+    '#d79525',
+    '#bd6341',
+    '#709a04',
+    '#5fa7c8',
+    '#f3cd6c',
+    '#FF0800',
+    '#5fa7c8',
+];
+
 let sum_of_slices = 0;
-let data_from_backend;
 
 export default class PieChart extends React.Component {
     constructor(props) {
@@ -23,21 +39,21 @@ export default class PieChart extends React.Component {
         if (typeof props.text === 'undefined' || typeof props.text[index] === 'undefined' || props.text[index].length === 0) {
             this.setState({ data_points: PieDataMock() });
         } else if (props.text[index].length > 0) {
-            this.setState({ data_points: PieDataMock() });
+            this.setState({ data_points: props.text[index] });
         }
     }
 
     static getDerivedStateFromProps(props) {
-        console.log("pie chart changing")
+        console.log('pie chart changing');
         if (props.text !== null && props.text !== '') {
             if (props.text[index] && props.text[index].length > 0) {
                 // console.log("comparing data")
                 // console.log(PieChartMock);
                 // console.log(props.text[index]);
-                return props.text[index];
+                return { data_points: props.text[index] };
             }
         }
-        return { dataToBeDisplayed: PieDataMock() };
+        return { data_points: PieDataMock() };
     }
 
     _changeSliceSum(value) {
@@ -86,59 +102,30 @@ export default class PieChart extends React.Component {
     render() {
         return (
             <>
-                {/*<VictoryPie*/}
-                {/*  colorScale={['#FF0000', '#FFFF00', '#00a800']}*/}
-                {/*  data={this.state.data_points}*/}
-                {/*  // labels={({ datum }) => `${datum.x} ${datum.y}%`}*/}
-                {/*  innerRadius={200}*/}
-                {/*  // style={{ labels: { fontSize: 30, padding: 25 } }}*/}
-                {/*  labelComponent={<PieCustomLabel/>}*/}
-                {/*  animate={{*/}
-                {/*        duration: 500,*/}
-                {/*    }}*/}
+                {/* <VictoryPie */}
+                {/*  colorScale={['#FF0000', '#FFFF00', '#00a800']} */}
+                {/*  data={this.state.data_points} */}
+                {/*  // labels={({ datum }) => `${datum.x} ${datum.y}%`} */}
+                {/*  innerRadius={200} */}
+                {/*  // style={{ labels: { fontSize: 30, padding: 25 } }} */}
+                {/*  labelComponent={<PieCustomLabel/>} */}
+                {/*  animate={{ */}
+                {/*        duration: 500, */}
+                {/*    }} */}
                 {/*  */}
                 {/*  */}
-                {/*/>*/}
-                <VictoryPie
-                    style={{ labels: { fill: 'darkgrey', fontWeight: 600 } }}
-                    colorScale={['#5873f9', '#FFFF00', '#00a800']}
-                    innerRadius={100}
-                    labelRadius={120}
-                    labels={({ datum }) => [datum.x]}
-                    labelComponent={<PieCustomLabel/>}
-                    data={this.state.data_points}
-                    // events={[{
-                    //     target: 'data',
-                    //     eventHandlers: {
-                    //         onMouseOver: () => {
-                    //             return [
-                    //                 {
-                    //                     target: 'data',
-                    //                     mutation: (props) => {
-                    //                         // this._changeSliceSum(style.fill === '#c43a31');
-                    //                         // return style.fill === '#c43a31'
-                    //                         //     ? null
-                    //                         //     : { style: { fill: '#c43a31' } };
-                    //                         return {
-                    //                             style: { ...props.style, fill: '#5773FA' },
-                    //                         };
-                    //                     },
-                    //                 },
-                    //             ];
-                    //         },
-                    //         onMouseOut: () => {
-                    //             return [
-                    //                 {
-                    //                     target: 'data',
-                    //                     mutation: () =>{
-                    //                         return null;
-                    //                     },
-                    //                 },
-                    //             ];
-                    //         },
-                    //     },
-                    // }]}
-                />
+                {/* /> */}
+                {this.state.data_points && (
+                    <VictoryPie
+                      style={{ labels: { fill: 'darkgrey', fontWeight: 600 } }}
+                      colorScale={colors}
+                      innerRadius={100}
+                      labelRadius={120}
+                      labels={({ datum }) => [datum.x, `${datum.y}%`]}
+                      labelComponent={<PieCustomLabel />}
+                      data={this.state.data_points}
+                    />
+)}
             </>
         );
     }

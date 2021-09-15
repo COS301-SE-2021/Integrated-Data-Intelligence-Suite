@@ -18,7 +18,8 @@ public class VisualizeServiceImpl {
 
 
 
-    public VisualizeDataResponse visualizeData(VisualizeDataRequest request) throws InvalidRequestException {
+    public VisualizeDataResponse visualizeData(VisualizeDataRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -87,6 +88,11 @@ public class VisualizeServiceImpl {
         GetTotalAnomaliesResponse totalAnomaliesResponse = this.getTotalAnomalies(totalAnomaliesRequest);
         outputData.add(totalAnomaliesResponse.words);
 
+
+
+
+
+
         //Line graph Interactions (Bar graph now)(Average Interaction)
         CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
         CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
@@ -102,6 +108,11 @@ public class VisualizeServiceImpl {
         CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
         outputData.add(extraBarOneResponse.BarGraphArray);
 
+
+
+
+
+
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
         CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
@@ -111,6 +122,10 @@ public class VisualizeServiceImpl {
         CreateBarGraphRequest barRequest = new CreateBarGraphRequest(request.getTrendList());
         CreateBarGraphResponse barResponse =  this.createBarGraph(barRequest);
         outputData.add(barResponse.BarGraphArray);
+
+
+
+
 
         //WordCloud graph
         CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getTrendList());
@@ -129,6 +144,9 @@ public class VisualizeServiceImpl {
 
          */
 
+
+
+
         //Network graph (Relationships)
         CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
         CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest);
@@ -140,18 +158,19 @@ public class VisualizeServiceImpl {
         outputData.add(patternGraphResponse.NetworkGraphArray);
 
 
+
+
+
+
+
+
         //Timeline graph
         CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
         CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
         outputData.add(timelineResponse.timelineGraphArray);
 
-
-
-
-
         /*
         ToDo: Scatter plot
-
 
          */
 
@@ -170,7 +189,9 @@ public class VisualizeServiceImpl {
     }
 
 
-    public GetTotalInteractionResponse getTotalInteraction(GetTotalInteractionRequest request) throws InvalidRequestException {
+    /*****************OVERALL**********************/
+    public GetTotalInteractionResponse getTotalInteraction(GetTotalInteractionRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
@@ -255,7 +276,8 @@ public class VisualizeServiceImpl {
         return new GetMostProminentSentimentResponse(output);
     }
 
-    public GetTotalTrendsResponse getTotalTrends(GetTotalTrendsRequest request) throws InvalidRequestException {
+    public GetTotalTrendsResponse getTotalTrends(GetTotalTrendsRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
@@ -272,7 +294,8 @@ public class VisualizeServiceImpl {
         return new GetTotalTrendsResponse(output);
     }
 
-    public GetTotalAnomaliesResponse getTotalAnomalies(GetTotalAnomaliesRequest request) throws InvalidRequestException {
+    public GetTotalAnomaliesResponse getTotalAnomalies(GetTotalAnomaliesRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
@@ -290,114 +313,10 @@ public class VisualizeServiceImpl {
     }
 
 
+    /*****************DEEP OVERALL**********************/
 
-
-    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-
-        ArrayList<String> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            TimelineGraph newGraph = new TimelineGraph();
-
-            Random random = new Random();
-            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
-            int maxDay = (int) LocalDate.now().toEpochDay();
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-
-            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-            String stringDate=randomBirthDate.format(formatter);
-
-            newGraph.title = stringDate;
-            newGraph.cardTitle = "Anomaly Detected";
-            newGraph.cardSubtitle = reqData.get(i);
-
-            output.add(newGraph);
-        }
-        return new CreateTimelineGraphResponse(output);
-    }
-
-    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("FindEntitiesRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-        ArrayList<String> listSent = new ArrayList<>();
-        ArrayList<ArrayList> out = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
-            //System.out.println(locs.toString());
-            listSent = new ArrayList<>();
-            out = new ArrayList<>();
-            for (int j = 0; j < sents.size(); j++) {
-                if (listSent.isEmpty()){
-                    listSent.add(sents.get(j));
-                    ArrayList<Object> r = new ArrayList<>();
-                    r.add(sents.get(j));
-                    r.add(1);
-                    out.add(r);
-                }else {
-                    if (listSent.contains(sents.get(j))){
-                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
-                        int val=Integer.parseInt(r.get(1).toString());
-                        val++;
-                        r.set(1,val);
-                        out.set(listSent.indexOf(sents.get(j)),r);
-                    }else {
-                        listSent.add(sents.get(j));
-                        ArrayList<Object> r = new ArrayList<>();
-                        r.add(sents.get(j));
-                        r.add(1);
-                        out.add(r);
-                    }
-                }
-            }
-            int temp = 0;
-            String sent = "";
-            for (ArrayList o : out) {
-               if (temp < Integer.parseInt(o.get(1).toString())) {
-                   temp = Integer.parseInt(o.get(1).toString());
-                   sent = o.get(0).toString();
-               }
-            }
-
-            float tot = sents.size() +1;
-            float number = ((float)temp)/tot * 50;
-            if (sent == "Positive")
-                number *= 2;
-            else
-                number = 100 - number*2;
-
-            LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateLineGraphSentimentsResponse(output);
-    }
-
-    public CreateLineGraphInteractionsResponse createLineGraphInteractions(CreateLineGraphInteractionsRequest request) throws InvalidRequestException{
+    public CreateLineGraphInteractionsResponse createLineGraphInteractions(CreateLineGraphInteractionsRequest request)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
@@ -413,7 +332,7 @@ public class VisualizeServiceImpl {
             float number = Float.parseFloat(reqData.get(i).get(3).toString());
 
             LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
+            outp.x = reqData.get(i).get(0).toString();
             outp.y = String.valueOf((int) number);
 
             System.out.println("x: "+outp.x);
@@ -428,139 +347,8 @@ public class VisualizeServiceImpl {
         return new CreateLineGraphInteractionsResponse(output);
     }
 
-
-
-    //frequecy of tweets in trend
-    public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-
-        for (int i = 0; i < reqData.size(); i++) {
-            float number = Float.parseFloat(reqData.get(i).get(6).toString());
-
-            BarGraph outp = new BarGraph();
-            outp.x = reqData.get(i).get(0).toString();
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateBarGraphResponse(output);
-    }
-
-    //Engagment by location
-    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request) throws InvalidRequestException {
-
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-
-        ArrayList<Graph> output = new ArrayList<>();
-
-        BarGraph bar2;
-
-
-        ArrayList<String> province = new ArrayList<>();
-        ArrayList<Integer> provfrq  = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
-            //System.out.println(locs.toString());
-
-            for (int j = 0; j < locs.size(); j++) {
-
-
-                String [] latlon = locs.get(j).toString().split(",");
-                String prov= getLocation(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
-                if (prov.equals("")){
-                    prov = "Northern Cape";
-                }
-                if (province.contains(prov)){
-                    int frq = provfrq.get(province.indexOf(prov)).intValue();
-                    frq++;
-                    provfrq.set(province.indexOf(prov),frq);
-                }else{
-                    province.add(prov);
-                    provfrq.add(1);
-                }
-
-
-            }
-        }
-        for (int j = 0; j < province.size(); j++) {
-            bar2 = new BarGraph();
-            bar2.x = province.get(j).toString();
-            bar2.y = provfrq.get(j).toString();
-
-            System.out.println("x: " + bar2.x);
-            System.out.println("y: " + bar2.y);
-            output.add(bar2);
-        }
-        return new CreateBarGraphExtraOneResponse (output);
-    }
-
-    //no text over time/dates
-    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request) throws InvalidRequestException {
-
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-
-
-        ArrayList<Graph> output = new ArrayList<>();
-        BarGraph bar2;
-
-        for (int i = 0; i < reqData.size(); i++) {
-            Random random = new Random();
-            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
-            int maxDay = (int) LocalDate.now().toEpochDay();
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-
-            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-            String stringDate=randomBirthDate.format(formatter);
-
-            double Freq = Float.parseFloat(reqData.get(i).get(6).toString());
-            Freq += Math.random() * (15);
-
-
-            bar2 = new BarGraph();
-            bar2.x = stringDate;
-            bar2.y = String.valueOf((int)Freq);
-
-            System.out.println("x: " + bar2.x);
-            System.out.println("y: " + bar2.y);
-            output.add(bar2);
-        }
-        return new CreateBarGraphExtraTwoResponse(output);
-    }
-
-
-
-
-    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request) throws InvalidRequestException{
+    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
@@ -619,7 +407,66 @@ public class VisualizeServiceImpl {
         return new CreatePieChartGraphResponse(output);
     }
 
-    public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
+    //Engagment by location
+    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request)
+            throws InvalidRequestException {
+
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+
+        ArrayList<Graph> output = new ArrayList<>();
+
+        BarGraph bar2;
+
+
+        ArrayList<String> province = new ArrayList<>();
+        ArrayList<Integer> provfrq  = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < locs.size(); j++) {
+
+
+                String [] latlon = locs.get(j).toString().split(",");
+                String prov= getLocation(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
+                if (prov.equals("")){
+                    prov = "Northern Cape";
+                }
+                if (province.contains(prov)){
+                    int frq = provfrq.get(province.indexOf(prov)).intValue();
+                    frq++;
+                    provfrq.set(province.indexOf(prov),frq);
+                }else{
+                    province.add(prov);
+                    provfrq.add(1);
+                }
+
+
+            }
+        }
+        for (int j = 0; j < province.size(); j++) {
+            bar2 = new BarGraph();
+            bar2.x = province.get(j).toString();
+            bar2.y = provfrq.get(j).toString();
+
+            System.out.println("x: " + bar2.x);
+            System.out.println("y: " + bar2.y);
+            output.add(bar2);
+        }
+        return new CreateBarGraphExtraOneResponse (output);
+    }
+
+
+    /*****************MAP LOCATION**********************/
+
+    public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateMapGraphRequest Object is null");
         }
@@ -654,7 +501,200 @@ public class VisualizeServiceImpl {
         return new CreateMapGraphResponse(output);
     }
 
-    public CreateRelationshipGraphResponse createRelationGraph(CreateRelationshipGraphRequest request) throws InvalidRequestException{
+    //frequecy of tweets in trend
+    public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            float number = Float.parseFloat(reqData.get(i).get(6).toString());
+
+            BarGraph outp = new BarGraph();
+            outp.x = reqData.get(i).get(0).toString();
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateBarGraphResponse(output);
+    }
+
+
+
+    /*****************WORD CLOUD**********************/
+    public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.dataList == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+
+        ArrayList<String> wordList = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < texts.size(); j++) {
+                String[] words = texts.get(j).toString().split(" ");
+                for(int k =0; k < words.length ; k++){
+                    if (filterdCloud.contains(words[k]) == false){
+                        wordList.add(words[k]);
+                    }
+                }
+            }
+        }
+
+        String text =wordList.get(0);
+        for(int i =1; i < wordList.size(); i++){
+            text = text + " " + wordList.get(i);
+        }
+
+        WordCloudGraph out = new WordCloudGraph();
+        out.words = text;
+
+        System.out.println(out.words);
+        output.add(out);
+
+
+        return new CreateWordCloudGraphResponse(output,wordList);
+    }
+
+    public CreateWordCloudPieChartGraphResponse createWordCloudPieChartGraph(CreateWordCloudPieChartGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.dataList == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        ArrayList<String> wordList = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+
+        HashMap<String, Integer> wordMap = new HashMap<>();
+
+        //ArrayList<String> wordList = new ArrayList<>();
+        for (int i = 0; i < wordList.size(); i++) {
+            if (wordMap.containsKey(wordList.get(i)) == false) {
+                wordMap.put(wordList.get(i), 1);
+            } else {
+                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
+            }
+        }
+
+        System.out.println("Investigate here");
+        System.out.println(wordMap);
+
+
+        // Sort the list by values
+        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
+
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return o2.getValue().compareTo(o1.getValue()); //des
+            }
+        });
+
+
+        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
+        for (Map.Entry<String, Integer> values : list) {
+            finalHash.put(values.getKey(), values.getValue());
+        }
+
+        System.out.println("Investigate here 2");
+        System.out.println(finalHash);
+
+
+        //count word frequency
+        int totalCount = 0;
+        int sumCount = 0;
+
+
+
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            totalCount = totalCount + set.getValue();
+        }
+
+        System.out.println("TOTAL HERE");
+        System.out.println(totalCount);
+
+        if(totalCount ==0){
+            throw new InvalidRequestException("Number of cloud objects equals zero");
+        }
+
+        //output
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            System.out.println(set.getKey() + " : " + set.getValue() );
+
+            sumCount = sumCount + set.getValue();
+
+            System.out.println("Sum : " + sumCount);
+
+
+            //if((((float)sumCount /totalCount)*100) < 65.0f) {
+            if( (((float) set.getValue())/totalCount*100) > 1.5f){
+                PieChartGraph out = new PieChartGraph();
+                out.label = set.getKey();
+                out.x = set.getKey();
+                out.y = ((double) set.getValue())/totalCount*100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE");
+                System.out.println(out.y);
+
+                //System.out.println(out.words);
+                output.add(out);
+            }
+            else{
+                PieChartGraph out = new PieChartGraph();
+                    out.label = "{OTHERS}";
+                out.x = "the rest";
+                //DecimalFormat df = new DecimalFormat("#.##");
+                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE - Rest");
+                System.out.println(out.y);
+
+                //System.out.println(out.words);
+                output.add(out);
+
+                break;
+            }
+        }
+
+
+        return new CreateWordCloudPieChartGraphResponse(output);
+    }
+
+
+    /*****************PATTERNS**********************/
+
+    public CreateRelationshipGraphResponse createRelationGraph(CreateRelationshipGraphRequest request)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -819,7 +859,8 @@ public class VisualizeServiceImpl {
         return new CreateRelationshipGraphResponse(output);
     }
 
-    public CreatePatternGraphResponse createPatternGraph(CreatePatternGraphRequest request) throws InvalidRequestException{
+    public CreatePatternGraphResponse createPatternGraph(CreatePatternGraphRequest request)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -900,157 +941,163 @@ public class VisualizeServiceImpl {
     }
 
 
+    /*****************TIMELINE**********************/
 
-    public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
+    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+
+        ArrayList<String> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            TimelineGraph newGraph = new TimelineGraph();
+
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "Anomaly Detected";
+            newGraph.cardSubtitle = reqData.get(i);
+
+            output.add(newGraph);
+        }
+        return new CreateTimelineGraphResponse(output);
+    }
+
+    /***TODO: Scatter ****/
+
+    //no text over time/dates
+    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request)
+            throws InvalidRequestException {
+
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.dataList == null){
-            throw new InvalidRequestException("Arraylist object is null");
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+
+
+        ArrayList<Graph> output = new ArrayList<>();
+        BarGraph bar2;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            double Freq = Float.parseFloat(reqData.get(i).get(6).toString());
+            Freq += Math.random() * (15);
+
+
+            bar2 = new BarGraph();
+            bar2.x = stringDate;
+            bar2.y = String.valueOf((int)Freq);
+
+            System.out.println("x: " + bar2.x);
+            System.out.println("y: " + bar2.y);
+            output.add(bar2);
+        }
+        return new CreateBarGraphExtraTwoResponse(output);
+    }
+
+
+    /*********EXTRA*******/
+
+    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("FindEntitiesRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
         }
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-
-        ArrayList<String> wordList = new ArrayList<>();
+        int k = 0;
+        ArrayList<String> listSent = new ArrayList<>();
+        ArrayList<ArrayList> out = new ArrayList<>();
         for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
+            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
             //System.out.println(locs.toString());
-
-            for (int j = 0; j < texts.size(); j++) {
-                String[] words = texts.get(j).toString().split(" ");
-                for(int k =0; k < words.length ; k++){
-                    if (filterdCloud.contains(words[k]) == false){
-                        wordList.add(words[k]);
+            listSent = new ArrayList<>();
+            out = new ArrayList<>();
+            for (int j = 0; j < sents.size(); j++) {
+                if (listSent.isEmpty()){
+                    listSent.add(sents.get(j));
+                    ArrayList<Object> r = new ArrayList<>();
+                    r.add(sents.get(j));
+                    r.add(1);
+                    out.add(r);
+                }else {
+                    if (listSent.contains(sents.get(j))){
+                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
+                        int val=Integer.parseInt(r.get(1).toString());
+                        val++;
+                        r.set(1,val);
+                        out.set(listSent.indexOf(sents.get(j)),r);
+                    }else {
+                        listSent.add(sents.get(j));
+                        ArrayList<Object> r = new ArrayList<>();
+                        r.add(sents.get(j));
+                        r.add(1);
+                        out.add(r);
                     }
                 }
             }
+            int temp = 0;
+            String sent = "";
+            for (ArrayList o : out) {
+                if (temp < Integer.parseInt(o.get(1).toString())) {
+                    temp = Integer.parseInt(o.get(1).toString());
+                    sent = o.get(0).toString();
+                }
+            }
+
+            float tot = sents.size() +1;
+            float number = ((float)temp)/tot * 50;
+            if (sent == "Positive")
+                number *= 2;
+            else
+                number = 100 - number*2;
+
+            LineGraph outp = new LineGraph();
+            outp.x = String.valueOf(i);
+            outp.y = String.valueOf((int) number);
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
         }
 
-        String text =wordList.get(0);
-        for(int i =1; i < wordList.size(); i++){
-            text = text + " " + wordList.get(i);
-        }
-
-        WordCloudGraph out = new WordCloudGraph();
-        out.words = text;
-
-        System.out.println(out.words);
-        output.add(out);
 
 
-        return new CreateWordCloudGraphResponse(output,wordList);
+
+        return new CreateLineGraphSentimentsResponse(output);
     }
 
-    public CreateWordCloudPieChartGraphResponse createWordCloudPieChartGraph(CreateWordCloudPieChartGraphRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.dataList == null){
-            throw new InvalidRequestException("Arraylist object is null");
-        }
-        ArrayList<String> wordList = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
 
-
-        HashMap<String, Integer> wordMap = new HashMap<>();
-
-        //ArrayList<String> wordList = new ArrayList<>();
-        for (int i = 0; i < wordList.size(); i++) {
-            if (wordMap.containsKey(wordList.get(i)) == false) {
-                wordMap.put(wordList.get(i), 1);
-            } else {
-                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
-            }
-        }
-
-        System.out.println("Investigate here");
-        System.out.println(wordMap);
-
-
-        // Sort the list by values
-        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
-
-
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
-            public int compare(Map.Entry<String, Integer> o1,
-                               Map.Entry<String, Integer> o2)
-            {
-                return o2.getValue().compareTo(o1.getValue()); //des
-            }
-        });
-
-
-        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
-        for (Map.Entry<String, Integer> values : list) {
-            finalHash.put(values.getKey(), values.getValue());
-        }
-
-        System.out.println("Investigate here 2");
-        System.out.println(finalHash);
-
-
-        //count word frequency
-        int totalCount = 0;
-        int sumCount = 0;
-
-
-
-        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
-            totalCount = totalCount + set.getValue();
-        }
-
-        System.out.println("TOTAL HERE");
-        System.out.println(totalCount);
-
-        if(totalCount ==0){
-            throw new InvalidRequestException("Number of cloud objects equals zero");
-        }
-
-        //output
-        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
-            System.out.println(set.getKey() + " : " + set.getValue() );
-
-            sumCount = sumCount + set.getValue();
-
-            System.out.println("Sum : " + sumCount);
-
-
-            //if((((float)sumCount /totalCount)*100) < 65.0f) {
-            if( (((float) set.getValue())/totalCount*100) > 1.5f){
-                PieChartGraph out = new PieChartGraph();
-                out.label = set.getKey();
-                out.x = set.getKey();
-                out.y = ((double) set.getValue())/totalCount*100.00;
-                out.y = (double) Math.round(out.y *100) /100;
-
-                System.out.println("CLOUD VALUES HERE");
-                System.out.println(out.y);
-
-                //System.out.println(out.words);
-                output.add(out);
-            }
-            else{
-                PieChartGraph out = new PieChartGraph();
-                out.label = "the rest";
-                out.x = "the rest";
-                //DecimalFormat df = new DecimalFormat("#.##");
-                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
-                out.y = (double) Math.round(out.y *100) /100;
-
-                System.out.println("CLOUD VALUES HERE - Rest");
-                System.out.println(out.y);
-
-                //System.out.println(out.words);
-                output.add(out);
-
-                break;
-            }
-        }
-
-
-        return new CreateWordCloudPieChartGraphResponse(output);
-    }
 
     /*************************************************HELPER***********************************************************/
 
@@ -1098,6 +1145,11 @@ public class VisualizeServiceImpl {
         provinces.add("Limpopo"); //8
 
 
+        System.out.println("check this right here, lat long");
+        System.out.println(latitude);
+        System.out.println(longitude);
+
+
         /**Western Cape**/
         double box[][] = new double[][] {
                 {-32.105816, 18.325114}, //-32.105816, 18.325114 - tl
@@ -1108,6 +1160,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Western Cape";
+            return output;
         }
 
         /**Northern Cape**/
@@ -1121,6 +1174,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Northern Cape";
+            return output;
         }
 
         /**North West**/
@@ -1134,6 +1188,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "North West";
+            return output;
         }
 
         /**Free State**/
@@ -1147,6 +1202,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Free State";
+            return output;
         }
 
         /**Eastern Cape**/
@@ -1160,6 +1216,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Eastern Cape";
+            return output;
         }
 
         /**KwaZulu Natal**/
@@ -1173,6 +1230,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "KwaZulu Natal";
+            return output;
         }
 
         /**Mpumalanga**/
@@ -1186,6 +1244,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Mpumalanga";
+            return output;
         }
 
         /**Gauteng**/
@@ -1199,6 +1258,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Gauteng";
+            return output;
         }
 
         /**Limpopo**/
@@ -1212,6 +1272,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Limpopo";
+            return output;
         }
 
         return output;
@@ -1251,12 +1312,27 @@ public class VisualizeServiceImpl {
         double[] bottomLeft = box.get(2);
         double[] bottomRight = box.get(3);
 
+        /*System.out.println("check box here, latitude (side) :");
+        System.out.println(latitude);
 
-        //check latitude
+        System.out.println("bottomRight : " + bottomRight[0]);
+        System.out.println("topLeft : " + topLeft[0]);
+        System.out.println("topRight : " + topRight[0]);
+        System.out.println("bottomLeft : " + bottomLeft[0]);
+
+        System.out.println("check box here, longitude (u-d):");
+        System.out.println(longitude);
+
+        System.out.println("bottomRight : " + bottomRight[1]);
+        System.out.println("topLeft : " + topLeft[1]);
+        System.out.println("topRight : " + topRight[1]);
+        System.out.println("bottomLeft : " + bottomLeft[1]);*/
+
+        //check latitude : (SIDES)
         double maxBottom =  bottomLeft[0];
         if(bottomRight[0] > maxBottom)
             maxBottom = bottomRight[0];
-        if ( latitude < maxBottom) //first points
+        if ( latitude < maxBottom)
             return false;
 
         double maxTop =  topLeft[0];
@@ -1265,16 +1341,16 @@ public class VisualizeServiceImpl {
         if ( latitude > maxTop )
             return false;
 
-        //check longitude
-        double maxLeft =  topLeft[1];
+        //check longitude : (UP_DOWN)
+        double maxLeft =  topLeft[1]; //19 - 20 - 21
         if(bottomLeft[1] > maxBottom)
-            maxLeft = topRight[1];
-        if ( longitude < maxLeft ) //second points
+            maxLeft = bottomLeft[1];
+        if ( longitude < maxLeft )
             return false;
 
         double maxRight =  topRight[1];
         if(bottomRight[1] > maxBottom)
-            maxRight = topRight[1];
+            maxRight = bottomRight[1];
         if ( longitude > maxRight )
             return false;
 
