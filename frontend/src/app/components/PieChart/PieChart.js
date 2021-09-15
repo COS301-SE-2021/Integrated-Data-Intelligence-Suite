@@ -17,13 +17,13 @@ export default class PieChart extends React.Component {
         super(props);
         this.state = {
             sumOfSlices: 0,
-            data_points: PieDataMock(),
+            data_points: null,
         };
         // TODO change data to [] or correct value from text array
         if (typeof props.text === 'undefined' || typeof props.text[index] === 'undefined' || props.text[index].length === 0) {
             this.setState({ data_points: PieDataMock() });
         } else if (props.text[index].length > 0) {
-            this.setState({ data_points: PieDataMock() });
+            this.setState({ data_points: props.text[index]});
         }
     }
 
