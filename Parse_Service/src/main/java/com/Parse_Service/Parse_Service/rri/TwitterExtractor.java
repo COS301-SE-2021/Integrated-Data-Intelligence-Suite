@@ -9,6 +9,8 @@ import com.Parse_Service.Parse_Service.dataclass.*;
 import org.json.JSONObject;
 
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TwitterExtractor implements Extractor {
     /**
@@ -31,7 +33,15 @@ public class TwitterExtractor implements Extractor {
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
         String responseText = obj.getString("text");
-        GetTextResponse response = new GetTextResponse(responseText);
+
+        String regex = "[^\\p{L}\\p{N}\\p{P}\\p{Z}]";
+        Pattern pattern = Pattern.compile(
+                regex,
+                Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher matcher = pattern.matcher(responseText);
+        String text = matcher.replaceAll("");
+
+        GetTextResponse response = new GetTextResponse(text);
         return response;
     }
 
