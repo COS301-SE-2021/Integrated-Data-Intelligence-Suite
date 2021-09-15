@@ -35,6 +35,7 @@ import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.clustering.KMeans;
 import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
+import org.apache.spark.ml.evaluation.ClusteringEvaluator;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.feature.*;
@@ -1011,8 +1012,8 @@ public class AnalyseServiceImpl {
         MlflowContext mlflow = new MlflowContext(client);
         ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
 
-        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
 
+        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
         Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         //predictions.show();
         //System.out.println("*****************Predictions Of Test Data*****************");
@@ -1025,9 +1026,11 @@ public class AnalyseServiceImpl {
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
         //param
-        client.logParam(run.getId(),"MaxIter", "10");
-        client.logParam(run.getId(),"setRegParam" ,"0.3");
-        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+        client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
+        client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
+        client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
+        client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
+
 
         //metrics
         client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
@@ -1310,19 +1313,21 @@ public class AnalyseServiceImpl {
 
 
         TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
-
         Dataset<Row> predictions = dtModel.transform(testSetDF);
         //predictions.show();
         //System.out.println("*****************Predictions Of Test Data*****************");
 
         double accuracy = multiclassClassificationEvaluator.evaluate(predictions);
-        System.out.println("Accuracy :" + accuracy);
-        System.out.println("Test Error = " + (1.0 - accuracy));
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+        //System.out.println("Test Error = " + (1.0 - accuracy));
 
-        //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
         MulticlassMetrics multiclassMetrics = multiclassClassificationEvaluator.getMetrics(predictions);
 
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+
+        //param
+        client.logParam(run.getId(),"max depth", String.valueOf(dt.getMaxDepth()));
+        client.logParam(run.getId(),"max bin" ,String.valueOf(dt.getMaxBins()));
 
 
         //metrics
@@ -1859,7 +1864,7 @@ public class AnalyseServiceImpl {
         KMeans km = new KMeans()
                 .setFeaturesCol("features")
                 .setPredictionCol("prediction");
-                //.setK(2) //number of classses/clusters
+                //.setK(2); //number of classses/clusters
                 //.setMaxIterations(numIterations);
 
         //pipeline
@@ -1867,38 +1872,36 @@ public class AnalyseServiceImpl {
 
         /******************EVALUATE/ANALYSE MODEL**************/
 
-        /*evaluators
-        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
-                .setLabelCol("label")
-                .setRawPredictionCol("prediction")
-                .setMetricName("areaUnderROC");
 
-        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
-                .setLabelCol("label")
-                .setPredictionCol("prediction")
-                .setMetricName("mse") //meanSquaredError
-                .setMetricName("rmse") //rootMeanSquaredError
-                .setMetricName("mae") //meanAbsoluteError
-                .setMetricName("r2"); //r^2, variance
+        //evaluators
+        ClusteringEvaluator clusteringEvaluator = new ClusteringEvaluator()
+                .setFeaturesCol("features")
+                .setPredictionCol("prediction");
+                //.setDistanceMeasure(String value)
+                //.setMetricName(String value)
+                //.setWeightCol(String value)
+
+
 
         //parameterGrid
-        /*ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
-        /*paramGridBuilder.addGrid(km. .regParam(), new double[]{lr.getRegParam()});
-        paramGridBuilder.addGrid(km.elasticNetParam(), new double[]{lr.getElasticNetParam()});
-        paramGridBuilder.addGrid(km.fitIntercept());
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+        //paramGridBuilder.addGrid(km.k(), new int[]{km.getK()});
+        paramGridBuilder.addGrid(km.initSteps(), new int[]{km.getInitSteps()});
+        paramGridBuilder.addGrid(km.maxIter(), new  int[]{km.getMaxIter()});
         ParamMap[] paramMaps = paramGridBuilder.build();
 
 
         //validator
         CrossValidator crossValidator = new CrossValidator()
                 .setEstimator(pipeline)
-                .setEvaluator(regressionEvaluator)
+                .setEvaluator(clusteringEvaluator)
                 .setEstimatorParamMaps(paramMaps)
-                .setNumFolds(2);
+                .setNumFolds(3)
+                .setParallelism(2);
 
         /*TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
                 .setEstimator(pipeline)
-                .setEvaluator(regressionEvaluator)
+                .setEvaluator(clusteringEvaluator)
                 .setEstimatorParamMaps(paramMaps)
                 .setTrainRatio(0.7)  //70% : 30% ratio
                 .setParallelism(2);*/
@@ -1922,35 +1925,30 @@ public class AnalyseServiceImpl {
         ActiveRun run = mlflow.startRun("KMeans_Run", runInfo.getRunId());
 
         //KMeans model = pipeline.getStages()[1];
-        PipelineModel kmModel =  pipeline.fit(trainingDF);
-
-        /*Dataset<Row> predictions = kmModel.transform(trainingDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        PipelineModel kmModel = pipeline.fit(trainingDF);
+        //CrossValidatorModel kmModel = crossValidator.fit(trainingDF);
+        Dataset<Row> predictions = kmModel.transform(trainingDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         //predictions.show();
         //System.out.println("*****************Predictions Of Test Data*****************");
 
 
-        //double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        double accuracy = clusteringEvaluator.evaluate(predictions);
         //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
         //RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
 
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
         //param
-        /*client.logParam(run.getId(),"MaxIter", "10");
-        client.logParam(run.getId(),"setRegParam" ,"0.3");
-        client.logParam(run.getId(),"setElasticNetParam" , "0.8");
+        client.logParam(run.getId(),"k-value", String.valueOf(km.getK()));
+        client.logParam(run.getId(),"Initial step" ,String.valueOf(km.getInitSteps()));
+        client.logParam(run.getId(),"Max iterations" , String.valueOf(km.maxIter()));
+
 
         //metrics
-        //client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        /*client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
-        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
-        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
 
         //custom tags
-        //client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
-
 
 
         try {
@@ -2177,7 +2175,8 @@ public class AnalyseServiceImpl {
     }
 
 
-    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request) throws InvalidRequestException {
+    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("SaveAIModelRequest Object is null");
         }
