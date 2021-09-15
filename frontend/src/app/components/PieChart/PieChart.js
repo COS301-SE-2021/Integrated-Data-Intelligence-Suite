@@ -37,7 +37,7 @@ export default class PieChart extends React.Component {
                 return props.text[index];
             }
         }
-        return { dataToBeDisplayed: PieDataMock() };
+        return { data_points: PieDataMock() };
     }
 
     _changeSliceSum(value) {
