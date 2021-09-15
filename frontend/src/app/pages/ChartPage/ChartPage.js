@@ -173,12 +173,12 @@ class ChartPage extends Component {
                                                 >
                                                     <PieChart text={this.state.text}/>
                                                 </SimpleCard>
-                                                <SimpleCard
+                                                {/*<SimpleCard
                                                     cardTitle="Word Sunburst"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
-                                                </SimpleCard>
+                                                </SimpleCard>*/}
                                             </div>
                                         </SimpleSection>
 
