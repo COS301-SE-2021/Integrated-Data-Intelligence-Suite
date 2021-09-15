@@ -138,7 +138,7 @@ public class TwitterExtractor implements Extractor {
      *                                 the attributes of the request is null.
      */
     @Override
-    public GetLikesResponse getLikes(GetLikesRequest request) throws InvalidRequestException {
+    public GetLikesResponse getInteractions(GetLikesRequest request) throws InvalidRequestException {
         if (request == null || request.getJsonString() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
