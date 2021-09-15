@@ -70,8 +70,8 @@ function getRotationDegree() {
 const words = wordFreq(totoAfricaLyrics);
 
 const fontScale = scaleLog({
-    domain: [1, 10000],
-    range: [18, 250],
+    domain: [2, 1000],
+    range: [20, 150],
 });
 const fontSizeSetter = function (datum) {
     // console.log(datum);
@@ -126,7 +126,7 @@ function WordCloud(props) {
               key={wordsArray}
               words={wordsArray}
               width={windowWidth}
-              height={windowWidth * 0.8}
+              height={windowWidth * 0.4}
               font="Impact"
               padding={2}
               fontSize={(datum) => fontScale(datum.value)}
