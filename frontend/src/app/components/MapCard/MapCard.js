@@ -141,10 +141,10 @@ function MapCard(props) {
                       center={[city.lat, city.lng]}
                       icon={markerIcon}
                       key={idx}
-                      className={city.classname}
-                      onClick={() => {
-                            showCircleData(city.classname, data_from_backend);
-                        }}
+                      className={city.statistic_1}
+                      // onClick={() => {
+                      //       showCircleData(city.stastic_1, data_from_backend);
+                      //   }}
                     />
                 ))}
             </Map>

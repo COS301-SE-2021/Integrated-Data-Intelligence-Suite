@@ -296,7 +296,7 @@ class ChartPage extends Component {
                                                     cardTitle="Dominant words"
                                                     cardID="word-graph-2"
                                                 >
-                                                    <PieChart/>
+                                                    <PieChart text={this.state.text}/>
                                                 </SimpleCard>
                                                 <SimpleCard
                                                     cardTitle="Word Sunburst"

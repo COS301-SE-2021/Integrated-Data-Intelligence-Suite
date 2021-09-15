@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryBar, VictoryTooltip } from 'victory';
+import { VictoryChart, VictoryBar, VictoryTooltip, VictoryAxis } from 'victory';
 
 // Color States
 const COLOR_DEFAULT = '#4666FF';
@@ -24,100 +24,114 @@ let SampleData = [
         y: 5
     }
 ];
+let data_from_backend = null;
+export default class VictoryBarGraph extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-export default function VictoryBarGraph(props) {
+    _verifyDataFromBackend = function (backend_data) {
+        console.log('inside_bar_graph');
+        console.log(backend_data);
+        if (backend_data !== 'undefined') {
+            return backend_data;
+        }
+        return null;
+    };
 
-    console.log("inside victory bar graph");
-    // console.log(this.props);
+    render() {
+        return (
+            <VictoryChart domainPadding={25}>
+                <VictoryAxis
+                    label={this.props.xAxisLabel}
+                />
 
-    return (
-        <VictoryChart>
-            <VictoryBar
-                animate={{
-                    duration: 1000,
-                    onLoad: { duration: 500 }
-                }}
-                cornerRadius={15}
-                alignment="middle"
-                padding={{
-                    top: 20,
-                    bottom: 60
-                }}
-                domain={{
-                    x: [0, 11],
-                    // y: [0, 5]
-                }}
-                name="bars"
-                style={{ data: { fill: COLOR_DEFAULT } }}
-                labels={({ datum }) => [datum.y, datum.x]}
-                labelComponent={(
-                    <VictoryTooltip
-                        constrainToVisibleArea
-                        flyoutHeight={40}
-                        flyoutWidth={40}
-                        flyoutPadding={10}
-                        flyoutStyle={{
-                            stroke: '#4666FF',
-                            strokeWidth: 2,
-                            fill: 'white',
-                        }}
-                        style={{ fill: '#4666FF' }}
-                    />
-                )}
-                events={[
-                    {
-                        eventHandlers: {
-                            onMouseEnter: () => {
-                                return [
-                                    {
-                                        eventKey: 'all',
-                                        target: 'data',
-                                        mutation: () => ({
-                                            style: {
-                                                fill: COLOR_NOTHOVER
-                                            }
-                                        })
-                                    },
-                                    {
-                                        target: 'data',
-                                        mutation: () => ({
-                                            style: {
-                                                fill: COLOR_DEFAULT
-                                            }
-                                        })
-                                    }
-                                ];
-                            },
-                            onMouseLeave: () => {
-                                return [
-                                    {
-                                        eventKey: 'all',
-                                        target: 'data',
-                                        mutation: () => ({
-                                            style: {
-                                                fill: COLOR_DEFAULT
-                                            }
-                                        })
-                                    },
-                                    {
-                                        target: 'data',
-                                        mutation: () => ({
-                                            style: {
-                                                fill: COLOR_DEFAULT
-                                            }
-                                        })
-                                    }
-                                ];
+                <VictoryAxis
+                    dependentAxis
+                    label={this.props.yAxisLabel}
+                    fixLabelOverlap
+                />
+                <VictoryBar
+                    animate={{
+                        duration: 1000,
+                        onLoad: { duration: 500 }
+                    }}
+                    cornerRadius={15}
+                    alignment="middle"
+                    padding={{
+                        top: 20,
+                        bottom: 60
+                    }}
+                    name="bars"
+                    style={{ data: { fill: COLOR_DEFAULT } }}
+                    labels={({ datum }) => [datum.y, datum.x]}
+                    labelComponent={(
+                        <VictoryTooltip
+                            constrainToVisibleArea
+                            flyoutHeight={40}
+                            flyoutWidth={40}
+                            flyoutPadding={10}
+                            flyoutStyle={{
+                                stroke: '#4666FF',
+                                strokeWidth: 2,
+                                fill: 'white',
+                            }}
+                            style={{ fill: '#4666FF' }}
+                        />
+                    )}
+                    events={[
+                        {
+                            eventHandlers: {
+                                onMouseEnter: () => {
+                                    return [
+                                        {
+                                            eventKey: 'all',
+                                            target: 'data',
+                                            mutation: () => ({
+                                                style: {
+                                                    fill: COLOR_NOTHOVER
+                                                }
+                                            })
+                                        },
+                                        {
+                                            target: 'data',
+                                            mutation: () => ({
+                                                style: {
+                                                    fill: COLOR_DEFAULT
+                                                }
+                                            })
+                                        }
+                                    ];
+                                },
+                                onMouseLeave: () => {
+                                    return [
+                                        {
+                                            eventKey: 'all',
+                                            target: 'data',
+                                            mutation: () => ({
+                                                style: {
+                                                    fill: COLOR_DEFAULT
+                                                }
+                                            })
+                                        },
+                                        {
+                                            target: 'data',
+                                            mutation: () => ({
+                                                style: {
+                                                    fill: COLOR_DEFAULT
+                                                }
+                                            })
+                                        }
+                                    ];
+                                }
                             }
                         }
-                    }
-                ]}
-                // data={this.props.text}
-                // key={this.props.text}
-
-                // samples={10}
-            />
-        </VictoryChart>
-    );
+                    ]}
+                    data={this._verifyDataFromBackend(this.props.text)}
+                    // samples={10}
+                />
+            </VictoryChart>
+        );
+    }
 }
 

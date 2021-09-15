@@ -6,6 +6,7 @@ import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -608,7 +609,7 @@ public class VisualizeServiceImpl {
             PieChartGraph temp = new PieChartGraph();
             temp.label = o.get(0).toString();
             temp.x = o.get(0).toString() + "s";
-            temp.y = o.get(1).toString();
+            temp.y = (int) o.get(1);
 
             System.out.println("Label: "+ temp.label);
             System.out.println("x: "+ temp.x);
@@ -900,7 +901,6 @@ public class VisualizeServiceImpl {
 
 
 
-
     public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -964,15 +964,19 @@ public class VisualizeServiceImpl {
             }
         }
 
+        System.out.println("Investigate here");
+        System.out.println(wordMap);
+
 
         // Sort the list by values
         List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
+
 
         Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
             public int compare(Map.Entry<String, Integer> o1,
                                Map.Entry<String, Integer> o2)
             {
-                return (o1.getValue()).compareTo(o2.getValue());
+                return o2.getValue().compareTo(o1.getValue()); //des
             }
         });
 
@@ -982,25 +986,46 @@ public class VisualizeServiceImpl {
             finalHash.put(values.getKey(), values.getValue());
         }
 
+        System.out.println("Investigate here 2");
+        System.out.println(finalHash);
+
 
         //count word frequency
         int totalCount = 0;
         int sumCount = 0;
 
+
+
         for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
             totalCount = totalCount + set.getValue();
         }
 
+        System.out.println("TOTAL HERE");
+        System.out.println(totalCount);
+
+        if(totalCount ==0){
+            throw new InvalidRequestException("Number of cloud objects equals zero");
+        }
+
         //output
         for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            System.out.println(set.getKey() + " : " + set.getValue() );
+
             sumCount = sumCount + set.getValue();
 
-            if(((sumCount /totalCount)*100) < 75) {
+            System.out.println("Sum : " + sumCount);
 
+
+            //if((((float)sumCount /totalCount)*100) < 65.0f) {
+            if( (((float) set.getValue())/totalCount*100) > 1.5f){
                 PieChartGraph out = new PieChartGraph();
                 out.label = set.getKey();
                 out.x = set.getKey();
-                out.y = String.valueOf(set.getValue()/totalCount*100);
+                out.y = ((double) set.getValue())/totalCount*100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE");
+                System.out.println(out.y);
 
                 //System.out.println(out.words);
                 output.add(out);
@@ -1009,7 +1034,12 @@ public class VisualizeServiceImpl {
                 PieChartGraph out = new PieChartGraph();
                 out.label = "the rest";
                 out.x = "the rest";
-                out.y = String.valueOf(((totalCount - (sumCount+ set.getValue())) / totalCount) *100);
+                //DecimalFormat df = new DecimalFormat("#.##");
+                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE - Rest");
+                System.out.println(out.y);
 
                 //System.out.println(out.words);
                 output.add(out);
@@ -1322,8 +1352,6 @@ public class VisualizeServiceImpl {
         filterdCloud.add("if");	filterdCloud.add("than");	filterdCloud.add("because");	filterdCloud.add("while");
         filterdCloud.add("it’s");	filterdCloud.add("don’t");
     }
-
-
 
 
 }
