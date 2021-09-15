@@ -35,7 +35,7 @@ export default class DraggableBarGraph extends React.Component {
         };
     }
     static getDerivedStateFromProps(props) {
-        if (props.text !== null) {
+        if (props.text !== null && props.text !== '') {
             if (props.text[index] && props.text[index].length > 0) {
                 const dataPoints = Object.values(props.text[index]).map((item, i) => ({
                     x0: i, x: i + 1, y: item.y, classname: item.x,
