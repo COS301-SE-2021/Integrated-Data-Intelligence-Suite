@@ -14,33 +14,12 @@ import '../../components/NetworkGraph/NetworkGraph.css';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
-import useGet from '../../functions/useGet';
-import IndicatorCard from '../../components/IndicatorCard/IndicatorCard';
-import LineGraphDataPositive from '../../Mocks/LineGraphDataPositive.json';
-import LineGraphDataNegative from '../../Mocks/LineGraphDataNegative.json';
-import LineGraph from '../../components/LineGraph/LineGraph';
 import PieChart from '../../components/PieChart/PieChart';
-import PieChartMockData from '../../Mocks/PieChartDataMock.json';
-import BarGraphMockData from '../../Mocks/BarGraphDataMock.json';
-import BarGraph from '../../components/BarGraph/VictoryBarGraph';
-import InfoDiv from '../../components/InfoDiv/InfoDiv';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
-import VisxLineGraph from '../../components/vsixLineGraph/VisxLineGraph';
-import VisxBarStackGraph from '../../components/visxBarStackGraph/visxBarStackGraph';
-import VisxAreaGraph from '../../components/visxAreaGraph/visxAreaGraph';
-import VisxAreaStackGraph from '../../components/visxAreaStackGraph/visxAreaStackGraph';
-import VisxBarGraph from '../../components/visxBarGraph/visxBarGraph';
-import VisxBarGroupGraph from '../../components/visxBarGroupGraph/visxBarGroup';
-import visxAreaMockData from '../../Mocks/vsixAreaDataMock.json';
-import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import SimpleSection from '../../components/SimpleSection/SimpleSection';
-import AreaGraph from '../../components/AreaGraph/AreaGraph';
-import { Simple } from 'leaflet/src/geo/crs/CRS.Simple';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
-import UberLineGraph from '../../components/UberLineGraph/UberLineGraph';
-import UberSunburstGraph from '../../components/UberSunburstGraph/UberSunburstGraph';
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
 import OverviewSection from '../../components/OverviewSection/OverviewSection';
 import GraphWithBrushAndZoom from '../../components/GraphWithBrushAndZoom/GraphWithBrushAndZoom';
@@ -128,110 +107,6 @@ class ChartPage extends Component {
                                         />
                                     </Header>
 
-                                    {/*        /!* <div id="map-details-container"> *!/ */}
-                                    {/*        /!* </div> *!/ */}
-                                    {/*    </div> */}
-                                    {/*    /!* <IndicatorCard *!/ */}
-                                    {/*    /!*    indicatorTitle="Some Title" *!/ */}
-                                    {/*    /!*    cardID="top-country-indicator-card" *!/ */}
-                                    {/*    /!*    showArrow={false} *!/ */}
-                                    {/*    /!*    graphComponent={( *!/ */}
-                                    {/*    /!*        <BarGraph *!/ */}
-                                    {/*    /!*            graphData={BarGraphMockData} *!/ */}
-                                    {/*    /!*        /> *!/ */}
-                                    {/*    /!*    )} *!/ */}
-                                    {/*    /!* /> *!/ */}
-                                    {/*    /!* <InfoDiv infoValue="77%"/> *!/ */}
-                                    {/*    /!* <IndicatorCard *!/ */}
-                                    {/*    /!*    cardID="top-country-indicator-card" *!/ */}
-                                    {/*    /!*    indicatorTitle="Some Title" *!/ */}
-                                    {/*    /!*    showArrow={false} *!/ */}
-                                    {/*    /!*    graphComponent={( *!/ */}
-                                    {/*    /!*        <BarGraph *!/ */}
-                                    {/*    /!*            graphData={BarGraphMockData} *!/ */}
-                                    {/*    /!*        /> *!/ */}
-                                    {/*    /!*    )} *!/ */}
-                                    {/*    /!* /> *!/ */}
-
-                                    {/*    /!* <Sider *!/ */}
-                                    {/*    /!*    id="map_card_sidebar" *!/ */}
-                                    {/*    /!*    className="map_card" *!/ */}
-                                    {/*    /!*    style={{ display: 'none' }} *!/ */}
-                                    {/*    /!* > *!/ */}
-                                    {/*    /!*    <DetailsCard/> *!/ */}
-                                    {/*    /!* </Sider> *!/ */}
-                                    {/*    /!* </Layout> *!/ */}
-
-                                    {/*    <Layout */}
-                                    {/*        id="word-cloud-layout" */}
-                                    {/*    > */}
-
-                                    {/*        <div */}
-                                    {/*            id="word-cloud-grid-container" */}
-                                    {/*        > */}
-                                    {/*            <div */}
-                                    {/*                id="word-cloud-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                <WordCloud */}
-                                    {/*                    text={this.state.text} */}
-                                    {/*                    key={this.state.text} */}
-                                    {/*                /> */}
-                                    {/*            </div> */}
-
-                                    {/*            <div */}
-                                    {/*                id="stat1-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                <VisxBarGroupGraph/> */}
-                                    {/*            </div> */}
-                                    {/*            <div */}
-                                    {/*                id="stat2-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                locations where its been mentioned */}
-                                    {/*            </div> */}
-                                    {/*            <div */}
-                                    {/*                id="stat3-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                timeline thingy */}
-                                    {/*            </div> */}
-                                    {/*        </div> */}
-                                    {/*    </Layout> */}
-
-                                    {/*    /!* The Network Graph *!/ */}
-                                    {/*    <Layout */}
-                                    {/*        id="network_graph_layout_div" */}
-                                    {/*        className="network_card" */}
-                                    {/*    > */}
-                                    {/*        <Content */}
-                                    {/*            id="network_graph_card_content" */}
-                                    {/*            className="network_card" */}
-                                    {/*        > */}
-                                    {/*            <NetworkGraphCard */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*            /> */}
-                                    {/*        </Content> */}
-                                    {/*    </Layout> */}
-
-                                    {/*    /!* The timeline Graph *!/ */}
-                                    {/*    <Layout */}
-                                    {/*        id="timeline_graph_div" */}
-                                    {/*        className="timeline_card" */}
-                                    {/*    > */}
-                                    {/*        <Content */}
-                                    {/*            id="timeline_graph_card_content" */}
-                                    {/*            className="timeline_card" */}
-                                    {/*        > */}
-                                    {/*            <TimelineGraph */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*            /> */}
-                                    {/*        </Content> */}
-                                    {/*    </Layout> */}
-                                    {/* </Content> */}
                                     <div id="content-section">
                                         <SimpleSection
                                             cardTitle=""
@@ -318,6 +193,7 @@ class ChartPage extends Component {
                                                 <NetworkGraphCard
                                                     text={this.state.text}
                                                     key={this.state.text}
+                                                    indexOfData={11}
                                                 />
                                             </SimpleCard>
 
@@ -328,6 +204,7 @@ class ChartPage extends Component {
                                                 <NetworkGraphCard
                                                     text={this.state.text}
                                                     key={this.state.text}
+                                                    indexOfData={12}
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>

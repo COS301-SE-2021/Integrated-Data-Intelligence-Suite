@@ -41,7 +41,10 @@ export default class VictoryBarGraph extends React.Component {
 
     render() {
         return (
-            <VictoryChart domainPadding={25}>
+            <VictoryChart
+                domainPadding={25}
+                animate={{ duration: 1000 }}
+            >
                 <VictoryAxis
                     label={this.props.xAxisLabel}
                 />
@@ -52,10 +55,6 @@ export default class VictoryBarGraph extends React.Component {
                     fixLabelOverlap
                 />
                 <VictoryBar
-                    animate={{
-                        duration: 1000,
-                        onLoad: { duration: 500 }
-                    }}
                     cornerRadius={15}
                     alignment="middle"
                     padding={{

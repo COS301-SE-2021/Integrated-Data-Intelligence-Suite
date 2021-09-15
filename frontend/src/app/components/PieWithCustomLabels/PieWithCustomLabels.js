@@ -17,9 +17,7 @@ export default class PieWithCustomLabels extends React.Component {
         return (
             <>
                 <VictoryPie
-                    animate={{
-                        duration: 2000
-                    }}
+                    animate={{ duration: 1000 }}
                     style={{ labels: { fill: 'white' } }}
                     innerRadius={100}
                     // labelRadius={120}
