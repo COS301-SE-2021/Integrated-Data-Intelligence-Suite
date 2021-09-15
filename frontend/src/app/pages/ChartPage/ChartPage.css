@@ -173,7 +173,7 @@
 /*    border-radius: 10px;*/
 /*}*/
 
-#word-cloud-graph-container> .simple-card-container{
+#word-cloud-graph-container > .simple-card-container {
     border: 2px solid var(--border-color);
     background: white;
     padding: 10px;
@@ -264,27 +264,27 @@
     border-radius: 10px;
     border: solid 2px var(--border-color);
 }
-#word-cloud-outer-container{
+
+#word-cloud-outer-container {
     display: flex;
     align-content: center;
 
 }
 
-#word-cloud-outer-container>div{
+#word-cloud-outer-container > div {
     margin-left: auto;
     margin-right: auto;
 }
 
-#word-cloud-card svg{
+#word-cloud-card svg {
     margin-left: auto;
     margin-right: auto;
 }
 
-.simple-section-body svg{
+.simple-section-body svg {
     margin-right: auto;
     margin-left: auto;
 }
-
 
 #word-cloud-graph-container {
     grid-column-start: 2;
@@ -332,7 +332,7 @@
     column-gap: 10px;
 }
 
-#row-5> .simple-section-body .simple-card-container{
+#row-5 > .simple-section-body .simple-card-container {
     background: white;
     padding: 10px;
     border-radius: 10px;
@@ -365,6 +365,55 @@
     grid-column-start: 2;
     grid-column-end: 3;
 }
+
+/***********************************************/
+/*******************Row 6**********************/
+/*****************Anomalies*******************/
+/********************************************/
+#row-6 {
+    grid-row-start: 6;
+    grid-row-end: 7;
+
+    /*Internal Display of Row 6 items*/
+    display: grid;
+
+    /*0 = no heading*/
+    grid-template-rows: 0 auto;
+    grid-template-columns: 100%;
+    padding-bottom: 30px;
+}
+
+#row-6 > .simple-section-body {
+    display: grid;
+    grid-template-rows: repeat(2, 50%);
+    grid-template-columns: repeat(2, 50%);
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+#anomaly-timeline-card {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#anomaly-scatter-plot {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#anomaly-line-graph {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+}
+
+
 
 
 

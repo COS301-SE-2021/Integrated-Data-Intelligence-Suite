@@ -26,7 +26,7 @@ export default class PieWithCustomLabels extends React.Component {
                     // labels={({ datum }) => `#${datum.y}`}
                     labelComponent={<PieCustomLabel/>}
                     data={this._dataToDisplay(this.props.text)}
-                    colorScale={['green', 'red']}
+                    colorScale={['#00b074', 'red']}
                 />
             </>
         );
