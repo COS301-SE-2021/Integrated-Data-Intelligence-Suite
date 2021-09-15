@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
- Form, Input, Card, Divider,
+ Form, Input, Card, Divider, message
 } from 'antd';
 import VerifyButton from './VerifyButton';
 import '../../../styles/VerifyPage/verifyPage.css';
@@ -45,9 +45,10 @@ const VerifyPage = () => {
                 .then((response) => response.json()).then((json) => {
                 if (json.success) {
                     // localStorage.setItem("user", json.id)
+                    message.success(json.message);
                     history.push('/login');
                 } else {
-                    alert(json.message);
+                    message.info(json.message);
                 }
             });
         },
@@ -81,7 +82,7 @@ const VerifyPage = () => {
         <Card
           id="login_card"
           className="loginCard"
-          title="Verify your account"
+          title="Step 2: Verify your account"
         >
 
             <form onSubmit={formikVerify.handleSubmit}>

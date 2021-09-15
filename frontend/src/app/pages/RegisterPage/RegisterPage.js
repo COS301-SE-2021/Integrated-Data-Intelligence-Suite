@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
-  Form, Input, Button, Checkbox, Card, Divider,
+  Form, Input, Button, Checkbox, Card, Divider, message
 } from 'antd';
 import RegisterButton from '../../components/RegisterButton/RegisterButton';
 import './registerPage.css';
@@ -68,11 +68,11 @@ const RegisterPage = () => {
       fetch('/user/register', requestOptions)
         .then((response) => response.json()).then((json) => {
           if (json.success) {
-            alert(json.message);
+            message.success(json.message);
             localStorage.setItem("email", values.email);
             history.push('/verify');
           } else {
-            alert(json.message);
+              message.info(json.message);
           }
         });
 
@@ -86,7 +86,7 @@ const RegisterPage = () => {
           <Card
             id="register_card"
             className="loginCard"
-            title="Register"
+            title="Step 1: Register Account"
           >
               <form onSubmit={formik.handleSubmit}>
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
-    Form, Input, Button, Checkbox, Card, Divider,
+    Form, Input, Button, Checkbox, Card, Divider, message
 } from 'antd';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import './loginPage.css';
@@ -58,9 +58,10 @@ export default function LoginPage(props) {
                     .then((json) => {
                         if (json.success) {
                             localStorage.setItem('user', json.id);
-                            history.push('/');
+                            message.success(json.message);
+                            history.push('/chart');
                         } else {
-                            alert(json.message);
+                            message.error(json.message);
                         }
                     });
             }
