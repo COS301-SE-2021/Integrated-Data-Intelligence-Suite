@@ -127,7 +127,7 @@ class ChartPage extends Component {
                                             name="s"
                                         />
                                     </Header>
-                                    
+
                                     {/*        /!* <div id="map-details-container"> *!/ */}
                                     {/*        /!* </div> *!/ */}
                                     {/*    </div> */}
@@ -299,12 +299,11 @@ class ChartPage extends Component {
                                                     <PieChart/>
                                                 </SimpleCard>
                                                 <SimpleCard
-                                                    cardTitle="word-graph-1"
+                                                    cardTitle="Word Sunburst"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
                                                 </SimpleCard>
-
                                             </div>
                                         </SimpleSection>
 
@@ -332,8 +331,36 @@ class ChartPage extends Component {
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
-                                        {/**!/*/}
 
+                                        <SimpleSection
+                                            cardTitle=""
+                                            cardID="row-6"
+                                        >
+                                            <SimpleCard
+                                                cardTitle="Timeline"
+                                                cardID="anomaly-timeline-card"
+                                            >
+                                                <TimelineGraph
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                />
+                                            </SimpleCard>
+
+                                            <SimpleCard
+                                                cardTitle="Scatter Plot"
+                                                cardID="anomaly-scatter-plot"
+                                            >
+                                                Scatter Plot
+                                            </SimpleCard>
+
+                                            <SimpleCard
+                                                cardTitle="Line Graph"
+                                                cardID="anomaly-line-graph"
+                                            >
+                                                Line Graph
+                                            </SimpleCard>
+                                        </SimpleSection>
+                                        {/**!/*/}
                                     </div>
                                 </Layout>
                             </Layout>
