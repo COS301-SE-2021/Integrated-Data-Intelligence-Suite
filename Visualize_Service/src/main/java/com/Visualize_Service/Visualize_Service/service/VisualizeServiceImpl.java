@@ -413,7 +413,7 @@ public class VisualizeServiceImpl {
             float number = Float.parseFloat(reqData.get(i).get(3).toString());
 
             LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
+            outp.x = reqData.get(i).get(0).toString();
             outp.y = String.valueOf((int) number);
 
             System.out.println("x: "+outp.x);
