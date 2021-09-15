@@ -463,7 +463,6 @@ public class VisualizeServiceImpl {
     }
 
 
-
     /*****************MAP LOCATION**********************/
 
     public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request)
@@ -671,7 +670,7 @@ public class VisualizeServiceImpl {
             }
             else{
                 PieChartGraph out = new PieChartGraph();
-                out.label = "the rest";
+                    out.label = "{OTHERS}";
                 out.x = "the rest";
                 //DecimalFormat df = new DecimalFormat("#.##");
                 out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
@@ -1100,17 +1099,6 @@ public class VisualizeServiceImpl {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     /*************************************************HELPER***********************************************************/
 
     private boolean isNetworkGraph(String idOne, String idTwo,ArrayList<String[]> Relationships ) {
@@ -1292,10 +1280,6 @@ public class VisualizeServiceImpl {
 
     private boolean isInBox(double[][] box2, double latitude, double longitude) {
 
-        System.out.println("check box here, lat long");
-        System.out.println(latitude);
-        System.out.println(longitude);
-
         ArrayList<double[]> box = new ArrayList<>();
 
         double[] codinateValue = new double[2];
@@ -1328,18 +1312,27 @@ public class VisualizeServiceImpl {
         double[] bottomLeft = box.get(2);
         double[] bottomRight = box.get(3);
 
-        System.out.println("bottomRight : " + bottomRight);
-        System.out.println("topLeft : " + topLeft);
-        System.out.println("topRight : " + topRight);
-        System.out.println("bottomLeft : " + bottomLeft);
+        /*System.out.println("check box here, latitude (side) :");
+        System.out.println(latitude);
 
+        System.out.println("bottomRight : " + bottomRight[0]);
+        System.out.println("topLeft : " + topLeft[0]);
+        System.out.println("topRight : " + topRight[0]);
+        System.out.println("bottomLeft : " + bottomLeft[0]);
 
+        System.out.println("check box here, longitude (u-d):");
+        System.out.println(longitude);
 
-        //check latitude
+        System.out.println("bottomRight : " + bottomRight[1]);
+        System.out.println("topLeft : " + topLeft[1]);
+        System.out.println("topRight : " + topRight[1]);
+        System.out.println("bottomLeft : " + bottomLeft[1]);*/
+
+        //check latitude : (SIDES)
         double maxBottom =  bottomLeft[0];
         if(bottomRight[0] > maxBottom)
             maxBottom = bottomRight[0];
-        if ( latitude < maxBottom) //first points
+        if ( latitude < maxBottom)
             return false;
 
         double maxTop =  topLeft[0];
@@ -1348,18 +1341,18 @@ public class VisualizeServiceImpl {
         if ( latitude > maxTop )
             return false;
 
-        //check longitude
-        double maxLeft =  topLeft[1];
+        //check longitude : (UP_DOWN)
+        double maxLeft =  topLeft[1]; //19 - 20 - 21
         if(bottomLeft[1] > maxBottom)
-            maxLeft = topRight[1];
-        if ( longitude < maxLeft ) //second points
-            return true;
+            maxLeft = bottomLeft[1];
+        if ( longitude < maxLeft )
+            return false;
 
         double maxRight =  topRight[1];
         if(bottomRight[1] > maxBottom)
-            maxRight = topRight[1];
+            maxRight = bottomRight[1];
         if ( longitude > maxRight )
-            return true;
+            return false;
 
         return true;
     }
