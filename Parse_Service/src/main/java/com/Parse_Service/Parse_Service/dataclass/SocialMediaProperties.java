@@ -3,11 +3,16 @@ package com.Parse_Service.Parse_Service.dataclass;
 import javax.persistence.*;
 
 @Entity(name = "social_media_properties")
-@Table
+@Table(name = "social_media_properties")
 public class SocialMediaProperties {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    /**
+     * This attribute is the name of social media source.
+     */
+    private String name;
 
     /**
      * This attribute is the name of the json property to extract
@@ -44,7 +49,8 @@ public class SocialMediaProperties {
 
     }
 
-    public SocialMediaProperties(String interactionsProp, String locationProp, String dateProp, String textProp, String collectionProp) {
+    public SocialMediaProperties(String name, String interactionsProp, String locationProp, String dateProp, String textProp, String collectionProp) {
+        this.name = name;
         this.interactionsProp = interactionsProp;
         this.locationProp = locationProp;
         this.dateProp = dateProp;
@@ -98,5 +104,13 @@ public class SocialMediaProperties {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
