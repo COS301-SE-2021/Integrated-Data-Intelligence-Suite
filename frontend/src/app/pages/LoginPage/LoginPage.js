@@ -199,20 +199,19 @@ export default function LoginPage(props) {
                                     Forgot password
                                 </a>
                             </Form.Item>
+                            <Divider className="or_divider">
+                                OR
+                            </Divider>
+
+                            <Form.Item>
+                                Cannot login?
+                                <Link to="/verify">
+                                    <a className="register_link" href="#">Click here to verify account!</a>
+                                </Link>
+                            </Form.Item>
                         </form>
                     </div>
                     <div id="login-card-svg-bg"/>
-
-                    <Divider className="or_divider">
-                        OR
-                    </Divider>
-
-                    <Form.Item>
-                        Cannot login?
-                        <Link to="/verify">
-                            <a className="register_link" href="#">Click here to verify account!</a>
-                        </Link>
-                    </Form.Item>
                 </div>
             </div>
         </>
