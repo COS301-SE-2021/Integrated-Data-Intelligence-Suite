@@ -152,7 +152,7 @@ export default function LoginPage(props) {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    placeholder="email"
+                                    placeholder="Email address"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.email}
@@ -167,7 +167,7 @@ export default function LoginPage(props) {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    placeholder="password"
+                                    placeholder="Password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur} // When the user leaves the form field
@@ -189,7 +189,7 @@ export default function LoginPage(props) {
                             <Form.Item>
                                 Don't have an account?
                                 <Link to="/register">
-                                    <a className="register_link" href="#">register now!</a>
+                                    <a className="register_link" href="#">Register now!</a>
                                 </Link>
                             </Form.Item>
 
