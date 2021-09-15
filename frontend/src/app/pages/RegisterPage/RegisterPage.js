@@ -347,7 +347,7 @@ const RegisterPage = () => {
                           {/* </Form.Item> */}
                       </form>
                   </div>
-                  <div id="login-card-svg-bg" />
+                  <div id="register-card-svg-bg" />
               </div>
           </div>
       </>
