@@ -1,7 +1,6 @@
 package com.Parse_Service.Parse_Service.controller;
 
-import com.Parse_Service.Parse_Service.ParseServiceApplication;
-import com.Parse_Service.Parse_Service.dataclass.DataSource;
+import com.Parse_Service.Parse_Service.rri.DataSource;
 import com.Parse_Service.Parse_Service.dataclass.ParsedArticle;
 import com.Parse_Service.Parse_Service.dataclass.ParsedData;
 import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
@@ -16,24 +15,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 
