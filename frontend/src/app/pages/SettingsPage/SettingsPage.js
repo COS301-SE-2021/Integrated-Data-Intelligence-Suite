@@ -52,22 +52,21 @@ const SettingsPage = () => {
 
                       <div id="Profile" className="option" onClick={() => setComponent('Profile')}>Profile</div>
 
-                      <div id="Account" className="option" onClick={() => setComponent('Account')}>Account</div>
-
-                      <div id="Data Sources" className="option" onClick={() => setComponent('Data Sources')}>Data Sources</div>
+                      { user && user.isAdmin && <div id="Data Sources" className="option active" onClick={() => setComponent('Data Sources')}>Data Sources</div>}
                   </Col>
                   <Col style={{ padding: '0 0px 30px 0', backgroundColor: colorOne, maxWidth: '700px' }} className="right-column" flex="60%">
                       <div>
                           <div className="component-title">
                               {component}
                               <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.go(-1)} />
+                              {/* eslint-disable-next-line max-len */}
                               {/* <CloseOutlined className="back-button" onClick={() => history.go(-1)} /> */}
+                              {/* eslint-disable-next-line max-len */}
                               {/* <CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /> */}
                           </div>
                           { component === 'Permissions' && user && user.isAdmin && setActive(component) && <Permissions />}
                           { component === 'Profile' && setActive(component) && <ProfilePage />}
-                          { component === 'Account' && setActive(component) && <div><h1>Page not implemented</h1></div>}
-                          { component === 'Data Sources' && setActive(component) && <DataSourceList /> }
+                          { component === 'Data Sources' && user && user.isAdmin && setActive(component) && <DataSourceList /> }
                       </div>
                   </Col>
                   <Col flex="auto" style={{ backgroundColor: colorOne, color: colorOne }}>
