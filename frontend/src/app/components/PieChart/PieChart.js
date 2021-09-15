@@ -34,7 +34,7 @@ export default class PieChart extends React.Component {
                 // console.log("comparing data")
                 // console.log(PieChartMock);
                 // console.log(props.text[index]);
-                return props.text[index];
+                return { data_points: props.text[index] }
             }
         }
         return { data_points: PieDataMock() };
