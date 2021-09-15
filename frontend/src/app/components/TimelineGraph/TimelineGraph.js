@@ -31,20 +31,20 @@ class TimelineGraph extends React.Component {
 
     if (typeof this.props.text === 'undefined') {
       data_from_backend = [];
-    } else if (typeof this.props.text[2] === 'undefined') {
+    } else if (typeof this.props.text[13] === 'undefined') {
       // console.log()
       // console.log("Data Received from Backend was undefined");
 
       // some error message
       data_from_backend = [];
-    } else if (this.props.text[2].length === 0) {
+    } else if (this.props.text[13].length === 0) {
       console.log('Data Received from Backend was of length 0');
 
       // Some error message
       data_from_backend = [];
-    } else if (this.props.text[2].length > 0) {
+    } else if (this.props.text[13].length > 0) {
       // console.log("Data Received from Backend was greater than length 0");
-      data_from_backend = this.props.text[2];
+      data_from_backend = this.props.text[13];
       // console.log(data_from_backend);
       // this.setState({data_from_backend: data_from_backend})
     }
