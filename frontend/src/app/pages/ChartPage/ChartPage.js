@@ -153,7 +153,7 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Textual Analysis"
+                                            cardTitle=""
                                             cardID="row-4"
                                         >
                                             <SimpleCard

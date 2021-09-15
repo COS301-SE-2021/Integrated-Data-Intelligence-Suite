@@ -202,6 +202,12 @@
     grid-row-end: 3;
 }
 
+#map-metric-1 {
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+}
+
+
 #map-metric-1 > .simple-card-title {
     padding: 10px;
     text-align: left;
@@ -245,7 +251,8 @@
     /**/
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: repeat(2, auto);
+    /*grid-template-rows: repeat(2, auto);*/
+    grid-template-rows: 0 auto;
 }
 
 #row-4 > .simple-section-body {
@@ -317,7 +324,6 @@
     background: white;
     border-radius: 10px;
 }
-
 
 /*********************************************/
 /******************Row 5********************/
@@ -404,6 +410,8 @@
     grid-row-start: 1;
     grid-row-end: 2;
     overflow: auto;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
 }
 
 #anomaly-timeline-card > .simple-card-title {
@@ -418,6 +426,8 @@
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
 }
 
 #anomaly-scatter-plot > .simple-card-title {
@@ -426,6 +436,11 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     color: var(--simple-card-title-color);
+}
+
+#anomaly-scatter-plot > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 #anomaly-line-graph {
