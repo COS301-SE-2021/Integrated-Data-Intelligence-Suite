@@ -61,6 +61,7 @@ import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -149,23 +150,23 @@ public class AnalyseServiceImpl {
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
+        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
-        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        //FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
+        //FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
 
         /*************************************************/
 
-        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
-        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDatalist);
         this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
-        //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
-        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(
@@ -174,6 +175,223 @@ public class AnalyseServiceImpl {
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
                 findAnomaliesResponse.getPattenList());
+    }
+
+
+    /**
+     * This method used to find an entity of a statement i.e sentiments/parts of speech
+     * @param request This is a request object which contains data required to be processed.
+     * @return FindEntitiesResponse This object contains data of the entities found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public ArrayList<FindNlpPropertiesResponse> findNlpProperties(FindNlpPropertiesRequest request)
+            throws InvalidRequestException {
+
+        if (request == null) {
+            throw new InvalidRequestException("FindEntitiesRequest Object is null");
+        }
+        if (request.getText() == null) {
+            throw new InvalidRequestException("Text object is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        SparkSession sparkNlpProperties = SparkSession
+                .builder()
+                .appName("NlpProperties")
+                .master("local")
+                .getOrCreate();
+
+        /*******************SETUP DATA*****************/
+
+        StructType schema = new StructType( new StructField[]{
+                new StructField("text", DataTypes.StringType, false, Metadata.empty())});
+
+        List<Row> nlpPropertiesData = new ArrayList<>();
+        for(int i =0; i < request.getText().size(); i++) {
+            Row row = RowFactory.create(request.getText().get(i));
+            nlpPropertiesData.add(row);
+        }
+
+        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
+        //createDataset(text, Encoders.STRING()).toDF("text");
+
+        /*******************SETUP NLP PIPELINE MODEL*****************/
+
+        DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
+        Dataset<Row> data2 = document_assembler.transform(data);
+
+        SentenceDetectorDLModel sentence_detector = (SentenceDetectorDLModel) ((SentenceDetectorDLModel) new SentenceDetectorDLModel().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence"); //"sentence_detector_dl", "en"
+        Dataset<Row> data3 = sentence_detector.transform(data2);
+
+        TokenizerModel tokenizer =  ((Tokenizer) ((Tokenizer) new Tokenizer().setInputCols(new String[] {"document"})) .setOutputCol("token")).fit(data3);
+
+        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
+
+        WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().pretrained().setInputCols(new String[] {"document", "token"})).setOutputCol("embeddings");
+
+        UniversalSentenceEncoder sentenceEmbeddings = (UniversalSentenceEncoder) ((UniversalSentenceEncoder) new UniversalSentenceEncoder().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence_embeddings");
+
+        SentimentDLModel sentimentDetector = (SentimentDLModel) ((SentimentDLModel) new SentimentDLModel().pretrained().setInputCols(new String[] {"sentence_embeddings"})).setOutputCol("sentiment");
+
+        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().pretrained().setInputCols(new String[] {"document", "token", "embeddings"})).setOutputCol("ner");
+
+        NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"document", "token", "ner"})).setOutputCol("chunk");
+
+        //pipeline
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker, embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
+
+
+        PipelineModel pipelineFit = pipeline.fit(data);
+        Dataset<Row> results = pipelineFit.transform(data);
+
+
+        /*******************READ MODEL DATA*****************/
+
+        ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
+        long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
+
+        System.out.println("DATA COUNT : " + dataCount);
+
+
+        /**sentiment**/
+        Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
+        List<Row> sentimentRowData = sentimentDataset.collectAsList();
+        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
+            Row sentimentRow = sentimentRowData.get(dataIndex);
+            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //vaue
+            List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
+
+            String sentiment = "no sentiment";
+            if (innerSentimentRowData.get(0).equals("pos")) {
+                sentiment = "Positive";
+            }
+            else if (innerSentimentRowData.get(0).equals("neg")) {
+                sentiment = "Negative";
+            }
+            else if (innerSentimentRowData.get(0).equals("neu")) {
+                sentiment = "Neutral";
+            }
+
+            //System.out.println("added response : " + dataIndex);
+            response.add(new FindNlpPropertiesResponse(sentiment, null));
+        }
+
+
+        /**Named entity recognised**/
+        Dataset<Row> nerDataset = results.select(col("ner.result"));
+        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
+
+        List<Row> textRowData = chunkDataset.collectAsList();
+        List<Row> entityRowData = nerDataset.collectAsList();
+
+        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
+            //System.out.println("getting response : " + dataIndex);
+
+            Row textRow = textRowData.get(dataIndex);
+            Row entityRow = entityRowData.get(dataIndex);
+
+            WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
+            WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
+
+            List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
+            List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
+
+            ArrayList<ArrayList> nameEntities = new ArrayList<>();  //text, entity
+            int entityIndex = 0;
+
+            for (int i = 0; i < innerTextRowData.size(); i++) {
+                //System.out.println(innerEntityRowData.get(i));
+
+                String nameEntityText = "";
+                String nameEntityType = "";
+
+                if (entityIndex >= innerTextRowData.size()) { //all entities found
+                    break;
+                }
+
+                if (innerEntityRowData.get(i).equals("O") == false) { //finds entity
+
+                    String foundEntity = innerEntityRowData.get(i);
+                    //System.out.println("FOUNDITGIRL : " + foundEntity);
+
+                    nameEntityText = innerTextRowData.get(entityIndex);
+
+                    if (foundEntity.equals("B-PER") || foundEntity.equals("I-PER")) {
+                        nameEntityType = "Person";
+                    }
+                    else if (innerEntityRowData.get(i).equals("B-ORG") || foundEntity.equals("I-ORG")) {
+                        nameEntityType = "Organisation";
+                    }
+                    else if (foundEntity.equals("B-LOC") || foundEntity.equals("I-LOC")) {
+                        nameEntityType = "Location";
+                    }
+                    else if (foundEntity.equals("B-MISC") || foundEntity.equals("I-MISC")) {
+                        nameEntityType = "Miscellaneous";
+                    }
+
+                    ArrayList<String> nameEntityRow = new ArrayList<>();
+                    nameEntityRow.add(nameEntityText);
+                    nameEntityRow.add(nameEntityType);
+                    nameEntities.add(nameEntityRow);
+                    entityIndex = entityIndex + 1;
+                }
+            }
+
+            response.get(dataIndex).setNamedEntities(nameEntities);
+        }
+
+
+        /**OLD NLP
+         Properties properties = new Properties();
+         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
+         properties.setProperty("annotators", pipelineProperties);
+         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
+         CoreDocument coreDocument = new CoreDocument(request.getText());
+         stanfordCoreNLP.annotate(coreDocument);
+         //List<CoreSentence> coreSentences = coreDocument.sentences();
+         /**output of analyser**
+         List<CoreSentence> coreSentences = coreDocument.sentences();
+         List<CoreLabel> coreLabels = coreDocument.tokens();
+         ArrayList<String> row = new ArrayList<>();
+         //get sentiment of text
+         String sentiment;
+         ArrayList<String> sentiments = new ArrayList<>();
+         for (CoreSentence sentence : coreSentences) {
+         sentiments.add(sentence.sentiment());
+         }
+         Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
+         Map.Entry<String, Long> maxEntry = null;
+         for (Map.Entry<String, Long> entry : occurrences.entrySet()) {
+         if (maxEntry == null || entry.getValue()
+         .compareTo(maxEntry.getValue()) > 0) {
+         maxEntry = entry;
+         }
+         }
+         sentiment = maxEntry.getKey();
+         //get parts of speech
+         ArrayList<ArrayList> partOfSpeech = new ArrayList<>();
+         for (CoreLabel label : coreLabels) {
+         //String lemma = label.lemma();//lemmanation
+         String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+         ; //parts of speech
+         row = new ArrayList<>();
+         row.add(label.toString());
+         row.add(pos);
+         partOfSpeech.add(row);
+         //System.out.println("TOKEN : " + label.originalText());
+         }
+         //get parts of named entity
+         ArrayList<ArrayList> nameEntities = new ArrayList<>();
+         for (CoreEntityMention em : coreDocument.entityMentions()) {
+         row = new ArrayList<>();
+         row.add(em.text());
+         row.add(em.entityType());
+         nameEntities.add(row);
+         }*/
+
+
+        return response;
     }
 
 
@@ -822,7 +1040,16 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));
 
-        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        //lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+        try {
+            lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            client.logArtifact(run.getId(), modelFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         run.endRun();
 
@@ -833,7 +1060,23 @@ public class AnalyseServiceImpl {
     }
 
 
-    public void trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request) throws IOException {
+    /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return void
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public void trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request)
+            throws InvalidRequestException, IOException {
+
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsDTRequest Object is null");
+        }
+        if (request.getDataList() == null) {
+            throw new InvalidRequestException("DataList is null");
+        }
+
         /*******************SETUP SPARK*****************/
         logger.setLevel(Level.ERROR);
         LogManager.getRootLogger().setLevel(Level.ERROR);
@@ -1109,7 +1352,17 @@ public class AnalyseServiceImpl {
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
 
-        dtModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+
+        try {
+            dtModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+
+            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+            client.logArtifact(run.getId(), modelFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
 
         run.endRun();
 
@@ -1118,6 +1371,7 @@ public class AnalyseServiceImpl {
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results);*/
     }
+
 
     /**
      * This method used to find a trends(s) within a given data.
@@ -1382,6 +1636,7 @@ public class AnalyseServiceImpl {
 
         return new TrainGetPredictionResponse(null);
     }
+
 
     /**
      * This method used to find a predictions(s) within a given data
@@ -1696,7 +1951,16 @@ public class AnalyseServiceImpl {
         //client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        kmModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+
+
+        try {
+            kmModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+
+            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+            client.logArtifact(run.getId(), modelFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         run.endRun();
 
@@ -1888,223 +2152,6 @@ public class AnalyseServiceImpl {
      * *****************************************************************************************************************
      * *****************************************************************************************************************
      */
-
-
-    /**
-     * This method used to find an entity of a statement i.e sentiments/parts of speech
-     * @param request This is a request object which contains data required to be processed.
-     * @return FindEntitiesResponse This object contains data of the entities found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public ArrayList<FindNlpPropertiesResponse> findNlpProperties(FindNlpPropertiesRequest request)
-            throws InvalidRequestException {
-
-        if (request == null) {
-            throw new InvalidRequestException("FindEntitiesRequest Object is null");
-        }
-        if (request.getText() == null) {
-            throw new InvalidRequestException("Text object is null");
-        }
-
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkNlpProperties = SparkSession
-                .builder()
-                .appName("NlpProperties")
-                .master("local")
-                .getOrCreate();
-
-        /*******************SETUP DATA*****************/
-
-        StructType schema = new StructType( new StructField[]{
-                new StructField("text", DataTypes.StringType, false, Metadata.empty())});
-
-        List<Row> nlpPropertiesData = new ArrayList<>();
-        for(int i =0; i < request.getText().size(); i++) {
-            Row row = RowFactory.create(request.getText().get(i));
-            nlpPropertiesData.add(row);
-        }
-
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
-        //createDataset(text, Encoders.STRING()).toDF("text");
-
-        /*******************SETUP NLP PIPELINE MODEL*****************/
-
-        DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
-        Dataset<Row> data2 = document_assembler.transform(data);
-
-        SentenceDetectorDLModel sentence_detector = (SentenceDetectorDLModel) ((SentenceDetectorDLModel) new SentenceDetectorDLModel().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence"); //"sentence_detector_dl", "en"
-        Dataset<Row> data3 = sentence_detector.transform(data2);
-
-        TokenizerModel tokenizer =  ((Tokenizer) ((Tokenizer) new Tokenizer().setInputCols(new String[] {"document"})) .setOutputCol("token")).fit(data3);
-
-        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
-
-        WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().pretrained().setInputCols(new String[] {"document", "token"})).setOutputCol("embeddings");
-
-        UniversalSentenceEncoder sentenceEmbeddings = (UniversalSentenceEncoder) ((UniversalSentenceEncoder) new UniversalSentenceEncoder().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence_embeddings");
-
-        SentimentDLModel sentimentDetector = (SentimentDLModel) ((SentimentDLModel) new SentimentDLModel().pretrained().setInputCols(new String[] {"sentence_embeddings"})).setOutputCol("sentiment");
-
-        NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().pretrained().setInputCols(new String[] {"document", "token", "embeddings"})).setOutputCol("ner");
-
-        NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"document", "token", "ner"})).setOutputCol("chunk");
-
-        //pipeline
-        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker, embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
-
-
-        PipelineModel pipelineFit = pipeline.fit(data);
-        Dataset<Row> results = pipelineFit.transform(data);
-
-
-        /*******************READ MODEL DATA*****************/
-
-        ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
-        long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
-
-        System.out.println("DATA COUNT : " + dataCount);
-
-
-        /**sentiment**/
-        Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
-        List<Row> sentimentRowData = sentimentDataset.collectAsList();
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
-            Row sentimentRow = sentimentRowData.get(dataIndex);
-            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //vaue
-            List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
-
-            String sentiment = "no sentiment";
-            if (innerSentimentRowData.get(0).equals("pos")) {
-                sentiment = "Positive";
-            }
-            else if (innerSentimentRowData.get(0).equals("neg")) {
-                sentiment = "Negative";
-            }
-            else if (innerSentimentRowData.get(0).equals("neu")) {
-                sentiment = "Neutral";
-            }
-
-            //System.out.println("added response : " + dataIndex);
-            response.add(new FindNlpPropertiesResponse(sentiment, null));
-        }
-
-
-        /**Named entity recognised**/
-        Dataset<Row> nerDataset = results.select(col("ner.result"));
-        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
-
-        List<Row> textRowData = chunkDataset.collectAsList();
-        List<Row> entityRowData = nerDataset.collectAsList();
-
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
-            //System.out.println("getting response : " + dataIndex);
-
-            Row textRow = textRowData.get(dataIndex);
-            Row entityRow = entityRowData.get(dataIndex);
-
-            WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
-            WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
-
-            List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
-            List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
-
-            ArrayList<ArrayList> nameEntities = new ArrayList<>();  //text, entity
-            int entityIndex = 0;
-
-            for (int i = 0; i < innerTextRowData.size(); i++) {
-                //System.out.println(innerEntityRowData.get(i));
-
-                String nameEntityText = "";
-                String nameEntityType = "";
-
-                if (entityIndex >= innerTextRowData.size()) { //all entities found
-                    break;
-                }
-
-                if (innerEntityRowData.get(i).equals("O") == false) { //finds entity
-
-                    String foundEntity = innerEntityRowData.get(i);
-                    //System.out.println("FOUNDITGIRL : " + foundEntity);
-
-                    nameEntityText = innerTextRowData.get(entityIndex);
-
-                    if (foundEntity.equals("B-PER") || foundEntity.equals("I-PER")) {
-                        nameEntityType = "Person";
-                    }
-                    else if (innerEntityRowData.get(i).equals("B-ORG") || foundEntity.equals("I-ORG")) {
-                        nameEntityType = "Organisation";
-                    }
-                    else if (foundEntity.equals("B-LOC") || foundEntity.equals("I-LOC")) {
-                        nameEntityType = "Location";
-                    }
-                    else if (foundEntity.equals("B-MISC") || foundEntity.equals("I-MISC")) {
-                        nameEntityType = "Miscellaneous";
-                    }
-
-                    ArrayList<String> nameEntityRow = new ArrayList<>();
-                    nameEntityRow.add(nameEntityText);
-                    nameEntityRow.add(nameEntityType);
-                    nameEntities.add(nameEntityRow);
-                    entityIndex = entityIndex + 1;
-                }
-            }
-
-            response.get(dataIndex).setNamedEntities(nameEntities);
-        }
-
-
-        /**OLD NLP
-         Properties properties = new Properties();
-         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
-         properties.setProperty("annotators", pipelineProperties);
-         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-         CoreDocument coreDocument = new CoreDocument(request.getText());
-         stanfordCoreNLP.annotate(coreDocument);
-         //List<CoreSentence> coreSentences = coreDocument.sentences();
-         /**output of analyser**
-         List<CoreSentence> coreSentences = coreDocument.sentences();
-         List<CoreLabel> coreLabels = coreDocument.tokens();
-         ArrayList<String> row = new ArrayList<>();
-         //get sentiment of text
-         String sentiment;
-         ArrayList<String> sentiments = new ArrayList<>();
-         for (CoreSentence sentence : coreSentences) {
-         sentiments.add(sentence.sentiment());
-         }
-         Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
-         Map.Entry<String, Long> maxEntry = null;
-         for (Map.Entry<String, Long> entry : occurrences.entrySet()) {
-         if (maxEntry == null || entry.getValue()
-         .compareTo(maxEntry.getValue()) > 0) {
-         maxEntry = entry;
-         }
-         }
-         sentiment = maxEntry.getKey();
-         //get parts of speech
-         ArrayList<ArrayList> partOfSpeech = new ArrayList<>();
-         for (CoreLabel label : coreLabels) {
-         //String lemma = label.lemma();//lemmanation
-         String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-         ; //parts of speech
-         row = new ArrayList<>();
-         row.add(label.toString());
-         row.add(pos);
-         partOfSpeech.add(row);
-         //System.out.println("TOKEN : " + label.originalText());
-         }
-         //get parts of named entity
-         ArrayList<ArrayList> nameEntities = new ArrayList<>();
-         for (CoreEntityMention em : coreDocument.entityMentions()) {
-         row = new ArrayList<>();
-         row.add(em.text());
-         row.add(em.entityType());
-         nameEntities.add(row);
-         }*/
-
-
-        return response;
-    }
 
     /**
      * This method used to fetch the parsed data from the database
