@@ -1,6 +1,6 @@
 import {Button} from 'antd';
 import React, {Component} from 'react';
-import "../../../styles/VerifyPage/resendButton.css";
+import "./resendButton.css";
 
 class ResendButton extends React.Component {
     constructor(props) {

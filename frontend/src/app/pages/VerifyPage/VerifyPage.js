@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
- Form, Input, Card, Divider, message
+ Form, Input, Card, Divider, message,
 } from 'antd';
 import VerifyButton from './VerifyButton';
-import '../../../styles/VerifyPage/verifyPage.css';
+import './verifyPage.css';
 import ResendButton from './ResendButton';
+import LoginButton from '../../components/LoginButton/LoginButton';
 
 // Validation Function
 const validate = (values) => {
@@ -38,8 +39,8 @@ const VerifyPage = () => {
         onSubmit: (values) => {
             const requestOptions = {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(values)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values),
             };
             fetch('/user/verify', requestOptions)
                 .then((response) => response.json()).then((json) => {
@@ -48,7 +49,7 @@ const VerifyPage = () => {
                     message.success(json.message);
                     history.push('/login');
                 } else {
-                    message.info(json.message);
+                    message.error(json.message);
                 }
             });
         },
@@ -70,7 +71,7 @@ const VerifyPage = () => {
                 .then((response) => response.json()).then((json) => {
                 if (json.success) {
                     // localStorage.setItem("user", json.id)
-                    alert(json.message);
+                    message.success(json.message);
                 } else {
                     alert(json.message);
                 }
@@ -79,62 +80,127 @@ const VerifyPage = () => {
     });
 
     return (
-        <Card
-          id="login_card"
-          className="loginCard"
-          title="Step 2: Verify your account"
-        >
+        // <Card
+        //   id="login_card"
+        //   className="loginCard"
+        //   title="Step 2: Verify your account"
+        // >
+        //
+        //     <form onSubmit={formikVerify.handleSubmit}>
+        //         <Form.Item
+        //           className="input_item_div"
+        //         >
+        //             <Input
+        //               id="email"
+        //               name="email"
+        //               type="email"
+        //               placeholder="Email"
+        //               onChange={formikVerify.handleChange}
+        //               onBlur={formikVerify.handleBlur}
+        //               value={formikVerify.values.email}
+        //               prefix={<UserOutlined className="site-form-item-icon" />}
+        //             />
+        //         </Form.Item>
+        //
+        //         <Form.Item
+        //           className="input_item_div"
+        //         >
+        //             <Input
+        //               id="verificationCode"
+        //               name="verificationCode"
+        //               type="text"
+        //               placeholder="Verification code"
+        //               value={formikVerify.values.verificationCode}
+        //               onChange={formikVerify.handleChange}
+        //               onBlur={formikVerify.handleBlur} // When the user leaves the form field
+        //               prefix={<LockOutlined className="site-form-item-icon" />}
+        //             />
+        //             {/* {formik.touched.password && formik.errors.password ? ( */}
+        //             {/*    <p>{formik.errors.password}</p>) : null} */}
+        //
+        //         </Form.Item>
+        //
+        //         <Form.Item>
+        //             <VerifyButton />
+        //         </Form.Item>
+        //
+        //         <Divider className="or_divider">
+        //             OR
+        //         </Divider>
+        //     </form>
+        //
+        //     <form onSubmit={formikResend.handleSubmit}>
+        //         <Form.Item>
+        //             <ResendButton />
+        //         </Form.Item>
+        //     </form>
+        //
+        // </Card>
 
-            <form onSubmit={formikVerify.handleSubmit}>
-                <Form.Item
-                  className="input_item_div"
-                >
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="Email"
-                      onChange={formikVerify.handleChange}
-                      onBlur={formikVerify.handleBlur}
-                      value={formikVerify.values.email}
-                      prefix={<UserOutlined className="site-form-item-icon" />}
-                    />
-                </Form.Item>
+        <>
+            <div id="login-custom-bg">
+                <div id="top-left-block" />
+                <div id="top-right-block" />
+                <div id="bottom-left-block" />
+                <div id="bottom-right-block" />
+            </div>
+            <div id="verify-background">
+                <div id="verify-form-container">
+                    <div id="verify-card">
+                        <div id="verify-card-title">Step 2: Verify your account</div>
+                        <form onSubmit={formikVerify.handleSubmit}>
+                            <Form.Item
+                              className="input_item_div"
+                            >
+                                <Input
+                                  id="email"
+                                  name="email"
+                                  type="email"
+                                  placeholder="Email address"
+                                  onChange={formikVerify.handleChange}
+                                  onBlur={formikVerify.handleBlur}
+                                  value={formikVerify.values.email}
+                                  prefix={<UserOutlined className="site-form-item-icon" />}
+                                />
+                            </Form.Item>
 
-                <Form.Item
-                  className="input_item_div"
-                >
-                    <Input
-                      id="verificationCode"
-                      name="verificationCode"
-                      type="text"
-                      placeholder="Verification code"
-                      value={formikVerify.values.verificationCode}
-                      onChange={formikVerify.handleChange}
-                      onBlur={formikVerify.handleBlur} // When the user leaves the form field
-                      prefix={<LockOutlined className="site-form-item-icon" />}
-                    />
-                    {/* {formik.touched.password && formik.errors.password ? ( */}
-                    {/*    <p>{formik.errors.password}</p>) : null} */}
+                            <Form.Item
+                              className="input_item_div"
+                            >
+                                <Input
+                                  id="verificationCode"
+                                  name="verificationCode"
+                                  type="text"
+                                  placeholder="Verification code"
+                                  value={formikVerify.values.verificationCode}
+                                  onChange={formikVerify.handleChange}
+                                  onBlur={formikVerify.handleBlur} // When the user leaves the form field
+                                  prefix={<LockOutlined className="site-form-item-icon" />}
+                                />
+                                {/* {formik.touched.password && formik.errors.password ? ( */}
+                                {/*    <p>{formik.errors.password}</p>) : null} */}
 
-                </Form.Item>
+                            </Form.Item>
 
-                <Form.Item>
-                    <VerifyButton />
-                </Form.Item>
+                            <Form.Item>
+                                <VerifyButton />
+                            </Form.Item>
 
-                <Divider className="or_divider">
-                    OR
-                </Divider>
-            </form>
+                            <Divider className="or_divider">
+                                OR
+                            </Divider>
+                        </form>
 
-            <form onSubmit={formikResend.handleSubmit}>
-                <Form.Item>
-                    <ResendButton />
-                </Form.Item>
-            </form>
-
-        </Card>
+                        <form onSubmit={formikResend.handleSubmit}>
+                            <Form.Item>
+                                <ResendButton />
+                            </Form.Item>
+                        </form>
+                    </div>
+                    <div id="login-card-svg-bg" />
+                </div>
+            </div>
+        </>
     );
 };
 
