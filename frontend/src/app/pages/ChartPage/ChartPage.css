@@ -296,7 +296,8 @@
     /*grid-template-rows: 1fr 1fr;*/
     /*row-gap: 10px;*/
 }
-#word-cloud-graph-container>div{
+
+#word-cloud-graph-container > div {
     display: flex;
     /*margin-right: auto;*/
     /*margin-left: auto;*/
@@ -402,6 +403,7 @@
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
+    overflow: auto;
 }
 
 #anomaly-scatter-plot {
