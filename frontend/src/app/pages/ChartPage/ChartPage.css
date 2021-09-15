@@ -181,8 +181,7 @@
 }
 
 #world-map > .simple-card-title {
-    padding: 10px;
-    padding-left: 0px;
+    padding: 10px 10px 10px 0px;
     text-align: left;
 }
 
@@ -251,7 +250,7 @@
 
 #row-4 > .simple-section-body {
     display: grid;
-    grid-template-columns: 65% 35%;
+    grid-template-columns:60% 40%;
     grid-template-rows: 100%;
     column-gap: 10px;
 }
@@ -292,9 +291,16 @@
 
     /*Display of the body of the container*/
     display: grid;
+    align-items: center;
     /*grid-template-columns: 100%;*/
-    grid-template-rows: 1fr 1fr;
-    row-gap: 10px;
+    /*grid-template-rows: 1fr 1fr;*/
+    /*row-gap: 10px;*/
+}
+#word-cloud-graph-container>div{
+    display: flex;
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
+
 }
 
 #word-graph-1 {

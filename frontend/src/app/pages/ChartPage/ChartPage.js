@@ -414,14 +414,14 @@ class ChartPage extends Component {
                                                     cardTitle="Dominant words"
                                                     cardID="word-graph-2"
                                                 >
-                                                    <PieChart/>
+                                                    <PieChart text={this.state.text}/>
                                                 </SimpleCard>
-                                                <SimpleCard
-                                                    cardTitle="word-graph-1"
-                                                    cardID="word-graph-1"
-                                                >
-                                                    Word Graph1
-                                                </SimpleCard>
+                                                {/*<SimpleCard*/}
+                                                {/*    cardTitle="word-graph-1"*/}
+                                                {/*    cardID="word-graph-1"*/}
+                                                {/*>*/}
+                                                {/*    Word Graph1*/}
+                                                {/*</SimpleCard>*/}
 
                                             </div>
                                         </SimpleSection>
