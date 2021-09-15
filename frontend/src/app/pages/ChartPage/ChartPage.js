@@ -230,15 +230,15 @@ class ChartPage extends Component {
                                                 Scatter Plot
                                             </SimpleCard>
 
-                                            <SimpleCard
-                                                cardTitle="Line Graph"
-                                                cardID="anomaly-line-graph"
-                                            >
-                                                <GraphWithBrushAndZoom
-                                                    text={this.state.text}
-                                                    key={this.state.text}
-                                                />
-                                            </SimpleCard>
+                                            {/*<SimpleCard*/}
+                                            {/*    cardTitle="Line Graph"*/}
+                                            {/*    cardID="anomaly-line-graph"*/}
+                                            {/*>*/}
+                                            {/*    <GraphWithBrushAndZoom*/}
+                                            {/*        text={this.state.text}*/}
+                                            {/*        key={this.state.text}*/}
+                                            {/*    />*/}
+                                            {/*</SimpleCard>*/}
                                         </SimpleSection>
                                         {/**!/*/}
                                     </div>

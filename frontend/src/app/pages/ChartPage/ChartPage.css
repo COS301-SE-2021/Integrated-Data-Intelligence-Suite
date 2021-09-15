@@ -392,7 +392,7 @@
 
 #row-6 > .simple-section-body {
     display: grid;
-    grid-template-rows: repeat(2, 50%);
+    grid-template-rows: repeat(1, 100%);
     grid-template-columns: repeat(2, 50%);
     column-gap: 10px;
     row-gap: 10px;
