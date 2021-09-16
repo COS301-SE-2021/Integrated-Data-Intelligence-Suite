@@ -51,7 +51,7 @@ export default class OverviewGraphSection extends React.Component {
                         <VictoryBarGraph
                             text={_average_interaction}
                             key={_average_interaction}
-                            xAxisLabel={'Trend'}
+                            xAxisLabel={''}
                             yAxisLabel={''}
                             showYAxisLabel={false}
                             showXAxisLabel
