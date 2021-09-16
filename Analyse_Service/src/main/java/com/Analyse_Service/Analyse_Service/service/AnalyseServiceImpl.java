@@ -1,6 +1,7 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepository;
@@ -103,20 +104,35 @@ public class AnalyseServiceImpl {
             }
         }
 
-        /*******************Setup Data******************/
 
+        /*******************USE NLP******************/
+
+        /**social**/
         ArrayList<ParsedData> dataList = request.getDataList();
-        ArrayList<ArrayList> parsedDatalist = new ArrayList<>();
+        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
 
-        ArrayList<String> nlpText = new ArrayList<>();
+        ArrayList<String> nlpTextSocial = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
-            nlpText.add(dataList.get(i).getTextMessage());
+            nlpTextSocial.add(dataList.get(i).getTextMessage());
         }
 
-        FindNlpPropertiesRequest findNlpPropertiesRequest = new FindNlpPropertiesRequest(nlpText);
-        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponse = this.findNlpProperties(findNlpPropertiesRequest);
+        FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = this.findNlpProperties(findNlpPropertiesRequestSocial);
 
+        /**articles**/
+        ArrayList<ParsedArticle> articleList = request.getArticleList();
+        ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
 
+        ArrayList<String> nlpTextArticle = new ArrayList<>();
+        for (int i = 0; i < articleList.size(); i++) {
+            nlpTextArticle.add(articleList.get(i).getContent()); ///TODO: shrey used other names like i think message = content; (more was changed)
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = this.findNlpProperties(findNlpPropertiesRequestArticle);
+
+        /*******************Setup Data******************/
+        /**social**/
         for (int i = 0; i < dataList.size(); i++) {
             //String row = "";
 
@@ -135,20 +151,27 @@ public class AnalyseServiceImpl {
             rowOfParsed.add(location);
             rowOfParsed.add(formattedDate);
             rowOfParsed.add(likes);
-            rowOfParsed.add(findNlpPropertiesResponse.get(i));
+            rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
 
-            parsedDatalist.add(rowOfParsed);
+            parsedDataList.add(rowOfParsed);
         }
 
+        /**article**/
+        for(int i = 0; i < 1; i++){
+
+        }
+
+
+        //TODO: idk maybe merge the results (socail-article) before here?? ----need to play around
         /*******************Run A.I Models******************/
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDatalist); //TODO
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDatalist);
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDatalist); //TODO
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
         //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
@@ -158,15 +181,15 @@ public class AnalyseServiceImpl {
         //FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
 
-        /*************************************************/
+        /*********************Result**************************/
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDatalist);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDatalist);
+        TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
         this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
-        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDatalist);
+        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
         TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
