@@ -1,11 +1,13 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
-import com.Parse_Service.Parse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 
 import java.util.ArrayList;
 
 public class ParseImportedDataResponse {
     ArrayList<ParsedData> dataList;
+    ArrayList<ParsedArticle> articleList;
 
     boolean fallback = false;
     String fallbackMessage = "";
@@ -14,13 +16,24 @@ public class ParseImportedDataResponse {
 
     }
 
-    public ParseImportedDataResponse(ArrayList<ParsedData> dataList){
+
+    public ParseImportedDataResponse(ArrayList<ParsedData> dataList, ArrayList<ParsedArticle> articleList){
         this.dataList = dataList;
+        this.articleList = articleList;
     }
+
+
 
     public ArrayList<ParsedData> getDataList(){
         return dataList;
     }
+
+    public ArrayList<ParsedArticle> getArticleList() {
+        return articleList;
+    }
+
+
+
 
     public void setFallback(boolean fallback){
         this.fallback = fallback;
