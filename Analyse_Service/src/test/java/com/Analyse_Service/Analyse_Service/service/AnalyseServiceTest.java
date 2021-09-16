@@ -51,7 +51,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the analyzeData data list is Null")
     public void analyzeDataNullList(){
-        AnalyseDataRequest test = new AnalyseDataRequest(null);
+        AnalyseDataRequest test = new AnalyseDataRequest(null, null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.analyzeData(test));
     }
 
