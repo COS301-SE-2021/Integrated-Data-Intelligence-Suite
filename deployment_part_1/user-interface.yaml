@@ -3,8 +3,9 @@ kind: ConfigMap
 metadata:
   name: user-interface-configmap
 data:
-  backend_host: gateway-service-svc.default.svc.cluster.local
-  backend_port: "9000"
+  backend_host: http://gateway-service-svc.default.svc.cluster.local
+  #backend_host: http://localhost
+  backend_port: "80"
 
 ---
 apiVersion: apps/v1
