@@ -269,7 +269,7 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(parseResponse.getDataList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(parseResponse.getDataList(), parseResponse.getArticleList());//    DataSource.TWITTER,ImportResponse. getJsonData());
         AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
 
 
