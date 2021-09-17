@@ -1081,9 +1081,9 @@ public class AnalyseServiceImpl {
             File modelFile = new File("../models/LogisticRegressionModel");
 
             //TODO: flavor
+            //client.logArtifact(run.getId(), modelFile);
 
-            client.logArtifact(run.getId(), modelFile);
-
+            File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
 
             /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
             mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
@@ -1600,71 +1600,7 @@ public class AnalyseServiceImpl {
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
 
 
-        /***********************SETUP MLFLOW - LOAD ***********************/
-        MlflowClient client = new MlflowClient("http://localhost:5000");
-
-        /*Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("LogisticRegression_Experiment");
-        }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
-
-
-        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
-        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
-        //predictions.show();
-        //System.out.println("*****************Predictions Of Test Data*****************");
-
-
-        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
-        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
-        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
-
-        param
-        client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
-        client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
-        client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
-        client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
-
-
-        //metrics
-        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
-        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
-        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
-
-        //custom tags
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        //run.setTag("Accuracy", String.valueOf(accuracy));
-
-        //lrModel.write().overwrite().save("../models/LogisticRegressionModel");*
-
-        try {
-            lrModel.write().overwrite().save("../models/LogisticRegressionModel");
-
-            File modelFile = new File("../models/LogisticRegressionModel");
-            client.logArtifact(run.getId(), modelFile);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        run.endRun();
-
-        /***********************SETUP MLFLOW - SAVE ***********************/
-
-
-        /*******************READ MODEL*****************/
+        /*******************LOAD - READ MODEL*****************/
 
         TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("../models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
@@ -2297,21 +2233,6 @@ public class AnalyseServiceImpl {
         return new FetchParsedDataResponse(list );
     }
 
-
-    public SaveAIModelResponse saveAIModel(SaveAIModelRequest request)
-            throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("SaveAIModelRequest Object is null");
-        }
-        if (request.getSaveAIModel() == null) {
-            throw new InvalidRequestException("SaveAIModelRequest AIModel Object is null");
-        }
-
-        AIModel model = request.getSaveAIModel();
-        aiModelRepository.save(model);
-
-        return new SaveAIModelResponse(true);
-    }
 
     public SaveAIModelResponse fetchAIModel(SaveAIModelRequest request){
 
