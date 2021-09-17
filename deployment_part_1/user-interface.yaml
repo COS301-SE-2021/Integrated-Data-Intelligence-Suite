@@ -41,6 +41,13 @@ spec:
                 configMapKeyRef:
                   name: user-interface-configmap
                   key: backend_port
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "2000m"
 
 ---
 apiVersion: v1

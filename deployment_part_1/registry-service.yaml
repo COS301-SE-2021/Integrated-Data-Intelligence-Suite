@@ -1,5 +1,4 @@
 #podname-{replica-index}.{serviceName}.default.svc.cluster.local
-
 #config map
 apiVersion: v1
 kind: ConfigMap
@@ -54,6 +53,13 @@ spec:
                 configMapKeyRef:
                   name: eureka-configmap
                   key: eureka_service_address
+          resources:
+            requests:
+              memory: "150Mi"
+              cpu: "500m"
+            limits:
+              memory: "350Mi"
+              cpu: "1000m"
 
 
 ---
@@ -65,7 +71,7 @@ metadata:
   labels:
     app: eureka
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: eureka
   ports:
