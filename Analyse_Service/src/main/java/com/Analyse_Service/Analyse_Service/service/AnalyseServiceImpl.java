@@ -13,6 +13,9 @@ import com.Analyse_Service.Analyse_Service.response.*;
 //import edu.stanford.nlp.ling.CoreLabel;
 //import edu.stanford.nlp.pipeline.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.annotators.TokenizerModel;
 import com.johnsnowlabs.nlp.annotators.Tokenizer;
@@ -51,11 +54,15 @@ import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
+import org.mlflow.api.proto.ModelRegistry;
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
 import org.mlflow.api.proto.Service.Experiment;
 import org.mlflow.api.proto.Service.RunInfo;
+import org.mlflow.api.proto.Service.LogModel;
+import org.mlflow.api.proto.ModelRegistry.ListRegisteredModels;
+import org.mlflow.api.proto.ModelRegistry.CreateRegisteredModelOrBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,7 +126,7 @@ public class AnalyseServiceImpl {
         FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = this.findNlpProperties(findNlpPropertiesRequestSocial);
 
-        /**articles**/
+        /**articles**
         ArrayList<ParsedArticle> articleList = request.getArticleList();
         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
 
@@ -1069,10 +1076,37 @@ public class AnalyseServiceImpl {
         //lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
 
         try {
+            //lrModel.save("postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase");
             lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-
             File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+            //flavor
+
             client.logArtifact(run.getId(), modelFile);
+
+
+            /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+            mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+            ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+            String jsonModel = ow.writeValueAsString(modelFile);
+            //String jsonModel = String.valueOf(modelFile);
+
+            LogModel logModel = LogModel.newBuilder()
+                    .setRunId(run.getId())
+                    .setModelJson(jsonModel)
+                    .build();
+
+
+
+            System.out.println(logModel);
+
+            ModelRegistry.CreateModelVersion.newBuilder()
+                    .setName("LogisticRegressionModel")
+                    .setRunId(run.getId())
+                    .setSource("DefaultEndpointsProtocol=https;AccountName=emergeartifactstore;AccountKey=8atYYzEevj5iElQfwWeyEnshETGfftBS75gLXF2O7Ay7HV2DEeXLic0tjeswqGYjPVyXLAIXQzohVMEBtRz9ew==;EndpointSuffix=core.windows.net")
+                    .build();*/
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -1565,7 +1599,73 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
 
-        /*******************LOAD & READ MODEL*****************/
+
+        /***********************SETUP MLFLOW - LOAD ***********************/
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        /*Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
+        RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+
+
+        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
+        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        //predictions.show();
+        //System.out.println("*****************Predictions Of Test Data*****************");
+
+
+        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+        param
+        client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
+        client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
+        client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
+        client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
+
+
+        //metrics
+        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+
+        //custom tags
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));
+
+        //lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");*
+
+        try {
+            lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            client.logArtifact(run.getId(), modelFile);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        run.endRun();
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+
+        /*******************READ MODEL*****************/
+
         TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
 
