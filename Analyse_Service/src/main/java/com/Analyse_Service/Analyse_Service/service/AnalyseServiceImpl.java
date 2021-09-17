@@ -1073,14 +1073,14 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));
 
-        //lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
         try {
             //lrModel.save("postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase");
-            lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            lrModel.write().overwrite().save("../models/LogisticRegressionModel");
+            File modelFile = new File("../models/LogisticRegressionModel");
 
-            //flavor
+            //TODO: flavor
 
             client.logArtifact(run.getId(), modelFile);
 
@@ -1416,9 +1416,9 @@ public class AnalyseServiceImpl {
 
 
         try {
-            dtModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+            dtModel.write().overwrite().save("../models/DecisionTreeModel");
 
-            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+            File modelFile = new File("../models/DecisionTreeModel");
             client.logArtifact(run.getId(), modelFile);
         }catch (Exception e){
             e.printStackTrace();
@@ -1647,12 +1647,12 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));
 
-        //lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");*
+        //lrModel.write().overwrite().save("../models/LogisticRegressionModel");*
 
         try {
-            lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            File modelFile = new File("../models/LogisticRegressionModel");
             client.logArtifact(run.getId(), modelFile);
 
         }catch (Exception e){
@@ -1666,7 +1666,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL*****************/
 
-        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("../models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
@@ -2075,9 +2075,9 @@ public class AnalyseServiceImpl {
 
 
         try {
-            kmModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+            kmModel.write().overwrite().save("../models/KMeansModel");
 
-            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+            File modelFile = new File("../models/KMeansModel");
             client.logArtifact(run.getId(), modelFile);
         }catch (Exception e){
             e.printStackTrace();
@@ -2244,7 +2244,7 @@ public class AnalyseServiceImpl {
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
         /*******************LOAD & READ MODEL*****************/
-        PipelineModel kmModel = PipelineModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        PipelineModel kmModel = PipelineModel.load("../models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
