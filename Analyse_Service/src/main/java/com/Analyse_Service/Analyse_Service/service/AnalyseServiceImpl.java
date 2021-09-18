@@ -205,10 +205,10 @@ public class AnalyseServiceImpl {
         /*******************Run A.I Models******************/
 
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList); //TODO
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList,parsedArticleList); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList);
+        /*FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
@@ -225,23 +225,23 @@ public class AnalyseServiceImpl {
 
         //trainFindTrendsArticlesLR(parsedArticleList);
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+        /*TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
         this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);*/
 
 
-        return new AnalyseDataResponse(//null,null,null,null,null,null);
-                findPatternResponse.getPattenList(),//null,null,null,null);
+        return new AnalyseDataResponse(null,null,null,null,null,null);
+                /*findPatternResponse.getPattenList(),//null,null,null,null);
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
                 findAnomaliesResponse.getPattenList(),
-                wordList);
+                wordList);*/
     }
 
 
@@ -598,6 +598,34 @@ public class AnalyseServiceImpl {
                 patternData.add(relationshipRow);
             }
         }
+
+        ArrayList<ArrayList> requestAData = request.getArticleList();
+
+        for(int i=0; i < requestAData.size(); i++){
+            List<Object> row = new ArrayList<>();
+
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestAData.get(i).get(5);
+
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            row = new ArrayList<>();
+            for (int j=0; j< namedEntities.size(); j++){
+                if (row.isEmpty()) {
+                    row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                }
+                else {
+                    if(!row.contains(namedEntities.get(j).get(0).toString())) {
+                        row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                    }
+                }
+
+            }
+            if (!row.isEmpty()) {
+                Row relationshipRow = RowFactory.create(row);
+                patternData.add(relationshipRow);
+            }
+        }
+
         System.out.println("Hereisthepatterndata");
         System.out.println(patternData);
 
@@ -606,7 +634,7 @@ public class AnalyseServiceImpl {
         });
 
         Dataset<Row> itemsDF = sparkPatterns.createDataFrame(patternData, schema);
-        itemsDF.show();
+        itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
 
@@ -618,8 +646,8 @@ public class AnalyseServiceImpl {
         FPGrowthModel fpModel = fp.fit(itemsDF);
 
 
-        fpModel.freqItemsets().show();
-        fpModel.associationRules().show();
+        fpModel.freqItemsets().show(1000);
+        fpModel.associationRules().show(1000);
 
         List<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
