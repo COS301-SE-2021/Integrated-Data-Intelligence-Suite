@@ -130,17 +130,19 @@ public class AnalyseServiceImpl {
         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
         wordList = (ArrayList<ArrayList>) nlpResults.get(1);
 
-        /**articles**
+        /**articles**/
         ArrayList<ParsedArticle> articleList = request.getArticleList();
         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
 
         ArrayList<String> nlpTextArticle = new ArrayList<>();
         for (int i = 0; i < articleList.size(); i++) {
-            nlpTextArticle.add(articleList.get(i).getContent()); ///TODO: shrey used other names like i think message = content; (more was changed)
+            nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle()); ///TODO: shrey used other names like i think message = content; (more was changed)
         }
 
         FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
-        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = this.findNlpProperties(findNlpPropertiesRequestArticle);
+        List<Object> nlpArticle = this.findNlpProperties(findNlpPropertiesRequestArticle);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = (ArrayList<FindNlpPropertiesResponse>) nlpArticle.get(0);
+        ArrayList<ArrayList> ArticleWordList = (ArrayList<ArrayList>) nlpArticle.get(1);
 
         /*******************Setup Data******************/
         /**social**/
@@ -168,8 +170,32 @@ public class AnalyseServiceImpl {
         }
 
         /**article**/
-        for(int i = 0; i < 1; i++){
+        for(int i = 0; i < articleList.size(); i++){
+            String title = articleList.get(i).getTitle();
+            String desc = articleList.get(i).getDescription();
+            String content = articleList.get(i).getContent();
+            String date = articleList.get(i).getDate();
+            //String location = articleList.get(i).getLoction(); TODO Ask shrey if this is possible or if even necessary
+            int wordcount = 0;
+            char ch[]= new char[content.length()];
+            for(int j=0;j<content.length();j++)
+            {
+                ch[j]= content.charAt(j);
+                if( ((j>0)&&(ch[i]!=' ')&&(ch[j-1]==' ')) || ((ch[0]!=' ')&&(j==0)) )
+                    wordcount++;
+            }
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
+            rowOfParsed.add(title);
+            rowOfParsed.add(desc);
+            rowOfParsed.add(content);
+            rowOfParsed.add(wordcount);
+            rowOfParsed.add(date);
+            rowOfParsed.add(findNlpPropertiesResponseArticle.get(i));
+            parsedArticleList.add(rowOfParsed);
+        }
 
+        for (ArrayList eg: parsedArticleList) {
+            System.out.println(eg.toString());
         }
 
 
