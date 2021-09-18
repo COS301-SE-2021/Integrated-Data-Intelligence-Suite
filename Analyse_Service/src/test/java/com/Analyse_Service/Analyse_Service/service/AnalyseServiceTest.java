@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 
@@ -192,7 +193,8 @@ public class AnalyseServiceTest {
         ArrayList<String> text = new ArrayList<>();;
         text.add("test text for function");
         FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
-        ArrayList<FindNlpPropertiesResponse> testResults = service.findNlpProperties(test);
+        List<Object> nlpResults = service.findNlpProperties(test);
+        ArrayList<FindNlpPropertiesResponse> testResults = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0);//service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 

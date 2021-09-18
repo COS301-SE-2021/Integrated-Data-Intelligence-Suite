@@ -88,7 +88,7 @@ public class AnalyseServiceControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(analyseRequest);
 
-        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null);
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null,null);
         when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
@@ -136,7 +136,7 @@ public class AnalyseServiceControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson = ow.writeValueAsString(analyseRequest);
 
-        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null, null, null, null, null);
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null, null, null, null, null,null);
         when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
