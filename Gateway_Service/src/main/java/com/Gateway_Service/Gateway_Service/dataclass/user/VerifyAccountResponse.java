@@ -1,14 +1,14 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.user;
 
-public class ManagePermissionsResponse {
+public class VerifyAccountResponse {
     private String message;
     private boolean success;
 
-    public ManagePermissionsResponse() {
+    public VerifyAccountResponse() {
 
     }
 
-    public ManagePermissionsResponse(String message, boolean success) {
+    public VerifyAccountResponse(boolean success, String message) {
         this.message = message;
         this.success = success;
     }

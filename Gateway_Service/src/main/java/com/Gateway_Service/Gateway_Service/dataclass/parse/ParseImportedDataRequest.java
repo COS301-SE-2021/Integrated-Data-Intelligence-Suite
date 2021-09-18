@@ -1,6 +1,6 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.parse;
 
-import com.Gateway_Service.Gateway_Service.dataclass.DataSource;
+import com.Gateway_Service.Gateway_Service.rri.DataSource;
 
 public class ParseImportedDataRequest {
     DataSource type;

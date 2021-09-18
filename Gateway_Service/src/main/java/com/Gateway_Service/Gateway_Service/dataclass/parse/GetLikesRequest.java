@@ -1,4 +1,4 @@
-package za.ac.up.cs.emerge.integrateddataintelligencesuite.parser.request;
+package com.Gateway_Service.Gateway_Service.dataclass.parse;
 
 public class GetLikesRequest {
     private String jsonString;

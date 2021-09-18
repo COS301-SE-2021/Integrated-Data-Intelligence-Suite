@@ -1,6 +1,4 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
-
-import com.Gateway_Service.Gateway_Service.dataclass.User;
+package com.Gateway_Service.Gateway_Service.dataclass.user;
 
 import java.util.List;
 

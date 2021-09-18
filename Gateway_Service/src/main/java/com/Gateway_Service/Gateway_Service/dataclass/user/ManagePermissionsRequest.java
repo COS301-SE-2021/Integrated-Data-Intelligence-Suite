@@ -1,4 +1,4 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.user;
 
 import com.Gateway_Service.Gateway_Service.rri.Permission;
 

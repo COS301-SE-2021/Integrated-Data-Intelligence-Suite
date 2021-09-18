@@ -1,4 +1,4 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.parse;
 
 import java.util.UUID;
 

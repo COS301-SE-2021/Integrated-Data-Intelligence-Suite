@@ -1,4 +1,4 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.user;
 
 public class SearchRequest {
     private String username;

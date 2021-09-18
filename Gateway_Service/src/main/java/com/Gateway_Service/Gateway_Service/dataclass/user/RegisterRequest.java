@@ -1,17 +1,20 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.user;
 
-public class RegisterForm {
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String password;
-    private String email;
+import com.Gateway_Service.Gateway_Service.rri.Permission;
+import org.codehaus.jackson.annotate.JsonProperty;
 
-    public RegisterForm() {
+public class RegisterRequest {
+    String username;
+    String firstName;
+    String lastName;
+    String password;
+    String email;
 
+    public RegisterRequest() {
+        super();
     }
 
-    public RegisterForm(String username, String firstName, String lastName, String password, String email) {
+    public RegisterRequest(String username, String firstName, String lastName, String password, String email) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,12 +22,12 @@ public class RegisterForm {
         this.email = email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -39,7 +42,7 @@ public class RegisterForm {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastname(String lastName) {
         this.lastName = lastName;
     }
 
@@ -58,4 +61,12 @@ public class RegisterForm {
     public void setEmail(String email) {
         this.email = email;
     }
+
+//    public Permission getPermission() {
+//        return permission;
+//    }
+//
+//    public void setPermission(Permission permission) {
+//        this.permission = permission;
+//    }
 }
