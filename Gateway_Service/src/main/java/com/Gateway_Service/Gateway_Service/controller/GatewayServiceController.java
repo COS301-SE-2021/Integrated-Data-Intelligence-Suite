@@ -247,7 +247,7 @@ public class GatewayServiceController {
         ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
         ArrayList<ParsedData> socialMediaData = parseResponse.getDataList();
 
-        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSSCOURCE, importResponse.getList().get(1).getData(), request.getPermission());
+        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
         parseResponse = parseClient.parseImportedData(parseRequestNews);
 
         if(parseResponse.getFallback() == true) {
