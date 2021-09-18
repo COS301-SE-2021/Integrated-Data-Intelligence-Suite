@@ -80,7 +80,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the findRelationship data list is Null")
     public void findRelationshipDataNullList(){
-        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null,null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
     }
 
@@ -164,7 +164,7 @@ public class AnalyseServiceTest {
         ArrayList<ArrayList> input = new ArrayList<>();
         input.add(TestList);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(input);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(input,null);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
