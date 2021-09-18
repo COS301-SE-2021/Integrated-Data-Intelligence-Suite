@@ -6,7 +6,6 @@ import com.Parse_Service.Parse_Service.repository.NewsPropertiesRepository;
 import com.Parse_Service.Parse_Service.repository.SocialMediaPropertiesRepository;
 import com.Parse_Service.Parse_Service.rri.ArticleExtractor;
 import com.Parse_Service.Parse_Service.rri.DataSource;
-import com.netflix.discovery.converters.Auto;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +15,7 @@ import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import com.Parse_Service.Parse_Service.request.*;
 import com.Parse_Service.Parse_Service.response.*;
 import com.Parse_Service.Parse_Service.dataclass.*;
-import com.Parse_Service.Parse_Service.rri.TwitterExtractor;
+import com.Parse_Service.Parse_Service.rri.SocialMediaExtractor;
 
 import java.util.*;
 
@@ -70,7 +69,7 @@ public class ParseServiceImpl {
                 for (int i=0; i < jsonArray.length(); i++){
                     //create and set node
                     ParsedData parsedData = new ParsedData();
-                    TwitterExtractor extractor = new TwitterExtractor();
+                    SocialMediaExtractor extractor = new SocialMediaExtractor();
 
                     //parse text data from post
                     GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString());

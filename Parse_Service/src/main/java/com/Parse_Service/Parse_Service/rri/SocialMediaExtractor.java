@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TwitterExtractor implements Extractor {
+public class SocialMediaExtractor implements Extractor {
     /**
      * This method is used to extract the text of a given tweet.
      * @param request This is the request class which contains the JSON string
