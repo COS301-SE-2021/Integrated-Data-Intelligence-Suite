@@ -5,8 +5,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
     Form, Input, Card, Divider, message, Button,
 } from 'antd';
-import VerifyButton from './VerifyButton';
-import './verifyPage.css';
+import './resendPage.css';
+import ResendButton from './ResendButton';
 
 // Validation Function
 const validate = (values) => {
@@ -18,20 +18,15 @@ const validate = (values) => {
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address';
     }
-
-    // password validation
-    if (!values.verificationCode) {
-        errors.verificationCode = 'required';
-    }
     return errors;
 };
 
-const VerifyPage = () => {
+const ResendPage = () => {
     const history = useHistory();
-    const formikVerify = useFormik({
+
+    const formik = useFormik({
         initialValues: {
-            email: '',
-            verificationCode: '',
+            email: 'thisISTest@gmail.com',
         },
         validate,
         onSubmit: (values) => {
@@ -40,17 +35,14 @@ const VerifyPage = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values),
             };
-            fetch('/user/verify', requestOptions)
+            fetch('/user/resend', requestOptions)
                 .then((response) => response.json()).then((json) => {
                 if (json.success) {
                     // localStorage.setItem("user", json.id)
                     message.success(json.message);
-                    history.push('/login');
+                    history.go(-1);
                 } else {
                     message.error(json.message);
-                    if (json.message === 'This account has already been verified') {
-                        history.push('/login');
-                    }
                 }
             });
         },
@@ -124,8 +116,8 @@ const VerifyPage = () => {
             <div id="verify-background">
                 <div id="verify-form-container">
                     <div id="verify-card">
-                        <div id="verify-card-title">Step 2: Verify your account</div>
-                        <form onSubmit={formikVerify.handleSubmit}>
+                        <div id="verify-card-title">Resend Verification Code</div>
+                        <form onSubmit={formik.handleSubmit}>
                             <Form.Item
                               className="input_item_div"
                             >
@@ -134,33 +126,15 @@ const VerifyPage = () => {
                                   name="email"
                                   type="email"
                                   placeholder="Email address"
-                                  onChange={formikVerify.handleChange}
-                                  onBlur={formikVerify.handleBlur}
-                                  value={formikVerify.values.email}
+                                  onChange={formik.handleChange}
+                                  onBlur={formik.handleBlur}
+                                  value={formik.values.email}
                                   prefix={<UserOutlined className="site-form-item-icon" />}
                                 />
                             </Form.Item>
 
-                            <Form.Item
-                              className="input_item_div"
-                            >
-                                <Input
-                                  id="verificationCode"
-                                  name="verificationCode"
-                                  type="text"
-                                  placeholder="Verification code"
-                                  value={formikVerify.values.verificationCode}
-                                  onChange={formikVerify.handleChange}
-                                  onBlur={formikVerify.handleBlur} // When the user leaves the form field
-                                  prefix={<LockOutlined className="site-form-item-icon" />}
-                                />
-                                {/* {formik.touched.password && formik.errors.password ? ( */}
-                                {/*    <p>{formik.errors.password}</p>) : null} */}
-
-                            </Form.Item>
-
                             <Form.Item>
-                                <VerifyButton />
+                                <ResendButton />
                             </Form.Item>
 
                             <Divider className="or_divider">
@@ -171,9 +145,9 @@ const VerifyPage = () => {
                         <Button
                           type="link"
                           className="link-button"
-                          href="/resend"
+                          href="/verify"
                         >
-                            Resend code
+                            Go back
                         </Button>
                     </div>
                     <div id="login-card-svg-bg" />
@@ -183,4 +157,4 @@ const VerifyPage = () => {
     );
 };
 
-export default VerifyPage;
+export default ResendPage;

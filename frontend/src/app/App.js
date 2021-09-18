@@ -11,7 +11,9 @@ import LogoutPage from './pages/LogoutPage/LogoutPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
 import VerifyPage from './pages/VerifyPage/VerifyPage';
+import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
+
 
 class App extends Component {
     render() {
@@ -42,6 +44,9 @@ class App extends Component {
                         <Permissions/>
                     </Route>
 
+                    <Route exact path="/resend">
+                        <ResendPage/>
+                    </Route>
 
                     <Route exact path="/logout">
                         <LogoutPage/>

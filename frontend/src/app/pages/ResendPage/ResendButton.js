@@ -1,6 +1,6 @@
-import {Button} from 'antd';
-import React, {Component} from 'react';
-import "./resendButton.css";
+import { Button } from 'antd';
+import React, { Component } from 'react';
+import '../VerifyPage/resendButton.css';
 
 class ResendButton extends React.Component {
     constructor(props) {
@@ -9,16 +9,16 @@ class ResendButton extends React.Component {
 
     state = {
         is_loading: false,
-        email: localStorage.getItem("email")
+        email: '',
     }
 
     render() {
         return (
             <>
                 <Button
-                    type="link"
-                    htmlType="submit"
-                    className="link-button"
+                  type="primary"
+                  htmlType="submit"
+                  className="login_button"
                 >
                     Resend code
                 </Button>
