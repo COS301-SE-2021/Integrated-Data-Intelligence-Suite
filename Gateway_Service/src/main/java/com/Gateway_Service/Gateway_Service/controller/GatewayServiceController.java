@@ -48,8 +48,8 @@ public class GatewayServiceController {
     @Autowired
     private UserService userClient;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    //@Autowired
+    //private RestTemplate restTemplate;
 
 
 
@@ -123,6 +123,8 @@ public class GatewayServiceController {
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
     */
+
+
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
