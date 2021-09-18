@@ -10,7 +10,7 @@ on:
     branches:
         - master
         - develop
-        - feature-**
+        - feature-user
 
   pull_request:
     branches:
