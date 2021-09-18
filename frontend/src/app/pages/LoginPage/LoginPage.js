@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
-    Form, Input, Button, Checkbox, Card, Divider,
+    Form, Input, Button, Checkbox, Card, Divider, message
 } from 'antd';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import './loginPage.css';
@@ -58,9 +58,10 @@ export default function LoginPage(props) {
                     .then((json) => {
                         if (json.success) {
                             localStorage.setItem('user', json.id);
-                            history.push('/');
+                            message.success(json.message);
+                            history.push('/chart');
                         } else {
-                            alert(json.message);
+                            message.error(json.message);
                         }
                     });
             }
@@ -151,7 +152,7 @@ export default function LoginPage(props) {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    placeholder="email"
+                                    placeholder="Email address"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.email}
@@ -166,7 +167,7 @@ export default function LoginPage(props) {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    placeholder="password"
+                                    placeholder="Password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur} // When the user leaves the form field
@@ -188,7 +189,7 @@ export default function LoginPage(props) {
                             <Form.Item>
                                 Don't have an account?
                                 <Link to="/register">
-                                    <a className="register_link" href="#">register now!</a>
+                                    <a className="register_link" href="#">Register now!</a>
                                 </Link>
                             </Form.Item>
 
@@ -199,20 +200,19 @@ export default function LoginPage(props) {
                                     Forgot password
                                 </a>
                             </Form.Item>
+                            <Divider className="or_divider">
+                                OR
+                            </Divider>
+
+                            <Form.Item>
+                                Cannot login?
+                                <Link to="/verify">
+                                    <a className="register_link" href="#">Click here to verify account!</a>
+                                </Link>
+                            </Form.Item>
                         </form>
                     </div>
                     <div id="login-card-svg-bg"/>
-
-                    <Divider className="or_divider">
-                        OR
-                    </Divider>
-
-                    <Form.Item>
-                        Cannot login?
-                        <Link to="/verify">
-                            <a className="register_link" href="#">Click here to verify account!</a>
-                        </Link>
-                    </Form.Item>
                 </div>
             </div>
         </>

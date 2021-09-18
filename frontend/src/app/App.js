@@ -10,8 +10,10 @@ import LogoutPage from './pages/LogoutPage/LogoutPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
 import VerifyPage from './pages/VerifyPage/VerifyPage';
+import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
+
 
 class App extends Component {
     render() {
@@ -40,6 +42,10 @@ class App extends Component {
 
                     <Route exact path="/permissions">
                         <Permissions/>
+                    </Route>
+
+                    <Route exact path="/resend">
+                        <ResendPage/>
                     </Route>
 
                     <Route exact path="/logout">

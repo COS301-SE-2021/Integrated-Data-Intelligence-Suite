@@ -158,9 +158,8 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/resend",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<VerifyAccountResponse> resendCode(@RequestBody String body) {
-        System.out.println(body);
-        VerifyAccountResponse response = new VerifyAccountResponse(true, "This is a test for resend");
+    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
+        ResendCodeResponse response = userClient.resendCode(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -169,11 +168,11 @@ public class GatewayServiceController {
      * @param request This is the body send by POST
      * @return This is the response http entity
      */
-    @PostMapping(value = "/changePermission",
+    @PostMapping(value = "/changeUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ManagePermissionsResponse> managePermissions(@RequestBody ManagePermissionsRequest request) {
-        ManagePermissionsResponse response = userClient.managePermissions(request);
+    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
+        ChangeUserResponse response = userClient.managePermissions(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -184,9 +183,7 @@ public class GatewayServiceController {
     @GetMapping(value = "/user/getAll", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<GetAllUsersResponse> getAllUsers() {
-        GetAllUsersRequest request = new GetAllUsersRequest();
         System.out.println("Getting all users from the database");
-        System.out.println(request.getMessage());
         GetAllUsersResponse response = userClient.getAllUsers();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
