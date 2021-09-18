@@ -10,7 +10,7 @@ public class CreateWordCloudPieChartGraphResponse {
         this.wordCloudPieChartGraphArray = wordCloudPieChartGraphArray;
     }
 
-    public ArrayList<Graph> getLineGraphArray(){
+    public ArrayList<Graph> getWordCloudPieChartGraphArray(){
         return wordCloudPieChartGraphArray;
     }
 }
