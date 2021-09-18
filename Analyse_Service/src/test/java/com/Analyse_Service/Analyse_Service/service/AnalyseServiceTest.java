@@ -66,7 +66,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the findPattern data list is Null")
     public void findPatternDataNullList(){
-        FindPatternRequest test = new FindPatternRequest(null);
+        FindPatternRequest test = new FindPatternRequest(null,null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(test));
     }
 
@@ -142,7 +142,7 @@ public class AnalyseServiceTest {
 
         TestList.add(row);
 
-        FindPatternRequest test = new FindPatternRequest(TestList);
+        FindPatternRequest test = new FindPatternRequest(TestList,null);
         FindPatternResponse testResults = service.findPattern(test);
         Assertions.assertNotNull(testResults);
     }
