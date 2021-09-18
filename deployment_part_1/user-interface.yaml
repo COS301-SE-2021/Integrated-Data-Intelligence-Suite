@@ -43,11 +43,11 @@ spec:
                   key: backend_port
           resources:
             requests:
-              memory: "200Mi"
-              cpu: "500m"
+              memory: "600Mi"
+              cpu: "300m"
             limits:
-              memory: "500Mi"
-              cpu: "2000m"
+              memory: "1200Mi"
+              cpu: "750m"
 
 ---
 apiVersion: v1

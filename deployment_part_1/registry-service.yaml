@@ -55,11 +55,11 @@ spec:
                   key: eureka_service_address
           resources:
             requests:
-              memory: "150Mi"
-              cpu: "500m"
+              memory: "200Mi"
+              cpu: "200m"
             limits:
               memory: "350Mi"
-              cpu: "1000m"
+              cpu: "500m"
 
 
 ---
