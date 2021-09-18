@@ -22,11 +22,11 @@ public class UserService {
      * @return This class will contain the information whether or not the request was successfull
      *         or not.
      */
-    public ManagePermissionsResponse managePermissions(ManagePermissionsRequest userRequest) {
+    public ChangeUserResponse managePermissions(ChangeUserRequest userRequest) {
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<ManagePermissionsRequest> requestEntity = new HttpEntity<ManagePermissionsRequest>(request, requestHeaders);
-        ResponseEntity<ManagePermissionsResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ManagePermissionsResponse.class);
+        HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<ChangeUserRequest>(request, requestHeaders);
+        ResponseEntity<ChangeUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
         return responseEntity.getBody();*/
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -42,7 +42,7 @@ public class UserService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ManagePermissionsResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ManagePermissionsResponse.class);
+        ChangeUserResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ChangeUserResponse.class);
 
         return userResponse;
     }

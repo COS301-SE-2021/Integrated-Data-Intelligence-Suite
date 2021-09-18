@@ -156,10 +156,10 @@ public class UserServiceControllerIntegrationTest {
     @DisplayName("Test_Change_Permission_To_IMPORTING_Successful")
     public void changePermissionSuccessful() {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        ManagePermissionsRequest request = new ManagePermissionsRequest(testUser1.getUsername(), Permission.IMPORTING);
+        ChangeUserRequest request = new ChangeUserRequest(testUser1.getUsername(), testUser1.getAdmin(), Permission.IMPORTING);
 
-        HttpEntity<ManagePermissionsRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<ManagePersmissionsResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changepermission", HttpMethod.POST, requestEntity, ManagePersmissionsResponse.class);
+        HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
+        ResponseEntity<ChangeUserResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
 
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertTrue(responseEntity.getBody().isSuccess());
@@ -171,10 +171,10 @@ public class UserServiceControllerIntegrationTest {
     @DisplayName("Test_Change_Permission_To_IMPORTING_Unsuccessful")
     public void changePermissionUnsuccessful() {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        ManagePermissionsRequest request = new ManagePermissionsRequest("nonexistingUser", Permission.IMPORTING);
+        ChangeUserRequest request = new ChangeUserRequest("nonexistingUser", false, Permission.IMPORTING);
 
-        HttpEntity<ManagePermissionsRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<ManagePersmissionsResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changepermission", HttpMethod.POST, requestEntity, ManagePersmissionsResponse.class);
+        HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
+        ResponseEntity<ChangeUserResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
 
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertFalse(responseEntity.getBody().isSuccess());

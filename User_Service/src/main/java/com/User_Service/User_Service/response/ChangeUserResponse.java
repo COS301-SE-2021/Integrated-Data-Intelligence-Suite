@@ -1,14 +1,14 @@
-package com.Gateway_Service.Gateway_Service.dataclass;
+package com.User_Service.User_Service.response;
 
-public class ManagePermissionsResponse {
+public class ChangeUserResponse {
     private String message;
     private boolean success;
 
-    public ManagePermissionsResponse() {
+    public ChangeUserResponse() {
 
     }
 
-    public ManagePermissionsResponse(String message, boolean success) {
+    public ChangeUserResponse(String message, boolean success) {
         this.message = message;
         this.success = success;
     }

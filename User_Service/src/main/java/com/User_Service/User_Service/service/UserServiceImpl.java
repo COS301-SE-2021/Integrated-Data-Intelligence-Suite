@@ -366,11 +366,11 @@ public class UserServiceImpl {
     /**
      * This function will allow an admin to manage permissions of users registered
      * to the system.
-     * @param request This is the request for the managePermissions use case***
-     * @return This is the response for the managePermissions use case***
+     * @param request This is the request for the changeUser use case***
+     * @return This is the response for the changeUser use case***
      */
     @Transactional
-    public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
+    public ChangeUserResponse changeUser(ChangeUserRequest request) throws InvalidRequestException {
         if(request == null) {
             throw new InvalidRequestException("The Manage Permissions request is null");
         }
@@ -379,16 +379,17 @@ public class UserServiceImpl {
         }
         Optional<User> users = repository.findUserByUsername(request.getUsername());
         if(users.isEmpty()) {
-            return new ManagePersmissionsResponse("User does not exist", false);
+            return new ChangeUserResponse("User does not exist", false);
         }
         else {
             User user = users.get();
             int count = repository.updatePermission(user.getId(), request.getNewPermission());
+            repository.updateAdmin(user.getId(), request.isAdmin());
             if(count == 0) {
-                return new ManagePersmissionsResponse("Permission for user not updated", false);
+                return new ChangeUserResponse("Permission for user not updated", false);
             }
             else {
-                return new ManagePersmissionsResponse("Permission updated", true);
+                return new ChangeUserResponse("Permission updated", true);
             }
         }
     }

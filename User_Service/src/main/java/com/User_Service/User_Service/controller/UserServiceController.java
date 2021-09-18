@@ -20,10 +20,10 @@ public class UserServiceController {
      * @return A class that contains if the update was successful or not.
      * @throws Exception Thrown when any exceptions are encountered
      */
-    @PostMapping(value = "/changepermission")
-    public @ResponseBody ManagePersmissionsResponse managePermissions(@RequestBody ManagePermissionsRequest request) throws Exception {
-        //ManagePermissionsRequest request = requestEntity.getBody();
-        return service.managePermissions(request);
+    @PostMapping(value = "/changeUser")
+    public @ResponseBody ChangeUserResponse changeUser(@RequestBody ChangeUserRequest request) throws Exception {
+        //ChangeUserRequest request = requestEntity.getBody();
+        return service.changeUser(request);
     }
 
     @GetMapping(value = "/getAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
