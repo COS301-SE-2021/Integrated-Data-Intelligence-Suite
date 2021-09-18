@@ -132,19 +132,16 @@ public class VisualizeServiceImpl {
         CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
         outputData.add(wordCloudResponse.words);
 
-        //WordCloud Piechart Todo
-        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(wordCloudResponse.wordList);
+        //WordCloud Piechart
+        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getTrendList()); //TODO: request.getWordList() !!!!this wont work for now
         CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
         outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
-
-        /*
-        ToDo: Sunburst
-
-
-         */
-
-
+        //WordCloud Sunburst
+        //TODO: request.getWordList() !!!!this wont work for now
+        CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getTrendList(),wordCloudPieChartGraphResponse.getDominantWords());
+        CreateWordCloudSunBurstGraphResponse wordCloudSunBurstGraphResponse = this.createWordCloudSunBurstGraph(wordCloudSunBurstGraphRequest);
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
 
         //Network graph (Relationships)
@@ -542,7 +539,7 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.dataList == null){
+        if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
         ArrayList<ArrayList> reqData = request.getDataList();
@@ -584,13 +581,146 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.dataList == null){
+        if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
-        ArrayList<String> wordList = request.getDataList();
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
+
+
+        ArrayList<Graph> output = new ArrayList<>();
+        ArrayList<String> dominantWords = new ArrayList<>();
+
+
+        HashMap<String, Integer> wordMap = new HashMap<>();
+
+        //ArrayList<String> wordList = new ArrayList<>();
+        for (int i = 0; i < wordList.size(); i++) {
+            if (wordMap.containsKey(wordList.get(i)) == false) {
+                wordMap.put(wordList.get(i), 1);
+            } else {
+                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
+            }
+        }
+
+        System.out.println("Investigate here");
+        System.out.println(wordMap);
+
+
+        // Sort the list by values
+        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
+
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return o2.getValue().compareTo(o1.getValue()); //des
+            }
+        });
+
+
+        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
+        for (Map.Entry<String, Integer> values : list) {
+            finalHash.put(values.getKey(), values.getValue());
+        }
+
+        System.out.println("Investigate here 2");
+        System.out.println(finalHash);
+
+
+        //count word frequency
+        int totalCount = 0;
+        int sumCount = 0;
+
+
+
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            totalCount = totalCount + set.getValue();
+        }
+
+        System.out.println("TOTAL HERE");
+        System.out.println(totalCount);
+
+        if(totalCount ==0){
+            throw new InvalidRequestException("Number of cloud objects equals zero");
+        }
+
+        //output
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            System.out.println(set.getKey() + " : " + set.getValue() );
+
+            sumCount = sumCount + set.getValue();
+
+            System.out.println("Sum : " + sumCount);
+
+
+            //if((((float)sumCount /totalCount)*100) < 65.0f) {
+            if( (((float) set.getValue())/totalCount*100) > 1.5f){
+                PieChartGraph out = new PieChartGraph();
+                out.label = set.getKey();
+                out.x = set.getKey();
+                out.y = ((double) set.getValue())/totalCount*100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE");
+                System.out.println(out.y);
+
+                dominantWords.add(out.label);
+
+                //System.out.println(out.words);
+                output.add(out);
+            }
+            else{
+                PieChartGraph out = new PieChartGraph();
+                    out.label = "{OTHERS}";
+                out.x = "the rest";
+                //DecimalFormat df = new DecimalFormat("#.##");
+                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE - Rest");
+                System.out.println(out.y);
+
+                //System.out.println(out.words);
+                output.add(out);
+
+                break;
+            }
+        }
+
+
+        return new CreateWordCloudPieChartGraphResponse(output,dominantWords);
+    }
+
+
+    public CreateWordCloudSunBurstGraphResponse createWordCloudSunBurstGraph(CreateWordCloudSunBurstGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        if (request.getDominantWords() == null){
+            throw new InvalidRequestException("Dominant/parent nodes object is null");
+        }
+
+        ArrayList<ArrayList> associatedWords  = request.dataList;
+        ArrayList<String> dominantWords = request.getDominantWords();
         ArrayList<Graph> output = new ArrayList<>();
 
 
+
+
+
+        /*
         HashMap<String, Integer> wordMap = new HashMap<>();
 
         //ArrayList<String> wordList = new ArrayList<>();
@@ -670,7 +800,7 @@ public class VisualizeServiceImpl {
             }
             else{
                 PieChartGraph out = new PieChartGraph();
-                    out.label = "{OTHERS}";
+                out.label = "{OTHERS}";
                 out.x = "the rest";
                 //DecimalFormat df = new DecimalFormat("#.##");
                 out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
@@ -684,10 +814,10 @@ public class VisualizeServiceImpl {
 
                 break;
             }
-        }
+        }*/
 
 
-        return new CreateWordCloudPieChartGraphResponse(output);
+        return new CreateWordCloudSunBurstGraphResponse(output);
     }
 
 
