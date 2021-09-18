@@ -132,6 +132,7 @@ public class AnalyseServiceImpl {
 
         /**articles**/
         ArrayList<ParsedArticle> articleList = request.getArticleList();
+        if (articleList.isEmpty()) System.out.println("no articles");
         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
 
         ArrayList<String> nlpTextArticle = new ArrayList<>();
@@ -176,24 +177,35 @@ public class AnalyseServiceImpl {
             String content = articleList.get(i).getContent();
             String date = articleList.get(i).getDate();
             //String location = articleList.get(i).getLoction(); TODO Ask shrey if this is possible or if even necessary
-            int wordcount = 0;
-            char ch[]= new char[content.length()];
-            for(int j=0;j<content.length();j++)
-            {
-                ch[j]= content.charAt(j);
-                if( ((j>0)&&(ch[i]!=' ')&&(ch[j-1]==' ')) || ((ch[0]!=' ')&&(j==0)) )
-                    wordcount++;
+            int Charcount = content.length();
+            if (content.charAt(content.length()-1) == ']' && content.charAt(content.length()-2) == 's' && content.charAt(content.length()-3) == 'r' && content.charAt(content.length()-4) == 'a' && content.charAt(content.length()-5) == 'h' && content.charAt(content.length()-6) == 'c' && content.charAt(content.length()-7) == ' '){
+                Charcount -= 7;
+                int end = Charcount;
+                char pos = content.charAt(Charcount-1);
+                while (pos != '['){
+                    Charcount--;
+                    pos = content.charAt(Charcount-1);
+                }
+                String addChar = content.substring(Charcount+1,end);
+                //System.out.println(addChar);
+
+                Charcount -= 3;
+                Charcount += Integer.parseInt(addChar);
             }
+
+
+
             ArrayList<Object> rowOfParsed = new ArrayList<>();
             rowOfParsed.add(title);
             rowOfParsed.add(desc);
             rowOfParsed.add(content);
-            rowOfParsed.add(wordcount);
+            rowOfParsed.add(Charcount);
             rowOfParsed.add(date);
             rowOfParsed.add(findNlpPropertiesResponseArticle.get(i));
             parsedArticleList.add(rowOfParsed);
         }
 
+        System.out.println("its the Articles my man heeeeeeeeeeeeeeeerrrrrrrrrreeeeeeeee");
         for (ArrayList eg: parsedArticleList) {
             System.out.println(eg.toString());
         }
@@ -230,7 +242,7 @@ public class AnalyseServiceImpl {
         TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
-        return new AnalyseDataResponse(
+        return new AnalyseDataResponse(//null,null,null,null,null,null);
                 findPatternResponse.getPattenList(),//null,null,null,null);
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
