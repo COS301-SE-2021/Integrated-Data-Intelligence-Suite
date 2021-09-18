@@ -1,16 +1,14 @@
 package com.Gateway_Service.Gateway_Service.service;
 
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 @Service

@@ -2,9 +2,17 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
-
-
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.GetUserRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.GetUserResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.user.*;
+import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.service.AnalyseService;
 import com.Gateway_Service.Gateway_Service.service.ImportService;
 import com.Gateway_Service.Gateway_Service.service.ParseService;
@@ -21,7 +29,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
