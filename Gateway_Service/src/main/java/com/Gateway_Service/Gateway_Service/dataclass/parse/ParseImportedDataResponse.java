@@ -1,7 +1,6 @@
 package com.Gateway_Service.Gateway_Service.dataclass.parse;
 
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+
 
 import java.util.ArrayList;
 
