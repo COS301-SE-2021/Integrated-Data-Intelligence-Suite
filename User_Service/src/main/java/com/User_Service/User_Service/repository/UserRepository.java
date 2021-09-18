@@ -41,4 +41,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Modifying
     @Query("UPDATE users u SET u.isVerified = true WHERE u.id = :id")
     int verifyUser(@Param("id")UUID userid);
+
+    @Modifying
+    @Query("UPDATE users u SET u.isAdmin = :newAdmin WHERE u.id = :id")
+    int updateAdmin(@Param("id")UUID userid, @Param("newAdmin") boolean newAdmin);
 }
