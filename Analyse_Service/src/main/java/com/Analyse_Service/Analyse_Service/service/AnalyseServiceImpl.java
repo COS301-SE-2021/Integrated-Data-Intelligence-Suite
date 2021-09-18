@@ -1,6 +1,5 @@
 package com.Analyse_Service.Analyse_Service.service;
 
-import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
@@ -13,9 +12,6 @@ import com.Analyse_Service.Analyse_Service.response.*;
 //import edu.stanford.nlp.ling.CoreLabel;
 //import edu.stanford.nlp.pipeline.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.annotators.TokenizerModel;
 import com.johnsnowlabs.nlp.annotators.Tokenizer;
@@ -37,7 +33,6 @@ import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.*;
 import org.apache.spark.ml.clustering.KMeans;
-import org.apache.spark.ml.clustering.KMeansModel;
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
 import org.apache.spark.ml.evaluation.ClusteringEvaluator;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
@@ -54,15 +49,11 @@ import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
-import org.mlflow.api.proto.ModelRegistry;
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
 import org.mlflow.api.proto.Service.Experiment;
 import org.mlflow.api.proto.Service.RunInfo;
-import org.mlflow.api.proto.Service.LogModel;
-import org.mlflow.api.proto.ModelRegistry.ListRegisteredModels;
-import org.mlflow.api.proto.ModelRegistry.CreateRegisteredModelOrBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +64,6 @@ import scala.collection.mutable.WrappedArray;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.*;
 
@@ -214,6 +204,7 @@ public class AnalyseServiceImpl {
         //TODO: idk maybe merge the results (socail-article) before here?? ----need to play around
         /*******************Run A.I Models******************/
 
+
         FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
@@ -231,6 +222,8 @@ public class AnalyseServiceImpl {
 
 
         /*********************Result**************************/
+
+        //trainFindTrendsArticlesLR(parsedArticleList);
 
         TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
@@ -1171,6 +1164,323 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
+    public void trainFindTrendsArticlesLR(ArrayList<ArrayList> request){
+        /*if (request == null) {
+            throw new InvalidRequestException("FindTrendsRequest Object is null");
+        }
+        if (request.getDataList() == null) {
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+
+        logger.setLevel(Level.ERROR);
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
+
+        /*******************SETUP DATA*****************/
+
+        List<Row> trendsData = new ArrayList<>();
+        ArrayList<ArrayList> requestData = request;
+
+        ArrayList<String> types = new ArrayList<>();
+
+        for (int i = 0; i < requestData.size(); i++) {
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(5); //response Object
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for (int j = 0; j < namedEntities.size(); j++) {
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()) {// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                } else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    } else {
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                row.add(requestData.get(i).get(4).toString());//date
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//Character count
+                row.add(sentiment);//sentiment
+
+                Row trendRow = RowFactory.create(row.toArray());
+                trendsData.add(trendRow);
+            }
+        }
+
+        /*******************SETUP DATAFRAME*****************/
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("SentimentType", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Character count", DataTypes.DoubleType, false, Metadata.empty()),
+                });
+
+        StructType schema2 = new StructType(
+                new StructField[]{
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("Character count", DataTypes.IntegerType, false, Metadata.empty()),
+                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                });
+
+
+        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
+        itemsDF.show(itemsDF.collectAsList().size());
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+        //group named entity
+        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Character count").collectAsList(); //average likes of topic
+        averageLikes.get(1); //average likes
+
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        rate.get(1); //rate ???
+
+        ArrayList<String> sents = new ArrayList<>();
+
+
+
+
+
+
+        //training set
+        int minSize = 0;
+        if (namedEntities.size() > averageLikes.size()) {
+            minSize = averageLikes.size();
+        } else {
+            minSize = namedEntities.size();
+        }
+
+        if (minSize > rate.size()) {
+            minSize = rate.size();
+        }
+
+
+        System.out.println("NameEntity : " + namedEntities.size());
+        for (int i = 0; i < namedEntities.size(); i++) {
+            System.out.println(namedEntities.get(i).toString());
+        }
+
+        System.out.println("AverageLikes : " + averageLikes.size());
+        for (int i = 0; i < averageLikes.size(); i++) {
+            System.out.println(averageLikes.get(i).toString());
+        }
+
+        List<Row> trainSet = new ArrayList<>();
+        for (int i = 0; i < minSize; i++) {
+            List<Row> sen = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(namedEntities.get(i).get(0).toString())).collectAsList();
+            double sent = 0.0;
+            if (sen.get(0).get(0).toString().equals("Positive")) sent = 2.0;
+            else if (sen.get(0).get(0).toString().equals("Negative")) sent = 1.0;
+            double trending = 0.0;
+            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
+                trending = 1.0;
+            }
+            Row trainRow = RowFactory.create(
+                    trending,
+                    namedEntities.get(i).get(0).toString(),
+                    namedEntities.get(i).get(1).toString(),
+                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                    sent,
+                    Double.parseDouble(averageLikes.get(i).get(1).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+        //split data
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
+
+        Dataset<Row> trainSetDF = split[0];
+        Dataset<Row> testSetDF = split[1];
+
+        trainSetDF.show();
+        System.out.println("TRAIN ME");
+
+        testSetDF.show();
+        System.out.println("TEST ME");
+
+        /*******************SETUP PIPELINE MODEL *****************/
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "SentimentType","Character count"})
+                .setOutputCol("features");
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        //model
+        LogisticRegression lr = new LogisticRegression() //model - estimator
+                .setMaxIter(10)
+                .setRegParam(0.3)
+                .setElasticNetParam(0.8);
+
+        //pipeline
+        Pipeline pipeline = new Pipeline();
+        pipeline.setStages(new PipelineStage[]{assembler, indexer, lr});
+
+        /******************EVALUATE/ANALYSE MODEL**************/
+
+        //evaluators
+        BinaryClassificationEvaluator binaryClassificationEvaluator = new BinaryClassificationEvaluator()
+                .setLabelCol("label")
+                .setRawPredictionCol("prediction")
+                .setMetricName("areaUnderROC");
+
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator()
+                .setLabelCol("label")
+                .setPredictionCol("prediction")
+                .setMetricName("mse") //meanSquaredError
+                .setMetricName("rmse") //rootMeanSquaredError
+                .setMetricName("mae") //meanAbsoluteError
+                .setMetricName("r2"); //r^2, variance
+
+        //parameterGrid
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+
+        paramGridBuilder.addGrid(lr.regParam(), new double[]{lr.getRegParam()});
+        paramGridBuilder.addGrid(lr.elasticNetParam(), new double[]{lr.getElasticNetParam()});
+        paramGridBuilder.addGrid(lr.fitIntercept());
+        ParamMap[] paramMaps = paramGridBuilder.build();
+
+
+        //validator
+        /*CrossValidator crossValidator = new CrossValidator()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setNumFolds(2);*/
+
+        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+                .setEstimator(pipeline)
+                .setEvaluator(regressionEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setTrainRatio(0.7)  //70% : 30% ratio
+                .setParallelism(2);
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        Optional<Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
+        RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+
+
+        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
+        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+        //predictions.show();
+        //System.out.println("*****************Predictions Of Test Data*****************");
+
+
+        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+        //param
+        client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
+        client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
+        client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
+        client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
+
+
+        //metrics
+        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
+        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+
+        //custom tags
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        //run.setTag("Accuracy", String.valueOf(accuracy));
+
+        //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
+
+        try {
+            //lrModel.save("postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase");
+            lrModel.write().overwrite().save("../models/LogisticRegressionModel");
+            File modelFile = new File("../models/LogisticRegressionModel");
+
+            //TODO: flavor
+            //client.logArtifact(run.getId(), modelFile);
+
+            File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
+
+            /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+            mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+            ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+            String jsonModel = ow.writeValueAsString(modelFile);
+            //String jsonModel = String.valueOf(modelFile);
+
+            LogModel logModel = LogModel.newBuilder()
+                    .setRunId(run.getId())
+                    .setModelJson(jsonModel)
+                    .build();
+
+
+
+            System.out.println(logModel);
+
+            ModelRegistry.CreateModelVersion.newBuilder()
+                    .setName("LogisticRegressionModel")
+                    .setRunId(run.getId())
+                    .setSource("DefaultEndpointsProtocol=https;AccountName=emergeartifactstore;AccountKey=8atYYzEevj5iElQfwWeyEnshETGfftBS75gLXF2O7Ay7HV2DEeXLic0tjeswqGYjPVyXLAIXQzohVMEBtRz9ew==;EndpointSuffix=core.windows.net")
+                    .build();*/
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        run.endRun();
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+        ArrayList<ArrayList> results = new ArrayList<>();
+    }
 
     /**
      * This method used to find a trends(s) within a given data.
