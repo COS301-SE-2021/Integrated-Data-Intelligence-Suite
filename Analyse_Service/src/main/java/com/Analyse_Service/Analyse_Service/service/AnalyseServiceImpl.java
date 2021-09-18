@@ -208,7 +208,7 @@ public class AnalyseServiceImpl {
         FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList,parsedArticleList); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
 
-        /*FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList);
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList,parsedArticleList);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
 
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
@@ -225,23 +225,23 @@ public class AnalyseServiceImpl {
 
         //trainFindTrendsArticlesLR(parsedArticleList);
 
-        /*TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
         TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
         this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
         TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);*/
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
-        return new AnalyseDataResponse(null,null,null,null,null,null);
-                /*findPatternResponse.getPattenList(),//null,null,null,null);
+        return new AnalyseDataResponse(//null,null,null,null,null,null);
+                findPatternResponse.getPattenList(),//null,null,null,null);
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
                 findAnomaliesResponse.getPattenList(),
-                wordList);*/
+                wordList);
     }
 
 
@@ -728,6 +728,33 @@ public class AnalyseServiceImpl {
             }
         }
 
+        ArrayList<ArrayList> requestAData = request.getArticleList();
+
+        for(int i=0; i < requestAData.size(); i++){
+            List<Object> row = new ArrayList<>();
+
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestAData.get(i).get(5);
+
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            row = new ArrayList<>();
+            for (int j=0; j< namedEntities.size(); j++){
+                if (row.isEmpty()) {
+                    row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                }
+                else {
+                    if(!row.contains(namedEntities.get(j).get(0).toString())) {
+                        row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                    }
+                }
+
+            }
+            if (!row.isEmpty()) {
+                Row relationshipRow = RowFactory.create(row);
+                relationshipData.add(relationshipRow);
+            }
+        }
+
         System.out.println(relationshipData);
 
         StructType schema = new StructType(new StructField[]{ new StructField(
@@ -735,7 +762,7 @@ public class AnalyseServiceImpl {
         });
 
         Dataset<Row> itemsDF = sparkRelationships.createDataFrame(relationshipData, schema);
-        itemsDF.show();
+        itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
 
@@ -844,7 +871,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        fpModel.freqItemsets().show();
+        fpModel.freqItemsets().show(1000,1000);
         List<Row> Rdata = fpModel.freqItemsets().collectAsList();
 
         ArrayList<ArrayList> results = new ArrayList<>();
