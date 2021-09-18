@@ -142,7 +142,7 @@ public class AnalyseServiceTest {
 
         TestList.add(row);
 
-        FindPatternRequest test = new FindPatternRequest(TestList,null);
+        FindPatternRequest test = new FindPatternRequest(TestList,TestList);
         FindPatternResponse testResults = service.findPattern(test);
         Assertions.assertNotNull(testResults);
     }
@@ -164,7 +164,8 @@ public class AnalyseServiceTest {
         ArrayList<ArrayList> input = new ArrayList<>();
         input.add(TestList);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(input,null);
+
+        FindRelationshipsRequest test = new FindRelationshipsRequest(input,input);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
