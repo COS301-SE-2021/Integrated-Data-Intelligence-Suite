@@ -168,11 +168,11 @@ public class GatewayServiceController {
      * @param request This is the body send by POST
      * @return This is the response http entity
      */
-    @PostMapping(value = "/changePermission",
+    @PostMapping(value = "/changeUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ManagePermissionsResponse> managePermissions(@RequestBody ManagePermissionsRequest request) {
-        ManagePermissionsResponse response = userClient.managePermissions(request);
+    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
+        ChangeUserResponse response = userClient.managePermissions(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -5,7 +5,7 @@ import {
 import { CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import DataSourceList from '../../components/DataSourceList/DataSourceList';
-import Permissions from '../PermissionsPage/Permissions';
+import Users from '../PermissionsPage/Permissions';
 import ProfilePage from '../ProfilePage/ProfilePage';
 // import AddDataSource from '../AddDataSourcePage/AddDataSource';
 
@@ -35,7 +35,7 @@ function getLocalUser() {
 }
 
 const SettingsPage = () => {
-  const [component, setComponent] = useState('Permissions');
+  const [component, setComponent] = useState('Users');
   const [user, setUser] = useState(getLocalUser());
   const history = useHistory();
   const colorOne = '#E8E8E9';
@@ -48,11 +48,11 @@ const SettingsPage = () => {
                   <Col flex="auto" style={{ opacity: 0 }}>.</Col>
                   <Col style={{ padding: '30px 10px' }} className="left-column" flex="160px">
 
-                      { user && user.isAdmin && <div id="Permissions" className="option active" onClick={() => setComponent('Permissions')}>Permissions</div>}
-
                       <div id="Profile" className="option" onClick={() => setComponent('Profile')}>Profile</div>
 
-                      { user && user.isAdmin && <div id="Data Sources" className="option active" onClick={() => setComponent('Data Sources')}>Data Sources</div>}
+                      { user && user.isAdmin && <div id="Users" className="option active" onClick={() => setComponent('Users')}>Manage Users</div>}
+
+                      { user && user.isAdmin && <div id="Data Sources" className="option" onClick={() => setComponent('Data Sources')}>Data Sources</div>}
                   </Col>
                   <Col style={{ padding: '0 0px 30px 0', backgroundColor: colorOne, maxWidth: '700px' }} className="right-column" flex="60%">
                       <div>
@@ -64,8 +64,8 @@ const SettingsPage = () => {
                               {/* eslint-disable-next-line max-len */}
                               {/* <CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /> */}
                           </div>
-                          { component === 'Permissions' && user && user.isAdmin && setActive(component) && <Permissions />}
                           { component === 'Profile' && setActive(component) && <ProfilePage />}
+                          { component === 'Users' && user && user.isAdmin && setActive(component) && <Users />}
                           { component === 'Data Sources' && user && user.isAdmin && setActive(component) && <DataSourceList /> }
                       </div>
                   </Col>
