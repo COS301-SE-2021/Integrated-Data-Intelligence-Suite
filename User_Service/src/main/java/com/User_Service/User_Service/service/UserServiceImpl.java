@@ -356,10 +356,10 @@ public class UserServiceImpl {
         Optional<User> currentUser = repository.findUserById(UUID.fromString(request.getId()));
 
         if(currentUser.isPresent()) {
-            return new GetCurrentUserResponse(true, "Succesfully returned current user", currentUser.get().getFirstName(), currentUser.get().getLastName(), currentUser.get().getUsername(), currentUser.get().getEmail(), currentUser.get().getAdmin());
+            return new GetCurrentUserResponse(true, "Successfully returned current user", currentUser.get().getFirstName(), currentUser.get().getLastName(), currentUser.get().getUsername(), currentUser.get().getEmail(), currentUser.get().getAdmin());
         }
         else {
-            return new GetCurrentUserResponse(false, "User does not exist.");
+            return new GetCurrentUserResponse(false, "User does not exist");
         }
     }
 
@@ -414,7 +414,7 @@ public class UserServiceImpl {
             success = false;
         }
         else {
-            message = "Returned list of users.";
+            message = "Returned list of users";
             success = true;
         }
         return new GetAllUsersResponse(message, success, users);
