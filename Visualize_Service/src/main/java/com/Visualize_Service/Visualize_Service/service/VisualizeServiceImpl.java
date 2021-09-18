@@ -14,7 +14,7 @@ import java.util.*;
 @Service
 public class VisualizeServiceImpl {
 
-    private HashSet<String> filterdCloud = new HashSet<String>();
+    private HashSet<String> foundWords = new HashSet<String>();
 
 
 
@@ -40,7 +40,7 @@ public class VisualizeServiceImpl {
         }
 
         ArrayList<ArrayList> outputData = new ArrayList<>();
-        setCloud();
+
 
 
         //***********************Overview Section*************************//
@@ -139,9 +139,9 @@ public class VisualizeServiceImpl {
 
         //WordCloud Sunburst
         //TODO: request.getWordList() !!!!this wont work for now
-        CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getTrendList(),wordCloudPieChartGraphResponse.getDominantWords());
+        /*CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getTrendList(),wordCloudPieChartGraphResponse.getDominantWords());
         CreateWordCloudSunBurstGraphResponse wordCloudSunBurstGraphResponse = this.createWordCloudSunBurstGraph(wordCloudSunBurstGraphRequest);
-        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
 
 
         //Network graph (Relationships)
@@ -542,12 +542,19 @@ public class VisualizeServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
-        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
+
         ArrayList<Graph> output = new ArrayList<>();
 
 
-        ArrayList<String> wordList = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
+        /*for (int i = 0; i < reqData.size(); i++) {
             ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
             //System.out.println(locs.toString());
 
@@ -559,7 +566,7 @@ public class VisualizeServiceImpl {
                     }
                 }
             }
-        }
+        }*/
 
         String text =wordList.get(0);
         for(int i =1; i < wordList.size(); i++){
@@ -592,7 +599,6 @@ public class VisualizeServiceImpl {
                 wordList.add(temp.get(j));
             }
         }
-
 
         ArrayList<Graph> output = new ArrayList<>();
         ArrayList<String> dominantWords = new ArrayList<>();
@@ -716,106 +722,20 @@ public class VisualizeServiceImpl {
         ArrayList<String> dominantWords = request.getDominantWords();
         ArrayList<Graph> output = new ArrayList<>();
 
+        SunBurstGraph parentNode = new SunBurstGraph();
+        parentNode.children = new ArrayList<>();
+
+        for(int i=0; i< dominantWords.size(); i++){
+
+            SunBurstNodeGraph baseSunBurstNodeGraph = new SunBurstNodeGraph();
+            baseSunBurstNodeGraph.name = dominantWords.get(i);
+            baseSunBurstNodeGraph.children = associateSunburstWord(associatedWords,dominantWords.get(i), false); //search
 
 
-
-
-        /*
-        HashMap<String, Integer> wordMap = new HashMap<>();
-
-        //ArrayList<String> wordList = new ArrayList<>();
-        for (int i = 0; i < wordList.size(); i++) {
-            if (wordMap.containsKey(wordList.get(i)) == false) {
-                wordMap.put(wordList.get(i), 1);
-            } else {
-                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
-            }
+            parentNode.children.add(baseSunBurstNodeGraph);
         }
 
-        System.out.println("Investigate here");
-        System.out.println(wordMap);
-
-
-        // Sort the list by values
-        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
-
-
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
-            public int compare(Map.Entry<String, Integer> o1,
-                               Map.Entry<String, Integer> o2)
-            {
-                return o2.getValue().compareTo(o1.getValue()); //des
-            }
-        });
-
-
-        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
-        for (Map.Entry<String, Integer> values : list) {
-            finalHash.put(values.getKey(), values.getValue());
-        }
-
-        System.out.println("Investigate here 2");
-        System.out.println(finalHash);
-
-
-        //count word frequency
-        int totalCount = 0;
-        int sumCount = 0;
-
-
-
-        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
-            totalCount = totalCount + set.getValue();
-        }
-
-        System.out.println("TOTAL HERE");
-        System.out.println(totalCount);
-
-        if(totalCount ==0){
-            throw new InvalidRequestException("Number of cloud objects equals zero");
-        }
-
-        //output
-        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
-            System.out.println(set.getKey() + " : " + set.getValue() );
-
-            sumCount = sumCount + set.getValue();
-
-            System.out.println("Sum : " + sumCount);
-
-
-            //if((((float)sumCount /totalCount)*100) < 65.0f) {
-            if( (((float) set.getValue())/totalCount*100) > 1.5f){
-                PieChartGraph out = new PieChartGraph();
-                out.label = set.getKey();
-                out.x = set.getKey();
-                out.y = ((double) set.getValue())/totalCount*100.00;
-                out.y = (double) Math.round(out.y *100) /100;
-
-                System.out.println("CLOUD VALUES HERE");
-                System.out.println(out.y);
-
-                //System.out.println(out.words);
-                output.add(out);
-            }
-            else{
-                PieChartGraph out = new PieChartGraph();
-                out.label = "{OTHERS}";
-                out.x = "the rest";
-                //DecimalFormat df = new DecimalFormat("#.##");
-                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
-                out.y = (double) Math.round(out.y *100) /100;
-
-                System.out.println("CLOUD VALUES HERE - Rest");
-                System.out.println(out.y);
-
-                //System.out.println(out.words);
-                output.add(out);
-
-                break;
-            }
-        }*/
-
+        output.add(parentNode);
 
         return new CreateWordCloudSunBurstGraphResponse(output);
     }
@@ -1106,7 +1026,7 @@ public class VisualizeServiceImpl {
         return new CreateTimelineGraphResponse(output);
     }
 
-    /***TODO: Scatter ****/
+    /*** TODO: Scatter ***/
 
     //no text over time/dates
     public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request)
@@ -1487,7 +1407,72 @@ public class VisualizeServiceImpl {
         return true;
     }
 
-    private void setCloud() {
+
+    private ArrayList<SunBurstGraph> associateSunburstWord(ArrayList<ArrayList> associatedWords, String searchName, Boolean isLeaf) {
+
+        ArrayList<SunBurstGraph> output = new ArrayList<>();
+
+        int maxWordCount = 0;
+        for(int i=0; i <  associatedWords.size(); i++){
+            maxWordCount = maxWordCount + associatedWords.get(i).size();
+        }
+
+        for(int i = 0 ; i < associatedWords.size(); i++){
+            ArrayList<String> sentenceWords = associatedWords.get(i);
+
+            if(sentenceWords.contains(searchName)){
+
+                for(int j = 0 ; j < sentenceWords.size(); j++) {
+                    String foundName = sentenceWords.get(j);
+
+                    if( (foundName.equals(searchName)) || (foundWords.contains(foundName)) ) //skips searched name value and used words
+                        continue;
+
+                    if (isLeaf == false) { //node
+
+                        SunBurstNodeGraph sunBurstGraph = new SunBurstNodeGraph();
+                        sunBurstGraph.name = foundName;
+
+                        if(maxWordCount > ( foundWords.size()*0.65) ) {
+                            sunBurstGraph.children = associateSunburstWord(associatedWords, foundName, true);
+                        }
+                        else{
+                            sunBurstGraph.children = associateSunburstWord(associatedWords, foundName, false);
+                        }
+
+                        foundWords.add(foundName);
+
+                        output.add(sunBurstGraph);
+                    } else {//leaf
+                        SunBurstLeafGraph sunBurstGraph = new SunBurstLeafGraph();
+                        sunBurstGraph.name = foundName;
+
+                        ArrayList<String> hexValues = new ArrayList<>();
+                        hexValues.add("#12939A");
+                        hexValues.add("#FF9833");
+
+
+                        sunBurstGraph.hex = hexValues.get(j % hexValues.size());
+
+                        long leftLimit = 300L;
+                        long rightLimit = 5000L;
+                        sunBurstGraph.value = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));;
+
+                        foundWords.add(foundName);
+
+                        output.add(sunBurstGraph);
+                    }
+                }
+
+            }
+        }
+
+        return output;
+    }
+
+
+
+    /*private void setCloud() {
         filterdCloud.add("is");	filterdCloud.add("was");	filterdCloud.add("are");	filterdCloud.add("be");	filterdCloud.add("have");
         filterdCloud.add("had");	filterdCloud.add("were");	filterdCloud.add("can");	filterdCloud.add("said");	filterdCloud.add("use");
         filterdCloud.add("do");	filterdCloud.add("will");	filterdCloud.add("would");	filterdCloud.add("make");	filterdCloud.add("like");
@@ -1557,7 +1542,9 @@ public class VisualizeServiceImpl {
         filterdCloud.add("and");	filterdCloud.add("as");	filterdCloud.add("or");	filterdCloud.add("but");
         filterdCloud.add("if");	filterdCloud.add("than");	filterdCloud.add("because");	filterdCloud.add("while");
         filterdCloud.add("it’s");	filterdCloud.add("don’t");
-    }
+    }*/
+
+
 
 
 }
