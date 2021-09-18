@@ -296,6 +296,48 @@ public class UserServiceImpl {
     }
 
     /**
+     * This function will resend the verification code to user.
+     * @param request This class contains the information of the user.
+     * @return The return class returns if the verification process was successful**
+     */
+    @Transactional
+    public ResendCodeResponse resendCode(ResendCodeRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+
+        if(request.getEmail() == null) {
+            throw new InvalidRequestException("The request email is null");
+        }
+
+        Optional<User> userCheck = repository.findUserByEmail(request.getEmail());
+
+        if(userCheck.isEmpty()) {
+            return new ResendCodeResponse(false, "User does not exist");
+        }
+        else {
+            User user = userCheck.get();
+
+            String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
+            emailText += user.getVerificationCode();
+            String to = user.getEmail();
+            String from = "emergenoreply@gmail.com";
+            String subject = "IDIS Verification Code";
+
+            SendEmailNotificationRequest emailRequest = new SendEmailNotificationRequest(emailText, to, from, subject);
+
+            try {
+                CompletableFuture<SendEmailNotificationResponse> emailResponse  = notificationService.sendEmailNotification(emailRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResendCodeResponse(false, "An error has occurred while sending an the verification code to user");
+            }
+
+            return new ResendCodeResponse(true, "Verification code sent");
+        }
+    }
+
+    /**
      * This function will allow the user to reset their password and store the new password
      * in the database.
      * @param request This class will contain the new password of the user.
@@ -335,7 +377,7 @@ public class UserServiceImpl {
                 return new ResetPasswordResponse(false, "Password not updated");
             }
             else {
-                return new ResetPasswordResponse(true, "Password successfully updated.");
+                return new ResetPasswordResponse(true, "Password successfully updated");
             }
         }
     }
