@@ -83,15 +83,54 @@ public class GatewayServiceControllerTest {
 
 
     @Test
-    @DisplayName("When gateway check connection")
+    @DisplayName("gateway check connection")
     public void gatewayRequestConnection() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/main/space"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/main/key"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
+    @DisplayName("When analyzeRequest is empty")
+    public void analyzeDataEmptyRequest() throws Exception {
+
+        ArrayList<ParsedData> dataList = new ArrayList<>();
+        ParsedData parsedData = new ParsedData();
+        dataList.add(parsedData);
+
+        ArrayList<ParsedArticle> articleList = new ArrayList<>();
+        ParsedArticle parsedArticle = new ParsedArticle();
+        articleList.add(parsedArticle);
+
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList,articleList);
+
+        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+
+        Assertions.assertNull(analyseResponse);
+
+        /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(analyseRequest);
+
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null);
+        when( analyseClient.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof GatewayException));
+
+        AnalyseDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);*/
+    }
+
+
+    @Test
     @DisplayName("When analyzeRequest is Null")
-    public void analyzeDataNullRequest() throws Exception {
+    public void analyzeDataNullRequest2() throws Exception {
 
         ArrayList<ParsedData> dataList = new ArrayList<>();
         ParsedData parsedData = new ParsedData();
