@@ -214,25 +214,26 @@ public class AnalyseServiceImpl {
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
 
-        //FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDatalist);
-        //FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList);
+        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
 
-        //FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDatalist);
-        //FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList);
+        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
 
 
         /*********************Result**************************/
 
-        //trainFindTrendsArticlesLR(parsedArticleList);
+        //TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
+        // trainFindTrendsArticlesLR(findTrendsArticlesRequest);
 
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
-        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-        TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
-        this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+        //TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
+        //this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
-        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
+        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
         return new AnalyseDataResponse(//null,null,null,null,null,null);
@@ -1219,8 +1220,8 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
-    public void trainFindTrendsArticlesLR(ArrayList<ArrayList> request){
-        /*if (request == null) {
+    public void trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request) throws InvalidRequestException {
+        if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
         if (request.getDataList() == null) {
@@ -1243,7 +1244,7 @@ public class AnalyseServiceImpl {
         /*******************SETUP DATA*****************/
 
         List<Row> trendsData = new ArrayList<>();
-        ArrayList<ArrayList> requestData = request;
+        ArrayList<ArrayList> requestData = request.getDataList();
 
         ArrayList<String> types = new ArrayList<>();
 
