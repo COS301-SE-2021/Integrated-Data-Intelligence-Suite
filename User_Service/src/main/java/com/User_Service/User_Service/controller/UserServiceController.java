@@ -66,4 +66,9 @@ public class UserServiceController {
     public @ResponseBody VerifyAccountResponse verifyAccount(@RequestBody VerifyAccountRequest request) throws Exception {
         return service.verifyAccount(request);
     }
+
+    @PostMapping(value = "/resendCode")
+    public @ResponseBody ResendCodeResponse resendCode(@RequestBody ResendCodeRequest request) throws Exception {
+        return service.resendCode(request);
+    }
 }

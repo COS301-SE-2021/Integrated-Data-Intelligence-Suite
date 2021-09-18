@@ -152,6 +152,25 @@ public class UserService {
         return userResponse;
     }
 
+    public ResendCodeResponse resendCode(ResendCodeRequest userRequest) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/resendCode", request, ResendCodeResponse.class);
+
+        return userResponse;
+    }
+
     public GetUserResponse getUser(GetUserRequest userRequest){
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
