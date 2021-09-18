@@ -53,7 +53,9 @@ const LoginPage = () => {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(values)
                 };
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/login`, requestOptions)
+
+                //fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/login`, requestOptions)
+                fetch("http://20.49.228.222:3000/user/login", requestOptions)
                     .then(response => {
                         return response.json()
                     }).then(json => {

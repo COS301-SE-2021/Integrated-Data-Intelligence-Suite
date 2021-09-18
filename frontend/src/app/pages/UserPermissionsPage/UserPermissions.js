@@ -28,7 +28,9 @@ const UserPermissions = () => {
         }
         console.log("userdata ",user.user);
         console.log("body is ", requestBody)
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/changePermission`,{
+
+        //fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/changePermission`,{
+        fetch("http://20.49.228.222:3000/changePermission",{
             method:"POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(requestBody)
