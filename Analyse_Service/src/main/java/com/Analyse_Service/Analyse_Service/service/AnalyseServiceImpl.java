@@ -114,6 +114,8 @@ public class AnalyseServiceImpl {
 
         /*******************USE NLP******************/
 
+        ArrayList<ArrayList> wordList= null;
+
         /**social**/
         ArrayList<ParsedData> dataList = request.getDataList();
         ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
@@ -124,7 +126,9 @@ public class AnalyseServiceImpl {
         }
 
         FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
-        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = this.findNlpProperties(findNlpPropertiesRequestSocial);
+        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
+        wordList = (ArrayList<ArrayList>) nlpResults.get(1);
 
         /**articles**
         ArrayList<ParsedArticle> articleList = request.getArticleList();
@@ -205,7 +209,8 @@ public class AnalyseServiceImpl {
                 findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
-                findAnomaliesResponse.getPattenList());
+                findAnomaliesResponse.getPattenList(),
+                wordList);
     }
 
 
@@ -215,7 +220,7 @@ public class AnalyseServiceImpl {
      * @return FindEntitiesResponse This object contains data of the entities found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public ArrayList<FindNlpPropertiesResponse> findNlpProperties(FindNlpPropertiesRequest request)
+    public List<Object> findNlpProperties(FindNlpPropertiesRequest request)
             throws InvalidRequestException {
 
         if (request == null) {
@@ -284,6 +289,8 @@ public class AnalyseServiceImpl {
 
         System.out.println("DATA COUNT : " + dataCount);
 
+        ArrayList<ArrayList> entityList = new ArrayList<>();
+
 
         /**sentiment**/
         Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
@@ -318,6 +325,8 @@ public class AnalyseServiceImpl {
 
         for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
             //System.out.println("getting response : " + dataIndex);
+
+            ArrayList<String> listData =  new ArrayList<>();
 
             Row textRow = textRowData.get(dataIndex);
             Row entityRow = entityRowData.get(dataIndex);
@@ -365,12 +374,17 @@ public class AnalyseServiceImpl {
                     nameEntityRow.add(nameEntityText);
                     nameEntityRow.add(nameEntityType);
                     nameEntities.add(nameEntityRow);
+
+                    listData.add(nameEntityText);
                     entityIndex = entityIndex + 1;
                 }
+
             }
 
             response.get(dataIndex).setNamedEntities(nameEntities);
+            entityList.add(listData);
         }
+
 
 
         /**OLD NLP
@@ -422,7 +436,7 @@ public class AnalyseServiceImpl {
          }*/
 
 
-        return response;
+        return Arrays.asList(response, entityList);
     }
 
 
@@ -2233,11 +2247,6 @@ public class AnalyseServiceImpl {
         return new FetchParsedDataResponse(list );
     }
 
-
-    public SaveAIModelResponse fetchAIModel(SaveAIModelRequest request){
-
-        return new SaveAIModelResponse(true);
-    }
 
 }
 
