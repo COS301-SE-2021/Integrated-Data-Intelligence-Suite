@@ -1,7 +1,5 @@
 package com.Gateway_Service.Gateway_Service.dataclass.impor;
 
-import com.Import_Service.Import_Service.dataclass.ImportedData;
-
 import java.util.ArrayList;
 
 public class ImportDataResponse {
