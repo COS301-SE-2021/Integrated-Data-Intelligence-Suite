@@ -26,7 +26,7 @@ const ResendPage = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: 'thisISTest@gmail.com',
+            email: '',
         },
         validate,
         onSubmit: (values) => {

@@ -318,7 +318,7 @@ public class UserServiceImpl {
         else {
             User user = userCheck.get();
 
-            String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
+            String emailText = "Your verification code is:\n";
             emailText += user.getVerificationCode();
             String to = user.getEmail();
             String from = "emergenoreply@gmail.com";
