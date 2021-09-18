@@ -1,13 +1,18 @@
 package com.Gateway_Service.Gateway_Service.controller;
 
-import com.Analyse_Service.Analyse_Service.controller.AnalyseServiceController;
+/*import com.Analyse_Service.Analyse_Service.controller.AnalyseServiceController;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.AnalyseDataRequest;
 import com.Analyse_Service.Analyse_Service.response.AnalyseDataResponse;
-import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
+import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;*/
 import com.Gateway_Service.Gateway_Service.GatewayServiceApplication;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParsedArticle;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParsedData;
+import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -52,8 +57,8 @@ public class GatewayServiceControllerTest {
     //@MockBean
     //private GatewayServiceController controller;
 
-    @MockBean
-    private AnalyseServiceImpl service;
+    //@MockBean
+    //private AnalyseServiceImpl service;
 
 
     @MockBean
@@ -107,14 +112,14 @@ public class GatewayServiceControllerTest {
         String requestJson=ow.writeValueAsString(analyseRequest);
 
         AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null);
-        when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+        when( analyseClient.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof InvalidRequestException));
+                .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof GatewayException));
 
         AnalyseDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);
 
