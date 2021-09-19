@@ -15,18 +15,19 @@ with mlflow.start_run(run_name="YOUR_RUN_NAME") as run:
     #mlflow.log_metrics({"metric_1": random(), "metric_2": random() + 1})
 
 
-    foundModel = LogisticRegression.load(Path)
+    unflavouredModel = LogisticRegression.load("../Models/LogisticRegression)
 
-    model = mlflow.spark.load_model("../Models/LogisticRegression")
 
-    mlflow.spark.log_model(foundModel, "LogisticRegression")
+    mlflow.spark.log_model(unflavouredModel, "LogisticRegression")
 
-    mlflow.spark.save_model(foundModel, "spark-model")
+    mlflow.spark.save_model(unflavouredModel, "spark-model")
 
     # Log the spark model and register as version 1
-    mlflow.spark.log_model(
-        sk_model=sk_learn_rfr,
-        artifact_path="sklearn-model",
-        registered_model_name="sk-learn-random-forest-reg-model"
-    )
+    #mlflow.spark.log_model(
+    #    sk_model=sk_learn_rfr,
+    #    artifact_path="sklearn-model",
+    #    registered_model_name="sk-learn-random-forest-reg-model"
+    #)
 
+    flavouredModel = mlflow.spark.load_model("LogisticRegression")
+    model.save_model("../Models/LogisticRegression")
