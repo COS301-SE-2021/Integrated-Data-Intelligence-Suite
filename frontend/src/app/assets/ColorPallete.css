@@ -15,8 +15,18 @@
     /*Personal Info Card*/
     --personal-card-bg: #efefef;
     --personal-info-title: #737373;
+    --profile-background: #E8E8E9;
 
 
     /* chats page */
     --border-color: lightgrey;
+
+    /* login and registration */
+    --green-blue-background: #35a4b2;
+
+
+    /* settings page */
+    --black-border-color: black;
+    --green-blue-title: #35a4b2;
+
 }
