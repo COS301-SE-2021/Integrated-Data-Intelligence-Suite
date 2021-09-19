@@ -81,9 +81,13 @@ class HomePage extends Component {
                                 <div id={'selling-point-2-container'}>
                                     <div/>
                                     <div id={'selling-point-2'}>
-                                        The quick brown fox jumps over the lazy dog but
-                                        accidentally steps on a thorn and its wails jump wake up
-                                        the dog from its sleep.
+                                        Your own Intelligent Data Suite.
+                                        <br/>
+                                        Connect your own data sources.
+                                        <br/>
+                                        Import your own data and visualise it.
+                                        <br/>
+                                        All with a few clicks.
                                     </div>
                                 </div>
                             </div>
