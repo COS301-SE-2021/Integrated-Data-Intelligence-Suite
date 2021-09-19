@@ -1,4 +1,4 @@
-package com.Analyse_Service.Analyse_Service.response;
+package com.Gateway_Service.Gateway_Service.dataclass.analyse;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,10 @@ public class AnalyseDataResponse {
     public ArrayList<ArrayList> predictionList;
     public ArrayList<ArrayList> trendList;
     public ArrayList<String> anomalyList;
-    public ArrayList<ArrayList> wordList;
+
+    boolean fallback = false;
+    String fallbackMessage = "";
+
 
     public AnalyseDataResponse(){
 
@@ -18,37 +21,48 @@ public class AnalyseDataResponse {
                                ArrayList<ArrayList> relationshipList,
                                ArrayList<ArrayList> predictionList,
                                ArrayList<ArrayList> trendList,
-                               ArrayList<String> anomalyList,
-                               ArrayList<ArrayList> wordList){
+                               ArrayList<String> anomalyList){
         this.patternList = pattenList;
         this.relationshipList = relationshipList;
         this.predictionList = predictionList;
         this.trendList = trendList;
         this.anomalyList = anomalyList;
-        this.wordList = wordList;
     }
 
+
     public ArrayList<ArrayList> getPattenList(){
-        return this.patternList;
+        return patternList;
     }
 
     public ArrayList<ArrayList> getRelationshipList(){
-        return this.relationshipList;
+        return relationshipList;
     }
 
     public ArrayList<ArrayList> getPredictionList(){
-        return this.predictionList;
+        return predictionList;
     }
 
     public ArrayList<ArrayList> getTrendList(){
-        return this.trendList;
+        return trendList;
     }
 
     public ArrayList<String> getAnomalyList(){
-        return this.anomalyList;
+        return anomalyList;
     }
 
-    public ArrayList<ArrayList> getWordList(){
-        return this.wordList;
+
+    public void setFallback(boolean fallback){
+        this.fallback = fallback;
+    }
+    public void setFallbackMessage(String fallbackMessage){
+        this.fallbackMessage = fallbackMessage;
+    }
+
+    public boolean getFallback(){
+        return this.fallback;
+    }
+
+    public String getFallbackMessage(){
+        return this.fallbackMessage;
     }
 }

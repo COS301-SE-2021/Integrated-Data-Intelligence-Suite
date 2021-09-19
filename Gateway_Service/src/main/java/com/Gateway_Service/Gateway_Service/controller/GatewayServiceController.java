@@ -2,9 +2,16 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
-
-
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
+import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
+import com.Gateway_Service.Gateway_Service.dataclass.user.*;
+import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.service.AnalyseService;
 import com.Gateway_Service.Gateway_Service.service.ImportService;
 import com.Gateway_Service.Gateway_Service.service.ParseService;
@@ -16,13 +23,11 @@ import com.Gateway_Service.Gateway_Service.service.VisualizeService;
 
 import com.Gateway_Service.Gateway_Service.service.UserService;
 
-import com.Parse_Service.Parse_Service.dataclass.ParsedData;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -49,8 +54,8 @@ public class GatewayServiceController {
     @Autowired
     private UserService userClient;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    //@Autowired
+    //private RestTemplate restTemplate;
 
 
 
@@ -124,6 +129,8 @@ public class GatewayServiceController {
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
     */
+
+
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
@@ -272,6 +279,7 @@ public class GatewayServiceController {
 
         ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
         parseResponse = parseClient.parseImportedData(parseRequestNews);
+        ArrayList<ParsedArticle> newsData = parseResponse.getArticleList();
 
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
@@ -293,7 +301,7 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData);//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
         AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
 
 

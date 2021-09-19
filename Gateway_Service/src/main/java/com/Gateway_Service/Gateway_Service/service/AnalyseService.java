@@ -1,6 +1,7 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 //@FeignClient(name = "Analyse-Service" ,  url = "localhost:9002/Analyse" , fallback = AnalyseServiceFallback.class)

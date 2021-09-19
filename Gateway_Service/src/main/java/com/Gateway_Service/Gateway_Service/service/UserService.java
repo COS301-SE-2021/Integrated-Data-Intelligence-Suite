@@ -1,6 +1,8 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -1,14 +1,14 @@
-package com.Analyse_Service.Analyse_Service.request;
+package com.Gateway_Service.Gateway_Service.dataclass.analyse;
 
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+
+
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParsedArticle;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParsedData;
 
 import java.util.ArrayList;
 
 public class AnalyseDataRequest {
-
     ArrayList<ParsedData> dataList;
-
     ArrayList<ParsedArticle> articleList;
 
     public AnalyseDataRequest(){
@@ -19,6 +19,7 @@ public class AnalyseDataRequest {
         this.dataList = dataList;
         this.articleList = articleList;
     }
+
 
     public ArrayList<ParsedData> getDataList(){
         return this.dataList;
