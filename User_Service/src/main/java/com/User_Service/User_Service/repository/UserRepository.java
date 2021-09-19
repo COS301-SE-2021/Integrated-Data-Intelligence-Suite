@@ -45,4 +45,20 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Modifying
     @Query("UPDATE users u SET u.isAdmin = :newAdmin WHERE u.id = :id")
     int updateAdmin(@Param("id")UUID userid, @Param("newAdmin") boolean newAdmin);
+
+    @Modifying
+    @Query("UPDATE users u SET u.firstName = :newFirst WHERE u.id = :id")
+    int updateFirstName(@Param("id")UUID userid, @Param("newFirst") String newFirst);
+
+    @Modifying
+    @Query("UPDATE users u SET u.lastName = :newLast WHERE u.id = :id")
+    int updateLastName(@Param("id")UUID userid, @Param("newLast") String newLast);
+
+    @Modifying
+    @Query("UPDATE users u SET u.username = :newUsername WHERE u.id = :id")
+    int updateUsername(@Param("id")UUID userid, @Param("newUsername") String newUsername);
+
+    @Modifying
+    @Query("UPDATE users u SET u.email = :newEmail WHERE u.id = :id")
+    int updateEmail(@Param("id")UUID userid, @Param("newEmail") String newEmail);
 }
