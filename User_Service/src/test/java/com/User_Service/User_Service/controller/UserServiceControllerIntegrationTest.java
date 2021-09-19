@@ -159,7 +159,7 @@ public class UserServiceControllerIntegrationTest {
         ChangeUserRequest request = new ChangeUserRequest(testUser1.getUsername(), testUser1.getAdmin(), Permission.IMPORTING);
 
         HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<ChangeUserResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
+        ResponseEntity<ChangeUserResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changeUser", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
 
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertTrue(responseEntity.getBody().isSuccess());
@@ -174,7 +174,7 @@ public class UserServiceControllerIntegrationTest {
         ChangeUserRequest request = new ChangeUserRequest("nonexistingUser", false, Permission.IMPORTING);
 
         HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<ChangeUserResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
+        ResponseEntity<ChangeUserResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/User/changeUser", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
 
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertFalse(responseEntity.getBody().isSuccess());
@@ -238,7 +238,7 @@ public class UserServiceControllerIntegrationTest {
 
 
     @Test
-    @Order(99)
+    @Order(14)
     @DisplayName("Delete_testUser1")
     public void removeMockUser() {
         Optional<User> user = userRepository.findUserByEmail(testUser1.getEmail());
