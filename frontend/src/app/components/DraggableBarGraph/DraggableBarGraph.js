@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight,
+    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, DiscreteColorLegend,
 } from 'react-vis';
 
 import { DATA } from '../../Mocks/BarGraphMock';
@@ -10,6 +10,16 @@ const colors = {
     primary: '#5873f9',
     secondary: '#12939A',
 };
+
+const ITEMS = [
+    { title: 'Options', color: '#ffffff' },
+    { title: 'Buttons', color: '#ffffff' },
+    { title: 'Select boxes', color: '#ffffff' },
+    { title: 'Date inputs', color: '#ffffff' },
+    { title: 'Password inputs', color: '#ffffff' },
+    { title: 'Forms', color: '#ffffff' },
+    { title: 'Other', color: '#ffffff' },
+];
 
 function highlightMapPoints(highlightedPoints) {
     const oldHighlightedPoints = document.getElementsByClassName('chosen_circle');
@@ -32,6 +42,7 @@ export default class DraggableBarGraph extends React.Component {
             selectionStart: null,
             selectionEnd: null,
             dataToBeDisplayed: null,
+            legendItems: null,
         };
     }
     static getDerivedStateFromProps(props) {
@@ -40,10 +51,14 @@ export default class DraggableBarGraph extends React.Component {
                 const dataPoints = Object.values(props.text[index]).map((item, i) => ({
                     x0: i, x: i + 1, y: item.y, classname: item.x,
                 }));
-                return { dataToBeDisplayed: dataPoints };
+                const legendPoints = Object.values(props.text[index]).map((item, i) => ({
+                    title: `${i}-${item.x}`, color: '#ffffff',
+                }));
+                return { dataToBeDisplayed: dataPoints, legendItems: legendPoints };
             }
         }
-        return { dataToBeDisplayed: DATA };
+
+        return { dataToBeDisplayed: DATA, legendItems: [] };
     }
 
     getAverageY() {
@@ -98,6 +113,8 @@ export default class DraggableBarGraph extends React.Component {
                                     return inStart || inEnd || inX || inX0 ? colors.secondary : colors.primary;
                                 }}
                             />
+
+                            <DiscreteColorLegend orientation="horizontal" items={this.state.legendItems} />
 
                             <Highlight
                               color="#829AE3"

@@ -16,6 +16,7 @@ import com.Gateway_Service.Gateway_Service.service.VisualizeService;
 
 import com.Gateway_Service.Gateway_Service.service.UserService;
 
+import com.Parse_Service.Parse_Service.dataclass.ParsedData;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,9 +246,12 @@ public class GatewayServiceController {
 
         /*********************PARSE*************************/
 
-        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());
         ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
+        ArrayList<ParsedData> socialMediaData = parseResponse.getDataList();
 
+        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSSCOURCE, importResponse.getList().get(1).getData(), request.getPermission());
+        parseResponse = parseClient.parseImportedData(parseRequestNews);
 
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
@@ -269,7 +273,7 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(parseResponse.getDataList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData);//    DataSource.TWITTER,ImportResponse. getJsonData());
         AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
 
 

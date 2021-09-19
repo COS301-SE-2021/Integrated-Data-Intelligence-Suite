@@ -31,7 +31,7 @@ public class ParseServiceImpl {
 
     /**
      * This method is used to structure the JSON string sent from the import-service.
-     * This method also calls the Extractor inferface to extract data based on the source
+     * This method also calls the Extractor interface to extract data based on the source
      * of the data.
      *
      * @param request This is the request object that contains the JSON string.
@@ -46,7 +46,7 @@ public class ParseServiceImpl {
             throw new InvalidRequestException("Request object is null");
         }
         else{
-            if (request.getJsonString() == null || request.getJsonString().isEmpty()){
+            if (request.getJsonString() == null || request.getJsonString().isEmpty()) {
                 throw new InvalidRequestException("Imported string is null");
             }
 
@@ -61,7 +61,7 @@ public class ParseServiceImpl {
         ArrayList<ParsedArticle> parsedArticlesList = new ArrayList<>();
 
         if (request.getType() == DataSource.TWITTER) {
-            JSONArray jsonArray = obj.getJSONArray("statuses");;
+            JSONArray jsonArray = obj.getJSONArray("statuses");
             for (int i=0; i < jsonArray.length(); i++){
                 //create and set node
                 ParsedData parsedData = new ParsedData();

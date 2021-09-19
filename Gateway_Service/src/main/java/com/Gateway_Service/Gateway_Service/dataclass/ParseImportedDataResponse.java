@@ -1,11 +1,14 @@
 package com.Gateway_Service.Gateway_Service.dataclass;
 
+import com.Parse_Service.Parse_Service.dataclass.ParsedArticle;
 import com.Parse_Service.Parse_Service.dataclass.ParsedData;
 
 import java.util.ArrayList;
 
 public class ParseImportedDataResponse {
     ArrayList<ParsedData> dataList;
+    ArrayList<ParsedArticle> articleList;
+
 
     boolean fallback = false;
     String fallbackMessage = "";
@@ -20,6 +23,10 @@ public class ParseImportedDataResponse {
 
     public ArrayList<ParsedData> getDataList(){
         return dataList;
+    }
+
+    public ArrayList<ParsedArticle> getArticleList() {
+        return articleList;
     }
 
     public void setFallback(boolean fallback){
