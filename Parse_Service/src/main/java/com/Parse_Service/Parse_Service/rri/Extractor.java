@@ -14,5 +14,5 @@ public  interface Extractor {
     GetTextResponse getText(GetTextRequest request) throws InvalidRequestException;
     GetDateResponse getDate(GetDateRequest request) throws InvalidRequestException;
     GetLocationResponse getLocation(GetLocationRequest request) throws InvalidRequestException;
-    GetLikesResponse getLikes(GetLikesRequest request) throws  InvalidRequestException;
+    GetLikesResponse getInteractions(GetLikesRequest request) throws  InvalidRequestException;
 }
