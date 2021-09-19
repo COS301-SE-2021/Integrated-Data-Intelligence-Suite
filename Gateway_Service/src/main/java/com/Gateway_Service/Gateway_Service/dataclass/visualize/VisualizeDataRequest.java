@@ -8,17 +8,20 @@ public class VisualizeDataRequest {
     public ArrayList<ArrayList> predictionList;
     public ArrayList<ArrayList> trendList;
     public ArrayList<String> anomalyList;
+    public ArrayList<ArrayList> wordList;
 
     public VisualizeDataRequest(ArrayList<ArrayList> patternList,
                                 ArrayList<ArrayList> relationshipList,
                                 ArrayList<ArrayList> predictionList,
                                 ArrayList<ArrayList> trendList,
-                                ArrayList<String> anomalyList){
+                                ArrayList<String> anomalyList,
+                                ArrayList<ArrayList> wordList){
         this.patternList = patternList;
         this.relationshipList = relationshipList;
         this.predictionList = predictionList;
         this.trendList = trendList;
         this.anomalyList = anomalyList;
+        this.wordList = wordList;
     }
 
     public ArrayList<ArrayList> getPatternList(){
@@ -36,5 +39,9 @@ public class VisualizeDataRequest {
 
     public ArrayList<String> getAnomalyList(){
         return anomalyList;
+    }
+
+    public ArrayList<ArrayList> getWordList(){
+        return wordList;
     }
 }

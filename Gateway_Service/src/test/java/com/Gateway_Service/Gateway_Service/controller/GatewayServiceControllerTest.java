@@ -150,7 +150,7 @@ public class GatewayServiceControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(analyseRequest);
 
-        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null);
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null, null);
         when( analyseClient.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 

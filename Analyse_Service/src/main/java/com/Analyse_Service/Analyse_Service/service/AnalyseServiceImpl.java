@@ -23,6 +23,9 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -1186,6 +1189,22 @@ public class AnalyseServiceImpl {
             File modelFile = new File("../models/LogisticRegressionModel");
 
             //TODO: flavor
+
+
+            CommandLine commandLine = CommandLine.parse("python ../rri/RegisterModel.py");
+            commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setStreamHandler(new PumpStreamHandler(System.out));
+            try {
+                executor.execute(commandLine);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
+
+            //TODO: flavor
+
+
             //client.logArtifact(run.getId(), modelFile);
 
             File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
