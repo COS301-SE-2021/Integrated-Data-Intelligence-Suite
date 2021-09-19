@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "IDIS",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
@@ -87,6 +87,8 @@
   "build": {
     "extends": null,
     "appId": "com.example.electron-cra",
+    "productName": "IDIS",
+    "target": "NSIS",
     "files": [
       "dist/**/*",
       "build/**/*",
@@ -95,6 +97,11 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "createDesktopShortcut": true
     }
   },
   "eslintConfig": {
