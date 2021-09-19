@@ -47,8 +47,8 @@
     /*width: max-content;*/
     height: max-content;
     padding: 20px;
-    /*justify-self: end;*/
-    justify-self: center;
+    justify-self: end;
+    /*justify-self: center;*/
     border-radius: 50px;
     z-index: 2;
     column-gap: 15px;
