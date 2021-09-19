@@ -6,8 +6,6 @@ import {
     Form, Input, Button, Checkbox, Card, Divider, message
 } from 'antd';
 import LoginButton from '../../components/LoginButton/LoginButton';
-import './loginPage.css';
-import '../../components/LoginButton/loginButton.css';
 
 // Validation Function
 const validate = (values) => {
@@ -191,8 +189,8 @@ export default function LoginPage(props) {
 
                             <Form.Item>
                                 Don't have an account?
-                                <Link to="/register">
-                                    <a className="register_link" href="#">Register now!</a>
+                                <Link to="/register" className="register_link">
+                                    Register now!
                                 </Link>
                             </Form.Item>
 
@@ -209,8 +207,8 @@ export default function LoginPage(props) {
 
                             <Form.Item>
                                 Cannot login?
-                                <Link to="/verify">
-                                    <a className="register_link" href="#">Click here to verify account!</a>
+                                <Link to="/verify" className="register_link">
+                                    Click here to verify account!
                                 </Link>
                             </Form.Item>
                         </form>

@@ -166,15 +166,13 @@ const VerifyPage = () => {
                             <Divider className="or_divider">
                                 OR
                             </Divider>
-                        </form>
 
-                        <Button
-                          type="link"
-                          className="link-button"
-                          href="/resend"
-                        >
-                            Resend code
-                        </Button>
+                            <Form.Item>
+                                <Link to="/resend" className="register_link">
+                                    Resend code
+                                </Link>
+                            </Form.Item>
+                        </form>
                     </div>
                     <div id="login-card-svg-bg" />
                 </div>
