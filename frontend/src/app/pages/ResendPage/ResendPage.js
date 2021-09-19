@@ -140,15 +140,13 @@ const ResendPage = () => {
                             <Divider className="or_divider">
                                 OR
                             </Divider>
-                        </form>
 
-                        <Button
-                          type="link"
-                          className="link-button"
-                          href="/verify"
-                        >
-                            Go back
-                        </Button>
+                            <Form.Item>
+                                <Link to="/verify" className="register_link">
+                                    Go back
+                                </Link>
+                            </Form.Item>
+                        </form>
                     </div>
                     <div id="login-card-svg-bg" />
                 </div>
