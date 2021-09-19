@@ -9,8 +9,8 @@
 }
 
 #nav-bar-logo {
-    background: white;
-    background-image: url("../../assets/idis-logo.png") !important;
+    background: var(--cultured);
+    background-image: url("../../assets/idis-logo-prussian-blue.png") !important;
     background-size: cover;
     background-position: center;
     color: black;
@@ -35,6 +35,13 @@
     /*margin: 0 30% !important;*/
     /*margin-left: 30% !important;*/
     /*margin-right: 30% !important;*/
+    color: var(--prussian-blue);
+}
+
+.nav-bar-item:hover {
+    text-underline: var(--prussian-blue);
+    text-decoration: underline;
+    color: var(--dodger-blue);
 }
 
 #nav-bar-left-col {
