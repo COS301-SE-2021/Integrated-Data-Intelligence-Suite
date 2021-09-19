@@ -1181,7 +1181,7 @@ public class AnalyseServiceImpl {
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
         try {
-            //lrModel.save("postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase");
+            //lrModel.save("Database");
             lrModel.write().overwrite().save("../models/LogisticRegressionModel");
             File modelFile = new File("../models/LogisticRegressionModel");
 
@@ -1209,7 +1209,7 @@ public class AnalyseServiceImpl {
             ModelRegistry.CreateModelVersion.newBuilder()
                     .setName("LogisticRegressionModel")
                     .setRunId(run.getId())
-                    .setSource("DefaultEndpointsProtocol=https;AccountName=emergeartifactstore;AccountKey=8atYYzEevj5iElQfwWeyEnshETGfftBS75gLXF2O7Ay7HV2DEeXLic0tjeswqGYjPVyXLAIXQzohVMEBtRz9ew==;EndpointSuffix=core.windows.net")
+                    .setSource("artifactstore")
                     .build();*/
 
         }catch (Exception e){
@@ -1500,7 +1500,7 @@ public class AnalyseServiceImpl {
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
         try {
-            //lrModel.save("postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase");
+            //lrModel.save("Database");
             lrModel.write().overwrite().save("../models/LogisticRegressionModel");
             File modelFile = new File("../models/LogisticRegressionModel");
 
@@ -1528,7 +1528,7 @@ public class AnalyseServiceImpl {
             ModelRegistry.CreateModelVersion.newBuilder()
                     .setName("LogisticRegressionModel")
                     .setRunId(run.getId())
-                    .setSource("DefaultEndpointsProtocol=https;AccountName=emergeartifactstore;AccountKey=8atYYzEevj5iElQfwWeyEnshETGfftBS75gLXF2O7Ay7HV2DEeXLic0tjeswqGYjPVyXLAIXQzohVMEBtRz9ew==;EndpointSuffix=core.windows.net")
+                    .setSource("artifactstore")
                     .build();*/
 
         }catch (Exception e){
