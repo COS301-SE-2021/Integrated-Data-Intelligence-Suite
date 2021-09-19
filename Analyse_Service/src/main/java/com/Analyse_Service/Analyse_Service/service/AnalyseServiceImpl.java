@@ -208,7 +208,20 @@ public class AnalyseServiceImpl {
         }
 
 
-        //TODO: idk maybe merge the results (socail-article) before here?? ----need to play around
+        /******************Select Best Models (registry)*******************/
+
+        String commandPath = "python ../rri/RegisterModel.py";
+        CommandLine commandLine = CommandLine.parse(commandPath);
+        //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setStreamHandler(new PumpStreamHandler(System.out));
+        try {
+            executor.execute(commandLine);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+
         /*******************Run A.I Models******************/
 
 
@@ -1186,13 +1199,15 @@ public class AnalyseServiceImpl {
         try {
             //lrModel.save("Database");
             lrModel.write().overwrite().save("../models/LogisticRegressionModel");
-            File modelFile = new File("../models/LogisticRegressionModel");
+
+            //File modelFile = new File("../models/LogisticRegressionModel");
+            //client.logArtifact(run.getId(), modelFile);
 
             //TODO: flavor
 
-
-            CommandLine commandLine = CommandLine.parse("python ../rri/RegisterModel.py");
-            commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+            String commandPath = "python ../rri/LogModel.py ../models/LogisticRegressionModel LogisticRegressionModel";
+            CommandLine commandLine = CommandLine.parse(commandPath);
+            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
             executor.setStreamHandler(new PumpStreamHandler(System.out));
             try {
@@ -1207,7 +1222,7 @@ public class AnalyseServiceImpl {
 
             //client.logArtifact(run.getId(), modelFile);
 
-            File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
+            //File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
 
             /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
             mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
@@ -1859,11 +1874,25 @@ public class AnalyseServiceImpl {
         try {
             dtModel.write().overwrite().save("../models/DecisionTreeModel");
 
-            File modelFile = new File("../models/DecisionTreeModel");
-            client.logArtifact(run.getId(), modelFile);
+            //File modelFile = new File("../models/DecisionTreeModel");
+            //client.logArtifact(run.getId(), modelFile);
+
+            String commandPath = "python ../rri/LogModel.py ../models/DecisionTreeModel DecisionTreeModel";
+            CommandLine commandLine = CommandLine.parse(commandPath);
+            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setStreamHandler(new PumpStreamHandler(System.out));
+            try {
+                executor.execute(commandLine);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
+
+
 
 
 
@@ -2454,8 +2483,20 @@ public class AnalyseServiceImpl {
         try {
             kmModel.write().overwrite().save("../models/KMeansModel");
 
-            File modelFile = new File("../models/KMeansModel");
-            client.logArtifact(run.getId(), modelFile);
+            //File modelFile = new File("../models/KMeansModel");
+            //client.logArtifact(run.getId(), modelFile);
+
+            String commandPath = "python ../rri/LogModel.py ../models/KMeansModel KMeansModel";
+            CommandLine commandLine = CommandLine.parse(commandPath);
+            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setStreamHandler(new PumpStreamHandler(System.out));
+            try {
+                executor.execute(commandLine);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
