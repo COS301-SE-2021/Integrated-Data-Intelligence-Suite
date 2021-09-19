@@ -52,6 +52,7 @@ export default class OverviewSection extends React.Component {
                     <SimpleCard
                         cardTitle="Total Interaction"
                         cardID="overview-metric-1"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing
@@ -63,6 +64,7 @@ export default class OverviewSection extends React.Component {
                     <SimpleCard
                         cardTitle="Trends"
                         cardID="overview-metric-3"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
@@ -74,6 +76,7 @@ export default class OverviewSection extends React.Component {
                     <SimpleCard
                         cardTitle="Overall Sentiment"
                         cardID="overview-metric-2"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
@@ -85,6 +88,7 @@ export default class OverviewSection extends React.Component {
                     <SimpleCard
                         cardTitle="Anomalies"
                         cardID="overview-metric-4"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing

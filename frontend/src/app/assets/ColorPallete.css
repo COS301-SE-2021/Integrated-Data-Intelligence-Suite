@@ -1,12 +1,15 @@
 :root {
     /*Overall App*/
     --neon-blue: #5773FA;
+    --dodger-blue: #148dff;
     /*--light-gray: #f4f7fc;*/
     --light-gray: #F1F2F8;
     --amount-increasing: #00b074;
     --grey-border-color: #e8e8e9;
     --simple-card-title-color: darkgrey;
 
+    --prussian-blue: #0E2A42;
+    --cultured: #f9fbfc;
 
 
     /*******************************/
@@ -18,7 +21,7 @@
     --profile-background: #E8E8E9;
 
 
-    /* chats page */
+    /* charts page */
     --border-color: lightgrey;
 
     /* login and registration */
