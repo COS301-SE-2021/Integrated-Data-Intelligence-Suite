@@ -258,6 +258,76 @@ public class UserServiceImpl {
     }
 
     /**
+     * This method will update the details of a specific user
+     * @param request This class contains the details of the user.
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    public UpdateProfileResponse updateProfile(UpdateProfileRequest request) throws Exception{
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+
+        if(request.getEmail() == null || request.getLastName() == null || request.getFirstName() == null || request.getUsername() == null) {
+            throw new InvalidRequestException("Some or all of the request values are null");
+        }
+
+        Optional<User> userCheck = repository.findUserById(UUID.fromString(request.getId()));
+
+        if(userCheck.isEmpty()) {
+            return new UpdateProfileResponse(false, "User does not exist");
+        }
+        else {
+            User u = userCheck.get();
+
+            boolean usernameUpdated = true;
+            boolean firstNameUpdated = true;
+            boolean lastNameUpdated = true;
+            boolean emailUpdated = true;
+
+            if(!u.getUsername().equals(request.getUsername())) {
+                int count = repository.updateUsername(u.getId(), request.getUsername());
+
+                if(count != 1) {
+                    usernameUpdated = false;
+                }
+            }
+
+            if(!u.getFirstName().equals(request.getFirstName())) {
+                int count = repository.updateFirstName(u.getId(), request.getFirstName());
+
+                if(count != 1) {
+                    firstNameUpdated = false;
+                }
+            }
+
+            if(u.getLastName().equals(request.getLastName())) {
+                int count = repository.updateLastName(u.getId(), request.getLastName());
+
+                if(count != 1) {
+                    lastNameUpdated = false;
+                }
+            }
+
+            if(u.getEmail().equals(request.getEmail())) {
+                int count = repository.updateEmail(u.getId(), request.getEmail());
+
+                if(count != 1) {
+                    emailUpdated = false;
+                }
+            }
+
+            if(!usernameUpdated || !firstNameUpdated || !lastNameUpdated || !emailUpdated) {
+                return new UpdateProfileResponse(false, "Failed to update account");
+            }
+            else {
+                return new UpdateProfileResponse(true, "Successfully updated account");
+            }
+        }
+    }
+
+    /**
      * This function verifies the user's authenticity.
      * @param request This class contains the information of the user.
      * @return The return class returns if the verification process was successful**
