@@ -9,7 +9,7 @@ const useGet = (url) => {
   useEffect(() => {
     const abortCont = new AbortController();
 
-    fetch(`http://20.108.56.39:80${url}`, { signal: abortCont.signal })
+    fetch(`http://localhost:9000${url}`, { signal: abortCont.signal })
       .then((res) => {
         if (!res.ok) {
           console.log(res);
