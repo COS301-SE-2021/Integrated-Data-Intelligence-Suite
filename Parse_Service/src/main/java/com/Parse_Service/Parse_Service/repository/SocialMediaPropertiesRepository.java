@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface SocialMediaPropertiesRepository extends JpaRepository<SocialMediaProperties, Long> {
 
-    @Query("SELECT s FROM news_properties s WHERE s.name = :name")
+    @Query("SELECT s FROM social_media_properties s WHERE s.name = :name")
     Optional<SocialMediaProperties> findSocialMediaPropertiesByName(@Param("name") String name);
 }

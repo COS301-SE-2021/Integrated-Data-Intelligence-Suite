@@ -47,8 +47,8 @@
     /*width: max-content;*/
     height: max-content;
     padding: 20px;
-    /*justify-self: end;*/
-    justify-self: center;
+    justify-self: end;
+    /*justify-self: center;*/
     border-radius: 50px;
     z-index: 2;
     column-gap: 15px;
@@ -139,6 +139,28 @@
     background: var(--cultured);
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
 }
+
+/*
+*Customizing The Scrollbar
+*
+ */
+#home-page-container::-webkit-scrollbar {
+    width: 11px;
+}
+
+#home-page-container::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: var(--cultured);
+}
+
+#home-page-container::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #c5bfbf;
+}
+
+#home-page-container::-webkit-scrollbar-thumb:active {
+    background: var(--dodger-blue);
+}
+
 

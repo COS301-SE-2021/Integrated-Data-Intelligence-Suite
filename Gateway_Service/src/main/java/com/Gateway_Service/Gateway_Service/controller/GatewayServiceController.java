@@ -262,6 +262,16 @@ public class GatewayServiceController {
     }
 
     /**
+     * This the endpoint for getting all the api sources.
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/getAllSources", produces = "application/json")
+    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
+        GetAllAPISourcesResponse response = importClient.getAllAPISources();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
      * This method is used to facilitate communication to all the Services.
      * Outputs data related to a topic/key.
      * @param key This is a path variable of string value
