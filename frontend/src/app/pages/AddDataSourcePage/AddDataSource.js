@@ -14,7 +14,7 @@ const getSource = (id, structure) => {
             id,
         };
 
-        fetch('http://localhost:9001/Import/getSourceById',
+        fetch('http://localhost:9000/getSourceById',
             {
                 signal: abortCont.signal,
                 method: 'POST',
@@ -165,9 +165,9 @@ const AddDataSource = () => {
         console.log(newSource);
         let link = '';
         if (dataSource.id === null) {
-            link = 'http://localhost:9001/Import/addApiSource';
+            link = 'http://localhost:9000/addApiSource';
         } else {
-            link = 'http://localhost:9001/Import/updateAPI';
+            link = 'http://localhost:9000/updateAPI';
         }
         const abortCont = new AbortController();
         fetch(link,
