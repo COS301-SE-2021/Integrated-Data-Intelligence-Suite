@@ -5,7 +5,7 @@
 }
 
 .forgot_password_link {
-    color: #5773FA;
+    color: var(--neon-blue);
     float: none;
 }
 
@@ -23,8 +23,13 @@ div.ant-divider.ant-divider-horizontal.ant-divider-with-text.ant-divider-with-te
 }
 
 .register_link {
-    color: #5773FA;
+    color: var(--neon-blue);
     float: right;
+}
+
+.back-to-register{
+    color: var(--neon-blue);
+    float: left;
 }
 
 /*!* The root div. Its encompasses all the elements/components *!*/
