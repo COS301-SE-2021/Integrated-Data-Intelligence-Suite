@@ -47,6 +47,7 @@ export default class OverviewGraphSection extends React.Component {
                     <SimpleCard
                         cardTitle="Average Interaction for each trend"
                         cardID="overview-graph-metric-1"
+                        titleOnTop
                     >
                         <VictoryBarGraph
                             text={_average_interaction}
@@ -61,6 +62,7 @@ export default class OverviewGraphSection extends React.Component {
                     <SimpleCard
                         cardTitle="Sentiment Distribution"
                         cardID="overview-graph-metric-2"
+                        titleOnTop
                     >
                         <PieWithCustomLabels
                             text={_pie_chart_data}
@@ -71,6 +73,7 @@ export default class OverviewGraphSection extends React.Component {
                     <SimpleCard
                         cardTitle="Engagement per Province"
                         cardID="overview-graph-metric-3"
+                        titleOnTop
                     >
                         <VictoryBarGraph
                             text={_engagement_data}
