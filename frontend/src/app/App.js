@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+//import { Link, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Link, Route, Switch } from "react-router-dom"
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
 import ChartPage from './pages/ChartPage/ChartPage';
@@ -18,7 +19,7 @@ import CreditsPage from './pages/CreditsPage/CreditsPage';
 class App extends Component {
     render() {
         return (
-            <>
+            <Router>
                 <Switch>
                     <Route exact path="/">
                         <HomePage/>
@@ -75,7 +76,7 @@ class App extends Component {
                         </div>
                     </Route>
                 </Switch>
-            </>
+            </Router>
         );
     }
 }
