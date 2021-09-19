@@ -168,11 +168,29 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    /**
+     * This the endpoint for resending the verification code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
     @PostMapping(value = "/user/resend",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
         ResendCodeResponse response = userClient.resendCode(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for resending the verification code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/updateProfile",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
+        UpdateProfileResponse response = userClient.updateProfile(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -207,18 +225,33 @@ public class GatewayServiceController {
         return null;
     }
 
+    /**
+     * This the endpoint for getting all the users registered on the system.
+     * @param jsonRequest This is the body send by POST.
+     * @return This is the response http entity. It contains all the users.
+     */
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
     public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
         String response = importClient.addApiSource(jsonRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param request This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
     @PostMapping(value = "/getSourceById", produces = "application/json")
     public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
         GetAPISourceByIdResponse response = importClient.getSourceById(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param jsonRequest This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
     @PostMapping(value = "/updateAPI", produces = "application/json")
     public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
         String response = importClient.editAPISource(jsonRequest);
