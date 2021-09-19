@@ -21,7 +21,7 @@ class App extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route exact path="/landingpage">
+                    <Route exact path="/">
                         <HomePage/>
                     </Route>
 
@@ -31,9 +31,6 @@ class App extends Component {
 
                     <Route exact path="/register">
                         <RegisterPage/>
-                    </Route>
-                    <Route exact path="/">
-                        <ChartPage/>
                     </Route>
                     <Route exact path="/chart">
                         <ChartPage/>

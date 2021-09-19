@@ -42,7 +42,7 @@ export default function LoginPage(props) {
                     username: 'myron',
                     firstName: 'Myron',
                     lastName: 'Maugi',
-                    admin: true,
+                    isAdmin: true,
                     permission: 'IMPORTING',
                     email: values.email,
                 };

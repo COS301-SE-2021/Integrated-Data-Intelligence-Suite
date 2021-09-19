@@ -4,7 +4,9 @@ import {
     Layout,
     Typography,
 } from 'antd';
-import { Link, Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import {
+ Link, Redirect, Route, Switch, useHistory,
+} from 'react-router-dom';
 import SideBar from '../../components/SideBar/SideBar';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import NavBar from '../../components/NavBar/NavBar';
@@ -40,75 +42,80 @@ class HomePage extends Component {
     }
 
     render() {
-        return (
-            <>
-                <Switch>
-                    <Route exact path="/">
-                        {/*<Layout*/}
-                        {/*    id="outer_layout"*/}
-                        {/*    className="chart-page"*/}
-                        {/*>*/}
-                        {/*    <SideBar currentPage={'1'}/>*/}
+        if (getLocalUser() == null) {
+            return <Redirect to="/login" />;
+        } if (getLocalUser()) {
+            return <Redirect to="/chart" />;
+        }
 
-                        {/*    <Layout id="inner_layout_div">*/}
-                        {/*        <Header id="top_bar">*/}
-                        {/*            /!* <Title level={1}>Home</Title> *!/*/}
+            return (
+                <>
+                    <Switch>
+                        <Route exact path="/">
+                            {/* <Layout */}
+                            {/*    id="outer_layout" */}
+                            {/*    className="chart-page" */}
+                            {/* > */}
+                            {/*    <SideBar currentPage={'1'}/> */}
 
-                        {/*            <UserInfoCard*/}
-                        {/*                name="s"*/}
-                        {/*            />*/}
-                        {/*        </Header>*/}
-                        {/*    </Layout>*/}
-                        {/*</Layout>*/}
+                            {/*    <Layout id="inner_layout_div"> */}
+                            {/*        <Header id="top_bar"> */}
+                            {/*            /!* <Title level={1}>Home</Title> *!/ */}
 
-                        <div id={'home-page-container'}>
-                            <NavBar/>
-                            <div id={'home-page-content'}>
-                                <div id={'selling-point-1'}>
-                                    Import it.
-                                    <br/>
-                                    Analyse it.
-                                    <br/>
-                                    Visualise it.
-                                    <br/>
-                                    All in one place.
-                                </div>
-                                {/*<div id={'button-container'}>*/}
-                                <button id={'download-button'}>
-                                    <SiWindows id={'windows-logo'}/>
-                                    Download for Windows
-                                </button>
+                            {/*            <UserInfoCard */}
+                            {/*                name="s" */}
+                            {/*            /> */}
+                            {/*        </Header> */}
+                            {/*    </Layout> */}
+                            {/* </Layout> */}
 
+                            <div id="home-page-container">
+                                <NavBar />
+                                <div id="home-page-content">
+                                    <div id="selling-point-1">
+                                        Import it.
+                                        <br />
+                                        Analyse it.
+                                        <br />
+                                        Visualise it.
+                                        <br />
+                                        All in one place.
+                                    </div>
+                                    {/* <div id={'button-container'}> */}
+                                    <button id="download-button">
+                                        <SiWindows id="windows-logo" />
+                                        Download for Windows
+                                    </button>
 
-                                {/*<Link to="/login">*/}
-                                {/*    <button*/}
-                                {/*        id={'open-in-browser-button'}*/}
-                                {/*    >*/}
-                                {/*        <MdOpenInBrowser id={'windows-logo'}/>*/}
-                                {/*        Open in your browser*/}
-                                {/*    </button>*/}
-                                {/*</Link>*/}
-                                {/*</div>*/}
-                                <div id={'app-image'}>Image</div>
-                                <div id={'selling-point-2-container'}>
-                                    <div/>
-                                    <div id={'selling-point-2'}>
-                                        Your own Intelligent Data Suite.
-                                        <br/>
-                                        Connect your own data sources.
-                                        <br/>
-                                        Import your own data and visualise it.
-                                        <br/>
-                                        All with a few clicks.
+                                    {/* <Link to="/login"> */}
+                                    {/*    <button */}
+                                    {/*        id={'open-in-browser-button'} */}
+                                    {/*    > */}
+                                    {/*        <MdOpenInBrowser id={'windows-logo'}/> */}
+                                    {/*        Open in your browser */}
+                                    {/*    </button> */}
+                                    {/* </Link> */}
+                                    {/* </div> */}
+                                    <div id="app-image">Image</div>
+                                    <div id="selling-point-2-container">
+                                        <div />
+                                        <div id="selling-point-2">
+                                            Your own Intelligent Data Suite.
+                                            <br />
+                                            Connect your own data sources.
+                                            <br />
+                                            Import your own data and visualise it.
+                                            <br />
+                                            All with a few clicks.
+                                        </div>
                                     </div>
                                 </div>
+                                <Footer />
                             </div>
-                            <Footer/>
-                        </div>
-                    </Route>
-                </Switch>
-            </>
-        );
+                        </Route>
+                    </Switch>
+                </>
+            );
     }
 }
 
