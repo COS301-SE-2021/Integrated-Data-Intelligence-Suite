@@ -11,7 +11,7 @@ const useGet = (url) => {
         const abortCont = new AbortController();
 
         //fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}`+url, { signal: abortCont.signal })
-        fetch("http://20.49.228.222:3000" + url, { signal: abortCont.signal })
+        fetch("http://20.108.56.39:80" + url, { signal: abortCont.signal })
             .then(res => {
                 if(!res.ok){
                     console.log(res)

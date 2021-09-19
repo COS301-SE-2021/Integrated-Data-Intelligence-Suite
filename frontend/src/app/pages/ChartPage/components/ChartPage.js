@@ -21,7 +21,7 @@ const {Header, Footer, Sider, Content} = Layout;
 
 function retrieveData(){
     //fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/retrievePrevious`)
-    fetch("http://20.49.228.222:3000/retrievePrevious")
+    fetch("http://20.108.56.39:80/retrievePrevious")
         .then(res =>{
             if(!res.ok){
                 return null;

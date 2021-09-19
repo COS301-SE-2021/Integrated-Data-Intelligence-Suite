@@ -68,7 +68,7 @@ const RegisterPage = () => {
             };
 
             //fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/register`, requestOptions)
-            fetch("http://20.49.228.222:3000/user/register", requestOptions)
+            fetch("http://20.108.56.39:80/user/register", requestOptions)
                 .then(response => {
                     return response.json()
                 }).then(json => {
