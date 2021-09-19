@@ -48,7 +48,7 @@ public class AnalyseService {
      * @return AnalyseDataResponse This object contains failure values as data.
      */
     public AnalyseDataResponse analyzeDataFallback(AnalyseDataRequest analyseRequest){
-        AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null, null, null, null, null);
+        AnalyseDataResponse analyseDataResponse =  new AnalyseDataResponse(null, null, null, null, null, null);
         analyseDataResponse.setFallback(true);
         analyseDataResponse.setFallbackMessage("{Failed to get analyzeData's data}");
         return analyseDataResponse;
