@@ -7,6 +7,10 @@ import {
 import { Redirect, Route, Switch } from 'react-router-dom';
 import SideBar from '../../components/SideBar/SideBar';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
+import NavBar from '../../components/NavBar/NavBar';
+import Footer from '../../components/Footer/Footer';
+import './HomePage.css';
+import { SiWindows } from 'react-icons/all';
 
 const {
     Title,
@@ -14,7 +18,6 @@ const {
 } = Typography;
 const {
     Header,
-    Footer,
     Sider,
     Content,
 } = Layout;
@@ -41,23 +44,51 @@ class HomePage extends Component {
             <>
                 <Switch>
                     <Route exact path="/">
-                        <Layout
-                            id="outer_layout"
-                            className="chart-page"
-                        >
-                            <SideBar currentPage={'1'}/>
+                        {/*<Layout*/}
+                        {/*    id="outer_layout"*/}
+                        {/*    className="chart-page"*/}
+                        {/*>*/}
+                        {/*    <SideBar currentPage={'1'}/>*/}
 
-                            <Layout id="inner_layout_div">
-                                <Header id="top_bar">
-                                    {/* <Title level={1}>Home</Title> */}
+                        {/*    <Layout id="inner_layout_div">*/}
+                        {/*        <Header id="top_bar">*/}
+                        {/*            /!* <Title level={1}>Home</Title> *!/*/}
 
-                                    <UserInfoCard
-                                        name="s"
-                                    />
-                                </Header>
-                            </Layout>
+                        {/*            <UserInfoCard*/}
+                        {/*                name="s"*/}
+                        {/*            />*/}
+                        {/*        </Header>*/}
+                        {/*    </Layout>*/}
+                        {/*</Layout>*/}
 
-                        </Layout>
+                        <div id={'home-page-container'}>
+                            <NavBar/>
+                            <div id={'home-page-content'}>
+                                <div id={'selling-point-1'}>
+                                    Data Importing?
+                                    <br/>
+                                    Data Analysis?
+                                    <br/>
+                                    Data Visualisation?
+                                    <br/>
+                                    All in one place.
+                                </div>
+                                <button id={'download-button'}>
+                                    <SiWindows id={'windows-logo'}/>
+                                    Download for Windows
+                                </button>
+                                <div id={'app-image'}>Image</div>
+                                <div id={'selling-point-2-container'}>
+                                    <div/>
+                                    <div id={'selling-point-2'}>
+                                        The quick brown fox jumps over the lazy dog but
+                                        accidentally steps on a thorn and its wails jump wake up
+                                        the dog from its sleep.
+                                    </div>
+                                </div>
+                            </div>
+                            <Footer/>
+                        </div>
                     </Route>
                 </Switch>
             </>
