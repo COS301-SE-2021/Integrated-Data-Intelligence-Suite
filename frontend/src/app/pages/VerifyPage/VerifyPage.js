@@ -168,6 +168,9 @@ const VerifyPage = () => {
                             </Divider>
 
                             <Form.Item>
+                                <Link className="back-to-register" to="/register">
+                                    Back to Registration
+                                </Link>
                                 <Link to="/resend" className="register_link">
                                     Resend code
                                 </Link>
