@@ -12,7 +12,7 @@ public class EmailConfig {
     /**
      * This is if the domain should be checked by the system
      */
-    private boolean allowAnyDomain = false;
+    private boolean allowAnyDomain = true;
 
     public void setEmailDomain(String emailDomain) {
         this.emailDomain = emailDomain;
