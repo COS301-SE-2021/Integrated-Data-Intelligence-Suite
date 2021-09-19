@@ -228,10 +228,10 @@
 }
 
 #world-map {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 0 auto;
-    border-radius: 10px;
+    display: grid !important;
+    grid-template-columns: 100% !important;
+    grid-template-rows: 0 auto !important;
+    border-radius: 10px !important;
 }
 
 #world-map > .simple-card-body {
