@@ -226,6 +226,33 @@ public class UserService {
 
         return userResponse;
     }
+
+    /**
+     * This function is used to connect to the user service to allow the user to change
+     * their account detials. It sends a request to the user controller and send the request
+     * class to user service.
+     * @param userRequest This class contains the new details of the user to change their current details.
+     * @return This class contains the information if the process of changing their account details
+     * was successful or not.
+     */
+    public UpdateProfileResponse updateProfile(UpdateProfileRequest userRequest) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        UpdateProfileResponse userResponse = restTemplate.postForObject("http://User-Service/User/updateProfile", request, UpdateProfileResponse.class);
+
+        return userResponse;
+    }
 }
 
 
