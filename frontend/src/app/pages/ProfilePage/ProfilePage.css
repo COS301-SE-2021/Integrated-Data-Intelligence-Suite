@@ -114,8 +114,9 @@ div.switch_box{
 #profile-page-container form>div>button{
     background: var(--neon-blue);
     color: white;
-    padding: 8px 15px;
-    margin: 10px 20px;
+    /*padding: 10px 15px;*/
+    /*margin: 10px 20px;*/
     text-transform: capitalize;
+    float: right;
 }
 

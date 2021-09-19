@@ -36,7 +36,7 @@ const UserPermissions = () => {
     };
     // console.log('userdata ', user.user);
     // console.log('body is ', requestBody);
-    fetch('http://20.108.56.39:80/changeUser', {
+    fetch('/changeUser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
