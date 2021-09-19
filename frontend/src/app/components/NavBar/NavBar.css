@@ -1,0 +1,45 @@
+#nav-bar {
+    /*border: 2px solid black;*/
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: 100%;
+}
+
+#nav-bar-logo {
+    background: white;
+    background-image: url("../../assets/idis-logo.png") !important;
+    background-size: cover;
+    background-position: center;
+    color: black;
+    height: inherit;
+    width: 167px;
+}
+
+#nav-bar-right-col {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    grid-template-rows: 100%;
+    align-items: center;
+    /*justify-items: right;*/
+    margin-right: 10%;
+    justify-content: right;
+    column-gap: 5%;
+    font-weight: 450;
+}
+
+.nav-bar-item {
+    width: max-content;
+    /*margin: 0 30% !important;*/
+    /*margin-left: 30% !important;*/
+    /*margin-right: 30% !important;*/
+}
+
+#nav-bar-left-col {
+    display: grid;
+    margin-left: 10%;
+}
+
+
