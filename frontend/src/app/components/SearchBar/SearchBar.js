@@ -50,7 +50,8 @@ class SearchBar extends React.Component {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
                 // remove or stop the loading icon
                 this.handleTextChange(json);
-            }).catch((err) => {
+            })
+            .catch((err) => {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
@@ -60,9 +61,9 @@ class SearchBar extends React.Component {
     render() {
         return (
             <Search
-              placeholder="looking for something?"
-              onSearch={this.onSearch}
-              loading={this.state.showLoadingIcon}
+                placeholder="Search for a keyword?"
+                onSearch={this.onSearch}
+                loading={this.state.showLoadingIcon}
             />
         );
     }

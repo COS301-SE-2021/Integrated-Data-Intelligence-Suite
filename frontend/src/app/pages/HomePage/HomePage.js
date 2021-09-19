@@ -73,22 +73,21 @@ class HomePage extends Component {
                                     <br/>
                                     All in one place.
                                 </div>
-                                {/*<div id={'button-container'}>*/}
-                                <button id={'download-button'}>
-                                    <SiWindows id={'windows-logo'}/>
-                                    Download for Windows
-                                </button>
+                                <div id={'button-container'}>
+                                    <button id={'download-button'}>
+                                        <SiWindows id={'windows-logo'}/>
+                                        Download for Windows
+                                    </button>
 
-
-                                {/*<Link to="/login">*/}
-                                {/*    <button*/}
-                                {/*        id={'open-in-browser-button'}*/}
-                                {/*    >*/}
-                                {/*        <MdOpenInBrowser id={'windows-logo'}/>*/}
-                                {/*        Open in your browser*/}
-                                {/*    </button>*/}
-                                {/*</Link>*/}
-                                {/*</div>*/}
+                                    <Link to="/login">
+                                        <button
+                                            id={'open-in-browser-button'}
+                                        >
+                                            <MdOpenInBrowser id={'windows-logo'}/>
+                                            Open in your browser
+                                        </button>
+                                    </Link>
+                                </div>
                                 <div id={'app-image'}>Image</div>
                                 <div id={'selling-point-2-container'}>
                                     <div/>
