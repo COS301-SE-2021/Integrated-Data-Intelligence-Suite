@@ -133,7 +133,7 @@ public class GatewayServiceController {
     }
 
     /**
-     * This the endpoint for changing the permission of a user
+     * This is the endpoint to allow the user to login.
      * @param request This is the body send by POST
      * @return This is the response http entity
      */
@@ -146,6 +146,12 @@ public class GatewayServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * This is the endpoint to allow the user to verify their account
+     * via email.
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
     @PostMapping(value = "/user/verify",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
@@ -194,6 +200,23 @@ public class GatewayServiceController {
         return null;
     }
 
+    @PostMapping(value = "/addNewApiSource", produces = "application/json")
+    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
+        String response = importClient.addApiSource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getSourceById", produces = "application/json")
+    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
+        GetAPISourceByIdResponse response = importClient.getSourceById(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/updateAPI", produces = "application/json")
+    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
+        String response = importClient.editAPISource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     /**
      * This method is used to facilitate communication to all the Services.

@@ -138,6 +138,86 @@ public class ImportService {
     }
 
 
+    public String addApiSource(String jsonString) {
+
+        /*HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ImportTwitterRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
+
+        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST,null, ImportTwitterResponse.class);
+        ImportTwitterResponse importResponse = new ImportTwitterResponse("hello world"); // responseEntity.getBody();
+
+        return importResponse;*/
+
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request;
+        request = new HttpEntity<>(jsonString ,requestHeaders);
+        String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/addApiSource", request, String.class);
+
+        return jsonResponse;
+    }
+
+    public GetAPISourceByIdResponse getSourceById(GetAPISourceByIdRequest sourceByIdRequest)  {
+
+        /*HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ImportTwitterRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
+
+        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST,null, ImportTwitterResponse.class);
+        ImportTwitterResponse importResponse = new ImportTwitterResponse("hello world"); // responseEntity.getBody();
+
+        return importResponse;*/
+
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(sourceByIdRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        GetAPISourceByIdResponse response = restTemplate.postForObject("http://Import-Service/Import/getSourceById", request, GetAPISourceByIdResponse.class);
+
+        return response;
+    }
+
+    public String editAPISource(String jsonString)  {
+
+        /*HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ImportTwitterRequest> requestEntity =new HttpEntity<>(importRequest,requestHeaders);
+
+        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",  HttpMethod.POST,null, ImportTwitterResponse.class);
+        ImportTwitterResponse importResponse = new ImportTwitterResponse("hello world"); // responseEntity.getBody();
+
+        return importResponse;*/
+
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request;
+        request = new HttpEntity<>(jsonString ,requestHeaders);
+        String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/updateAPI", request, String.class);
+
+        return jsonResponse;
+    }
 
     /*@GetMapping(value = "/importData")
     ImportDataResponse importData(@RequestParam("request") ImportDataRequest request) throws Exception;
