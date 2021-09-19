@@ -61,6 +61,13 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+#button-container {
+    border: 3px solid black;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+}
+
 #selling-point-1 {
     align-self: center;
     justify-self: center;

@@ -10,7 +10,7 @@ import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import NavBar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
 import './HomePage.css';
-import { SiWindows } from 'react-icons/all';
+import { MdOpenInBrowser, SiWindows } from 'react-icons/all';
 
 const {
     Title,
@@ -65,18 +65,25 @@ class HomePage extends Component {
                             <NavBar/>
                             <div id={'home-page-content'}>
                                 <div id={'selling-point-1'}>
-                                    Data Importing?
+                                    Import it.
                                     <br/>
-                                    Data Analysis?
+                                    Analyse it.
                                     <br/>
-                                    Data Visualisation?
+                                    Visualise it.
                                     <br/>
                                     All in one place.
                                 </div>
+                                {/*<div id={'button-container'}>*/}
                                 <button id={'download-button'}>
                                     <SiWindows id={'windows-logo'}/>
                                     Download for Windows
                                 </button>
+
+                                {/*<button id={'open-in-browser-button'}>*/}
+                                {/*    <MdOpenInBrowser id={'windows-logo'}/>*/}
+                                {/*    Open in your browser*/}
+                                {/*</button>*/}
+                                {/*</div>*/}
                                 <div id={'app-image'}>Image</div>
                                 <div id={'selling-point-2-container'}>
                                     <div/>
