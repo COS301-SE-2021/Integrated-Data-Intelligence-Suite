@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ImportServiceImpl {
@@ -71,7 +73,7 @@ public class ImportServiceImpl {
                 .build();
         Request req = new Request.Builder()
                 .addHeader("Authorization", "Bearer "+bearer)
-                .url("https://api.twitter.com/1.1/search/tweets.json?lang=en&q="+keyword+"&count="+limit)
+                .url("https://api.twitter.com/1.1/search/tweets.json?lang=en&q="+keyword+" -filter:retweets AND -filter:replies&result_type=mixed&tweet_mode=extended&count="+limit)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(req).execute();
