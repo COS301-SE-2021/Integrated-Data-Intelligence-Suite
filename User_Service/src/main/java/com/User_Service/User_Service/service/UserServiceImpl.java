@@ -1,5 +1,6 @@
 package com.User_Service.User_Service.service;
 
+import com.User_Service.User_Service.config.EmailConfig;
 import com.User_Service.User_Service.dataclass.User;
 import com.User_Service.User_Service.exception.InvalidRequestException;
 import com.User_Service.User_Service.repository.UserRepository;
@@ -9,9 +10,7 @@ import com.User_Service.User_Service.rri.Permission;
 import org.apache.commons.lang.RandomStringUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,18 +32,18 @@ public class UserServiceImpl {
     @Autowired
     private NotificationServiceImpl notificationService;
 
+    @Autowired
+    private final EmailConfig config = new EmailConfig();
+
     private final boolean mock = false;
 
     public UserServiceImpl() {
-
     }
 
     @Autowired
     public void setRepository(UserRepository repository) {
         this.repository = repository;
     }
-
-
 
 
     /**
@@ -119,10 +118,20 @@ public class UserServiceImpl {
         if(request.getUsername() == null || request.getFirstName() == null || request.getLastName() == null || request.getEmail() == null || request.getPassword() == null) {
             throw new InvalidRequestException("One or more attributes of the register request is null.");
         }
+
         if(repository == null) {
             System.out.println("Repository is null");
         }
-        System.out.println(request.getUsername());
+
+        //email domain check
+        if(!config.isAllowAnyDomain()) {
+            String[] domain = request.getEmail().split("@");
+
+            if(!domain[1].equals(config.getEmailDomain())) {
+                return new RegisterResponse(false, "You are not authorized to register");
+            }
+        }
+
         Optional<User> usersByUsername= repository.findUserByUsername(request.getUsername());
         if(usersByUsername.isPresent()) {
             return new RegisterResponse(false, "Username has been taken");
@@ -157,6 +166,9 @@ public class UserServiceImpl {
         newUser.setVerified(false);
         newUser.setVerificationCode(verificationCode);
 
+        //Setting date the user registered
+        newUser.setDateCreated(new Date());
+
         //Storing the user in the database
         User checkIfSaved = repository.save(newUser);
 
@@ -164,7 +176,7 @@ public class UserServiceImpl {
             return new RegisterResponse(false, "Registration failed");
         }
 
-        if(!mock) {
+        if(!mock) { //to be removed before deployment
             String emailText = "Thank you for signing up to IDIS. Your verification code is:\n";
             emailText += newUser.getVerificationCode() + "\n";
 
@@ -245,6 +257,76 @@ public class UserServiceImpl {
     }
 
     /**
+     * This method will update the details of a specific user
+     * @param request This class contains the details of the user.
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    public UpdateProfileResponse updateProfile(UpdateProfileRequest request) throws Exception{
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+
+        if(request.getEmail() == null || request.getLastName() == null || request.getFirstName() == null || request.getUsername() == null) {
+            throw new InvalidRequestException("Some or all of the request values are null");
+        }
+
+        Optional<User> userCheck = repository.findUserById(UUID.fromString(request.getId()));
+
+        if(userCheck.isEmpty()) {
+            return new UpdateProfileResponse(false, "User does not exist");
+        }
+        else {
+            User u = userCheck.get();
+
+            boolean usernameUpdated = true;
+            boolean firstNameUpdated = true;
+            boolean lastNameUpdated = true;
+            boolean emailUpdated = true;
+
+            if(!u.getUsername().equals(request.getUsername())) {
+                int count = repository.updateUsername(u.getId(), request.getUsername());
+
+                if(count != 1) {
+                    usernameUpdated = false;
+                }
+            }
+
+            if(!u.getFirstName().equals(request.getFirstName())) {
+                int count = repository.updateFirstName(u.getId(), request.getFirstName());
+
+                if(count != 1) {
+                    firstNameUpdated = false;
+                }
+            }
+
+            if(u.getLastName().equals(request.getLastName())) {
+                int count = repository.updateLastName(u.getId(), request.getLastName());
+
+                if(count != 1) {
+                    lastNameUpdated = false;
+                }
+            }
+
+            if(u.getEmail().equals(request.getEmail())) {
+                int count = repository.updateEmail(u.getId(), request.getEmail());
+
+                if(count != 1) {
+                    emailUpdated = false;
+                }
+            }
+
+            if(!usernameUpdated || !firstNameUpdated || !lastNameUpdated || !emailUpdated) {
+                return new UpdateProfileResponse(false, "Failed to update account");
+            }
+            else {
+                return new UpdateProfileResponse(true, "Successfully updated account");
+            }
+        }
+    }
+
+    /**
      * This function verifies the user's authenticity.
      * @param request This class contains the information of the user.
      * @return The return class returns if the verification process was successful**
@@ -279,6 +361,48 @@ public class UserServiceImpl {
             else {
                 return new VerifyAccountResponse(false, "Verification code is incorrect");
             }
+        }
+    }
+
+    /**
+     * This function will resend the verification code to user.
+     * @param request This class contains the information of the user.
+     * @return The return class returns if the verification process was successful**
+     */
+    @Transactional
+    public ResendCodeResponse resendCode(ResendCodeRequest request) throws Exception {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+
+        if(request.getEmail() == null) {
+            throw new InvalidRequestException("The request email is null");
+        }
+
+        Optional<User> userCheck = repository.findUserByEmail(request.getEmail());
+
+        if(userCheck.isEmpty()) {
+            return new ResendCodeResponse(false, "User does not exist");
+        }
+        else {
+            User user = userCheck.get();
+
+            String emailText = "Your verification code is:\n";
+            emailText += user.getVerificationCode();
+            String to = user.getEmail();
+            String from = "emergenoreply@gmail.com";
+            String subject = "IDIS Verification Code";
+
+            SendEmailNotificationRequest emailRequest = new SendEmailNotificationRequest(emailText, to, from, subject);
+
+            try {
+                CompletableFuture<SendEmailNotificationResponse> emailResponse  = notificationService.sendEmailNotification(emailRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResendCodeResponse(false, "An error has occurred while sending an the verification code to user");
+            }
+
+            return new ResendCodeResponse(true, "Verification code sent");
         }
     }
 
@@ -322,7 +446,7 @@ public class UserServiceImpl {
                 return new ResetPasswordResponse(false, "Password not updated");
             }
             else {
-                return new ResetPasswordResponse(true, "Password successfully updated.");
+                return new ResetPasswordResponse(true, "Password successfully updated");
             }
         }
     }
@@ -343,21 +467,21 @@ public class UserServiceImpl {
         Optional<User> currentUser = repository.findUserById(UUID.fromString(request.getId()));
 
         if(currentUser.isPresent()) {
-            return new GetCurrentUserResponse(true, "Succesfully returned current user", currentUser.get().getFirstName(), currentUser.get().getLastName(), currentUser.get().getUsername(), currentUser.get().getEmail(), currentUser.get().getAdmin());
+            return new GetCurrentUserResponse(true, "Successfully returned current user", currentUser.get().getFirstName(), currentUser.get().getLastName(), currentUser.get().getUsername(), currentUser.get().getEmail(), currentUser.get().getAdmin());
         }
         else {
-            return new GetCurrentUserResponse(false, "User does not exist.");
+            return new GetCurrentUserResponse(false, "User does not exist");
         }
     }
 
     /**
      * This function will allow an admin to manage permissions of users registered
      * to the system.
-     * @param request This is the request for the managePermissions use case***
-     * @return This is the response for the managePermissions use case***
+     * @param request This is the request for the changeUser use case***
+     * @return This is the response for the changeUser use case***
      */
     @Transactional
-    public ManagePersmissionsResponse managePermissions(ManagePermissionsRequest request) throws InvalidRequestException {
+    public ChangeUserResponse changeUser(ChangeUserRequest request) throws InvalidRequestException {
         if(request == null) {
             throw new InvalidRequestException("The Manage Permissions request is null");
         }
@@ -366,16 +490,17 @@ public class UserServiceImpl {
         }
         Optional<User> users = repository.findUserByUsername(request.getUsername());
         if(users.isEmpty()) {
-            return new ManagePersmissionsResponse("User does not exist", false);
+            return new ChangeUserResponse("User does not exist", false);
         }
         else {
             User user = users.get();
             int count = repository.updatePermission(user.getId(), request.getNewPermission());
+            repository.updateAdmin(user.getId(), request.isAdmin());
             if(count == 0) {
-                return new ManagePersmissionsResponse("Permission for user not updated", false);
+                return new ChangeUserResponse("Permission for user not updated", false);
             }
             else {
-                return new ManagePersmissionsResponse("Permission updated", true);
+                return new ChangeUserResponse("Permission updated", true);
             }
         }
     }
@@ -401,7 +526,7 @@ public class UserServiceImpl {
             success = false;
         }
         else {
-            message = "Returned list of users.";
+            message = "Returned list of users";
             success = true;
         }
         return new GetAllUsersResponse(message, success, users);

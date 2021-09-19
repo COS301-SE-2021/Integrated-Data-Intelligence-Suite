@@ -5,7 +5,7 @@ export default class PieCustomLabel extends React.Component {
     render() {
         return (
             <g>
-                <VictoryLabel {...this.props}/>
+                {/*<VictoryLabel {...this.props}/>*/}
                 <VictoryTooltip
                     {...this.props}
                     x={200}

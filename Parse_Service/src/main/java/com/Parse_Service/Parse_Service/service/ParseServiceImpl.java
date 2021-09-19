@@ -156,7 +156,6 @@ public class ParseServiceImpl {
             }
 
             SocialMediaProperties newProp = new SocialMediaProperties(request.getName(), request.getInteractionsProp(), request.getLocationProp(), request.getDateProp(), request.getTextProp(), request.getCollectionProp());
-
             SocialMediaProperties saved = socialMediaPropertiesRepository.save(newProp);
 
             if(newProp == saved) {

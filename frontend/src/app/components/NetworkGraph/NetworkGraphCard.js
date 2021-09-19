@@ -151,17 +151,17 @@ class NetworkGraphCard extends React.Component {
 
     componentDidMount() {
         // //Adding nodes to the layout
-        if (typeof this.props.text[1] === 'undefined') {
+        if (typeof this.props.text[11] === 'undefined') {
             // some error message
             this.setState({ dataToBeDisplayed: [] });
             console.log('array is undefined');
-        } else if (this.props.text[1].length === 0) {
+        } else if (this.props.text[11].length === 0) {
             // Some error
             this.setState({ dataToBeDisplayed: [] });
             console.log('array is empty');
-        } else if (this.props.text[1].length > 0) {
+        } else if (this.props.text[11].length > 0) {
             // this.theData = this.props.text[1];
-            this.setState({ dataToBeDisplayed: this.props.text[1] });
+            this.setState({ dataToBeDisplayed: this.props.text[this.props.indexOfData] });
             console.log('i reached here');
         }
     }
@@ -170,23 +170,24 @@ class NetworkGraphCard extends React.Component {
         return (
             <>
                 <Card
-                  id="network_card"
-                  title=""
-                  style={{ border: '0' }}
+                    id="network_card"
+                    title=""
+                    style={{ border: '0' }}
                 >
                     <CytoscapeComponent
-                      elements={this.state.dataToBeDisplayed}
-                      stylesheet={network_stylesheet}
-                      layout={this.layout}
-                      style={{
+                        elements={this.state.dataToBeDisplayed}
+                        stylesheet={network_stylesheet}
+                        layout={this.layout}
+                        style={{
                             width: '100%',
                             height: '400px',
                         }}
-                      cy={(cy) => {
+                        cy={(cy) => {
                             this.ref = cy;
                             this.cy = cy;
                             cy.on('add', 'node', (_evt) => {
-                                cy.layout(this.layout).run();
+                                cy.layout(this.layout)
+                                    .run();
                                 cy.fit();
                             });
                         }}

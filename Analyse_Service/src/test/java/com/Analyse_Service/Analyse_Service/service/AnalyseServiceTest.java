@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 
@@ -51,7 +52,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the analyzeData data list is Null")
     public void analyzeDataNullList(){
-        AnalyseDataRequest test = new AnalyseDataRequest(null);
+        AnalyseDataRequest test = new AnalyseDataRequest(null, null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.analyzeData(test));
     }
 
@@ -65,7 +66,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the findPattern data list is Null")
     public void findPatternDataNullList(){
-        FindPatternRequest test = new FindPatternRequest(null);
+        FindPatternRequest test = new FindPatternRequest(null,null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findPattern(test));
     }
 
@@ -79,7 +80,7 @@ public class AnalyseServiceTest {
     @Test
     @DisplayName("When the findRelationship data list is Null")
     public void findRelationshipDataNullList(){
-        FindRelationshipsRequest test = new FindRelationshipsRequest(null);
+        FindRelationshipsRequest test = new FindRelationshipsRequest(null,null);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.findRelationship(test));
     }
 
@@ -141,7 +142,7 @@ public class AnalyseServiceTest {
 
         TestList.add(row);
 
-        FindPatternRequest test = new FindPatternRequest(TestList);
+        FindPatternRequest test = new FindPatternRequest(TestList,TestList);
         FindPatternResponse testResults = service.findPattern(test);
         Assertions.assertNotNull(testResults);
     }
@@ -163,7 +164,8 @@ public class AnalyseServiceTest {
         ArrayList<ArrayList> input = new ArrayList<>();
         input.add(TestList);
 
-        FindRelationshipsRequest test = new FindRelationshipsRequest(input);
+
+        FindRelationshipsRequest test = new FindRelationshipsRequest(input,input);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
     }
@@ -192,13 +194,14 @@ public class AnalyseServiceTest {
         ArrayList<String> text = new ArrayList<>();;
         text.add("test text for function");
         FindNlpPropertiesRequest test = new FindNlpPropertiesRequest(text);
-        ArrayList<FindNlpPropertiesResponse> testResults = service.findNlpProperties(test);
+        List<Object> nlpResults = service.findNlpProperties(test);
+        ArrayList<FindNlpPropertiesResponse> testResults = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0);//service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
     }
 
     /******************************************Repository Functional Test**********************************************/
 
-    @Test
+    /*@Test
     @DisplayName("fetch saveAIModel from database")
     public void fetchSaveAIModelFromDatabase() throws AnalyzerException {
         //set test data
@@ -219,7 +222,7 @@ public class AnalyseServiceTest {
         //test
         Assertions.assertEquals(saveModel,testModel);
         Assertions.assertTrue(testResults.getModelSave());
-    }
+    }*/
 
 
 }

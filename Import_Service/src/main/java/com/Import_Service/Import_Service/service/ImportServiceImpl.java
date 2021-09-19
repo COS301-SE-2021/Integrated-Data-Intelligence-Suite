@@ -256,7 +256,7 @@ public class ImportServiceImpl {
 
             String newsData = newsResponse.getData();
 
-            list.add(new ImportedData(DataSource.NEWSSCOURCE, newsData));
+            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData));
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());

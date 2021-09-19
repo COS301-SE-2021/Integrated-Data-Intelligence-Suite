@@ -2,6 +2,7 @@ package com.Analyse_Service.Analyse_Service.controller;
 
 import com.Analyse_Service.Analyse_Service.AnalyseServiceApplication;
 import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.AnalyseDataRequest;
@@ -73,7 +74,11 @@ public class AnalyseServiceControllerTest {
         ParsedData parsedData = new ParsedData();
         dataList.add(parsedData);
 
-        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList);
+        ArrayList<ParsedArticle> articleList = new ArrayList<>();
+        ParsedArticle parsedArticle = new ParsedArticle();
+        articleList.add(parsedArticle);
+
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList,articleList);
 
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
@@ -83,7 +88,7 @@ public class AnalyseServiceControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(analyseRequest);
 
-        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null);
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null,null);
         when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
@@ -112,7 +117,17 @@ public class AnalyseServiceControllerTest {
 
         dataList.add(parsedData);
 
-        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList);
+        ArrayList<ParsedArticle> articleList = new ArrayList<>();
+        ParsedArticle parsedArticle = new ParsedArticle();
+        parsedArticle.setContent("MockTextMesssage");
+        parsedArticle.setTitle("1");
+        parsedArticle.setDate("2020/04/12");
+        parsedArticle.setDescription("location");
+        articleList.add(parsedArticle);
+
+
+
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(dataList, articleList);
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
@@ -121,7 +136,7 @@ public class AnalyseServiceControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson = ow.writeValueAsString(analyseRequest);
 
-        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null, null, null, null, null);
+        AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null, null, null, null, null,null);
         when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
