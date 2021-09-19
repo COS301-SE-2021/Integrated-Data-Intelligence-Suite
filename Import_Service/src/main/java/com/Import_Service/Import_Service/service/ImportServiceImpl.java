@@ -1,6 +1,7 @@
 package com.Import_Service.Import_Service.service;
 
 import com.Import_Service.Import_Service.dataclass.APISource;
+import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.rri.DataSource;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
