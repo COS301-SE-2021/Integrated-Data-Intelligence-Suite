@@ -6,8 +6,6 @@ import {
   Form, Input, Button, Checkbox, Card, Divider, message,
 } from 'antd';
 import RegisterButton from '../../components/RegisterButton/RegisterButton';
-import './registerPage.css';
-import LoginButton from '../../components/LoginButton/LoginButton';
 
 // Validation Function
 const validate = (values) => {
@@ -333,8 +331,8 @@ const RegisterPage = () => {
 
                           <Form.Item>
                               Already have an account?
-                              <Link to="/login">
-                                  <a className="register_link" href="#">Login!</a>
+                              <Link to="/login" className="register_link">
+                                  Login!
                               </Link>
                           </Form.Item>
 
