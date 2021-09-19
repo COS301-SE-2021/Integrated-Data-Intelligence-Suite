@@ -1,20 +1,22 @@
 package com.User_Service.User_Service.request;
 
 public class UpdateProfileRequest {
-    String username;
-    String firstName;
-    String lastName;
-    String email;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String id;
 
     public UpdateProfileRequest() {
 
     }
 
-    public UpdateProfileRequest(String username, String firstName, String lastName, String email) {
+    public UpdateProfileRequest(String username, String firstName, String lastName, String email, String id) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.id = id;
     }
 
     public String getUsername() {
@@ -49,4 +51,11 @@ public class UpdateProfileRequest {
         this.email = email;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
