@@ -14,7 +14,7 @@ public class CreateWordCloudGraphResponse {
         this.wordList = wordList;
     }
 
-    public ArrayList<Graph> getWordGraphArray(){
+    public ArrayList<Graph> getWordList(){
         return words;
     }
 }

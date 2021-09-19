@@ -14,7 +14,7 @@ import java.util.*;
 @Service
 public class VisualizeServiceImpl {
 
-    private HashSet<String> filterdCloud = new HashSet<String>();
+    private HashSet<String> foundWords = new HashSet<String>();
 
 
 
@@ -40,7 +40,7 @@ public class VisualizeServiceImpl {
         }
 
         ArrayList<ArrayList> outputData = new ArrayList<>();
-        setCloud();
+
 
 
         //***********************Overview Section*************************//
@@ -132,19 +132,16 @@ public class VisualizeServiceImpl {
         CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
         outputData.add(wordCloudResponse.words);
 
-        //WordCloud Piechart Todo
-        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(wordCloudResponse.wordList);
+        //WordCloud Piechart
+        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getTrendList()); //TODO: request.getWordList() !!!!this wont work for now
         CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
         outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
-
-        /*
-        ToDo: Sunburst
-
-
-         */
-
-
+        //WordCloud Sunburst
+        //TODO: request.getWordList() !!!!this wont work for now
+        /*CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getTrendList(),wordCloudPieChartGraphResponse.getDominantWords());
+        CreateWordCloudSunBurstGraphResponse wordCloudSunBurstGraphResponse = this.createWordCloudSunBurstGraph(wordCloudSunBurstGraphRequest);
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
 
 
         //Network graph (Relationships)
@@ -542,15 +539,22 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.dataList == null){
+        if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
-        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
+
         ArrayList<Graph> output = new ArrayList<>();
 
 
-        ArrayList<String> wordList = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
+        /*for (int i = 0; i < reqData.size(); i++) {
             ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
             //System.out.println(locs.toString());
 
@@ -562,7 +566,7 @@ public class VisualizeServiceImpl {
                     }
                 }
             }
-        }
+        }*/
 
         String text =wordList.get(0);
         for(int i =1; i < wordList.size(); i++){
@@ -584,11 +588,20 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.dataList == null){
+        if (request.getDataList() == null){
             throw new InvalidRequestException("Arraylist object is null");
         }
-        ArrayList<String> wordList = request.getDataList();
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
+
         ArrayList<Graph> output = new ArrayList<>();
+        ArrayList<String> dominantWords = new ArrayList<>();
 
 
         HashMap<String, Integer> wordMap = new HashMap<>();
@@ -665,6 +678,8 @@ public class VisualizeServiceImpl {
                 System.out.println("CLOUD VALUES HERE");
                 System.out.println(out.y);
 
+                dominantWords.add(out.label);
+
                 //System.out.println(out.words);
                 output.add(out);
             }
@@ -687,7 +702,42 @@ public class VisualizeServiceImpl {
         }
 
 
-        return new CreateWordCloudPieChartGraphResponse(output);
+        return new CreateWordCloudPieChartGraphResponse(output,dominantWords);
+    }
+
+
+    public CreateWordCloudSunBurstGraphResponse createWordCloudSunBurstGraph(CreateWordCloudSunBurstGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        if (request.getDominantWords() == null){
+            throw new InvalidRequestException("Dominant/parent nodes object is null");
+        }
+
+        ArrayList<ArrayList> associatedWords  = request.dataList;
+        ArrayList<String> dominantWords = request.getDominantWords();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        SunBurstGraph parentNode = new SunBurstGraph();
+        parentNode.children = new ArrayList<>();
+
+        for(int i=0; i< dominantWords.size(); i++){
+
+            SunBurstNodeGraph baseSunBurstNodeGraph = new SunBurstNodeGraph();
+            baseSunBurstNodeGraph.name = dominantWords.get(i);
+            baseSunBurstNodeGraph.children = associateSunburstWord(associatedWords,dominantWords.get(i), false); //search
+
+
+            parentNode.children.add(baseSunBurstNodeGraph);
+        }
+
+        output.add(parentNode);
+
+        return new CreateWordCloudSunBurstGraphResponse(output);
     }
 
 
@@ -976,7 +1026,7 @@ public class VisualizeServiceImpl {
         return new CreateTimelineGraphResponse(output);
     }
 
-    /***TODO: Scatter ****/
+    /*** TODO: Scatter ***/
 
     //no text over time/dates
     public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request)
@@ -1357,76 +1407,69 @@ public class VisualizeServiceImpl {
         return true;
     }
 
-    private void setCloud() {
-        filterdCloud.add("is");	filterdCloud.add("was");	filterdCloud.add("are");	filterdCloud.add("be");	filterdCloud.add("have");
-        filterdCloud.add("had");	filterdCloud.add("were");	filterdCloud.add("can");	filterdCloud.add("said");	filterdCloud.add("use");
-        filterdCloud.add("do");	filterdCloud.add("will");	filterdCloud.add("would");	filterdCloud.add("make");	filterdCloud.add("like");
-        filterdCloud.add("has");	filterdCloud.add("look");	filterdCloud.add("write");	filterdCloud.add("go");	filterdCloud.add("see");
-        filterdCloud.add("could");	filterdCloud.add("been");	filterdCloud.add("call");	filterdCloud.add("am");	filterdCloud.add("find");
-        filterdCloud.add("did");	filterdCloud.add("get");	filterdCloud.add("come");	filterdCloud.add("made");	filterdCloud.add("may");
-        filterdCloud.add("take");	filterdCloud.add("know");	filterdCloud.add("live");	filterdCloud.add("give");	filterdCloud.add("think");
-        filterdCloud.add("say");	filterdCloud.add("help");	filterdCloud.add("tell");	filterdCloud.add("follow");	filterdCloud.add("came");
-        filterdCloud.add("want");	filterdCloud.add("show");	filterdCloud.add("set");	filterdCloud.add("put");	filterdCloud.add("does");
-        filterdCloud.add("must");	filterdCloud.add("ask");	filterdCloud.add("went");	filterdCloud.add("read");	filterdCloud.add("need");
-        filterdCloud.add("move");	filterdCloud.add("try");	filterdCloud.add("change");	filterdCloud.add("play");	filterdCloud.add("spell");
-        filterdCloud.add("found");	filterdCloud.add("study");	filterdCloud.add("learn");	filterdCloud.add("should");	filterdCloud.add("add");
-        filterdCloud.add("keep");	filterdCloud.add("start");	filterdCloud.add("thought");	filterdCloud.add("saw");	filterdCloud.add("turn");
-        filterdCloud.add("might");	filterdCloud.add("close");	filterdCloud.add("seem");	filterdCloud.add("open");	filterdCloud.add("begin");
-        filterdCloud.add("got");	filterdCloud.add("run");	filterdCloud.add("walk");	filterdCloud.add("began");	filterdCloud.add("grow");
-        filterdCloud.add("took");	filterdCloud.add("carry");	filterdCloud.add("hear");	filterdCloud.add("stop");	filterdCloud.add("miss");
-        filterdCloud.add("eat");	filterdCloud.add("watch");	filterdCloud.add("let");	filterdCloud.add("cut");	filterdCloud.add("talk");
-        filterdCloud.add("being");	filterdCloud.add("leave");
+    private ArrayList<SunBurstGraph> associateSunburstWord(ArrayList<ArrayList> associatedWords, String searchName, Boolean isLeaf) {
 
-        filterdCloud.add("word");	filterdCloud.add("time");	filterdCloud.add("number");	filterdCloud.add("way");	filterdCloud.add("people");
-        filterdCloud.add("water");	filterdCloud.add("day");	filterdCloud.add("part");	filterdCloud.add("sound");	filterdCloud.add("work");
-        filterdCloud.add("place");	filterdCloud.add("year");	filterdCloud.add("back");	filterdCloud.add("thing");	filterdCloud.add("name");
-        filterdCloud.add("sentence");	filterdCloud.add("man");	filterdCloud.add("line");	filterdCloud.add("boy");	filterdCloud.add("farm");
-        filterdCloud.add("end");	filterdCloud.add("men");	filterdCloud.add("land");	filterdCloud.add("home");	filterdCloud.add("hand");
-        filterdCloud.add("picture");	filterdCloud.add("air");	filterdCloud.add("animal");	filterdCloud.add("house");	filterdCloud.add("page");
-        filterdCloud.add("letter");	filterdCloud.add("point");	filterdCloud.add("mother");	filterdCloud.add("answer");
-        filterdCloud.add("world");	filterdCloud.add("food");	filterdCloud.add("country");	filterdCloud.add("plant");	filterdCloud.add("school");
-        filterdCloud.add("father");	filterdCloud.add("tree");	filterdCloud.add("city");	filterdCloud.add("earth	eye");
-        filterdCloud.add("head");	filterdCloud.add("story");	filterdCloud.add("example");	filterdCloud.add("life");	filterdCloud.add("paper");
-        filterdCloud.add("group");	filterdCloud.add("children");	filterdCloud.add("side");	filterdCloud.add("feet");	filterdCloud.add("car");
-        filterdCloud.add("mile");	filterdCloud.add("night");	filterdCloud.add("sea");	filterdCloud.add("river");	filterdCloud.add("state");
-        filterdCloud.add("book");	filterdCloud.add("idea");	filterdCloud.add("face");	filterdCloud.add("girl");
-        filterdCloud.add("list");	filterdCloud.add("song");	filterdCloud.add("family");
+        ArrayList<SunBurstGraph> output = new ArrayList<>();
 
-        filterdCloud.add("he");	filterdCloud.add("a");	filterdCloud.add("one");	filterdCloud.add("all");	filterdCloud.add("an");
-        filterdCloud.add("each");	filterdCloud.add("other");	filterdCloud.add("many");	filterdCloud.add("some");	filterdCloud.add("two");
-        filterdCloud.add("more");	filterdCloud.add("long");	filterdCloud.add("new");	filterdCloud.add("little");	filterdCloud.add("most");
-        filterdCloud.add("good");	filterdCloud.add("great");	filterdCloud.add("right");	filterdCloud.add("mean");	filterdCloud.add("old");
-        filterdCloud.add("any");	filterdCloud.add("same");	filterdCloud.add("three");	filterdCloud.add("small");	filterdCloud.add("another");
-        filterdCloud.add("large");	filterdCloud.add("big");	filterdCloud.add("even");	filterdCloud.add("such");	filterdCloud.add("different");
-        filterdCloud.add("kind");	filterdCloud.add("still");	filterdCloud.add("high");	filterdCloud.add("every");	filterdCloud.add("own");
-        filterdCloud.add("light");	filterdCloud.add("left");	filterdCloud.add("few");	filterdCloud.add("next");	filterdCloud.add("hard");
-        filterdCloud.add("both");	filterdCloud.add("important");	filterdCloud.add("white");	filterdCloud.add("four");	filterdCloud.add("second");
-        filterdCloud.add("enough");	filterdCloud.add("above");	filterdCloud.add("young");
+        int maxWordCount = 0;
+        for(int i=0; i <  associatedWords.size(); i++){
+            maxWordCount = maxWordCount + associatedWords.get(i).size();
+        }
 
-        filterdCloud.add("not");	filterdCloud.add("when");	filterdCloud.add("there");	filterdCloud.add("how");	filterdCloud.add("up");
-        filterdCloud.add("out");	filterdCloud.add("then");	filterdCloud.add("so");	filterdCloud.add("no");	filterdCloud.add("first");
-        filterdCloud.add("now");	filterdCloud.add("only");	filterdCloud.add("very");	filterdCloud.add("just");	filterdCloud.add("where");
-        filterdCloud.add("much");	filterdCloud.add("before");	filterdCloud.add("too");	filterdCloud.add("also");	filterdCloud.add("around");
-        filterdCloud.add("well");	filterdCloud.add("here");	filterdCloud.add("why");	filterdCloud.add("again");	filterdCloud.add("off");
-        filterdCloud.add("away");	filterdCloud.add("near");	filterdCloud.add("below");	filterdCloud.add("last");	filterdCloud.add("never");
-        filterdCloud.add("always");	filterdCloud.add("together");	filterdCloud.add("often");	filterdCloud.add("once");	filterdCloud.add("later");
-        filterdCloud.add("far");	filterdCloud.add("really");	filterdCloud.add("almost");	filterdCloud.add("sometimes");	filterdCloud.add("soon");
+        for(int i = 0 ; i < associatedWords.size(); i++){
+            ArrayList<String> sentenceWords = associatedWords.get(i);
 
-        filterdCloud.add("of");	filterdCloud.add("to");	filterdCloud.add("in");	filterdCloud.add("for");	filterdCloud.add("on");
-        filterdCloud.add("with");	filterdCloud.add("at");	filterdCloud.add("from");	filterdCloud.add("by");	filterdCloud.add("about");
-        filterdCloud.add("into");	filterdCloud.add("down");	filterdCloud.add("over");	filterdCloud.add("after");	filterdCloud.add("through");
-        filterdCloud.add("between");	filterdCloud.add("under");	filterdCloud.add("along");	filterdCloud.add("until");	filterdCloud.add("without");
+            if(sentenceWords.contains(searchName)){
 
-        filterdCloud.add("you");	filterdCloud.add("that");	filterdCloud.add("it");	filterdCloud.add("his");
-        filterdCloud.add("they");	filterdCloud.add("I");	filterdCloud.add("this");	filterdCloud.add("what");	filterdCloud.add("we");
-        filterdCloud.add("your");	filterdCloud.add("which");	filterdCloud.add("she");	filterdCloud.add("their");	filterdCloud.add("them");
-        filterdCloud.add("these");	filterdCloud.add("her");	filterdCloud.add("him");	filterdCloud.add("my");	filterdCloud.add("who");
-        filterdCloud.add("its");	filterdCloud.add("me");	filterdCloud.add("our");	filterdCloud.add("us");	filterdCloud.add("something");
-        filterdCloud.add("those");
+                for(int j = 0 ; j < sentenceWords.size(); j++) {
+                    String foundName = sentenceWords.get(j);
 
-        filterdCloud.add("and");	filterdCloud.add("as");	filterdCloud.add("or");	filterdCloud.add("but");
-        filterdCloud.add("if");	filterdCloud.add("than");	filterdCloud.add("because");	filterdCloud.add("while");
-        filterdCloud.add("it’s");	filterdCloud.add("don’t");
+                    if( (foundName.equals(searchName)) || (foundWords.contains(foundName)) ) //skips searched name value and used words
+                        continue;
+
+                    if (isLeaf == false) { //node
+
+                        SunBurstNodeGraph sunBurstGraph = new SunBurstNodeGraph();
+                        sunBurstGraph.name = foundName;
+
+                        if(maxWordCount > ( foundWords.size()*0.65) ) {
+
+                            //ArrayList<ArrayList> truncatedAssociatedWords = associatedWords;
+                            //truncatedAssociatedWords.remove(0);
+                            sunBurstGraph.children = associateSunburstWord(associatedWords, foundName, true);
+                        }
+                        else{
+                            sunBurstGraph.children = associateSunburstWord(associatedWords, foundName, false);
+                        }
+
+                        foundWords.add(foundName);
+
+                        output.add(sunBurstGraph);
+                    } else {//leaf
+                        SunBurstLeafGraph sunBurstGraph = new SunBurstLeafGraph();
+                        sunBurstGraph.name = foundName;
+
+                        ArrayList<String> hexValues = new ArrayList<>();
+                        hexValues.add("#12939A");
+                        hexValues.add("#FF9833");
+
+
+                        sunBurstGraph.hex = hexValues.get(j % hexValues.size());
+
+                        long leftLimit = 300L;
+                        long rightLimit = 5000L;
+                        sunBurstGraph.value = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));;
+
+                        foundWords.add(foundName);
+
+                        output.add(sunBurstGraph);
+                    }
+                }
+
+            }
+        }
+
+        return output;
     }
 
 

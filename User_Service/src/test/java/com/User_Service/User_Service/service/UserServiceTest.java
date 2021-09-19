@@ -37,28 +37,28 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Null")
     public void managePermissionsNullRequest() {
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(null));
     }
 
     @Test
     @DisplayName("If_Both_ManagePermissionsRequest_Attributes_Are_Null")
     public void managePermissionsRequestNullAttribs() {
-        ManagePermissionsRequest request = new ManagePermissionsRequest(null, null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+        ChangeUserRequest request = new ChangeUserRequest(null, false, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(request));
     }
 
     @Test
     @DisplayName("If_ManagePermissionsRequest_Username_Field_Is_Null")
     public void managePermissionsRequestNullUsernameField() {
-        ManagePermissionsRequest request = new ManagePermissionsRequest(null, Permission.VIEWING);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+        ChangeUserRequest request = new ChangeUserRequest(null, false,  Permission.VIEWING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(request));
     }
 
     @Test
     @DisplayName("If_ManagePermissionsRequest_Permission_Field_Is_Null")
     public void managePermissionsRequestNullPermissionField() {
-        ManagePermissionsRequest request = new ManagePermissionsRequest("exampleUser", null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+        ChangeUserRequest request = new ChangeUserRequest("exampleUser", false, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(request));
     }
 
     @Test
@@ -76,8 +76,8 @@ public class UserServiceTest {
         userRepository.save(testUser);
 
         //test
-        ManagePermissionsRequest request = new ManagePermissionsRequest("UserNameTest", Permission.IMPORTING);
-        ManagePersmissionsResponse response = service.managePermissions(request);
+        ChangeUserRequest request = new ChangeUserRequest("UserNameTest", false, Permission.IMPORTING);
+        ChangeUserResponse response = service.changeUser(request);
 
         when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
         Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
@@ -105,8 +105,8 @@ public class UserServiceTest {
         userRepository.save(testUser);
 
         //test
-        ManagePermissionsRequest request = new ManagePermissionsRequest("NotUserNameTest", Permission.VIEWING);
-        ManagePersmissionsResponse response = service.managePermissions(request);
+        ChangeUserRequest request = new ChangeUserRequest("NotUserNameTest", false, Permission.VIEWING);
+        ChangeUserResponse response = service.changeUser(request);
 
         Optional<User> foundUser = verify(userRepository).findUserByUsername("NotUserNameTest");
         Assertions.assertNull(foundUser);

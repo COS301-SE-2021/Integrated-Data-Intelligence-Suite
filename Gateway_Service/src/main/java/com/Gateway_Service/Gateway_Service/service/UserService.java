@@ -22,11 +22,11 @@ public class UserService {
      * @return This class will contain the information whether or not the request was successfull
      *         or not.
      */
-    public ManagePermissionsResponse managePermissions(ManagePermissionsRequest userRequest) {
+    public ChangeUserResponse managePermissions(ChangeUserRequest userRequest) {
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<ManagePermissionsRequest> requestEntity = new HttpEntity<ManagePermissionsRequest>(request, requestHeaders);
-        ResponseEntity<ManagePermissionsResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ManagePermissionsResponse.class);
+        HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<ChangeUserRequest>(request, requestHeaders);
+        ResponseEntity<ChangeUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
         return responseEntity.getBody();*/
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -42,7 +42,7 @@ public class UserService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ManagePermissionsResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ManagePermissionsResponse.class);
+        ChangeUserResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ChangeUserResponse.class);
 
         return userResponse;
     }
@@ -148,6 +148,25 @@ public class UserService {
             e.printStackTrace();
         }
         VerifyAccountResponse userResponse = restTemplate.postForObject("http://User-Service/User/verifyAccount", request, VerifyAccountResponse.class);
+
+        return userResponse;
+    }
+
+    public ResendCodeResponse resendCode(ResendCodeRequest userRequest) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/resendCode", request, ResendCodeResponse.class);
 
         return userResponse;
     }

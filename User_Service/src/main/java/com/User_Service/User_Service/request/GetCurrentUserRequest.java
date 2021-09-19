@@ -8,7 +8,7 @@ public class GetCurrentUserRequest {
     }
 
     public GetCurrentUserRequest(String id) {
-
+        this.id = id;
     }
 
     public String getId() {

@@ -4,6 +4,7 @@ import com.User_Service.User_Service.rri.Permission;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -39,6 +40,10 @@ public class User {
     String verificationCode;
 
     Boolean isVerified;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    Date dateCreated;
 
     public User() {
 
@@ -133,6 +138,14 @@ public class User {
 
     public void setVerified(Boolean verified) {
         isVerified = verified;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     @Override
