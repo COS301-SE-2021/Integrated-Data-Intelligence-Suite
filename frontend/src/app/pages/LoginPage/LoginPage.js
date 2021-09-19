@@ -42,8 +42,11 @@ export default function LoginPage(props) {
                 const localuser = {
                     id: 'b5aa283d-35d1-421d-a8c6-42dd3e115463',
                     username: 'myron',
+                    firstName: 'Myron',
+                    lastName: 'Maugi',
                     isAdmin: true,
                     permission: 'IMPORTING',
+                    email: values.email,
                 };
                 localStorage.setItem('user', JSON.stringify(localuser));
                 history.push('/');

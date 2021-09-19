@@ -91,7 +91,6 @@ export default class DraggableBarGraph extends React.Component {
         return (
             <div className="uber-bar-graph-container">
                 {/* {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>} */}
-                {}
                 <div className="bar-graph-plot">
                     { this.state.dataToBeDisplayed && (
                         <XYPlot width={300} height={200}>

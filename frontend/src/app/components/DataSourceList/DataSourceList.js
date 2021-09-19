@@ -65,9 +65,9 @@ const DataSourceList = () => {
                 <Link to="/settings/source/new" className="standard-filled button">new Source</Link>
             </div>
             {data && sources === null && setSources(data)}
-            {sources !== null && sources.map((source) =>(
+            {sources !== null && sources.map((source, index) =>(
                 <div>
-                    <div className="source-preview" key={`source ${source.id}`}>
+                    <div className="source-preview" key={`source ${source.id}${index}`}>
                         <p className="source-title">{source.name}</p>
                         <div className="button-div">
                             <Link className="standard button" to={`/settings/source/${source.id}`}><EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} /></Link>
