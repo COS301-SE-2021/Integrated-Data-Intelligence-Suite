@@ -4,7 +4,7 @@ import {
     Layout,
     Typography,
 } from 'antd';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import SideBar from '../../components/SideBar/SideBar';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import NavBar from '../../components/NavBar/NavBar';
@@ -73,17 +73,22 @@ class HomePage extends Component {
                                     <br/>
                                     All in one place.
                                 </div>
-                                {/*<div id={'button-container'}>*/}
-                                <button id={'download-button'}>
-                                    <SiWindows id={'windows-logo'}/>
-                                    Download for Windows
-                                </button>
+                                <div id={'button-container'}>
+                                    <button id={'download-button'}>
+                                        <SiWindows id={'windows-logo'}/>
+                                        Download for Windows
+                                    </button>
 
-                                {/*<button id={'open-in-browser-button'}>*/}
-                                {/*    <MdOpenInBrowser id={'windows-logo'}/>*/}
-                                {/*    Open in your browser*/}
-                                {/*</button>*/}
-                                {/*</div>*/}
+
+                                    <Link to="/login">
+                                        <button
+                                            id={'open-in-browser-button'}
+                                        >
+                                            <MdOpenInBrowser id={'windows-logo'}/>
+                                            Open in your browser
+                                        </button>
+                                    </Link>
+                                </div>
                                 <div id={'app-image'}>Image</div>
                                 <div id={'selling-point-2-container'}>
                                     <div/>

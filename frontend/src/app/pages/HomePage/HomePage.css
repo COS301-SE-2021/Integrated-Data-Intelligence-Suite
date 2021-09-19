@@ -44,10 +44,10 @@
     display: grid;
     grid-template-columns: 25px auto;
     grid-template-rows: 100%;
-    width: max-content;
+    /*width: max-content;*/
     height: max-content;
     padding: 20px;
-    justify-self: center;
+    justify-self: end;
     border-radius: 50px;
     z-index: 2;
     column-gap: 15px;
@@ -55,17 +55,42 @@
     background: var(--dodger-blue);
     color: white;
     border: var(--dodger-blue);
+    width: 230px;
+}
+
+#open-in-browser-button {
+    display: grid;
+    grid-template-columns: 25px auto;
+    grid-template-rows: 100%;
+    /*width: max-content;*/
+    height: max-content;
+    padding: 20px;
+    justify-self: start;
+    border-radius: 50px;
+    z-index: 2;
+    column-gap: 15px;
+    margin-top: 40px;
+    background: var(--dodger-blue);
+    color: white;
+    border: var(--dodger-blue);
+    width: 230px;
+
 }
 
 #download-button:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+#open-in-browser-button:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 #button-container {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
+    column-gap: 40px;
 }
 
 #selling-point-1 {
