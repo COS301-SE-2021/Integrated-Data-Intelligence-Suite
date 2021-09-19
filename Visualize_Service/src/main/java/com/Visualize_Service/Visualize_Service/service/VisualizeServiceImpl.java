@@ -125,23 +125,21 @@ public class VisualizeServiceImpl {
 
 
 
-
-
         //WordCloud graph
-        CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getTrendList());
+        //TODO: request.getWordList()
+        CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getWordList());
         CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
         outputData.add(wordCloudResponse.words);
 
         //WordCloud Piechart
-        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getTrendList()); //TODO: request.getWordList() !!!!this wont work for now
+        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getWordList());
         CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
         outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
         //WordCloud Sunburst
-        //TODO: request.getWordList() !!!!this wont work for now
-        /*CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getTrendList(),wordCloudPieChartGraphResponse.getDominantWords());
+        CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getWordList(),wordCloudPieChartGraphResponse.getDominantWords());
         CreateWordCloudSunBurstGraphResponse wordCloudSunBurstGraphResponse = this.createWordCloudSunBurstGraph(wordCloudSunBurstGraphRequest);
-        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
 
         //Network graph (Relationships)

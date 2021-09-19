@@ -39,7 +39,8 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
         ArrayList<String> testlist4 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2,testlist3,testlist4);
+        ArrayList<ArrayList> testlist5 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(null,testlist1,testlist2,testlist3,testlist4, testlist5);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
@@ -50,7 +51,8 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
         ArrayList<String> testlist4 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,null,testlist2,testlist3,testlist4);
+        ArrayList<ArrayList> testlist5 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,null,testlist2,testlist3,testlist4, testlist5);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
@@ -61,7 +63,8 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
         ArrayList<String> testlist4 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null,testlist3,testlist4);
+        ArrayList<ArrayList> testlist5 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,null,testlist3,testlist4, testlist5);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
@@ -72,7 +75,8 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
         ArrayList<String> testlist4 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,null,testlist4);
+        ArrayList<ArrayList> testlist5 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,null,testlist4, testlist5);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
@@ -83,7 +87,8 @@ public class VisualizeServiceTest {
         ArrayList<ArrayList> testlist2 = new ArrayList<>();
         ArrayList<ArrayList> testlist3 = new ArrayList<>();
         ArrayList<ArrayList> testlist4 = new ArrayList<>();
-        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,testlist4,null);
+        ArrayList<ArrayList> testlist5 = new ArrayList<>();
+        VisualizeDataRequest test = new VisualizeDataRequest(testlist1,testlist2,testlist3,testlist4,null, testlist5);
         Assertions.assertThrows(InvalidRequestException.class, () -> service.visualizeData(test));
     }
 
