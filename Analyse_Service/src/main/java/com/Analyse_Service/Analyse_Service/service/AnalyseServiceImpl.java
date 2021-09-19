@@ -135,6 +135,10 @@ public class AnalyseServiceImpl {
         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = (ArrayList<FindNlpPropertiesResponse>) nlpArticle.get(0);
         ArrayList<ArrayList> ArticleWordList = (ArrayList<ArrayList>) nlpArticle.get(1);
 
+        for(int i =0; i < ArticleWordList.size() ;i++){
+            wordList.add(ArticleWordList.get(i));
+        }
+
         /*******************Setup Data******************/
         /**social**/
         for (int i = 0; i < dataList.size(); i++) {
