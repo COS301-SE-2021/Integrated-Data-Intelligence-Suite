@@ -63,13 +63,15 @@ public class VisualizeServiceControllerTest {
         ArrayList<ArrayList> predictionList = new ArrayList<>();
         ArrayList<ArrayList> trendList = new ArrayList<>();
         ArrayList<String> anomalyList = new ArrayList<>();
+        ArrayList<ArrayList> wordList = new ArrayList<>();
 
         VisualizeDataRequest visualizeDataRequest = new VisualizeDataRequest(
                 patternList,
                 relationshipList,
                 predictionList,
                 trendList,
-                anomalyList );
+                anomalyList,
+                wordList);
 
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
@@ -106,13 +108,15 @@ public class VisualizeServiceControllerTest {
         ArrayList<ArrayList> predictionList = new ArrayList<>();
         ArrayList<ArrayList> trendList = new ArrayList<>();
         ArrayList<String> anomalyList = new ArrayList<>();
+        ArrayList<ArrayList> wordList = new ArrayList<>();
 
         VisualizeDataRequest visualizeDataRequest = new VisualizeDataRequest(
                 patternList,
                 relationshipList,
                 predictionList,
                 trendList,
-                anomalyList );
+                anomalyList,
+                wordList);
 
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();

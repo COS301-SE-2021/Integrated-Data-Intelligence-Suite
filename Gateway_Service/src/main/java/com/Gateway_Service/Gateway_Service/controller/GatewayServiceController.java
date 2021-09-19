@@ -325,11 +325,12 @@ public class GatewayServiceController {
         /*********************VISUALISE**********************/
 
         VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
-                analyseResponse.patternList,
-                analyseResponse.relationshipList,
                 analyseResponse.getPattenList(),
-                analyseResponse.trendList,
-                analyseResponse.anomalyList);//    DataSource.TWITTER,ImportResponse. getJsonData());
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPattenList(),
+                analyseResponse.getTrendList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
         VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
 
 
