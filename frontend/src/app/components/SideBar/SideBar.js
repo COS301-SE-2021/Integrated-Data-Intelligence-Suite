@@ -36,7 +36,7 @@ class SideBar extends React.Component {
 
     componentDidMount() {
         // this.setActive(this.props.currentPage);
-        this.setState({active: this.props.currentPage});
+        this.setState({ active: this.props.currentPage });
     }
 
     render() {
