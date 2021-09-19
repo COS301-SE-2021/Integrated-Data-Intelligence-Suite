@@ -43,6 +43,7 @@
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
     background: #5773FA;
+    /*background: var(--dodger-blue);*/
     /*color: var(--neon-blue);*/
     color: white
     /*border-left: 3px solid #5773FA;*/

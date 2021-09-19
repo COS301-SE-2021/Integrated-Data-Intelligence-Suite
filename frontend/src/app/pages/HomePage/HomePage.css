@@ -131,12 +131,15 @@
 #app-image {
     justify-self: center;
     border: 3px solid var(--grey-border-color);
-    height: 500px;
+    height: 460px;
     width: 900px;
     z-index: 3;
     position: relative;
     top: 50px;
     background: var(--cultured);
+    background: url("../../assets/app-image.png");
+    background-size: 900px;
+    background-repeat: no-repeat;
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

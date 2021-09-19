@@ -88,7 +88,7 @@ class HomePage extends Component {
                                         </button>
                                     </Link>
                                 </div>
-                                <div id={'app-image'}>Image</div>
+                                <div id={'app-image'}/>
                                 <div id={'selling-point-2-container'}>
                                     <div/>
                                     <div id={'selling-point-2'}>
