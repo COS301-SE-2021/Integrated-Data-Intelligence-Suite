@@ -21,7 +21,7 @@ class LoginButton extends React.Component {
                   type="primary"
                   htmlType="submit"
                   className="login_button"
-                  onClick={addError}
+                  // onClick={addError}
                 >
                     Log in
                 </Button>

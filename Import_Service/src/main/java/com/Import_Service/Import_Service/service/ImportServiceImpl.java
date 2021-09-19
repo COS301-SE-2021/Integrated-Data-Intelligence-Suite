@@ -1,6 +1,7 @@
 package com.Import_Service.Import_Service.service;
 
 import com.Import_Service.Import_Service.dataclass.APISource;
+import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.rri.DataSource;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
 import com.Import_Service.Import_Service.exception.ImporterException;
@@ -16,12 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ImportServiceImpl {
@@ -258,6 +257,62 @@ public class ImportServiceImpl {
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
+        }
+
+        //Fetching api sources from database
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request req;
+        List<APISource> sources = apiSourceRepository.findAll();
+        if(!sources.isEmpty()) {
+            for (APISource s : sources) {
+                String apiUrl = s.getUrl();
+                if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
+                    apiUrl += "?";
+                }
+
+                apiUrl += s.getSearchKey() + "=" + keyword;
+
+                Map<String, String> params = s.getParameters();
+
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
+                }
+
+                if (s.getAuthType() == AuthorizationType.apiKey) {
+                    apiUrl += "&apiKey=" + s.getAuthorization();
+
+                    req = new Request.Builder()
+                            .url(apiUrl)
+                            .method(s.getMethod(), null)
+                            .build();
+                } else if (s.getAuthType() == AuthorizationType.bearer) {
+                    req = new Request.Builder()
+                            .addHeader("Authorization", "Bearer " + s.getAuthorization())
+                            .url(apiUrl)
+                            .method(s.getMethod(), null)
+                            .build();
+                } else {
+                    req = new Request.Builder()
+                            .url(apiUrl)
+                            .method(s.getMethod(), null)
+                            .build();
+                }
+
+                try {
+                    Response response = client.newCall(req).execute();
+
+                    if (!response.isSuccessful()) {
+                        throw new ImporterException("Unexpected Error: " + Objects.requireNonNull(response.body()).string());
+                    }
+
+                    list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
+                }
+                catch (IOException e) {
+                    throw new ImporterException("An error has occurred when executing api call");
+                }
+
+            }
         }
 
         return new ImportDataResponse(list);
