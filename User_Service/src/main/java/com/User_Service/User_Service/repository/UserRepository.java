@@ -27,6 +27,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT s FROM users s WHERE s.isAdmin = true")
     ArrayList<User> findUsersByAdmin();
 
+    @Query("SELECT s FROM users s WHERE s.isVerified = false ORDER BY s.dateCreated ASC")
+    ArrayList<User> findAllByIsVerifiedFalseOrderByDateCreatedAsc();
+
     @Modifying
     @Query("UPDATE users u SET u.permission = :perm WHERE u.id = :id")
     int updatePermission(@Param("id")UUID userID, @Param("perm")Permission perm);
@@ -38,4 +41,24 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Modifying
     @Query("UPDATE users u SET u.isVerified = true WHERE u.id = :id")
     int verifyUser(@Param("id")UUID userid);
+
+    @Modifying
+    @Query("UPDATE users u SET u.isAdmin = :newAdmin WHERE u.id = :id")
+    int updateAdmin(@Param("id")UUID userid, @Param("newAdmin") boolean newAdmin);
+
+    @Modifying
+    @Query("UPDATE users u SET u.firstName = :newFirst WHERE u.id = :id")
+    int updateFirstName(@Param("id")UUID userid, @Param("newFirst") String newFirst);
+
+    @Modifying
+    @Query("UPDATE users u SET u.lastName = :newLast WHERE u.id = :id")
+    int updateLastName(@Param("id")UUID userid, @Param("newLast") String newLast);
+
+    @Modifying
+    @Query("UPDATE users u SET u.username = :newUsername WHERE u.id = :id")
+    int updateUsername(@Param("id")UUID userid, @Param("newUsername") String newUsername);
+
+    @Modifying
+    @Query("UPDATE users u SET u.email = :newEmail WHERE u.id = :id")
+    int updateEmail(@Param("id")UUID userid, @Param("newEmail") String newEmail);
 }

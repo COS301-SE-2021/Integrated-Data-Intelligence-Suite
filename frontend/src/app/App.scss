@@ -16,10 +16,13 @@
 @import url("components/Footer/Footer.css");
 
 //Login Page
-//@import "../styles/LoginPage/login.css";
+@import "pages/LoginPage/loginPage.css";
+
+//Login button
+@import url("components/LoginButton/loginButton.css");
 
 //Register Page
-//@import "../styles/RegisterPage/registerPage.css";
+@import "pages/RegisterPage/RegisterPage.css";
 
 //Permissions Page
 @import "pages/PermissionsPage/Permissions.css";

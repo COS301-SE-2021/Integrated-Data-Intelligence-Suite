@@ -1,10 +1,9 @@
 package com.User_Service.User_Service.controller;
 
-import com.User_Service.User_Service.UserServiceApplication;
 import com.User_Service.User_Service.dataclass.User;
+import com.User_Service.User_Service.request.ChangeUserRequest;
 import com.User_Service.User_Service.request.GetUserRequest;
 import com.User_Service.User_Service.request.LoginRequest;
-import com.User_Service.User_Service.request.ManagePermissionsRequest;
 import com.User_Service.User_Service.request.RegisterRequest;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
@@ -17,21 +16,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,7 +199,7 @@ public class UserServiceControllerTest {
     public void userManagePermissions() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/User/changepermission")
-                .content(asJsonString(new ManagePermissionsRequest("randomUsername", Permission.IMPORTING)))
+                .content(asJsonString(new ChangeUserRequest("randomUsername", false, Permission.IMPORTING)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -215,24 +208,24 @@ public class UserServiceControllerTest {
     @Test
     @DisplayName("When_user_managePermissions_is_Requested_valid_data")
     public void userManagePermissionsValidData() throws Exception {
-        ManagePermissionsRequest managePermissionsRequest = new ManagePermissionsRequest("userName", Permission.VIEWING);
+        ChangeUserRequest changeUserRequest = new ChangeUserRequest("userName", false, Permission.VIEWING);
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
         mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
 
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson = ow.writeValueAsString(managePermissionsRequest);
+        String requestJson = ow.writeValueAsString(changeUserRequest);
 
-        ManagePersmissionsResponse managePersmissionsResponse = new ManagePersmissionsResponse("message", true);
-        when(service.managePermissions(any(ManagePermissionsRequest.class))).thenReturn(managePersmissionsResponse);
+        ChangeUserResponse changeUserResponse = new ChangeUserResponse("message", true);
+        when(service.changeUser(any(ChangeUserRequest.class))).thenReturn(changeUserResponse);
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/changepermission")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        ManagePersmissionsResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ManagePersmissionsResponse.class);
+        ChangeUserResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), ChangeUserResponse.class);
 
         Assertions.assertNotNull(returnClass);
     }

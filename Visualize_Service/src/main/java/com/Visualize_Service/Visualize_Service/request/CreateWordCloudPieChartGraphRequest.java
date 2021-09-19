@@ -3,13 +3,13 @@ package com.Visualize_Service.Visualize_Service.request;
 import java.util.ArrayList;
 
 public class CreateWordCloudPieChartGraphRequest {
-    public ArrayList<String> dataList;
+    public ArrayList<ArrayList> dataList;
 
-    public CreateWordCloudPieChartGraphRequest(ArrayList<String> dataList){
+    public CreateWordCloudPieChartGraphRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;
     }
 
-    public ArrayList<String> getDataList(){
+    public ArrayList<ArrayList> getDataList(){
         return dataList;
     }
 }

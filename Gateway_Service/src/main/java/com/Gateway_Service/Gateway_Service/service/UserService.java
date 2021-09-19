@@ -1,6 +1,8 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,11 +24,11 @@ public class UserService {
      * @return This class will contain the information whether or not the request was successfull
      *         or not.
      */
-    public ManagePermissionsResponse managePermissions(ManagePermissionsRequest userRequest) {
+    public ChangeUserResponse managePermissions(ChangeUserRequest userRequest) {
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<ManagePermissionsRequest> requestEntity = new HttpEntity<ManagePermissionsRequest>(request, requestHeaders);
-        ResponseEntity<ManagePermissionsResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ManagePermissionsResponse.class);
+        HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<ChangeUserRequest>(request, requestHeaders);
+        ResponseEntity<ChangeUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
         return responseEntity.getBody();*/
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -42,7 +44,7 @@ public class UserService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ManagePermissionsResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ManagePermissionsResponse.class);
+        ChangeUserResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ChangeUserResponse.class);
 
         return userResponse;
     }
@@ -152,6 +154,25 @@ public class UserService {
         return userResponse;
     }
 
+    public ResendCodeResponse resendCode(ResendCodeRequest userRequest) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/resendCode", request, ResendCodeResponse.class);
+
+        return userResponse;
+    }
+
     public GetUserResponse getUser(GetUserRequest userRequest){
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -202,6 +223,33 @@ public class UserService {
             e.printStackTrace();
         }
         LoginResponse userResponse = restTemplate.postForObject("http://User-Service/User/login", request, LoginResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service to allow the user to change
+     * their account detials. It sends a request to the user controller and send the request
+     * class to user service.
+     * @param userRequest This class contains the new details of the user to change their current details.
+     * @return This class contains the information if the process of changing their account details
+     * was successful or not.
+     */
+    public UpdateProfileResponse updateProfile(UpdateProfileRequest userRequest) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        UpdateProfileResponse userResponse = restTemplate.postForObject("http://User-Service/User/updateProfile", request, UpdateProfileResponse.class);
 
         return userResponse;
     }
