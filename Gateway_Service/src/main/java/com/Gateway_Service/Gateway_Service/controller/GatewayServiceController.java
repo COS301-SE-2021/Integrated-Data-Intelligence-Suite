@@ -69,7 +69,7 @@ public class GatewayServiceController {
     }
 
     /**
-     * Test function, this methoe is used to test the service
+     * Test function, this method is used to test the service
      * @param key This is a path variable of string value
      * @return String This is a string value of a json test
      */
@@ -231,6 +231,7 @@ public class GatewayServiceController {
      * @return This is the response http entity. It contains all the users.
      */
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
+    @CrossOrigin
     public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
         String response = importClient.addApiSource(jsonRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -242,6 +243,7 @@ public class GatewayServiceController {
      * @return This is the response http entity. It contains all the users.
      */
     @PostMapping(value = "/getSourceById", produces = "application/json")
+    @CrossOrigin
     public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
         GetAPISourceByIdResponse response = importClient.getSourceById(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -253,8 +255,19 @@ public class GatewayServiceController {
      * @return This is the response http entity. It contains all the users.
      */
     @PostMapping(value = "/updateAPI", produces = "application/json")
+    @CrossOrigin
     public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
         String response = importClient.editAPISource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the api sources.
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/getAllSources", produces = "application/json")
+    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
+        GetAllAPISourcesResponse response = importClient.getAllAPISources();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

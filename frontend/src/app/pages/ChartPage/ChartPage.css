@@ -75,7 +75,6 @@
 
     overflow-x: hidden;
     background: #e8e8e9;
-
 }
 
 
@@ -84,7 +83,7 @@
 *
  */
 #inner_layout_div ::-webkit-scrollbar {
-    width: 8px;
+    width: 11px;
 }
 
 #inner_layout_div ::-webkit-scrollbar-track {
@@ -97,7 +96,7 @@
 }
 
 #inner_layout_div ::-webkit-scrollbar-thumb:active {
-    color: red;
+    background: var(--dodger-blue);
 }
 
 #map-details-container {
@@ -228,10 +227,10 @@
 }
 
 #world-map {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 0 auto;
-    border-radius: 10px;
+    display: grid !important;
+    grid-template-columns: 100% !important;
+    grid-template-rows: 0 auto !important;
+    border-radius: 10px !important;
 }
 
 #world-map > .simple-card-body {

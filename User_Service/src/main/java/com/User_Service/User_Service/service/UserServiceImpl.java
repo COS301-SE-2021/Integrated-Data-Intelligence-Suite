@@ -33,12 +33,11 @@ public class UserServiceImpl {
     private NotificationServiceImpl notificationService;
 
     @Autowired
-    private final EmailConfig config;
+    private final EmailConfig config = new EmailConfig();
 
     private final boolean mock = false;
 
-    public UserServiceImpl(EmailConfig config) {
-        this.config = config;
+    public UserServiceImpl() {
     }
 
     @Autowired

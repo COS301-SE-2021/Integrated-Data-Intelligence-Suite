@@ -190,6 +190,16 @@ public class ImportService {
         return response;
     }
 
+    public GetAllAPISourcesResponse getAllAPISources()  {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request = new HttpEntity<>(requestHeaders);
+        GetAllAPISourcesResponse response = restTemplate.getForObject("http://Import-Service/Import/getAllSources", GetAllAPISourcesResponse.class);
+
+        return response;
+    }
+
     public String editAPISource(String jsonString)  {
 
         /*HttpHeaders requestHeaders = new HttpHeaders();

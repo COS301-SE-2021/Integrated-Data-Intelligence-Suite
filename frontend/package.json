@@ -128,7 +128,7 @@
     "identity-obj-proxy": "^3.0.0",
     "wait-on": "^5.3.0"
   },
-  "proxy": "http://20.108.56.39:80",
+  "proxy": "http://localhost:9000",
   "jest": {
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",

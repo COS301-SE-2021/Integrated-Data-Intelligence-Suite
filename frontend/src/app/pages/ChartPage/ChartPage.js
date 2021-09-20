@@ -138,6 +138,7 @@ class ChartPage extends Component {
                                                     <SimpleCard
                                                         cardTitle={''}
                                                         cardID={'world-map'}
+                                                        titleOnTop
                                                     >
                                                         <MapCard text={this.state.text}/>
                                                     </SimpleCard>
@@ -145,6 +146,7 @@ class ChartPage extends Component {
                                                     <SimpleCard
                                                         cardTitle={'Tweet Frequency'}
                                                         cardID={'map-metric-1'}
+                                                        titleOnTop
                                                     >
                                                         <DraggableBarGraph text={this.state.text}/>
                                                     </SimpleCard>
@@ -159,6 +161,7 @@ class ChartPage extends Component {
                                             <SimpleCard
                                                 cardTitle="Word Cloud"
                                                 cardID="word-cloud-card"
+                                                titleOnTop
                                             >
                                                 <WordCloud
                                                     text={this.state.text}
@@ -170,6 +173,7 @@ class ChartPage extends Component {
                                                 <SimpleCard
                                                     cardTitle="Dominant words"
                                                     cardID="word-graph-2"
+                                                    titleOnTop
                                                 >
                                                     <PieChart text={this.state.text}/>
                                                 </SimpleCard>
@@ -189,6 +193,7 @@ class ChartPage extends Component {
                                             <SimpleCard
                                                 cardTitle="Relationship Between Entities"
                                                 cardID="network-graph-entities"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
                                                     text={this.state.text}
@@ -200,6 +205,7 @@ class ChartPage extends Component {
                                             <SimpleCard
                                                 cardTitle="Relationship Between Patterns"
                                                 cardID="network-graph-patterns"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
                                                     text={this.state.text}
@@ -216,6 +222,7 @@ class ChartPage extends Component {
                                             <SimpleCard
                                                 cardTitle="Timeline"
                                                 cardID="anomaly-timeline-card"
+                                                titleOnTop
                                             >
                                                 <TimelineGraph
                                                     text={this.state.text}
@@ -226,6 +233,7 @@ class ChartPage extends Component {
                                             <SimpleCard
                                                 cardTitle="Scatter Plot"
                                                 cardID="anomaly-scatter-plot"
+                                                titleOnTop
                                             >
                                                 Scatter Plot
                                             </SimpleCard>

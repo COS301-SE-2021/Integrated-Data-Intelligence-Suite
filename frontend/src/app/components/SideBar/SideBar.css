@@ -20,6 +20,7 @@
     /*border: 3px solid red;*/
     height: 87%;
     padding: 10px;
+    padding-top: 30px;
 }
 
 #sidebar_menu > li {
@@ -42,6 +43,7 @@
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
     background: #5773FA;
+    /*background: var(--dodger-blue);*/
     /*color: var(--neon-blue);*/
     color: white
     /*border-left: 3px solid #5773FA;*/
