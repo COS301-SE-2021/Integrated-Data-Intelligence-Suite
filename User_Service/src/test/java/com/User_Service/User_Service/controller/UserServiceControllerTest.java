@@ -198,7 +198,7 @@ public class UserServiceControllerTest {
     @DisplayName("When_user_managePermissions_is_Requested")
     public void userManagePermissions() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
-                .post("/User/changepermission")
+                .post("/User/changeUser")
                 .content(asJsonString(new ChangeUserRequest("randomUsername", false, Permission.IMPORTING)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -220,7 +220,7 @@ public class UserServiceControllerTest {
         ChangeUserResponse changeUserResponse = new ChangeUserResponse("message", true);
         when(service.changeUser(any(ChangeUserRequest.class))).thenReturn(changeUserResponse);
 
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/changepermission")
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/User/changeUser")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(MockMvcResultMatchers.status().isOk());
