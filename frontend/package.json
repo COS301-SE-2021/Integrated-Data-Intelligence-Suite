@@ -101,7 +101,10 @@
     "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false,
-      "createDesktopShortcut": true
+      "createDesktopShortcut": true,
+      "installerIcon": "build/idis-logo.ico",
+      "uninstallerIcon": "build/idis-logo.ico",
+      "installerHeaderIcon": "build/idis-logo.ico"
     }
   },
   "eslintConfig": {

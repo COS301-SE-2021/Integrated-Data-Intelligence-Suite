@@ -15,17 +15,17 @@ mlflow.set_tracking_uri("http://localhost:5000")
 
 if (name == "LogisticRegressionModel"):
     from pyspark.ml.tuning import TrainValidationSplitModel
-    unflavouredModel = TrainValidationSplitModel.log_model(path)
+    unflavouredModel = TrainValidationSplitModel.load(path)
     mlflow.spark.log_model(unflavouredModel, "LogisticRegressionModel")
 
 if (name == "DecisionTreeModel"):
     from pyspark.ml.tuning import TrainValidationSplitModel
-    unflavouredModel = TrainValidationSplitModel.log_model(path)
+    unflavouredModel = TrainValidationSplitModel.load(path)
     mlflow.spark.log_model(unflavouredModel, "DecisionTreeModel")
 
 if(name == "KMeansModel"):
     from pyspark.ml.pipeline import PipelineModel
-    unflavouredModel = PipelineModel.log_model(path)
+    unflavouredModel = PipelineModel.load(path)
     mlflow.spark.log_model(unflavouredModel, "KMeansModel")
 
 #elif

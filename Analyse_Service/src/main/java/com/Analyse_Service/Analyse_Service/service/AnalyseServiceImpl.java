@@ -208,7 +208,7 @@ public class AnalyseServiceImpl {
         }
 
 
-        /******************Select Best Models (registry)*******************/
+        /******************Select Best Models (registry)*******************
 
         String commandPath = "python ../rri/RegisterModel.py";
         CommandLine commandLine = CommandLine.parse(commandPath);
@@ -258,7 +258,7 @@ public class AnalyseServiceImpl {
 
         return new AnalyseDataResponse(//null,null,null,null,null,null);
                 findPatternResponse.getPattenList(),//null,null,null,null);
-                findRelationshipsResponse.getPattenList(),
+               findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
                 findAnomaliesResponse.getPattenList(),
@@ -1196,9 +1196,14 @@ public class AnalyseServiceImpl {
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-        try {
+        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+
+        File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        //client.logArtifact(run.getId(), modelFile);
+        /*try {
             //lrModel.save("Database");
-            lrModel.write().overwrite().save("../models/LogisticRegressionModel");
+
 
             //File modelFile = new File("../models/LogisticRegressionModel");
             //client.logArtifact(run.getId(), modelFile);
@@ -1210,12 +1215,13 @@ public class AnalyseServiceImpl {
             //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
             executor.setStreamHandler(new PumpStreamHandler(System.out));
-            try {
+            executor.execute(commandLine);
+            /*try {
                 executor.execute(commandLine);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);
-            }
+            }*
 
             //TODO: flavor
 
@@ -1244,11 +1250,11 @@ public class AnalyseServiceImpl {
                     .setName("LogisticRegressionModel")
                     .setRunId(run.getId())
                     .setSource("artifactstore")
-                    .build();*/
+                    .build();*
 
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
 
         run.endRun();
 
@@ -1258,7 +1264,7 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
-    public void trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request) throws InvalidRequestException {
+    public void trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request) throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -1533,10 +1539,11 @@ public class AnalyseServiceImpl {
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
+        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         try {
             //lrModel.save("Database");
-            lrModel.write().overwrite().save("../models/LogisticRegressionModel");
-            File modelFile = new File("../models/LogisticRegressionModel");
+
+            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
 
             //TODO: flavor
             //client.logArtifact(run.getId(), modelFile);
@@ -1870,9 +1877,11 @@ public class AnalyseServiceImpl {
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
 
+        dtModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+        File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
+        //client.logArtifact(run.getId(), modelFile);
 
         try {
-            dtModel.write().overwrite().save("../models/DecisionTreeModel");
 
             //File modelFile = new File("../models/DecisionTreeModel");
             //client.logArtifact(run.getId(), modelFile);
@@ -1882,12 +1891,13 @@ public class AnalyseServiceImpl {
             //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
             executor.setStreamHandler(new PumpStreamHandler(System.out));
-            try {
+            executor.execute(commandLine);
+            /*try {
                 executor.execute(commandLine);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);
-            }
+            }*/
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -2072,7 +2082,7 @@ public class AnalyseServiceImpl {
 
         /*******************LOAD - READ MODEL*****************/
 
-        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("../models/LogisticRegressionModel");
+        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
@@ -2479,9 +2489,11 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-
+        kmModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        //client.logArtifact(run.getId(), modelFile);
         try {
-            kmModel.write().overwrite().save("../models/KMeansModel");
+
 
             //File modelFile = new File("../models/KMeansModel");
             //client.logArtifact(run.getId(), modelFile);
@@ -2491,12 +2503,13 @@ public class AnalyseServiceImpl {
             //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
             executor.setStreamHandler(new PumpStreamHandler(System.out));
-            try {
+            executor.execute(commandLine);
+            /*try {
                 executor.execute(commandLine);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);
-            }
+            }*/
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -2662,7 +2675,7 @@ public class AnalyseServiceImpl {
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
         /*******************LOAD & READ MODEL*****************/
-        PipelineModel kmModel = PipelineModel.load("../models/KMeansModel");
+        PipelineModel kmModel = PipelineModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 

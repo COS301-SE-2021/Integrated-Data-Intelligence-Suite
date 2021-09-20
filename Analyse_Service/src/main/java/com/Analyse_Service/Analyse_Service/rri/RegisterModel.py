@@ -4,26 +4,26 @@ import mlflow
 import mlflow.spark
 from mlflow.tracking import MlflowClient
 import pyspark
-from pyspark.ml.pipeline import PipelineModel
 
 mlflow.set_tracking_uri("http://localhost:5000")
-
 
 client = MlflowClient()
 flavouredModel = client.get_latest_versions("LogisticRegressionModel", stages=["None"]
 if flavouredModel != null:
-    from pyspark.ml.tuning import TrainValidationSplitModel
-    flavouredModel.save_model("../models/LogisticRegressionModel")
+    #from pyspark.ml.tuning import TrainValidationSplitModel
+    #flavouredModel.save_model("../models/LogisticRegressionModel")
+    flavouredModel.write.overwrite.save("../models/LogisticRegressionModel")
 
 flavouredModel = client.get_latest_versions("DecisionTreeModel", stages=["None"]
 if flavouredModel != null:
-    from pyspark.ml.tuning import TrainValidationSplitModel
-    flavouredModel.save_model("../models/DecisionTreeModel")
+    #from pyspark.ml.tuning import TrainValidationSplitModel
+    flavouredModel.write.overwrite.save("../models/DecisionTreeModel")
 
 flavouredModel = client.get_latest_versions("KMeansModel", stages=["None"]
 if flavouredModel != null:
-    from pyspark.ml.tuning import TrainValidationSplitModel
-    flavouredModel.save_model("../models/KMeansModel")
+    #from pyspark.ml.pipeline import PipelineModel
+    flavouredModel.write.overwrite.save("../models/KMeansModel")
+
 
 
 
