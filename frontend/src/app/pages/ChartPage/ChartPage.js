@@ -230,13 +230,13 @@ class ChartPage extends Component {
                                                 />
                                             </SimpleCard>
 
-                                            <SimpleCard
-                                                cardTitle="Scatter Plot"
-                                                cardID="anomaly-scatter-plot"
-                                                titleOnTop
-                                            >
-                                                Scatter Plot
-                                            </SimpleCard>
+                                            {/*<SimpleCard*/}
+                                            {/*    cardTitle="Scatter Plot"*/}
+                                            {/*    cardID="anomaly-scatter-plot"*/}
+                                            {/*    titleOnTop*/}
+                                            {/*>*/}
+                                            {/*    Scatter Plot*/}
+                                            {/*</SimpleCard>*/}
 
                                             {/*<SimpleCard*/}
                                             {/*    cardTitle="Line Graph"*/}

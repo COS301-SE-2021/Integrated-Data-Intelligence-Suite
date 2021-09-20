@@ -6,6 +6,10 @@
     grid-template-rows: 3em auto; /* Row 1 = title, Row 2 = body*/
     height: 100%;
     margin-bottom: 3%;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .simple-section-title {
