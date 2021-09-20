@@ -508,7 +508,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************
+        /*******************SETUP SPARK*****************/
 
          SparkSession sparkPatterns = SparkSession
          .builder()
@@ -582,7 +582,6 @@ public class AnalyseServiceImpl {
         }
         System.out.println(results.toString());
 
-        sparkPatterns.stop();*/
 
         SparkSession sparkPatterns = SparkSession
                 .builder()
@@ -690,7 +689,7 @@ public class AnalyseServiceImpl {
             System.out.println(o.toString());
         }
 
-        sparkPatterns.stop();
+
         return new FindPatternResponse(results);
     }
 
@@ -906,7 +905,7 @@ public class AnalyseServiceImpl {
         }
         //System.out.println(results.toString());
 
-        //sparkRelationships.stop();
+
 
         return new FindRelationshipsResponse(results);
     }

@@ -137,9 +137,9 @@ public class VisualizeServiceImpl {
         outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
         //WordCloud Sunburst
-        CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getWordList(),wordCloudPieChartGraphResponse.getDominantWords());
+        /*CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getWordList(),wordCloudPieChartGraphResponse.getDominantWords());
         CreateWordCloudSunBurstGraphResponse wordCloudSunBurstGraphResponse = this.createWordCloudSunBurstGraph(wordCloudSunBurstGraphRequest);
-        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
 
 
         //Network graph (Relationships)

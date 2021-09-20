@@ -119,7 +119,7 @@ public class ParseServiceImpl {
                     parsedArticlesList.add(article);
                 }
                 if(request.getPermission().equals("IMPORTING")) {
-                    articleRepository.saveAll(parsedArticlesList);
+                    //articleRepository.saveAll(parsedArticlesList);
                 }
             }
 
