@@ -3,7 +3,6 @@ package com.Analyse_Service.Analyse_Service.service;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -23,9 +22,6 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -77,8 +73,6 @@ public class AnalyseServiceImpl {
     @Autowired
     private AnalyseServiceParsedDataRepository parsedDataRepository;
 
-    @Autowired
-    private AnalyseServiceAIModelRepository aiModelRepository;
 
     static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
@@ -258,7 +252,7 @@ public class AnalyseServiceImpl {
 
         return new AnalyseDataResponse(//null,null,null,null,null,null);
                 findPatternResponse.getPattenList(),//null,null,null,null);
-               findRelationshipsResponse.getPattenList(),
+                findRelationshipsResponse.getPattenList(),
                 getPredictionResponse.getPattenList(),
                 findTrendsResponse.getPattenList(),
                 findAnomaliesResponse.getPattenList(),
@@ -508,7 +502,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************
+        /*******************SETUP SPARK*****************/
 
          SparkSession sparkPatterns = SparkSession
          .builder()
@@ -582,7 +576,6 @@ public class AnalyseServiceImpl {
         }
         System.out.println(results.toString());
 
-        sparkPatterns.stop();*/
 
         SparkSession sparkPatterns = SparkSession
                 .builder()
@@ -690,7 +683,7 @@ public class AnalyseServiceImpl {
             System.out.println(o.toString());
         }
 
-        sparkPatterns.stop();
+
         return new FindPatternResponse(results);
     }
 
@@ -906,7 +899,7 @@ public class AnalyseServiceImpl {
         }
         //System.out.println(results.toString());
 
-        //sparkRelationships.stop();
+
 
         return new FindRelationshipsResponse(results);
     }
@@ -1196,26 +1189,28 @@ public class AnalyseServiceImpl {
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        String path = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel";
+        String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
+        lrModel.write().overwrite().save(path);
+        File modelFile = new File(path);
+        client.logArtifact(run.getId(), modelFile);
 
-
-        File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-        //client.logArtifact(run.getId(), modelFile);
         /*try {
             //lrModel.save("Database");
-
 
             //File modelFile = new File("../models/LogisticRegressionModel");
             //client.logArtifact(run.getId(), modelFile);
 
             //TODO: flavor
 
-            String commandPath = "python ../rri/LogModel.py ../models/LogisticRegressionModel LogisticRegressionModel";
+            String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
             CommandLine commandLine = CommandLine.parse(commandPath);
             //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
             executor.setStreamHandler(new PumpStreamHandler(System.out));
             executor.execute(commandLine);
+
             /*try {
                 executor.execute(commandLine);
             } catch (Exception ex) {
@@ -1877,16 +1872,18 @@ public class AnalyseServiceImpl {
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
 
-        dtModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
-        File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel");
-        //client.logArtifact(run.getId(), modelFile);
+        String path = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
+        String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        dtModel.write().overwrite().save(path);
+        File modelFile = new File(path);
+        client.logArtifact(run.getId(), modelFile);
 
-        try {
+
+        /*try {
 
             //File modelFile = new File("../models/DecisionTreeModel");
             //client.logArtifact(run.getId(), modelFile);
-
-            String commandPath = "python ../rri/LogModel.py ../models/DecisionTreeModel DecisionTreeModel";
+            String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
             CommandLine commandLine = CommandLine.parse(commandPath);
             //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
@@ -1897,13 +1894,10 @@ public class AnalyseServiceImpl {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);
-            }*/
+            }*
         }catch (Exception e){
             e.printStackTrace();
-        }
-
-
-
+        }*/
 
 
         run.endRun();
@@ -2465,6 +2459,7 @@ public class AnalyseServiceImpl {
 
         //KMeans model = pipeline.getStages()[1];
         PipelineModel kmModel = pipeline.fit(trainingDF);
+
         //CrossValidatorModel kmModel = crossValidator.fit(trainingDF);
         Dataset<Row> predictions = kmModel.transform(trainingDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         //predictions.show();
@@ -2489,16 +2484,19 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        kmModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
-        File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
-        //client.logArtifact(run.getId(), modelFile);
-        try {
+        String path = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel";
+        String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        kmModel.write().overwrite().save(path);
+        File modelFile = new File(path);
+        client.logArtifact(run.getId(), modelFile);
+
+
+        /*try {
 
 
             //File modelFile = new File("../models/KMeansModel");
             //client.logArtifact(run.getId(), modelFile);
-
-            String commandPath = "python ../rri/LogModel.py ../models/KMeansModel KMeansModel";
+            String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
             CommandLine commandLine = CommandLine.parse(commandPath);
             //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
             DefaultExecutor executor = new DefaultExecutor();
@@ -2509,10 +2507,10 @@ public class AnalyseServiceImpl {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);
-            }*/
+            }*
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
 
         run.endRun();
 
