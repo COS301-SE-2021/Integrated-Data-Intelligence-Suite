@@ -111,8 +111,6 @@ public class VisualizeServiceImpl {
 
 
 
-
-
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
         CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
@@ -295,7 +293,7 @@ public class VisualizeServiceImpl {
         ArrayList<Graph> output = new ArrayList<>();
 
         WordCloudGraph out = new WordCloudGraph();
-        out.words = String.valueOf(reqData.size());
+        out.words = String.valueOf(reqData.size()-1); //removed first index
         output.add(out);
         System.out.println(out.words);
         return new GetTotalAnomaliesResponse(output);
@@ -968,7 +966,7 @@ public class VisualizeServiceImpl {
 
         ArrayList<String> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
+        for (int i = 1; i < reqData.size(); i++) {
             TimelineGraph newGraph = new TimelineGraph();
 
             Random random = new Random();
@@ -984,6 +982,26 @@ public class VisualizeServiceImpl {
             newGraph.title = stringDate;
             newGraph.cardTitle = "Anomaly Detected";
             newGraph.cardSubtitle = reqData.get(i);
+
+            output.add(newGraph);
+        }
+
+        if(output.isEmpty()){
+            TimelineGraph newGraph = new TimelineGraph();
+
+            /*Random random = new Random();
+            int minDay = (int) LocalDate.of(2014, 01, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);*/
+
+            LocalDate randomBirthDate = LocalDate.of(0001,01,01) .ofEpochDay(1);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate= randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "No Anomaly Detected";
+            newGraph.cardSubtitle = "-";
 
             output.add(newGraph);
         }
