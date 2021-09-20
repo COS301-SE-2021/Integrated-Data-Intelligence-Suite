@@ -31,7 +31,11 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
   * [Version 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
   * [Version 4]()
-* [Coding Standards](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
+* Coding Standards 
+  * [Coding Standards](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
+  * [React / JSX](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/reactCodingStandards.md)
+  * [Javascript](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/javascriptCodingStandards.md)
+  * [Css](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/cssCodingStandards.md)
 * [Architectural Document](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
 * [User Manual](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
 * [Technical Installation](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
