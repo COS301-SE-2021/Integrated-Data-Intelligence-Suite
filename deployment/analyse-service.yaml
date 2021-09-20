@@ -22,10 +22,10 @@ spec:
             - containerPort: 9003
           resources:
             requests:
-              memory: "600Mi"
+              memory: "1200Mi"
               cpu: "300m"
             limits:
-              memory: "1200Mi"
+              memory: "2000Mi"
               cpu: "750m"
 
 
@@ -36,7 +36,7 @@ kind: Service
 metadata:
   name: analyse-service-svc
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: analyse-service
   ports:
