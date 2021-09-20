@@ -35,6 +35,13 @@ public class AnalyseServiceController {
 
         return service.analyzeData(request);
     }
+
+
+    @GetMapping("/trainData")
+    public void trainData() throws Exception{
+        //AnalyseDataRequest request = getBody();
+        service.TrainOverallModels();
+    }
     /*@PostMapping("/analyzeData")
     public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{
         AnalyseDataRequest request = requestEntity.getBody();
