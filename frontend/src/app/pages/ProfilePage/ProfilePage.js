@@ -152,11 +152,11 @@ export default function ProfilePage(props) {
                 const requestOptions = {
                     signal: abortCond.signal,
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(usr),
                 };
 
-                fetch('/user/updateProfile', requestOptions)
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/updateProfile`, requestOptions)
                     .then((res) => {
                         if (!res.ok) {
                             throw Error(res.error());

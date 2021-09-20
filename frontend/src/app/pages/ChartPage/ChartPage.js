@@ -144,7 +144,7 @@ class ChartPage extends Component {
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                        cardTitle={'Tweet Frequency'}
+                                                        cardTitle={'Data Frequency'}
                                                         cardID={'map-metric-1'}
                                                         titleOnTop
                                                     >
