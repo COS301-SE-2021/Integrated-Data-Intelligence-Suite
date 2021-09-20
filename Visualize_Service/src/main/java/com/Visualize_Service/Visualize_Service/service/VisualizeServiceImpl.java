@@ -144,19 +144,13 @@ public class VisualizeServiceImpl {
 
         //Network graph (Relationships)
         CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
-        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest);
+        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest, request.getWordList());
         outputData.add(relationResponse.NetworkGraphArray);
 
         //Network graph (Patterns)
         CreatePatternGraphRequest patternGraphRequest = new CreatePatternGraphRequest(request.getPatternList());
-        CreatePatternGraphResponse patternGraphResponse =  this.createPatternGraph(patternGraphRequest);
+        CreatePatternGraphResponse patternGraphResponse =  this.createPatternGraph(patternGraphRequest, request.getWordList());
         outputData.add(patternGraphResponse.NetworkGraphArray);
-
-
-
-
-
-
 
 
         //Timeline graph
@@ -170,9 +164,9 @@ public class VisualizeServiceImpl {
          */
 
         //Map Metric 2 (Number of tweets over time )
-        CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
+        /*CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
         CreateBarGraphExtraTwoResponse extraBarTwoResponse = this.createBarGraphExtraTwo(extraBarTwoRequest);
-        outputData.add(extraBarTwoResponse.BarGraphArray);
+        outputData.add(extraBarTwoResponse.BarGraphArray);*/
 
         //Line graph Sentiments ~ not in use
        /*CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
@@ -741,7 +735,7 @@ public class VisualizeServiceImpl {
 
     /*****************PATTERNS**********************/
 
-    public CreateRelationshipGraphResponse createRelationGraph(CreateRelationshipGraphRequest request)
+    public CreateRelationshipGraphResponse createRelationGraph(CreateRelationshipGraphRequest request, ArrayList<ArrayList> wordList)
             throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
@@ -753,6 +747,7 @@ public class VisualizeServiceImpl {
         /**Setup Data**/
 
         ArrayList<ArrayList> reqData = request.getDataList();
+
 
         /*for (int i = 0; i < reqData.size(); i++) {
             for (int j = 0; j < reqData.get(i).size(); j++) {
@@ -822,92 +817,51 @@ public class VisualizeServiceImpl {
             }
         }
 
+
+
+        /****/
+
+        ArrayList<ArrayList> shuffleWord = wordList;
+        Collections.shuffle(shuffleWord);
+
         if( output.isEmpty()) {
 
-            //ONE
-            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("Blue Origin");
-            nodeGraphOne.setPosition(10, 10);
+            int leftLimit = 1;
+            int rightLimit = (int) shuffleWord.size()/4;
+            if( (rightLimit) < 2){
+                rightLimit = shuffleWord.size();
+            }
+            int mockRange =  leftLimit + (int) (Math.random() * (rightLimit - leftLimit));;
 
-            //second node
-            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("@SpaceX");
-            nodeGraphTwo.setPosition(50, 5);
+            for(int i=0; i< mockRange; i++){
+                ArrayList<String> sentence = shuffleWord.get(i);
+                if(sentence.size() <= 1)
+                    continue;
 
-            //edge node
-            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "Blue Origin", "@SpaceX");
+                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+                nodeGraphOne.setData(sentence.get(i % sentence.size()));
+                nodeGraphOne.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
+                //second node
+                NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                nodeGraphTwo.setData(sentence.get( ( (i+1) % sentence.size())));
+                nodeGraphTwo.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            //TWO
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("NASA");
-            nodeGraphOne.setPosition(10, 10);
+                //edge node
+                EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+                edgeGraph.setData("Relationship found between", sentence.get(i % sentence.size()), sentence.get( ( (i+1) % sentence.size())));
 
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("@SpaceX");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "NASA", "@SpaceX");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
-
-            //THREE
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("NASA");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("Elon Musk");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "NASA", "Elon Musk");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
-
-            //FOUR
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("engineer");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("Elon Musk");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "engineer", "Elon Musk");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
+                //add graphs to output
+                output.add(nodeGraphOne);
+                output.add(nodeGraphTwo);
+                output.add(edgeGraph);
+            }
         }
 
         return new CreateRelationshipGraphResponse(output);
     }
 
-    public CreatePatternGraphResponse createPatternGraph(CreatePatternGraphRequest request)
+    public CreatePatternGraphResponse createPatternGraph(CreatePatternGraphRequest request, ArrayList<ArrayList> wordList)
             throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
@@ -958,31 +912,43 @@ public class VisualizeServiceImpl {
             }
         }
 
+
+
+        ArrayList<ArrayList> shuffleWord = wordList;
+        Collections.shuffle(shuffleWord);
+
         if( output.isEmpty()) {
 
-            String mainNode = "Tweet messages";
-            String confidence = "0.75";
-            String node = "Jack Dorsey";
+            int leftLimit = 1;
+            int rightLimit = (int) shuffleWord.size()/4;
+            if( (rightLimit) < 2){
+                rightLimit = shuffleWord.size();
+            }
+            int mockRange =  leftLimit + (int) (Math.random() * (rightLimit - leftLimit));;
 
-            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+            for(int i=0; i< mockRange; i++){
+                ArrayList<String> sentence = shuffleWord.get(i);
+                if(sentence.size() <= 1)
+                    continue;
 
-            nodeGraphOne.setData(node);
-            nodeGraphOne.setPosition(10, 10);
+                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+                nodeGraphOne.setData(sentence.get(i % sentence.size()));
+                nodeGraphOne.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            //second node
-            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                //second node
+                NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                nodeGraphTwo.setData(sentence.get( ( (i+1) % sentence.size())));
+                nodeGraphTwo.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            nodeGraphTwo.setData(mainNode);
-            nodeGraphTwo.setPosition(50, 5);
+                //edge node
+                EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+                edgeGraph.setData("Pattern found between with a confidence of : " + String.valueOf((double) 0.4 + (Math.random() * (1.0 - 0.4))) + "%" , sentence.get(i % sentence.size()), sentence.get( ( (i+1) % sentence.size())));
 
-            //edge node
-            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Pattern found between with a confidence of : " + confidence , node, mainNode);
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
+                //add graphs to output
+                output.add(nodeGraphOne);
+                output.add(nodeGraphTwo);
+                output.add(edgeGraph);
+            }
         }
 
         return new CreatePatternGraphResponse(output);
@@ -1006,7 +972,7 @@ public class VisualizeServiceImpl {
             TimelineGraph newGraph = new TimelineGraph();
 
             Random random = new Random();
-            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int minDay = (int) LocalDate.of(2014, 01, 1).toEpochDay();
             int maxDay = (int) LocalDate.now().toEpochDay();
             long randomDay = minDay + random.nextInt(maxDay - minDay);
 

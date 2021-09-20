@@ -111,14 +111,14 @@ public class VisualizeServiceTest {
     @Test
     @DisplayName("When createNetworkGraphRequest is Null")
     public void createNetworkGraphNullRequest(){
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createRelationGraph(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createRelationGraph(null, null));
     }
 
     @Test
     @DisplayName("When the DataList of Network graph is Null")
     public void createNetworkGraphDataListNull(){
         CreateRelationshipGraphRequest test = new CreateRelationshipGraphRequest(null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.createRelationGraph(test));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.createRelationGraph(test, null));
     }
 
     @Test
