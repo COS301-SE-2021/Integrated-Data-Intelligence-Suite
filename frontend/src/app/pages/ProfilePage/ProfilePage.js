@@ -97,7 +97,7 @@ export default function ProfilePage(props) {
 
                 };
 
-                fetch('/user/updateProfile',
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/updateProfile`,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },

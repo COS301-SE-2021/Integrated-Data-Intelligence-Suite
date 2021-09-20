@@ -15,7 +15,7 @@ const getSource = (id, structure) => {
                 id,
             };
 
-            fetch('/getSourceById',
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/getSourceById`,
                 {
                     signal: abortCont.signal,
                     method: 'POST',
@@ -174,7 +174,7 @@ const AddDataSource = () => {
             link = '/updateAPI';
         }
         const abortCont = new AbortController();
-        fetch(link,
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}${url}`,
             {
                 signal: abortCont.signal,
                 method: 'POST',
