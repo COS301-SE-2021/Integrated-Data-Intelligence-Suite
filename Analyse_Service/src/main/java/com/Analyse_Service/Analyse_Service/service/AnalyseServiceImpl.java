@@ -3,7 +3,6 @@ package com.Analyse_Service.Analyse_Service.service;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -23,9 +22,6 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -77,8 +73,6 @@ public class AnalyseServiceImpl {
     @Autowired
     private AnalyseServiceParsedDataRepository parsedDataRepository;
 
-    @Autowired
-    private AnalyseServiceAIModelRepository aiModelRepository;
 
     static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
