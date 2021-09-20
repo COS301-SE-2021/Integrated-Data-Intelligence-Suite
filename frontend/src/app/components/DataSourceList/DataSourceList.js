@@ -52,7 +52,7 @@ const getAllSources = (url) => {
 const DataSourceList = () => {
     const [sources, setSources] = useState(null);
 
-    const { data, isPending, error } = getAllSources('http://localhost:9000/getAllSources');
+    const { data, isPending, error } = getAllSources('/getAllSources');
 
     const handleDelete = (sourceId) =>{
         setSources((prev)=>prev.filter((item)=> item.id !== sourceId));

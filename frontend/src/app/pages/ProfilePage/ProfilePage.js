@@ -17,29 +17,6 @@ function getLocalUser() {
     return null;
 }
 
-const validateChanges = (values) => {
-    const errors = {};
-
-    console.log('validation');
-    console.log(values);
-
-    if (values.firstName === '') {
-        errors.firstName = 'Invalid firstname';
-    }
-
-    if (values.lastName === '') {
-        errors.lastName = 'Invalid lastname';
-    }
-
-    if (values.username === '') {
-        errors.username = 'Invalid username';
-    }
-
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-};
-
 const getUser = function () {
     const localUser = getLocalUser();
     if (localUser && localUser.id === 'b5aa283d-35d1-421d-a8c6-42dd3e115463') {
@@ -151,52 +128,55 @@ export default function ProfilePage(props) {
 
     const formik = useFormik({
         initialValues: {
-            username: '',
-            firstName: '',
-            lastName: '',
-            email: '',
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
         },
         // validate: validateChanges,
         onSubmit: (values) => {
-            const abortCond = new AbortController();
+            if (username === '' || firstName === '' || lastName === '' || email === '') {
+                message.error('some fields are empty');
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+                message.error('Invalid email');
+            } else {
+                const abortCond = new AbortController();
 
-            values.firstName = firstName;
-            // console.log(values);
+                const usr = {
+                    id: data.user[0].id,
+                    username: values.username,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    email: values.email,
+                };
+                const requestOptions = {
+                    signal: abortCond.signal,
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(usr),
+                };
 
-            const usr = {
-                id: data.user[0].id,
-                username: values.username,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-            };
-            const requestOptions = {
-                signal: abortCond.signal,
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(usr),
-            };
-
-            fetch('/user/updateProfile', requestOptions)
-                .then((res) =>{
-                    if (!res.ok) {
-                       throw Error(res.error());
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    if (data.success) {
-                        message.success(data.message);
-                    } else {
-                        message.error(data.message);
-                    }
-                })
-                .catch((err) =>{
-                    if (err.name === 'AbortError') console.log('Fetch Aborted');
-                    else {
-                        message.error(err.message);
-                    }
-                });
+                fetch('/user/updateProfile', requestOptions)
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw Error(res.error());
+                        }
+                        return res.json();
+                    })
+                    .then((data) => {
+                        if (data.success) {
+                            message.success(data.message);
+                        } else {
+                            message.error(data.message);
+                        }
+                    })
+                    .catch((err) => {
+                        if (err.name === 'AbortError') console.log('Fetch Aborted');
+                        else {
+                            message.error(err.message);
+                        }
+                    });
+            }
         },
     });
 
