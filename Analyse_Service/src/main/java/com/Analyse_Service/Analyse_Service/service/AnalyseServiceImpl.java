@@ -60,7 +60,9 @@ import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
@@ -2724,6 +2726,128 @@ public class AnalyseServiceImpl {
 
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
         return new FetchParsedDataResponse(list );
+    }
+
+
+    public void TrainOverallModels() throws InvalidRequestException, IOException {
+
+        ArrayList<ParsedData> dataList = new ArrayList<>();// repos.getParsedDataList();
+
+
+        String fileUrl = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+        BufferedReader reader = null;
+        String line = "";
+
+        try{
+            reader = new BufferedReader(new FileReader(fileUrl));
+            //System.out.println("*******************CHECK THIS HERE*****************");
+
+            line = reader.readLine();
+            String text = "";
+            int maxCounter = 0;
+            boolean foundComplete = true;
+            int count = 1;
+            while(( (line = reader.readLine()) != null) ){
+                System.out.println(line);
+                String[] row = line.split("\\|");
+                if(row != null)
+                    maxCounter = maxCounter + row.length-1; //delimiter counter
+
+                ParsedData newData = new ParsedData();
+
+                if((maxCounter == 4) && (foundComplete == true)){
+                    maxCounter = 0;
+                    text = "";
+                    foundComplete = true;
+
+                    newData.setTextMessage(row[1] );
+                    newData.setDate(row[2]);
+                    newData.setLocation(row[3]);
+                    newData.setLikes(Integer.parseInt(row[4]));
+                    dataList.add(newData);
+                    count = count +1;
+                }
+                else if((maxCounter == 4) && (foundComplete == false)){
+                    maxCounter = 0;
+                    text = "";
+                    foundComplete = true;
+
+                    newData.setTextMessage(text + row[0] );
+                    newData.setDate(row[1]);
+                    newData.setLocation(row[2]);
+                    newData.setLikes(Integer.parseInt(row[3]));
+                    dataList.add(newData);
+                    count = count +1;
+                }
+                else if(maxCounter < 4){
+                    text = text + line;
+                    foundComplete = false;
+                    continue;
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        /**************************************************************************************************************/
+
+
+        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
+
+        ArrayList<String> nlpTextSocial = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            nlpTextSocial.add(dataList.get(i).getTextMessage());
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
+        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
+
+
+
+
+
+        /*******************Setup Data******************/
+        /**social**/
+        for (int i = 0; i < dataList.size(); i++) {
+            //String row = "";
+
+            String text = dataList.get(i).getTextMessage();
+            String location = dataList.get(i).getLocation();
+            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
+            String[] dateTime = date.split(" ");
+            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            String likes = String.valueOf(dataList.get(i).getLikes());
+
+            //Random rn = new Random();
+            //int mockLike = rn.nextInt(10000) + 1;*/
+
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
+            rowOfParsed.add(text);
+            rowOfParsed.add(location);
+            rowOfParsed.add(formattedDate);
+            rowOfParsed.add(likes);
+            rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
+
+            parsedDataList.add(rowOfParsed);
+        }
+
+
+
+        /**************************************************************************************************************/
+
+        TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
+        trainFindTrendsArticlesLR(findTrendsArticlesRequest);
+
+        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+
+        TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
+        this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+
+        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
+        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
     }
 
 
