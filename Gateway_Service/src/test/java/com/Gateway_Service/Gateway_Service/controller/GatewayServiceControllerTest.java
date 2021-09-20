@@ -128,7 +128,7 @@ public class GatewayServiceControllerTest {
     }
 
 
-    @Test
+    /*@Test
     @DisplayName("When analyzeRequest is Null")
     public void analyzeDataNullRequest2() throws Exception {
 
@@ -164,7 +164,7 @@ public class GatewayServiceControllerTest {
 
         Assertions.assertNotNull(returnClass);
 
-    }
+    }*/
 
 
 
