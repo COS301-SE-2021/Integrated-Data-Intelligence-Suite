@@ -266,6 +266,7 @@ public class GatewayServiceController {
      * @return This is the response http entity. It contains all the users.
      */
     @GetMapping(value = "/getAllSources", produces = "application/json")
+    @CrossOrigin
     public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
         GetAllAPISourcesResponse response = importClient.getAllAPISources();
         return new ResponseEntity<>(response, HttpStatus.OK);

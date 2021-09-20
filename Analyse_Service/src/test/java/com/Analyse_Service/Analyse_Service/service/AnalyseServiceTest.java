@@ -1,18 +1,12 @@
 package com.Analyse_Service.Analyse_Service.service;
 
-import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
-import com.Analyse_Service.Analyse_Service.dataclass.AIType;
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
-import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceAIModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,9 +19,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AnalyseServiceTest {
-
-    @Mock
-    private AnalyseServiceAIModelRepository analyseServiceAIModelRepository;
 
     @Mock
     private AnalyseServiceParsedDataRepository analyseServiceParsedDataRepository;
@@ -130,7 +121,7 @@ public class AnalyseServiceTest {
 
 
 
-    @Test
+    /*@Test
     @DisplayName("When the data list is Valid")
     public void findPatternValidRequest() throws InvalidRequestException {
         ArrayList<ArrayList> TestList = new ArrayList<>();
@@ -145,11 +136,11 @@ public class AnalyseServiceTest {
         FindPatternRequest test = new FindPatternRequest(TestList,TestList);
         FindPatternResponse testResults = service.findPattern(test);
         Assertions.assertNotNull(testResults);
-    }
+    }*/
 
 
 
-    @Test
+    /*@Test
     @DisplayName("When the data list is Valid")
     public void findRelationshipValidRequest() throws InvalidRequestException {
         ArrayList<String> TestList = new ArrayList<>();
@@ -168,7 +159,7 @@ public class AnalyseServiceTest {
         FindRelationshipsRequest test = new FindRelationshipsRequest(input,input);
         FindRelationshipsResponse testResults = service.findRelationship(test);
         Assertions.assertNotNull(testResults);
-    }
+    }*/
 
     @Test
     @DisplayName("When the data list is Valid")

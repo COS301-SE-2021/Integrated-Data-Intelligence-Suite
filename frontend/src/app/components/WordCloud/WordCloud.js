@@ -125,8 +125,8 @@ function WordCloud(props) {
             <Wordcloud
               key={wordsArray}
               words={wordsArray}
-              width={windowWidth}
-              height={windowWidth * 0.4}
+              width={windowWidth * 0.7}
+              height={windowWidth * 0.6}
               font="Impact"
               padding={2}
               fontSize={(datum) => fontScale(datum.value)}
