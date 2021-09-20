@@ -1,6 +1,7 @@
 package com.Gateway_Service.Gateway_Service.dataclass.impor;
 
-import com.Import_Service.Import_Service.rri.DataSource;
+
+import com.Gateway_Service.Gateway_Service.rri.DataSource;
 
 public class ImportedData {
     private DataSource source;
