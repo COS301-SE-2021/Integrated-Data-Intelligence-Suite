@@ -9,47 +9,51 @@ const getSource = (id, structure) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const abortCont = new AbortController();
-        const requestBody = {
-            id,
-        };
+        if (id !== "new") {
+            const abortCont = new AbortController();
+            const requestBody = {
+                id,
+            };
 
-        fetch('http://localhost:9000/getSourceById',
-            {
-                signal: abortCont.signal,
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody),
-            })
-            .then((res) => {
-                if (!res.ok) {
-                    throw Error(res.error());
-                }
-                return res.json();
-            })
-            .then((data) => {
-                console.log('data is here', data);
-                console.log('structure looks like ', data.source);
-                if (data.success) {
-                    setData(data.source);
-                } else {
-                    setData(structure);
-                }
-                setIsPending(false);
-                setError(null);
-            })
-            .catch((err) => {
-                if (err.name === 'AbortError') console.log('Fetch Aborted');
-                else {
-                    // console.log(err.message)
-                    // setError(err.message);
-                    setData(structure);
-                    setError(null);
+            fetch('/getSourceById',
+                {
+                    signal: abortCont.signal,
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestBody),
+                })
+                .then((res) => {
+                    if (!res.ok) {
+                        throw Error(res.error());
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log('data is here', data);
+                    console.log('structure looks like ', data.source);
+                    if (data.success) {
+                        setData(data.source);
+                    } else {
+                        setData(structure);
+                    }
                     setIsPending(false);
-                }
-            });
+                    setError(null);
+                })
+                .catch((err) => {
+                    if (err.name === 'AbortError') console.log('Fetch Aborted');
+                    else {
+                        // console.log(err.message)
+                        // setError(err.message);
+                        setData(structure);
+                        setError(null);
+                        setIsPending(false);
+                    }
+                });
 
-        return () => abortCont.abort();
+            return () => abortCont.abort();
+        } else {
+            return null;
+        }
     }, [id]);
     return { data, isPending, error };
 };
@@ -165,9 +169,9 @@ const AddDataSource = () => {
         console.log(newSource);
         let link = '';
         if (dataSource.id === null) {
-            link = 'http://localhost:9000/addApiSource';
+            link = '/addApiSource';
         } else {
-            link = 'http://localhost:9000/updateAPI';
+            link = '/updateAPI';
         }
         const abortCont = new AbortController();
         fetch(link,

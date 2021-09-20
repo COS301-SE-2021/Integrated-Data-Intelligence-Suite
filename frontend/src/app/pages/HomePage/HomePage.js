@@ -4,7 +4,9 @@ import {
     Layout,
     Typography,
 } from 'antd';
-import { Link, Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import {
+ Link, Redirect, Route, Switch, useHistory,
+} from 'react-router-dom';
 import SideBar from '../../components/SideBar/SideBar';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import NavBar from '../../components/NavBar/NavBar';
@@ -40,69 +42,73 @@ class HomePage extends Component {
     }
 
     render() {
+        if (true) {
+            return <Redirect to="/login" />;
+        }
+
         return (
             <>
                 <Switch>
                     <Route exact path="/">
-                        {/*<Layout*/}
-                        {/*    id="outer_layout"*/}
-                        {/*    className="chart-page"*/}
-                        {/*>*/}
-                        {/*    <SideBar currentPage={'1'}/>*/}
+                        {/* <Layout */}
+                        {/*    id="outer_layout" */}
+                        {/*    className="chart-page" */}
+                        {/* > */}
+                        {/*    <SideBar currentPage={'1'}/> */}
 
-                        {/*    <Layout id="inner_layout_div">*/}
-                        {/*        <Header id="top_bar">*/}
-                        {/*            /!* <Title level={1}>Home</Title> *!/*/}
+                        {/*    <Layout id="inner_layout_div"> */}
+                        {/*        <Header id="top_bar"> */}
+                        {/*            /!* <Title level={1}>Home</Title> *!/ */}
 
-                        {/*            <UserInfoCard*/}
-                        {/*                name="s"*/}
-                        {/*            />*/}
-                        {/*        </Header>*/}
-                        {/*    </Layout>*/}
-                        {/*</Layout>*/}
+                        {/*            <UserInfoCard */}
+                        {/*                name="s" */}
+                        {/*            /> */}
+                        {/*        </Header> */}
+                        {/*    </Layout> */}
+                        {/* </Layout> */}
 
-                        <div id={'home-page-container'}>
-                            <NavBar/>
-                            <div id={'home-page-content'}>
-                                <div id={'selling-point-1'}>
+                        <div id="home-page-container">
+                            <NavBar />
+                            <div id="home-page-content">
+                                <div id="selling-point-1">
                                     Import it.
-                                    <br/>
+                                    <br />
                                     Analyse it.
-                                    <br/>
+                                    <br />
                                     Visualise it.
-                                    <br/>
+                                    <br />
                                     All in one place.
                                 </div>
-                                <div id={'button-container'}>
-                                    <button id={'download-button'}>
-                                        <SiWindows id={'windows-logo'}/>
+                                <div id="button-container">
+                                    <button id="download-button">
+                                        <SiWindows id="windows-logo" />
                                         Download for Windows
                                     </button>
 
                                     <Link to="/login">
                                         <button
-                                            id={'open-in-browser-button'}
+                                          id="open-in-browser-button"
                                         >
-                                            <MdOpenInBrowser id={'windows-logo'}/>
+                                            <MdOpenInBrowser id="windows-logo" />
                                             Open in your browser
                                         </button>
                                     </Link>
                                 </div>
-                                <div id={'app-image'}/>
-                                <div id={'selling-point-2-container'}>
-                                    <div/>
-                                    <div id={'selling-point-2'}>
+                                <div id="app-image" />
+                                <div id="selling-point-2-container">
+                                    <div />
+                                    <div id="selling-point-2">
                                         Your own Intelligent Data Suite.
-                                        <br/>
+                                        <br />
                                         Connect your own data sources.
-                                        <br/>
+                                        <br />
                                         Import your own data and visualise it.
-                                        <br/>
+                                        <br />
                                         All with a few clicks.
                                     </div>
                                 </div>
                             </div>
-                            <Footer/>
+                            <Footer />
                         </div>
                     </Route>
                 </Switch>
