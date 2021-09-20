@@ -1195,8 +1195,8 @@ public class AnalyseServiceImpl {
         String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
         lrModel.write().overwrite().save(path);
-        File modelFile = new File(path);
-        client.logArtifact(run.getId(), modelFile);
+        //File modelFile = new File(path);
+        //client.logArtifact(run.getId(), new File(path));
 
         /*try {
             //lrModel.save("Database");
@@ -1878,7 +1878,7 @@ public class AnalyseServiceImpl {
         String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         dtModel.write().overwrite().save(path);
         File modelFile = new File(path);
-        client.logArtifact(run.getId(), modelFile);
+        //client.logArtifact(run.getId(), modelFile);
 
 
         /*try {
@@ -2490,7 +2490,7 @@ public class AnalyseServiceImpl {
         String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         kmModel.write().overwrite().save(path);
         File modelFile = new File(path);
-        client.logArtifact(run.getId(), modelFile);
+        //client.logArtifact(run.getId(), modelFile);
 
 
         /*try {
@@ -2836,9 +2836,6 @@ public class AnalyseServiceImpl {
 
 
         /**************************************************************************************************************/
-
-        TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
-        trainFindTrendsArticlesLR(findTrendsArticlesRequest);
 
         TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
         TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
