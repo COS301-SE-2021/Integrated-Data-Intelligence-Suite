@@ -71,7 +71,7 @@ metadata:
   labels:
     app: eureka
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: eureka
   ports:

@@ -36,7 +36,7 @@ kind: Service
 metadata:
   name: analyse-service-svc
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: analyse-service
   ports:
