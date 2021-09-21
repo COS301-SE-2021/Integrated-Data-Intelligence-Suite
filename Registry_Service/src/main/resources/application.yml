@@ -1,16 +1,3 @@
-#server:
-#  port: 8761
-
-#spring:
-#  application:
-#    name: Registry-Service
-
-#eureka:
-#  client:
-#    register-with-eureka: false
-#    fetch-registry: false
-
-#depoyment
 server:
   port: 8761
 
@@ -19,12 +6,25 @@ spring:
     name: Registry-Service
 
 eureka:
-  instance:
-    #hostname: ${spring.application.name}
-    hostname: "${HOSTNAME}.eureka"
-    #hostname: localhost
   client:
     register-with-eureka: false
     fetch-registry: false
-    service-url:
-      defaultZone: ${EUREKA_SERVER_ADDRESS}
+
+##depoyment
+#server:
+#  port: 8761
+#
+#spring:
+#  application:
+#    name: Registry-Service
+#
+#eureka:
+#  instance:
+#    #hostname: ${spring.application.name}
+#    hostname: "${HOSTNAME}.eureka"
+#    #hostname: localhost
+#  client:
+#    register-with-eureka: false
+#    fetch-registry: false
+#    service-url:
+#      defaultZone: ${EUREKA_SERVER_ADDRESS}

@@ -44,7 +44,7 @@ class SearchBar extends React.Component {
         };
         const url = `/main/${values}`;
         // console.log(requestOptions)
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}${url}`, requestOptions)
+        fetch(`http://localhost:9000${url}`, requestOptions)
             .then((response) => response.json())
             .then((json) => {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
