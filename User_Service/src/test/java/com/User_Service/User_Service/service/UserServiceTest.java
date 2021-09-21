@@ -8,6 +8,7 @@ import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.rri.Permission;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
 import org.junit.jupiter.api.Test;
@@ -15,14 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
@@ -33,10 +31,28 @@ import static org.mockito.Mockito.when;
 public class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
-    @InjectMocks
-    private UserServiceImpl service;
+    UserServiceImpl service;
+
+    User testUser = new User();
+
+    @BeforeEach
+    public void init() {
+        service = new UserServiceImpl();
+        service.setRepository(userRepository);
+
+        testUser.setId(UUID.fromString("0b4b8936-bd7e-4373-b097-bb227b9f4072"));
+        testUser.setFirstName("FirstNameTest");
+        testUser.setLastName("LastNameTest");
+        testUser.setUsername("UserNameTest");
+        testUser.setEmail("email@test.com");
+        testUser.setPassword("1000:3dd6e56301215db3aaf500526a14f9b8:dc79a5a53f48f100883ef1327c89248b1eb0eb231408c746a4080995db17eafd71042a5b9c5429e2e26ea58d1e6e357e027e289f5a836fefa3b8accf4a056485");
+        testUser.setVerified(true);
+        testUser.setVerificationCode("eroiwuerowiuerowiurow");
+        testUser.setDateCreated(new Date());
+        testUser.setPermission(Permission.IMPORTING);
+    }
 
     /*
     ============================ManagePermissions tests============================
@@ -45,54 +61,39 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Null")
     public void managePermissionsNullRequest() {
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(null));
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(null));
     }
 
     @Test
     @DisplayName("If_Both_ManagePermissionsRequest_Attributes_Are_Null")
     public void managePermissionsRequestNullAttribs() {
-        ManagePermissionsRequest request = new ManagePermissionsRequest(null, null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+        ChangeUserRequest request = new ChangeUserRequest(null, false, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(request));
     }
 
     @Test
     @DisplayName("If_ManagePermissionsRequest_Username_Field_Is_Null")
     public void managePermissionsRequestNullUsernameField() {
-        ManagePermissionsRequest request = new ManagePermissionsRequest(null, Permission.VIEWING);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+        ChangeUserRequest request = new ChangeUserRequest(null, false,  Permission.VIEWING);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(request));
     }
 
     @Test
     @DisplayName("If_ManagePermissionsRequest_Permission_Field_Is_Null")
     public void managePermissionsRequestNullPermissionField() {
-        ManagePermissionsRequest request = new ManagePermissionsRequest("exampleUser", null);
-        Assertions.assertThrows(InvalidRequestException.class, () -> service.managePermissions(request));
+        ChangeUserRequest request = new ChangeUserRequest("exampleUser", false, null);
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.changeUser(request));
     }
 
     @Test
     @DisplayName("If_ManagePermissionsRequest_Is_Valid_And_User_Exists")
     public void managePermissionsValidRequestUserExists() throws Exception {
-        User testUser = new User();
-
-        testUser.setFirstName("FirstNameTest");
-        testUser.setLastName("LastNameTest");
-        testUser.setUsername("UserNameTest");
-        testUser.setEmail("email@test.com");
-        testUser.setPassword("passwordTest");
-        testUser.setPermission(Permission.IMPORTING);
-
-        userRepository.save(testUser);
+        when(userRepository.findUserByUsername("UserNameTest")).thenReturn(Optional.ofNullable(testUser));
+        when(userRepository.updatePermission(testUser.getId(), Permission.VIEWING)).thenReturn(1);
 
         //test
-        ManagePermissionsRequest request = new ManagePermissionsRequest("UserNameTest", Permission.IMPORTING);
-        ManagePersmissionsResponse response = service.managePermissions(request);
-
-        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
-        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
-        Assertions.assertNotNull(foundUser);
-
-        int count = verify(userRepository).updatePermission(foundUser.get().getId(), foundUser.get().getPermission());
-        Assertions.assertNotEquals(0,count);
+        ChangeUserRequest request = new ChangeUserRequest("UserNameTest", false, Permission.VIEWING);
+        ChangeUserResponse response = service.changeUser(request);
 
         Assertions.assertEquals("Permission updated", response.getMessage());
     }
@@ -113,8 +114,8 @@ public class UserServiceTest {
         userRepository.save(testUser);
 
         //test
-        ManagePermissionsRequest request = new ManagePermissionsRequest("NotUserNameTest", Permission.VIEWING);
-        ManagePersmissionsResponse response = service.managePermissions(request);
+        ChangeUserRequest request = new ChangeUserRequest("NotUserNameTest", false, Permission.VIEWING);
+        ChangeUserResponse response = service.changeUser(request);
 
         Optional<User> foundUser = verify(userRepository).findUserByUsername("NotUserNameTest");
         Assertions.assertNull(foundUser);
@@ -178,26 +179,11 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_New_User_Username_Already_Taken")
     public void registerUsernameTaken() throws Exception {
-
-        User testUser = new User();
-
-        testUser.setFirstName("FirstNameTest");
-        testUser.setLastName("LastNameTest");
-        testUser.setUsername("UserNameTest");
-        testUser.setEmail("email@test.com");
-        testUser.setPassword("passwordTest");
-        testUser.setPermission(Permission.IMPORTING);
-
-        userRepository.save(testUser);
+        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
 
         //test
-
-        RegisterRequest request = new RegisterRequest("UserNameTest", "FirstNameTestDifferent", "LastNameTestDifferent", "emailDifferent@test.com", "passwordTestDifferent");
+        RegisterRequest request = new RegisterRequest("UserNameTest", "FirstNameTestDifferent", "LastNameTestDifferent", "emailDifferent@test.com", "passwordTestDifferent@test.com");
         RegisterResponse response = service.register(request);
-
-        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
-        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
-        Assertions.assertNotNull(foundUser);
 
         Assertions.assertEquals("Username has been taken", response.getMessage());
     }
@@ -205,24 +191,11 @@ public class UserServiceTest {
     @Test
     @DisplayName("If_New_User_Email_Already_Taken")
     public void registerEmailTaken() throws Exception {
-        User testUser = new User();
-
-        testUser.setFirstName("FirstNameTest");
-        testUser.setLastName("LastNameTest");
-        testUser.setUsername("UserNameTest");
-        testUser.setEmail("email@test.com");
-        testUser.setPassword("passwordTest");
-        testUser.setPermission(Permission.IMPORTING);
-
-        userRepository.save(testUser);
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(testUser));
 
         //test
-        RegisterRequest request = new RegisterRequest("UserNameTestDifferent", "FirstNameTestDifferent", "LastNameTestDifferent", "email@test.com", "passwordTestDifferent");
+        RegisterRequest request = new RegisterRequest("asudfhaisudfh", "FirstNameTestDifferent", "LastNameTestDifferent", "adasdadas", "email@test.com");
         RegisterResponse response = service.register(request);
-
-        when(userRepository.findUserByUsername(anyString())).thenReturn(Optional.of(testUser));
-        Optional<User> foundUser = verify(userRepository).findUserByUsername("UserNameTest");
-        Assertions.assertNotNull(foundUser);
 
         Assertions.assertEquals("This email has already been registered", response.getMessage());
     }
@@ -230,49 +203,30 @@ public class UserServiceTest {
     @Test
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
-        User testUser = new User();
+        User newTestUser = new User();
 
-        testUser.setFirstName("FirstNameTest");
-        testUser.setLastName("LastNameTest");
-        testUser.setUsername("UserNameTest");
-        testUser.setEmail("email@test.com");
-        testUser.setPassword("passwordTest");
-        testUser.setPermission(Permission.VIEWING);
+        newTestUser.setId(UUID.fromString("0b4b8936-bd7e-4373-b097-bb227b9f4072"));
+        newTestUser.setFirstName("FirstNameTest");
+        newTestUser.setLastName("LastNameTest");
+        newTestUser.setUsername("newUsername");
+        newTestUser.setEmail("newemail@test.com");
+        newTestUser.setPassword("1000:3dd6e56301215db3aaf500526a14f9b8:dc79a5a53f48f100883ef1327c89248b1eb0eb231408c746a4080995db17eafd71042a5b9c5429e2e26ea58d1e6e357e027e289f5a836fefa3b8accf4a056485");
+        newTestUser.setVerified(true);
+        newTestUser.setVerificationCode("eroiwuerowiuerowiurow");
+        newTestUser.setDateCreated(new Date(2021, Calendar.JULY, 2));
+        newTestUser.setPermission(Permission.IMPORTING);
+
+        when(userRepository.save(any(User.class))).thenReturn(newTestUser);
 
         //test
-        RegisterRequest request = new RegisterRequest(
-                testUser.getUsername(),
-                testUser.getFirstName(),
-                testUser.getLastName(),
-                testUser.getPassword(),
-                testUser.getEmail());
-        RegisterResponse response = service.register(request);
-
-        /*String password = request.getPassword();
-        String hashedPass;
-        //Hashing the password
-        int iterations = 1000;
-        char[] chars = password.toCharArray();
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-
-        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = skf.generateSecret(spec).getEncoded();
-        hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);*/
-
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(userArgumentCaptor.capture());
-        User testUser2 = userArgumentCaptor.getValue();
-
-        Assertions.assertEquals(testUser,testUser2);
-        Assertions.assertEquals("Registration successful", response.getMessage());
+        User savedUser = userRepository.save(newTestUser);
+        Assertions.assertEquals(newTestUser.getUsername(), savedUser.getUsername());
+        Assertions.assertNotNull(savedUser);
     }
 
-    /*
-    ============================Login tests============================
-    */
+
+    //============================Login tests============================
+
 
     @Test
     @DisplayName("If_LoginRequest_Is_Null")
@@ -319,16 +273,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("Login_Existing_Email_Wrong_Password")
     public void loginWrongPassword() throws Exception {
-        User testUser = new User();
-
-        testUser.setFirstName("FirstNameTest");
-        testUser.setLastName("LastNameTest");
-        testUser.setUsername("UserNameTest");
-        testUser.setEmail("email@test.com");
-        testUser.setPassword("passwordTest");
-        testUser.setPermission(Permission.IMPORTING);
-
-        userRepository.save(testUser);
+        when(userRepository.findUserByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
 
         //test
 
@@ -336,7 +281,7 @@ public class UserServiceTest {
         LoginResponse response = service.login(request);
 
         Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
-        Assertions.assertNotNull(foundUser);
+        //Assertions.assertNotNull(foundUser);
 
         Assertions.assertEquals("Incorrect password", response.getMessage());
 
@@ -345,28 +290,60 @@ public class UserServiceTest {
     @Test
     @DisplayName("Login_Successful")
     public void loginSuccessful() throws Exception {
-        User testUser = new User();
-
-        testUser.setFirstName("FirstNameTest");
-        testUser.setLastName("LastNameTest");
-        testUser.setUsername("UserNameTest");
-        testUser.setEmail("email@test.com");
-        testUser.setPassword("passwordTest");
-        testUser.setPermission(Permission.IMPORTING);
-
-        userRepository.save(testUser);
+        when(userRepository.findUserByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
 
         //test
-
-        LoginRequest request = new LoginRequest("email@test.com", "wrongPasswordTest");
+        LoginRequest request = new LoginRequest("email@test.com", "pass");
         LoginResponse response = service.login(request);
 
-        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(testUser));
-        Optional<User> foundUser = verify(userRepository).findUserByEmail("email@test.com");
-        Assertions.assertNotNull(foundUser);
-
-        Assertions.assertEquals("Incorrect password", response.getMessage());
+        Assertions.assertEquals("Successfully logged in", response.getMessage());
 
     }
 
+//===================== RegisterAdmin tests =====================
+
+    @Test
+    @DisplayName("If_RegisterAdminRequest_Is_Null")
+    public void registerAdminRequestNull() {
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(null));
+    }
+
+    @Test
+    @DisplayName("If_RegisterAdminRequest_Contains_Null_Attributes")
+    public void registerAdminRequestAtribTest() {
+        RequestAdminRequest requestAllNull = new RequestAdminRequest(null,null,null,null,null);
+        RequestAdminRequest requestUsernameNull = new RequestAdminRequest("username", "first" , "last", "pass", "email@test.com");
+        RequestAdminRequest requestFirstNameNull = new RequestAdminRequest("username", null , "last", "pass", "email@test.com");
+        RequestAdminRequest requestLastNameNull = new RequestAdminRequest("username", "first" , null, "pass", "email@test.com");
+        RequestAdminRequest requestPasswordNull = new RequestAdminRequest("username", "first" , "last", null, "email@test.com");
+        RequestAdminRequest requestEmailNull = new RequestAdminRequest("username", "first" , "last", "pass", null);
+
+        Assertions.assertThrows(InvalidRequestException.class, () -> service.requestAdmin(requestAllNull));
+    }
+
+//===================== verifyAccount tests =====================
+
+    @Test
+    @DisplayName("If_User_Does_Not_Exist")
+    public void verifyUserDoesNotExist() throws Exception {
+//        VerifyAccountRequest request = new VerifyAccountRequest("missingEmail@notexist.com");
+//        VerifyAccountResponse response = service.verifyAccount(request);
+//
+//        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+//        Assertions.assertNull(foundUser);
+//
+//        Assertions.assertEquals("User does not exist", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_User_Already_Verified")
+    public void userAlreadyVerified() throws Exception {
+//        VerifyAccountRequest request = new VerifyAccountRequest("missingEmail@notexist.com");
+//        VerifyAccountResponse response = service.verifyAccount(request);
+//
+//        Optional<User> foundUser = verify(userRepository).findUserByEmail("missingEmail@notexist.com");
+//        Assertions.assertNull(foundUser);
+//
+//        Assertions.assertEquals("This account has already been verified", response.getMessage());
+    }
 }

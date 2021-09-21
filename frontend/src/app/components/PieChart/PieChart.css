@@ -1,0 +1,23 @@
+#textual.pie-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 5% 95%;
+    /*height: 200px;*/
+    margin: 0;
+
+}
+
+#textual.pie-container .sum-of-slices{
+    /*height: 20px;*/
+}
+
+#textual.pie-container>div>.total-sentiment-pie-container{
+    display: flex;
+}
+#textual.pie-container>div>.total-sentiment-pie-container>div{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+

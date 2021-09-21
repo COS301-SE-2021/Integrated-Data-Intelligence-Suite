@@ -4,6 +4,7 @@ import com.User_Service.User_Service.rri.Permission;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -36,6 +37,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     Permission permission;
 
+    String verificationCode;
+
+    Boolean isVerified;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    Date dateCreated;
+
     public User() {
 
     }
@@ -47,6 +56,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.isAdmin = false;
+        this.isVerified = false;
         this.permission = permission;
     }
 
@@ -112,6 +122,30 @@ public class User {
 
     public void setPermission(Permission permission) {
         this.permission = permission;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     @Override

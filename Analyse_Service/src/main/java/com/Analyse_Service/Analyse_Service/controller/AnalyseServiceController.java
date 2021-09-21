@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping(value = "/Analyse")
 public class AnalyseServiceController {
@@ -17,7 +19,7 @@ public class AnalyseServiceController {
 
     /**
      * This method is used to facilitate communication to the Analyse-Service.
-     * @param requestEntity This is a request entity which contains a AnalyseDataRequest object.
+     * @param request This is a request entity which contains a AnalyseDataRequest object.
      * @return AnalyseDataResponse This object contains analysed data which has been processed by Analyse-Service.
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
@@ -34,6 +36,19 @@ public class AnalyseServiceController {
         }
 
         return service.analyzeData(request);
+    }
+
+
+    @GetMapping("/trainData")
+    public boolean trainData() {
+        //AnalyseDataRequest request = getBody();
+        try {
+            service.TrainOverallModels();
+            return true;
+        } catch (InvalidRequestException | IOException e){
+            e.printStackTrace();
+            return false;
+        }
     }
     /*@PostMapping("/analyzeData")
     public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{

@@ -22,10 +22,13 @@
 @import url("../styles/Footer/Footer.css");
 
 //Login Page
-//@import "../styles/LoginPage/login.css";
+@import "pages/LoginPage/loginPage.css";
+
+//Login button
+@import url("components/LoginButton/loginButton.css");
 
 //Register Page
-//@import "../styles/RegisterPage/registerPage.css";
+@import "pages/RegisterPage/RegisterPage.css";
 
 
 //Permissions Page
@@ -48,6 +51,15 @@
 
 
 @import 'components/ExitMenuTooltip/ExitMenuTooltip.css';
+
+//Color Pallete
+@import "assets/ColorPallete.css";
+
+//React-vis
+@import "./node_modules/react-vis/dist/style";
+
+
+
 
 
 

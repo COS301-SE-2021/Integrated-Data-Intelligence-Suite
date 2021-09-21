@@ -1,6 +1,6 @@
 package com.Parse_Service.Parse_Service.request;
 
-import com.Parse_Service.Parse_Service.dataclass.DataSource;
+import com.Parse_Service.Parse_Service.rri.DataSource;
 
 public class ParseImportedDataRequest {
     DataSource type;

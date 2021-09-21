@@ -1,0 +1,57 @@
+.value-with-percent-container {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: auto auto;
+}
+
+.raw-value {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    font-size: 37px;
+}
+
+.icon-with-percent-changed-by {
+    grid-row-start: 2;
+    grid-row-end: 3;
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: 100%;
+}
+
+.icon-of-percent-increasing {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    align-self: center;
+    color: #00b074;
+    background: #104d3d;
+    border-radius: 10px;
+}
+
+.icon-of-percent-decreasing {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    align-self: center;
+    color: red;
+    background: darkred;
+    border-radius: 10px;
+}
+
+.amount-of-percent-increasing {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    align-self: center;
+    color: #00b074;
+    margin-left: 3%;
+
+}
+
+.amount-of-percent-decreasing {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    align-self: center;
+    color: red;
+    margin-left: 3%;
+
+}

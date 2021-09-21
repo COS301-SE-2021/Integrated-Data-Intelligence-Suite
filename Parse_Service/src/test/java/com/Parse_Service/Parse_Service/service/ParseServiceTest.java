@@ -1,21 +1,17 @@
 package com.Parse_Service.Parse_Service.service;
 
-import com.Parse_Service.Parse_Service.dataclass.DataSource;
+import com.Parse_Service.Parse_Service.rri.DataSource;
 import com.Parse_Service.Parse_Service.dataclass.ParsedArticle;
 import com.Parse_Service.Parse_Service.dataclass.ParsedData;
 import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
 import com.Parse_Service.Parse_Service.request.ParseImportedDataRequest;
 import com.Parse_Service.Parse_Service.response.ParseImportedDataResponse;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 public class ParseServiceTest {

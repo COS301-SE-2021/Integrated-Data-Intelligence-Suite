@@ -1,0 +1,93 @@
+:root{
+    --left-section-color: white;
+    --button-color: #5873f9;
+    --button-text-color: white;
+
+    --main-color-1: white;
+    --main-color-2: darkgrey;
+    --main-color-3: #5873f9;
+
+    --active-bg-color: #5873f9;
+    --active-text-color: white;
+
+}
+main .outer-container#settings-container{
+    /*border: 2px solid ;*/
+
+}
+
+.ant-col>div.option{
+    /*background-color: white;*/
+    /*border-radius: 10px;*/
+    margin: 10px;
+    padding: 8px;
+    line-height: normal;
+}
+
+
+
+.top-padding{
+    width: 100%;
+    /*border: 3px solid red;*/
+    height: 50px;
+    /*padding-right: 100px;*/
+}
+
+.ant-col .left-column{
+    padding-top: 50px;
+}
+
+
+.bodyDiv .ant-row{
+    height: 100vh;
+    flex-flow: unset;
+}
+
+
+.back-button{
+    margin: 15px 15px 15px 0;
+    font-size: 30px;
+    float: right;
+    position: relative;
+}
+
+
+.ant-col div.ant-divider{
+    border-color: var(--main-color-1);
+    line-height: normal;
+}
+
+.component-title-wrapper{
+    display: block;
+    line-height: normal;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-bottom: 40px;
+    width: 100%;
+}
+
+
+.component-title-wrapper .content-title{
+    color: var(--neon-blue);
+    font-size: 25px;
+    font-weight: 600;
+    float: left;
+}
+
+.bodyDiv .outer-container .left-column>div{
+    color: black;
+    text-transform: capitalize;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.bodyDiv .outer-container .left-column>div.active{
+    background: var(--neon-blue);
+    color: var(--active-text-color);
+}
+/*.bodyDiv .outer-container .row{*/
+/*    background: linear-gradient(176deg, #1c8efa 70%, #000000 calc(70% + 2px));*/
+/*}*/
+
+

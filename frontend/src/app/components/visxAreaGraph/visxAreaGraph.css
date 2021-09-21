@@ -1,0 +1,47 @@
+/****************************************************************************************/
+/*********************************Average Sentiment Area Graph***************************/
+/****************************************************************************************/
+/*The thicc line of the area graph*/
+div#ave-sentiment-card
+> div.ant-card-body
+> svg
+> path.visx-line {
+    stroke: red;
+}
+
+/*The area below the line*/
+.ave-sentiment-area-graph {
+    /*background: rgb(255, 0, 0);*/
+    fill: rgb(243, 76, 76) !important;
+}
+
+
+/****************************************************************************************/
+/*********************************Num Mentions Area Graph********************************/
+/****************************************************************************************/
+/*The thicc line of the area graph*/
+div#num-mentions-card
+> div.ant-card-body
+> svg
+> path.visx-line {
+    stroke: green;
+}
+
+/*The area below the line*/
+.num-mentions-area-graph {
+    /*background: rgb(255, 0, 0);*/
+    fill: rgb(40, 204, 102) !important;
+}
+
+#this-glyph{
+    position: absolute !important;
+    r: 10 !important;
+    border: 3px solid blue;
+    clip: auto;
+    z-index: 99999999999999;
+}
+
+
+
+
+

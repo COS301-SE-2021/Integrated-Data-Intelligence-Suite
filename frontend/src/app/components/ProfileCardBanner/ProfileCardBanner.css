@@ -1,0 +1,9 @@
+.profile-card-banner {
+    /*border: 2px solid red;*/
+    padding: 50px;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background: black;
+    border-top-left-radius: 0.9em;
+    border-top-right-radius: 0.9em;
+}

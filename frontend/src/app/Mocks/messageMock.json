@@ -1,0 +1,1563 @@
+[
+    [
+        {
+            "words": "15816"
+        }
+    ],
+    [
+        {
+            "words": "Positive"
+        }
+    ],
+    [
+        {
+            "words": "12"
+        }
+    ],
+    [
+        {
+            "words": "2"
+        }
+    ],
+    [
+        {
+            "x": "0",
+            "y": 102
+        },
+        {
+            "x": "1",
+            "y": 2
+        },
+        {
+            "x": "2",
+            "y": 62
+        },
+        {
+            "x": "3",
+            "y": 0
+        },
+        {
+            "x": "4",
+            "y": 2158
+        },
+        {
+            "x": "5",
+            "y": 13
+        },
+        {
+            "x": "6",
+            "y": 5
+        },
+        {
+            "x": "7",
+            "y": 303
+        },
+        {
+            "x": "8",
+            "y": 73
+        },
+        {
+            "x": "9",
+            "y": 1203
+        },
+        {
+            "x": "10",
+            "y": 0
+        },
+        {
+            "x": "11",
+            "y": 0
+        }
+    ],
+    [
+        {
+            "x": "Positives",
+            "y": 124,
+            "label": "Positive"
+        },
+        {
+            "x": "Negatives",
+            "y": 50,
+            "label": "Negative"
+        }
+    ],
+    [
+        {
+            "x": "Northern Cape",
+            "y": "86"
+        }
+    ],
+    [
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-28.21170968562954",
+            "lng": "24.254919744997743",
+            "classname": "circle0"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-26.528458373032848",
+            "lng": "27.570209696579443",
+            "classname": "circle1"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-31.618570080086457",
+            "lng": "28.673001808712307",
+            "classname": "circle2"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-30.809554387544154",
+            "lng": "23.19813313095608",
+            "classname": "circle3"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-31.89256684958521",
+            "lng": "26.924709998681323",
+            "classname": "circle4"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-22.764389117657363",
+            "lng": "29.782197939949462",
+            "classname": "circle5"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-25.93553976999295",
+            "lng": "30.2262708257614",
+            "classname": "circle6"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-28.95254643456727",
+            "lng": "25.936922778861106",
+            "classname": "circle7"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-30.043363386872894",
+            "lng": "23.92426174136187",
+            "classname": "circle8"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-30.5452270646296",
+            "lng": "19.702568003075022",
+            "classname": "circle9"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-29.514827035748258",
+            "lng": "26.120756182595112",
+            "classname": "circle10"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-28.40595579597221",
+            "lng": "25.20036896408798",
+            "classname": "circle11"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-29.17252909320928",
+            "lng": "26.73089756161028",
+            "classname": "circle12"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-30.13751484361765",
+            "lng": "28.081384847271263",
+            "classname": "circle13"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-31.973177647748834",
+            "lng": "28.44914607202731",
+            "classname": "circle14"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-27.465030706618723",
+            "lng": "21.283996530077882",
+            "classname": "circle15"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-31.23146791629533",
+            "lng": "23.520328183780585",
+            "classname": "circle16"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-29.303387848954703",
+            "lng": "30.551094879611895",
+            "classname": "circle17"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-22.920749434409515",
+            "lng": "29.605797522434884",
+            "classname": "circle18"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-28.097209035832307",
+            "lng": "22.802880638282854",
+            "classname": "circle19"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-29.15994795439604",
+            "lng": "27.938045589146288",
+            "classname": "circle20"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-26.80810773554102",
+            "lng": "24.12747952078964",
+            "classname": "circle21"
+        },
+        {
+            "statistic_1": "RT @Ndi_Muvenda_",
+            "statistic_2": "Organisation",
+            "statistic_3": "102.0",
+            "lat": "-29.839566280870738",
+            "lng": "30.233896922002337",
+            "classname": "circle22"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-33.21861998965504",
+            "lng": "20.308520314427685",
+            "classname": "circle23"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-27.327275901414023",
+            "lng": "23.07198940801386",
+            "classname": "circle24"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-27.59491871205316",
+            "lng": "22.970105836423286",
+            "classname": "circle25"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-28.709286359653024",
+            "lng": "23.83108044236617",
+            "classname": "circle26"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-24.23869785161793",
+            "lng": "30.03138193941746",
+            "classname": "circle27"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-30.696894111615215",
+            "lng": "21.22961416606773",
+            "classname": "circle28"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-29.667870735941353",
+            "lng": "29.486250798792117",
+            "classname": "circle29"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-30.146804158281018",
+            "lng": "28.589218057893127",
+            "classname": "circle30"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-27.751566532347375",
+            "lng": "24.071579256059145",
+            "classname": "circle31"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Location",
+            "statistic_3": "2.0",
+            "lat": "-23.535405734417147",
+            "lng": "30.82259254308962",
+            "classname": "circle32"
+        },
+        {
+            "statistic_1": "RT @OMGitZuma_",
+            "statistic_2": "Organisation",
+            "statistic_3": "62.0",
+            "lat": "-31.79067218079484",
+            "lng": "27.028139048016232",
+            "classname": "circle33"
+        },
+        {
+            "statistic_1": "RT @OMGitZuma_",
+            "statistic_2": "Organisation",
+            "statistic_3": "62.0",
+            "lat": "-31.886258532973915",
+            "lng": "22.547625596470777",
+            "classname": "circle34"
+        },
+        {
+            "statistic_1": "RT @OllieMeWash",
+            "statistic_2": "Organisation",
+            "statistic_3": "0.0",
+            "lat": "-27.327275901414023",
+            "lng": "23.07198940801386",
+            "classname": "circle35"
+        },
+        {
+            "statistic_1": "RT @OllieMeWash",
+            "statistic_2": "Organisation",
+            "statistic_3": "0.0",
+            "lat": "-30.696894111615215",
+            "lng": "21.22961416606773",
+            "classname": "circle36"
+        },
+        {
+            "statistic_1": "Green Tea 🍵 \n\n🍀Loose Belly",
+            "statistic_2": "Organisation",
+            "statistic_3": "2158.0",
+            "lat": "-31.79067218079484",
+            "lng": "27.028139048016232",
+            "classname": "circle37"
+        },
+        {
+            "statistic_1": "Green Tea 🍵 \n\n🍀Loose Belly",
+            "statistic_2": "Organisation",
+            "statistic_3": "2158.0",
+            "lat": "-31.886258532973915",
+            "lng": "22.547625596470777",
+            "classname": "circle38"
+        },
+        {
+            "statistic_1": "MEN'S",
+            "statistic_2": "Organisation",
+            "statistic_3": "13.0",
+            "lat": "-26.502079579556465",
+            "lng": "32.129077287305975",
+            "classname": "circle39"
+        },
+        {
+            "statistic_1": "MEN'S",
+            "statistic_2": "Organisation",
+            "statistic_3": "13.0",
+            "lat": "-26.88763657896883",
+            "lng": "24.236624658683297",
+            "classname": "circle40"
+        },
+        {
+            "statistic_1": "RT @SthembiD",
+            "statistic_2": "Organisation",
+            "statistic_3": "5.0",
+            "lat": "-26.502079579556465",
+            "lng": "32.129077287305975",
+            "classname": "circle41"
+        },
+        {
+            "statistic_1": "RT @SthembiD",
+            "statistic_2": "Organisation",
+            "statistic_3": "5.0",
+            "lat": "-26.88763657896883",
+            "lng": "24.236624658683297",
+            "classname": "circle42"
+        },
+        {
+            "statistic_1": "#Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "303.0",
+            "lat": "-26.689329028114358",
+            "lng": "26.164980614859097",
+            "classname": "circle43"
+        },
+        {
+            "statistic_1": "#Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "303.0",
+            "lat": "-22.588702244359347",
+            "lng": "29.516493114282138",
+            "classname": "circle44"
+        },
+        {
+            "statistic_1": "#Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "303.0",
+            "lat": "-24.260914290203132",
+            "lng": "29.64302151853688",
+            "classname": "circle45"
+        },
+        {
+            "statistic_1": "#Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "303.0",
+            "lat": "-29.539864250159262",
+            "lng": "29.793130649565946",
+            "classname": "circle46"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-28.21170968562954",
+            "lng": "24.254919744997743",
+            "classname": "circle47"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-26.528458373032848",
+            "lng": "27.570209696579443",
+            "classname": "circle48"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-31.618570080086457",
+            "lng": "28.673001808712307",
+            "classname": "circle49"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-30.809554387544154",
+            "lng": "23.19813313095608",
+            "classname": "circle50"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-31.89256684958521",
+            "lng": "26.924709998681323",
+            "classname": "circle51"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-22.764389117657363",
+            "lng": "29.782197939949462",
+            "classname": "circle52"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-25.93553976999295",
+            "lng": "30.2262708257614",
+            "classname": "circle53"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-28.95254643456727",
+            "lng": "25.936922778861106",
+            "classname": "circle54"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-30.043363386872894",
+            "lng": "23.92426174136187",
+            "classname": "circle55"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-30.5452270646296",
+            "lng": "19.702568003075022",
+            "classname": "circle56"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-29.514827035748258",
+            "lng": "26.120756182595112",
+            "classname": "circle57"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-28.40595579597221",
+            "lng": "25.20036896408798",
+            "classname": "circle58"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-29.17252909320928",
+            "lng": "26.73089756161028",
+            "classname": "circle59"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-30.13751484361765",
+            "lng": "28.081384847271263",
+            "classname": "circle60"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-31.973177647748834",
+            "lng": "28.44914607202731",
+            "classname": "circle61"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-27.465030706618723",
+            "lng": "21.283996530077882",
+            "classname": "circle62"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-31.23146791629533",
+            "lng": "23.520328183780585",
+            "classname": "circle63"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-29.303387848954703",
+            "lng": "30.551094879611895",
+            "classname": "circle64"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-22.920749434409515",
+            "lng": "29.605797522434884",
+            "classname": "circle65"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-28.097209035832307",
+            "lng": "22.802880638282854",
+            "classname": "circle66"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-29.15994795439604",
+            "lng": "27.938045589146288",
+            "classname": "circle67"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-26.80810773554102",
+            "lng": "24.12747952078964",
+            "classname": "circle68"
+        },
+        {
+            "statistic_1": "Edward Place",
+            "statistic_2": "Organisation",
+            "statistic_3": "73.0",
+            "lat": "-29.839566280870738",
+            "lng": "30.233896922002337",
+            "classname": "circle69"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-33.21861998965504",
+            "lng": "20.308520314427685",
+            "classname": "circle70"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-27.327275901414023",
+            "lng": "23.07198940801386",
+            "classname": "circle71"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-27.59491871205316",
+            "lng": "22.970105836423286",
+            "classname": "circle72"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-28.709286359653024",
+            "lng": "23.83108044236617",
+            "classname": "circle73"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-24.23869785161793",
+            "lng": "30.03138193941746",
+            "classname": "circle74"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-30.696894111615215",
+            "lng": "21.22961416606773",
+            "classname": "circle75"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-29.667870735941353",
+            "lng": "29.486250798792117",
+            "classname": "circle76"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-30.146804158281018",
+            "lng": "28.589218057893127",
+            "classname": "circle77"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-27.751566532347375",
+            "lng": "24.071579256059145",
+            "classname": "circle78"
+        },
+        {
+            "statistic_1": "Durban",
+            "statistic_2": "Organisation",
+            "statistic_3": "1203.0",
+            "lat": "-23.535405734417147",
+            "lng": "30.82259254308962",
+            "classname": "circle79"
+        },
+        {
+            "statistic_1": "RT @StandWithUs",
+            "statistic_2": "Organisation",
+            "statistic_3": "0.0",
+            "lat": "-26.689329028114358",
+            "lng": "26.164980614859097",
+            "classname": "circle80"
+        },
+        {
+            "statistic_1": "RT @StandWithUs",
+            "statistic_2": "Organisation",
+            "statistic_3": "0.0",
+            "lat": "-22.588702244359347",
+            "lng": "29.516493114282138",
+            "classname": "circle81"
+        },
+        {
+            "statistic_1": "RT @StandWithUs",
+            "statistic_2": "Organisation",
+            "statistic_3": "0.0",
+            "lat": "-24.260914290203132",
+            "lng": "29.64302151853688",
+            "classname": "circle82"
+        },
+        {
+            "statistic_1": "RT @StandWithUs",
+            "statistic_2": "Organisation",
+            "statistic_3": "0.0",
+            "lat": "-29.539864250159262",
+            "lng": "29.793130649565946",
+            "classname": "circle83"
+        },
+        {
+            "statistic_1": "South African",
+            "statistic_2": "Location",
+            "statistic_3": "0.0",
+            "lat": "-27.327275901414023",
+            "lng": "23.07198940801386",
+            "classname": "circle84"
+        },
+        {
+            "statistic_1": "South African",
+            "statistic_2": "Location",
+            "statistic_3": "0.0",
+            "lat": "-30.696894111615215",
+            "lng": "21.22961416606773",
+            "classname": "circle85"
+        }
+    ],
+    [
+        {
+            "x": "RT @Ndi_Muvenda_",
+            "y": "23"
+        },
+        {
+            "x": "Durban",
+            "y": "2"
+        },
+        {
+            "x": "RT @OMGitZuma_",
+            "y": "2"
+        },
+        {
+            "x": "RT @OllieMeWash",
+            "y": "2"
+        },
+        {
+            "x": "Green Tea 🍵 \n\n🍀Loose Belly",
+            "y": "2"
+        },
+        {
+            "x": "MEN'S",
+            "y": "2"
+        },
+        {
+            "x": "RT @SthembiD",
+            "y": "2"
+        },
+        {
+            "x": "#Durban",
+            "y": "4"
+        },
+        {
+            "x": "Edward Place",
+            "y": "23"
+        },
+        {
+            "x": "Durban",
+            "y": "7"
+        },
+        {
+            "x": "RT @StandWithUs",
+            "y": "4"
+        },
+        {
+            "x": "South African",
+            "y": "2"
+        }
+    ],
+    [
+        {
+            "words": "RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… @Mivusiwe @Hlengiwe_EJ she's asking differences coloured communities, Durban colou… https://t.co/i1RabMqhsa RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… Durban metro municipality : Save the Blue Zoo Tea Garden - Sign the Petition! https://t.co/rjCLeP28w3 via… https://t.co/fbxfDmKRDP RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb Durban wind today.😒 RT @OMGitZuma_: Is body ready summer? 💁🏾‍♂️\n\nGreen Tea 🍵 \n\n🍀Loose Belly within less month. \n\n🍀For R150 \n\n🍀 Burns… RT @OMGitZuma_: Is body ready summer? 💁🏾‍♂️\n\nGreen Tea 🍵 \n\n🍀Loose Belly within less month. \n\n🍀For R150 \n\n🍀 Burns… RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… RT @OMGitZuma_: Is body ready summer? 💁🏾‍♂️\n\nGreen Tea 🍵 \n\n🍀Loose Belly within less month. \n\n🍀For R150 \n\n🍀 Burns… RT @OMGitZuma_: Is body ready summer? 💁🏾‍♂️\n\nGreen Tea 🍵 \n\n🍀Loose Belly within less month. \n\n🍀For R150 \n\n🍀 Burns… RT @SthembiD: MEN'S ORGANIC PRODUCT\n\nAttain the size acquire Penis enlargement combo\n*Premature Ejaculation\n*Low Sex Drive\n*We… RT @SthembiD: MEN'S ORGANIC PRODUCT\n\nAttain the size acquire Penis enlargement combo\n*Premature Ejaculation\n*Low Sex Drive\n*We… RT @SthembiD: MEN'S ORGANIC PRODUCT\n\nAttain the size acquire Penis enlargement combo\n*Premature Ejaculation\n*Low Sex Drive\n*We… RT @SthembiD: MEN'S ORGANIC PRODUCT\n\nAttain the size acquire Penis enlargement combo\n*Premature Ejaculation\n*Low Sex Drive\n*We… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… RT @Ndi_Muvenda_: Are looking holiday 😌 plug 🔌 Edward Place, Ballito, Durban, KwaZulu-Natal\n\nFrom : R2300 per n… @Mivusiwe @Hlengiwe_EJ she's asking differences coloured communities, Durban colou… https://t.co/i1RabMqhsa RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… Durban metro municipality : Save the Blue Zoo Tea Garden - Sign the Petition! https://t.co/rjCLeP28w3 via… https://t.co/fbxfDmKRDP RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb RT @RoryPetzer: It’s cute Durban tries speak Afrikaans. https://t.co/IMJ12kKKZb Durban wind today.😒 RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @StandWithUs: These countries standing against hate boycotting the antisemitic #Durban conference - thank you!\n\nIsrael 🇮🇱\nUS… RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set… RT @OllieMeWash: The Durban Conference stole misappropriated the South African apartheid narrative smear Israel.\n\nDurban IV set…"
+        }
+    ],
+    [
+        {
+            "x": "communities,",
+            "y": "0",
+            "label": "communities,"
+        },
+        {
+            "x": "https://t.co/fbxfDmKRDP",
+            "y": "0",
+            "label": "https://t.co/fbxfDmKRDP"
+        },
+        {
+            "x": "metro",
+            "y": "0",
+            "label": "metro"
+        },
+        {
+            "x": "wind",
+            "y": "0",
+            "label": "wind"
+        },
+        {
+            "x": "differences",
+            "y": "0",
+            "label": "differences"
+        },
+        {
+            "x": "she's",
+            "y": "0",
+            "label": "she's"
+        },
+        {
+            "x": "@Hlengiwe_EJ",
+            "y": "0",
+            "label": "@Hlengiwe_EJ"
+        },
+        {
+            "x": "Blue",
+            "y": "0",
+            "label": "Blue"
+        },
+        {
+            "x": "today.😒",
+            "y": "0",
+            "label": "today.😒"
+        },
+        {
+            "x": "https://t.co/i1RabMqhsa",
+            "y": "0",
+            "label": "https://t.co/i1RabMqhsa"
+        },
+        {
+            "x": "municipality",
+            "y": "0",
+            "label": "municipality"
+        },
+        {
+            "x": "@Mivusiwe",
+            "y": "0",
+            "label": "@Mivusiwe"
+        },
+        {
+            "x": "https://t.co/rjCLeP28w3",
+            "y": "0",
+            "label": "https://t.co/rjCLeP28w3"
+        },
+        {
+            "x": "Save",
+            "y": "0",
+            "label": "Save"
+        },
+        {
+            "x": "Zoo",
+            "y": "0",
+            "label": "Zoo"
+        },
+        {
+            "x": "colou…",
+            "y": "0",
+            "label": "colou…"
+        },
+        {
+            "x": "asking",
+            "y": "0",
+            "label": "asking"
+        },
+        {
+            "x": "Petition!",
+            "y": "0",
+            "label": "Petition!"
+        },
+        {
+            "x": "Garden",
+            "y": "0",
+            "label": "Garden"
+        },
+        {
+            "x": "coloured",
+            "y": "0",
+            "label": "coloured"
+        },
+        {
+            "x": "via…",
+            "y": "0",
+            "label": "via…"
+        },
+        {
+            "x": "Sign",
+            "y": "0",
+            "label": "Sign"
+        },
+        {
+            "x": "Burns…",
+            "y": "0",
+            "label": "Burns…"
+        },
+        {
+            "x": "@OMGitZuma_:",
+            "y": "0",
+            "label": "@OMGitZuma_:"
+        },
+        {
+            "x": "💁🏾‍♂️\n\nGreen",
+            "y": "0",
+            "label": "💁🏾‍♂️\n\nGreen"
+        },
+        {
+            "x": "PRODUCT\n\nAttain",
+            "y": "0",
+            "label": "PRODUCT\n\nAttain"
+        },
+        {
+            "x": "Ejaculation\n*Low",
+            "y": "0",
+            "label": "Ejaculation\n*Low"
+        },
+        {
+            "x": "MEN'S",
+            "y": "0",
+            "label": "MEN'S"
+        },
+        {
+            "x": "Drive\n*We…",
+            "y": "0",
+            "label": "Drive\n*We…"
+        },
+        {
+            "x": "size",
+            "y": "0",
+            "label": "size"
+        },
+        {
+            "x": "summer?",
+            "y": "0",
+            "label": "summer?"
+        },
+        {
+            "x": "Sex",
+            "y": "0",
+            "label": "Sex"
+        },
+        {
+            "x": "Is",
+            "y": "0",
+            "label": "Is"
+        },
+        {
+            "x": "acquire",
+            "y": "0",
+            "label": "acquire"
+        },
+        {
+            "x": "within",
+            "y": "0",
+            "label": "within"
+        },
+        {
+            "x": "Belly",
+            "y": "0",
+            "label": "Belly"
+        },
+        {
+            "x": "Penis",
+            "y": "0",
+            "label": "Penis"
+        },
+        {
+            "x": "\n\n🍀Loose",
+            "y": "0",
+            "label": "\n\n🍀Loose"
+        },
+        {
+            "x": "@SthembiD:",
+            "y": "0",
+            "label": "@SthembiD:"
+        },
+        {
+            "x": "body",
+            "y": "0",
+            "label": "body"
+        },
+        {
+            "x": "enlargement",
+            "y": "0",
+            "label": "enlargement"
+        },
+        {
+            "x": "🍵",
+            "y": "0",
+            "label": "🍵"
+        },
+        {
+            "x": "less",
+            "y": "0",
+            "label": "less"
+        },
+        {
+            "x": "combo\n*Premature",
+            "y": "0",
+            "label": "combo\n*Premature"
+        },
+        {
+            "x": "\n\n🍀For",
+            "y": "0",
+            "label": "\n\n🍀For"
+        },
+        {
+            "x": "ORGANIC",
+            "y": "0",
+            "label": "ORGANIC"
+        },
+        {
+            "x": "ready",
+            "y": "0",
+            "label": "ready"
+        },
+        {
+            "x": "\n\n🍀",
+            "y": "0",
+            "label": "\n\n🍀"
+        },
+        {
+            "x": "R150",
+            "y": "0",
+            "label": "R150"
+        },
+        {
+            "x": "month.",
+            "y": "0",
+            "label": "month."
+        },
+        {
+            "x": "Tea",
+            "y": "0",
+            "label": "Tea"
+        },
+        {
+            "x": "Conference",
+            "y": "0",
+            "label": "Conference"
+        },
+        {
+            "x": "hate",
+            "y": "0",
+            "label": "hate"
+        },
+        {
+            "x": "misappropriated",
+            "y": "0",
+            "label": "misappropriated"
+        },
+        {
+            "x": "narrative",
+            "y": "0",
+            "label": "narrative"
+        },
+        {
+            "x": "countries",
+            "y": "0",
+            "label": "countries"
+        },
+        {
+            "x": "IV",
+            "y": "0",
+            "label": "IV"
+        },
+        {
+            "x": "set…",
+            "y": "0",
+            "label": "set…"
+        },
+        {
+            "x": "antisemitic",
+            "y": "0",
+            "label": "antisemitic"
+        },
+        {
+            "x": "smear",
+            "y": "0",
+            "label": "smear"
+        },
+        {
+            "x": "conference",
+            "y": "0",
+            "label": "conference"
+        },
+        {
+            "x": "against",
+            "y": "0",
+            "label": "against"
+        },
+        {
+            "x": "@StandWithUs:",
+            "y": "0",
+            "label": "@StandWithUs:"
+        },
+        {
+            "x": "Israel.\n\nDurban",
+            "y": "0",
+            "label": "Israel.\n\nDurban"
+        },
+        {
+            "x": "The",
+            "y": "0",
+            "label": "The"
+        },
+        {
+            "x": "#Durban",
+            "y": "0",
+            "label": "#Durban"
+        },
+        {
+            "x": "apartheid",
+            "y": "0",
+            "label": "apartheid"
+        },
+        {
+            "x": "South",
+            "y": "0",
+            "label": "South"
+        },
+        {
+            "x": "boycotting",
+            "y": "0",
+            "label": "boycotting"
+        },
+        {
+            "x": "standing",
+            "y": "0",
+            "label": "standing"
+        },
+        {
+            "x": "thank",
+            "y": "0",
+            "label": "thank"
+        },
+        {
+            "x": "@OllieMeWash:",
+            "y": "0",
+            "label": "@OllieMeWash:"
+        },
+        {
+            "x": "stole",
+            "y": "0",
+            "label": "stole"
+        },
+        {
+            "x": "These",
+            "y": "0",
+            "label": "These"
+        },
+        {
+            "x": "you!\n\nIsrael",
+            "y": "0",
+            "label": "you!\n\nIsrael"
+        },
+        {
+            "x": "African",
+            "y": "0",
+            "label": "African"
+        },
+        {
+            "x": "🇮🇱\nUS…",
+            "y": "0",
+            "label": "🇮🇱\nUS…"
+        },
+        {
+            "x": "tries",
+            "y": "0",
+            "label": "tries"
+        },
+        {
+            "x": "It’s",
+            "y": "0",
+            "label": "It’s"
+        },
+        {
+            "x": "Afrikaans.",
+            "y": "0",
+            "label": "Afrikaans."
+        },
+        {
+            "x": "-",
+            "y": "0",
+            "label": "-"
+        },
+        {
+            "x": "cute",
+            "y": "0",
+            "label": "cute"
+        },
+        {
+            "x": "speak",
+            "y": "0",
+            "label": "speak"
+        },
+        {
+            "x": "@RoryPetzer:",
+            "y": "0",
+            "label": "@RoryPetzer:"
+        },
+        {
+            "x": "https://t.co/IMJ12kKKZb",
+            "y": "0",
+            "label": "https://t.co/IMJ12kKKZb"
+        },
+        {
+            "x": "Durban",
+            "y": "0",
+            "label": "Durban"
+        },
+        {
+            "x": "the",
+            "y": "0",
+            "label": "the"
+        },
+        {
+            "x": "per",
+            "y": "0",
+            "label": "per"
+        },
+        {
+            "x": "Durban,",
+            "y": "0",
+            "label": "Durban,"
+        },
+        {
+            "x": "Ballito,",
+            "y": "0",
+            "label": "Ballito,"
+        },
+        {
+            "x": "@Ndi_Muvenda_:",
+            "y": "0",
+            "label": "@Ndi_Muvenda_:"
+        },
+        {
+            "x": "KwaZulu-Natal\n\nFrom",
+            "y": "0",
+            "label": "KwaZulu-Natal\n\nFrom"
+        },
+        {
+            "x": "Are",
+            "y": "0",
+            "label": "Are"
+        },
+        {
+            "x": "looking",
+            "y": "0",
+            "label": "looking"
+        },
+        {
+            "x": "holiday",
+            "y": "0",
+            "label": "holiday"
+        },
+        {
+            "x": "😌",
+            "y": "0",
+            "label": "😌"
+        },
+        {
+            "x": "🔌",
+            "y": "0",
+            "label": "🔌"
+        },
+        {
+            "x": "n…",
+            "y": "0",
+            "label": "n…"
+        },
+        {
+            "x": "Place,",
+            "y": "0",
+            "label": "Place,"
+        },
+        {
+            "x": "plug",
+            "y": "0",
+            "label": "plug"
+        },
+        {
+            "x": "R2300",
+            "y": "0",
+            "label": "R2300"
+        },
+        {
+            "x": "Edward",
+            "y": "0",
+            "label": "Edward"
+        },
+        {
+            "x": ":",
+            "y": "0",
+            "label": ":"
+        },
+        {
+            "x": "the rest",
+            "y": "0",
+            "label": "the rest"
+        }
+    ],
+    [
+        {
+            "group": "nodes",
+            "data": {
+                "id": "Edward Place"
+            },
+            "position": {
+                "x": 10,
+                "y": 10
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "RT @Ndi_Muvenda_"
+            },
+            "position": {
+                "x": 50,
+                "y": 5
+            }
+        },
+        {
+            "group": "edges",
+            "data": {
+                "id": "Relationship found between",
+                "source": "Edward Place",
+                "target": "RT @Ndi_Muvenda_"
+            }
+        }
+    ],
+    [
+        {
+            "group": "nodes",
+            "data": {
+                "id": "Edward Place"
+            },
+            "position": {
+                "x": 10,
+                "y": 10
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "RT @Ndi_Muvenda_"
+            },
+            "position": {
+                "x": 50,
+                "y": 5
+            }
+        },
+        {
+            "group": "edges",
+            "data": {
+                "id": "Pattern found between with a confidence of : 1.0",
+                "source": "Edward Place",
+                "target": "RT @Ndi_Muvenda_"
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "RT @Ndi_Muvenda_"
+            },
+            "position": {
+                "x": 10,
+                "y": 10
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "Edward Place"
+            },
+            "position": {
+                "x": 50,
+                "y": 5
+            }
+        },
+        {
+            "group": "edges",
+            "data": {
+                "id": "Pattern found between with a confidence of : 1.0",
+                "source": "RT @Ndi_Muvenda_",
+                "target": "Edward Place"
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "Edward Place"
+            },
+            "position": {
+                "x": 10,
+                "y": 10
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "RT @Ndi_Muvenda_"
+            },
+            "position": {
+                "x": 50,
+                "y": 5
+            }
+        },
+        {
+            "group": "edges",
+            "data": {
+                "id": "Pattern found between with a confidence of : 1.0",
+                "source": "Edward Place",
+                "target": "RT @Ndi_Muvenda_"
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "RT @Ndi_Muvenda_"
+            },
+            "position": {
+                "x": 10,
+                "y": 10
+            }
+        },
+        {
+            "group": "nodes",
+            "data": {
+                "id": "Edward Place"
+            },
+            "position": {
+                "x": 50,
+                "y": 5
+            }
+        },
+        {
+            "group": "edges",
+            "data": {
+                "id": "Pattern found between with a confidence of : 1.0",
+                "source": "RT @Ndi_Muvenda_",
+                "target": "Edward Place"
+            }
+        }
+    ],
+    [
+        {
+            "title": "Apr 15, 2021",
+            "cardTitle": "Anomaly Detected",
+            "cardSubtitle": "100"
+        },
+        {
+            "title": "Mar 22, 2021",
+            "cardTitle": "Anomaly Detected",
+            "cardSubtitle": "requirements to join the Illuminati,Illuminati church in musgrave Durban,Illuminati jobs in durban,Illuminati whats… https://t.co/o0VyWrQfPh"
+        }
+    ],
+    [
+        {
+            "x": "Jul 16, 2021",
+            "y": "37"
+        },
+        {
+            "x": "Sep 04, 2021",
+            "y": "3"
+        },
+        {
+            "x": "Jul 21, 2021",
+            "y": "16"
+        },
+        {
+            "x": "Apr 21, 2021",
+            "y": "4"
+        },
+        {
+            "x": "Apr 23, 2021",
+            "y": "11"
+        },
+        {
+            "x": "May 20, 2021",
+            "y": "9"
+        },
+        {
+            "x": "Aug 20, 2021",
+            "y": "8"
+        },
+        {
+            "x": "Mar 06, 2021",
+            "y": "18"
+        },
+        {
+            "x": "Mar 23, 2021",
+            "y": "37"
+        },
+        {
+            "x": "Sep 04, 2021",
+            "y": "18"
+        },
+        {
+            "x": "May 03, 2021",
+            "y": "6"
+        },
+        {
+            "x": "Apr 28, 2021",
+            "y": "4"
+        }
+    ]
+]

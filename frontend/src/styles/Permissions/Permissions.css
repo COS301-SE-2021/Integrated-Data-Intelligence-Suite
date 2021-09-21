@@ -51,7 +51,6 @@
 }
 
 .permissions-content-section{
-    padding: 20px;
     line-height: normal;
 
 }
@@ -114,17 +113,16 @@
 }
 
 
-.bodyDiv .outer-container .left-column>div{
-    color: black;
-    text-transform: capitalize;
-    font-size: 16px;
-}
+
 
 
 .form-container{
 
     border: 3px solid #5773FA;
     padding: 20px;
+    background: white;
+    border-radius: 2%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 
@@ -179,8 +177,8 @@ button.enabled{
 }
 
 .form-header span{
-    float: left;
-    margin-left: 150px;
+    margin-left: auto;
+    margin-right: 0;
     font-size: 20px;
 }
 
@@ -207,5 +205,6 @@ button.enabled{
 .profile.user .about-user div{
     color: black;
 }
+
 
 

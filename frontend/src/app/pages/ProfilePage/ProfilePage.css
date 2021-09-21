@@ -1,0 +1,122 @@
+#profile-page-container{
+/*background: var(--profile-background);*/
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#profile-page-container form{
+    line-height: normal;
+}
+
+#profile-page-container form .heading{
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 17px;
+    padding-top: 20px;
+    color: var(--neon-blue);
+}
+
+
+#profile-page-container form .ant-divider{
+    border-color: var(--black-border-color);
+    /*margin-top: 15px;*/
+    /*margin-bottom: 15px;*/
+}
+
+#profile-page-container form label{
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--neon-blue);
+    margin-left: 10px;
+}
+
+#profile-page-container form input[type=text]{
+    width: calc(100% - 10px);
+    padding: 8px;
+    background: var(--light-gray);
+    color: black;
+    border: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-left: 10px;
+    /*border-radius: 10px;*/
+
+}
+
+#profile-page-container form input[type="text"]:hover{
+    border-color: var(--neon-blue);
+}
+
+#profile-page-container form input[type="text"]:focus{
+    color: var(--neon-blue);
+}
+
+#profile-page-container form .ant-checkbox-wrapper{
+    margin: 10px;
+}
+
+#profile-page-container form .ant-checkbox-wrapper span{
+    text-transform: uppercase;
+}
+
+#profile-page-container form .ant-checkbox-inner{
+    text-transform: uppercase;
+}
+
+input[type="checkbox"].switch_1{
+    font-size: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 16px;
+    background: var(--grey-border-color);
+    border-radius: 3em;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+}
+
+input[type="checkbox"].switch_1:checked{
+    background: var(--neon-blue);
+}
+
+input[type="checkbox"].switch_1:after{
+    position: absolute;
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    -webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
+    box-shadow: 0 0 .25em rgba(0,0,0,.3);
+    left: 0;
+
+}
+
+input[type="checkbox"].switch_1:checked:after{
+    left: calc(100% - 16px);
+}
+
+div.switch_box.box_1>label.field-name#admin-label{
+
+    text-transform: capitalize;
+    color: black;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+div.switch_box{
+    margin: 20px 20px;
+    cursor: pointer;
+}
+
+#profile-page-container form>div>button{
+    background: var(--neon-blue);
+    color: white;
+    /*padding: 10px 15px;*/
+    /*margin: 10px 20px;*/
+    text-transform: capitalize;
+    float: right;
+}
+

@@ -1,72 +1,79 @@
-import React, {useState} from 'react';
-import {Layout, Row, Col, Divider} from 'antd';
-import {CloseCircleTwoTone} from '@ant-design/icons'
-import { useHistory} from "react-router-dom";
-import Permissions from "../PermissionsPage/Permissions";
+import React, { useState } from 'react';
+import {
+  Layout, Row, Col, Divider,
+} from 'antd';
+import { CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone } from '@ant-design/icons';
+import {Link, useHistory} from 'react-router-dom';
+import DataSourceList from '../../components/DataSourceList/DataSourceList';
+import Users from '../PermissionsPage/Permissions';
+import ProfilePage from '../ProfilePage/ProfilePage';
+// import AddDataSource from '../AddDataSourcePage/AddDataSource';
 
+const { Content } = Layout;
 
-const { Content} = Layout;
-
-const setActive = (component) =>{
-    let options = document.getElementsByClassName("option");
-    console.log(options)
-    for (let i = 0; i < options.length; i++) {
-        console.log(options[i].id)
-        if(options[i].id === component){
-            options[i].className = "option active"
-        }else{
-            options[i].className = "option"
-        }
+const setActive = (component) => {
+  const options = document.getElementsByClassName('option');
+  // console.log(options);
+  for (let i = 0; i < options.length; i += 1) {
+    // console.log(options[i].id);
+    if (options[i].id === component) {
+      options[i].className = 'option active';
+    } else {
+      options[i].className = 'option';
     }
-    return true;
-}
+  }
+  return true;
+};
 
 function getLocalUser() {
-    const localUser = localStorage.getItem("user");
-    if (localUser) {
-        // console.log("user logged in is ", localUser)
-        return JSON.parse(localUser);
-    } else {
-        return null;
-    }
+  const localUser = localStorage.getItem('user');
+  if (localUser) {
+    console.log("user logged in is ", localUser)
+    return JSON.parse(localUser);
+  }
+  return null;
 }
 
-
-
-
 const SettingsPage = () => {
+  const [component, setComponent] = useState('Profile');
+  const [user, setUser] = useState(getLocalUser());
+  const history = useHistory();
+  const colors = ['#E8E8E9', '#F1F2F8'];
 
-    const [component, setComponent] = useState("Permissions");
-    const [user, setUser] = useState(getLocalUser());
-    const history = useHistory();
+  return (
+      <Layout className="bodyDiv">
+          <div className="header white-background" />
+          <Content id="settings-container" className="outer-container" style={{ margin: '0', minHeight: '100vh' }}>
+              <Row className="row">
+                  <Col flex="auto" style={{ backgroundColor: colors[0], color: colors[0] }}>.</Col>
+                  <Col style={{ padding: '30px 10px', backgroundColor: colors[0] }} className="left-column" flex="160px">
 
+                      <div id="Profile" className="option active" onClick={() => setComponent('Profile')}>Profile</div>
 
-    return (
-        <Layout className={"bodyDiv"}>
-            <div className={"header white-background"}>
-            </div>
-                <Content id={"settings-container"} className={"outer-container"} style={{ margin: '0' , minHeight:"100vh"}}>
-                    <Row className={"row"}>
-                        <Col style={{padding:"30px 20px"}} className={"left-column"} flex="200px">
+                      { user && user.isAdmin && <div id="Users" className="option" onClick={() => setComponent('Users')}>Manage Users</div>}
 
-                            { user && user.isAdmin && <div id={"Permissions"} className={"option active"} onClick={()=>setComponent("Permissions")}>Permissions</div>}
-                            {user && user.isAdmin && <Divider />}
+                      { user && user.isAdmin && <div id="Data Sources" className="option" onClick={() => setComponent('Data Sources')}>Data Sources</div>}
+                  </Col>
+                  <Col style={{ padding: '0 0px 30px 0', backgroundColor: colors[1], maxWidth: '900px' }} className="right-column" flex="70%">
+                      <div>
+                          <div className="component-title-wrapper">
+                              <div className="content-title">{component}</div>
+                              <Link to={'/chart'}>
+                                  <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.push('/chart')} />
+                              </Link>
+                          </div>
+                          { component === 'Profile' && setActive(component) && <ProfilePage />}
+                          { component === 'Users' && user && user.isAdmin && setActive(component) && <Users />}
+                          { component === 'Data Sources' && user && user.isAdmin && setActive(component) && <DataSourceList /> }
+                      </div>
+                  </Col>
+                  <Col flex="auto" style={{ backgroundColor: colors[1], color: colors[1] }}>
+                      <div>.</div>
+                  </Col>
+              </Row>
+          </Content>
+      </Layout>
 
-                            <div id={"Profile"} className={"option"} onClick={()=>setComponent("Profile")}>Profile</div>
-                            <Divider />
-
-                            <div id={"Account"} className={"option"} onClick={()=>setComponent("Account")}>Account</div>
-                        </Col>
-                        <Col style={{padding:"0 0px 30px 0", backgroundColor:"#eff0f0"}} className={"right-column"} flex="auto">
-                            {<div className={"top-padding"}><CloseCircleTwoTone className={"back-button"} onClick={()=>history.go(-1)}/></div>}
-                            { component === "Permissions" && user && user.isAdmin && setActive(component) && <Permissions/>}
-                            { component === "Profile" && setActive(component) && <div> <h1>Page not implemented</h1></div>}
-                            { component === "Account" && setActive(component) && <div><h1>Page not implemented</h1></div>}
-                        </Col>
-                    </Row>
-                </Content>
-        </Layout>
-
-    );
+  );
 };
 export default SettingsPage;

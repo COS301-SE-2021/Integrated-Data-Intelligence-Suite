@@ -22,7 +22,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 * [Demo 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
 * [Demo 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
 * [Demo 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-* [Demo 4]()
+* [Demo 4](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
 
 <a name="srs"></a>
 ## Documentation
@@ -30,11 +30,15 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
   * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
   * [Version 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-  * [Version 4]()
-* [Coding Standards](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-* [Architectural Document](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-* [User Manual](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-* [Technical Installation](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
+  * [Version 4](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+* Coding Standards 
+  * [Coding Standards](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+  * [React / JSX](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/reactCodingStandards.md)
+  * [Javascript](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/javascriptCodingStandards.md)
+  * [Css](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/cssCodingStandards.md)
+* [Architectural Document](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+* [User Manual](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+* [Technical Installation](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools

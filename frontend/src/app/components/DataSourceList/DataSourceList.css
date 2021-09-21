@@ -1,0 +1,70 @@
+.source-list{
+    padding-left: 20px;
+    line-height: normal;
+}
+
+.source-list .source-preview{
+    display: flex;
+    background: white;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.source-list .source-preview p.source-title{
+    float: left;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: capitalize;
+    padding-top: 10px;
+    color: black;
+}
+
+.source-preview .button-div{
+    margin-left: auto;
+}
+
+.source-preview .button-div button{
+    margin: 5px;
+    border: 1px solid #E8E8E9;
+    padding: 5px;
+    border-radius: 5px;
+    background: #E8E8E9;
+}
+
+button.standard{
+    color: #5773FA;
+}
+
+button.warning{
+    color: #FF0800;
+}
+
+.source-list .button.standard-filled{
+    background: #5773FA;
+    border: none;
+    font-size: 16px;
+    padding: 8px;
+    margin-left: 10px;
+    border-radius: 5px;
+    text-transform: capitalize;
+    color: white;
+}
+.source-list .add-source{
+    margin-bottom: 20px;
+}
+
+.source-list .button.standard-filled:hover{
+    background: #1C8EFA;
+
+}
+
+.source-preview .button-div button.standard:hover{
+    border: 1px solid #5773FA;
+}
+
+.source-preview .button-div button.warning:hover{
+    border: 1px solid #FF0800;
+}
+
