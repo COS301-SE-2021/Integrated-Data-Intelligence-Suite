@@ -32,7 +32,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [Version 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
   * [Version 4](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
 * Coding Standards 
-  * [Coding Standards](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
+  * [Coding Standards](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
   * [React / JSX](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/reactCodingStandards.md)
   * [Javascript](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/javascriptCodingStandards.md)
   * [Css](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/cssCodingStandards.md)
