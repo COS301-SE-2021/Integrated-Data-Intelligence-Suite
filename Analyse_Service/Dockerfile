@@ -2,6 +2,7 @@ FROM maven:amazoncorretto as build
 COPY src .
 COPY pom.xml .
 CMD ["mvn", "clean", "package"]
+RUN apt-get install lib32stdc++6
 #RUN mvn -f pom.xml clean package/install
 #mvn spring-boot:run
 
@@ -11,6 +12,7 @@ FROM python:3.7.0
 RUN pip install mlflow==1.20.1
 RUN pip install azure-storage-blob
 
+
 #CMD ["pip" , "install" , "psycopg2"]
 #CMD ["mlfow", "db" , "upgrade" , "postgresql://emerge:emerge0000@analysedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyseDatabase"]
 
@@ -18,9 +20,15 @@ ENTRYPOINT ["mlflow", "server", "--host" , "0.0.0.0", "--backend-store-uri", "po
 #CMD ["mlflow", "ui"]
 
 
-FROM amazoncorretto:11-alpine-jdk
+#FROM amazonlinux:2
+#RUN amazon-linux-extras enable corretto11 && yum install -y java-11.0.12-amazon-corretto && yum clean all
+#1.8.0
+#11-alpine-jdk
+#FROM amazoncorretto:11
+FROM openjdk:11
 #ARG JAR_FILE=target/*.jar
 #COPY --from=build ${JAR_FILE} Analyse_Service.jar
+#RUN apt-get install lib32stdc++6
 ADD target/Analyse_Service-0.0.1-SNAPSHOT.jar Analyse_Service.jar
 EXPOSE 9003
 ENTRYPOINT ["java", "-jar", "Analyse_Service.jar"]
