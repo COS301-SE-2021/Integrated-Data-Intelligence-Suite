@@ -36,9 +36,9 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [React / JSX](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/reactCodingStandards.md)
   * [Javascript](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/javascriptCodingStandards.md)
   * [Css](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/cssCodingStandards.md)
-* [Architectural Document](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-* [User Manual](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-* [Technical Installation](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
+* [Architectural Document](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+* [User Manual](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+* [Technical Installation](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools
