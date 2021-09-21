@@ -36,7 +36,7 @@ metadata:
   name: gateway-service-svc
 spec:
   #types : ClusterIP | LoadBalancer | NodePort
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: gateway-service
   ports:
