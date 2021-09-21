@@ -4,22 +4,22 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 
 const getSource = (id, structure) => {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(structure);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (id !== "new") {
+        if (id !== 'new') {
             const abortCont = new AbortController();
             const requestBody = {
                 id,
             };
 
-            fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/getSourceById`,
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}/getSourceById`,
                 {
                     signal: abortCont.signal,
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestBody),
                 })
                 .then((res) => {
@@ -51,9 +51,8 @@ const getSource = (id, structure) => {
                 });
 
             return () => abortCont.abort();
-        } else {
-            return null;
         }
+            return { data, isPending, error};
     }, [id]);
     return { data, isPending, error };
 };
@@ -62,12 +61,12 @@ const AddDataSource = () => {
     const { id } = useParams();
     const history = useHistory();
     const [form, setForm] = useState(null);
-    const [url, setUrl] = useState(null);
-    const [name, setName] = useState(null);
-    const [authType, setAuthType] = useState(null);
-    const [token, setToken] = useState(null);
-    const [queryKey, setQueryKey] = useState(null);
-    const [method, setMethod] = useState(null);
+    const [url, setUrl] = useState('');
+    const [name, setName] = useState('');
+    const [authType, setAuthType] = useState('none');
+    const [token, setToken] = useState('');
+    const [queryKey, setQueryKey] = useState('');
+    const [method, setmethod] = useState('GET');
     const [submitLoading, setSubmitLoading] = useState(false);
 
     const structure = {
@@ -169,12 +168,13 @@ const AddDataSource = () => {
         console.log(newSource);
         let link = '';
         if (dataSource.id === null) {
-            link = '/addApiSource';
+            link = '/addNewApiSource';
         } else {
             link = '/updateAPI';
         }
         const abortCont = new AbortController();
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}${url}`,
+        console.log(`${process.env.REACT_APP_BACKEND_HOST}${link}`);
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}${link}`,
             {
                 signal: abortCont.signal,
                 method: 'POST',
@@ -224,7 +224,7 @@ const AddDataSource = () => {
     return (
         <div className="data-source">
             { dataSource && form === null && mapForm([dataSource.parameters])}
-            { dataSource && method === null && setMethod(dataSource.method)}
+            { dataSource && method === null && setmethod(dataSource.method)}
             { dataSource && name === null && setName(dataSource.name)}
             { dataSource && url === null && setUrl(dataSource.url) }
             { dataSource && queryKey === null && setQueryKey(dataSource.searchKey)}
@@ -238,7 +238,7 @@ const AddDataSource = () => {
                             <select
                               className="method select"
                               value={method}
-                              onChange={(e) => setMethod(e.target.value)}
+                              onChange={(e) => setmethod(e.target.value)}
                             >
                                 <option>GET</option>
                                 <option>POST</option>
@@ -246,7 +246,6 @@ const AddDataSource = () => {
                                 <option>PUT</option>
                                 <option>DELETE</option>
                                 <option>CONNECT</option>
-                                <option>OPTIONS</option>
                                 <option>TRACE</option>
                                 <option>PATCH</option>
                             </select>
@@ -395,7 +394,7 @@ const AddDataSource = () => {
                 <Button
                   className="btn submit btn-primary"
                   type="primary"
-                  loading={submitLoading}
+                  // loading={submitLoading}
                   onClick={(e)=>handleSubmit(e)}
                 >
                     Submit

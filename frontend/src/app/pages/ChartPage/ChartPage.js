@@ -38,7 +38,7 @@ const {
 } = Layout;
 
 function retrieveData() {
-    fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/retrievePrevious`)
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/retrievePrevious`)
         .then((res) => {
             if (!res.ok) {
                 return null;

@@ -18,7 +18,7 @@ const getAllSources = (url) => {
     useEffect(() => {
         const abortCont = new AbortController();
 
-        fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}${url}`, { signal: abortCont.signal })
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}${url}`, { signal: abortCont.signal })
             .then((res) => {
                 if (!res.ok) {
                     throw Error(res.error());

@@ -97,7 +97,7 @@ export default function ProfilePage(props) {
 
                 };
 
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/updateProfile`,
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/updateProfile`,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -156,7 +156,7 @@ export default function ProfilePage(props) {
                     body: JSON.stringify(usr),
                 };
 
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/updateProfile`, requestOptions)
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/updateProfile`, requestOptions)
                     .then((res) => {
                         if (!res.ok) {
                             throw Error(res.error());

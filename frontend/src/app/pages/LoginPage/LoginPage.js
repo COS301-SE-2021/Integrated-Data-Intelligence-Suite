@@ -54,7 +54,7 @@ export default function LoginPage(props) {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(values),
                 };
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/login`, requestOptions)
+                fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/login`, requestOptions)
                     .then((response) => response.json())
                     .then((json) => {
                         if (json.success) {
