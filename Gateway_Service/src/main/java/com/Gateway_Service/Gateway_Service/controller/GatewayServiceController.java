@@ -69,10 +69,9 @@ public class GatewayServiceController {
     }
 
     /**
-     * Test function, this method is used to test the service
-     * @param key This is a path variable of string value
+     * Test function, this method is used to test the servic
      * @return String This is a string value of a json test
-     */
+     *
     @GetMapping(value ="/{key}", produces = "application/json")
     public String testNothing(@PathVariable String key) {
         String output = "";
@@ -85,6 +84,20 @@ public class GatewayServiceController {
         else
             output = importResponse.getJsonData();
 
+        return output;
+    }*/
+
+
+    @GetMapping(value ="/analyse/trainData", produces = "application/json")
+    public String trainData() {
+        String output = "";
+
+        //analyseClient.trainData();
+        if(analyseClient.trainData())
+            output = "Succsess";
+        else{
+            output = "Fail";
+        }
         return output;
     }
 

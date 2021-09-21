@@ -42,6 +42,30 @@ public class AnalyseService {
         return analyseResponse;
     }
 
+
+    public boolean trainData() {
+
+        /*HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(analyseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }*/
+
+        // .getForEntity("http://Analyse-Service/Analyse/trainData"); // .postForObject("http://Analyse-Service/Analyse/trainData", request, AnalyseDataResponse.class);
+
+        Boolean analyseResponse = restTemplate.getForObject("http://Analyse-Service/Analyse/trainData",boolean.class);
+
+        return analyseResponse;
+    }
+
     /**
      * This method is used to return fail values if communication to the Analyse-Service fails.
      * @param analyseRequest This param is used to identify the method.

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping(value = "/Analyse")
 public class AnalyseServiceController {
@@ -38,9 +40,15 @@ public class AnalyseServiceController {
 
 
     @GetMapping("/trainData")
-    public void trainData() throws Exception{
+    public boolean trainData() {
         //AnalyseDataRequest request = getBody();
-        service.TrainOverallModels();
+        try {
+            service.TrainOverallModels();
+            return true;
+        } catch (InvalidRequestException | IOException e){
+            e.printStackTrace();
+            return false;
+        }
     }
     /*@PostMapping("/analyzeData")
     public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{
