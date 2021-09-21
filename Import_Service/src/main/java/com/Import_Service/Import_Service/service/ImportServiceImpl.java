@@ -264,7 +264,7 @@ public class ImportServiceImpl {
                 .build();
         Request req;
         List<APISource> sources = apiSourceRepository.findAll();
-        if(!sources.isEmpty()) {
+        /*if(!sources.isEmpty()) {
             for (APISource s : sources) {
                 String apiUrl = s.getUrl();
                 if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
@@ -313,7 +313,7 @@ public class ImportServiceImpl {
                 }
 
             }
-        }
+        }*/
 
         return new ImportDataResponse(list);
     }
