@@ -106,6 +106,16 @@ services:
     links:
       - database
 
+    #volumes:
+    #  - Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV:C:/Users/Rhuli/IdeaProjects/Integrated-Data-Intelligence-Suite/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV
+
+    volumes:
+      - type: bind
+        source: C:/Users/Rhuli/IdeaProjects/Integrated-Data-Intelligence-Suite/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV
+        target: Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV
+
+
+
 
   visualize_service:
     container_name: visualize_service
@@ -186,3 +196,5 @@ services:
 volumes:
   database-data:
   pgdata:
+  #Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV:
+
