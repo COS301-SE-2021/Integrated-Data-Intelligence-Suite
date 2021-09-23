@@ -55,15 +55,13 @@ import org.mlflow.api.proto.Service.Experiment;
 import org.mlflow.api.proto.Service.RunInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import static org.apache.spark.sql.functions.*;
@@ -103,6 +101,8 @@ public class AnalyseServiceImpl {
 
         /*******************USE NLP******************/
 
+        System.out.println("*******************USE NLP******************");
+
         ArrayList<ArrayList> wordList= null;
 
         /**social**/
@@ -139,6 +139,9 @@ public class AnalyseServiceImpl {
         }
 
         /*******************Setup Data******************/
+
+        System.out.println("*******************Setup Data******************");
+
         /**social**/
         for (int i = 0; i < dataList.size(); i++) {
             //String row = "";
@@ -220,21 +223,27 @@ public class AnalyseServiceImpl {
 
         /*******************Run A.I Models******************/
 
+        System.out.println("*******************Run A.I Models******************");
 
         FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList,parsedArticleList); //TODO
         FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
+        System.out.println("*******************Ran findPattern******************");
 
         FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList,parsedArticleList);
         FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+        System.out.println("*******************Ran findRelationships******************");
 
         GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
         GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
+        System.out.println("*******************Ran findPrediction******************");
 
         FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList);
         FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        System.out.println("*******************Ran findTrends******************");
 
         FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList);
         FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        System.out.println("*******************Ran findAnomalies******************");
 
 
         /*********************Result**************************/
@@ -279,6 +288,7 @@ public class AnalyseServiceImpl {
         }
 
         /*******************SETUP SPARK*****************/
+        System.out.println("*******************SETUP SPARK*****************");
 
         SparkSession sparkNlpProperties = SparkSession
                 .builder()
@@ -287,6 +297,7 @@ public class AnalyseServiceImpl {
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
+        System.out.println("*******************SETUP DATA*****************");
 
         StructType schema = new StructType( new StructField[]{
                 new StructField("text", DataTypes.StringType, false, Metadata.empty())});
@@ -301,29 +312,40 @@ public class AnalyseServiceImpl {
         //createDataset(text, Encoders.STRING()).toDF("text");
 
         /*******************SETUP NLP PIPELINE MODEL*****************/
+        System.out.println("*******************SETUP NLP PIPELINE MODEL*****************");
 
+        System.out.println("*******************document_assembler");
         DocumentAssembler document_assembler = (DocumentAssembler) new DocumentAssembler().setInputCol("text").setOutputCol("document");
         Dataset<Row> data2 = document_assembler.transform(data);
 
+        System.out.println("*******************sentence_detector");
         SentenceDetectorDLModel sentence_detector = (SentenceDetectorDLModel) ((SentenceDetectorDLModel) new SentenceDetectorDLModel().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence"); //"sentence_detector_dl", "en"
         Dataset<Row> data3 = sentence_detector.transform(data2);
 
+        System.out.println("*******************tokenizer");
         TokenizerModel tokenizer =  ((Tokenizer) ((Tokenizer) new Tokenizer().setInputCols(new String[] {"document"})) .setOutputCol("token")).fit(data3);
 
-        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
+        //System.out.println("*******************checker");
+        //NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
 
+        System.out.println("*******************embeddings");
         WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().pretrained().setInputCols(new String[] {"document", "token"})).setOutputCol("embeddings");
 
+        System.out.println("*******************sentenceEmbeddings");
         UniversalSentenceEncoder sentenceEmbeddings = (UniversalSentenceEncoder) ((UniversalSentenceEncoder) new UniversalSentenceEncoder().pretrained().setInputCols(new String[] {"document"})).setOutputCol("sentence_embeddings");
 
+        System.out.println("*******************sentimentDetector");
         SentimentDLModel sentimentDetector = (SentimentDLModel) ((SentimentDLModel) new SentimentDLModel().pretrained().setInputCols(new String[] {"sentence_embeddings"})).setOutputCol("sentiment");
 
+        System.out.println("*******************ner");
         NerDLModel ner = (NerDLModel) ((NerDLModel) new NerDLModel().pretrained().setInputCols(new String[] {"document", "token", "embeddings"})).setOutputCol("ner");
 
+        System.out.println("*******************converter");
         NerConverter converter = (NerConverter) ((NerConverter) new NerConverter().setInputCols(new String[]{"document", "token", "ner"})).setOutputCol("chunk");
 
         //pipeline
-        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker, embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
+        System.out.println("*******************pipeline");
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, /*checker,*/ embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
 
 
         PipelineModel pipelineFit = pipeline.fit(data);
@@ -331,6 +353,7 @@ public class AnalyseServiceImpl {
 
 
         /*******************READ MODEL DATA*****************/
+        System.out.println("*******************READ MODEL DATA*****************");
 
         ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
         long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
@@ -2733,13 +2756,29 @@ public class AnalyseServiceImpl {
 
         ArrayList<ParsedData> dataList = new ArrayList<>();// repos.getParsedDataList();
 
+        //File file = new File(classLoader.getResource("fileTest.txt").getFile());
+
+        /*File resource = new ClassPathResource("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV").getFile();
+
+        FileResourcesUtils app = new FileResourcesUtils();
 
         String fileUrl = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+
+        ;*/
+
+        //ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        //File tData = new File(classloader.getResource("TData.CSV").getFile());  //.getResourceAsStream("TData.CSV");
+        //InputStream is = classloader.getResource("TData.CSV").
+
+        InputStream is = this.getClass().getResourceAsStream("TData.CSV");
+
         BufferedReader reader = null;
         String line = "";
 
         try{
-            reader = new BufferedReader(new FileReader(fileUrl));
+            //reader = new BufferedReader(new FileReader(tData));
+            reader = new BufferedReader(new InputStreamReader(is));
+
             //System.out.println("*******************CHECK THIS HERE*****************");
 
             line = reader.readLine();
