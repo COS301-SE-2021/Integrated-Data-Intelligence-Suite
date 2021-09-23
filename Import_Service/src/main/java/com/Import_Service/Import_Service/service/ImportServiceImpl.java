@@ -417,7 +417,7 @@ public class ImportServiceImpl {
 
     /**
      * This method will return a list of all the APISources saved in the database.
-     * @return This class contains whether or not the retrieving process was successful
+     * @return This class contains whether the retrieving process was successful
      * or not and the list of APISources
      */
     public GetAllAPISourcesResponse getAllAPISources() {
@@ -433,8 +433,8 @@ public class ImportServiceImpl {
 
     /**
      * This method is used to retrieve a specific API source based on the Id of an API source.
-     * @param request This contains the Id of an APISource that is being requested.
-     * @return This will return whether or not editing an API source was successful and APISource if it found one.
+     * @param request This contains the ID of an APISource that is being requested.
+     * @return This will return whether editing an API source was successful and APISource if it found one.
      * @throws Exception This will be thrown if the request is invalid.
      */
     public GetAPISourceByIdResponse getAPISourceById(GetAPISourceByIdRequest request) throws Exception {
