@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+//import { Link, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Link, Route, Switch } from "react-router-dom"
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
 import ChartPage from './pages/ChartPage/ChartPage';
@@ -10,13 +11,15 @@ import LogoutPage from './pages/LogoutPage/LogoutPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import AddDataSource from './pages/AddDataSourcePage/AddDataSource';
 import VerifyPage from './pages/VerifyPage/VerifyPage';
+import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
+
 
 class App extends Component {
     render() {
         return (
-            <>
+            <Router>
                 <Switch>
                     <Route exact path="/">
                         <HomePage/>
@@ -29,7 +32,6 @@ class App extends Component {
                     <Route exact path="/register">
                         <RegisterPage/>
                     </Route>
-
                     <Route exact path="/chart">
                         <ChartPage/>
                     </Route>
@@ -40,6 +42,10 @@ class App extends Component {
 
                     <Route exact path="/permissions">
                         <Permissions/>
+                    </Route>
+
+                    <Route exact path="/resend">
+                        <ResendPage/>
                     </Route>
 
                     <Route exact path="/logout">
@@ -69,7 +75,7 @@ class App extends Component {
                         </div>
                     </Route>
                 </Switch>
-            </>
+            </Router>
         );
     }
 }

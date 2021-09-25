@@ -6,6 +6,7 @@ import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -13,11 +14,12 @@ import java.util.*;
 @Service
 public class VisualizeServiceImpl {
 
-    private HashSet<String> filterdCloud = new HashSet<String>();
+    private HashSet<String> foundWords = new HashSet<String>();
 
 
 
-    public VisualizeDataResponse visualizeData(VisualizeDataRequest request) throws InvalidRequestException {
+    public VisualizeDataResponse visualizeData(VisualizeDataRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -38,7 +40,7 @@ public class VisualizeServiceImpl {
         }
 
         ArrayList<ArrayList> outputData = new ArrayList<>();
-        setCloud();
+
 
 
         //***********************Overview Section*************************//
@@ -86,6 +88,11 @@ public class VisualizeServiceImpl {
         GetTotalAnomaliesResponse totalAnomaliesResponse = this.getTotalAnomalies(totalAnomaliesRequest);
         outputData.add(totalAnomaliesResponse.words);
 
+
+
+
+
+
         //Line graph Interactions (Bar graph now)(Average Interaction)
         CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
         CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
@@ -101,6 +108,9 @@ public class VisualizeServiceImpl {
         CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
         outputData.add(extraBarOneResponse.BarGraphArray);
 
+
+
+
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
         CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
@@ -111,31 +121,33 @@ public class VisualizeServiceImpl {
         CreateBarGraphResponse barResponse =  this.createBarGraph(barRequest);
         outputData.add(barResponse.BarGraphArray);
 
+
+
         //WordCloud graph
-        CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getTrendList());
+        //TODO: request.getWordList()
+        CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getWordList());
         CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
         outputData.add(wordCloudResponse.words);
 
-        //WordCloud Piechart Todo
-        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(wordCloudResponse.wordList);
+        //WordCloud Piechart
+        CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getWordList());
         CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
         outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
 
+        //WordCloud Sunburst
+        /*CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getWordList(),wordCloudPieChartGraphResponse.getDominantWords());
+        CreateWordCloudSunBurstGraphResponse wordCloudSunBurstGraphResponse = this.createWordCloudSunBurstGraph(wordCloudSunBurstGraphRequest);
+        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);*/
 
-        /*
-        ToDo: Sunburst
-
-
-         */
 
         //Network graph (Relationships)
         CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
-        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest);
+        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest, request.getWordList());
         outputData.add(relationResponse.NetworkGraphArray);
 
         //Network graph (Patterns)
         CreatePatternGraphRequest patternGraphRequest = new CreatePatternGraphRequest(request.getPatternList());
-        CreatePatternGraphResponse patternGraphResponse =  this.createPatternGraph(patternGraphRequest);
+        CreatePatternGraphResponse patternGraphResponse =  this.createPatternGraph(patternGraphRequest, request.getWordList());
         outputData.add(patternGraphResponse.NetworkGraphArray);
 
 
@@ -144,20 +156,15 @@ public class VisualizeServiceImpl {
         CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
         outputData.add(timelineResponse.timelineGraphArray);
 
-
-
-
-
         /*
         ToDo: Scatter plot
-
 
          */
 
         //Map Metric 2 (Number of tweets over time )
-        CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
+        /*CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
         CreateBarGraphExtraTwoResponse extraBarTwoResponse = this.createBarGraphExtraTwo(extraBarTwoRequest);
-        outputData.add(extraBarTwoResponse.BarGraphArray);
+        outputData.add(extraBarTwoResponse.BarGraphArray);*/
 
         //Line graph Sentiments ~ not in use
        /*CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
@@ -169,7 +176,9 @@ public class VisualizeServiceImpl {
     }
 
 
-    public GetTotalInteractionResponse getTotalInteraction(GetTotalInteractionRequest request) throws InvalidRequestException {
+    /*****************OVERALL**********************/
+    public GetTotalInteractionResponse getTotalInteraction(GetTotalInteractionRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
@@ -254,7 +263,8 @@ public class VisualizeServiceImpl {
         return new GetMostProminentSentimentResponse(output);
     }
 
-    public GetTotalTrendsResponse getTotalTrends(GetTotalTrendsRequest request) throws InvalidRequestException {
+    public GetTotalTrendsResponse getTotalTrends(GetTotalTrendsRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
@@ -271,7 +281,8 @@ public class VisualizeServiceImpl {
         return new GetTotalTrendsResponse(output);
     }
 
-    public GetTotalAnomaliesResponse getTotalAnomalies(GetTotalAnomaliesRequest request) throws InvalidRequestException {
+    public GetTotalAnomaliesResponse getTotalAnomalies(GetTotalAnomaliesRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
@@ -282,121 +293,17 @@ public class VisualizeServiceImpl {
         ArrayList<Graph> output = new ArrayList<>();
 
         WordCloudGraph out = new WordCloudGraph();
-        out.words = String.valueOf(reqData.size());
+        out.words = String.valueOf(reqData.size()-1); //removed first index
         output.add(out);
         System.out.println(out.words);
         return new GetTotalAnomaliesResponse(output);
     }
 
 
+    /*****************DEEP OVERALL**********************/
 
-
-    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request) throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-
-        ArrayList<String> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            TimelineGraph newGraph = new TimelineGraph();
-
-            Random random = new Random();
-            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
-            int maxDay = (int) LocalDate.now().toEpochDay();
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-
-            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-            String stringDate=randomBirthDate.format(formatter);
-
-            newGraph.title = stringDate;
-            newGraph.cardTitle = "Anomaly Detected";
-            newGraph.cardSubtitle = reqData.get(i);
-
-            output.add(newGraph);
-        }
-        return new CreateTimelineGraphResponse(output);
-    }
-
-    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("FindEntitiesRequest Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-        ArrayList<String> listSent = new ArrayList<>();
-        ArrayList<ArrayList> out = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
-            //System.out.println(locs.toString());
-            listSent = new ArrayList<>();
-            out = new ArrayList<>();
-            for (int j = 0; j < sents.size(); j++) {
-                if (listSent.isEmpty()){
-                    listSent.add(sents.get(j));
-                    ArrayList<Object> r = new ArrayList<>();
-                    r.add(sents.get(j));
-                    r.add(1);
-                    out.add(r);
-                }else {
-                    if (listSent.contains(sents.get(j))){
-                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
-                        int val=Integer.parseInt(r.get(1).toString());
-                        val++;
-                        r.set(1,val);
-                        out.set(listSent.indexOf(sents.get(j)),r);
-                    }else {
-                        listSent.add(sents.get(j));
-                        ArrayList<Object> r = new ArrayList<>();
-                        r.add(sents.get(j));
-                        r.add(1);
-                        out.add(r);
-                    }
-                }
-            }
-            int temp = 0;
-            String sent = "";
-            for (ArrayList o : out) {
-               if (temp < Integer.parseInt(o.get(1).toString())) {
-                   temp = Integer.parseInt(o.get(1).toString());
-                   sent = o.get(0).toString();
-               }
-            }
-
-            float tot = sents.size() +1;
-            float number = ((float)temp)/tot * 50;
-            if (sent == "Positive")
-                number *= 2;
-            else
-                number = 100 - number*2;
-
-            LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateLineGraphSentimentsResponse(output);
-    }
-
-    public CreateLineGraphInteractionsResponse createLineGraphInteractions(CreateLineGraphInteractionsRequest request) throws InvalidRequestException{
+    public CreateLineGraphInteractionsResponse createLineGraphInteractions(CreateLineGraphInteractionsRequest request)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
@@ -412,8 +319,8 @@ public class VisualizeServiceImpl {
             float number = Float.parseFloat(reqData.get(i).get(3).toString());
 
             LineGraph outp = new LineGraph();
-            outp.x = String.valueOf(i);
-            outp.y = String.valueOf((int) number);
+            outp.x = reqData.get(i).get(0).toString();
+            outp.y = (int) number;
 
             System.out.println("x: "+outp.x);
             System.out.println("y: "+outp.y);
@@ -427,139 +334,8 @@ public class VisualizeServiceImpl {
         return new CreateLineGraphInteractionsResponse(output);
     }
 
-
-
-    //frequecy of tweets in trend
-    public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
-
-        int k = 0;
-
-        for (int i = 0; i < reqData.size(); i++) {
-            float number = Float.parseFloat(reqData.get(i).get(6).toString());
-
-            BarGraph outp = new BarGraph();
-            outp.x = reqData.get(i).get(0).toString();
-            outp.y = String.valueOf((int) number);
-
-            System.out.println("x: "+outp.x);
-            System.out.println("y: "+outp.y);
-            output.add(outp);
-
-        }
-
-
-
-
-        return new CreateBarGraphResponse(output);
-    }
-
-    //Engagment by location
-    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request) throws InvalidRequestException {
-
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-
-        ArrayList<Graph> output = new ArrayList<>();
-
-        BarGraph bar2;
-
-
-        ArrayList<String> province = new ArrayList<>();
-        ArrayList<Integer> provfrq  = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
-            //System.out.println(locs.toString());
-
-            for (int j = 0; j < locs.size(); j++) {
-
-
-                String [] latlon = locs.get(j).toString().split(",");
-                String prov= getLocation(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
-                if (prov.equals("")){
-                    prov = "Northern Cape";
-                }
-                if (province.contains(prov)){
-                    int frq = provfrq.get(province.indexOf(prov)).intValue();
-                    frq++;
-                    provfrq.set(province.indexOf(prov),frq);
-                }else{
-                    province.add(prov);
-                    provfrq.add(1);
-                }
-
-
-            }
-        }
-        for (int j = 0; j < province.size(); j++) {
-            bar2 = new BarGraph();
-            bar2.x = province.get(j).toString();
-            bar2.y = provfrq.get(j).toString();
-
-            System.out.println("x: " + bar2.x);
-            System.out.println("y: " + bar2.y);
-            output.add(bar2);
-        }
-        return new CreateBarGraphExtraOneResponse (output);
-    }
-
-    //no text over time/dates
-    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request) throws InvalidRequestException {
-
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("Arraylist is null");
-        }
-        ArrayList<ArrayList> reqData = request.getDataList();
-
-
-        ArrayList<Graph> output = new ArrayList<>();
-        BarGraph bar2;
-
-        for (int i = 0; i < reqData.size(); i++) {
-            Random random = new Random();
-            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
-            int maxDay = (int) LocalDate.now().toEpochDay();
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-
-            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-            String stringDate=randomBirthDate.format(formatter);
-
-            double Freq = Float.parseFloat(reqData.get(i).get(6).toString());
-            Freq += Math.random() * (15);
-
-
-            bar2 = new BarGraph();
-            bar2.x = stringDate;
-            bar2.y = String.valueOf((int)Freq);
-
-            System.out.println("x: " + bar2.x);
-            System.out.println("y: " + bar2.y);
-            output.add(bar2);
-        }
-        return new CreateBarGraphExtraTwoResponse(output);
-    }
-
-
-
-
-    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request) throws InvalidRequestException{
+    public CreatePieChartGraphResponse createPieChartGraph(CreatePieChartGraphRequest request)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
@@ -608,7 +384,7 @@ public class VisualizeServiceImpl {
             PieChartGraph temp = new PieChartGraph();
             temp.label = o.get(0).toString();
             temp.x = o.get(0).toString() + "s";
-            temp.y = o.get(1).toString();
+            temp.y = (int) o.get(1);
 
             System.out.println("Label: "+ temp.label);
             System.out.println("x: "+ temp.x);
@@ -618,7 +394,66 @@ public class VisualizeServiceImpl {
         return new CreatePieChartGraphResponse(output);
     }
 
-    public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request) throws InvalidRequestException {
+    //Engagment by location
+    public CreateBarGraphExtraOneResponse createBarGraphExtraOne(CreateBarGraphExtraOneRequest request)
+            throws InvalidRequestException {
+
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+
+        ArrayList<Graph> output = new ArrayList<>();
+
+        BarGraph bar2;
+
+
+        ArrayList<String> province = new ArrayList<>();
+        ArrayList<Integer> provfrq  = new ArrayList<>();
+        for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> locs = (ArrayList<String>) reqData.get(i).get(1);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < locs.size(); j++) {
+
+
+                String [] latlon = locs.get(j).toString().split(",");
+                String prov= getLocation(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
+                if (prov.equals("")){
+                    prov = "Northern Cape";
+                }
+                if (province.contains(prov)){
+                    int frq = provfrq.get(province.indexOf(prov)).intValue();
+                    frq++;
+                    provfrq.set(province.indexOf(prov),frq);
+                }else{
+                    province.add(prov);
+                    provfrq.add(1);
+                }
+
+
+            }
+        }
+        for (int j = 0; j < province.size(); j++) {
+            bar2 = new BarGraph();
+            bar2.x = province.get(j).toString();
+            bar2.y = Integer.parseInt(provfrq.get(j).toString());
+
+            System.out.println("x: " + bar2.x);
+            System.out.println("y: " + bar2.y);
+            output.add(bar2);
+        }
+        return new CreateBarGraphExtraOneResponse (output);
+    }
+
+
+    /*****************MAP LOCATION**********************/
+
+    public CreateMapGraphResponse createMapGraph(CreateMapGraphRequest request)
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("CreateMapGraphRequest Object is null");
         }
@@ -653,7 +488,253 @@ public class VisualizeServiceImpl {
         return new CreateMapGraphResponse(output);
     }
 
-    public CreateRelationshipGraphResponse createRelationGraph(CreateRelationshipGraphRequest request) throws InvalidRequestException{
+    //frequecy of tweets in trend
+    public CreateBarGraphResponse createBarGraph(CreateBarGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        int k = 0;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            float number = Float.parseFloat(reqData.get(i).get(6).toString());
+
+            BarGraph outp = new BarGraph();
+            outp.x = reqData.get(i).get(0).toString();
+            outp.y = (int) number;
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
+        }
+
+
+
+
+        return new CreateBarGraphResponse(output);
+    }
+
+
+
+    /*****************WORD CLOUD**********************/
+    public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
+
+        ArrayList<Graph> output = new ArrayList<>();
+
+
+        /*for (int i = 0; i < reqData.size(); i++) {
+            ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < texts.size(); j++) {
+                String[] words = texts.get(j).toString().split(" ");
+                for(int k =0; k < words.length ; k++){
+                    if (filterdCloud.contains(words[k]) == false){
+                        wordList.add(words[k]);
+                    }
+                }
+            }
+        }*/
+
+        String text =wordList.get(0);
+        for(int i =1; i < wordList.size(); i++){
+            text = text + " " + wordList.get(i);
+        }
+
+        WordCloudGraph out = new WordCloudGraph();
+        out.words = text;
+
+        System.out.println(out.words);
+        output.add(out);
+
+
+        return new CreateWordCloudGraphResponse(output,wordList);
+    }
+
+    public CreateWordCloudPieChartGraphResponse createWordCloudPieChartGraph(CreateWordCloudPieChartGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
+
+        ArrayList<Graph> output = new ArrayList<>();
+        ArrayList<String> dominantWords = new ArrayList<>();
+
+
+        HashMap<String, Integer> wordMap = new HashMap<>();
+
+        //ArrayList<String> wordList = new ArrayList<>();
+        for (int i = 0; i < wordList.size(); i++) {
+            if (wordMap.containsKey(wordList.get(i)) == false) {
+                wordMap.put(wordList.get(i), 1);
+            } else {
+                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
+            }
+        }
+
+        System.out.println("Investigate here");
+        System.out.println(wordMap);
+
+
+        // Sort the list by values
+        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
+
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return o2.getValue().compareTo(o1.getValue()); //des
+            }
+        });
+
+
+        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
+        for (Map.Entry<String, Integer> values : list) {
+            finalHash.put(values.getKey(), values.getValue());
+        }
+
+        System.out.println("Investigate here 2");
+        System.out.println(finalHash);
+
+
+        //count word frequency
+        int totalCount = 0;
+        int sumCount = 0;
+
+
+
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            totalCount = totalCount + set.getValue();
+        }
+
+        System.out.println("TOTAL HERE");
+        System.out.println(totalCount);
+
+        if(totalCount ==0){
+            throw new InvalidRequestException("Number of cloud objects equals zero");
+        }
+
+        //output
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            System.out.println(set.getKey() + " : " + set.getValue() );
+
+            sumCount = sumCount + set.getValue();
+
+            System.out.println("Sum : " + sumCount);
+
+
+            //if((((float)sumCount /totalCount)*100) < 65.0f) {
+            if( (((float) set.getValue())/totalCount*100) > 1.5f){
+                PieChartGraph out = new PieChartGraph();
+                out.label = set.getKey();
+                out.x = set.getKey();
+                out.y = ((double) set.getValue())/totalCount*100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE");
+                System.out.println(out.y);
+
+                dominantWords.add(out.label);
+
+                //System.out.println(out.words);
+                output.add(out);
+            }
+            else{
+                PieChartGraph out = new PieChartGraph();
+                    out.label = "{OTHERS}";
+                out.x = "the rest";
+                //DecimalFormat df = new DecimalFormat("#.##");
+                out.y = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
+                out.y = (double) Math.round(out.y *100) /100;
+
+                System.out.println("CLOUD VALUES HERE - Rest");
+                System.out.println(out.y);
+
+                //System.out.println(out.words);
+                output.add(out);
+
+                break;
+            }
+        }
+
+
+        return new CreateWordCloudPieChartGraphResponse(output,dominantWords);
+    }
+
+
+    public CreateWordCloudSunBurstGraphResponse createWordCloudSunBurstGraph(CreateWordCloudSunBurstGraphRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist object is null");
+        }
+        if (request.getDominantWords() == null){
+            throw new InvalidRequestException("Dominant/parent nodes object is null");
+        }
+
+        ArrayList<ArrayList> associatedWords  = request.dataList;
+        ArrayList<String> dominantWords = request.getDominantWords();
+        ArrayList<Graph> output = new ArrayList<>();
+
+        SunBurstGraph parentNode = new SunBurstGraph();
+        parentNode.children = new ArrayList<>();
+
+        for(int i=0; i< dominantWords.size(); i++){
+
+            SunBurstNodeGraph baseSunBurstNodeGraph = new SunBurstNodeGraph();
+            baseSunBurstNodeGraph.name = dominantWords.get(i);
+            baseSunBurstNodeGraph.children = associateSunburstWord(associatedWords,dominantWords.get(i), false); //search
+
+
+            parentNode.children.add(baseSunBurstNodeGraph);
+        }
+
+        output.add(parentNode);
+
+        return new CreateWordCloudSunBurstGraphResponse(output);
+    }
+
+
+    /*****************PATTERNS**********************/
+
+    public CreateRelationshipGraphResponse createRelationGraph(CreateRelationshipGraphRequest request, ArrayList<ArrayList> wordList)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -664,6 +745,7 @@ public class VisualizeServiceImpl {
         /**Setup Data**/
 
         ArrayList<ArrayList> reqData = request.getDataList();
+
 
         /*for (int i = 0; i < reqData.size(); i++) {
             for (int j = 0; j < reqData.get(i).size(); j++) {
@@ -733,92 +815,52 @@ public class VisualizeServiceImpl {
             }
         }
 
+
+
+        /****/
+
+        ArrayList<ArrayList> shuffleWord = wordList;
+        Collections.shuffle(shuffleWord);
+
         if( output.isEmpty()) {
 
-            //ONE
-            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("Blue Origin");
-            nodeGraphOne.setPosition(10, 10);
+            int leftLimit = 1;
+            int rightLimit = (int) shuffleWord.size()/4;
+            if( (rightLimit) < 2){
+                rightLimit = shuffleWord.size();
+            }
+            int mockRange =  leftLimit + (int) (Math.random() * (rightLimit - leftLimit));;
 
-            //second node
-            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("@SpaceX");
-            nodeGraphTwo.setPosition(50, 5);
+            for(int i=0; i< mockRange; i++){
+                ArrayList<String> sentence = shuffleWord.get(i);
+                if(sentence.size() <= 1)
+                    continue;
 
-            //edge node
-            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "Blue Origin", "@SpaceX");
+                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+                nodeGraphOne.setData(sentence.get(i % sentence.size()));
+                nodeGraphOne.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
+                //second node
+                NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                nodeGraphTwo.setData(sentence.get( ( (i+1) % sentence.size())));
+                nodeGraphTwo.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            //TWO
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("NASA");
-            nodeGraphOne.setPosition(10, 10);
+                //edge node
+                EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+                edgeGraph.setData("Relationship found between", sentence.get(i % sentence.size()), sentence.get( ( (i+1) % sentence.size())));
 
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("@SpaceX");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "NASA", "@SpaceX");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
-
-            //THREE
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("NASA");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("Elon Musk");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "NASA", "Elon Musk");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
-
-            //FOUR
-            nodeGraphOne = new NodeNetworkGraph();
-            nodeGraphOne.setData("engineer");
-            nodeGraphOne.setPosition(10, 10);
-
-            //second node
-            nodeGraphTwo = new NodeNetworkGraph();
-            nodeGraphTwo.setData("Elon Musk");
-            nodeGraphTwo.setPosition(50, 5);
-
-            //edge node
-            edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Relationship found between", "engineer", "Elon Musk");
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
-
+                //add graphs to output
+                output.add(nodeGraphOne);
+                output.add(nodeGraphTwo);
+                output.add(edgeGraph);
+            }
         }
 
         return new CreateRelationshipGraphResponse(output);
     }
 
-    public CreatePatternGraphResponse createPatternGraph(CreatePatternGraphRequest request) throws InvalidRequestException{
+    public CreatePatternGraphResponse createPatternGraph(CreatePatternGraphRequest request, ArrayList<ArrayList> wordList)
+            throws InvalidRequestException{
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -868,159 +910,226 @@ public class VisualizeServiceImpl {
             }
         }
 
+
+
+        ArrayList<ArrayList> shuffleWord = wordList;
+        Collections.shuffle(shuffleWord);
+
         if( output.isEmpty()) {
 
-            String mainNode = "Tweet messages";
-            String confidence = "0.75";
-            String node = "Jack Dorsey";
+            int leftLimit = 1;
+            int rightLimit = (int) shuffleWord.size()/4;
+            if( (rightLimit) < 2){
+                rightLimit = shuffleWord.size();
+            }
+            int mockRange =  leftLimit + (int) (Math.random() * (rightLimit - leftLimit));;
 
-            NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+            for(int i=0; i< mockRange; i++){
+                ArrayList<String> sentence = shuffleWord.get(i);
+                if(sentence.size() <= 1)
+                    continue;
 
-            nodeGraphOne.setData(node);
-            nodeGraphOne.setPosition(10, 10);
+                NodeNetworkGraph nodeGraphOne = new NodeNetworkGraph();
+                nodeGraphOne.setData(sentence.get(i % sentence.size()));
+                nodeGraphOne.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            //second node
-            NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                //second node
+                NodeNetworkGraph nodeGraphTwo = new NodeNetworkGraph();
+                nodeGraphTwo.setData(sentence.get( ( (i+1) % sentence.size())));
+                nodeGraphTwo.setPosition((int) (Math.random() * (100 - 2)), (int) (Math.random() * (100 - 2)));
 
-            nodeGraphTwo.setData(mainNode);
-            nodeGraphTwo.setPosition(50, 5);
+                //edge node
+                EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
+                edgeGraph.setData("Pattern found between with a confidence of : " + String.valueOf((double) 0.4 + (Math.random() * (1.0 - 0.4))) + "%" , sentence.get(i % sentence.size()), sentence.get( ( (i+1) % sentence.size())));
 
-            //edge node
-            EdgeNetworkGraph edgeGraph = new EdgeNetworkGraph();
-            edgeGraph.setData("Pattern found between with a confidence of : " + confidence , node, mainNode);
-
-            //add graphs to output
-            output.add(nodeGraphOne);
-            output.add(nodeGraphTwo);
-            output.add(edgeGraph);
+                //add graphs to output
+                output.add(nodeGraphOne);
+                output.add(nodeGraphTwo);
+                output.add(edgeGraph);
+            }
         }
 
         return new CreatePatternGraphResponse(output);
     }
 
 
+    /*****************TIMELINE**********************/
 
+    public CreateTimelineGraphResponse createTimelineGraph(CreateTimelineGraphRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
 
-    public CreateWordCloudGraphResponse createWordCloudGraph(CreateWordCloudGraphRequest request) throws InvalidRequestException{
+        ArrayList<String> reqData = request.getDataList();
+        ArrayList<Graph> output = new ArrayList<>();
+        for (int i = 1; i < reqData.size(); i++) {
+            TimelineGraph newGraph = new TimelineGraph();
+
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2014, 01, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "Anomaly Detected";
+            newGraph.cardSubtitle = reqData.get(i);
+
+            output.add(newGraph);
+        }
+
+        if(output.isEmpty()){
+            TimelineGraph newGraph = new TimelineGraph();
+
+            /*Random random = new Random();
+            int minDay = (int) LocalDate.of(2014, 01, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);*/
+
+            LocalDate randomBirthDate = LocalDate.of(0001,01,01) .ofEpochDay(1);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate= randomBirthDate.format(formatter);
+
+            newGraph.title = stringDate;
+            newGraph.cardTitle = "No Anomaly Detected";
+            newGraph.cardSubtitle = "-";
+
+            output.add(newGraph);
+        }
+        return new CreateTimelineGraphResponse(output);
+    }
+
+    /*** TODO: Scatter ***/
+
+    //no text over time/dates
+    public CreateBarGraphExtraTwoResponse createBarGraphExtraTwo(CreateBarGraphExtraTwoRequest request)
+            throws InvalidRequestException {
+
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
-        if (request.dataList == null){
-            throw new InvalidRequestException("Arraylist object is null");
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
+        }
+        ArrayList<ArrayList> reqData = request.getDataList();
+
+
+        ArrayList<Graph> output = new ArrayList<>();
+        BarGraph bar2;
+
+        for (int i = 0; i < reqData.size(); i++) {
+            Random random = new Random();
+            int minDay = (int) LocalDate.of(2021, 03, 1).toEpochDay();
+            int maxDay = (int) LocalDate.now().toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            String stringDate=randomBirthDate.format(formatter);
+
+            double Freq = Float.parseFloat(reqData.get(i).get(6).toString());
+            Freq += Math.random() * (15);
+
+
+            bar2 = new BarGraph();
+            bar2.x = stringDate;
+            bar2.y = (int)Freq;
+
+            System.out.println("x: " + bar2.x);
+            System.out.println("y: " + bar2.y);
+            output.add(bar2);
+        }
+        return new CreateBarGraphExtraTwoResponse(output);
+    }
+
+
+    /*********EXTRA*******/
+
+    public CreateLineGraphSentimentsResponse createLineGraphSentiments(CreateLineGraphSentimentsRequest request)
+            throws InvalidRequestException{
+        if (request == null) {
+            throw new InvalidRequestException("FindEntitiesRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Arraylist is null");
         }
         ArrayList<ArrayList> reqData = request.getDataList();
         ArrayList<Graph> output = new ArrayList<>();
 
-
-        ArrayList<String> wordList = new ArrayList<>();
+        int k = 0;
+        ArrayList<String> listSent = new ArrayList<>();
+        ArrayList<ArrayList> out = new ArrayList<>();
         for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> texts = (ArrayList<String>) reqData.get(i).get(5);
+            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
             //System.out.println(locs.toString());
-
-            for (int j = 0; j < texts.size(); j++) {
-                String[] words = texts.get(j).toString().split(" ");
-                for(int k =0; k < words.length ; k++){
-                    if (filterdCloud.contains(words[k]) == false){
-                        wordList.add(words[k]);
+            listSent = new ArrayList<>();
+            out = new ArrayList<>();
+            for (int j = 0; j < sents.size(); j++) {
+                if (listSent.isEmpty()){
+                    listSent.add(sents.get(j));
+                    ArrayList<Object> r = new ArrayList<>();
+                    r.add(sents.get(j));
+                    r.add(1);
+                    out.add(r);
+                }else {
+                    if (listSent.contains(sents.get(j))){
+                        ArrayList<Object>r =  out.get(listSent.indexOf(sents.get(j)));
+                        int val=Integer.parseInt(r.get(1).toString());
+                        val++;
+                        r.set(1,val);
+                        out.set(listSent.indexOf(sents.get(j)),r);
+                    }else {
+                        listSent.add(sents.get(j));
+                        ArrayList<Object> r = new ArrayList<>();
+                        r.add(sents.get(j));
+                        r.add(1);
+                        out.add(r);
                     }
                 }
             }
+            int temp = 0;
+            String sent = "";
+            for (ArrayList o : out) {
+                if (temp < Integer.parseInt(o.get(1).toString())) {
+                    temp = Integer.parseInt(o.get(1).toString());
+                    sent = o.get(0).toString();
+                }
+            }
+
+            float tot = sents.size() +1;
+            float number = ((float)temp)/tot * 50;
+            if (sent == "Positive")
+                number *= 2;
+            else
+                number = 100 - number*2;
+
+            LineGraph outp = new LineGraph();
+            outp.x = String.valueOf(i);
+            outp.y = (int) number;
+
+            System.out.println("x: "+outp.x);
+            System.out.println("y: "+outp.y);
+            output.add(outp);
+
         }
 
-        String text =wordList.get(0);
-        for(int i =1; i < wordList.size(); i++){
-            text = text + " " + wordList.get(i);
-        }
-
-        WordCloudGraph out = new WordCloudGraph();
-        out.words = text;
-
-        System.out.println(out.words);
-        output.add(out);
 
 
-        return new CreateWordCloudGraphResponse(output,wordList);
+
+        return new CreateLineGraphSentimentsResponse(output);
     }
 
-    public CreateWordCloudPieChartGraphResponse createWordCloudPieChartGraph(CreateWordCloudPieChartGraphRequest request) throws InvalidRequestException{
-        if (request == null) {
-            throw new InvalidRequestException("Request Object is null");
-        }
-        if (request.dataList == null){
-            throw new InvalidRequestException("Arraylist object is null");
-        }
-        ArrayList<String> wordList = request.getDataList();
-        ArrayList<Graph> output = new ArrayList<>();
 
-
-        HashMap<String, Integer> wordMap = new HashMap<>();
-
-        //ArrayList<String> wordList = new ArrayList<>();
-        for (int i = 0; i < wordList.size(); i++) {
-            if (wordMap.containsKey(wordList.get(i)) == false) {
-                wordMap.put(wordList.get(i), 1);
-            } else {
-                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
-            }
-        }
-
-
-        // Sort the list by values
-        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
-
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
-            public int compare(Map.Entry<String, Integer> o1,
-                               Map.Entry<String, Integer> o2)
-            {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
-
-        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
-        for (Map.Entry<String, Integer> values : list) {
-            finalHash.put(values.getKey(), values.getValue());
-        }
-
-
-        //count word frequency
-        int totalCount = 0;
-        int sumCount = 0;
-
-        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
-            totalCount = totalCount + set.getValue();
-        }
-
-        //output
-        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
-            sumCount = sumCount + set.getValue();
-
-            if(((sumCount /totalCount)*100) < 75) {
-
-                PieChartGraph out = new PieChartGraph();
-                out.label = set.getKey();
-                out.x = set.getKey();
-                out.y = String.valueOf(set.getValue()/totalCount*100);
-
-                //System.out.println(out.words);
-                output.add(out);
-            }
-            else{
-                PieChartGraph out = new PieChartGraph();
-                out.label = "the rest";
-                out.x = "the rest";
-                out.y = String.valueOf(((totalCount - (sumCount+ set.getValue())) / totalCount) *100);
-
-                //System.out.println(out.words);
-                output.add(out);
-
-                break;
-            }
-        }
-
-
-        return new CreateWordCloudPieChartGraphResponse(output);
-    }
 
     /*************************************************HELPER***********************************************************/
 
@@ -1068,6 +1177,11 @@ public class VisualizeServiceImpl {
         provinces.add("Limpopo"); //8
 
 
+        System.out.println("check this right here, lat long");
+        System.out.println(latitude);
+        System.out.println(longitude);
+
+
         /**Western Cape**/
         double box[][] = new double[][] {
                 {-32.105816, 18.325114}, //-32.105816, 18.325114 - tl
@@ -1078,6 +1192,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Western Cape";
+            return output;
         }
 
         /**Northern Cape**/
@@ -1091,6 +1206,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Northern Cape";
+            return output;
         }
 
         /**North West**/
@@ -1104,6 +1220,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "North West";
+            return output;
         }
 
         /**Free State**/
@@ -1117,6 +1234,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Free State";
+            return output;
         }
 
         /**Eastern Cape**/
@@ -1130,6 +1248,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Eastern Cape";
+            return output;
         }
 
         /**KwaZulu Natal**/
@@ -1143,6 +1262,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "KwaZulu Natal";
+            return output;
         }
 
         /**Mpumalanga**/
@@ -1156,6 +1276,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Mpumalanga";
+            return output;
         }
 
         /**Gauteng**/
@@ -1169,6 +1290,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Gauteng";
+            return output;
         }
 
         /**Limpopo**/
@@ -1182,6 +1304,7 @@ public class VisualizeServiceImpl {
 
         if( isInBox(box,latitude,longitude) ){
             output = "Limpopo";
+            return output;
         }
 
         return output;
@@ -1221,12 +1344,27 @@ public class VisualizeServiceImpl {
         double[] bottomLeft = box.get(2);
         double[] bottomRight = box.get(3);
 
+        /*System.out.println("check box here, latitude (side) :");
+        System.out.println(latitude);
 
-        //check latitude
+        System.out.println("bottomRight : " + bottomRight[0]);
+        System.out.println("topLeft : " + topLeft[0]);
+        System.out.println("topRight : " + topRight[0]);
+        System.out.println("bottomLeft : " + bottomLeft[0]);
+
+        System.out.println("check box here, longitude (u-d):");
+        System.out.println(longitude);
+
+        System.out.println("bottomRight : " + bottomRight[1]);
+        System.out.println("topLeft : " + topLeft[1]);
+        System.out.println("topRight : " + topRight[1]);
+        System.out.println("bottomLeft : " + bottomLeft[1]);*/
+
+        //check latitude : (SIDES)
         double maxBottom =  bottomLeft[0];
         if(bottomRight[0] > maxBottom)
             maxBottom = bottomRight[0];
-        if ( latitude < maxBottom) //first points
+        if ( latitude < maxBottom)
             return false;
 
         double maxTop =  topLeft[0];
@@ -1235,95 +1373,86 @@ public class VisualizeServiceImpl {
         if ( latitude > maxTop )
             return false;
 
-        //check longitude
-        double maxLeft =  topLeft[1];
+        //check longitude : (UP_DOWN)
+        double maxLeft =  topLeft[1]; //19 - 20 - 21
         if(bottomLeft[1] > maxBottom)
-            maxLeft = topRight[1];
-        if ( longitude < maxLeft ) //second points
+            maxLeft = bottomLeft[1];
+        if ( longitude < maxLeft )
             return false;
 
         double maxRight =  topRight[1];
         if(bottomRight[1] > maxBottom)
-            maxRight = topRight[1];
+            maxRight = bottomRight[1];
         if ( longitude > maxRight )
             return false;
 
         return true;
     }
 
-    private void setCloud() {
-        filterdCloud.add("is");	filterdCloud.add("was");	filterdCloud.add("are");	filterdCloud.add("be");	filterdCloud.add("have");
-        filterdCloud.add("had");	filterdCloud.add("were");	filterdCloud.add("can");	filterdCloud.add("said");	filterdCloud.add("use");
-        filterdCloud.add("do");	filterdCloud.add("will");	filterdCloud.add("would");	filterdCloud.add("make");	filterdCloud.add("like");
-        filterdCloud.add("has");	filterdCloud.add("look");	filterdCloud.add("write");	filterdCloud.add("go");	filterdCloud.add("see");
-        filterdCloud.add("could");	filterdCloud.add("been");	filterdCloud.add("call");	filterdCloud.add("am");	filterdCloud.add("find");
-        filterdCloud.add("did");	filterdCloud.add("get");	filterdCloud.add("come");	filterdCloud.add("made");	filterdCloud.add("may");
-        filterdCloud.add("take");	filterdCloud.add("know");	filterdCloud.add("live");	filterdCloud.add("give");	filterdCloud.add("think");
-        filterdCloud.add("say");	filterdCloud.add("help");	filterdCloud.add("tell");	filterdCloud.add("follow");	filterdCloud.add("came");
-        filterdCloud.add("want");	filterdCloud.add("show");	filterdCloud.add("set");	filterdCloud.add("put");	filterdCloud.add("does");
-        filterdCloud.add("must");	filterdCloud.add("ask");	filterdCloud.add("went");	filterdCloud.add("read");	filterdCloud.add("need");
-        filterdCloud.add("move");	filterdCloud.add("try");	filterdCloud.add("change");	filterdCloud.add("play");	filterdCloud.add("spell");
-        filterdCloud.add("found");	filterdCloud.add("study");	filterdCloud.add("learn");	filterdCloud.add("should");	filterdCloud.add("add");
-        filterdCloud.add("keep");	filterdCloud.add("start");	filterdCloud.add("thought");	filterdCloud.add("saw");	filterdCloud.add("turn");
-        filterdCloud.add("might");	filterdCloud.add("close");	filterdCloud.add("seem");	filterdCloud.add("open");	filterdCloud.add("begin");
-        filterdCloud.add("got");	filterdCloud.add("run");	filterdCloud.add("walk");	filterdCloud.add("began");	filterdCloud.add("grow");
-        filterdCloud.add("took");	filterdCloud.add("carry");	filterdCloud.add("hear");	filterdCloud.add("stop");	filterdCloud.add("miss");
-        filterdCloud.add("eat");	filterdCloud.add("watch");	filterdCloud.add("let");	filterdCloud.add("cut");	filterdCloud.add("talk");
-        filterdCloud.add("being");	filterdCloud.add("leave");
+    private ArrayList<SunBurstGraph> associateSunburstWord(ArrayList<ArrayList> associatedWords, String searchName, Boolean isLeaf) {
 
-        filterdCloud.add("word");	filterdCloud.add("time");	filterdCloud.add("number");	filterdCloud.add("way");	filterdCloud.add("people");
-        filterdCloud.add("water");	filterdCloud.add("day");	filterdCloud.add("part");	filterdCloud.add("sound");	filterdCloud.add("work");
-        filterdCloud.add("place");	filterdCloud.add("year");	filterdCloud.add("back");	filterdCloud.add("thing");	filterdCloud.add("name");
-        filterdCloud.add("sentence");	filterdCloud.add("man");	filterdCloud.add("line");	filterdCloud.add("boy");	filterdCloud.add("farm");
-        filterdCloud.add("end");	filterdCloud.add("men");	filterdCloud.add("land");	filterdCloud.add("home");	filterdCloud.add("hand");
-        filterdCloud.add("picture");	filterdCloud.add("air");	filterdCloud.add("animal");	filterdCloud.add("house");	filterdCloud.add("page");
-        filterdCloud.add("letter");	filterdCloud.add("point");	filterdCloud.add("mother");	filterdCloud.add("answer");
-        filterdCloud.add("world");	filterdCloud.add("food");	filterdCloud.add("country");	filterdCloud.add("plant");	filterdCloud.add("school");
-        filterdCloud.add("father");	filterdCloud.add("tree");	filterdCloud.add("city");	filterdCloud.add("earth	eye");
-        filterdCloud.add("head");	filterdCloud.add("story");	filterdCloud.add("example");	filterdCloud.add("life");	filterdCloud.add("paper");
-        filterdCloud.add("group");	filterdCloud.add("children");	filterdCloud.add("side");	filterdCloud.add("feet");	filterdCloud.add("car");
-        filterdCloud.add("mile");	filterdCloud.add("night");	filterdCloud.add("sea");	filterdCloud.add("river");	filterdCloud.add("state");
-        filterdCloud.add("book");	filterdCloud.add("idea");	filterdCloud.add("face");	filterdCloud.add("girl");
-        filterdCloud.add("list");	filterdCloud.add("song");	filterdCloud.add("family");
+        ArrayList<SunBurstGraph> output = new ArrayList<>();
 
-        filterdCloud.add("he");	filterdCloud.add("a");	filterdCloud.add("one");	filterdCloud.add("all");	filterdCloud.add("an");
-        filterdCloud.add("each");	filterdCloud.add("other");	filterdCloud.add("many");	filterdCloud.add("some");	filterdCloud.add("two");
-        filterdCloud.add("more");	filterdCloud.add("long");	filterdCloud.add("new");	filterdCloud.add("little");	filterdCloud.add("most");
-        filterdCloud.add("good");	filterdCloud.add("great");	filterdCloud.add("right");	filterdCloud.add("mean");	filterdCloud.add("old");
-        filterdCloud.add("any");	filterdCloud.add("same");	filterdCloud.add("three");	filterdCloud.add("small");	filterdCloud.add("another");
-        filterdCloud.add("large");	filterdCloud.add("big");	filterdCloud.add("even");	filterdCloud.add("such");	filterdCloud.add("different");
-        filterdCloud.add("kind");	filterdCloud.add("still");	filterdCloud.add("high");	filterdCloud.add("every");	filterdCloud.add("own");
-        filterdCloud.add("light");	filterdCloud.add("left");	filterdCloud.add("few");	filterdCloud.add("next");	filterdCloud.add("hard");
-        filterdCloud.add("both");	filterdCloud.add("important");	filterdCloud.add("white");	filterdCloud.add("four");	filterdCloud.add("second");
-        filterdCloud.add("enough");	filterdCloud.add("above");	filterdCloud.add("young");
+        int maxWordCount = 0;
+        for(int i=0; i <  associatedWords.size(); i++){
+            maxWordCount = maxWordCount + associatedWords.get(i).size();
+        }
 
-        filterdCloud.add("not");	filterdCloud.add("when");	filterdCloud.add("there");	filterdCloud.add("how");	filterdCloud.add("up");
-        filterdCloud.add("out");	filterdCloud.add("then");	filterdCloud.add("so");	filterdCloud.add("no");	filterdCloud.add("first");
-        filterdCloud.add("now");	filterdCloud.add("only");	filterdCloud.add("very");	filterdCloud.add("just");	filterdCloud.add("where");
-        filterdCloud.add("much");	filterdCloud.add("before");	filterdCloud.add("too");	filterdCloud.add("also");	filterdCloud.add("around");
-        filterdCloud.add("well");	filterdCloud.add("here");	filterdCloud.add("why");	filterdCloud.add("again");	filterdCloud.add("off");
-        filterdCloud.add("away");	filterdCloud.add("near");	filterdCloud.add("below");	filterdCloud.add("last");	filterdCloud.add("never");
-        filterdCloud.add("always");	filterdCloud.add("together");	filterdCloud.add("often");	filterdCloud.add("once");	filterdCloud.add("later");
-        filterdCloud.add("far");	filterdCloud.add("really");	filterdCloud.add("almost");	filterdCloud.add("sometimes");	filterdCloud.add("soon");
+        for(int i = 0 ; i < associatedWords.size(); i++){
+            ArrayList<String> sentenceWords = associatedWords.get(i);
 
-        filterdCloud.add("of");	filterdCloud.add("to");	filterdCloud.add("in");	filterdCloud.add("for");	filterdCloud.add("on");
-        filterdCloud.add("with");	filterdCloud.add("at");	filterdCloud.add("from");	filterdCloud.add("by");	filterdCloud.add("about");
-        filterdCloud.add("into");	filterdCloud.add("down");	filterdCloud.add("over");	filterdCloud.add("after");	filterdCloud.add("through");
-        filterdCloud.add("between");	filterdCloud.add("under");	filterdCloud.add("along");	filterdCloud.add("until");	filterdCloud.add("without");
+            if(sentenceWords.contains(searchName)){
 
-        filterdCloud.add("you");	filterdCloud.add("that");	filterdCloud.add("it");	filterdCloud.add("his");
-        filterdCloud.add("they");	filterdCloud.add("I");	filterdCloud.add("this");	filterdCloud.add("what");	filterdCloud.add("we");
-        filterdCloud.add("your");	filterdCloud.add("which");	filterdCloud.add("she");	filterdCloud.add("their");	filterdCloud.add("them");
-        filterdCloud.add("these");	filterdCloud.add("her");	filterdCloud.add("him");	filterdCloud.add("my");	filterdCloud.add("who");
-        filterdCloud.add("its");	filterdCloud.add("me");	filterdCloud.add("our");	filterdCloud.add("us");	filterdCloud.add("something");
-        filterdCloud.add("those");
+                for(int j = 0 ; j < sentenceWords.size(); j++) {
+                    String foundName = sentenceWords.get(j);
 
-        filterdCloud.add("and");	filterdCloud.add("as");	filterdCloud.add("or");	filterdCloud.add("but");
-        filterdCloud.add("if");	filterdCloud.add("than");	filterdCloud.add("because");	filterdCloud.add("while");
-        filterdCloud.add("it’s");	filterdCloud.add("don’t");
+                    if( (foundName.equals(searchName)) || (foundWords.contains(foundName)) ) //skips searched name value and used words
+                        continue;
+
+                    if (isLeaf == false) { //node
+
+                        SunBurstNodeGraph sunBurstGraph = new SunBurstNodeGraph();
+                        sunBurstGraph.name = foundName;
+
+                        if(maxWordCount > ( foundWords.size()*0.65) ) {
+
+                            //ArrayList<ArrayList> truncatedAssociatedWords = associatedWords;
+                            //truncatedAssociatedWords.remove(0);
+                            sunBurstGraph.children = associateSunburstWord(associatedWords, foundName, true);
+                        }
+                        else{
+                            sunBurstGraph.children = associateSunburstWord(associatedWords, foundName, false);
+                        }
+
+                        foundWords.add(foundName);
+
+                        output.add(sunBurstGraph);
+                    } else {//leaf
+                        SunBurstLeafGraph sunBurstGraph = new SunBurstLeafGraph();
+                        sunBurstGraph.name = foundName;
+
+                        ArrayList<String> hexValues = new ArrayList<>();
+                        hexValues.add("#12939A");
+                        hexValues.add("#FF9833");
+
+
+                        sunBurstGraph.hex = hexValues.get(j % hexValues.size());
+
+                        long leftLimit = 300L;
+                        long rightLimit = 5000L;
+                        sunBurstGraph.value = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));;
+
+                        foundWords.add(foundName);
+
+                        output.add(sunBurstGraph);
+                    }
+                }
+
+            }
+        }
+
+        return output;
     }
-
-
 
 
 }

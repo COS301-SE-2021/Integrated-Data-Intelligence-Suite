@@ -20,16 +20,16 @@ export default function ValueWithPercentChange(props) {
         <>
             <div className={'value-with-percent-container'}>
                 <div className={'raw-value'}>{props.rawValue}</div>
-                <div className={'icon-with-percent-changed-by'}>
-                    {props.rawValue === 'Positive' ?
-                        <FiArrowUpRight className={'icon-of-percent-increasing'}/>
-                        : <FiArrowDownRight className={'icon-of-percent-decreasing'}/>
-                    }
-                    {props.rawValue === 'Positive' ?
-                        <div className={'amount-of-percent-increasing'}>{_getRandomPercentage()}</div>
-                        : <div className={'amount-of-percent-decreasing'}>{_getRandomPercentage()}</div>
-                    }
-                </div>
+                {/*<div className={'icon-with-percent-changed-by'}>*/}
+                {/*    {props.rawValue === 'Positive' ?*/}
+                {/*        <FiArrowUpRight className={'icon-of-percent-increasing'}/>*/}
+                {/*        : <FiArrowDownRight className={'icon-of-percent-decreasing'}/>*/}
+                {/*    }*/}
+                {/*    {props.rawValue === 'Positive' ?*/}
+                {/*        <div className={'amount-of-percent-increasing'}>{_getRandomPercentage()}</div>*/}
+                {/*        : <div className={'amount-of-percent-decreasing'}>{_getRandomPercentage()}</div>*/}
+                {/*    }*/}
+                {/*</div>*/}
             </div>
         </>
     );

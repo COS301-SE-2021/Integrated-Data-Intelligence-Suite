@@ -18,13 +18,13 @@
 }
 
 .login_button {
-    background: #35a4b2 !important;
-    border-color: #35a4b2 !important;
+    background: #4169E1 !important;
+    border-color: #4169E1 !important;
     width: 100%;
 }
 
 .forgot_password_link {
-    color: #35a4b2 !important;
+    color: #4169E1 !important;
     float: none;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .register_link {
-    color: #35a4b2 !important;
+    color: #4169E1 !important;
     float: right;
 }
 
@@ -93,7 +93,7 @@
     grid-row-end: 2;
     font-weight: 600;
     font-size: 18px;
-    color: #35a4b2;
+    color: #4169E1;
     margin-bottom: 5%;
 }
 
@@ -105,7 +105,7 @@
 #login-card-svg-bg {
     grid-column-start: 2;
     grid-column-end: 3;
-    background: url("../../assets/BackgroundPatterns/Rangitikei.svg");
+    background: url("../../assets/BackgroundPatterns/Whangaehu.svg");
     background-color: white;
     background-size: cover;
 }
@@ -130,7 +130,8 @@
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
-    background-color: white;
+    background: rgb(1,49,152);
+    background: linear-gradient(90deg, rgba(1,49,152,1) 0%, rgba(29,148,214,1) 100%);
 }
 
 #top-right-block {
@@ -138,7 +139,8 @@
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
-    background: #27818e;
+    background: rgb(29,148,214);
+    background: linear-gradient(90deg, rgba(29,148,214,1) 0%, rgba(140,223,255,1) 100%);
 
 }
 
@@ -147,7 +149,8 @@
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 2;
-    background: #27818e;
+    background: rgb(29,148,214);
+    background: linear-gradient(90deg, rgba(29,148,214,1) 0%, rgba(140,223,255,1) 100%);
 }
 
 #bottom-left-block {
@@ -155,7 +158,8 @@
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 2;
-    background: #27818e;
+    background: rgb(1,49,152);
+    background: linear-gradient(90deg, rgba(1,49,152,1) 0%, rgba(29,148,214,1) 100%);
 }
 
 

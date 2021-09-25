@@ -14,33 +14,12 @@ import '../../components/NetworkGraph/NetworkGraph.css';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
-import useGet from '../../functions/useGet';
-import IndicatorCard from '../../components/IndicatorCard/IndicatorCard';
-import LineGraphDataPositive from '../../Mocks/LineGraphDataPositive.json';
-import LineGraphDataNegative from '../../Mocks/LineGraphDataNegative.json';
-import LineGraph from '../../components/LineGraph/LineGraph';
 import PieChart from '../../components/PieChart/PieChart';
-import PieChartMockData from '../../Mocks/PieChartDataMock.json';
-import BarGraphMockData from '../../Mocks/BarGraphDataMock.json';
-import BarGraph from '../../components/BarGraph/VictoryBarGraph';
-import InfoDiv from '../../components/InfoDiv/InfoDiv';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
-import VisxLineGraph from '../../components/vsixLineGraph/VisxLineGraph';
-import VisxBarStackGraph from '../../components/visxBarStackGraph/visxBarStackGraph';
-import VisxAreaGraph from '../../components/visxAreaGraph/visxAreaGraph';
-import VisxAreaStackGraph from '../../components/visxAreaStackGraph/visxAreaStackGraph';
-import VisxBarGraph from '../../components/visxBarGraph/visxBarGraph';
-import VisxBarGroupGraph from '../../components/visxBarGroupGraph/visxBarGroup';
-import visxAreaMockData from '../../Mocks/vsixAreaDataMock.json';
-import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import SimpleSection from '../../components/SimpleSection/SimpleSection';
-import AreaGraph from '../../components/AreaGraph/AreaGraph';
-import { Simple } from 'leaflet/src/geo/crs/CRS.Simple';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
-import UberLineGraph from '../../components/UberLineGraph/UberLineGraph';
-import UberSunburstGraph from '../../components/UberSunburstGraph/UberSunburstGraph';
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
 import OverviewSection from '../../components/OverviewSection/OverviewSection';
 import GraphWithBrushAndZoom from '../../components/GraphWithBrushAndZoom/GraphWithBrushAndZoom';
@@ -50,6 +29,7 @@ const {
     Title,
     Text,
 } = Typography;
+
 const {
     Header,
     Footer,
@@ -58,7 +38,7 @@ const {
 } = Layout;
 
 function retrieveData() {
-    fetch('/retrievePrevious')
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/retrievePrevious`)
         .then((res) => {
             if (!res.ok) {
                 return null;
@@ -127,230 +107,6 @@ class ChartPage extends Component {
                                         />
                                     </Header>
 
-
-                                    {/* <Content id="content_section"> */}
-                                    {/*    /!* <Layout *!/ */}
-                                    {/*    /!*    id="map_card_content_layout_div" *!/ */}
-                                    {/*    /!*    className="map_card" *!/ */}
-                                    {/*    /!* > *!/ */}
-                                    {/*    /!* <div *!/ */}
-                                    {/*    /!*    id="indicator-container" *!/ */}
-                                    {/*    /!* > *!/ */}
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Average Sentiment" */}
-                                    {/*        indicatorValue="Very Bad" */}
-                                    {/*        showArrow */}
-                                    {/*        percentChange="-27%" */}
-                                    {/*        cardID="ave-sentiment-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxAreaGraph */}
-                                    {/*                graphData={this.state.text} */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*                showSecondLine={false} */}
-                                    {/*                showXAxis={false} */}
-                                    {/*                showYAxis={false} */}
-                                    {/*                idName="ave-sentiment-area-graph" */}
-                                    {/*                tooltipKeyColor="red" */}
-                                    {/*            /> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Number of Mentions" */}
-                                    {/*        indicatorValue="246K" */}
-                                    {/*        percentChange="+69%" */}
-                                    {/*        cardID="num-mentions-card" */}
-                                    {/*        showArrow */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxAreaGraph */}
-                                    {/*                graphData={this.state.text} */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*                showSecondLine={false} */}
-                                    {/*                showXAxis={false} */}
-                                    {/*                showYAxis={false} */}
-                                    {/*                idName="num-mentions-area-graph" */}
-                                    {/*                tooltipKeyColor="green" */}
-                                    {/*            /> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Total Sentiment" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="total-sentiment-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <PieChart */}
-                                    {/*                graphData={this.state.text} */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*                legendOrientation="horizontal" */}
-                                    {/*                pieID="total-sentiment-pie" */}
-                                    {/*                legendID="total-sentiment-legend" */}
-                                    {/*            /> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Sentiment vs Time" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="sentiment-vs-time-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxLineGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    /!* </div> *!/ */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Engagement By Location" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="engagement-location-card" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxBarStackGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-
-                                    {/*    /!*<IndicatorCard*!/ */}
-                                    {/*    /!*    indicatorTitle="Tweet Content"*!/ */}
-                                    {/*    /!*    showArrow={false}*!/ */}
-                                    {/*    /!*    cardID="tweet-content-card"*!/ */}
-                                    {/* /> */}
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Frequency of Entity Type" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        cardID="freq-entity-type" */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxBarGroupGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-
-                                    {/*    <IndicatorCard */}
-                                    {/*        indicatorTitle="Frequency per country" */}
-                                    {/*        showArrow={false} */}
-                                    {/*        // cardID={'total-sentiment-pie-card'} */}
-                                    {/*        graphComponent={( */}
-                                    {/*            <VisxBarStackGraph/> */}
-                                    {/*        )} */}
-                                    {/*    /> */}
-
-                                    {/*    <div id="map-card-container"> */}
-                                    {/*        <Card */}
-                                    {/*            id="map-card" */}
-                                    {/*            // title="World Map" */}
-                                    {/*        > */}
-                                    {/*            <MapCard text={this.state.text}/> */}
-                                    {/*        </Card> */}
-
-                                    {/*        /!* <div id="map-details-container"> *!/ */}
-                                    {/*        /!* </div> *!/ */}
-                                    {/*    </div> */}
-                                    {/*    /!* <IndicatorCard *!/ */}
-                                    {/*    /!*    indicatorTitle="Some Title" *!/ */}
-                                    {/*    /!*    cardID="top-country-indicator-card" *!/ */}
-                                    {/*    /!*    showArrow={false} *!/ */}
-                                    {/*    /!*    graphComponent={( *!/ */}
-                                    {/*    /!*        <BarGraph *!/ */}
-                                    {/*    /!*            graphData={BarGraphMockData} *!/ */}
-                                    {/*    /!*        /> *!/ */}
-                                    {/*    /!*    )} *!/ */}
-                                    {/*    /!* /> *!/ */}
-                                    {/*    /!* <InfoDiv infoValue="77%"/> *!/ */}
-                                    {/*    /!* <IndicatorCard *!/ */}
-                                    {/*    /!*    cardID="top-country-indicator-card" *!/ */}
-                                    {/*    /!*    indicatorTitle="Some Title" *!/ */}
-                                    {/*    /!*    showArrow={false} *!/ */}
-                                    {/*    /!*    graphComponent={( *!/ */}
-                                    {/*    /!*        <BarGraph *!/ */}
-                                    {/*    /!*            graphData={BarGraphMockData} *!/ */}
-                                    {/*    /!*        /> *!/ */}
-                                    {/*    /!*    )} *!/ */}
-                                    {/*    /!* /> *!/ */}
-
-                                    {/*    /!* <Sider *!/ */}
-                                    {/*    /!*    id="map_card_sidebar" *!/ */}
-                                    {/*    /!*    className="map_card" *!/ */}
-                                    {/*    /!*    style={{ display: 'none' }} *!/ */}
-                                    {/*    /!* > *!/ */}
-                                    {/*    /!*    <DetailsCard/> *!/ */}
-                                    {/*    /!* </Sider> *!/ */}
-                                    {/*    /!* </Layout> *!/ */}
-
-                                    {/*    <Layout */}
-                                    {/*        id="word-cloud-layout" */}
-                                    {/*    > */}
-
-                                    {/*        <div */}
-                                    {/*            id="word-cloud-grid-container" */}
-                                    {/*        > */}
-                                    {/*            <div */}
-                                    {/*                id="word-cloud-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                <WordCloud */}
-                                    {/*                    text={this.state.text} */}
-                                    {/*                    key={this.state.text} */}
-                                    {/*                /> */}
-                                    {/*            </div> */}
-
-                                    {/*            <div */}
-                                    {/*                id="stat1-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                <VisxBarGroupGraph/> */}
-                                    {/*            </div> */}
-                                    {/*            <div */}
-                                    {/*                id="stat2-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                locations where its been mentioned */}
-                                    {/*            </div> */}
-                                    {/*            <div */}
-                                    {/*                id="stat3-item" */}
-                                    {/*                className="word-cloud-grid-item" */}
-                                    {/*            > */}
-                                    {/*                timeline thingy */}
-                                    {/*            </div> */}
-                                    {/*        </div> */}
-                                    {/*    </Layout> */}
-
-                                    {/*    /!* The Network Graph *!/ */}
-                                    {/*    <Layout */}
-                                    {/*        id="network_graph_layout_div" */}
-                                    {/*        className="network_card" */}
-                                    {/*    > */}
-                                    {/*        <Content */}
-                                    {/*            id="network_graph_card_content" */}
-                                    {/*            className="network_card" */}
-                                    {/*        > */}
-                                    {/*            <NetworkGraphCard */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*            /> */}
-                                    {/*        </Content> */}
-                                    {/*    </Layout> */}
-
-                                    {/*    /!* The timeline Graph *!/ */}
-                                    {/*    <Layout */}
-                                    {/*        id="timeline_graph_div" */}
-                                    {/*        className="timeline_card" */}
-                                    {/*    > */}
-                                    {/*        <Content */}
-                                    {/*            id="timeline_graph_card_content" */}
-                                    {/*            className="timeline_card" */}
-                                    {/*        > */}
-                                    {/*            <TimelineGraph */}
-                                    {/*                text={this.state.text} */}
-                                    {/*                key={this.state.text} */}
-                                    {/*            /> */}
-                                    {/*        </Content> */}
-                                    {/*    </Layout> */}
-                                    {/* </Content> */}
                                     <div id="content-section">
                                         <SimpleSection
                                             cardTitle=""
@@ -372,6 +128,7 @@ class ChartPage extends Component {
                                             />
                                         </SimpleSection>
 
+                                        {/*/!**/}
                                         <SimpleSection
                                             cardTitle=""
                                             cardID="row-3"
@@ -381,13 +138,15 @@ class ChartPage extends Component {
                                                     <SimpleCard
                                                         cardTitle={''}
                                                         cardID={'world-map'}
+                                                        titleOnTop
                                                     >
                                                         <MapCard text={this.state.text}/>
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                        cardTitle={'Tweet Frequency'}
+                                                        cardTitle={'Data Frequency'}
                                                         cardID={'map-metric-1'}
+                                                        titleOnTop
                                                     >
                                                         <DraggableBarGraph text={this.state.text}/>
                                                     </SimpleCard>
@@ -396,12 +155,13 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                            cardTitle="Textual Analysis"
+                                            cardTitle=""
                                             cardID="row-4"
                                         >
                                             <SimpleCard
                                                 cardTitle="Word Cloud"
                                                 cardID="word-cloud-card"
+                                                titleOnTop
                                             >
                                                 <WordCloud
                                                     text={this.state.text}
@@ -413,16 +173,16 @@ class ChartPage extends Component {
                                                 <SimpleCard
                                                     cardTitle="Dominant words"
                                                     cardID="word-graph-2"
+                                                    titleOnTop
                                                 >
-                                                    <PieChart/>
+                                                    <PieChart text={this.state.text}/>
                                                 </SimpleCard>
-                                                <SimpleCard
-                                                    cardTitle="word-graph-1"
+                                                {/*<SimpleCard
+                                                    cardTitle="Word Sunburst"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
-                                                </SimpleCard>
-
+                                                </SimpleCard>*/}
                                             </div>
                                         </SimpleSection>
 
@@ -433,23 +193,62 @@ class ChartPage extends Component {
                                             <SimpleCard
                                                 cardTitle="Relationship Between Entities"
                                                 cardID="network-graph-entities"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                    indexOfData={11}
+                                                />
+                                            </SimpleCard>
+
+                                            <SimpleCard
+                                                cardTitle="Relationship Between Patterns"
+                                                cardID="network-graph-patterns"
+                                                titleOnTop
+                                            >
+                                                <NetworkGraphCard
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                    indexOfData={12}
+                                                />
+                                            </SimpleCard>
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                            cardTitle=""
+                                            cardID="row-6"
+                                        >
+                                            <SimpleCard
+                                                cardTitle="Timeline"
+                                                cardID="anomaly-timeline-card"
+                                                titleOnTop
+                                            >
+                                                <TimelineGraph
                                                     text={this.state.text}
                                                     key={this.state.text}
                                                 />
                                             </SimpleCard>
 
-                                            <SimpleCard
-                                                cardTitle="Relationship Between Entities"
-                                                cardID="network-graph-patterns"
-                                            >
-                                                <NetworkGraphCard
-                                                    text={this.state.text}
-                                                    key={this.state.text}
-                                                />
-                                            </SimpleCard>
+                                            {/*<SimpleCard*/}
+                                            {/*    cardTitle="Scatter Plot"*/}
+                                            {/*    cardID="anomaly-scatter-plot"*/}
+                                            {/*    titleOnTop*/}
+                                            {/*>*/}
+                                            {/*    Scatter Plot*/}
+                                            {/*</SimpleCard>*/}
+
+                                            {/*<SimpleCard*/}
+                                            {/*    cardTitle="Line Graph"*/}
+                                            {/*    cardID="anomaly-line-graph"*/}
+                                            {/*>*/}
+                                            {/*    <GraphWithBrushAndZoom*/}
+                                            {/*        text={this.state.text}*/}
+                                            {/*        key={this.state.text}*/}
+                                            {/*    />*/}
+                                            {/*</SimpleCard>*/}
                                         </SimpleSection>
+                                        {/**!/*/}
                                     </div>
                                 </Layout>
                             </Layout>

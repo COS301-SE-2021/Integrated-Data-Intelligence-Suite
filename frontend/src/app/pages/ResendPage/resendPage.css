@@ -1,0 +1,171 @@
+#verify_card {
+    /*border: 3px solid #5773FA;*/
+    border:none;
+    /* align-self: center; */
+
+    /*Aligning it Horizontally in the Center*/
+    width: 24%;
+    max-width: 300px;
+
+    /* Aligning it Vertically in the center  */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)
+}
+
+.login_button {
+    background: #5773FA;
+    border-color: #5773FA;
+    width: 100%;
+}
+
+/*The  Lines in between the word OR*/
+.ant-divider-horizontal.ant-divider-with-text{
+    display: flex;
+    margin: 16px 0;
+    color: black !important;
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: center;
+    border-top: 0;
+    border-top-color: black !important;
+}
+
+.register_link {
+    color: #5873f9;
+    float: right;
+}
+
+/* The root div. Its encompasses all the elements/components */
+#root {
+    /*border: 3px solid red;*/
+    border:0;
+    height: 100vh;
+    position: relative;
+    margin:auto;
+    /*width: 100vw;*/
+    /*background: white;*/
+    background: linear-gradient(176deg, #1c8efa 70%, #000000 calc(70% + 2px));
+}
+
+.forgot_password_link_container > .ant-form-item-control > .ant-form-item-control-input
+> .ant-form-item-control-input-content{
+    text-align: center;
+}
+
+#verify-background {
+    /*border: 3px solid red;*/
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    padding: 10%;
+    justify-content: center;
+    align-items: center;
+    background: #27818e;
+    z-index: 2;
+
+}
+
+#verify-form-container {
+    /*border: 3px solid blue;*/
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 50% 50%;
+    background-color: white;
+    z-index: 2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#verify-card {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+    background-color: white;
+    padding: 18%;
+
+}
+
+#verify-card-title {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    font-weight: 600;
+    font-size: 18px;
+    color: #4169E1;
+    margin-bottom: 5%;
+}
+
+#verify-form {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#verify-card-svg-bg {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    background: url("../../assets/BackgroundPatterns/Whangaehu.svg");
+    background-color: white;
+    background-size: cover;
+}
+
+/***********************************************/
+/******************Custom Bg********************/
+/***********************************************/
+#login-custom-bg {
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background: white;
+    /*border: 3px solid red;*/
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
+#top-left-block {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background: rgb(1,49,152);
+    background: linear-gradient(90deg, rgba(1,49,152,1) 0%, rgba(29,148,214,1) 100%);
+}
+
+#top-right-block {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background: rgb(29,148,214);
+    background: linear-gradient(90deg, rgba(29,148,214,1) 0%, rgba(140,223,255,1) 100%);
+
+}
+
+#bottom-right-block {
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    background: rgb(29,148,214);
+    background: linear-gradient(90deg, rgba(29,148,214,1) 0%, rgba(140,223,255,1) 100%);
+}
+
+#bottom-left-block {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    background: rgb(1,49,152);
+    background: linear-gradient(90deg, rgba(1,49,152,1) 0%, rgba(29,148,214,1) 100%);
+}
+
+
+

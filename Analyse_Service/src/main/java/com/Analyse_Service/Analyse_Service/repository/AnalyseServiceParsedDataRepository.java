@@ -9,8 +9,4 @@ import java.util.List;
 
 public interface AnalyseServiceParsedDataRepository extends JpaRepository<ParsedData,Long> {
 
-    @Query(
-            value = "SELECT * FROM parsed_data P WHERE P.id = ?1",
-            nativeQuery = true)
-    List<ParsedData> findTextById(Long Id);
 }

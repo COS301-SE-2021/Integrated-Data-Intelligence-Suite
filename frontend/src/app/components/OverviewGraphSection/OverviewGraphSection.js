@@ -35,7 +35,7 @@ export default class OverviewGraphSection extends React.Component {
             _average_interaction = this.props.text[4];
             _pie_chart_data = this.props.text[5];
             _engagement_data = this.props.text[6];
-            console.log(this.props)
+            console.log(this.props);
             console.log(_engagement_data);
         }
     }
@@ -45,18 +45,24 @@ export default class OverviewGraphSection extends React.Component {
             <>
                 <div id={'overview-graph-section'}>
                     <SimpleCard
-                        cardTitle="Average Interaction"
+                        cardTitle="Average Interaction for each trend"
                         cardID="overview-graph-metric-1"
+                        titleOnTop
                     >
                         <VictoryBarGraph
                             text={_average_interaction}
                             key={_average_interaction}
+                            xAxisLabel={''}
+                            yAxisLabel={''}
+                            showYAxisLabel={false}
+                            showXAxisLabel
                         />
                     </SimpleCard>
 
                     <SimpleCard
                         cardTitle="Sentiment Distribution"
                         cardID="overview-graph-metric-2"
+                        titleOnTop
                     >
                         <PieWithCustomLabels
                             text={_pie_chart_data}
@@ -65,12 +71,15 @@ export default class OverviewGraphSection extends React.Component {
                     </SimpleCard>
 
                     <SimpleCard
-                        cardTitle="Engagement p/ Location"
+                        cardTitle="Engagement per Province"
                         cardID="overview-graph-metric-3"
+                        titleOnTop
                     >
                         <VictoryBarGraph
                             text={_engagement_data}
                             key={_engagement_data}
+                            xAxisLabel={''}
+                            yAxisLabel={''}
                         />
                     </SimpleCard>
                 </div>

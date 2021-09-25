@@ -1,6 +1,8 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Gateway_Service.Gateway_Service.dataclass.*;
+import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,6 +24,8 @@ public class VisualizeService {
      */
     //@HystrixCommand(fallbackMethod = "visualizeDataFallback")
     public VisualizeDataResponse visualizeData(VisualizeDataRequest visualizeRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);

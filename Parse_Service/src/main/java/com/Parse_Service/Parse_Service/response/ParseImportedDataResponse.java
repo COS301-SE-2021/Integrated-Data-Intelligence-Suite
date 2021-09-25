@@ -8,12 +8,16 @@ import java.util.ArrayList;
 public class ParseImportedDataResponse {
     ArrayList<ParsedData> dataList;
     ArrayList<ParsedArticle> articleList;
+    private boolean success;
+    private String message;
 
     public ParseImportedDataResponse(){
 
     }
 
-    public ParseImportedDataResponse(ArrayList<ParsedData> dataList, ArrayList<ParsedArticle> articleList){
+    public ParseImportedDataResponse(boolean success, String message, ArrayList<ParsedData> dataList, ArrayList<ParsedArticle> articleList){
+        this.success = success;
+        this.message = message;
         this.dataList = dataList;
         this.articleList = articleList;
     }
@@ -24,5 +28,21 @@ public class ParseImportedDataResponse {
 
     public ArrayList<ParsedArticle> getArticleList() {
         return articleList;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "IDIS",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
@@ -58,6 +58,7 @@
     "react-icons": "^4.2.0",
     "react-leaflet": "2.7.0",
     "react-leaflet-draw": "0.19.0",
+    "react-leaflet-heatmap-layer": "^2.0.0",
     "react-moment": "^1.1.1",
     "react-router-dom": "^5.2.0",
     "react-script-tag": "^1.1.2",
@@ -86,6 +87,8 @@
   "build": {
     "extends": null,
     "appId": "com.example.electron-cra",
+    "productName": "IDIS",
+    "target": "NSIS",
     "files": [
       "dist/**/*",
       "build/**/*",
@@ -94,6 +97,14 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "createDesktopShortcut": true,
+      "installerIcon": "build/idis-logo.ico",
+      "uninstallerIcon": "build/idis-logo.ico",
+      "installerHeaderIcon": "build/idis-logo.ico"
     }
   },
   "eslintConfig": {

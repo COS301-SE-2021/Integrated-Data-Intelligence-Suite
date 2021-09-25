@@ -18,7 +18,7 @@ const getAllSources = (url) => {
     useEffect(() => {
         const abortCont = new AbortController();
 
-        fetch(url, { signal: abortCont.signal })
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}${url}`, { signal: abortCont.signal })
             .then((res) => {
                 if (!res.ok) {
                     throw Error(res.error());
@@ -52,7 +52,7 @@ const getAllSources = (url) => {
 const DataSourceList = () => {
     const [sources, setSources] = useState(null);
 
-    const { data, isPending, error } = getAllSources('http://localhost:9001/Import/getAllSources');
+    const { data, isPending, error } = getAllSources('/getAllSources');
 
     const handleDelete = (sourceId) =>{
         setSources((prev)=>prev.filter((item)=> item.id !== sourceId));
@@ -65,9 +65,9 @@ const DataSourceList = () => {
                 <Link to="/settings/source/new" className="standard-filled button">new Source</Link>
             </div>
             {data && sources === null && setSources(data)}
-            {sources !== null && sources.map((source) =>(
+            {sources !== null && sources.map((source, index) =>(
                 <div>
-                    <div className="source-preview" key={`source ${source.id}`}>
+                    <div className="source-preview" key={`source ${source.id}${index}`}>
                         <p className="source-title">{source.name}</p>
                         <div className="button-div">
                             <Link className="standard button" to={`/settings/source/${source.id}`}><EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} /></Link>

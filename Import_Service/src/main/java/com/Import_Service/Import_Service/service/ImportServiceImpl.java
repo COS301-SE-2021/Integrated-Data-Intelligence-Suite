@@ -1,7 +1,6 @@
 package com.Import_Service.Import_Service.service;
 
 import com.Import_Service.Import_Service.dataclass.APISource;
-import com.Import_Service.Import_Service.rri.ApiType;
 import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.rri.DataSource;
 import com.Import_Service.Import_Service.dataclass.ImportedData;
@@ -13,6 +12,8 @@ import com.Import_Service.Import_Service.repository.ApiSourceRepository;
 import com.Import_Service.Import_Service.request.*;
 import com.Import_Service.Import_Service.response.*;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ public class ImportServiceImpl {
 
     @Autowired
     private ApiSourceRepository apiSourceRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(ImportServiceImpl.class);
 
     public ImportServiceImpl() {
     }
@@ -214,7 +217,7 @@ public class ImportServiceImpl {
      * @throws ImporterException when request object contains invalid parameters or any of the
      *                           data sources does not successfully execute
      */
-    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException, IOException {
+    public ImportDataResponse importData(ImportDataRequest request) throws ImporterException {
 
         if(request == null) {
             throw new InvalidImporterRequestException("Request object is null.");
@@ -232,6 +235,7 @@ public class ImportServiceImpl {
         ArrayList<ImportedData> list = new ArrayList<>();
 
         //Twitter Request
+        boolean oneFailedFlag = false;
         String keyword = request.getKeyword();
         int limit = request.getLimit();
 
@@ -245,6 +249,8 @@ public class ImportServiceImpl {
 
         } catch (Exception e){
             System.out.println("\n\n twitter error: "+e.getMessage());
+            log.info("Twitter error: " + e.getMessage());
+            oneFailedFlag = true;
         }
 
         //NewsAPI request
@@ -254,21 +260,26 @@ public class ImportServiceImpl {
 
             String newsData = newsResponse.getData();
 
-            list.add(new ImportedData(DataSource.NEWSSCOURCE, newsData));
+            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData));
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
+            log.info("NewsAPI error: " + e.getMessage());
+            oneFailedFlag = true;
         }
 
         //Fetching api sources from database
+
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request req;
         List<APISource> sources = apiSourceRepository.findAll();
+        //Looping through the added sources
         if(!sources.isEmpty()) {
-            for(APISource s : sources) {
+            for (APISource s : sources) {
+                //Building URL
                 String apiUrl = s.getUrl();
-                if(apiUrl.charAt(apiUrl.length()-1) != '?') {
+                if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
                     apiUrl += "?";
                 }
 
@@ -276,43 +287,61 @@ public class ImportServiceImpl {
 
                 Map<String, String> params = s.getParameters();
 
-                for (Map.Entry<String, String> entry: params.entrySet()) {
+                for (Map.Entry<String, String> entry : params.entrySet()) {
                     apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
                 }
 
-                if(s.getAuthType() == AuthorizationType.apiKey) {
+                //Building the request for various type of authorization
+                if (s.getAuthType() == AuthorizationType.apiKey) {
                     apiUrl += "&apiKey=" + s.getAuthorization();
 
                     req = new Request.Builder()
                             .url(apiUrl)
                             .method(s.getMethod(), null)
                             .build();
-                }
-                else if (s.getAuthType() == AuthorizationType.bearer) {
+                } else if (s.getAuthType() == AuthorizationType.bearer) {
                     req = new Request.Builder()
                             .addHeader("Authorization", "Bearer " + s.getAuthorization())
                             .url(apiUrl)
                             .method(s.getMethod(), null)
                             .build();
-                }
-                else {
+                } else {
                     req = new Request.Builder()
                             .url(apiUrl)
                             .method(s.getMethod(), null)
                             .build();
                 }
+                //Attempting to execute query
+                try {
+                    Response response = client.newCall(req).execute();
+                    //Log error if response was unsuccessful
+                    if (!response.isSuccessful()) {
+                        //throw new ImporterException("Unexpected Error: " + Objects.requireNonNull(response.body()).string());
+                        log.warn("Failed to fetch data from " + s.getName());
+                        oneFailedFlag = true;
+                    }
 
-                Response response = client.newCall(req).execute();
-
-                if(!response.isSuccessful()){
-                    throw new ImporterException("Unexpected Error: "+ Objects.requireNonNull(response.body()).string());
+                    list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
+                }
+                catch (IOException e) {
+                    //Log error if request is invalid
+                    log.warn("Error executing request for " + s.getName());
+                    oneFailedFlag = true;
                 }
 
-                list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
             }
         }
+        //Return a response based on the fetched info
+        if(list.isEmpty()) {
+            return new ImportDataResponse(false, "Failed to fetch data from all sources", list);
+        }
+        else if(oneFailedFlag) {
+            return new ImportDataResponse(true, "One or more resources failed to fetch data", list);
+        }
+        else {
+            return new ImportDataResponse(true, "Successfully fetched data", list);
+        }
 
-        return new ImportDataResponse(list);
     }
 
     //====================== API sources functionality ======================
@@ -341,7 +370,7 @@ public class ImportServiceImpl {
             return new AddAPISourceResponse(false, "The source does not exist");
         }
 
-        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getType(), request.getAuthType(), request.getAuthorization(), request.getParameters());
+        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getAuthType(), request.getAuthorization(), request.getParameters());
 
         APISource savedSource = apiSourceRepository.save(newSource);
 
@@ -414,7 +443,7 @@ public class ImportServiceImpl {
 
     /**
      * This method will return a list of all the APISources saved in the database.
-     * @return This class contains whether or not the retrieving process was successful
+     * @return This class contains whether the retrieving process was successful
      * or not and the list of APISources
      */
     public GetAllAPISourcesResponse getAllAPISources() {
@@ -430,8 +459,8 @@ public class ImportServiceImpl {
 
     /**
      * This method is used to retrieve a specific API source based on the Id of an API source.
-     * @param request This contains the Id of an APISource that is being requested.
-     * @return This will return whether or not editing an API source was successful and APISource if it found one.
+     * @param request This contains the ID of an APISource that is being requested.
+     * @return This will return whether editing an API source was successful and APISource if it found one.
      * @throws Exception This will be thrown if the request is invalid.
      */
     public GetAPISourceByIdResponse getAPISourceById(GetAPISourceByIdRequest request) throws Exception {
