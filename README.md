@@ -124,9 +124,8 @@ I love gaming, playing/watching soccer, and occasionally reading. <br>
 <p>
 <br>
 I am a programmer always willing in improve myself, challenge me and I'll do you one better. <br>
-I am mainly interested in backend functionality, <br>
-but will take up other forms of programming happily. <br>
-In my spare time I like to gym, be outdoors, food and gamming <br>
+I am mainly interested in backend functionality, but will take up other forms of programming happily. <br>
+In my spare time I like to gym, be outdoors, food and gaming <br>
 </p>
 </td>
 </tr>
