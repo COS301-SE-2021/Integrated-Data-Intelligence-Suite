@@ -293,7 +293,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkNlpProperties = SparkSession
                 .builder()
                 .appName("NlpProperties")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -534,7 +534,7 @@ public class AnalyseServiceImpl {
          SparkSession sparkPatterns = SparkSession
          .builder()
          .appName("Pattern")
-         //.master("local")
+         .master("local")
          .getOrCreate();
 
          sparkPatterns.sparkContext().setLogLevel("OFF");
@@ -737,7 +737,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkRelationships = SparkSession
                 .builder()
                 .appName("Relationships")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -958,7 +958,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1304,7 +1304,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1632,7 +1632,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1972,7 +1972,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -2194,7 +2194,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkPredictions = SparkSession
                 .builder()
                 .appName("Predictions")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -2229,7 +2229,7 @@ public class AnalyseServiceImpl {
          SparkSession sparkPredictions = SparkSession
          .builder()
          .appName("Predictions")
-         //.master("local")
+         .master("local")
          .getOrCreate();
 
          /*******************SETUP DATA*****************/
@@ -2270,7 +2270,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkAnomalies = SparkSession
                 .builder()
                 .appName("Anomalies")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
@@ -2575,7 +2575,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkAnomalies = SparkSession
                 .builder()
                 .appName("Anomalies")
-                //.master("local")
+                .master("local")
                 .getOrCreate();
 
         JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
