@@ -3,6 +3,7 @@ package com.Gateway_Service.Gateway_Service.service;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
+import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -31,6 +32,8 @@ public class UserService {
         ResponseEntity<ChangeUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
         return responseEntity.getBody();*/
 
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -54,6 +57,8 @@ public class UserService {
      * @return This class contains a list of users saved on the system.
      */
     public GetAllUsersResponse getAllUsers() {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -82,6 +87,8 @@ public class UserService {
         HttpEntity<RegisterRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/register", HttpMethod.POST, requestEntity, RegisterResponse.class);
         return responseEntity.getBody();*/
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -136,6 +143,8 @@ public class UserService {
     */
 
     public VerifyAccountResponse verifyAccount(VerifyAccountRequest userRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -155,6 +164,8 @@ public class UserService {
     }
 
     public ResendCodeResponse resendCode(ResendCodeRequest userRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -179,6 +190,9 @@ public class UserService {
         HttpEntity<GetUserRequest> requestEntity = new HttpEntity<GetUserRequest>(request, requestHeaders);
         ResponseEntity<GetUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/getUser", HttpMethod.POST, requestEntity, GetUserResponse.class);
         return responseEntity.getBody();*/
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -209,6 +223,9 @@ public class UserService {
         HttpEntity<LoginRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<LoginResponse> responseEntity = restTemplate.exchange("http://User-Service/User/login", HttpMethod.POST, requestEntity, LoginResponse.class);
         return responseEntity.getBody();*/
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -236,6 +253,9 @@ public class UserService {
      * was successful or not.
      */
     public UpdateProfileResponse updateProfile(UpdateProfileRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 

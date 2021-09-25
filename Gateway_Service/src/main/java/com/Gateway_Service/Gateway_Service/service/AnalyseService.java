@@ -2,6 +2,7 @@ package com.Gateway_Service.Gateway_Service.service;
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,6 +25,8 @@ public class AnalyseService {
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 

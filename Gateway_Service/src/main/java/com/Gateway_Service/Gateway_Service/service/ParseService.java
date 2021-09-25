@@ -3,6 +3,7 @@ package com.Gateway_Service.Gateway_Service.service;
 
 import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataResponse;
+import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,6 +25,8 @@ public class ParseService {
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
