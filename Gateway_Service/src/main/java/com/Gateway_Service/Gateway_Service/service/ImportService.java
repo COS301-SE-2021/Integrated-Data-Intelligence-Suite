@@ -104,7 +104,7 @@ public class ImportService {
      */
     public ImportDataResponse importDataFallback(ImportDataRequest importRequest){
         //return "Import Service is not working...try again later";
-        ImportDataResponse importDataResponse =  new ImportDataResponse(null);
+        ImportDataResponse importDataResponse =  new ImportDataResponse(false, null, null);
         importDataResponse.setFallback(true);
         importDataResponse.setFallbackMessage("{Failed to get import data}");
         return importDataResponse;
