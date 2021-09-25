@@ -315,7 +315,7 @@ public class ImportServiceImpl {
             }
         }
 
-        return new ImportDataResponse(list);
+        return new ImportDataResponse(true, "Successfully fetched data", list);
     }
 
     //====================== API sources functionality ======================

@@ -91,7 +91,7 @@ public class ImportServiceControllerTest {
         ImportedData importedData1 = new ImportedData();
         importedData.add(importedData1);
 
-        ImportDataResponse importDataResponse = new ImportDataResponse(importedData);
+        ImportDataResponse importDataResponse = new ImportDataResponse(true, "Successfully fetched data", importedData);
         when(service.importData(any(ImportDataRequest.class))).thenReturn(importDataResponse);
 
 
@@ -124,7 +124,7 @@ public class ImportServiceControllerTest {
         ImportedData importedData1 = new ImportedData();
         importedData.add(importedData1);
 
-        ImportDataResponse importDataResponse = new ImportDataResponse(importedData);
+        ImportDataResponse importDataResponse = new ImportDataResponse(true, "Successfully fetched data", importedData);
         when(service.importData(any(ImportDataRequest.class))).thenReturn(importDataResponse);
 
 
