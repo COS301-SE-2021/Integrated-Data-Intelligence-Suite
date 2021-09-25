@@ -293,7 +293,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkNlpProperties = SparkSession
                 .builder()
                 .appName("NlpProperties")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -458,6 +458,7 @@ public class AnalyseServiceImpl {
 
 
 
+
         /**OLD NLP
          Properties properties = new Properties();
          String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
@@ -506,6 +507,7 @@ public class AnalyseServiceImpl {
          nameEntities.add(row);
          }*/
 
+        sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -532,7 +534,7 @@ public class AnalyseServiceImpl {
          SparkSession sparkPatterns = SparkSession
          .builder()
          .appName("Pattern")
-         .master("local")
+         //.master("local")
          .getOrCreate();
 
          sparkPatterns.sparkContext().setLogLevel("OFF");
@@ -708,6 +710,7 @@ public class AnalyseServiceImpl {
             System.out.println(o.toString());
         }
 
+        sparkPatterns.stop();
 
         return new FindPatternResponse(results);
     }
@@ -734,7 +737,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkRelationships = SparkSession
                 .builder()
                 .appName("Relationships")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -924,7 +927,7 @@ public class AnalyseServiceImpl {
         }
         //System.out.println(results.toString());
 
-
+        sparkRelationships.stop();
 
         return new FindRelationshipsResponse(results);
     }
@@ -955,7 +958,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1280,6 +1283,7 @@ public class AnalyseServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
+        sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results);
     }
@@ -1300,7 +1304,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1600,6 +1604,7 @@ public class AnalyseServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
+        sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
     }
 
@@ -1627,7 +1632,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1924,7 +1929,7 @@ public class AnalyseServiceImpl {
             e.printStackTrace();
         }*/
 
-
+        sparkTrends.stop();
         run.endRun();
 
         /***********************SETUP MLFLOW - SAVE ***********************
@@ -1967,7 +1972,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkTrends = SparkSession
                 .builder()
                 .appName("Trends")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -2162,6 +2167,7 @@ public class AnalyseServiceImpl {
             System.out.println("RESULT TREND : " + results.get(i));
         }
 
+        sparkTrends.stop();
         return new FindTrendsResponse(results);
     }
 
@@ -2188,7 +2194,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkPredictions = SparkSession
                 .builder()
                 .appName("Predictions")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -2197,6 +2203,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
+        sparkPredictions.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -2222,7 +2229,7 @@ public class AnalyseServiceImpl {
          SparkSession sparkPredictions = SparkSession
          .builder()
          .appName("Predictions")
-         .master("local")
+         //.master("local")
          .getOrCreate();
 
          /*******************SETUP DATA*****************/
@@ -2237,7 +2244,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-
+        sparkPredictions.stop();
         return new GetPredictionResponse(null);
     }
 
@@ -2263,7 +2270,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkAnomalies = SparkSession
                 .builder()
                 .appName("Anomalies")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
@@ -2541,6 +2548,8 @@ public class AnalyseServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
+        sparkAnomalies.stop();
+
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results);
     }
@@ -2566,7 +2575,7 @@ public class AnalyseServiceImpl {
         SparkSession sparkAnomalies = SparkSession
                 .builder()
                 .appName("Anomalies")
-                .master("local")
+                //.master("local")
                 .getOrCreate();
 
         JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
@@ -2716,6 +2725,8 @@ public class AnalyseServiceImpl {
             if(rawResults.get(i).get(0) != null)
                 results.add(rawResults.get(i).get(0).toString());//name
         }
+
+        sparkAnomalies.stop();
 
         return new FindAnomaliesResponse(results);
     }

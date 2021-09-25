@@ -161,7 +161,7 @@ public class AnalyseServiceTest {
         Assertions.assertNotNull(testResults);
     }*/
 
-    @Test
+    /*@Test
     @DisplayName("When the data list is Valid")
     public void getPredictionValidRequest() throws InvalidRequestException {
         ArrayList<ArrayList> TestList = new ArrayList<>();
@@ -176,10 +176,10 @@ public class AnalyseServiceTest {
         GetPredictionRequest test = new GetPredictionRequest(TestList);
         GetPredictionResponse testResults = service.getPredictions(test);
         Assertions.assertNotNull(testResults);
-    }
+    }*/
 
 
-    @Test
+    /*@Test
     @DisplayName("When the text is Valid")
     public void findEntitiesValidRequest() throws InvalidRequestException {
         ArrayList<String> text = new ArrayList<>();;
@@ -188,7 +188,7 @@ public class AnalyseServiceTest {
         List<Object> nlpResults = service.findNlpProperties(test);
         ArrayList<FindNlpPropertiesResponse> testResults = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0);//service.findNlpProperties(test);
         Assertions.assertNotNull(testResults);
-    }
+    }*/
 
     /******************************************Repository Functional Test**********************************************/
 
