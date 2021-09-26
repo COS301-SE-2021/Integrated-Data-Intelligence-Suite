@@ -152,6 +152,24 @@ services:
       - database
 
 
+  report_service:
+    container_name: report_service
+    image: teamemerge/report_service
+
+    build: ./Report_Service
+
+    #environment:
+    #  - DB_SERVER=database
+    #  - POSTGRES_DB=UserServiceDatabase
+    #  - POSTGRES_USER=emerge
+    #  - POSTGRES_PASSWORD=emerge0000
+
+    ports:
+      - 9006:9006
+    links:
+      - database
+
+
   gateway_service:
     container_name: gateway_service
     image: teamemerge/gateway_service
