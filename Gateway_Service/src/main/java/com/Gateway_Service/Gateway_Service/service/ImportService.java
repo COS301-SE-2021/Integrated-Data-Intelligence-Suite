@@ -1,6 +1,7 @@
 package com.Gateway_Service.Gateway_Service.service;
 
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
+import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -39,6 +40,7 @@ public class ImportService {
 
         return importResponse;*/
 
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -66,6 +68,8 @@ public class ImportService {
      */
     //@HystrixCommand(fallbackMethod = "importDataFallback")
     public ImportDataResponse importData(ImportDataRequest importRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
