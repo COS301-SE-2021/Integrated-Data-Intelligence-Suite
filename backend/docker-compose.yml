@@ -177,7 +177,7 @@ services:
     image: teamemerge/user_interface
 
     build:
-      context: ./frontend
+      context: ../frontend
       args:
         REACT_APP_BACKEND_HOST: ${REACT_APP_BACKEND_HOST}
         REACT_APP_BACKEND_PORT: ${REACT_APP_BACKEND_PORT}
