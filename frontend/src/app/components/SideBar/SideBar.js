@@ -21,7 +21,7 @@ class SideBar extends React.Component {
 
         this.state = {
             collapsed: false,
-            active: 1,
+            active: 2,
         };
 
         this.setActive = (value) => {
@@ -36,7 +36,7 @@ class SideBar extends React.Component {
 
     componentDidMount() {
         // this.setActive(this.props.currentPage);
-        this.setState({active: this.props.currentPage});
+        this.setState({ active: this.props.currentPage });
     }
 
     render() {
@@ -60,14 +60,14 @@ class SideBar extends React.Component {
                         defaultSelectedKeys={this.props.currentPage}
                         mode="inline"
                     >
-                        <Menu.Item
-                            key="1"
-                            icon={<AiOutlineHome/>}
-                            onClick={() => this.setActive('1')}
-                        >
-                            Home
-                            <Link to="/"/>
-                        </Menu.Item>
+                        {/*<Menu.Item*/}
+                        {/*    key="1"*/}
+                        {/*    icon={<AiOutlineHome/>}*/}
+                        {/*    onClick={() => this.setActive('1')}*/}
+                        {/*>*/}
+                        {/*    Home*/}
+                        {/*    <Link to="/"/>*/}
+                        {/*</Menu.Item>*/}
 
                         <Menu.Item
                             key="2"

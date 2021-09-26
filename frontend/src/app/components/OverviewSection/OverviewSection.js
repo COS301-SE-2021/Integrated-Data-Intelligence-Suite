@@ -40,8 +40,8 @@ export default class OverviewSection extends React.Component {
             });
             total_likes = this.props.text[0][0].words;
             overall_sentiment = this.props.text[1][0].words;
-            num_of_anomalies = this.props.text[2][0].words;
-            trends_value = this.props.text[3][0].words;
+            num_of_anomalies = this.props.text[3][0].words;
+            trends_value = this.props.text[2][0].words;
         }
     }
 
@@ -50,8 +50,9 @@ export default class OverviewSection extends React.Component {
             <>
                 <div id={'overview-col-left'}>
                     <SimpleCard
-                        cardTitle="Total Likes"
+                        cardTitle="Total Interaction"
                         cardID="overview-metric-1"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing
@@ -63,6 +64,7 @@ export default class OverviewSection extends React.Component {
                     <SimpleCard
                         cardTitle="Trends"
                         cardID="overview-metric-3"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
@@ -72,8 +74,9 @@ export default class OverviewSection extends React.Component {
                     </SimpleCard>
 
                     <SimpleCard
-                        cardTitle="Average Sentiment"
+                        cardTitle="Overall Sentiment"
                         cardID="overview-metric-2"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing={false}
@@ -85,6 +88,7 @@ export default class OverviewSection extends React.Component {
                     <SimpleCard
                         cardTitle="Anomalies"
                         cardID="overview-metric-4"
+                        titleOnTop
                     >
                         <ValueWithPercentChange
                             isIncreasing

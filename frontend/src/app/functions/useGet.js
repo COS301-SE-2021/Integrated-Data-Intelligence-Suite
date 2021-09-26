@@ -9,17 +9,17 @@ const useGet = (url) => {
   useEffect(() => {
     const abortCont = new AbortController();
 
-    fetch(`http://localhost:9000${url}`, { signal: abortCont.signal })
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}${url}`, { signal: abortCont.signal })
       .then((res) => {
         if (!res.ok) {
-          console.log(res);
+          // console.log(res);
           throw Error(res.error());
         }
         return res.json();
       })
       .then((data) => {
         setData(data);
-        console.log('data is here', data);
+        // console.log('data is here', data);
         setIsPending(false);
         setError(null);
       })

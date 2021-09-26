@@ -7,7 +7,7 @@ import useGet from '../../functions/useGet';
 const { Content, Footer, Header } = Layout;
 const { Title } = Typography;
 
-const Permissions = () => {
+const Users = () => {
   const { data: users, isPending, error } = useGet('/user/getAll');
 
   return (
@@ -21,4 +21,4 @@ const Permissions = () => {
   );
 };
 
-export default Permissions;
+export default Users;

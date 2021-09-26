@@ -75,7 +75,6 @@
 
     overflow-x: hidden;
     background: #e8e8e9;
-
 }
 
 
@@ -84,7 +83,7 @@
 *
  */
 #inner_layout_div ::-webkit-scrollbar {
-    width: 8px;
+    width: 11px;
 }
 
 #inner_layout_div ::-webkit-scrollbar-track {
@@ -97,7 +96,7 @@
 }
 
 #inner_layout_div ::-webkit-scrollbar-thumb:active {
-    color: red;
+    background: var(--dodger-blue);
 }
 
 #map-details-container {
@@ -144,6 +143,10 @@
 }
 
 
+#content_section .simple-section-container{
+    max-width: 1200px;
+}
+
 /*******************************************/
 /******************Row 3********************/
 /***************Location Row****************/
@@ -173,7 +176,7 @@
 /*    border-radius: 10px;*/
 /*}*/
 
-#word-cloud-graph-container> .simple-card-container{
+#word-cloud-graph-container > .simple-card-container {
     border: 2px solid var(--border-color);
     background: white;
     padding: 10px;
@@ -181,8 +184,7 @@
 }
 
 #world-map > .simple-card-title {
-    padding: 10px;
-    padding-left: 0px;
+    padding: 10px 10px 10px 0px;
     text-align: left;
 }
 
@@ -194,7 +196,7 @@
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
-    column-gap: 10px;
+    column-gap: 30px;
     height: 340px;
 }
 
@@ -202,6 +204,12 @@
     grid-row-start: 2;
     grid-row-end: 3;
 }
+
+#map-metric-1 {
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+}
+
 
 #map-metric-1 > .simple-card-title {
     padding: 10px;
@@ -223,10 +231,10 @@
 }
 
 #world-map {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 0 auto;
-    border-radius: 10px;
+    display: grid !important;
+    grid-template-columns: 100% !important;
+    grid-template-rows: 0 auto !important;
+    border-radius: 10px !important;
 }
 
 #world-map > .simple-card-body {
@@ -246,14 +254,15 @@
     /**/
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: repeat(2, auto);
+    /*grid-template-rows: repeat(2, auto);*/
+    grid-template-rows: 0 auto;
 }
 
 #row-4 > .simple-section-body {
     display: grid;
-    grid-template-columns: 65% 35%;
+    grid-template-columns:60% 40%;
     grid-template-rows: 100%;
-    column-gap: 10px;
+    column-gap: 30px;
 }
 
 #word-cloud-card {
@@ -264,27 +273,27 @@
     border-radius: 10px;
     border: solid 2px var(--border-color);
 }
-#word-cloud-outer-container{
+
+#word-cloud-outer-container {
     display: flex;
     align-content: center;
 
 }
 
-#word-cloud-outer-container>div{
+#word-cloud-outer-container > div {
     margin-left: auto;
     margin-right: auto;
 }
 
-#word-cloud-card svg{
+#word-cloud-card svg {
     margin-left: auto;
     margin-right: auto;
 }
 
-.simple-section-body svg{
+.simple-section-body svg {
     margin-right: auto;
     margin-left: auto;
 }
-
 
 #word-cloud-graph-container {
     grid-column-start: 2;
@@ -292,9 +301,17 @@
 
     /*Display of the body of the container*/
     display: grid;
+    align-items: center;
     /*grid-template-columns: 100%;*/
-    grid-template-rows: 1fr 1fr;
-    row-gap: 10px;
+    /*grid-template-rows: 1fr 1fr;*/
+    /*row-gap: 10px;*/
+}
+
+#word-cloud-graph-container > div {
+    display: flex;
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
+
 }
 
 #word-graph-1 {
@@ -310,7 +327,6 @@
     background: white;
     border-radius: 10px;
 }
-
 
 /*********************************************/
 /******************Row 5********************/
@@ -329,10 +345,10 @@
     display: grid;
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: 100%;
-    column-gap: 10px;
+    column-gap: 30px;
 }
 
-#row-5> .simple-section-body .simple-card-container{
+#row-5 > .simple-section-body .simple-card-container {
     background: white;
     padding: 10px;
     border-radius: 10px;
@@ -365,6 +381,88 @@
     grid-column-start: 2;
     grid-column-end: 3;
 }
+
+/***********************************************/
+/*******************Row 6**********************/
+/*****************Anomalies*******************/
+/********************************************/
+#row-6 {
+    grid-row-start: 6;
+    grid-row-end: 7;
+
+    /*Internal Display of Row 6 items*/
+    display: grid;
+
+    /*0 = no heading*/
+    grid-template-rows: 0 auto;
+    grid-template-columns: 100%;
+    padding-bottom: 30px;
+}
+
+#row-6 > .simple-section-body {
+    display: grid;
+    grid-template-rows: repeat(1, 100%);
+    grid-template-columns: 50%;
+    column-gap: 30px;
+    row-gap: 10px;
+    justify-content: center;
+}
+
+#anomaly-timeline-card {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    overflow: auto;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+}
+
+#anomaly-timeline-card > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+#anomaly-scatter-plot {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+}
+
+#anomaly-scatter-plot > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+#anomaly-scatter-plot > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#anomaly-line-graph {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#anomaly-line-graph > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+
 
 
 

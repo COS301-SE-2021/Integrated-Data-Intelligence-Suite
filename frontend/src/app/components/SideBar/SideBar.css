@@ -20,6 +20,7 @@
     /*border: 3px solid red;*/
     height: 87%;
     padding: 10px;
+    padding-top: 30px;
 }
 
 #sidebar_menu > li {
@@ -42,6 +43,7 @@
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
     background: #5773FA;
+    /*background: var(--dodger-blue);*/
     /*color: var(--neon-blue);*/
     color: white
     /*border-left: 3px solid #5773FA;*/
@@ -105,7 +107,7 @@
     /*grid-template-columns: 100%;*/
     /*grid-template-rows: 100%;*/
     background: white;
-    /*background-image: url("../../assets/athena-logo.png") !important;*/
+    background-image: url("../../assets/idis-logo.png") !important;
     background-size: cover;
     background-position: center;
     color: black;

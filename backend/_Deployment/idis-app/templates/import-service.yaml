@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: import-service
+  labels:
+    app: import-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: import-service
+  template:
+    metadata:
+      labels:
+        app: import-service
+    spec:
+      containers:
+        - name: import-service
+          image: teamemerge/import_service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9001
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "350Mi"
+              cpu: "500m"
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: import-service-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: import-service
+  ports:
+    - port: 80
+      targetPort: 9001

@@ -29,7 +29,7 @@ class SearchBar extends React.Component {
 
     // Runs when the search button is clicked
     onSearch(values) {
-        this.handleTextChange(template_json);
+        //this.handleTextChange(template_json);
 
         // Show loading icon while API request is waiting for data
         this.setState((prevState) => ({ showLoadingIcon: true }));
@@ -44,21 +44,26 @@ class SearchBar extends React.Component {
         };
         const url = `/main/${values}`;
         // console.log(requestOptions)
-        fetch(url, requestOptions)
+        fetch(`http://localhost:9000${url}`, requestOptions)
             .then((response) => response.json())
             .then((json) => {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
                 // remove or stop the loading icon
-                // this.handleTextChange(json);
+                this.handleTextChange(json);
+            })
+            .catch((err) => {
+                this.setState((prevState) => ({ showLoadingIcon: false }));
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
             });
     }
 
     render() {
         return (
             <Search
-              placeholder="looking for something?"
-              onSearch={this.onSearch}
-              loading={this.state.showLoadingIcon}
+                placeholder="Search for a keyword?"
+                onSearch={this.onSearch}
+                loading={this.state.showLoadingIcon}
             />
         );
     }

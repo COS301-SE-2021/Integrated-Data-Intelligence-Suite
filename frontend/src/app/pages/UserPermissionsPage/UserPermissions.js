@@ -9,12 +9,17 @@ const UserPermissions = () => {
   const [permission, setPermission] = useState(null);
   const [submit, setSubmit] = useState(false);
   const [user, setUser] = useState(null);
+  const [adminStatus, setAdmin] = useState(null);
 
   const {
     data: users,
     isPending,
     error,
   } = useGet(`/user/getUser/${id}`);
+
+  const changeAdmin = (value) => {
+    setAdmin(value);
+  };
 
   const enableSubmit = (value) => {
     setPermission(value);
@@ -26,11 +31,12 @@ const UserPermissions = () => {
     setSubmit(false);
     const requestBody = {
       username: user.username,
-      newPermission: permission,
+      admin: adminStatus,
+      newPermission: permission
     };
     // console.log('userdata ', user.user);
     // console.log('body is ', requestBody);
-    fetch('http://localhost:9000/changePermission', {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/changeUser`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
@@ -47,6 +53,7 @@ const UserPermissions = () => {
           {error && <div>{error}</div>}
           {users && user === null && setUser(users.user[0])}
           {user && permission === null && setPermission(user.permission)}
+          {user && adminStatus === null && setAdmin(user.admin)}
           {user && (
           <div className="form-container">
               <div className="form-header">
@@ -61,6 +68,15 @@ const UserPermissions = () => {
                   <label>Username</label>
                   <br />
                   <input type="text" value={user.username} />
+                  <br />
+                  <label>
+                      Admin status:
+                      <input
+                        type="checkbox"
+                        checked={adminStatus}
+                        onChange={(e) => changeAdmin(e.target.checked)}
+                      />
+                  </label>
                   <br />
                   <label>Permission</label>
                   <br />
