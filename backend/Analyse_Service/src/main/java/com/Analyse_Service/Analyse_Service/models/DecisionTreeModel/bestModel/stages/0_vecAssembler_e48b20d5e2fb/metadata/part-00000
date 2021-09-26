@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1632152486347,"sparkVersion":"3.1.2","uid":"vecAssembler_e48b20d5e2fb","paramMap":{"outputCol":"features","inputCols":["EntityTypeNumber","Frequency","AverageLikes"]},"defaultParamMap":{"outputCol":"vecAssembler_e48b20d5e2fb__output","handleInvalid":"error"}}
