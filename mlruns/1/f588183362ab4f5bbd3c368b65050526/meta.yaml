@@ -1,0 +1,15 @@
+artifact_uri: ./mlruns/1/f588183362ab4f5bbd3c368b65050526/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: f588183362ab4f5bbd3c368b65050526
+run_uuid: f588183362ab4f5bbd3c368b65050526
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1632099555448
+status: 1
+tags: []
+user_id: Rhuli
