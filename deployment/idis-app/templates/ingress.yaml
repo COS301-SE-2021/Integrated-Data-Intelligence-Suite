@@ -59,7 +59,7 @@ spec:
   #      hosts:
   #     - idis.com
   rules:
-    - host: c11c72c0138243acaa70.uksouth.aksapp.io
+    - host: 2beb4b53d3634645b476.uksouth.aksapp.io
       http:
         paths:
           - path: /
@@ -67,5 +67,15 @@ spec:
             backend:
               service:
                 name: gateway-service-svc
+                port:
+                  number: 80
+    - host: 2beb4b53d3634645b476.uksouth.aksapp.io
+      http:
+        paths:
+          - path: /spark
+            pathType: Prefix
+            backend:
+              service:
+                name: idis-app-spark-master-svc
                 port:
                   number: 80
