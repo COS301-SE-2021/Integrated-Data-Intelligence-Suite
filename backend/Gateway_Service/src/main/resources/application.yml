@@ -1,0 +1,36 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: Gateway-Service
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+##deployment
+#server:
+#  port: 9000
+#
+#spring:
+#  application:
+#    name: Gateway-Service
+#
+#eureka:
+#  #instance:
+#  #hostname: localhost
+#  instance:
+#    prefer-ip-address: true
+#    hostname: eureka-0
+#  client:
+#    fetch-registry: true
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+#      #defaultZone: http://localhost:8761/eureka/
