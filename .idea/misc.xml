@@ -18,6 +18,13 @@
         <option value="$PROJECT_DIR$/../User_Service/pom.xml" />
         <option value="$PROJECT_DIR$/User_Service/pom.xml" />
         <option value="$PROJECT_DIR$/Visualize_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Analyse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Gateway_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Import_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Parse_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Registry_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/User_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Visualize_Service/pom.xml" />
       </list>
     </option>
   </component>
