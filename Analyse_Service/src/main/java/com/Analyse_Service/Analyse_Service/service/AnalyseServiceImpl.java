@@ -7,9 +7,9 @@ import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRe
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
-//import edu.stanford.nlp.ling.CoreAnnotations;
-//import edu.stanford.nlp.ling.CoreLabel;
-//import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.pipeline.*;
 
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.annotators.TokenizerModel;
@@ -63,6 +63,7 @@ import scala.collection.mutable.WrappedArray;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.*;
 
@@ -294,6 +295,8 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("NlpProperties")
                 .master("local")
+                //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -325,8 +328,8 @@ public class AnalyseServiceImpl {
         System.out.println("*******************tokenizer");
         TokenizerModel tokenizer =  ((Tokenizer) ((Tokenizer) new Tokenizer().setInputCols(new String[] {"document"})) .setOutputCol("token")).fit(data3);
 
-        //System.out.println("*******************checker");
-        //NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
+        System.out.println("*******************checker");
+        NorvigSweetingModel checker = (NorvigSweetingModel) ((NorvigSweetingModel) new NorvigSweetingModel().pretrained().setInputCols(new String[]{"token"})).setOutputCol("Checked"); //checked = token
 
         System.out.println("*******************embeddings");
         WordEmbeddingsModel embeddings = (WordEmbeddingsModel) ((WordEmbeddingsModel) new WordEmbeddingsModel().pretrained().setInputCols(new String[] {"document", "token"})).setOutputCol("embeddings");
@@ -345,7 +348,7 @@ public class AnalyseServiceImpl {
 
         //pipeline
         System.out.println("*******************pipeline");
-        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, /*checker,*/ embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
+        Pipeline pipeline = new Pipeline().setStages(new PipelineStage[]{document_assembler, sentence_detector , tokenizer, checker, embeddings, sentenceEmbeddings, sentimentDetector, ner ,converter /*normalizer, lemmatizer, finisher*/});
 
 
         PipelineModel pipelineFit = pipeline.fit(data);
@@ -459,53 +462,73 @@ public class AnalyseServiceImpl {
 
 
 
-        /**OLD NLP
-         Properties properties = new Properties();
-         String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
-         properties.setProperty("annotators", pipelineProperties);
-         StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
-         CoreDocument coreDocument = new CoreDocument(request.getText());
-         stanfordCoreNLP.annotate(coreDocument);
-         //List<CoreSentence> coreSentences = coreDocument.sentences();
-         /**output of analyser**
-         List<CoreSentence> coreSentences = coreDocument.sentences();
-         List<CoreLabel> coreLabels = coreDocument.tokens();
-         ArrayList<String> row = new ArrayList<>();
-         //get sentiment of text
-         String sentiment;
-         ArrayList<String> sentiments = new ArrayList<>();
-         for (CoreSentence sentence : coreSentences) {
-         sentiments.add(sentence.sentiment());
-         }
-         Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
-         Map.Entry<String, Long> maxEntry = null;
-         for (Map.Entry<String, Long> entry : occurrences.entrySet()) {
-         if (maxEntry == null || entry.getValue()
-         .compareTo(maxEntry.getValue()) > 0) {
-         maxEntry = entry;
-         }
-         }
-         sentiment = maxEntry.getKey();
-         //get parts of speech
-         ArrayList<ArrayList> partOfSpeech = new ArrayList<>();
-         for (CoreLabel label : coreLabels) {
-         //String lemma = label.lemma();//lemmanation
-         String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-         ; //parts of speech
-         row = new ArrayList<>();
-         row.add(label.toString());
-         row.add(pos);
-         partOfSpeech.add(row);
-         //System.out.println("TOKEN : " + label.originalText());
-         }
-         //get parts of named entity
-         ArrayList<ArrayList> nameEntities = new ArrayList<>();
-         for (CoreEntityMention em : coreDocument.entityMentions()) {
-         row = new ArrayList<>();
-         row.add(em.text());
-         row.add(em.entityType());
-         nameEntities.add(row);
-         }*/
+        /*OLD NLP
+        ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
+        ArrayList<String> entityList = new ArrayList<>();
+
+        Properties properties = new Properties();
+        String pipelineProperties = "tokenize, ssplit, pos, lemma, ner, parse, sentiment";
+        properties.setProperty("annotators", pipelineProperties);
+        StanfordCoreNLP stanfordCoreNLP = new StanfordCoreNLP(properties);
+
+        for(int i =0; i < request.getText().size(); i++) {
+
+            System.out.println("*********************SETUP****************");
+
+            CoreDocument coreDocument = new CoreDocument(request.getText().get(i));
+            stanfordCoreNLP.annotate(coreDocument);
+            //List<CoreSentence> coreSentences = coreDocument.sentences();
+            /**output of analyser**
+            System.out.println("*********************ANALYSER****************");
+
+            List<CoreSentence> coreSentences = coreDocument.sentences();
+            List<CoreLabel> coreLabels = coreDocument.tokens();
+            ArrayList<String> row = new ArrayList<>();
+            //get sentiment of text
+
+            System.out.println("*********************SENTIMENTS****************");
+            String sentiment;
+            ArrayList<String> sentiments = new ArrayList<>();
+            for (CoreSentence sentence : coreSentences) {
+                sentiments.add(sentence.sentiment());
+            }
+            Map<String, Long> occurrences = sentiments.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting())); //find most frequent sentiment
+            Map.Entry<String, Long> maxEntry = null;
+            for (Map.Entry<String, Long> entry : occurrences.entrySet()) {
+                if (maxEntry == null || entry.getValue()
+                        .compareTo(maxEntry.getValue()) > 0) {
+                    maxEntry = entry;
+                }
+            }
+            sentiment = maxEntry.getKey();
+            //get parts of speech
+
+            /*System.out.println("*********************P-O-S****************");
+            ArrayList<ArrayList> partOfSpeech = new ArrayList<>();
+            for (CoreLabel label : coreLabels) {
+                //String lemma = label.lemma();//lemmanation
+                String pos = label.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+                ; //parts of speech
+                row = new ArrayList<>();
+                row.add(label.toString());
+                row.add(pos);
+                partOfSpeech.add(row);
+                //System.out.println("TOKEN : " + label.originalText());
+            }*
+
+            System.out.println("*********************ENTITIES****************");
+            //get parts of named entity
+            ArrayList<ArrayList> nameEntities = new ArrayList<>();
+            for (CoreEntityMention em : coreDocument.entityMentions()) {
+                row = new ArrayList<>();
+                row.add(em.text());
+                row.add(em.entityType());
+                nameEntities.add(row);
+            }
+
+            FindNlpPropertiesResponse findNlpPropertiesResponse = new FindNlpPropertiesResponse(sentiment,nameEntities);
+            response.add(findNlpPropertiesResponse);
+        }*/
 
         sparkNlpProperties.stop();
 
@@ -535,6 +558,7 @@ public class AnalyseServiceImpl {
          .builder()
          .appName("Pattern")
          .master("local")
+         //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
          .getOrCreate();
 
          sparkPatterns.sparkContext().setLogLevel("OFF");
@@ -679,6 +703,8 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP MODEL*****************/
 
+
+        System.out.println("patterns model is set....");
         FPGrowth fp = new FPGrowth()
                 .setItemsCol("Entities")
                 .setMinSupport(0.10)
@@ -693,6 +719,7 @@ public class AnalyseServiceImpl {
         List<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
         ArrayList<ArrayList> results = new ArrayList<>();
 
+        System.out.println("patterns data extract ");
         for (int i = 0; i < pData.size(); i++) {
             ArrayList<String> row = new ArrayList<>();
 
@@ -711,6 +738,8 @@ public class AnalyseServiceImpl {
         }
 
         sparkPatterns.stop();
+
+        System.out.println("pattens stop");
 
         return new FindPatternResponse(results);
     }
@@ -738,6 +767,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Relationships")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -959,6 +989,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Trends")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1008,6 +1039,8 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP DATAFRAME*****************/
 
+
+
         StructType schema = new StructType(
                 new StructField[]{
                         new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
@@ -1033,6 +1066,8 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
 
+
+        System.out.println("trends dataframes");
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
@@ -1127,6 +1162,8 @@ public class AnalyseServiceImpl {
         Pipeline pipeline = new Pipeline();
         pipeline.setStages(new PipelineStage[]{assembler, indexer, lr});
 
+        System.out.println("trends model");
+
         /******************EVALUATE/ANALYSE MODEL**************/
 
         //evaluators
@@ -1166,7 +1203,7 @@ public class AnalyseServiceImpl {
                 .setTrainRatio(0.7)  //70% : 30% ratio
                 .setParallelism(2);
 
-
+        System.out.println("trends mlflow");
         /***********************SETUP MLFLOW - SAVE ***********************/
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
@@ -1282,7 +1319,7 @@ public class AnalyseServiceImpl {
         run.endRun();
 
         /***********************SETUP MLFLOW - SAVE ***********************/
-
+        System.out.println("trends done");
         sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results);
@@ -1305,6 +1342,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Trends")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1633,6 +1671,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Trends")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -1973,6 +2012,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Trends")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         sparkTrends.sparkContext().setLogLevel("ERROR");
@@ -2195,6 +2235,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Predictions")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -2230,6 +2271,7 @@ public class AnalyseServiceImpl {
          .builder()
          .appName("Predictions")
          .master("local")
+         //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
          .getOrCreate();
 
          /*******************SETUP DATA*****************/
@@ -2271,6 +2313,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Anomalies")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
@@ -2576,6 +2619,7 @@ public class AnalyseServiceImpl {
                 .builder()
                 .appName("Anomalies")
                 .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
                 .getOrCreate();
 
         JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
@@ -2777,18 +2821,33 @@ public class AnalyseServiceImpl {
 
         ;*/
 
-        //ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        //File tData = new File(classloader.getResource("TData.CSV").getFile());  //.getResourceAsStream("TData.CSV");
+
+
+         //.getResourceAsStream("TData.CSV");
         //InputStream is = classloader.getResource("TData.CSV").
 
         InputStream is = this.getClass().getResourceAsStream("TData.CSV");
+        File tData = null;
+
+        if(is == null){
+            tData = new File(this.getClass().getResource("TData.CSV").getFile());
+            if(tData.exists() == false){
+                ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+                tData = new File(classloader.getResource("TData.CSV").getFile());
+            }
+        }
+
 
         BufferedReader reader = null;
         String line = "";
 
         try{
-            //reader = new BufferedReader(new FileReader(tData));
-            reader = new BufferedReader(new InputStreamReader(is));
+            if(is != null){
+                reader = new BufferedReader(new InputStreamReader(is));
+            }
+            else{
+                reader = new BufferedReader(new FileReader(tData));
+            }
 
             //System.out.println("*******************CHECK THIS HERE*****************");
 
