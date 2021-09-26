@@ -119,7 +119,8 @@ public class AnalyseServiceImpl {
         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
         wordList = (ArrayList<ArrayList>) nlpResults.get(1);
 
-        /**articles**/
+        ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
+        /**articles**
         ArrayList<ParsedArticle> articleList = request.getArticleList();
         if (articleList.isEmpty()) System.out.println("no articles");
         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
@@ -140,7 +141,8 @@ public class AnalyseServiceImpl {
 
         /*******************Setup Data******************/
 
-        System.out.println("*******************Setup Data******************");
+        System.out.println("*******************Setup Data main: ******************");
+        System.out.println(dataList.size());
 
         /**social**/
         for (int i = 0; i < dataList.size(); i++) {
@@ -166,7 +168,7 @@ public class AnalyseServiceImpl {
             parsedDataList.add(rowOfParsed);
         }
 
-        /**article**/
+        /**article**
         for(int i = 0; i < articleList.size(); i++){
             String title = articleList.get(i).getTitle();
             String desc = articleList.get(i).getDescription();
@@ -1253,8 +1255,8 @@ public class AnalyseServiceImpl {
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-        String path = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel";
-        String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel";
+        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
         lrModel.write().overwrite().save(path);
         //File modelFile = new File(path);
@@ -1600,11 +1602,11 @@ public class AnalyseServiceImpl {
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-        lrModel.write().overwrite().save("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        lrModel.write().overwrite().save("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         try {
             //lrModel.save("Database");
 
-            File modelFile = new File("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            File modelFile = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
 
             //TODO: flavor
             //client.logArtifact(run.getId(), modelFile);
@@ -1940,8 +1942,8 @@ public class AnalyseServiceImpl {
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
 
-        String path = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
-        String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
+        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         dtModel.write().overwrite().save(path);
         File modelFile = new File(path);
         //client.logArtifact(run.getId(), modelFile);
@@ -2145,7 +2147,7 @@ public class AnalyseServiceImpl {
 
         /*******************LOAD - READ MODEL*****************/
 
-        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
@@ -2558,8 +2560,8 @@ public class AnalyseServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        String path = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel";
-        String script = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel";
+        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         kmModel.write().overwrite().save(path);
         File modelFile = new File(path);
         //client.logArtifact(run.getId(), modelFile);
@@ -2750,7 +2752,7 @@ public class AnalyseServiceImpl {
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
         /*******************LOAD & READ MODEL*****************/
-        PipelineModel kmModel = PipelineModel.load("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        PipelineModel kmModel = PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
@@ -2812,11 +2814,11 @@ public class AnalyseServiceImpl {
 
         //File file = new File(classLoader.getResource("fileTest.txt").getFile());
 
-        /*File resource = new ClassPathResource("Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV").getFile();
+        /*File resource = new ClassPathResource("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV").getFile();
 
         FileResourcesUtils app = new FileResourcesUtils();
 
-        String fileUrl = "Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
 
         ;*/
 
