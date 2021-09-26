@@ -12,6 +12,8 @@ import com.Import_Service.Import_Service.repository.ApiSourceRepository;
 import com.Import_Service.Import_Service.request.*;
 import com.Import_Service.Import_Service.response.*;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ public class ImportServiceImpl {
 
     @Autowired
     private ApiSourceRepository apiSourceRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(ImportServiceImpl.class);
 
     public ImportServiceImpl() {
     }
@@ -231,6 +235,7 @@ public class ImportServiceImpl {
         ArrayList<ImportedData> list = new ArrayList<>();
 
         //Twitter Request
+        boolean oneFailedFlag = false;
         String keyword = request.getKeyword();
         int limit = request.getLimit();
 
@@ -244,6 +249,8 @@ public class ImportServiceImpl {
 
         } catch (Exception e){
             System.out.println("\n\n twitter error: "+e.getMessage());
+            log.info("Twitter error: " + e.getMessage());
+            oneFailedFlag = true;
         }
 
         //NewsAPI request
@@ -257,15 +264,20 @@ public class ImportServiceImpl {
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
+            log.info("NewsAPI error: " + e.getMessage());
+            oneFailedFlag = true;
         }
 
         //Fetching api sources from database
+
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request req;
         List<APISource> sources = apiSourceRepository.findAll();
+        //Looping through the added sources
         if(!sources.isEmpty()) {
             for (APISource s : sources) {
+                //Building URL
                 String apiUrl = s.getUrl();
                 if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
                     apiUrl += "?";
@@ -279,6 +291,7 @@ public class ImportServiceImpl {
                     apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
                 }
 
+                //Building the request for various type of authorization
                 if (s.getAuthType() == AuthorizationType.apiKey) {
                     apiUrl += "&apiKey=" + s.getAuthorization();
 
@@ -298,24 +311,37 @@ public class ImportServiceImpl {
                             .method(s.getMethod(), null)
                             .build();
                 }
-
+                //Attempting to execute query
                 try {
                     Response response = client.newCall(req).execute();
-
+                    //Log error if response was unsuccessful
                     if (!response.isSuccessful()) {
-                        throw new ImporterException("Unexpected Error: " + Objects.requireNonNull(response.body()).string());
+                        //throw new ImporterException("Unexpected Error: " + Objects.requireNonNull(response.body()).string());
+                        log.warn("Failed to fetch data from " + s.getName());
+                        oneFailedFlag = true;
                     }
 
                     list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
                 }
                 catch (IOException e) {
-                    throw new ImporterException("An error has occurred when executing api call");
+                    //Log error if request is invalid
+                    log.warn("Error executing request for " + s.getName());
+                    oneFailedFlag = true;
                 }
 
             }
         }
+        //Return a response based on the fetched info
+        if(list.isEmpty()) {
+            return new ImportDataResponse(false, "Failed to fetch data from all sources", list);
+        }
+        else if(oneFailedFlag) {
+            return new ImportDataResponse(true, "One or more resources failed to fetch data", list);
+        }
+        else {
+            return new ImportDataResponse(true, "Successfully fetched data", list);
+        }
 
-        return new ImportDataResponse(list);
     }
 
     //====================== API sources functionality ======================

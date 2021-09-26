@@ -9,6 +9,8 @@ import com.Parse_Service.Parse_Service.rri.DataSource;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Parse_Service.Parse_Service.exception.InvalidRequestException;
@@ -33,6 +35,8 @@ public class ParseServiceImpl {
 
     @Autowired
     private NewsPropertiesRepository newsPropertiesRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(ParseServiceImpl.class);
 
     public ParseServiceImpl() {
 
@@ -123,7 +127,15 @@ public class ParseServiceImpl {
                 }
             }
 
-            return new ParseImportedDataResponse(parsedList, parsedArticlesList);
+            if(parsedList.isEmpty() && parsedArticlesList.isEmpty()) {
+                log.warn("Failed to parse the imported data");
+                return new ParseImportedDataResponse(false, "Failed to parse the imported data", parsedList, parsedArticlesList);
+            }
+            else {
+                log.info("Parsed imported data");
+                return new ParseImportedDataResponse(true, "Parsed imported data", parsedList, parsedArticlesList);
+            }
+
         }
     }
 

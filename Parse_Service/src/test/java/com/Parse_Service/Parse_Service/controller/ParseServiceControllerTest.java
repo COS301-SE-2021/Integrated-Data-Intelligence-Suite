@@ -292,7 +292,7 @@ public class ParseServiceControllerTest {
         ParsedArticle parsedArticle = new ParsedArticle();
         articleList.add(parsedArticle);
 
-        ParseImportedDataResponse parseImportedDataResponse = new ParseImportedDataResponse(dataList,articleList);
+        ParseImportedDataResponse parseImportedDataResponse = new ParseImportedDataResponse(true, "Parsed imported data", dataList, articleList);
         when(service.parseImportedData(any(ParseImportedDataRequest.class))).thenReturn(parseImportedDataResponse);
 
 
@@ -329,7 +329,7 @@ public class ParseServiceControllerTest {
         ParsedArticle parsedArticle = new ParsedArticle();
         articleList.add(parsedArticle);
 
-        ParseImportedDataResponse parseImportedDataResponse = new ParseImportedDataResponse(dataList,articleList);
+        ParseImportedDataResponse parseImportedDataResponse = new ParseImportedDataResponse(true, "Parsed imported data", dataList, articleList);
         when(service.parseImportedData(any(ParseImportedDataRequest.class))).thenReturn(parseImportedDataResponse);
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Parse/parseImportedData")

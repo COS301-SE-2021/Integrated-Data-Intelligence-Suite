@@ -52,7 +52,7 @@ public class ParseService {
      * @return ParseImportedDataResponse This object contains failure values as data.
      */
     public ParseImportedDataResponse parseImportedDataFallback(ParseImportedDataRequest parseRequest){
-        ParseImportedDataResponse parseImportedDataResponse =  new ParseImportedDataResponse(null, null);
+        ParseImportedDataResponse parseImportedDataResponse =  new ParseImportedDataResponse(false, null, null, null);
         parseImportedDataResponse.setFallback(true);
         parseImportedDataResponse.setFallbackMessage("{Failed to get parse data}");
         return parseImportedDataResponse;
