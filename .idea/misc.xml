@@ -25,6 +25,7 @@
         <option value="$PROJECT_DIR$/backend/Registry_Service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/User_Service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/Visualize_Service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Report_Service/pom.xml" />
       </list>
     </option>
   </component>

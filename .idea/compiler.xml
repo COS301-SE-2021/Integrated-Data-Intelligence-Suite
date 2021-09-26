@@ -8,6 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Analyse_Service" />
+        <module name="Analyse_Service (1)" />
+        <module name="Analyse_Service (2)" />
         <module name="User_Service" />
         <module name="Import_Service" />
         <module name="Visualize_Service" />
@@ -18,6 +20,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Analyse_Service" target="11" />
+      <module name="Analyse_Service (1)" target="11" />
+      <module name="Analyse_Service (2)" target="11" />
       <module name="backend" target="1.5" />
       <module name="Gateway_Service" target="11" />
       <module name="Import_Service" target="11" />
@@ -32,6 +36,8 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Analyse_Service" options="-parameters" />
+      <module name="Analyse_Service (1)" options="-parameters" />
+      <module name="Analyse_Service (2)" options="-parameters" />
       <module name="Gateway_Service" options="-parameters" />
       <module name="Import_Service" options="-parameters" />
       <module name="IntegratedDataIntelligenceSuite" options="-parameters" />
