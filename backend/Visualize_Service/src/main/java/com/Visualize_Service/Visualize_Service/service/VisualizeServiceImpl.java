@@ -23,7 +23,7 @@ public class VisualizeServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
-        if (request.getAnomalyList() == null){
+        if (request.getAnomalyList() == null) {
             throw new InvalidRequestException("Arraylist of AnomalyList is null");
         }
         /*if (request.getPatternList() == null){
@@ -32,10 +32,10 @@ public class VisualizeServiceImpl {
         if (request.getPredictionList() == null){
             throw new InvalidRequestException("Arraylist of PredictionList is null");
         }*/
-        if (request.getRelationshipList() == null){
+        if (request.getRelationshipList() == null) {
             throw new InvalidRequestException("Arraylist of RelationshipList is null");
         }
-        if (request.getTrendList() == null){
+        if (request.getTrendList() == null) {
             throw new InvalidRequestException("Arraylist of TrendList is null");
         }
 
@@ -91,78 +91,100 @@ public class VisualizeServiceImpl {
         selectedGraphs.put("extraBarTwo", false);
         selectedGraphs.put("line", false);
 
-        selector.setSelectedGraphs(selectedGraphs);
+        selector.setSelectedGraphs(selectedGraphs); //throws
 
         /************************Index Graphs*****************************/
 
-        
+        ArrayList<String> indexedGraphs = new ArrayList();
+        for (int i = 0; i < selector.getAllGraphs().size(); i++) {
+            if (selector.getSelectedGraph(selector.getAllGraphs().get(i)) == true) {
+                indexedGraphs.add(selector.getAllGraphs().get(i));
+            }
+        }
+        outputData.add(indexedGraphs);
 
         /************************Compute Graphs*****************************/
 
         //total likes
         GetTotalInteractionRequest totalInteractionRequest = new GetTotalInteractionRequest(request.getTrendList());
         GetTotalInteractionResponse totalInteractionResponse = this.getTotalInteraction(totalInteractionRequest);
-        outputData.add(totalInteractionResponse.words);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(totalInteractionResponse.words);
+        }
 
         //most prominent Sentiment
         GetMostProminentSentimentRequest mostProminentSentimentRequest = new GetMostProminentSentimentRequest(request.getTrendList());
         GetMostProminentSentimentResponse mostProminentSentimentResponse = this.getMostProminentSentiment(mostProminentSentimentRequest);
-        outputData.add(mostProminentSentimentResponse.words);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(mostProminentSentimentResponse.words);
+        }
 
         //Number of trends
         GetTotalTrendsRequest totalTrendsRequest = new GetTotalTrendsRequest(request.getTrendList());
         GetTotalTrendsResponse totalTrendsResponse = this.getTotalTrends(totalTrendsRequest);
-        outputData.add(totalTrendsResponse.words);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(totalTrendsResponse.words);
+        }
 
         //NUmber of anomalys
         GetTotalAnomaliesRequest totalAnomaliesRequest = new GetTotalAnomaliesRequest(request.getAnomalyList());
         GetTotalAnomaliesResponse totalAnomaliesResponse = this.getTotalAnomalies(totalAnomaliesRequest);
-        outputData.add(totalAnomaliesResponse.words);
-
-
-
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(totalAnomaliesResponse.words);
+        }
 
 
         //Line graph Interactions (Bar graph now)(Average Interaction)
         CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
-        CreateLineGraphInteractionsResponse lineInteractionsResponse =  this.createLineGraphInteractions(lineInteractionsRequest);
-        outputData.add(lineInteractionsResponse.LineGraphArray);
+        CreateLineGraphInteractionsResponse lineInteractionsResponse = this.createLineGraphInteractions(lineInteractionsRequest);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(lineInteractionsResponse.LineGraphArray);
+        }
 
         //PieChart graph(Overall section)
         CreatePieChartGraphRequest pieChartRequest = new CreatePieChartGraphRequest(request.getTrendList());
-        CreatePieChartGraphResponse pieChartResponse =  this.createPieChartGraph(pieChartRequest);
-        outputData.add(pieChartResponse.PieChartGraphArray);
+        CreatePieChartGraphResponse pieChartResponse = this.createPieChartGraph(pieChartRequest);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(pieChartResponse.PieChartGraphArray);
+        }
 
         //ExtraBar graph one Bar Graph(total Engagement in each location)
         CreateBarGraphExtraOneRequest extraBarOneRequest = new CreateBarGraphExtraOneRequest(request.getTrendList());
         CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
-        outputData.add(extraBarOneResponse.BarGraphArray);
-
-
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(extraBarOneResponse.BarGraphArray);
+        }
 
 
         //Map graph
         CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
-        CreateMapGraphResponse mapResponse =  this.createMapGraph(mapRequest);
-        outputData.add(mapResponse.mapGraphArray);
+        CreateMapGraphResponse mapResponse = this.createMapGraph(mapRequest);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(mapResponse.mapGraphArray);
+        }
 
         //Bar graph frequecy of tweets in trend
         CreateBarGraphRequest barRequest = new CreateBarGraphRequest(request.getTrendList());
-        CreateBarGraphResponse barResponse =  this.createBarGraph(barRequest);
-        outputData.add(barResponse.BarGraphArray);
-
+        CreateBarGraphResponse barResponse = this.createBarGraph(barRequest);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(barResponse.BarGraphArray);
+        }
 
 
         //WordCloud graph
         //TODO: request.getWordList()
         CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getWordList());
         CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
-        outputData.add(wordCloudResponse.words);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(wordCloudResponse.words);
+        }
 
         //WordCloud Piechart
         CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getWordList());
         CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
-        outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
+        }
 
         //WordCloud Sunburst
         /*CreateWordCloudSunBurstGraphRequest wordCloudSunBurstGraphRequest = new CreateWordCloudSunBurstGraphRequest(request.getWordList(),wordCloudPieChartGraphResponse.getDominantWords());
@@ -172,34 +194,44 @@ public class VisualizeServiceImpl {
 
         //Network graph (Relationships)
         CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
-        CreateRelationshipGraphResponse relationResponse =  this.createRelationGraph(relationRequest, request.getWordList());
-        outputData.add(relationResponse.NetworkGraphArray);
+        CreateRelationshipGraphResponse relationResponse = this.createRelationGraph(relationRequest, request.getWordList());
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(relationResponse.NetworkGraphArray);
+        }
 
         //Network graph (Patterns)
         CreatePatternGraphRequest patternGraphRequest = new CreatePatternGraphRequest(request.getPatternList());
-        CreatePatternGraphResponse patternGraphResponse =  this.createPatternGraph(patternGraphRequest, request.getWordList());
-        outputData.add(patternGraphResponse.NetworkGraphArray);
+        CreatePatternGraphResponse patternGraphResponse = this.createPatternGraph(patternGraphRequest, request.getWordList());
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(patternGraphResponse.NetworkGraphArray);
+        }
 
 
         //Timeline graph
         CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
-        CreateTimelineGraphResponse timelineResponse =  this.createTimelineGraph(timelineRequest);
-        outputData.add(timelineResponse.timelineGraphArray);
+        CreateTimelineGraphResponse timelineResponse = this.createTimelineGraph(timelineRequest);
+        if (indexedGraphs.contains("totalInteraction")) {
+            outputData.add(timelineResponse.timelineGraphArray);
+        }
 
         /*
         ToDo: Scatter plot
 
-         */
+        */
 
         //Map Metric 2 (Number of tweets over time )
         /*CreateBarGraphExtraTwoRequest extraBarTwoRequest = new CreateBarGraphExtraTwoRequest(request.getTrendList());
         CreateBarGraphExtraTwoResponse extraBarTwoResponse = this.createBarGraphExtraTwo(extraBarTwoRequest);
-        outputData.add(extraBarTwoResponse.BarGraphArray);*/
+        if(indexedGraphs.contains("totalInteraction")) {
+            outputData.add(extraBarTwoResponse.BarGraphArray);
+        }*/
 
         //Line graph Sentiments ~ not in use
-       /*CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
+        /*CreateLineGraphSentimentsRequest lineRequest = new CreateLineGraphSentimentsRequest(request.getTrendList());
         CreateLineGraphSentimentsResponse lineResponse =  this.createLineGraphSentiments(lineRequest);
-        outputData.add(lineResponse.LineGraphArray);*/
+        if(indexedGraphs.contains("totalInteraction")) {
+            outputData.add(lineResponse.LineGraphArray);
+        }*/
 
 
         return new VisualizeDataResponse( outputData );

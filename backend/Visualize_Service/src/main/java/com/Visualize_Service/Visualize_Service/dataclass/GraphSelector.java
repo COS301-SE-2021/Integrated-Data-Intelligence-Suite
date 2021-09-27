@@ -6,7 +6,7 @@ import java.util.*;
 
 public class GraphSelector {
 
-    private HashSet<String> allGraphs = new HashSet<>();
+    private ArrayList<String> allGraphs = new ArrayList();// new HashSet<>();
     private HashMap<String, Boolean> selectedGraphs = new HashMap<>();
 
     public GraphSelector(){
@@ -30,11 +30,11 @@ public class GraphSelector {
         allGraphs.add("line");
     }
 
-    public void setAllGraphs(HashSet<String> allGraphs){
+    public void setAllGraphs(ArrayList<String> allGraphs){
         this.allGraphs = allGraphs;
     }
 
-    public HashSet<String> getAllGraphs(){
+    public ArrayList<String> getAllGraphs(){
         return allGraphs;
     }
 
