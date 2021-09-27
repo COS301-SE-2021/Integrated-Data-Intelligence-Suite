@@ -2,6 +2,7 @@ package com.Visualize_Service.Visualize_Service.service;
 
 import com.Visualize_Service.Visualize_Service.dataclass.*;
 import com.Visualize_Service.Visualize_Service.exception.InvalidRequestException;
+import com.Visualize_Service.Visualize_Service.exception.VisualizerException;
 import com.Visualize_Service.Visualize_Service.request.*;
 import com.Visualize_Service.Visualize_Service.response.*;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,12 @@ import java.util.*;
 @Service
 public class VisualizeServiceImpl {
 
-    private HashSet<String> foundWords = new HashSet<String>();
+    private HashSet<String> foundWords = new HashSet<>();
 
 
 
     public VisualizeDataResponse visualizeData(VisualizeDataRequest request)
-            throws InvalidRequestException {
+            throws VisualizerException {
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
         }
@@ -39,8 +40,6 @@ public class VisualizeServiceImpl {
         }
 
         ArrayList<ArrayList> outputData = new ArrayList<>();
-
-
 
         //***********************Overview Section*************************//
 
@@ -67,6 +66,39 @@ public class VisualizeServiceImpl {
         // scatter plot * tentative                       <-
         // Map Metric 2 (Number of tweets over time )     <- D
 
+        /************************Select Graph*****************************/
+
+        GraphSelector selector = new GraphSelector();
+
+        HashMap<String, Boolean> selectedGraphs = new HashMap<>();
+
+        selectedGraphs.put("totalInteraction", true);
+        selectedGraphs.put("mostProminentSentiment", true);
+        selectedGraphs.put("totalTrends", true);
+        selectedGraphs.put("totalAnomalies", true);
+        selectedGraphs.put("lineInteractions", true);
+        selectedGraphs.put("pieChart", true);
+        selectedGraphs.put("extraBarOne", true);
+        selectedGraphs.put("map", true);
+        selectedGraphs.put("bar", true);
+        selectedGraphs.put("wordCloud", true);
+        selectedGraphs.put("wordCloudPieChart", true);
+        selectedGraphs.put("wordCloudSunBurst", false);
+        selectedGraphs.put("relation", true);
+        selectedGraphs.put("pattern", true);
+        selectedGraphs.put("timeline", true);
+        selectedGraphs.put("scatterPlot", false);
+        selectedGraphs.put("extraBarTwo", false);
+        selectedGraphs.put("line", false);
+
+        selector.setSelectedGraphs(selectedGraphs);
+
+        /************************Index Graphs*****************************/
+
+        
+
+        /************************Compute Graphs*****************************/
+
         //total likes
         GetTotalInteractionRequest totalInteractionRequest = new GetTotalInteractionRequest(request.getTrendList());
         GetTotalInteractionResponse totalInteractionResponse = this.getTotalInteraction(totalInteractionRequest);
@@ -86,7 +118,6 @@ public class VisualizeServiceImpl {
         GetTotalAnomaliesRequest totalAnomaliesRequest = new GetTotalAnomaliesRequest(request.getAnomalyList());
         GetTotalAnomaliesResponse totalAnomaliesResponse = this.getTotalAnomalies(totalAnomaliesRequest);
         outputData.add(totalAnomaliesResponse.words);
-
 
 
 
