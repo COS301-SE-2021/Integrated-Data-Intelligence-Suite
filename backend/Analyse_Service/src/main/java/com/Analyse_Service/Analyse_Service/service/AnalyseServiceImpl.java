@@ -22,6 +22,9 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -1262,7 +1265,7 @@ public class AnalyseServiceImpl {
         //File modelFile = new File(path);
         //client.logArtifact(run.getId(), new File(path));
 
-        /*try {
+        try {
             //lrModel.save("Database");
 
             //File modelFile = new File("../models/LogisticRegressionModel");
@@ -1311,11 +1314,11 @@ public class AnalyseServiceImpl {
                     .setName("LogisticRegressionModel")
                     .setRunId(run.getId())
                     .setSource("artifactstore")
-                    .build();*
+                    .build();*/
 
         }catch (Exception e){
             e.printStackTrace();
-        }*/
+        }
 
         run.endRun();
 
@@ -1326,7 +1329,15 @@ public class AnalyseServiceImpl {
         return new TrainFindTrendsResponse(results);
     }
 
-    public void trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request) throws InvalidRequestException, IOException {
+    /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return void
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public void trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request)
+            throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -2821,8 +2832,6 @@ public class AnalyseServiceImpl {
         String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
 
         ;*/
-
-
 
          //.getResourceAsStream("TData.CSV");
         //InputStream is = classloader.getResource("TData.CSV").
