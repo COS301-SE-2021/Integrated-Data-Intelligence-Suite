@@ -1,0 +1,6 @@
+dependencies:
+- name: spark
+  repository: https://marketplace.azurecr.io/helm/v1/repo
+  version: 5.7.2
+digest: sha256:497bd8c69f0130bffb40b1c720b2cb76fba1b8cbe184074cfe4f8b6a95fa7071
+generated: "2021-09-25T18:21:27.8536576+02:00"

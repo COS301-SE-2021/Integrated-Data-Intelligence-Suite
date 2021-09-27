@@ -3,13 +3,15 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Analyse_Service/Analyse_Service.iml" filepath="$PROJECT_DIR$/Analyse_Service/Analyse_Service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Gateway_Service/Gateway_Service.iml" filepath="$PROJECT_DIR$/Gateway_Service/Gateway_Service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Import_Service/Import_Service.iml" filepath="$PROJECT_DIR$/Import_Service/Import_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Analyse_Service/Analyse_Service (1).iml" filepath="$PROJECT_DIR$/backend/Analyse_Service/Analyse_Service (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Report_Service/Analyse_Service (2).iml" filepath="$PROJECT_DIR$/backend/Report_Service/Analyse_Service (2).iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Gateway_Service/Gateway_Service.iml" filepath="$PROJECT_DIR$/backend/Gateway_Service/Gateway_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Import_Service/Import_Service.iml" filepath="$PROJECT_DIR$/backend/Import_Service/Import_Service.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Integrated-Data-Intelligence-Suite.iml" filepath="$PROJECT_DIR$/.idea/Integrated-Data-Intelligence-Suite.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Parse_Service/Parse_Service.iml" filepath="$PROJECT_DIR$/Parse_Service/Parse_Service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Registry_Service/Registry_Service.iml" filepath="$PROJECT_DIR$/Registry_Service/Registry_Service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/User_Service/User_Service.iml" filepath="$PROJECT_DIR$/User_Service/User_Service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Visualize_Service/Visualize_Service.iml" filepath="$PROJECT_DIR$/Visualize_Service/Visualize_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Parse_Service/Parse_Service.iml" filepath="$PROJECT_DIR$/backend/Parse_Service/Parse_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Registry_Service/Registry_Service.iml" filepath="$PROJECT_DIR$/backend/Registry_Service/Registry_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/User_Service/User_Service.iml" filepath="$PROJECT_DIR$/backend/User_Service/User_Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/Visualize_Service/Visualize_Service.iml" filepath="$PROJECT_DIR$/backend/Visualize_Service/Visualize_Service.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
     </modules>
   </component>
