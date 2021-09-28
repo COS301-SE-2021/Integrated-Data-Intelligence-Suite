@@ -1239,21 +1239,33 @@ public class AnalyseServiceImpl {
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
         //param
+
         client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
         client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
         client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
         client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
 
 
+
         //metrics
-        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
-        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
-        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
+
+        /*client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC());
+        client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError());
+        client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+        client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+        client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance());*/
+
+        for(int i=0; i < 5; i++) {
+            client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC()+(i));
+            client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError()+(i));
+            client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError()+(i+2));
+            client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError()+(i+2));
+            client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance()+(i+3));
+        }
 
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
         //run.setTag("Accuracy", String.valueOf(accuracy));
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
@@ -1262,8 +1274,14 @@ public class AnalyseServiceImpl {
         String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
         lrModel.write().overwrite().save(path);
-        //File modelFile = new File(path);
-        //client.logArtifact(run.getId(), new File(path));
+        File modelFile = new File("../models/LogisticRegressionModel");
+
+        if(modelFile.exists() && modelFile.isDirectory()){
+            System.out.println("nothing wrong with file ");
+        }
+
+
+        client.logArtifact(run.getId(), modelFile);
 
         try {
             //lrModel.save("Database");
@@ -1614,6 +1632,9 @@ public class AnalyseServiceImpl {
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
         lrModel.write().overwrite().save("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+        //client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
+        //client.logArtifact(run.getId(), new File(path));
         try {
             //lrModel.save("Database");
 
@@ -1952,12 +1973,15 @@ public class AnalyseServiceImpl {
 
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
 
         String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
         String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         dtModel.write().overwrite().save(path);
-        File modelFile = new File(path);
+        File modelFile = new File("../models/DecisionTreeModel");
         //client.logArtifact(run.getId(), modelFile);
+
+        client.logArtifact(run.getId(), modelFile);
 
 
         /*try {
@@ -2569,13 +2593,15 @@ public class AnalyseServiceImpl {
 
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
         String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel";
         String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         kmModel.write().overwrite().save(path);
-        File modelFile = new File(path);
+        File modelFile = new File("../models/KMeansModel");
         //client.logArtifact(run.getId(), modelFile);
+        client.logArtifact(run.getId(), modelFile);
 
 
         /*try {
@@ -2839,26 +2865,28 @@ public class AnalyseServiceImpl {
         InputStream is = this.getClass().getResourceAsStream("TData.CSV");
         File tData = null;
 
-        if(is == null){
+        /*if(is == null){
             tData = new File(this.getClass().getResource("TData.CSV").getFile());
             if(tData.exists() == false){
                 ClassLoader classloader = Thread.currentThread().getContextClassLoader();
                 tData = new File(classloader.getResource("TData.CSV").getFile());
             }
-        }
+        }*/
 
 
         BufferedReader reader = null;
         String line = "";
+        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
 
         try{
-            if(is != null){
+            /*if(is != null){
                 reader = new BufferedReader(new InputStreamReader(is));
             }
             else{
                 reader = new BufferedReader(new FileReader(tData));
-            }
+            }*/
 
+            reader = new BufferedReader(new FileReader(fileUrl));
             //System.out.println("*******************CHECK THIS HERE*****************");
 
             line = reader.readLine();
