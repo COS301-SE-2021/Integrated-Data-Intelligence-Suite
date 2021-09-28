@@ -21,9 +21,6 @@ public class StorageService {
 
     private final Path rootLocation;
 
-
-    private StorageConfiguration config;
-
     private static final Logger log = LoggerFactory.getLogger(StorageService.class);
 
     @Autowired
@@ -41,23 +38,22 @@ public class StorageService {
         log.info("[Storage] Attempting to save file");
         try {
             if (file.isEmpty()) {
-                log.error("[Storage] The file is empty.");
+                log.error("[Storage] The file is empty");
                 throw new GatewayException("Failed to store empty file.");
             }
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(file.getOriginalFilename()))
                     .normalize().toAbsolutePath();
-            log.info("[Storage] File destination: " + destinationFile.toString());
-            log.info("[Storage] Root destination: " + this.rootLocation.toAbsolutePath().toString());
             if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
                 // This is a security check
-                log.error("[Storage] Cannot store file outside current directory.");
+                log.error("[Storage] Cannot store file outside current directory");
                 throw new GatewayException(
                         "Cannot store file outside current directory.");
             }
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
+                log.info("[Storage] Successfully saved file");
             }
         }
         catch (IOException | GatewayException e) {
