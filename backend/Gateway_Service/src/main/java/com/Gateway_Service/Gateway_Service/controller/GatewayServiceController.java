@@ -11,23 +11,21 @@ import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
-import com.Gateway_Service.Gateway_Service.service.AnalyseService;
-import com.Gateway_Service.Gateway_Service.service.ImportService;
-import com.Gateway_Service.Gateway_Service.service.ParseService;
+import com.Gateway_Service.Gateway_Service.service.*;
 
 
 //import com.netflix.discovery.DiscoveryClient;
 
-import com.Gateway_Service.Gateway_Service.service.VisualizeService;
-
-import com.Gateway_Service.Gateway_Service.service.UserService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -53,6 +51,11 @@ public class GatewayServiceController {
   
     @Autowired
     private UserService userClient;
+
+    @Autowired
+    private StorageService storageService;
+
+    private static final Logger log = LoggerFactory.getLogger(GatewayServiceController.class);
 
     //@Autowired
     //private RestTemplate restTemplate;
@@ -282,6 +285,27 @@ public class GatewayServiceController {
     @CrossOrigin
     public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
         GetAllAPISourcesResponse response = importClient.getAllAPISources();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This endpoint will be use for uploading a file and saving the file to
+     * a temporary directory such that it can be analyzed.
+     * @param file This parameter will contain the file itself.
+     * @return This contains if the request of uploading a file was successful or not.
+     */
+    @PostMapping("/upload")
+    public ResponseEntity<Map<String, String>> fileUpload(@RequestParam("file") MultipartFile file) {
+        log.info("Trying to save file");
+        Map<String, String> response = new HashMap<>();
+        try {
+            storageService.store(file);
+            response.put("message", "Saved file");
+        }
+        catch (GatewayException e) {
+            response.put("message", e.getMessage());
+        }
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
