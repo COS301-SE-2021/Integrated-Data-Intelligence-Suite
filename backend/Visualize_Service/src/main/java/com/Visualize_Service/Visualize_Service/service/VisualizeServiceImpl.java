@@ -109,28 +109,28 @@ public class VisualizeServiceImpl {
         if (indexedGraphs.contains("totalInteraction")) {
             GetTotalInteractionRequest totalInteractionRequest = new GetTotalInteractionRequest(request.getTrendList());
             GetTotalInteractionResponse totalInteractionResponse = this.getTotalInteraction(totalInteractionRequest);
-            outputData.add(totalInteractionResponse.words);
+            outputData.add(totalInteractionResponse.getWordGraphArray());
         }
 
         //most prominent Sentiment
         if (indexedGraphs.contains("mostProminentSentiment")) {
             GetMostProminentSentimentRequest mostProminentSentimentRequest = new GetMostProminentSentimentRequest(request.getTrendList());
             GetMostProminentSentimentResponse mostProminentSentimentResponse = this.getMostProminentSentiment(mostProminentSentimentRequest);
-            outputData.add(mostProminentSentimentResponse.words);
+            outputData.add(mostProminentSentimentResponse.getWordGraphArray());
         }
 
         //Number of trends
         if (indexedGraphs.contains("totalTrends")) {
             GetTotalTrendsRequest totalTrendsRequest = new GetTotalTrendsRequest(request.getTrendList());
             GetTotalTrendsResponse totalTrendsResponse = this.getTotalTrends(totalTrendsRequest);
-            outputData.add(totalTrendsResponse.words);
+            outputData.add(totalTrendsResponse.getWordGraphArray());
         }
 
         //NUmber of anomalys
         if (indexedGraphs.contains("totalAnomalies")) {
             GetTotalAnomaliesRequest totalAnomaliesRequest = new GetTotalAnomaliesRequest(request.getAnomalyList());
             GetTotalAnomaliesResponse totalAnomaliesResponse = this.getTotalAnomalies(totalAnomaliesRequest);
-            outputData.add(totalAnomaliesResponse.words);
+            outputData.add(totalAnomaliesResponse.getWordGraphArray());
         }
 
 
@@ -138,21 +138,21 @@ public class VisualizeServiceImpl {
         if (indexedGraphs.contains("lineInteractions")) {
             CreateLineGraphInteractionsRequest lineInteractionsRequest = new CreateLineGraphInteractionsRequest(request.getTrendList());
             CreateLineGraphInteractionsResponse lineInteractionsResponse = this.createLineGraphInteractions(lineInteractionsRequest);
-            outputData.add(lineInteractionsResponse.LineGraphArray);
+            outputData.add(lineInteractionsResponse.getLineGraphArray());
         }
 
         //PieChart graph(Overall section)
         if (indexedGraphs.contains("pieChart")) {
             CreatePieChartGraphRequest pieChartRequest = new CreatePieChartGraphRequest(request.getTrendList());
             CreatePieChartGraphResponse pieChartResponse = this.createPieChartGraph(pieChartRequest);
-            outputData.add(pieChartResponse.PieChartGraphArray);
+            outputData.add(pieChartResponse.getPieChartGraphArray());
         }
 
         //ExtraBar graph one Bar Graph(total Engagement in each location)
         if (indexedGraphs.contains("extraBarOne")) {
             CreateBarGraphExtraOneRequest extraBarOneRequest = new CreateBarGraphExtraOneRequest(request.getTrendList());
             CreateBarGraphExtraOneResponse extraBarOneResponse = this.createBarGraphExtraOne(extraBarOneRequest);
-            outputData.add(extraBarOneResponse.BarGraphArray);
+            outputData.add(extraBarOneResponse.getBarGraphArray());
         }
 
 
@@ -160,14 +160,14 @@ public class VisualizeServiceImpl {
         if (indexedGraphs.contains("map")) {
             CreateMapGraphRequest mapRequest = new CreateMapGraphRequest(request.getTrendList());
             CreateMapGraphResponse mapResponse = this.createMapGraph(mapRequest);
-            outputData.add(mapResponse.mapGraphArray);
+            outputData.add(mapResponse.getLineGraphArray());
         }
 
         //Bar graph frequecy of tweets in trend
         if (indexedGraphs.contains("bar")) {
             CreateBarGraphRequest barRequest = new CreateBarGraphRequest(request.getTrendList());
             CreateBarGraphResponse barResponse = this.createBarGraph(barRequest);
-            outputData.add(barResponse.BarGraphArray);
+            outputData.add(barResponse.getBarGraphArray());
         }
 
 
@@ -176,14 +176,14 @@ public class VisualizeServiceImpl {
         if (indexedGraphs.contains("wordCloud")) {
             CreateWordCloudGraphRequest wordCloudRequest = new CreateWordCloudGraphRequest(request.getWordList());
             CreateWordCloudGraphResponse wordCloudResponse = this.createWordCloudGraph(wordCloudRequest);
-            outputData.add(wordCloudResponse.words);
+            outputData.add(wordCloudResponse.getWords());
         }
 
         //WordCloud Piechart
         if (indexedGraphs.contains("wordCloudPieChart")) {
             CreateWordCloudPieChartGraphRequest wordCloudPieChartGraphRequest = new CreateWordCloudPieChartGraphRequest(request.getWordList());
             CreateWordCloudPieChartGraphResponse wordCloudPieChartGraphResponse = this.createWordCloudPieChartGraph(wordCloudPieChartGraphRequest);
-            outputData.add(wordCloudPieChartGraphResponse.wordCloudPieChartGraphArray);
+            outputData.add(wordCloudPieChartGraphResponse.getWordCloudPieChartGraphArray());
         }
 
         //WordCloud Sunburst
@@ -198,14 +198,14 @@ public class VisualizeServiceImpl {
         if (indexedGraphs.contains("relation")) {
             CreateRelationshipGraphRequest relationRequest = new CreateRelationshipGraphRequest(request.getRelationshipList());
             CreateRelationshipGraphResponse relationResponse = this.createRelationGraph(relationRequest, request.getWordList());
-            outputData.add(relationResponse.NetworkGraphArray);
+            outputData.add(relationResponse.getNetworkGraphArray());
         }
 
         //Network graph (Patterns)
         if (indexedGraphs.contains("pattern")) {
             CreatePatternGraphRequest patternGraphRequest = new CreatePatternGraphRequest(request.getPatternList());
             CreatePatternGraphResponse patternGraphResponse = this.createPatternGraph(patternGraphRequest, request.getWordList());
-            outputData.add(patternGraphResponse.NetworkGraphArray);
+            outputData.add(patternGraphResponse.getNetworkGraphArray());
         }
 
 
@@ -213,7 +213,7 @@ public class VisualizeServiceImpl {
         if (indexedGraphs.contains("timeline")) {
             CreateTimelineGraphRequest timelineRequest = new CreateTimelineGraphRequest(request.getAnomalyList());
             CreateTimelineGraphResponse timelineResponse = this.createTimelineGraph(timelineRequest);
-            outputData.add(timelineResponse.timelineGraphArray);
+            outputData.add(timelineResponse.getLineGraphArray());
         }
 
         /*
@@ -772,7 +772,7 @@ public class VisualizeServiceImpl {
             throw new InvalidRequestException("Dominant/parent nodes object is null");
         }
 
-        ArrayList<ArrayList> associatedWords  = request.dataList;
+        ArrayList<ArrayList> associatedWords  = request.getDataList();
         ArrayList<String> dominantWords = request.getDominantWords();
         ArrayList<Graph> output = new ArrayList<>();
 
