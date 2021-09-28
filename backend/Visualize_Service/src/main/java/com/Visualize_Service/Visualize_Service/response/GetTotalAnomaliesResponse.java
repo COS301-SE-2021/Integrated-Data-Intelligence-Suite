@@ -5,7 +5,7 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class GetTotalAnomaliesResponse {
-    public ArrayList<Graph> words;
+    private ArrayList<Graph> words;
 
     public GetTotalAnomaliesResponse(ArrayList<Graph> words){
         this.words = words;
