@@ -18,6 +18,7 @@ import com.Gateway_Service.Gateway_Service.service.*;
 
 //import com.netflix.discovery.DiscoveryClient;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -296,11 +297,19 @@ public class GatewayServiceController {
      */
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> fileUpload(@RequestParam("file") MultipartFile file) {
-        log.info("Trying to save file");
         Map<String, String> response = new HashMap<>();
+
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+        assert extension != null;
+        if(!extension.equals("csv")) {
+            response.put("message", "Incorrect file type uploaded.");
+            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        }
+
         try {
             storageService.store(file);
-            response.put("message", "Saved file");
+            response.put("message", "Successfully saved file");
         }
         catch (GatewayException e) {
             response.put("message", e.getMessage());
