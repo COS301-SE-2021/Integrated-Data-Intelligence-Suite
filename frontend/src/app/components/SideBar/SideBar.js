@@ -4,7 +4,7 @@ import {
 } from '@ant-design/icons';
 import React, { Component } from 'react';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
-import { AiOutlineHeart, AiOutlineHome } from 'react-icons/all';
+import { AiOutlineCloudUpload, AiOutlineHeart, AiOutlineHome } from 'react-icons/all';
 import UserInfoCard from '../UserInfoCard/UserInfoCard';
 
 const {
@@ -94,6 +94,15 @@ class SideBar extends React.Component {
                         >
                             Credits
                             <Link to="/credits"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="5"
+                            icon={<AiOutlineCloudUpload/>}
+                            onClick={() => this.setActive('5')}
+                        >
+                            Import
+                            <Link to="/uploadData"/>
                         </Menu.Item>
                     </Menu>
                 </Sider>
