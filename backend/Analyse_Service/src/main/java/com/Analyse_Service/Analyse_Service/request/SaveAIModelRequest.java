@@ -1,16 +1,16 @@
 package com.Analyse_Service.Analyse_Service.request;
 
-import com.Analyse_Service.Analyse_Service.dataclass.AIModel;
+import com.Analyse_Service.Analyse_Service.dataclass.RegisteredModel;
 
 public class SaveAIModelRequest {
 
-    AIModel saveAIModel;
+    RegisteredModel saveRegisteredModel;
 
-    public SaveAIModelRequest(AIModel saveAIModel){
-        this.saveAIModel = saveAIModel;
+    public SaveAIModelRequest(RegisteredModel saveRegisteredModel){
+        this.saveRegisteredModel = saveRegisteredModel;
     }
 
-    public AIModel getSaveAIModel() {
-        return saveAIModel;
+    public RegisteredModel getSaveAIModel() {
+        return saveRegisteredModel;
     }
 }
