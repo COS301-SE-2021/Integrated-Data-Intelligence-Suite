@@ -1,7 +1,9 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
+import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import com.johnsnowlabs.nlp.DocumentAssembler;
@@ -71,7 +73,170 @@ public class TrainServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainModelResponse trainModel(TrainModelRequest request)
-            throws InvalidRequestException {
+            throws AnalyzerException {
+
+        if (request == null) {
+            throw new InvalidRequestException("TrainModelRequest Object is null");
+        }
+        if (request.getModelName() == null){
+            throw new InvalidRequestException("Model Name is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList of requested parsedData is null");
+        }
+        else{
+            for(int i =0; i<request.getDataList().size(); i++) {
+                if (request.getDataList().get(i) == null) {
+                    throw new InvalidRequestException("DataList inside data of requested parsedData is null");
+                }
+            }
+        }
+
+
+        /*******************USE NLP******************/
+
+        System.out.println("*******************USE NLP******************");
+
+        ArrayList<ArrayList> wordList= null;
+
+        /**social**/
+        ArrayList<ParsedData> dataList = request.getDataList();
+        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
+
+        ArrayList<String> nlpTextSocial = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            nlpTextSocial.add(dataList.get(i).getTextMessage());
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
+        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
+        wordList = (ArrayList<ArrayList>) nlpResults.get(1);
+
+        ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
+        /**articles**
+         ArrayList<ParsedArticle> articleList = request.getArticleList();
+         if (articleList.isEmpty()) System.out.println("no articles");
+         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
+
+         ArrayList<String> nlpTextArticle = new ArrayList<>();
+         for (int i = 0; i < articleList.size(); i++) {
+         nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle()); ///TODO: shrey used other names like i think message = content; (more was changed)
+         }
+
+         FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
+         List<Object> nlpArticle = this.findNlpProperties(findNlpPropertiesRequestArticle);
+         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = (ArrayList<FindNlpPropertiesResponse>) nlpArticle.get(0);
+         ArrayList<ArrayList> ArticleWordList = (ArrayList<ArrayList>) nlpArticle.get(1);
+
+         for(int i =0; i < ArticleWordList.size() ;i++){
+         wordList.add(ArticleWordList.get(i));
+         }
+
+         /*******************Setup Data******************/
+
+        System.out.println("*******************Setup Data main: ******************");
+        System.out.println(dataList.size());
+
+        /**social**/
+        for (int i = 0; i < dataList.size(); i++) {
+            //String row = "";
+
+            String text = dataList.get(i).getTextMessage();
+            String location = dataList.get(i).getLocation();
+            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
+            String[] dateTime = date.split(" ");
+            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            String likes = String.valueOf(dataList.get(i).getLikes());
+
+            //Random rn = new Random();
+            //int mockLike = rn.nextInt(10000) + 1;*/
+
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
+            rowOfParsed.add(text);
+            rowOfParsed.add(location);
+            rowOfParsed.add(formattedDate);
+            rowOfParsed.add(likes);
+            rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
+
+            parsedDataList.add(rowOfParsed);
+        }
+
+        /**article**
+         for(int i = 0; i < articleList.size(); i++){
+         String title = articleList.get(i).getTitle();
+         String desc = articleList.get(i).getDescription();
+         String content = articleList.get(i).getContent();
+         String date = articleList.get(i).getDate();
+         //String location = articleList.get(i).getLoction(); TODO Ask shrey if this is possible or if even necessary
+         int Charcount = content.length();
+         if (content.charAt(content.length()-1) == ']' && content.charAt(content.length()-2) == 's' && content.charAt(content.length()-3) == 'r' && content.charAt(content.length()-4) == 'a' && content.charAt(content.length()-5) == 'h' && content.charAt(content.length()-6) == 'c' && content.charAt(content.length()-7) == ' '){
+         Charcount -= 7;
+         int end = Charcount;
+         char pos = content.charAt(Charcount-1);
+         while (pos != '['){
+         Charcount--;
+         pos = content.charAt(Charcount-1);
+         }
+         String addChar = content.substring(Charcount+1,end);
+         //System.out.println(addChar);
+
+         Charcount -= 3;
+         Charcount += Integer.parseInt(addChar);
+         }
+
+
+
+         ArrayList<Object> rowOfParsed = new ArrayList<>();
+         rowOfParsed.add(title);
+         rowOfParsed.add(desc);
+         rowOfParsed.add(content);
+         rowOfParsed.add(Charcount);
+         rowOfParsed.add(date);
+         rowOfParsed.add(findNlpPropertiesResponseArticle.get(i));
+         parsedArticleList.add(rowOfParsed);
+         }
+
+         System.out.println("its the Articles my man heeeeeeeeeeeeeeeerrrrrrrrrreeeeeeeee");
+         for (ArrayList eg: parsedArticleList) {
+         System.out.println(eg.toString());
+         }
+
+
+         /******************Select Best Models (registry)*******************
+
+         String commandPath = "python ../rri/RegisterModel.py";
+         CommandLine commandLine = CommandLine.parse(commandPath);
+         //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+         DefaultExecutor executor = new DefaultExecutor();
+         executor.setStreamHandler(new PumpStreamHandler(System.out));
+         try {
+         executor.execute(commandLine);
+         } catch (Exception ex) {
+         ex.printStackTrace();
+         throw new RuntimeException(ex);
+         }
+
+         /*******************Run A.I Models******************/
+
+        try {
+            TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
+            trainFindTrendsArticlesLR(findTrendsArticlesRequest);
+
+            TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+            TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+
+            TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
+            this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+
+            TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
+            TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+
+        } catch (IOException e) {
+            throw new TrainingModelException("Failed logging model file");
+        }
+
+
 
         return new TrainModelResponse();
     }
