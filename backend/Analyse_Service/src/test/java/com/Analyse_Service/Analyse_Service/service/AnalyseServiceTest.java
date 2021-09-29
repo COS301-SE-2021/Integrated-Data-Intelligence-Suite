@@ -190,7 +190,7 @@ public class AnalyseServiceTest {
 
     /*@Test
     @DisplayName("fetch saveAIModel from database")
-    public void fetchSaveAIModelFromDatabase() throws AnalyzerException {
+    public void fetchSaveAIModelFromDatabase() throws AnalyserException {
         //set test data
         AIModel saveModel = new AIModel();
         saveModel.setAccuracy(85.0F);

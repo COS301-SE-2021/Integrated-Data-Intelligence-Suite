@@ -1,6 +1,6 @@
 package com.Analyse_Service.Analyse_Service.controller;
 
-import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
+import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -8,8 +8,6 @@ import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import com.Analyse_Service.Analyse_Service.service.TrainServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/Analyse")
@@ -28,7 +26,7 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/analyzeData")
-    public @ResponseBody AnalyseDataResponse analyzeData(@RequestBody AnalyseDataRequest request) throws AnalyzerException {
+    public @ResponseBody AnalyseDataResponse analyzeData(@RequestBody AnalyseDataRequest request) throws AnalyserException {
         //AnalyseDataRequest request = getBody();
 
         if (request == null) {
@@ -50,7 +48,7 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/analyzeData")
-    public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyzerException {
+    public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException {
         //AnalyseDataRequest request = getBody();
 
         if (request == null) {
@@ -78,7 +76,7 @@ public class AnalyseServiceController {
     @PostMapping("/trainUserModel")
     public @ResponseBody
     TrainUserModelResponse trainUserModel(@RequestBody TrainUserModelRequest request)
-            throws AnalyzerException {
+            throws AnalyserException {
         //AnalyseDataRequest request = getBody();
         if (request == null) {
             throw new InvalidRequestException("TrainModelRequest Object is null");
@@ -102,7 +100,7 @@ public class AnalyseServiceController {
         try {
             trainService.trainApplicationModel();
             return true;
-        } catch (AnalyzerException e){
+        } catch (AnalyserException e){
             e.printStackTrace();
             return false;
         }
