@@ -36,18 +36,37 @@ public class ReportServiceImpl {
             String Entity = l.get(0).toString();
             String EntityType = l.get(2).toString();
             String AverageInteraction = l.get(3).toString();
-
-            GetMostProminentSentimentRequest SentReq = new GetMostProminentSentimentRequest((ArrayList<ArrayList>) l.get(4));
-            GetMostProminentSentimentResponse SentResp = this.getMostProminentSentiment(SentReq);
-            String mostProminentSentiment = SentResp.getSentiment();
+            String Frequency = l.get(6).toString();
 
 
+            //GetMostProminentSentimentRequest SentReq = new GetMostProminentSentimentRequest((ArrayList<ArrayList>) l.get(4));
+            //GetMostProminentSentimentResponse SentResp = this.getMostProminentSentiment(SentReq);
+            String mostProminentSentiment = "";//SentResp.getSentiment();
+
+            GetMostProminentLocationRequest LocReq = new GetMostProminentLocationRequest((ArrayList<String>) l.get(4));
+            GetMostProminentLocationResponse LocResp = this.getMostProminentLocation(LocReq);
+            String mostProminentLocation = LocResp.getLocation();
+
+            ArrayList<Object> row = new ArrayList<>();
+            row.add(Entity);
+            row.add(EntityType);
+            row.add(AverageInteraction);
+            row.add(Frequency);
+            row.add(mostProminentSentiment);
+            row.add(mostProminentSentiment);
+
+
+            System.out.println(row);
+            output.add(row);
 
         }
 
+        int numTrends = reqData.size();
+        System.out.println("");
 
-
-        return new GetTrendAnalysisDataResponse(null,null);
+        String summary = "The Integrated Data intelligence suite found "+ String.valueOf(numTrends) + " trends in the data collected by the search";
+        System.out.println(summary);
+        return new GetTrendAnalysisDataResponse(output,summary);
     }
 
     public GetMostProminentLocationResponse getMostProminentLocation(GetMostProminentLocationRequest request) throws InvalidRequestException {
@@ -55,7 +74,7 @@ public class ReportServiceImpl {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
 
-        return new GetMostProminentLocationResponse(null);
+        return new GetMostProminentLocationResponse("null");
     }
 
     public GetMostProminentSentimentResponse getMostProminentSentiment(GetMostProminentSentimentRequest request) throws InvalidRequestException {
@@ -110,7 +129,7 @@ public class ReportServiceImpl {
                 temp = Integer.parseInt(o.get(1).toString());
             }
         }
-        return new GetMostProminentSentimentResponse(outputs);
+        return new GetMostProminentSentimentResponse("outputs");
     }
 
     public GetPatternAndRelationshipDataResponse getPatternAndRelationshipData(GetPatternAndRelationshipDataRequest request) throws InvalidRequestException {
