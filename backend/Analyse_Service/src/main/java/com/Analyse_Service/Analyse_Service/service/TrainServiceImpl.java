@@ -280,7 +280,8 @@ public class TrainServiceImpl {
      *
      * @throws AnalyzerException This is thrown if the request or if any of its attributes are invalid.
      */
-    public void trainApplicationModel() throws AnalyzerException {
+    public void trainApplicationModel()
+            throws AnalyzerException {
 
         ArrayList<ParsedData> dataList = new ArrayList<>();// repos.getParsedDataList();
 
@@ -1012,8 +1013,9 @@ public class TrainServiceImpl {
             System.out.println("nothing wrong with file ");
         }
 
-
         client.logArtifact(run.getId(), modelFile);
+
+        TrainedModel model = new TrainedModel(run.getId(), accuracy);
 
         try {
             //lrModel.save("Database");
@@ -1076,7 +1078,7 @@ public class TrainServiceImpl {
         System.out.println("trends done");
         sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
-        return new TrainFindTrendsResponse(results);
+        return new TrainFindTrendsResponse(results, model);
     }
 
     /**
@@ -2101,8 +2103,11 @@ public class TrainServiceImpl {
      * This method used to compare between models and select the best one among them.
      * along with selecting the method registers that best model under the model name.
      * @param request This is a request object which contains data required to compare and log models.
+     * @return RegisterBestModelResponse This object contains data the selected best model
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public RegisterBestModelResponse RegisterBestModel(RegisterBestModelRequest request){
+    public RegisterBestModelResponse RegisterBestModel(RegisterBestModelRequest request)
+            throws InvalidRequestException{
         TrainedModel temp = new TrainedModel();
 
         return new RegisterBestModelResponse(temp);
@@ -2112,8 +2117,9 @@ public class TrainServiceImpl {
      * This method used to clean the registry by deleting unused/unsatisfying models.
      *
      */
-    public void CleanModelsRegistry(){
-
+    public void CleanModelsRegistry()
+            throws AnalyzerException{
+        //todo: do something here
     }
 
 
