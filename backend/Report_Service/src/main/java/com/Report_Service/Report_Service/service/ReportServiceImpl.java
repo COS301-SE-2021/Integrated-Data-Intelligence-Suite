@@ -34,12 +34,28 @@ public class ReportServiceImpl {
 
         for (ArrayList l: reqData) {
             String Entity = l.get(0).toString();
+            String EntityType = l.get(2).toString();
+            String AverageInteraction = l.get(3).toString();
+
+            GetMostProminentSentimentRequest SentReq = new GetMostProminentSentimentRequest((ArrayList<ArrayList>) l.get(4));
+            GetMostProminentSentimentResponse SentResp = this.getMostProminentSentiment(SentReq);
+            String mostProminentSentiment = SentResp.getSentiment();
+
+
 
         }
 
 
 
         return new GetTrendAnalysisDataResponse(null,null);
+    }
+
+    public GetMostProminentLocationResponse getMostProminentLocation(GetMostProminentLocationRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
+        }
+
+        return new GetMostProminentLocationResponse(null);
     }
 
     public GetMostProminentSentimentResponse getMostProminentSentiment(GetMostProminentSentimentRequest request) throws InvalidRequestException {
