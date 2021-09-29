@@ -77,10 +77,10 @@ public class AnalyseServiceImpl {
     private AnalyseServiceParsedDataRepository parsedDataRepository;
 
 
-    static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
+    //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
     /**
-     * This method used to analyse data which has been parsed by Parse-Service.
+     * This method used to analyse data which has been parsed by Parse-Service. Input from internet
      * @param request This is a request object which contains data required to be analysed.
      * @return AnalyseDataResponse This object contains analysed data which has been processed.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -93,13 +93,12 @@ public class AnalyseServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList of requested parsedData is null");
         }
-        else{
-            for(int i =0; i<request.getDataList().size(); i++) {
-                if (request.getDataList().get(i) == null) {
-                    throw new InvalidRequestException("DataList inside data of requested parsedData is null");
-                }
+        for(int i =0; i<request.getDataList().size(); i++) {
+            if (request.getDataList().get(i) == null) {
+                throw new InvalidRequestException("DataList inside data of requested parsedData is null");
             }
         }
+
 
 
         /*******************USE NLP******************/
@@ -274,6 +273,122 @@ public class AnalyseServiceImpl {
                 findAnomaliesResponse.getPattenList(),
                 wordList);
     }
+
+
+    /**
+     * This method used to analyse data which has been parsed by Parse-Service. Input from application user
+     * @param request This is a request object which contains data required to be analysed.
+     * @return AnalyseDataResponse This object contains analysed data which has been processed.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("AnalyzeUserDataRequest Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("DataList of requested parsedData is null");
+        }
+        for(int i =0; i<request.getDataList().size(); i++) {
+            if (request.getDataList().get(i) == null) {
+                throw new InvalidRequestException("DataList inside data of requested parsedData is null");
+            }
+        }
+        if(request.getModelId() == null){
+            throw new InvalidRequestException("AnalyzeUserDataRequest modelId is null");
+        }
+        if(request.getModelId().isEmpty()){
+            throw new InvalidRequestException("AnalyzeUserDataRequest modelId is invalid (check its not empty");
+        }
+
+        /*******************USE NLP******************/
+
+        System.out.println("*******************USE NLP******************");
+
+        ArrayList<ArrayList> wordList= null;
+
+        /**data**/
+        ArrayList<ParsedData> dataList = request.getDataList();
+        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
+
+        ArrayList<String> nlpTextSocial = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            nlpTextSocial.add(dataList.get(i).getTextMessage());
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
+        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
+        wordList = (ArrayList<ArrayList>) nlpResults.get(1);
+
+
+        ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
+         /*******************Setup Data******************/
+
+        System.out.println("*******************Setup Data main: ******************");
+        System.out.println(dataList.size());
+
+        for (int i = 0; i < dataList.size(); i++) {
+            //String row = "";
+
+            String text = dataList.get(i).getTextMessage();
+            String location = dataList.get(i).getLocation();
+            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
+            String[] dateTime = date.split(" ");
+            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            String likes = String.valueOf(dataList.get(i).getLikes());
+
+            //Random rn = new Random();
+            //int mockLike = rn.nextInt(10000) + 1;*/
+
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
+            rowOfParsed.add(text);
+            rowOfParsed.add(location);
+            rowOfParsed.add(formattedDate);
+            rowOfParsed.add(likes);
+            rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
+
+            parsedDataList.add(rowOfParsed);
+        }
+
+
+        /*******************Run A.I Models******************/
+
+        System.out.println("*******************Run A.I Models******************");
+
+        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList,parsedArticleList,request.getModelId()); //TODO
+        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
+        System.out.println("*******************Ran findPattern******************");
+
+        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList,parsedArticleList,request.getModelId());
+        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+        System.out.println("*******************Ran findRelationships******************");
+
+        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
+        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
+        System.out.println("*******************Ran findPrediction******************");
+
+        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
+        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
+        System.out.println("*******************Ran findTrends******************");
+
+        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
+        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+        System.out.println("*******************Ran findAnomalies******************");
+
+
+        /*********************Result**************************/
+
+        return new AnalyseUserDataResponse(//null,null,null,null,null,null);
+                findPatternResponse.getPattenList(),//null,null,null,null);
+                findRelationshipsResponse.getPattenList(),
+                getPredictionResponse.getPattenList(),
+                findTrendsResponse.getPattenList(),
+                findAnomaliesResponse.getPattenList(),
+                wordList);
+    }
+
+
 
 
     /**
@@ -988,9 +1103,9 @@ public class AnalyseServiceImpl {
 
         /*******************SETUP SPARK*****************/
 
-        logger.setLevel(Level.ERROR);
+        //logger.setLevel(Level.ERROR);
 
-        LogManager.getRootLogger().setLevel(Level.ERROR);
+        //LogManager.getRootLogger().setLevel(Level.ERROR);
 
         /*Logger rootLoggerM = LogManager.getRootLogger();
         rootLoggerM.setLevel(Level.ERROR);

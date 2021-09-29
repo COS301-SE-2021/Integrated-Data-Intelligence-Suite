@@ -70,7 +70,7 @@ public class TrainServiceImpl {
     @Autowired
     private AnalyseServiceParsedDataRepository parsedDataRepository;
 
-    static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
+    //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
     /**
      * This method used to train a user's model per their training data
@@ -719,8 +719,8 @@ public class TrainServiceImpl {
 
         /*******************SETUP SPARK*****************/
 
-        logger.setLevel(Level.ERROR);
-        LogManager.getRootLogger().setLevel(Level.ERROR);
+        //logger.setLevel(Level.ERROR);
+        //LogManager.getRootLogger().setLevel(Level.ERROR);
 
         SparkSession sparkTrends = SparkSession
                 .builder()
@@ -1015,15 +1015,9 @@ public class TrainServiceImpl {
 
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel model = new TrainedModel(run.getId(), accuracy);
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
 
         try {
-            //lrModel.save("Database");
-
-            //File modelFile = new File("../models/LogisticRegressionModel");
-            //client.logArtifact(run.getId(), modelFile);
-
-            //TODO: flavor
 
             String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
             CommandLine commandLine = CommandLine.parse(commandPath);
@@ -1031,6 +1025,16 @@ public class TrainServiceImpl {
             DefaultExecutor executor = new DefaultExecutor();
             executor.setStreamHandler(new PumpStreamHandler(System.out));
             executor.execute(commandLine);
+
+
+            /*lrModel.save("Database");
+
+            //File modelFile = new File("../models/LogisticRegressionModel");
+            //client.logArtifact(run.getId(), modelFile);
+
+            //TODO: flavor
+
+
 
             /*try {
                 executor.execute(commandLine);
@@ -1058,8 +1062,6 @@ public class TrainServiceImpl {
                     .setModelJson(jsonModel)
                     .build();
 
-
-
             System.out.println(logModel);
 
             ModelRegistry.CreateModelVersion.newBuilder()
@@ -1078,7 +1080,7 @@ public class TrainServiceImpl {
         System.out.println("trends done");
         sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
-        return new TrainFindTrendsResponse(results, model);
+        return new TrainFindTrendsResponse(results, trainedModel);
     }
 
     /**
@@ -1099,8 +1101,8 @@ public class TrainServiceImpl {
 
         /*******************SETUP SPARK*****************/
 
-        logger.setLevel(Level.ERROR);
-        LogManager.getRootLogger().setLevel(Level.ERROR);
+        //logger.setLevel(Level.ERROR);
+        //LogManager.getRootLogger().setLevel(Level.ERROR);
 
         SparkSession sparkTrends = SparkSession
                 .builder()
@@ -1431,8 +1433,8 @@ public class TrainServiceImpl {
         }
 
         /*******************SETUP SPARK*****************/
-        logger.setLevel(Level.ERROR);
-        LogManager.getRootLogger().setLevel(Level.ERROR);
+        //logger.setLevel(Level.ERROR);
+        //LogManager.getRootLogger().setLevel(Level.ERROR);
 
         SparkSession sparkTrends = SparkSession
                 .builder()
