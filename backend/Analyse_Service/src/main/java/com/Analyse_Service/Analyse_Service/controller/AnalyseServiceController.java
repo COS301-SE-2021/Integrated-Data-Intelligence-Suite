@@ -37,7 +37,7 @@ public class AnalyseServiceController {
         }
 
         if (request.getDataList() == null){
-            throw new InvalidRequestException("DataList is null");
+            throw new InvalidRequestException("AnalyseData DataList is null");
         }
 
         return analyseService.analyzeData(request);
@@ -54,7 +54,11 @@ public class AnalyseServiceController {
     public @ResponseBody TrainModelResponse trainModel(@RequestBody TrainModelRequest request) throws AnalyzerException {
         //AnalyseDataRequest request = getBody();
         if (request == null) {
-            throw new InvalidRequestException("AnalyzeDataRequest Object is null");
+            throw new InvalidRequestException("TrainModelRequest Object is null");
+        }
+
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("TrainModel DataList is null");
         }
 
         if (request.getModelName() == null){
@@ -69,7 +73,7 @@ public class AnalyseServiceController {
     public boolean trainData() {
         //AnalyseDataRequest request = getBody();
         try {
-            analyseService.TrainOverallModels();
+            trainService.TrainOverallModels();
             return true;
         } catch (InvalidRequestException | IOException e){
             e.printStackTrace();
