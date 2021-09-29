@@ -4,17 +4,17 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 
 import java.util.ArrayList;
 
-public class TrainModelRequest {
+public class TrainUserModelRequest {
 
     private String modelName;
 
     ArrayList<ParsedData> dataList;
 
-    public TrainModelRequest(){
+    public TrainUserModelRequest(){
 
     }
 
-    public TrainModelRequest(String modelName){
+    public TrainUserModelRequest(String modelName){
         this.modelName = modelName;
     }
 

@@ -1,14 +1,14 @@
 package com.Analyse_Service.Analyse_Service.response;
 
-public class TrainModelResponse {
+public class TrainUserModelResponse {
 
     private long trainingLength;
 
-    public TrainModelResponse(){
+    public TrainUserModelResponse(){
 
     }
 
-    public TrainModelResponse(long trainingLength){
+    public TrainUserModelResponse(long trainingLength){
         this.trainingLength = trainingLength;
     }
 
