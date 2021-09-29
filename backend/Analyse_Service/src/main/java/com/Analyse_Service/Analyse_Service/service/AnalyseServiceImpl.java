@@ -390,7 +390,6 @@ public class AnalyseServiceImpl {
 
 
 
-
     /**
      * This method used to find an entity of a statement i.e sentiments/parts of speech
      * @param request This is a request object which contains data required to be processed.
@@ -1082,9 +1081,6 @@ public class AnalyseServiceImpl {
     }
 
 
-
-
-
     /**
      * This method used to find a trends(s) within a given data.
      * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
@@ -1250,6 +1246,28 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
 
+        /***********************SETUP MLFLOW - LOAD ***********************/
+
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
+        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+
+        File artifact = client.downloadArtifacts("runid");
+
+
+
+        run.endRun();
 
         /*******************LOAD - READ MODEL*****************/
 
