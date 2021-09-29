@@ -1,6 +1,8 @@
 package com.Analyse_Service.Analyse_Service.dataclass;
 
-public class RegisteredModel {
+public class TrainedModel {
+
+
 
     private String modelId;
 
@@ -8,7 +10,11 @@ public class RegisteredModel {
 
     private double accuracy;
 
-    public RegisteredModel(String modelId, double accuracy){
+    public TrainedModel(){
+
+    }
+
+    public TrainedModel(String modelId, double accuracy){
         this.modelId = modelId;
         this.accuracy = accuracy;
     }
