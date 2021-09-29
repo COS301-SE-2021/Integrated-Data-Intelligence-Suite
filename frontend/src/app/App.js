@@ -14,6 +14,7 @@ import VerifyPage from './pages/VerifyPage/VerifyPage';
 import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
+import ReportsPage from "./pages/ReportsPage/ReportsPage";
 
 
 class App extends Component {
@@ -66,6 +67,10 @@ class App extends Component {
 
                     <Route exact path={'/credits'}>
                         <CreditsPage/>
+                    </Route>
+
+                    <Route exact path="/reports">
+                        <ReportsPage />
                     </Route>
 
                     <Route path="*">

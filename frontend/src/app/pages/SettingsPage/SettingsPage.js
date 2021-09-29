@@ -50,8 +50,6 @@ const SettingsPage = () => {
 
                       <div id="Profile" className="option active" onClick={() => setComponent('Profile')}>Profile</div>
 
-                      <div id="Reports" className="option" onClick={() => setComponent('Reports')}>Reports</div>
-
                       { user && user.isAdmin && <div id="Users" className="option" onClick={() => setComponent('Users')}>Manage Users</div>}
 
                       { user && user.isAdmin && <div id="Data Sources" className="option" onClick={() => setComponent('Data Sources')}>Data Sources</div>}
@@ -63,7 +61,6 @@ const SettingsPage = () => {
                               <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.push('/chart')} />
                           </div>
                           { component === 'Profile' && setActive(component) && <ProfilePage />}
-                          { component === 'Reports' && setActive(component) && <ReportsPage />}
                           { component === 'Users' && user && user.isAdmin && setActive(component) && <Users />}
                           { component === 'Data Sources' && user && user.isAdmin && setActive(component) && <DataSourceList /> }
                       </div>
