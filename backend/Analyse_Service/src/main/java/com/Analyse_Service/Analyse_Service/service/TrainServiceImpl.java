@@ -1,9 +1,11 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
+import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import com.johnsnowlabs.nlp.DocumentAssembler;
@@ -52,6 +54,7 @@ import org.apache.spark.sql.types.*;
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
@@ -64,10 +67,13 @@ import static org.apache.spark.sql.functions.col;
 @Service
 public class TrainServiceImpl {
 
+    @Autowired
+    private AnalyseServiceParsedDataRepository parsedDataRepository;
+
     static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
     /**
-     * This method used to analyse data which has been parsed by Parse-Service.
+     * This method used to train a user's model per their training data
      * @param request This is a request object which contains data required to be analysed.
      * @return TrainModelResponse This object contains analysed data which has been processed.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -2086,12 +2092,9 @@ public class TrainServiceImpl {
 
 
     /*******************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
+     * **********************************************MODEL REGISTRY*****************************************************
      * *****************************************************************************************************************
      */
-
 
 
     /**
@@ -2100,8 +2103,9 @@ public class TrainServiceImpl {
      * @param request This is a request object which contains data required to compare and log models.
      */
     public RegisterBestModelResponse RegisterBestModel(RegisterBestModelRequest request){
+        TrainedModel temp = new TrainedModel();
 
-        return new RegisterBestModelResponse();
+        return new RegisterBestModelResponse(temp);
     }
 
     /**
@@ -2110,5 +2114,30 @@ public class TrainServiceImpl {
      */
     public void CleanModelsRegistry(){
 
+    }
+
+
+
+    /**
+     * This method used to fetch the parsed data from the database
+     * @param request This is a request object which contains data required to be fetched.
+     * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request)
+            throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("FetchParsedDataRequest Object is null");
+        }
+        if (request.getDataType() == null){
+            throw new InvalidRequestException("Datatype is null");
+        }
+        if(request.getDataType() != "ParsedData") {
+            throw new InvalidRequestException("Wrong Datatype is used");
+        }
+
+
+        ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
+        return new FetchParsedDataResponse(list );
     }
 }
