@@ -44,14 +44,41 @@ public class AnalyseServiceController {
 
 
     /**
+     * This method is used to facilitate communication to the Analyse-Service.
+     * @param request This is a request entity which contains a AnalyseDataRequest object.
+     * @return AnalyseDataResponse This object contains analysed data which has been processed by Analyse-Service.
+     * @throws Exception This is thrown if exception caught in Analyse-Service.
+     */
+    @PostMapping("/analyzeData")
+    public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyzerException {
+        //AnalyseDataRequest request = getBody();
+
+        if (request == null) {
+            throw new InvalidRequestException("AnalyzeDataRequest Object is null");
+        }
+
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("AnalyseData DataList is null");
+        }
+
+        if (request.getModelId() == null){
+            throw new InvalidRequestException("AnalyseData modelID is null");
+        }
+
+        return analyseService.analyzeUserData(request);
+    }
+
+
+    /**
      * This method is used to facilitate communication to the Train-Service.
      * @param request This is a request entity which contains a TrainModelRequest object.
      * @return TrainModelResponse This object contains trained data which has been processed by Train-Service.
      * @throws Exception This is thrown if exception caught in Train-Service.
      */
-    @PostMapping("/trainModel")
+    @PostMapping("/trainUserModel")
     public @ResponseBody
-    TrainUserModelResponse trainModel(@RequestBody TrainUserModelRequest request) throws AnalyzerException {
+    TrainUserModelResponse trainUserModel(@RequestBody TrainUserModelRequest request)
+            throws AnalyzerException {
         //AnalyseDataRequest request = getBody();
         if (request == null) {
             throw new InvalidRequestException("TrainModelRequest Object is null");
@@ -69,8 +96,8 @@ public class AnalyseServiceController {
     }
 
 
-    @GetMapping("/trainData")
-    public boolean trainData() {
+    @GetMapping("/trainApplicationData")
+    public boolean trainApplicationData() {
         //AnalyseDataRequest request = getBody();
         try {
             trainService.trainApplicationModel();
@@ -80,15 +107,4 @@ public class AnalyseServiceController {
             return false;
         }
     }
-
-
-
-
-    /*@PostMapping("/analyzeData")
-    public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{
-        AnalyseDataRequest request = requestEntity.getBody();
-        return service.analyzeData(request);
-    }*/
-
-
 }
