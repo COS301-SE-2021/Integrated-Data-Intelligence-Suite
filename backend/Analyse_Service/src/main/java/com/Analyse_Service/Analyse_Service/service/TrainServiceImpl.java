@@ -69,10 +69,10 @@ public class TrainServiceImpl {
     /**
      * This method used to analyse data which has been parsed by Parse-Service.
      * @param request This is a request object which contains data required to be analysed.
-     * @return AnalyseDataResponse This object contains analysed data which has been processed.
+     * @return TrainModelResponse This object contains analysed data which has been processed.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public TrainModelResponse trainModel(TrainModelRequest request)
+    public TrainUserModelResponse trainUserModel(TrainUserModelRequest request)
             throws AnalyzerException {
 
         if (request == null) {
@@ -97,9 +97,21 @@ public class TrainServiceImpl {
 
         System.out.println("*******************USE NLP******************");
 
-        ArrayList<ArrayList> wordList= null;
+        /********data*******/
+        ArrayList<ParsedData> dataList = request.getDataList();
+        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
 
-        /**social**/
+        ArrayList<String> nlpTextData = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            nlpTextData.add(dataList.get(i).getTextMessage());
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequestData = new FindNlpPropertiesRequest(nlpTextData);
+        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestData);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
+
+
+        /**social **
         ArrayList<ParsedData> dataList = request.getDataList();
         ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
 
@@ -113,32 +125,36 @@ public class TrainServiceImpl {
         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
         wordList = (ArrayList<ArrayList>) nlpResults.get(1);
 
+
         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
         /**articles**
-         ArrayList<ParsedArticle> articleList = request.getArticleList();
-         if (articleList.isEmpty()) System.out.println("no articles");
-         ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
+        ArrayList<ParsedArticle> articleList = request.getArticleList();
+        if (articleList.isEmpty())
+            System.out.println("no articles");
 
-         ArrayList<String> nlpTextArticle = new ArrayList<>();
-         for (int i = 0; i < articleList.size(); i++) {
-         nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle()); ///TODO: shrey used other names like i think message = content; (more was changed)
-         }
+        ArrayList<ArrayList> parsedArticleList = new ArrayList<>(); //TODO: need to use
 
-         FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
-         List<Object> nlpArticle = this.findNlpProperties(findNlpPropertiesRequestArticle);
-         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = (ArrayList<FindNlpPropertiesResponse>) nlpArticle.get(0);
-         ArrayList<ArrayList> ArticleWordList = (ArrayList<ArrayList>) nlpArticle.get(1);
+        ArrayList<String> nlpTextArticle = new ArrayList<>();
+        for (int i = 0; i < articleList.size(); i++) {
+            nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle()); ///TODO: shrey used other names like i think message = content; (more was changed)
+        }
 
-         for(int i =0; i < ArticleWordList.size() ;i++){
-         wordList.add(ArticleWordList.get(i));
-         }
+        FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
+        List<Object> nlpArticle = this.findNlpProperties(findNlpPropertiesRequestArticle);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseArticle = (ArrayList<FindNlpPropertiesResponse>) nlpArticle.get(0);
+        ArrayList<ArrayList> ArticleWordList = (ArrayList<ArrayList>) nlpArticle.get(1);
 
-         /*******************Setup Data******************/
+        for(int i =0; i < ArticleWordList.size() ;i++){
+             wordList.add(ArticleWordList.get(i));
+        }
 
+        /*******************Setup Data******************/
+
+        /*******************Setup Data ******************/
         System.out.println("*******************Setup Data main: ******************");
         System.out.println(dataList.size());
 
-        /**social**/
+        /**TODO: social : data**/
         for (int i = 0; i < dataList.size(); i++) {
             //String row = "";
 
@@ -219,9 +235,16 @@ public class TrainServiceImpl {
 
          /*******************Run A.I Models******************/
 
+
+
+        long duration = 0;// milliseconds
         try {
-            TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
-            trainFindTrendsArticlesLR(findTrendsArticlesRequest);
+
+            long  startTime = System.currentTimeMillis();
+
+            //TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
+            //trainFindTrendsArticlesLR(findTrendsArticlesRequest);
+
 
             TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
@@ -232,13 +255,177 @@ public class TrainServiceImpl {
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
+
+
+            long  endTime = System.currentTimeMillis();
+            duration = endTime - startTime;
         } catch (IOException e) {
             throw new TrainingModelException("Failed logging model file");
         }
 
 
+        return new TrainUserModelResponse(duration);
+    }
 
-        return new TrainModelResponse();
+
+    /**
+     * This method used to train the overall default app models.
+     *
+     *
+     * @throws AnalyzerException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public void trainApplicationModel() throws AnalyzerException {
+
+        ArrayList<ParsedData> dataList = new ArrayList<>();// repos.getParsedDataList();
+
+        //File file = new File(classLoader.getResource("fileTest.txt").getFile());
+
+        /*File resource = new ClassPathResource("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV").getFile();
+
+        FileResourcesUtils app = new FileResourcesUtils();
+
+        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+
+        ;*/
+
+        //.getResourceAsStream("TData.CSV");
+        //InputStream is = classloader.getResource("TData.CSV").
+
+        InputStream is = this.getClass().getResourceAsStream("TData.CSV");
+        File tData = null;
+
+        /*if(is == null){
+            tData = new File(this.getClass().getResource("TData.CSV").getFile());
+            if(tData.exists() == false){
+                ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+                tData = new File(classloader.getResource("TData.CSV").getFile());
+            }
+        }*/
+
+
+        BufferedReader reader = null;
+        String line = "";
+        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+
+        try{
+            /*if(is != null){
+                reader = new BufferedReader(new InputStreamReader(is));
+            }
+            else{
+                reader = new BufferedReader(new FileReader(tData));
+            }*/
+
+            reader = new BufferedReader(new FileReader(fileUrl));
+            //System.out.println("*******************CHECK THIS HERE*****************");
+
+            line = reader.readLine();
+            String text = "";
+            int maxCounter = 0;
+            boolean foundComplete = true;
+            int count = 1;
+            while(( (line = reader.readLine()) != null) ){
+                System.out.println(line);
+                String[] row = line.split("\\|");
+                if(row != null)
+                    maxCounter = maxCounter + row.length-1; //delimiter counter
+
+                ParsedData newData = new ParsedData();
+
+                if((maxCounter == 4) && (foundComplete == true)){
+                    maxCounter = 0;
+                    text = "";
+                    foundComplete = true;
+
+                    newData.setTextMessage(row[1] );
+                    newData.setDate(row[2]);
+                    newData.setLocation(row[3]);
+                    newData.setLikes(Integer.parseInt(row[4]));
+                    dataList.add(newData);
+                    count = count +1;
+                }
+                else if((maxCounter == 4) && (foundComplete == false)){
+                    maxCounter = 0;
+                    text = "";
+                    foundComplete = true;
+
+                    newData.setTextMessage(text + row[0] );
+                    newData.setDate(row[1]);
+                    newData.setLocation(row[2]);
+                    newData.setLikes(Integer.parseInt(row[3]));
+                    dataList.add(newData);
+                    count = count +1;
+                }
+                else if(maxCounter < 4){
+                    text = text + line;
+                    foundComplete = false;
+                    continue;
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        /**************************************************************************************************************/
+
+
+        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
+
+        ArrayList<String> nlpTextSocial = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            nlpTextSocial.add(dataList.get(i).getTextMessage());
+        }
+
+        FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
+        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
+        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
+
+
+
+
+
+        /*******************Setup Data******************/
+        /**social**/
+        for (int i = 0; i < dataList.size(); i++) {
+            //String row = "";
+
+            String text = dataList.get(i).getTextMessage();
+            String location = dataList.get(i).getLocation();
+            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
+            String[] dateTime = date.split(" ");
+            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            String likes = String.valueOf(dataList.get(i).getLikes());
+
+            //Random rn = new Random();
+            //int mockLike = rn.nextInt(10000) + 1;*/
+
+            ArrayList<Object> rowOfParsed = new ArrayList<>();
+            rowOfParsed.add(text);
+            rowOfParsed.add(location);
+            rowOfParsed.add(formattedDate);
+            rowOfParsed.add(likes);
+            rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
+
+            parsedDataList.add(rowOfParsed);
+        }
+
+
+
+        /**************************************************************************************************************/
+
+        try {
+            TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+            TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+
+            TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
+            this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+
+            TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
+            TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+        } catch (IOException e) {
+            throw new TrainingModelException("Failed logging model file");
+        }
+
     }
 
 
@@ -1906,152 +2093,22 @@ public class TrainServiceImpl {
      */
 
 
-    public void TrainOverallModels() throws InvalidRequestException, IOException {
 
-        ArrayList<ParsedData> dataList = new ArrayList<>();// repos.getParsedDataList();
+    /**
+     * This method used to compare between models and select the best one among them.
+     * along with selecting the method registers that best model under the model name.
+     * @param request This is a request object which contains data required to compare and log models.
+     */
+    public RegisterBestModelResponse RegisterBestModel(RegisterBestModelRequest request){
 
-        //File file = new File(classLoader.getResource("fileTest.txt").getFile());
+        return new RegisterBestModelResponse();
+    }
 
-        /*File resource = new ClassPathResource("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV").getFile();
+    /**
+     * This method used to clean the registry by deleting unused/unsatisfying models.
+     *
+     */
+    public void CleanModelsRegistry(){
 
-        FileResourcesUtils app = new FileResourcesUtils();
-
-        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
-
-        ;*/
-
-        //.getResourceAsStream("TData.CSV");
-        //InputStream is = classloader.getResource("TData.CSV").
-
-        InputStream is = this.getClass().getResourceAsStream("TData.CSV");
-        File tData = null;
-
-        /*if(is == null){
-            tData = new File(this.getClass().getResource("TData.CSV").getFile());
-            if(tData.exists() == false){
-                ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-                tData = new File(classloader.getResource("TData.CSV").getFile());
-            }
-        }*/
-
-
-        BufferedReader reader = null;
-        String line = "";
-        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
-
-        try{
-            /*if(is != null){
-                reader = new BufferedReader(new InputStreamReader(is));
-            }
-            else{
-                reader = new BufferedReader(new FileReader(tData));
-            }*/
-
-            reader = new BufferedReader(new FileReader(fileUrl));
-            //System.out.println("*******************CHECK THIS HERE*****************");
-
-            line = reader.readLine();
-            String text = "";
-            int maxCounter = 0;
-            boolean foundComplete = true;
-            int count = 1;
-            while(( (line = reader.readLine()) != null) ){
-                System.out.println(line);
-                String[] row = line.split("\\|");
-                if(row != null)
-                    maxCounter = maxCounter + row.length-1; //delimiter counter
-
-                ParsedData newData = new ParsedData();
-
-                if((maxCounter == 4) && (foundComplete == true)){
-                    maxCounter = 0;
-                    text = "";
-                    foundComplete = true;
-
-                    newData.setTextMessage(row[1] );
-                    newData.setDate(row[2]);
-                    newData.setLocation(row[3]);
-                    newData.setLikes(Integer.parseInt(row[4]));
-                    dataList.add(newData);
-                    count = count +1;
-                }
-                else if((maxCounter == 4) && (foundComplete == false)){
-                    maxCounter = 0;
-                    text = "";
-                    foundComplete = true;
-
-                    newData.setTextMessage(text + row[0] );
-                    newData.setDate(row[1]);
-                    newData.setLocation(row[2]);
-                    newData.setLikes(Integer.parseInt(row[3]));
-                    dataList.add(newData);
-                    count = count +1;
-                }
-                else if(maxCounter < 4){
-                    text = text + line;
-                    foundComplete = false;
-                    continue;
-                }
-
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        /**************************************************************************************************************/
-
-
-        ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
-
-        ArrayList<String> nlpTextSocial = new ArrayList<>();
-        for (int i = 0; i < dataList.size(); i++) {
-            nlpTextSocial.add(dataList.get(i).getTextMessage());
-        }
-
-        FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
-        List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
-        ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
-
-
-
-
-
-        /*******************Setup Data******************/
-        /**social**/
-        for (int i = 0; i < dataList.size(); i++) {
-            //String row = "";
-
-            String text = dataList.get(i).getTextMessage();
-            String location = dataList.get(i).getLocation();
-            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
-            String[] dateTime = date.split(" ");
-            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
-            String likes = String.valueOf(dataList.get(i).getLikes());
-
-            //Random rn = new Random();
-            //int mockLike = rn.nextInt(10000) + 1;*/
-
-            ArrayList<Object> rowOfParsed = new ArrayList<>();
-            rowOfParsed.add(text);
-            rowOfParsed.add(location);
-            rowOfParsed.add(formattedDate);
-            rowOfParsed.add(likes);
-            rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
-
-            parsedDataList.add(rowOfParsed);
-        }
-
-
-
-        /**************************************************************************************************************/
-
-        TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
-        TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
-
-        TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
-        this.trainFindTrendsDecisionTree(findTrendsDTRequest);
-
-        TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
-        TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
     }
 }
