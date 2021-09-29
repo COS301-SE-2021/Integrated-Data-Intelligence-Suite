@@ -6,6 +6,10 @@ public class Report {
     public String TrendSummary = "";
     public ArrayList<ArrayList> TrendData;
 
+    public String AnomalySummary = "";
+    public ArrayList<ArrayList> AnomalyData;
+
+
     Report(){
 
     }
