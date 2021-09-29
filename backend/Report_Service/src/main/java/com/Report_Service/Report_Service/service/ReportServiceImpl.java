@@ -50,4 +50,12 @@ public class ReportServiceImpl {
 
         return new GetTextualAnalysisDataResponse(null,null);
     }
+
+    public GenerateReportPDFResponse generateReportPDF(GenerateReportPDFRequest request) throws InvalidRequestException {
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+
+        return new GenerateReportPDFResponse();
+    }
 }
