@@ -244,11 +244,9 @@ public class ReportServiceImpl {
 
         Paragraph rTitle = new Paragraph();
         rTitle.add("Report made on ");
-        String date = "2021/09/29";
-        rTitle.add(date);
-        rTitle.add(" at ");
-        String time = "23:00";
-        rTitle.add(time);
+        rTitle.add(request.report.Date);
+        rTitle.add(" at ");;
+        rTitle.add(request.report.time);
 
         document.add(rTitle);
         document.add(EmptyLine);
@@ -291,9 +289,17 @@ public class ReportServiceImpl {
         table.addCell(header);
 
 
-        for (int i = 0; i < 12; i++) {
-            table.addCell("test");
+        ArrayList<ArrayList> trendTable= request.report.TrendData;
+
+        for (ArrayList t: trendTable) {
+            for (int i = 0; i < t.size(); i++) {
+                table.addCell(t.get(i).toString());
+            }
         }
+
+        /*for (int i = 0; i < 12; i++) {
+            table.addCell("test");
+        }*/
 
 
         document.add(table);
@@ -304,7 +310,7 @@ public class ReportServiceImpl {
         document.add(EmptyLine);
 
         Paragraph Tsum = new Paragraph();
-        Tsum.add("This is a test summary");
+        Tsum.add(request.report.TrendSummary);
         document.add(Tsum);
         document.add(EmptyLine);
         document.add(EmptyLine);
@@ -321,8 +327,10 @@ public class ReportServiceImpl {
         header.setPhrase(new Phrase("Anomalies Detected"));
         aTable.addCell(header);
 
-        for (int i = 0; i < 3; i++) {
-            aTable.addCell("test");
+        ArrayList<ArrayList> anomalyTable= request.report.AnomalyData;
+
+        for (ArrayList t: anomalyTable) {
+            aTable.addCell(t.get(0).toString());
         }
 
         document.add(aTable);
@@ -333,14 +341,14 @@ public class ReportServiceImpl {
         document.add(EmptyLine);
 
         Paragraph Asum = new Paragraph();
-        Asum.add("This is a test summary");
+        Asum.add(request.report.AnomalySummary);
         document.add(Asum);
         document.add(EmptyLine);
         document.add(EmptyLine);
 
         /*************** Adding Textual Analysis **************/
         Paragraph Textitle= new Paragraph();
-        Textitle.add("Anomaly Analysis");
+        Textitle.add("Textual Analysis");
         document.add(Textitle);
         document.add(EmptyLine);
 
@@ -355,8 +363,16 @@ public class ReportServiceImpl {
         header.setPhrase(new Phrase("Dominance Percentage"));
         TexTable.addCell(header);
 
-        for (int i = 0; i < 4; i++) {
+        /* (int i = 0; i < 4; i++) {
             TexTable.addCell("test");
+        }*/
+
+        ArrayList<ArrayList> TexualTable= request.report.TextualAnalysisData;
+        for (ArrayList t: TexualTable) {
+            for (int i = 0; i < t.size(); i++) {
+                TexTable.addCell(t.get(i).toString());
+            }
+
         }
 
         document.add(TexTable);
@@ -367,16 +383,14 @@ public class ReportServiceImpl {
         document.add(EmptyLine);
 
         Paragraph Texsum = new Paragraph();
-        Texsum.add("This is a test summary");
+        Texsum.add(request.report.TextualAnalysisSummary);
         document.add(Texsum);
         document.add(EmptyLine);
         document.add(EmptyLine);
 
 
-
         document.close();
 
-        //new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
         byte[] output = byteArrayOutputStream.toByteArray();
 
         /*OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
