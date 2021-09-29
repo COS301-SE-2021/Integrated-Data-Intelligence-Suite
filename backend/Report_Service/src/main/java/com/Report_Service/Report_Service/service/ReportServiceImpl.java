@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -225,8 +225,122 @@ public class ReportServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Data list is null");
         }
+        ArrayList<ArrayList> dataList = request.getDataList();
+        ArrayList<String> wordList = new ArrayList<>();
+        for(int i=0; i < dataList.size(); i++ ) {
+            ArrayList<String> temp = dataList.get(i);
+            for(int j = 0; j < temp.size(); j++) {
+                wordList.add(temp.get(j));
+            }
+        }
 
-        return new GetTextualAnalysisDataResponse(null,null);
+        ArrayList<ArrayList> output = new ArrayList<>();
+        ArrayList<String> dominantWords = new ArrayList<>();
+
+
+        HashMap<String, Integer> wordMap = new HashMap<>();
+
+        //ArrayList<String> wordList = new ArrayList<>();
+        for (int i = 0; i < wordList.size(); i++) {
+            if (wordMap.containsKey(wordList.get(i)) == false) {
+                wordMap.put(wordList.get(i), 1);
+            } else {
+                wordMap.replace(wordList.get(i), wordMap.get(wordList.get(i)), wordMap.get(wordList.get(i)) + 1);//put(wordList.get(i), wordMap.get(wordList.get(i)) +1);
+            }
+        }
+
+        System.out.println("Investigate here");
+        System.out.println(wordMap);
+
+
+        // Sort the list by values
+        List<Map.Entry<String, Integer> > list = new LinkedList<Map.Entry<String, Integer> >(wordMap.entrySet());
+
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return o2.getValue().compareTo(o1.getValue()); //des
+            }
+        });
+
+
+        HashMap<String, Integer> finalHash = new LinkedHashMap<String, Integer>(); // put data from sorted list to hashmap
+        for (Map.Entry<String, Integer> values : list) {
+            finalHash.put(values.getKey(), values.getValue());
+        }
+
+        System.out.println("Investigate here 2");
+        System.out.println(finalHash);
+
+
+        //count word frequency
+        int totalCount = 0;
+        int sumCount = 0;
+
+
+
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            totalCount = totalCount + set.getValue();
+        }
+
+        System.out.println("TOTAL HERE");
+        System.out.println(totalCount);
+
+        if(totalCount ==0){
+            throw new InvalidRequestException("Number of cloud objects equals zero");
+        }
+
+
+        //output
+
+        for (Map.Entry<String, Integer> set : finalHash.entrySet()) {
+            ArrayList<Object> row = new ArrayList<>();
+            System.out.println(set.getKey() + " : " + set.getValue() );
+
+            sumCount = sumCount + set.getValue();
+
+            System.out.println("Sum : " + sumCount);
+
+
+            //if((((float)sumCount /totalCount)*100) < 65.0f) {
+            if( (((float) set.getValue())/totalCount*100) > 1.5f){
+
+                row.add(set.getKey());
+                double percent = ((double) set.getValue())/totalCount*100.00;
+                percent = (double) Math.round(percent *100) /100;
+
+                row.add(percent);
+
+                System.out.println("CLOUD VALUES HERE");
+                System.out.println(set.getKey());
+
+                dominantWords.add(set.getKey());
+
+                //System.out.println(out.words);
+                output.add(row);
+            }
+            else{
+
+                row.add("{OTHERS}");
+                //DecimalFormat df = new DecimalFormat("#.##");
+                double percent = ((double)(totalCount - (sumCount+ set.getValue())))/ totalCount *100.00;
+                percent = (double) Math.round(percent *100) /100;
+                row.add(percent);
+                System.out.println("CLOUD VALUES HERE - Rest");
+                System.out.println(percent);
+
+                //System.out.println(out.words);
+                output.add(row);
+
+                break;
+            }
+        }
+
+        String summary = "a totol of " + String.valueOf(dominantWords.size()) + " had high dominance in the collected data";
+
+        return new GetTextualAnalysisDataResponse(output,summary);
     }
 
     public GenerateReportPDFResponse generateReportPDF(GenerateReportPDFRequest request) throws InvalidRequestException, DocumentException, IOException {
