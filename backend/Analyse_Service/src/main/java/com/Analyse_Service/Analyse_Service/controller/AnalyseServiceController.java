@@ -1,9 +1,11 @@
 package com.Analyse_Service.Analyse_Service.controller;
 
+import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
+import com.Analyse_Service.Analyse_Service.service.TrainServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,10 @@ import java.io.IOException;
 public class AnalyseServiceController {
 
     @Autowired
-    private AnalyseServiceImpl service;
+    private AnalyseServiceImpl analyseService;
+
+    @Autowired
+    private TrainServiceImpl trainService;
 
     /**
      * This method is used to facilitate communication to the Analyse-Service.
@@ -24,7 +29,7 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/analyzeData")
-    public @ResponseBody AnalyseDataResponse analyzeData(@RequestBody AnalyseDataRequest request) throws Exception{
+    public @ResponseBody AnalyseDataResponse analyzeData(@RequestBody AnalyseDataRequest request) throws AnalyzerException {
         //AnalyseDataRequest request = getBody();
 
         if (request == null) {
@@ -35,7 +40,28 @@ public class AnalyseServiceController {
             throw new InvalidRequestException("DataList is null");
         }
 
-        return service.analyzeData(request);
+        return analyseService.analyzeData(request);
+    }
+
+
+    /**
+     * This method is used to facilitate communication to the Train-Service.
+     * @param request This is a request entity which contains a TrainModelRequest object.
+     * @return TrainModelResponse This object contains trained data which has been processed by Train-Service.
+     * @throws Exception This is thrown if exception caught in Train-Service.
+     */
+    @PostMapping("/trainModel")
+    public @ResponseBody TrainModelResponse trainModel(@RequestBody TrainModelRequest request) throws AnalyzerException {
+        //AnalyseDataRequest request = getBody();
+        if (request == null) {
+            throw new InvalidRequestException("AnalyzeDataRequest Object is null");
+        }
+
+        if (request.getModelName() == null){
+            throw new InvalidRequestException("Model Name is null");
+        }
+
+        return trainService.trainModel(request);
     }
 
 
@@ -43,13 +69,17 @@ public class AnalyseServiceController {
     public boolean trainData() {
         //AnalyseDataRequest request = getBody();
         try {
-            service.TrainOverallModels();
+            analyseService.TrainOverallModels();
             return true;
         } catch (InvalidRequestException | IOException e){
             e.printStackTrace();
             return false;
         }
     }
+
+
+
+
     /*@PostMapping("/analyzeData")
     public AnalyseDataResponse analyzeData(RequestEntity<AnalyseDataRequest> requestEntity) throws Exception{
         AnalyseDataRequest request = requestEntity.getBody();
