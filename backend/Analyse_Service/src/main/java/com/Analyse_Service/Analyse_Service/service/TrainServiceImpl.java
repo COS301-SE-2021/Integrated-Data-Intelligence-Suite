@@ -1801,7 +1801,7 @@ public class TrainServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
-
+        //must fix this
         /*******************SETUP SPARK*****************/
 
         SparkSession sparkAnomalies = SparkSession
