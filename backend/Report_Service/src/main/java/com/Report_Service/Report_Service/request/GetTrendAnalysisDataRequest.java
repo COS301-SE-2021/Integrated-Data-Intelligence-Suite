@@ -2,10 +2,10 @@ package com.Report_Service.Report_Service.request;
 
 import java.util.ArrayList;
 
-public class GetTreadAnalysisDataRequest {
+public class GetTrendAnalysisDataRequest {
     public ArrayList<ArrayList> dataList;
 
-    public GetTreadAnalysisDataRequest(ArrayList<ArrayList> dataList){
+    public GetTrendAnalysisDataRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;
     }
 

@@ -2,11 +2,11 @@ package com.Report_Service.Report_Service.response;
 
 import java.util.ArrayList;
 
-public class GetTreansAnalysisDataResponse {
+public class GetTrendAnalysisDataResponse {
     public ArrayList<ArrayList> dataList;
     String summary;
 
-    public GetTreansAnalysisDataResponse(ArrayList<ArrayList> dataList,String summary){
+    public GetTrendAnalysisDataResponse(ArrayList<ArrayList> dataList, String summary){
         this.summary = summary;
         this.dataList = dataList;
     }
