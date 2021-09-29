@@ -23,6 +23,11 @@ public class ReportServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Data list is null");
+        }
+
+
 
         return new GetTrendAnalysisDataResponse(null,null);
     }
@@ -30,6 +35,12 @@ public class ReportServiceImpl {
     public GetPatternAndRelationshipDataResponse getPatternAndRelationshipData(GetPatternAndRelationshipDataRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataListP() == null){
+            throw new InvalidRequestException("Data list P is null");
+        }
+        if (request.getDataListR() == null){
+            throw new InvalidRequestException("Data list R is null");
         }
 
         return new GetPatternAndRelationshipDataResponse(null,null);
@@ -39,6 +50,9 @@ public class ReportServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Data list is null");
+        }
 
         return new GetAnomalyDataResponse(null,null);
     }
@@ -46,6 +60,9 @@ public class ReportServiceImpl {
     public GetTextualAnalysisDataResponse getTextualAnalysisData(GetTextualAnalysisDataRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getDataList() == null){
+            throw new InvalidRequestException("Data list is null");
         }
 
         return new GetTextualAnalysisDataResponse(null,null);
