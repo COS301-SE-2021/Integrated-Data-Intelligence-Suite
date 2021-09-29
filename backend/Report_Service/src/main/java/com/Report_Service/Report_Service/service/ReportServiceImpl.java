@@ -4,12 +4,20 @@ import com.Report_Service.Report_Service.exception.InvalidRequestException;
 import com.Report_Service.Report_Service.exception.ReporterException;
 import com.Report_Service.Report_Service.request.*;
 import com.Report_Service.Report_Service.response.*;
+import com.itextpdf.text.*;
+
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.itextpdf.text.pdf.PdfWriter;
+
 
 @Service
 public class ReportServiceImpl {
@@ -221,12 +229,161 @@ public class ReportServiceImpl {
         return new GetTextualAnalysisDataResponse(null,null);
     }
 
-    public GenerateReportPDFResponse generateReportPDF(GenerateReportPDFRequest request) throws InvalidRequestException {
+    public GenerateReportPDFResponse generateReportPDF(GenerateReportPDFRequest request) throws InvalidRequestException, DocumentException, IOException {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
+        Document document = new Document();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, byteArrayOutputStream);
 
-        return new GenerateReportPDFResponse();
+        document.open();
+        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Chunk chunk = new Chunk("Hello World", font);
+        Paragraph EmptyLine = new Paragraph(" ");
+
+        Paragraph rTitle = new Paragraph();
+        rTitle.add("Report made on ");
+        String date = "2021/09/29";
+        rTitle.add(date);
+        rTitle.add(" at ");
+        String time = "23:00";
+        rTitle.add(time);
+
+        document.add(rTitle);
+        document.add(EmptyLine);
+
+        /*************** Adding Trend Analysis **************/
+        Paragraph Ttitle= new Paragraph();
+        Ttitle.add("Trend Analysis");
+        document.add(Ttitle);
+        document.add(EmptyLine);
+
+        PdfPTable table = new PdfPTable(6);
+        PdfPCell header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Entity"));
+        table.addCell(header);
+
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Entity Type"));
+        table.addCell(header);
+
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Average Interaction"));
+        table.addCell(header);
+
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Frequency"));
+        table.addCell(header);
+
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Overall Sentiment"));
+        table.addCell(header);
+
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Most Prominent Location"));
+        table.addCell(header);
+
+
+        for (int i = 0; i < 12; i++) {
+            table.addCell("test");
+        }
+
+
+        document.add(table);
+        document.add(EmptyLine);
+
+        Paragraph TsumTitle = new Paragraph("Summary");
+        document.add(TsumTitle);
+        document.add(EmptyLine);
+
+        Paragraph Tsum = new Paragraph();
+        Tsum.add("This is a test summary");
+        document.add(Tsum);
+        document.add(EmptyLine);
+        document.add(EmptyLine);
+
+        /*************** Adding Anomaly Analysis **************/
+        Paragraph Atitle= new Paragraph();
+        Atitle.add("Anomaly Analysis");
+        document.add(Atitle);
+        document.add(EmptyLine);
+
+        PdfPTable aTable = new PdfPTable(1);
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Anomalies Detected"));
+        aTable.addCell(header);
+
+        for (int i = 0; i < 3; i++) {
+            aTable.addCell("test");
+        }
+
+        document.add(aTable);
+        document.add(EmptyLine);
+
+        Paragraph AsumTitle = new Paragraph("Summary");
+        document.add(AsumTitle);
+        document.add(EmptyLine);
+
+        Paragraph Asum = new Paragraph();
+        Asum.add("This is a test summary");
+        document.add(Asum);
+        document.add(EmptyLine);
+        document.add(EmptyLine);
+
+        /*************** Adding Textual Analysis **************/
+        Paragraph Textitle= new Paragraph();
+        Textitle.add("Anomaly Analysis");
+        document.add(Textitle);
+        document.add(EmptyLine);
+
+        PdfPTable TexTable = new PdfPTable(2);
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Word"));
+        TexTable.addCell(header);
+
+        header = new PdfPCell();
+        header.setBorderWidth(2);
+        header.setPhrase(new Phrase("Dominance Percentage"));
+        TexTable.addCell(header);
+
+        for (int i = 0; i < 4; i++) {
+            TexTable.addCell("test");
+        }
+
+        document.add(TexTable);
+        document.add(EmptyLine);
+
+        Paragraph TexsumTitle = new Paragraph("Summary");
+        document.add(TexsumTitle);
+        document.add(EmptyLine);
+
+        Paragraph Texsum = new Paragraph();
+        Texsum.add("This is a test summary");
+        document.add(Texsum);
+        document.add(EmptyLine);
+        document.add(EmptyLine);
+
+
+
+        document.close();
+
+        //new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
+        byte[] output = byteArrayOutputStream.toByteArray();
+
+        /*OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
+        out.write(output);
+        out.close();*/
+
+        return new GenerateReportPDFResponse(output);
     }
 
     private String getLocation(double latitude , double longitude){
