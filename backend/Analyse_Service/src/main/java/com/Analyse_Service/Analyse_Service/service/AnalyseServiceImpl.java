@@ -86,7 +86,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public AnalyseDataResponse analyzeData(AnalyseDataRequest request)
-            throws InvalidRequestException, IOException {
+            throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
@@ -274,6 +274,11 @@ public class AnalyseServiceImpl {
                 findAnomaliesResponse.getPattenList(),
                 wordList);
     }
+
+
+
+
+
 
 
     /**
