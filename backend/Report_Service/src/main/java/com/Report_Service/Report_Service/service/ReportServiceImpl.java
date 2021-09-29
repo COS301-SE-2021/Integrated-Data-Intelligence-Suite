@@ -74,7 +74,46 @@ public class ReportServiceImpl {
             throw new InvalidRequestException("CreateTimelineGraphRequest Object is null");
         }
 
-        return new GetMostProminentLocationResponse("null");
+
+        ArrayList<String> province = new ArrayList<>();
+        ArrayList<Integer> provfrq  = new ArrayList<>();
+        ArrayList<String> locs = request.getDataList();
+            //System.out.println(locs.toString());
+
+            for (int j = 0; j < locs.size(); j++) {
+
+
+                String [] latlon = locs.get(j).toString().split(",");
+                String prov= getLocation(Double.parseDouble(latlon[0]),Double.parseDouble(latlon[1]));
+                if (prov.equals("")){
+                    prov = "Northern Cape";
+                }
+                if (province.contains(prov)){
+                    int frq = provfrq.get(province.indexOf(prov)).intValue();
+                    frq++;
+                    provfrq.set(province.indexOf(prov),frq);
+                }else{
+                    province.add(prov);
+                    provfrq.add(1);
+                }
+
+
+            }
+
+        String outputs = province.get(0);
+        int temp = provfrq.get(0);
+        int k = 0;
+        for (int o : provfrq) {
+            //System.out.println(o);
+            if (o > temp){
+                outputs = province.get(k);
+                temp = o;
+            }
+            k++;
+        }
+
+
+        return new GetMostProminentLocationResponse(outputs);
     }
 
     public GetMostProminentSentimentResponse getMostProminentSentiment(GetMostProminentSentimentRequest request) throws InvalidRequestException {
