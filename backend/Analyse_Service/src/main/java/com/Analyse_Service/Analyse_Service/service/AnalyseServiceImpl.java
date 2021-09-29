@@ -1,15 +1,12 @@
 package com.Analyse_Service.Analyse_Service.service;
 
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedArticle;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
+import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
-
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.*;
 
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.annotators.TokenizerModel;
@@ -22,43 +19,20 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
-import org.apache.spark.ml.classification.*;
-import org.apache.spark.ml.clustering.KMeans;
-import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator;
-import org.apache.spark.ml.evaluation.ClusteringEvaluator;
-import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
-import org.apache.spark.ml.evaluation.RegressionEvaluator;
-import org.apache.spark.ml.feature.*;
 //import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
-import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.tuning.*;
-import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics;
-import org.apache.spark.mllib.evaluation.MulticlassMetrics;
-import org.apache.spark.mllib.evaluation.RegressionMetrics;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
-import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
-import org.mlflow.tracking.MlflowContext;
-import org.mlflow.api.proto.Service.Experiment;
-import org.mlflow.api.proto.Service.RunInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
@@ -86,7 +60,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public AnalyseDataResponse analyzeData(AnalyseDataRequest request)
-            throws InvalidRequestException {
+            throws AnalyserException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeDataRequest Object is null");
         }
@@ -282,7 +256,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest request)
-            throws InvalidRequestException {
+            throws AnalyserException {
         if (request == null) {
             throw new InvalidRequestException("AnalyzeUserDataRequest Object is null");
         }
@@ -1089,7 +1063,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public FindTrendsResponse findTrends(FindTrendsRequest request)
-            throws InvalidRequestException {
+            throws AnalyserException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -1246,32 +1220,40 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
 
-        /***********************SETUP MLFLOW - LOAD ***********************/
-
+        /***********************MLFLOW - LOAD ***********************/
+        TrainValidationSplitModel lrModel;
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("LogisticRegression_Experiment");
+        try {
+            if(request.getModelId() != null) {
+                String[] splitModelId = request.getModelId().split(";"); //name, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[1];
+
+                File artifact = client.downloadArtifacts(modelID, modelName);
+                lrModel = TrainValidationSplitModel.load(artifact.getPath());
+            }
+            else{
+                BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
+
+                String findTrendModelId = reader.readLine();
+
+                String[] splitModelId = findTrendModelId.split(";"); //name, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[1];
+
+                File artifact = client.downloadArtifacts(modelID, modelName);
+                lrModel = TrainValidationSplitModel.load(artifact.getPath());
+
+                //while (((line = reader.readLine()) != null)) {}
+            }
+        } catch (Exception e){
+            throw new AnalysingModelException("Failed to find analysis model file");
         }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
 
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+        /******************* READ MODEL*****************/
 
-        File artifact = client.downloadArtifacts("runid");
-
-
-
-        run.endRun();
-
-        /*******************LOAD - READ MODEL*****************/
-
-        TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+        //TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF);
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
@@ -1340,7 +1322,7 @@ public class AnalyseServiceImpl {
 
     /**
      * This method used to find a predictions(s) within a given data
-     * A prediction is a prediction...
+     * A prediction is a overall insight. use neural network
      * @param request This is a request object which contains data required to be analysed.
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -1388,7 +1370,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request)
-            throws InvalidRequestException {
+            throws AnalyserException {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
@@ -1533,8 +1515,32 @@ public class AnalyseServiceImpl {
 
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
+        /***********************MLFLOW - LOAD ***********************/
+        PipelineModel kmModel;
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        try {
+
+            BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
+
+            String findTrendModelId = reader.readLine();
+            findTrendModelId = reader.readLine(); // 2nd line
+
+            String[] splitModelId = findTrendModelId.split(";"); //name, id
+            String modelName = splitModelId[0];
+            String modelID = splitModelId[1];
+
+            File artifact = client.downloadArtifacts(modelID, modelName);
+            kmModel = PipelineModel.load(artifact.getPath());
+
+            //while (((line = reader.readLine()) != null)) {}
+
+        } catch (Exception e){
+            throw new AnalysingModelException("Failed to find analysis model file");
+        }
+
         /*******************LOAD & READ MODEL*****************/
-        PipelineModel kmModel = PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        // PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
@@ -1556,37 +1562,6 @@ public class AnalyseServiceImpl {
         sparkAnomalies.stop();
 
         return new FindAnomaliesResponse(results);
-    }
-
-
-    /*******************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     * *****************************************************************************************************************
-     */
-
-    /**
-     * This method used to fetch the parsed data from the database
-     * @param request This is a request object which contains data required to be fetched.
-     * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request)
-            throws InvalidRequestException {
-        if (request == null) {
-            throw new InvalidRequestException("FetchParsedDataRequest Object is null");
-        }
-        if (request.getDataType() == null){
-            throw new InvalidRequestException("Datatype is null");
-        }
-        if(request.getDataType() != "ParsedData") {
-            throw new InvalidRequestException("Wrong Datatype is used");
-        }
-
-
-        ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
-        return new FetchParsedDataResponse(list );
     }
 
 
