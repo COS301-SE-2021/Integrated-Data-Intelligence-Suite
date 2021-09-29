@@ -9,6 +9,9 @@ public class Report {
     public String AnomalySummary = "";
     public ArrayList<ArrayList> AnomalyData;
 
+    public String PatternandRelationshipSummary = "";
+    public ArrayList<ArrayList> PatternandRelationshipData;
+
     public String TextualAnalysisSummary = "";
     public ArrayList<ArrayList> TextualAnalysisData;
 
