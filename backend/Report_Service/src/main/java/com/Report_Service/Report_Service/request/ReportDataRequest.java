@@ -22,4 +22,24 @@ public class ReportDataRequest {
         this.wordlist = wordlist;
 
     }
+
+    public ArrayList<String> getAnomalylist() {
+        return Anomalylist;
+    }
+
+    public ArrayList<ArrayList> getWordlist() {
+        return wordlist;
+    }
+
+    public ArrayList<ArrayList> getTrendlist() {
+        return trendlist;
+    }
+
+    public ArrayList<ArrayList> getRealationshiplist() {
+        return Realationshiplist;
+    }
+
+    public ArrayList<ArrayList> getPatternlist() {
+        return Patternlist;
+    }
 }
