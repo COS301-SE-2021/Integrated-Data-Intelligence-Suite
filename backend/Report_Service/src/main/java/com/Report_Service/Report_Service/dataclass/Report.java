@@ -1,7 +1,10 @@
 package com.Report_Service.Report_Service.dataclass;
 
+import java.util.ArrayList;
+
 public class Report {
-    private String text = "";
+    public String TrendSummary = "";
+    public ArrayList<ArrayList> TrendData;
 
     Report(){
 
