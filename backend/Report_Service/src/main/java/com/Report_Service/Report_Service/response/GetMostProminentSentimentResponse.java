@@ -9,7 +9,7 @@ public class GetMostProminentSentimentResponse {
         this.sentiment = sentiment;
     }
 
-    public String getWordGraphArray(){
+    public String getSentiment(){
         return sentiment;
     }
 }
