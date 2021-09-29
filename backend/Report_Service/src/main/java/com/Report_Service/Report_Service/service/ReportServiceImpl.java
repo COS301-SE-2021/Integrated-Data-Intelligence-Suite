@@ -6,7 +6,10 @@ import com.Report_Service.Report_Service.request.*;
 import com.Report_Service.Report_Service.response.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Service
 public class ReportServiceImpl {
@@ -189,8 +192,22 @@ public class ReportServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("Data list is null");
         }
+        ArrayList<String> reqData = request.getDataList();
+        ArrayList<ArrayList> out= new ArrayList<>();
+        for (int i = 1; i < reqData.size(); i++) {
+            String anonmaly = reqData.get(i);
+            String Date = "";
 
-        return new GetAnomalyDataResponse(null,null);
+            ArrayList<Object> row= new ArrayList<>();
+            row.add(anonmaly);
+            row.add(Date);
+
+            out.add(row);
+        }
+        int numAnomalies = reqData.size();
+        String summary = "The Integrated Data intelligence suite found "+ String.valueOf(numAnomalies) + " Anomalies in the data collected by the search";
+
+        return new GetAnomalyDataResponse(out,summary);
     }
 
     public GetTextualAnalysisDataResponse getTextualAnalysisData(GetTextualAnalysisDataRequest request) throws InvalidRequestException {
