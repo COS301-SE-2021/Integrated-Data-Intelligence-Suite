@@ -39,11 +39,11 @@ public class ReportServiceImpl {
             String Frequency = l.get(6).toString();
 
 
-            //GetMostProminentSentimentRequest SentReq = new GetMostProminentSentimentRequest((ArrayList<ArrayList>) l.get(4));
-            //GetMostProminentSentimentResponse SentResp = this.getMostProminentSentiment(SentReq);
-            String mostProminentSentiment = "";//SentResp.getSentiment();
+            GetMostProminentSentimentRequest SentReq = new GetMostProminentSentimentRequest((ArrayList<String>) l.get(4));
+            GetMostProminentSentimentResponse SentResp = this.getMostProminentSentiment(SentReq);
+            String mostProminentSentiment = SentResp.getSentiment();
 
-            GetMostProminentLocationRequest LocReq = new GetMostProminentLocationRequest((ArrayList<String>) l.get(4));
+            GetMostProminentLocationRequest LocReq = new GetMostProminentLocationRequest((ArrayList<String>) l.get(1));
             GetMostProminentLocationResponse LocResp = this.getMostProminentLocation(LocReq);
             String mostProminentLocation = LocResp.getLocation();
 
@@ -53,7 +53,7 @@ public class ReportServiceImpl {
             row.add(AverageInteraction);
             row.add(Frequency);
             row.add(mostProminentSentiment);
-            row.add(mostProminentSentiment);
+            row.add(mostProminentLocation);
 
 
             System.out.println(row);
@@ -85,14 +85,11 @@ public class ReportServiceImpl {
             throw new InvalidRequestException("Arraylist is null");
         }
         String outputs = "";
-        ArrayList<ArrayList> reqData = request.getDataList();
+        ArrayList<String> sents = request.getDataList();
 
         int k = 0;
         ArrayList<String> listSent = new ArrayList<>();
         ArrayList<ArrayList> out = new ArrayList<>();
-        for (int i = 0; i < reqData.size(); i++) {
-            ArrayList<String> sents = (ArrayList<String>) reqData.get(i).get(4);
-            //System.out.println(locs.toString());
 
             for (int j = 0; j < sents.size(); j++) {
                 if (listSent.isEmpty()){
@@ -117,7 +114,7 @@ public class ReportServiceImpl {
                     }
                 }
             }
-        }
+
 
 
         outputs = out.get(0).get(0).toString();
@@ -129,7 +126,7 @@ public class ReportServiceImpl {
                 temp = Integer.parseInt(o.get(1).toString());
             }
         }
-        return new GetMostProminentSentimentResponse("outputs");
+        return new GetMostProminentSentimentResponse(outputs);
     }
 
     public GetPatternAndRelationshipDataResponse getPatternAndRelationshipData(GetPatternAndRelationshipDataRequest request) throws InvalidRequestException {
