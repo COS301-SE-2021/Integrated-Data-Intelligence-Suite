@@ -7,7 +7,6 @@ import com.Analyse_Service.Analyse_Service.response.*;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import com.Analyse_Service.Analyse_Service.service.TrainServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -51,7 +50,8 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Train-Service.
      */
     @PostMapping("/trainModel")
-    public @ResponseBody TrainModelResponse trainModel(@RequestBody TrainModelRequest request) throws AnalyzerException {
+    public @ResponseBody
+    TrainUserModelResponse trainModel(@RequestBody TrainUserModelRequest request) throws AnalyzerException {
         //AnalyseDataRequest request = getBody();
         if (request == null) {
             throw new InvalidRequestException("TrainModelRequest Object is null");
@@ -65,7 +65,7 @@ public class AnalyseServiceController {
             throw new InvalidRequestException("Model Name is null");
         }
 
-        return trainService.trainModel(request);
+        return trainService.trainUserModel(request);
     }
 
 
@@ -73,9 +73,9 @@ public class AnalyseServiceController {
     public boolean trainData() {
         //AnalyseDataRequest request = getBody();
         try {
-            trainService.TrainOverallModels();
+            trainService.trainApplicationModel();
             return true;
-        } catch (InvalidRequestException | IOException e){
+        } catch (AnalyzerException e){
             e.printStackTrace();
             return false;
         }
