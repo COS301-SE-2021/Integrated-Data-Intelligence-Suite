@@ -3,7 +3,6 @@ package com.Analyse_Service.Analyse_Service.service;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
-import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
@@ -19,9 +18,6 @@ import com.johnsnowlabs.nlp.annotators.sentence_detector_dl.SentenceDetectorDLMo
 import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
@@ -89,14 +85,33 @@ public class TrainServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList of requested parsedData is null");
         }
-        else{
-            for(int i =0; i<request.getDataList().size(); i++) {
-                if (request.getDataList().get(i) == null) {
-                    throw new InvalidRequestException("DataList inside data of requested parsedData is null");
-                }
+        for(int i =0; i<request.getDataList().size(); i++) {
+            if (request.getDataList().get(i) == null) {
+                throw new InvalidRequestException("DataList inside data of requested parsedData is null");
             }
         }
+        if(request.getDataList().size() >0){
+            ParsedData testParsedData = request.getDataList().get(0);
 
+            if(testParsedData.getTextMessage() != null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Text field null");
+            }
+            if(testParsedData.getLocation() != null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Location field null");
+            }
+            if(testParsedData.getDate() != null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Date field null");
+            }
+            if(testParsedData.getLikes() != null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Likes field null");
+            }
+            if(testParsedData.getTrend() != null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Trend field null");
+            }
+        }
+        else{
+            throw new InvalidRequestException("DataList inside data of requested parsedData is empty");
+        }
 
         /*******************USE NLP******************/
 
@@ -169,6 +184,8 @@ public class TrainServiceImpl {
             String[] dateTime = date.split(" ");
             String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
             String likes = String.valueOf(dataList.get(i).getLikes());
+            String trend = String.valueOf(dataList.get(i).getTrend());
+
 
             //Random rn = new Random();
             //int mockLike = rn.nextInt(10000) + 1;*/
@@ -179,6 +196,7 @@ public class TrainServiceImpl {
             rowOfParsed.add(formattedDate);
             rowOfParsed.add(likes);
             rowOfParsed.add(findNlpPropertiesResponseSocial.get(i));
+            rowOfParsed.add(trend);
 
             parsedDataList.add(rowOfParsed);
         }
@@ -255,12 +273,20 @@ public class TrainServiceImpl {
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
             TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList, request.getModelName());
-            this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+            TrainFindTrendsDTResponse findTrendsDTResponse =   this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList, request.getModelName());
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
+            ArrayList trainedModel = new ArrayList();
+            trainedModel.add(findTrendsResponse.getTrainedModel());
+            trainedModel.add(findTrendsDTResponse.getTrainedModel());
+            trainedModel.add(findAnomaliesResponse.getTrainedModel());
+
+
+            RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel);
+            RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
 
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
@@ -744,7 +770,8 @@ public class TrainServiceImpl {
             ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
 
             for (int j = 0; j < namedEntities.size(); j++) {
-                //row.add(isTrending)
+
+
                 row = new ArrayList<>();
                 row.add(namedEntities.get(j).get(0).toString()); //entity-name
                 row.add(namedEntities.get(j).get(1).toString()); //entity-type
@@ -766,13 +793,47 @@ public class TrainServiceImpl {
                 row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
                 row.add(sentiment);//sentiment
 
+                if(request.getModelName() != null) {
+                    row.add(Integer.parseInt(requestData.get(i).get(5).toString())); //isTrending
+                }
+
                 Row trendRow = RowFactory.create(row.toArray());
                 trendsData.add(trendRow);
             }
         }
 
         /*******************SETUP DATAFRAME*****************/
+        Dataset<Row> itemsDF;
 
+        if(request.getModelName() == null) {
+            StructType inputSchema = new StructType(
+                    new StructField[]{
+                            new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                    });
+
+            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+        }else {
+
+            StructType inputSchema = new StructType(
+                    new StructField[]{
+                            new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                    });
+
+            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+        }
 
 
         StructType schema = new StructType(
@@ -786,32 +847,20 @@ public class TrainServiceImpl {
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
                 });
 
-        StructType schema2 = new StructType(
-                new StructField[]{
-                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                });
-
-
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
-
 
         System.out.println("trends dataframes");
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
-
+        List<Row> namedEntities;
+        if(request.getModelName() == null) {
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+        }else{
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count().collectAsList(); //frequency
+        }
         List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        averageLikes.get(1); //average likes
-
         List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
-        rate.get(1); //rate ???
+
 
         //training set
         int minSize = 0;
@@ -826,7 +875,7 @@ public class TrainServiceImpl {
         }
 
 
-        System.out.println("NameEntity : " + namedEntities.size());
+        /*System.out.println("NameEntity : " + namedEntities.size());
         for (int i = 0; i < namedEntities.size(); i++) {
             System.out.println(namedEntities.get(i).toString());
         }
@@ -834,24 +883,38 @@ public class TrainServiceImpl {
         System.out.println("AverageLikes : " + averageLikes.size());
         for (int i = 0; i < averageLikes.size(); i++) {
             System.out.println(averageLikes.get(i).toString());
-        }
+        }*/
 
         List<Row> trainSet = new ArrayList<>();
         for (int i = 0; i < minSize; i++) {
-            double trending = 0.0;
-            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
-                trending = 1.0;
+            if(request.getModelName() == null) {
+                double trending = 0.0;
+                if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
+                    trending = 1.0;
+                }
+                Row trainRow = RowFactory.create(
+                        trending,
+                        namedEntities.get(i).get(0).toString(),
+                        namedEntities.get(i).get(1).toString(),
+                        Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                        rate.get(i).get(1).toString(),
+                        Double.parseDouble(averageLikes.get(i).get(1).toString())
+                );
+                trainSet.add(trainRow);
             }
-            Row trainRow = RowFactory.create(
-                    trending,
-                    namedEntities.get(i).get(0).toString(),
-                    namedEntities.get(i).get(1).toString(),
-                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
-                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
-                    rate.get(i).get(1).toString(),
-                    Double.parseDouble(averageLikes.get(i).get(1).toString())
-            );
-            trainSet.add(trainRow);
+            else{
+                Row trainRow = RowFactory.create(
+                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        namedEntities.get(i).get(0).toString(), //name
+                        namedEntities.get(i).get(1).toString(), //type
+                        Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
+                        Double.parseDouble(namedEntities.get(i).get(4).toString()), //freq
+                        rate.get(i).get(1).toString(),
+                        Double.parseDouble(averageLikes.get(i).get(1).toString())
+                );
+                trainSet.add(trainRow);
+            }
         }
 
         //split data
@@ -943,12 +1006,16 @@ public class TrainServiceImpl {
         /***********************SETUP MLFLOW - SAVE ***********************/
 
         /***setup***/
-        String modelName = "FindTrend";
 
-        if(request.getModelName() != null) {
+        String modelName;
+        if(request.getModelName() == null) {
+            modelName = "FindTrend";
+        }
+        else{
             modelName = request.getModelName();
         }
 
+        //client
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
         Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
@@ -1381,7 +1448,7 @@ public class TrainServiceImpl {
      * @return void
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public void trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request)
+    public TrainFindTrendsDTResponse trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request)
             throws InvalidRequestException, IOException {
 
         if (request == null) {
@@ -1702,10 +1769,10 @@ public class TrainServiceImpl {
         sparkTrends.stop();
         run.endRun();
 
-        /***********************SETUP MLFLOW - SAVE ***********************
+        /***********************SETUP MLFLOW - SAVE ***********************/
 
          ArrayList<ArrayList> results = new ArrayList<>();
-         return new TrainFindTrendsResponse(results);*/
+         return new TrainFindTrendsDTResponse(results);
     }
 
 
@@ -2064,21 +2131,21 @@ public class TrainServiceImpl {
      * This method used to compare between models and select the best one among them.
      * along with selecting the method registers that best model under the model name.
      * @param request This is a request object which contains data required to compare and log models.
-     * @return RegisterBestModelResponse This object contains data the selected best model
+     * @return RegisterUserBestModelResponse This object contains data the selected best model
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public RegisterBestModelResponse RegisterBestModel(RegisterBestModelRequest request)
+    public RegisterUserBestModelResponse registerUserBestModel(RegisterUserBestModelRequest request)
             throws InvalidRequestException{
         TrainedModel temp = new TrainedModel();
 
-        return new RegisterBestModelResponse(temp);
+        return new RegisterUserBestModelResponse(temp);
     }
 
     /**
      * This method used to clean the registry by deleting unused/unsatisfying models.
      *
      */
-    public void CleanModelsRegistry()
+    public void cleanModelsRegistry()
             throws AnalyserException {
         //todo: do something here
     }
