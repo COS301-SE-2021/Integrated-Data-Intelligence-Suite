@@ -1,8 +1,11 @@
+import React, { Component } from 'react';
 import { Menu, Layout } from 'antd';
 import {
-    BarChartOutlined, HomeOutlined, LaptopOutlined, SettingOutlined,
+    BarChartOutlined,
+    HomeOutlined,
+    LaptopOutlined,
+    SettingOutlined,
 } from '@ant-design/icons';
-import React, { Component } from 'react';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
 import { AiOutlineCloudUpload, AiOutlineHeart, AiOutlineHome } from 'react-icons/all';
 import UserInfoCard from '../UserInfoCard/UserInfoCard';
@@ -88,21 +91,21 @@ class SideBar extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item
-                            key="4"
-                            icon={<AiOutlineHeart/>}
-                            onClick={() => this.setActive('4')}
-                        >
-                            Credits
-                            <Link to="/credits"/>
-                        </Menu.Item>
-
-                        <Menu.Item
                             key="5"
                             icon={<AiOutlineCloudUpload/>}
                             onClick={() => this.setActive('5')}
                         >
                             Import
                             <Link to="/uploadData"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="4"
+                            icon={<AiOutlineHeart/>}
+                            onClick={() => this.setActive('4')}
+                        >
+                            Credits
+                            <Link to="/credits"/>
                         </Menu.Item>
                     </Menu>
                 </Sider>

@@ -39,7 +39,7 @@ export default function LoginPage(props) {
             if (values.email === 'myron@gmail.com' && values.password === '123') {
                 const localuser = {
                     id: 'b5aa283d-35d1-421d-a8c6-42dd3e115463',
-                    username: 'myron',
+                    username: 'Myron Lopes',
                     firstName: 'Myron',
                     lastName: 'Maugi',
                     admin: true,
