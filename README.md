@@ -30,15 +30,15 @@ It aims to enhance the fluidity at which data can be imported and processed, the
   * [Version 1](https://drive.google.com/drive/folders/1ZRMPPnWl1-HEA_9O5I-z9Yo28eZJGeFe?usp=sharing)
   * [Version 2](https://drive.google.com/drive/folders/14kmO0cMqXNRhRyrHOQesGElyXNcm97fQ?usp=sharing)
   * [Version 3](https://drive.google.com/drive/folders/1bOlrq45IenFO2175vvWJfXkMIdHbBB4S?usp=sharing)
-  * [Version 4](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+  * [Version 4](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
 * Coding Standards 
-  * [Coding Standards](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+  * [Coding Standards](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
   * [React / JSX](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/reactCodingStandards.md)
   * [Javascript](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/javascriptCodingStandards.md)
   * [Css](https://github.com/COS301-SE-2021/Integrated-Data-Intelligence-Suite/blob/develop/frontend/coding%20standards/cssCodingStandards.md)
-* [Architectural Document](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
-* [User Manual](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
-* [Technical Installation](https://drive.google.com/file/d/17gdtjC-3RLoj4fvSpO54PJA3qcTlCxwB/view?usp=sharing)
+* [Architectural Document](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
+* [User Manual](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
+* [Technical Installation](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools
