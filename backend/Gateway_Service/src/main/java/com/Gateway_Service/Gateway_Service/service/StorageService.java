@@ -39,7 +39,7 @@ public class StorageService {
         this.rootLocation = Paths.get(config.getLocation());
     }
 
-    public void store(MultipartFile file) throws GatewayException {
+    public String store(MultipartFile file) throws GatewayException {
         log.info("[Storage] Attempting to save file");
         try {
             if (file.isEmpty()) {
@@ -58,8 +58,10 @@ public class StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
+                log.info("Full file name is: " + destinationFile.toString());
                 log.info("[Storage] Successfully saved file");
             }
+            return destinationFile.toString();
         }
         catch (IOException | GatewayException e) {
             e.printStackTrace();
