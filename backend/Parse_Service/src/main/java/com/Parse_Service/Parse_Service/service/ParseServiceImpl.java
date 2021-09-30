@@ -272,7 +272,7 @@ public class ParseServiceImpl {
                         .withCSVParser(parser)
                         .build();
                 //Check the columns in the uploaded file
-                ArrayList<String> columns = (ArrayList<String>) Arrays.asList(csvReader.readNext());
+                ArrayList<String> columns = new ArrayList<>(Arrays.asList(csvReader.readNext()));
 
                 //Check if the columns exist and get index of required columns. Throw error if they do not exists
                 if(columns.contains(request.getDateCol()) && columns.contains(request.getContentCol()) && columns.contains(request.getTitleCol()) && columns.contains(request.getDescCol())) {
@@ -298,6 +298,7 @@ public class ParseServiceImpl {
             }
             catch (Exception ex) {
                 log.error("An error has occurred while parsing: " + ex.getMessage());
+                ex.printStackTrace();
                 throw new ParserException("An error has occurred trying to parse uploaded news data");
             }
 
