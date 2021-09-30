@@ -1109,6 +1109,357 @@ public class TrainServiceImpl {
         return new TrainFindTrendsResponse(results, trainedModel);
     }
 
+
+    /**
+     * This method used to find a trends(s) within a given data.
+     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
+     * @param request This is a request object which contains data required to be analysed.
+     * @return void
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public TrainFindTrendsDTResponse trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request)
+            throws InvalidRequestException, IOException {
+
+        if (request == null) {
+            throw new InvalidRequestException("FindTrendsDTRequest Object is null");
+        }
+        if (request.getDataList() == null) {
+            throw new InvalidRequestException("DataList is null");
+        }
+
+        /*******************SETUP SPARK*****************/
+        //logger.setLevel(Level.ERROR);
+        //LogManager.getRootLogger().setLevel(Level.ERROR);
+
+        SparkSession sparkTrends = SparkSession
+                .builder()
+                .appName("Trends")
+                .master("local")
+                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .getOrCreate();
+
+        sparkTrends.sparkContext().setLogLevel("ERROR");
+
+        /*******************SETUP DATA*****************/
+
+
+        ArrayList<ArrayList> requestData = request.getDataList();
+        List<Row> trendsData = new ArrayList<>();
+
+        ArrayList<String> types = new ArrayList<>();
+
+        for (int i = 0; i < requestData.size(); i++) {
+            List<Object> row = new ArrayList<>();
+            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
+
+            String sentiment = findNlpPropertiesResponse.getSentiment();
+            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
+            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
+
+            for (int j = 0; j < namedEntities.size(); j++) {
+                //row.add(isTrending)
+                row = new ArrayList<>();
+                row.add(namedEntities.get(j).get(0).toString()); //entity-name
+                row.add(namedEntities.get(j).get(1).toString()); //entity-type
+                if (types.isEmpty()) {// entity-typeNumber
+                    row.add(0);
+                    types.add(namedEntities.get(j).get(1).toString());
+                } else {
+                    if (types.contains(namedEntities.get(j).get(1).toString())) {
+                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
+                    } else {
+                        row.add(types.size());
+                        types.add(namedEntities.get(j).get(1).toString());
+                    }
+
+                }
+
+                row.add(requestData.get(i).get(1).toString());//location
+                row.add(requestData.get(i).get(2).toString());//date
+                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
+                row.add(sentiment);//sentiment
+
+                if(request.getModelName() != null) {
+                    row.add(Integer.parseInt(requestData.get(i).get(5).toString())); //isTrending
+                }
+
+                Row trendRow = RowFactory.create(row.toArray());
+                trendsData.add(trendRow);
+            }
+        }
+
+        /*******************SETUP DATAFRAME*****************/
+
+        Dataset<Row> itemsDF;
+
+        if(request.getModelName() == null) {
+            StructType inputSchema = new StructType(
+                    new StructField[]{
+                            new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                    });
+
+            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+        }else {
+
+            StructType inputSchema = new StructType(
+                    new StructField[]{
+                            new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                    });
+
+            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+        }
+
+
+        StructType schema = new StructType(
+                new StructField[]{
+                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
+                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
+                });
+
+
+        /*******************MANIPULATE DATAFRAME*****************/
+
+        //group named entity
+        List<Row> namedEntities;
+        if(request.getModelName() == null) {
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+        }else{
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count().collectAsList(); //frequency
+        }
+        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+
+
+        //training set
+        int minSize = 0;
+        if (namedEntities.size() > averageLikes.size()) {
+            minSize = averageLikes.size();
+        } else {
+            minSize = namedEntities.size();
+        }
+
+        if (minSize > rate.size()) {
+            minSize = rate.size();
+        }
+
+
+        List<Row> trainSet = new ArrayList<>();
+        for (int i = 0; i < minSize; i++) {
+            if(request.getModelName() == null) {
+                double trending = 0.0;
+                if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
+                    trending = 1.0;
+                }
+                Row trainRow = RowFactory.create(
+                        trending,
+                        namedEntities.get(i).get(0).toString(),
+                        namedEntities.get(i).get(1).toString(),
+                        Double.parseDouble(namedEntities.get(i).get(2).toString()),
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()),
+                        rate.get(i).get(1).toString(),
+                        Double.parseDouble(averageLikes.get(i).get(1).toString())
+                );
+                trainSet.add(trainRow);
+            }
+            else{
+                Row trainRow = RowFactory.create(
+                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        namedEntities.get(i).get(0).toString(), //name
+                        namedEntities.get(i).get(1).toString(), //type
+                        Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
+                        Double.parseDouble(namedEntities.get(i).get(4).toString()), //freq
+                        rate.get(i).get(1).toString(),
+                        Double.parseDouble(averageLikes.get(i).get(1).toString())
+                );
+                trainSet.add(trainRow);
+            }
+        }
+
+        //split data
+        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
+
+        Dataset<Row> trainSetDF = split[0];
+        Dataset<Row> testSetDF = split[1];
+
+        trainSetDF.show();
+        System.out.println("TRAIN ME");
+
+        testSetDF.show();
+        System.out.println("TEST ME");
+
+        /*******************SETUP PIPELINE MODEL *****************/
+
+        VectorAssembler assembler = new VectorAssembler()
+                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
+                .setOutputCol("features");
+
+        StringIndexer indexer = new StringIndexer()
+                .setInputCol("IsTrending")
+                .setOutputCol("label");
+
+        StringIndexer labelIndexer = new StringIndexer()
+                .setInputCol("label")
+                .setOutputCol("indexedLabel");
+
+        VectorIndexer featureIndexer = new VectorIndexer()
+                .setInputCol("features")
+                .setOutputCol("indexedFeatures")
+                .setMaxCategories(3); // features with > 4 distinct values are treated as continuous.
+
+        //model
+        DecisionTreeClassifier dt = new DecisionTreeClassifier()
+                .setLabelCol("indexedLabel")
+                .setFeaturesCol("indexedFeatures");
+
+        //pipeline
+        Pipeline pipeline = new Pipeline();
+        pipeline.setStages(new PipelineStage[]{assembler, indexer,labelIndexer,featureIndexer, dt});
+
+        /******************EVALUATE/ANALYSE MODEL**************/
+
+        MulticlassClassificationEvaluator multiclassClassificationEvaluator = new MulticlassClassificationEvaluator()
+                .setLabelCol("indexedLabel")
+                .setPredictionCol("prediction")
+                .setMetricName("accuracy");
+
+        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
+
+        paramGridBuilder.addGrid(dt.maxDepth(), new int[]{dt.getMaxDepth()});
+        paramGridBuilder.addGrid(dt.maxBins(), new int[]{dt.getMaxBins()});
+        ParamMap[] paramMaps = paramGridBuilder.build();
+
+
+        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
+                .setEstimator(pipeline)
+                .setEvaluator(multiclassClassificationEvaluator)
+                .setEstimatorParamMaps(paramMaps)
+                .setTrainRatio(0.7)  //70% : 30% ratio
+                .setParallelism(2);
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+        /***setup***/
+
+        String modelName;
+        if(request.getModelName() == null) {
+            modelName = "FindTrend";
+        }
+        else{
+            modelName = request.getModelName();
+        }
+
+        //client
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment(modelName + "_Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
+        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
+
+        /***trainModel***/
+        TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
+        Dataset<Row> predictions = dtModel.transform(testSetDF);
+        //predictions.show();
+        //System.out.println("*****************Predictions Of Test Data*****************");
+
+        double accuracy = multiclassClassificationEvaluator.evaluate(predictions);
+        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+        //System.out.println("Test Error = " + (1.0 - accuracy));
+
+        MulticlassMetrics multiclassMetrics = multiclassClassificationEvaluator.getMetrics(predictions);
+
+
+        /***logging***/
+        //param
+        client.logParam(run.getId(),"max depth", String.valueOf(dt.getMaxDepth()));
+        client.logParam(run.getId(),"max bin" ,String.valueOf(dt.getMaxBins()));
+
+
+        //metrics
+        client.logMetric(run.getId(),"Accuracy" ,multiclassMetrics.accuracy());
+        client.logMetric(run.getId(),"Precision" , multiclassMetrics.weightedPrecision());
+        client.logMetric(run.getId(),"Recall" , multiclassMetrics.weightedRecall());
+
+        client.logMetric(run.getId(),"F-measure" ,multiclassMetrics.weightedFMeasure());
+        client.logMetric(run.getId(),"True positive rate" ,multiclassMetrics.weightedTruePositiveRate());
+        client.logMetric(run.getId(),"False positive rate" ,multiclassMetrics.weightedFalsePositiveRate());
+        client.logMetric(run.getId(),"Hamming loss" , multiclassMetrics.hammingLoss());
+
+        for(int i =0; i < multiclassMetrics.labels().length - 1; i++) {
+            client.logMetric(run.getId(), "Precision by label", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            client.logMetric(run.getId(), "Recall by label", multiclassMetrics.recall(multiclassMetrics.labels()[i]));
+            client.logMetric(run.getId(), "True positive rate by label", multiclassMetrics.truePositiveRate(multiclassMetrics.labels()[i]));
+            client.logMetric(run.getId(), "F-measure by label", multiclassMetrics.fMeasure(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(), "Subset Accuracy", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(),"Micro precision" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(),"Micro recall" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            //client.logMetric(run.getId(),"Micro F1 Measure" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+        }
+
+
+
+        //custom tags
+        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
+        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
+
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
+        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        dtModel.write().overwrite().save(path);
+        File modelFile = new File("../models/DecisionTreeModel");
+        //client.logArtifact(run.getId(), modelFile);
+
+        client.logArtifact(run.getId(), modelFile);
+
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
+
+        FileUtils.deleteDirectory(new File(path));
+
+
+        /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
+        CommandLine commandLine = CommandLine.parse(commandPath);
+        //commandLine.addArguments(new String[] {"../models/DecisionTreeModel","DecisionTreeModel", "1"});
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setStreamHandler(new PumpStreamHandler(System.out));
+        executor.execute(commandLine);*/
+
+        run.endRun();
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+         sparkTrends.stop();
+         ArrayList<ArrayList> results = new ArrayList<>();
+         return new TrainFindTrendsDTResponse(results, trainedModel);
+    }
+
+
     /**
      * This method used to find a trends(s) within a given data.
      * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
@@ -1441,340 +1792,6 @@ public class TrainServiceImpl {
         ArrayList<ArrayList> results = new ArrayList<>();
     }
 
-    /**
-     * This method used to find a trends(s) within a given data.
-     * A trend is when topic frequent over time and location for minimum a day, e.g elon musk name keeps popping [topic].
-     * @param request This is a request object which contains data required to be analysed.
-     * @return void
-     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
-     */
-    public TrainFindTrendsDTResponse trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request)
-            throws InvalidRequestException, IOException {
-
-        if (request == null) {
-            throw new InvalidRequestException("FindTrendsDTRequest Object is null");
-        }
-        if (request.getDataList() == null) {
-            throw new InvalidRequestException("DataList is null");
-        }
-
-        /*******************SETUP SPARK*****************/
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
-
-        /*******************SETUP DATA*****************/
-
-
-        ArrayList<ArrayList> requestData = request.getDataList();
-        List<Row> trendsData = new ArrayList<>();
-
-        ArrayList<String> types = new ArrayList<>();
-
-        for (int i = 0; i < requestData.size(); i++) {
-            List<Object> row = new ArrayList<>();
-            FindNlpPropertiesResponse findNlpPropertiesResponse = (FindNlpPropertiesResponse) requestData.get(i).get(4); //response Object
-
-            String sentiment = findNlpPropertiesResponse.getSentiment();
-            //ArrayList<ArrayList> partsOfSpeech = findNlpPropertiesResponse.getPartsOfSpeech();
-            ArrayList<ArrayList> namedEntities = findNlpPropertiesResponse.getNamedEntities();
-
-            for (int j = 0; j < namedEntities.size(); j++) {
-                //row.add(isTrending)
-                row = new ArrayList<>();
-                row.add(namedEntities.get(j).get(0).toString()); //entity-name
-                row.add(namedEntities.get(j).get(1).toString()); //entity-type
-                if (types.isEmpty()) {// entity-typeNumber
-                    row.add(0);
-                    types.add(namedEntities.get(j).get(1).toString());
-                } else {
-                    if (types.contains(namedEntities.get(j).get(1).toString())) {
-                        row.add(types.indexOf(namedEntities.get(j).get(1).toString()));
-                    } else {
-                        row.add(types.size());
-                        types.add(namedEntities.get(j).get(1).toString());
-                    }
-
-                }
-
-                row.add(requestData.get(i).get(1).toString());//location
-                row.add(requestData.get(i).get(2).toString());//date
-                row.add(Integer.parseInt(requestData.get(i).get(3).toString()));//likes
-                row.add(sentiment);//sentiment
-
-                Row trendRow = RowFactory.create(row.toArray());
-                trendsData.add(trendRow);
-            }
-        }
-
-        /*******************SETUP DATAFRAME*****************/
-
-        StructType schema = new StructType(
-                new StructField[]{
-                        new StructField("IsTrending", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
-                });
-
-        StructType schema2 = new StructType(
-                new StructField[]{
-                        new StructField("EntityName", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("EntityTypeNumber", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Location", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
-                        new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
-                        new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                });
-
-
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
-
-        /*******************MANIPULATE DATAFRAME*****************/
-
-        //group named entity
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
-
-        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        averageLikes.get(1); //average likes
-
-        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
-        rate.get(1); //rate ???
-
-        //training set
-        int minSize = 0;
-        if (namedEntities.size() > averageLikes.size()) {
-            minSize = averageLikes.size();
-        } else {
-            minSize = namedEntities.size();
-        }
-
-        if (minSize > rate.size()) {
-            minSize = rate.size();
-        }
-
-
-        System.out.println("NameEntity : " + namedEntities.size());
-        for (int i = 0; i < namedEntities.size(); i++) {
-            System.out.println(namedEntities.get(i).toString());
-        }
-
-        System.out.println("AverageLikes : " + averageLikes.size());
-        for (int i = 0; i < averageLikes.size(); i++) {
-            System.out.println(averageLikes.get(i).toString());
-        }
-
-        List<Row> trainSet = new ArrayList<>();
-        for (int i = 0; i < minSize; i++) {
-            double trending = 0.0;
-            if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
-                trending = 1.0;
-            }
-            Row trainRow = RowFactory.create(
-                    trending,
-                    namedEntities.get(i).get(0).toString(),
-                    namedEntities.get(i).get(1).toString(),
-                    Double.parseDouble(namedEntities.get(i).get(2).toString()),
-                    Double.parseDouble(namedEntities.get(i).get(3).toString()),
-                    rate.get(i).get(1).toString(),
-                    Double.parseDouble(averageLikes.get(i).get(1).toString())
-            );
-            trainSet.add(trainRow);
-        }
-
-        //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
-        Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
-
-        Dataset<Row> trainSetDF = split[0];
-        Dataset<Row> testSetDF = split[1];
-
-        trainSetDF.show();
-        System.out.println("TRAIN ME");
-
-        testSetDF.show();
-        System.out.println("TEST ME");
-
-        /*******************SETUP PIPELINE MODEL *****************/
-        //features
-        /*Tokenizer tokenizer = new Tokenizer()
-                .setInputCol("text")
-                .setOutputCol("words");
-
-        HashingTF hashingTF = new HashingTF()
-                .setNumFeatures(1000)
-                .setInputCol(tokenizer.getOutputCol())
-                .setOutputCol("features");*/
-
-        VectorAssembler assembler = new VectorAssembler()
-                .setInputCols(new String[]{"EntityTypeNumber", "Frequency", "AverageLikes"})
-                .setOutputCol("features");
-
-        StringIndexer indexer = new StringIndexer()
-                .setInputCol("IsTrending")
-                .setOutputCol("label");
-
-        StringIndexer labelIndexer = new StringIndexer()
-                .setInputCol("label")
-                .setOutputCol("indexedLabel");
-
-        VectorIndexer featureIndexer = new VectorIndexer()
-                .setInputCol("features")
-                .setOutputCol("indexedFeatures")
-                .setMaxCategories(3); // features with > 4 distinct values are treated as continuous.
-
-        //model
-        DecisionTreeClassifier dt = new DecisionTreeClassifier()
-                .setLabelCol("indexedLabel")
-                .setFeaturesCol("indexedFeatures");
-
-        //pipeline
-        Pipeline pipeline = new Pipeline();
-        pipeline.setStages(new PipelineStage[]{assembler, indexer,labelIndexer,featureIndexer, dt});
-
-        /******************EVALUATE/ANALYSE MODEL**************/
-
-        MulticlassClassificationEvaluator multiclassClassificationEvaluator = new MulticlassClassificationEvaluator()
-                .setLabelCol("indexedLabel")
-                .setPredictionCol("prediction")
-                .setMetricName("accuracy");
-
-        ParamGridBuilder paramGridBuilder = new ParamGridBuilder();
-
-        paramGridBuilder.addGrid(dt.maxDepth(), new int[]{dt.getMaxDepth()});
-        paramGridBuilder.addGrid(dt.maxBins(), new int[]{dt.getMaxBins()});
-        ParamMap[] paramMaps = paramGridBuilder.build();
-
-
-        //validator
-        /*CrossValidator crossValidator = new CrossValidator()
-                .setEstimator(pipeline)
-                .setEvaluator(regressionEvaluator)
-                .setEstimatorParamMaps(paramMaps)
-                .setNumFolds(2);*/
-
-        TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
-                .setEstimator(pipeline)
-                .setEvaluator(multiclassClassificationEvaluator)
-                .setEstimatorParamMaps(paramMaps)
-                .setTrainRatio(0.7)  //70% : 30% ratio
-                .setParallelism(2);
-
-
-        /***********************SETUP MLFLOW - SAVE ***********************/
-
-        MlflowClient client = new MlflowClient("http://localhost:5000");
-
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("DecisionTree_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("DecisionTree_Experiment");
-        }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("DecisionTree_Run", runInfo.getRunId());
-
-
-        TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
-        Dataset<Row> predictions = dtModel.transform(testSetDF);
-        //predictions.show();
-        //System.out.println("*****************Predictions Of Test Data*****************");
-
-        double accuracy = multiclassClassificationEvaluator.evaluate(predictions);
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
-        //System.out.println("Test Error = " + (1.0 - accuracy));
-
-        MulticlassMetrics multiclassMetrics = multiclassClassificationEvaluator.getMetrics(predictions);
-
-
-
-        //param
-        client.logParam(run.getId(),"max depth", String.valueOf(dt.getMaxDepth()));
-        client.logParam(run.getId(),"max bin" ,String.valueOf(dt.getMaxBins()));
-
-
-        //metrics
-        client.logMetric(run.getId(),"Accuracy" ,multiclassMetrics.accuracy());
-        client.logMetric(run.getId(),"Precision" , multiclassMetrics.weightedPrecision());
-        client.logMetric(run.getId(),"Recall" , multiclassMetrics.weightedRecall());
-
-        client.logMetric(run.getId(),"F-measure" ,multiclassMetrics.weightedFMeasure());
-        client.logMetric(run.getId(),"True positive rate" ,multiclassMetrics.weightedTruePositiveRate());
-        client.logMetric(run.getId(),"False positive rate" ,multiclassMetrics.weightedFalsePositiveRate());
-
-
-        for(int i =0; i < multiclassMetrics.labels().length - 1; i++) {
-            client.logMetric(run.getId(), "Precision by label", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            client.logMetric(run.getId(), "Recall by label", multiclassMetrics.recall(multiclassMetrics.labels()[i]));
-            client.logMetric(run.getId(), "True positive rate by label", multiclassMetrics.truePositiveRate(multiclassMetrics.labels()[i]));
-            client.logMetric(run.getId(), "F-measure by label", multiclassMetrics.fMeasure(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(), "Subset Accuracy", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(),"Micro precision" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(),"Micro recall" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(),"Micro F1 Measure" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-        }
-
-
-        client.logMetric(run.getId(),"Hamming loss" , multiclassMetrics.hammingLoss());
-
-        //custom tags
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
-
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
-        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
-        dtModel.write().overwrite().save(path);
-        File modelFile = new File("../models/DecisionTreeModel");
-        //client.logArtifact(run.getId(), modelFile);
-
-        client.logArtifact(run.getId(), modelFile);
-
-
-        /*try {
-
-            //File modelFile = new File("../models/DecisionTreeModel");
-            //client.logArtifact(run.getId(), modelFile);
-            String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
-            CommandLine commandLine = CommandLine.parse(commandPath);
-            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
-            DefaultExecutor executor = new DefaultExecutor();
-            executor.setStreamHandler(new PumpStreamHandler(System.out));
-            executor.execute(commandLine);
-            /*try {
-                executor.execute(commandLine);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex);
-            }*
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
-
-        sparkTrends.stop();
-        run.endRun();
-
-        /***********************SETUP MLFLOW - SAVE ***********************/
-
-         ArrayList<ArrayList> results = new ArrayList<>();
-         return new TrainFindTrendsDTResponse(results);
-    }
-
 
     /**
      * This method used to find a predictions(s) within a given data
@@ -1981,15 +1998,14 @@ public class TrainServiceImpl {
 
         Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
 
-        /*******************SETUP PIPELINE*****************/
-        /*******************SETUP MODEL*****************/
+        /*******************SETUP PIPELINE MODEL*****************/
         //features
-
         VectorAssembler assembler = new VectorAssembler()
                 //.setInputCols(new String[]{"EntityTypeNumbers", "AmountOfEntities", "Latitude", "Latitude", "Like"})
                 .setInputCols(new String[]{"AmountOfEntities", "Latitude", "Latitude", "Like"})
                 .setOutputCol("features");
 
+        //model
         KMeans km = new KMeans()
                 .setFeaturesCol("features")
                 .setPredictionCol("prediction");
@@ -2028,22 +2044,24 @@ public class TrainServiceImpl {
                 .setNumFolds(3)
                 .setParallelism(2);
 
-        /*TrainValidationSplit trainValidationSplit = new TrainValidationSplit()
-                .setEstimator(pipeline)
-                .setEvaluator(clusteringEvaluator)
-                .setEstimatorParamMaps(paramMaps)
-                .setTrainRatio(0.7)  //70% : 30% ratio
-                .setParallelism(2);*/
-
-
         /***********************SETUP MLFLOW - SAVE ***********************/
 
+        /***setup***/
+        String modelName;
+        if(request.getModelName() == null) {
+            modelName = "FindAnomaly";
+        }
+        else{
+            modelName = request.getModelName();
+        }
+
+        //client
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("KMeans_Experiment");
+        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
         String experimentID = "";
         if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("KMeans_Experiment");
+            experimentID = client.createExperiment(modelName + "_Experiment");
         }
         else{
             experimentID = foundExperiment.get().getExperimentId();
@@ -2051,8 +2069,10 @@ public class TrainServiceImpl {
 
         org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
         MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("KMeans_Run", runInfo.getRunId());
+        ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
 
+
+        /***trainModel***/
         //KMeans model = pipeline.getStages()[1];
         PipelineModel kmModel = pipeline.fit(trainingDF);
 
@@ -2065,9 +2085,9 @@ public class TrainServiceImpl {
         double accuracy = clusteringEvaluator.evaluate(predictions);
         //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
         //RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
+        /***logging***/
         //param
         client.logParam(run.getId(),"k-value", String.valueOf(km.getK()));
         client.logParam(run.getId(),"Initial step" ,String.valueOf(km.getInitSteps()));
@@ -2088,27 +2108,15 @@ public class TrainServiceImpl {
         //client.logArtifact(run.getId(), modelFile);
         client.logArtifact(run.getId(), modelFile);
 
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
+        FileUtils.deleteDirectory(new File(path));
 
-        /*try {
-
-
-            //File modelFile = new File("../models/KMeansModel");
-            //client.logArtifact(run.getId(), modelFile);
-            String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
-            CommandLine commandLine = CommandLine.parse(commandPath);
-            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
-            DefaultExecutor executor = new DefaultExecutor();
-            executor.setStreamHandler(new PumpStreamHandler(System.out));
-            executor.execute(commandLine);
-            /*try {
-                executor.execute(commandLine);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex);
-            }*
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
+        /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
+        CommandLine commandLine = CommandLine.parse(commandPath);
+        //commandLine.addArguments(new String[] {"../models/KMeansModel","KMeansModel", "1"});
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setStreamHandler(new PumpStreamHandler(System.out));
+        executor.execute(commandLine);*/
 
         run.endRun();
 
@@ -2117,7 +2125,7 @@ public class TrainServiceImpl {
         sparkAnomalies.stop();
 
         ArrayList<String> results = new ArrayList<>();
-        return new TrainFindAnomaliesResponse(results);
+        return new TrainFindAnomaliesResponse(results, trainedModel);
     }
 
 
