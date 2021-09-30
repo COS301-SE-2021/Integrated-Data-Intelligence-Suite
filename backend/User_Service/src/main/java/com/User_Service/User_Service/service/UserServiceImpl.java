@@ -552,6 +552,68 @@ public class UserServiceImpl {
         System.out.println(message);
         return  new GetUserResponse(message, success, response);
     }
+
+    /**
+     * This method will add a report id to user's list of reports for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public AddReportResponse addReport(AddReportRequest request) throws Exception {
+        if(request == null || request.getReportID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getReportID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.addReportID(request.getReportID());
+                //Return response
+                return new AddReportResponse(true, "Added report");
+            }
+            else {
+                return new AddReportResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will return a list of reports saved by the user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public GetUserReportsResponse getReports(GetUserReportsRequest request) throws Exception {
+        if(request == null || request.getId() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getId().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getId()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Return response
+                return new GetUserReportsResponse(true, "Retrieved report IDs", current.getReportIDs());
+            }
+            else {
+                return new GetUserReportsResponse(false, "User does not exist", null);
+            }
+        }
+    }
 /*
 =================== Private Functions ====================
  */
