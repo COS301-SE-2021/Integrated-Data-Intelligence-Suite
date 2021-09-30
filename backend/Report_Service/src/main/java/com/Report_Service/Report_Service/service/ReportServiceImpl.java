@@ -43,20 +43,20 @@ public class ReportServiceImpl {
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
-        newReport.DateTime= formatter.format(date);
-        newReport.TrendData = trendResp.getDataList();
-        newReport.TrendSummary = trendResp.getSummary();
+        newReport.setDateTime(formatter.format(date));
+        newReport.setTrendData(trendResp.getDataList());
+        newReport.setTrendSummary(trendResp.getSummary());
 
-        newReport.AnomalyData = anommalyResp.getDataList();
-        newReport.AnomalySummary = anommalyResp.getSummary();
+        newReport.setAnomalyData(anommalyResp.getDataList());
+        newReport.setAnomalySummary(anommalyResp.getSummary());
 
-        newReport.TextualAnalysisData = textualAnalysisDataResponse.getDataList();
-        newReport.TextualAnalysisSummary = textualAnalysisDataResponse.getSummary();
+        newReport.setTextualAnalysisData(textualAnalysisDataResponse.getDataList());
+        newReport.setTextualAnalysisSummary(textualAnalysisDataResponse.getSummary());
 
         GenerateReportPDFRequest reportPDFRequest = new GenerateReportPDFRequest(newReport);
         GenerateReportPDFResponse reportPDFResponse = this.generateReportPDF(reportPDFRequest);
 
-        newReport.pdf = reportPDFResponse.getPdf();
+        newReport.setPdf(reportPDFResponse.getPdf());
 
         /*OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
         out.write(reportPDFResponse.getPdf());
@@ -391,7 +391,7 @@ public class ReportServiceImpl {
 
         Paragraph rTitle = new Paragraph();
         rTitle.add("Report made on ");
-        rTitle.add(request.report.DateTime);
+        rTitle.add(request.report.getDateTime());
 
         document.add(rTitle);
         document.add(EmptyLine);
@@ -434,7 +434,7 @@ public class ReportServiceImpl {
         table.addCell(header);
 
 
-        ArrayList<ArrayList> trendTable= request.report.TrendData;
+        ArrayList<ArrayList> trendTable= request.report.getTrendData();
 
         for (ArrayList t: trendTable) {
             for (int i = 0; i < t.size(); i++) {
@@ -455,7 +455,7 @@ public class ReportServiceImpl {
         document.add(EmptyLine);
 
         Paragraph Tsum = new Paragraph();
-        Tsum.add(request.report.TrendSummary);
+        Tsum.add(request.report.getTrendSummary());
         document.add(Tsum);
         document.add(EmptyLine);
         document.add(EmptyLine);
@@ -472,7 +472,7 @@ public class ReportServiceImpl {
         header.setPhrase(new Phrase("Anomalies Detected"));
         aTable.addCell(header);
 
-        ArrayList<ArrayList> anomalyTable= request.report.AnomalyData;
+        ArrayList<ArrayList> anomalyTable= request.report.getAnomalyData();
 
         for (ArrayList t: anomalyTable) {
             aTable.addCell(t.get(0).toString());
@@ -486,7 +486,7 @@ public class ReportServiceImpl {
         document.add(EmptyLine);
 
         Paragraph Asum = new Paragraph();
-        Asum.add(request.report.AnomalySummary);
+        Asum.add(request.report.getAnomalySummary());
         document.add(Asum);
         document.add(EmptyLine);
         document.add(EmptyLine);
@@ -512,7 +512,7 @@ public class ReportServiceImpl {
             TexTable.addCell("test");
         }*/
 
-        ArrayList<ArrayList> TexualTable= request.report.TextualAnalysisData;
+        ArrayList<ArrayList> TexualTable= request.report.getTextualAnalysisData();
         for (ArrayList t: TexualTable) {
             for (int i = 0; i < t.size(); i++) {
                 TexTable.addCell(t.get(i).toString());
@@ -528,7 +528,7 @@ public class ReportServiceImpl {
         document.add(EmptyLine);
 
         Paragraph Texsum = new Paragraph();
-        Texsum.add(request.report.TextualAnalysisSummary);
+        Texsum.add(request.report.getTextualAnalysisSummary());
         document.add(Texsum);
         document.add(EmptyLine);
         document.add(EmptyLine);
