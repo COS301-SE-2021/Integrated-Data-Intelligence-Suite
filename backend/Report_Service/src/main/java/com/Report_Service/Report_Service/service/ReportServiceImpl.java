@@ -1,14 +1,17 @@
 package com.Report_Service.Report_Service.service;
 
+import com.Report_Service.Report_Service.dataclass.PdfReport;
 import com.Report_Service.Report_Service.dataclass.Report;
 import com.Report_Service.Report_Service.exception.InvalidRequestException;
 import com.Report_Service.Report_Service.exception.ReporterException;
+import com.Report_Service.Report_Service.repository.ReportRepository;
 import com.Report_Service.Report_Service.request.*;
 import com.Report_Service.Report_Service.response.*;
 import com.itextpdf.text.*;
 
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -23,6 +26,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class ReportServiceImpl {
+
+
+    @Autowired
+    private ReportRepository repository;
 
     public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException, DocumentException, IOException {
 
@@ -66,6 +73,18 @@ public class ReportServiceImpl {
     }
 
     public GetReportDataResponse getReportData(GetReportDataRequest request) throws ReporterException {
+
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getReportId() == null) {
+            throw new InvalidRequestException("Request report id is null");
+        }
+
+        Optional<PdfReport> report =  repository.findUserById(request.getReportId());
+        if(report.isEmpty()) {
+            throw new ReporterException("report service could not find user by given id");
+        }
 
         return new GetReportDataResponse(null);
     }
