@@ -91,15 +91,6 @@ class SideBar extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item
-                            key="5"
-                            icon={<AiOutlineCloudUpload/>}
-                            onClick={() => this.setActive('5')}
-                        >
-                            Import
-                            <Link to="/uploadData"/>
-                        </Menu.Item>
-
-                        <Menu.Item
                             key="4"
                             icon={<AiOutlineHeart/>}
                             onClick={() => this.setActive('4')}
