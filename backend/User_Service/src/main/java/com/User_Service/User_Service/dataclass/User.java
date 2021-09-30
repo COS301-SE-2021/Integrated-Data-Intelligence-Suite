@@ -4,7 +4,9 @@ import com.User_Service.User_Service.rri.Permission;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -44,6 +46,10 @@ public class User {
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     Date dateCreated;
+
+    @ElementCollection
+            @CollectionTable(name = "report_ids")
+    List<String> reportIDs = new ArrayList<>();
 
     public User() {
 
@@ -146,6 +152,22 @@ public class User {
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public void addReportID(String reportID) {
+        reportIDs.add(reportID);
+    }
+
+    public void removeID(String id) {
+        reportIDs.remove(id);
+    }
+
+    public List<String> getReportIDs() {
+        return reportIDs;
+    }
+
+    public void setReportIDs(ArrayList<String> reportIDs) {
+        this.reportIDs = reportIDs;
     }
 
     @Override
