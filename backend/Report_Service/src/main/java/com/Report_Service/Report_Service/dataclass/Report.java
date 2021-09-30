@@ -3,6 +3,7 @@ package com.Report_Service.Report_Service.dataclass;
 import java.util.ArrayList;
 
 public class Report {
+    public byte[] pdf;
     public String DateTime;
     public String time;
 
