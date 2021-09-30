@@ -20,8 +20,12 @@ public class ParseUploadedNewsDataResponse {
         this.newsDataList = dataList;
     }
 
-    public ArrayList<ParsedArticle> getDataList(){
+    public ArrayList<ParsedArticle> getNewsDataList() {
         return newsDataList;
+    }
+
+    public void setNewsDataList(ArrayList<ParsedArticle> newsDataList) {
+        this.newsDataList = newsDataList;
     }
 
     public boolean isSuccess() {
