@@ -60,7 +60,7 @@ public class ReportServiceImpl {
         out.write(reportPDFResponse.getPdf());
         out.close();*/
 
-        return new ReportDataResponse();
+        return new ReportDataResponse(reportPDFResponse.getPdf());
     }
 
     public GetTrendAnalysisDataResponse getTrendAnalysisData(GetTrendAnalysisDataRequest request) throws InvalidRequestException {
