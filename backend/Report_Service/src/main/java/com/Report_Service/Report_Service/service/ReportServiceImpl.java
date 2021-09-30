@@ -65,6 +65,13 @@ public class ReportServiceImpl {
         return new ReportDataResponse(reportPDFResponse.getPdf());
     }
 
+    public GetReportDataResponse getReportData(GetReportDataRequest request) throws ReporterException {
+
+        return new GetReportDataResponse(null);
+    }
+
+
+
     public GetTrendAnalysisDataResponse getTrendAnalysisData(GetTrendAnalysisDataRequest request) throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
