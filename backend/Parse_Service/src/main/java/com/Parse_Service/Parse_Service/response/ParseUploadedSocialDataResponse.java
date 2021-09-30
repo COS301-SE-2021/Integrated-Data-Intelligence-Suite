@@ -20,8 +20,12 @@ public class ParseUploadedSocialDataResponse {
         this.socialDataList = dataList;
     }
 
-    public ArrayList<ParsedData> getDataList(){
+    public ArrayList<ParsedData> getSocialDataList(){
         return socialDataList;
+    }
+
+    public void setSocialDataList(ArrayList<ParsedData> socialDataList) {
+        this.socialDataList = socialDataList;
     }
 
     public boolean isSuccess() {
