@@ -8,6 +8,7 @@ import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
+
 import com.johnsnowlabs.nlp.DocumentAssembler;
 import com.johnsnowlabs.nlp.annotators.Tokenizer;
 import com.johnsnowlabs.nlp.annotators.TokenizerModel;
@@ -18,6 +19,7 @@ import com.johnsnowlabs.nlp.annotators.sentence_detector_dl.SentenceDetectorDLMo
 import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
@@ -46,15 +48,19 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.*;
+
 import org.mlflow.tracking.ActiveRun;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.apache.spark.sql.functions.col;
@@ -409,9 +415,6 @@ public class TrainServiceImpl {
         FindNlpPropertiesRequest findNlpPropertiesRequestSocial = new FindNlpPropertiesRequest(nlpTextSocial);
         List<Object> nlpResults = this.findNlpProperties(findNlpPropertiesRequestSocial);
         ArrayList<FindNlpPropertiesResponse> findNlpPropertiesResponseSocial = (ArrayList<FindNlpPropertiesResponse>) nlpResults.get(0); // this.findNlpProperties(findNlpPropertiesRequestSocial);
-
-
-
 
 
         /*******************Setup Data******************/
@@ -1075,28 +1078,33 @@ public class TrainServiceImpl {
 
         /***saveModel***/
 
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
-        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        //*"backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/"*/ "..models/" +modelName;
+        String path =  Paths.get("../models/" +modelName).toString();
+        System.out.println("Testing new path !!!  " + path);
+        String script = Paths.get("../rri/LogModel.py").toString();
+
         //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
         lrModel.write().overwrite().save(path);
-        File modelFile = new File("../models/LogisticRegressionModel");
+        File modelFile = new File(path) ;// "../models/" + modelName);
 
         if(modelFile.exists() && modelFile.isDirectory()){
             System.out.println("nothing wrong with file ");
+        }else{
+            System.out.println("something wrong with the file");
         }
-
         client.logArtifact(run.getId(), modelFile);
 
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
-
         FileUtils.deleteDirectory(new File(path));
 
-        /*String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
+        /*
+        String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
         CommandLine commandLine = CommandLine.parse(commandPath);
         //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
         DefaultExecutor executor = new DefaultExecutor();
         executor.setStreamHandler(new PumpStreamHandler(System.out));
-        executor.execute(commandLine);*/
+        executor.execute(commandLine);
+        */
 
         run.endRun();
 
@@ -1428,10 +1436,11 @@ public class TrainServiceImpl {
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
 
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/DecisionTreeModel";
-        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        String path = Paths.get("../models/" + modelName).toString();
+
+        String script = Paths.get("../rri/LogModel.py").toString();
         dtModel.write().overwrite().save(path);
-        File modelFile = new File("../models/DecisionTreeModel");
+        File modelFile = new File(path);
         //client.logArtifact(run.getId(), modelFile);
 
         client.logArtifact(run.getId(), modelFile);
@@ -2101,11 +2110,11 @@ public class TrainServiceImpl {
         client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel";
-        String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
+        String path = Paths.get("../models/" + modelName).toString();
+        String script = Paths.get("../rri/LogModel.py").toString();
+
         kmModel.write().overwrite().save(path);
-        File modelFile = new File("../models/KMeansModel");
-        //client.logArtifact(run.getId(), modelFile);
+        File modelFile = new File(path);
         client.logArtifact(run.getId(), modelFile);
 
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
@@ -2154,6 +2163,10 @@ public class TrainServiceImpl {
 
         //select best in selection for user
 
+
+
+
+
         TrainedModel BestModel = new TrainedModel();
 
         return new RegisterUserBestModelResponse(BestModel);
@@ -2183,6 +2196,38 @@ public class TrainServiceImpl {
     public void cleanModelsRegistry()
             throws AnalyserException {
         //todo: do something here
+
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
+
+        /***setup***/
+
+        String modelName;
+
+        //client
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("Experiment");
+        String experimentID = "";
+        if (foundExperiment.isEmpty() == true){
+            experimentID = client.createExperiment("Experiment");
+        }
+        else{
+            experimentID = foundExperiment.get().getExperimentId();
+        }
+
+        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+        MlflowContext mlflow = new MlflowContext(client);
+        ActiveRun run = mlflow.startRun("Run", runInfo.getRunId());
+
+        List<org.mlflow.api.proto.Service.Experiment> experiment = client.listExperiments();
+
+
+
+
+        run.endRun();
+
+        /***********************SETUP MLFLOW - SAVE ***********************/
     }
 
 
@@ -2204,6 +2249,7 @@ public class TrainServiceImpl {
         if(request.getDataType() != "ParsedData") {
             throw new InvalidRequestException("Wrong Datatype is used");
         }
+
 
 
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
