@@ -51,8 +51,11 @@ public class ParseServiceImpl {
             "yyyy-MM-dd'T'HH:mm:ss",      "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd HH:mm:ss",
             "MM/dd/yyyy HH:mm:ss",        "MM/dd/yyyy'T'HH:mm:ss.SSS'Z'",
+            "dd/MM/yyyy HH:mm:ss",        "dd/MM/yyyy'T'HH:mm:ss.SSS'Z'",
             "MM/dd/yyyy'T'HH:mm:ss.SSSZ", "MM/dd/yyyy'T'HH:mm:ss.SSS",
+            "dd/MM/yyyy'T'HH:mm:ss.SSSZ", "dd/MM/yyyy'T'HH:mm:ss.SSS",
             "MM/dd/yyyy'T'HH:mm:ssZ",     "MM/dd/yyyy'T'HH:mm:ss",
+            "dd/MM/yyyy'T'HH:mm:ssZ",     "dd/MM/yyyy'T'HH:mm:ss",
             "yyyy:MM:dd HH:mm:ss",        "yyyyMMdd", };
 
     private static final Logger log = LoggerFactory.getLogger(ParseServiceImpl.class);
@@ -207,15 +210,15 @@ public class ParseServiceImpl {
                     String[] line;
                     while ((line = csvReader.readNext()) != null) {
                         ParsedData dataEntry = new ParsedData();
-                        //Parsing date with required formats to test if the date is valid
-                        checkDate(line[columns.indexOf(request.getDateCol())]);
 
                         //Set the relevant attributes of the ParsedData type
-                        dataEntry.setDate(line[columns.indexOf(request.getDateCol())]);
+                        //Parsing date with required formats to test if the date is valid
+                        dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
                         dataEntry.setLikes(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
                         dataEntry.setLocation(line[columns.indexOf(request.getLocCol())]);
                         dataEntry.setTextMessage(line[columns.indexOf(request.getTextCol())]);
                         parsedList.add(dataEntry);
+                        System.out.println(dataEntry.getDate());
                         //list.add(line);
                     }
                 }
@@ -276,11 +279,10 @@ public class ParseServiceImpl {
                     String[] line;
                     while ((line = csvReader.readNext()) != null) {
                         ParsedArticle dataEntry = new ParsedArticle();
-                        //Parsing date with required formats to test if the date is valid
-                        checkDate(line[columns.indexOf(request.getDateCol())]);
 
                         //Set the relevant attributes of the ParsedArticle type
-                        dataEntry.setDate(line[columns.indexOf(request.getDateCol())]);
+                        //Parsing date with required formats to test if the date is valid
+                        dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
                         dataEntry.setContent(line[columns.indexOf(request.getContentCol())]);
                         dataEntry.setDescription(line[columns.indexOf(request.getDescCol())]);
                         dataEntry.setTitle(line[columns.indexOf(request.getTitleCol())]);
@@ -391,21 +393,19 @@ public class ParseServiceImpl {
      * @param date This is the string that contains the date.
      * @throws IOException This is thrown if the date does not fall within the pre specified formats.
      */
-    private void checkDate(String date) throws IOException {
+    private String checkDate(String date) throws IOException {
         int numPassed = 0;
         for (String parse : dateFormats) {
             SimpleDateFormat sdf = new SimpleDateFormat(parse);
             try {
                 //System.out.println(date);
-                sdf.parse(date);
+                Date parsedDate = sdf.parse(date);
                 //System.out.println("passed");
-                return;
+                return parsedDate.getDate() + "/" + (parsedDate.getMonth() + 1) + "/" + (parsedDate.getYear() + 1900);
             } catch (ParseException e) {
             }
         }
 
-        if(numPassed != 0) {
-            throw new IOException("Invalid date format");
-        }
+        throw new IOException("Invalid date format");
     }
 }
