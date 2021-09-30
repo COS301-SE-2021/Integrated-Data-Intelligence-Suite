@@ -1,13 +1,16 @@
 package com.Report_Service.Report_Service.dataclass;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.ArrayList;
+import java.util.UUID;
 
-@Entity(name = "Reports")
-@Table(name = "Reports")
+
 public class Report {
-
 
     byte[] pdf;
     String DateTime;
