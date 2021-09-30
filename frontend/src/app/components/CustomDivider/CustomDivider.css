@@ -1,0 +1,24 @@
+.custom-divider-container {
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: 100%;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.custom-divider-title {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    font-weight: 600;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--dodger-blue);
+}
+
+.custom-divider-line {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    width: 100%;
+    background: var(--dodger-blue);
+    justify-self: start;
+}
