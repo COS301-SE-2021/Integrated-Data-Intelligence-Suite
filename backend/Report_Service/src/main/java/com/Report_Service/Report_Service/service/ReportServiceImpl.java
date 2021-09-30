@@ -69,6 +69,10 @@ public class ReportServiceImpl {
         out.write(reportPDFResponse.getPdf());
         out.close();*/
 
+        //save generated pdf
+        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf());
+        repository.save(pdfReport);
+
         return new ReportDataResponse(reportPDFResponse.getPdf());
     }
 
