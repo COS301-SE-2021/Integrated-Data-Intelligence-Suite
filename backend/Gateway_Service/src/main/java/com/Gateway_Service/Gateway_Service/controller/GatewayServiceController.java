@@ -343,6 +343,15 @@ public class GatewayServiceController {
                 response.put("message", response1.getMessage());
             }
 
+            if(storageService.deleteFile(filename)) {
+                log.info("[Gateway API] Delete file: " + filename);
+            }
+            else {
+                log.info("[Gateway API] Failed to delete file: " + filename);
+            }
+
+            log.info("[Gateway API] Successfully parsed. Attempting to analyze data");
+
             AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
             AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
 
@@ -362,6 +371,8 @@ public class GatewayServiceController {
 
 
             System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+            log.info("[Gateway API] Completed analysis. Preparing data for visualization");
 
 
             /*********************VISUALISE**********************/
@@ -389,13 +400,11 @@ public class GatewayServiceController {
             }
 
             System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
+            log.info("[Gateway API] Visualize success");
 
 
             for(int i =0; i < visualizeResponse.outputData.size(); i++)
                 outputData.add(visualizeResponse.outputData.get(i));
-
-            storageService.deleteFile(filename);
-
         }
         catch (Exception e) {
             e.printStackTrace();

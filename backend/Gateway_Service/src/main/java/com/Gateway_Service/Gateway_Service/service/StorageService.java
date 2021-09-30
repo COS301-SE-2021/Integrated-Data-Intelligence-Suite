@@ -71,6 +71,7 @@ public class StorageService {
     }
 
     public boolean deleteFile(String filename) {
+        log.info("[Storage] Deleting file");
         File filetoDelete = new File(filename);
         boolean success = filetoDelete.delete();
         return success;
