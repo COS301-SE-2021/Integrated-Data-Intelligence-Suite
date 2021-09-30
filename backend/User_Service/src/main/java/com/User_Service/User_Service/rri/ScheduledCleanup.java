@@ -37,12 +37,11 @@ public class ScheduledCleanup {
     @Async
     @Scheduled(cron = "0 43 17 * * *")
     public void performCleanup() {
-        log.info("Performing database cleanup, current time is: {}", dateFormat.format(new Date()));
+        log.info("[CRON] Performing database cleanup, current time is: {}", dateFormat.format(new Date()));
         List<User> users = repository.findAllByIsVerifiedFalseOrderByDateCreatedAsc();
         //Get current time
         Date now = new Date();
         for(User u : users) {
-            //System.out.println(u.getEmail() + " date registered: " + u.getDateCreated());
             //Calculate difference
             long difference_In_Time = now.getTime() - u.getDateCreated().getTime();
             long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
@@ -51,7 +50,7 @@ public class ScheduledCleanup {
                 repository.delete(u);
             }
         }
-        log.info("Completed removal of unverified accounts");
+        log.info("[CRON] Completed removal of unverified accounts");
     }
 }
 
