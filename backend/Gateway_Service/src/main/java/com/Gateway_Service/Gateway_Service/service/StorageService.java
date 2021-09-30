@@ -2,13 +2,14 @@ package com.Gateway_Service.Gateway_Service.service;
 
 import com.Gateway_Service.Gateway_Service.config.StorageConfiguration;
 import com.Gateway_Service.Gateway_Service.exception.GatewayException;
-import com.Import_Service.Import_Service.service.ImportServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -58,7 +59,7 @@ public class StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
-                log.info("Full file name is: " + destinationFile.toString());
+                //log.info("Full file name is: " + destinationFile.toString());
                 log.info("[Storage] Successfully saved file");
             }
             return destinationFile.toString();
@@ -67,6 +68,12 @@ public class StorageService {
             e.printStackTrace();
             throw new GatewayException("Failed to store file.");
         }
+    }
+
+    public boolean deleteFile(String filename) {
+        File filetoDelete = new File(filename);
+        boolean success = filetoDelete.delete();
+        return success;
     }
 
 
