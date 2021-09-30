@@ -301,8 +301,6 @@ public class TrainServiceImpl {
 
     /**
      * This method used to train the overall default app models.
-     *
-     *
      * @throws AnalyserException This is thrown if the request or if any of its attributes are invalid.
      */
     public void trainApplicationModel()
@@ -2144,9 +2142,36 @@ public class TrainServiceImpl {
      */
     public RegisterUserBestModelResponse registerUserBestModel(RegisterUserBestModelRequest request)
             throws InvalidRequestException{
-        TrainedModel temp = new TrainedModel();
 
-        return new RegisterUserBestModelResponse(temp);
+        if (request == null) {
+            throw new InvalidRequestException("registerUserBestModel request Object is null");
+        }
+        if (request.getModelList() == null){
+            throw new InvalidRequestException("registerUserBestModel ModelList is null");
+        }
+
+        //select best in selection for user
+
+        TrainedModel BestModel = new TrainedModel();
+
+        return new RegisterUserBestModelResponse(BestModel);
+    }
+
+
+    /**
+     * This method used to compare between models and select the best one among them.
+     * along with selecting the method registers that best model under the model name.
+     * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
+     */
+    public void registerApplicationBestModel()
+            throws IOException{
+
+        //select best in registry for application
+
+        String BestModelId ="";
+        BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt")); //TODO; write
+
+        TrainedModel BestModel = new TrainedModel();
     }
 
     /**
@@ -2161,12 +2186,12 @@ public class TrainServiceImpl {
 
 
     /**
-     * This method used to fetch the parsed data from the database
+     * This method used to fetch the parsed data from the database to train models
      * @param request This is a request object which contains data required to be fetched.
      * @return FetchParsedDataResponse This object contains data of the sentiment found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public FetchParsedDataResponse fetchParsedData(FetchParsedDataRequest request)
+    public FetchParsedDataResponse fetchTrainData(FetchParsedDataRequest request)
             throws InvalidRequestException {
         if (request == null) {
             throw new InvalidRequestException("FetchParsedDataRequest Object is null");

@@ -1244,7 +1244,7 @@ public class AnalyseServiceImpl {
 
             String findTrendModelId = reader.readLine();
 
-            String[] splitModelId = findTrendModelId.split(";"); //name, id
+            String[] splitModelId = findTrendModelId.split(":"); //name, id
             String modelName = splitModelId[0];
             String modelID = splitModelId[1];
 
@@ -1526,11 +1526,11 @@ public class AnalyseServiceImpl {
         BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
 
         String findTrendModelId = reader.readLine();
-        findTrendModelId = reader.readLine(); // 2nd line
+        //findTrendModelId = reader.readLine(); // 2nd line
 
-        String[] splitModelId = findTrendModelId.split(";"); //name, id
+        String[] splitModelId = findTrendModelId.split(":"); //name, id
         String modelName = splitModelId[0];
-        String modelID = splitModelId[1];
+        String modelID = splitModelId[2];
         File artifact = client.downloadArtifacts(modelID, modelName);
         kmModel = PipelineModel.load(artifact.getPath());
 
