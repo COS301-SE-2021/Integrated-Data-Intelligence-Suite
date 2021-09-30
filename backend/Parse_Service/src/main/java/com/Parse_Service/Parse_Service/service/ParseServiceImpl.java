@@ -212,7 +212,7 @@ public class ParseServiceImpl {
 
                         //Set the relevant attributes of the ParsedData type
                         dataEntry.setDate(line[columns.indexOf(request.getDateCol())]);
-                        dataEntry.setLikes(Integer.getInteger(line[columns.indexOf(request.getInteractionsCol())]));
+                        dataEntry.setLikes(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
                         dataEntry.setLocation(line[columns.indexOf(request.getLocCol())]);
                         dataEntry.setTextMessage(line[columns.indexOf(request.getTextCol())]);
                         parsedList.add(dataEntry);
