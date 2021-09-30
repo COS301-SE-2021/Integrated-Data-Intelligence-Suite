@@ -4,6 +4,7 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
+import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -72,7 +73,6 @@ public class AnalyseServiceImpl {
                 throw new InvalidRequestException("DataList inside data of requested parsedData is null");
             }
         }
-
 
 
         /*******************USE NLP******************/
@@ -203,41 +203,38 @@ public class AnalyseServiceImpl {
 
         System.out.println("*******************Run A.I Models******************");
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList,parsedArticleList); //TODO
-        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
-        System.out.println("*******************Ran findPattern******************");
+        FindPatternResponse findPatternResponse;
+        FindRelationshipsResponse findRelationshipsResponse;
+        GetPredictionResponse getPredictionResponse;
+        FindTrendsResponse findTrendsResponse;
+        FindAnomaliesResponse findAnomaliesResponse;
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList,parsedArticleList);
-        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
-        System.out.println("*******************Ran findRelationships******************");
+        try {
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
-        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
-        System.out.println("*******************Ran findPrediction******************");
+            FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList); //TODO
+            findPatternResponse = this.findPattern(findPatternRequest);
+            System.out.println("*******************Ran findPattern******************");
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList);
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
-        System.out.println("*******************Ran findTrends******************");
+            FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList);
+            findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+            System.out.println("*******************Ran findRelationships******************");
 
-        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList);
-        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
-        System.out.println("*******************Ran findAnomalies******************");
+            GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList); //TODO
+            getPredictionResponse = this.getPredictions(getPredictionRequest);
+            System.out.println("*******************Ran findPrediction******************");
 
+            FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList);
+            findTrendsResponse = this.findTrends(findTrendsRequest);
+            System.out.println("*******************Ran findTrends******************");
+
+            FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList);
+            findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+            System.out.println("*******************Ran findAnomalies******************");
+        } catch (IOException e) {
+            throw new AnalysingModelException("Failed loading model file");
+        }
 
         /*********************Result**************************/
-
-        //TrainFindTrendsArticlesRequest findTrendsArticlesRequest = new TrainFindTrendsArticlesRequest(parsedDataList);
-        // trainFindTrendsArticlesLR(findTrendsArticlesRequest);
-
-        //TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
-        //TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
-
-        //TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
-        //this.trainFindTrendsDecisionTree(findTrendsDTRequest);
-
-        //TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
-        //TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
-
 
         return new AnalyseDataResponse(//null,null,null,null,null,null);
                 findPatternResponse.getPattenList(),//null,null,null,null);
@@ -330,25 +327,36 @@ public class AnalyseServiceImpl {
 
         System.out.println("*******************Run A.I Models******************");
 
-        FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList,parsedArticleList,request.getModelId()); //TODO
-        FindPatternResponse findPatternResponse = this.findPattern(findPatternRequest);
-        System.out.println("*******************Ran findPattern******************");
+        FindPatternResponse findPatternResponse;
+        FindRelationshipsResponse findRelationshipsResponse;
+        GetPredictionResponse getPredictionResponse;
+        FindTrendsResponse findTrendsResponse;
+        FindAnomaliesResponse findAnomaliesResponse;
 
-        FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList,parsedArticleList,request.getModelId());
-        FindRelationshipsResponse findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
-        System.out.println("*******************Ran findRelationships******************");
+        try {
+            FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, request.getModelId()); //TODO
+            findPatternResponse = this.findPattern(findPatternRequest);
+            System.out.println("*******************Ran findPattern******************");
 
-        GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
-        GetPredictionResponse getPredictionResponse = this.getPredictions(getPredictionRequest);
-        System.out.println("*******************Ran findPrediction******************");
+            FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, request.getModelId());
+            findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+            System.out.println("*******************Ran findRelationships******************");
 
-        FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
-        FindTrendsResponse findTrendsResponse = this.findTrends(findTrendsRequest);
-        System.out.println("*******************Ran findTrends******************");
+            GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
+            getPredictionResponse = this.getPredictions(getPredictionRequest);
+            System.out.println("*******************Ran findPrediction******************");
 
-        FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
-        FindAnomaliesResponse findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
-        System.out.println("*******************Ran findAnomalies******************");
+            FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
+            findTrendsResponse = this.findTrends(findTrendsRequest);
+            System.out.println("*******************Ran findTrends******************");
+
+            FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
+            findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+            System.out.println("*******************Ran findAnomalies******************");
+        } catch (IOException e) {
+            throw new AnalysingModelException("Failed loading model file");
+        }
+
 
 
         /*********************Result**************************/
@@ -1061,7 +1069,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public FindTrendsResponse findTrends(FindTrendsRequest request)
-            throws AnalyserException {
+            throws InvalidRequestException, IOException{
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -1222,32 +1230,30 @@ public class AnalyseServiceImpl {
         TrainValidationSplitModel lrModel;
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        try {
-            if(request.getModelId() != null) {
-                String[] splitModelId = request.getModelId().split(";"); //name, id
-                String modelName = splitModelId[0];
-                String modelID = splitModelId[1];
 
-                File artifact = client.downloadArtifacts(modelID, modelName);
-                lrModel = TrainValidationSplitModel.load(artifact.getPath());
-            }
-            else{
-                BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
+        if(request.getModelId() != null) {
+            String[] splitModelId = request.getModelId().split(";"); //name, id
+            String modelName = splitModelId[0];
+            String modelID = splitModelId[1];
 
-                String findTrendModelId = reader.readLine();
+            File artifact = client.downloadArtifacts(modelID, modelName);
+            lrModel = TrainValidationSplitModel.load(artifact.getPath());
+        }
+        else{
+            BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
 
-                String[] splitModelId = findTrendModelId.split(";"); //name, id
-                String modelName = splitModelId[0];
-                String modelID = splitModelId[1];
+            String findTrendModelId = reader.readLine();
 
-                File artifact = client.downloadArtifacts(modelID, modelName);
-                lrModel = TrainValidationSplitModel.load(artifact.getPath());
+            String[] splitModelId = findTrendModelId.split(";"); //name, id
+            String modelName = splitModelId[0];
+            String modelID = splitModelId[1];
+
+            File artifact = client.downloadArtifacts(modelID, modelName);
+            lrModel = TrainValidationSplitModel.load(artifact.getPath());
 
                 //while (((line = reader.readLine()) != null)) {}
-            }
-        } catch (Exception e){
-            throw new AnalysingModelException("Failed to find analysis model file");
         }
+
 
         /******************* READ MODEL*****************/
 
@@ -1317,7 +1323,6 @@ public class AnalyseServiceImpl {
     }
 
 
-
     /**
      * This method used to find a predictions(s) within a given data
      * A prediction is a overall insight. use neural network
@@ -1368,7 +1373,7 @@ public class AnalyseServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public FindAnomaliesResponse findAnomalies(FindAnomaliesRequest request)
-            throws AnalyserException {
+            throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
@@ -1517,25 +1522,19 @@ public class AnalyseServiceImpl {
         PipelineModel kmModel;
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        try {
 
-            BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
 
-            String findTrendModelId = reader.readLine();
-            findTrendModelId = reader.readLine(); // 2nd line
+        String findTrendModelId = reader.readLine();
+        findTrendModelId = reader.readLine(); // 2nd line
 
-            String[] splitModelId = findTrendModelId.split(";"); //name, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[1];
+        String[] splitModelId = findTrendModelId.split(";"); //name, id
+        String modelName = splitModelId[0];
+        String modelID = splitModelId[1];
+        File artifact = client.downloadArtifacts(modelID, modelName);
+        kmModel = PipelineModel.load(artifact.getPath());
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            kmModel = PipelineModel.load(artifact.getPath());
-
-            //while (((line = reader.readLine()) != null)) {}
-
-        } catch (Exception e){
-            throw new AnalysingModelException("Failed to find analysis model file");
-        }
+        //while (((line = reader.readLine()) != null)) {}
 
         /*******************LOAD & READ MODEL*****************/
         // PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
