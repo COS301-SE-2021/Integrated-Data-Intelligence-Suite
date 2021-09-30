@@ -322,7 +322,7 @@ public class GatewayServiceController {
             //log.info(file.getOriginalFilename());
             if(isSocial) {
                 ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
-
+                socialMediaData = response1.getSocialDataList();
                 if(response1.isSuccess()) {
                     response.put("success", "true");
                 }
@@ -333,6 +333,7 @@ public class GatewayServiceController {
             }
             else {
                 ParseUploadedNewsDataResponse response1 = parseClient.parseUploadedNewsData(new ParseUploadedNewsDataRequest(filename, col1, col2, col3, col4));
+                newsData = response1.getNewsDataList();
                 if(response1.isSuccess()) {
                     response.put("success", "true");
                 }
@@ -392,6 +393,8 @@ public class GatewayServiceController {
 
             for(int i =0; i < visualizeResponse.outputData.size(); i++)
                 outputData.add(visualizeResponse.outputData.get(i));
+
+            storageService.deleteFile(filename);
 
         }
         catch (Exception e) {
