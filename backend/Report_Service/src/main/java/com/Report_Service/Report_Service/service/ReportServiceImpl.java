@@ -1,5 +1,6 @@
 package com.Report_Service.Report_Service.service;
 
+import com.Report_Service.Report_Service.dataclass.Report;
 import com.Report_Service.Report_Service.exception.InvalidRequestException;
 import com.Report_Service.Report_Service.exception.ReporterException;
 import com.Report_Service.Report_Service.request.*;
@@ -11,6 +12,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -22,12 +24,41 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class ReportServiceImpl {
 
-    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException {
+    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException, DocumentException, IOException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
         //does this work
+        GetTrendAnalysisDataRequest trendReq = new GetTrendAnalysisDataRequest(request.getTrendlist());
+        GetTrendAnalysisDataResponse trendResp = this.getTrendAnalysisData(trendReq);
+
+        GetAnomalyDataRequest anommalyReq = new GetAnomalyDataRequest(request.getAnomalylist());
+        GetAnomalyDataResponse anommalyResp = this.getAnomalyData(anommalyReq);
+
+        GetTextualAnalysisDataRequest textualAnalysisDataRequest = new GetTextualAnalysisDataRequest(request.getWordlist());
+        GetTextualAnalysisDataResponse textualAnalysisDataResponse = this.getTextualAnalysisData(textualAnalysisDataRequest);
+
+        Report newReport = new Report();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        newReport.DateTime= formatter.format(date);
+        newReport.TrendData = trendResp.getDataList();
+        newReport.TrendSummary = trendResp.getSummary();
+
+        newReport.AnomalyData = anommalyResp.getDataList();
+        newReport.AnomalySummary = anommalyResp.getSummary();
+
+        newReport.TextualAnalysisData = textualAnalysisDataResponse.getDataList();
+        newReport.TextualAnalysisSummary = textualAnalysisDataResponse.getSummary();
+
+        GenerateReportPDFRequest reportPDFRequest = new GenerateReportPDFRequest(newReport);
+        GenerateReportPDFResponse reportPDFResponse = this.generateReportPDF(reportPDFRequest);
+
+        OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
+        out.write(reportPDFResponse.getPdf());
+        out.close();
 
         return new ReportDataResponse();
     }
@@ -338,7 +369,7 @@ public class ReportServiceImpl {
             }
         }
 
-        String summary = "a totol of " + String.valueOf(dominantWords.size()) + " had high dominance in the collected data";
+        String summary = "a total of " + String.valueOf(dominantWords.size()) + " had high dominance in the collected data";
 
         return new GetTextualAnalysisDataResponse(output,summary);
     }
@@ -358,9 +389,7 @@ public class ReportServiceImpl {
 
         Paragraph rTitle = new Paragraph();
         rTitle.add("Report made on ");
-        rTitle.add(request.report.Date);
-        rTitle.add(" at ");;
-        rTitle.add(request.report.time);
+        rTitle.add(request.report.DateTime);
 
         document.add(rTitle);
         document.add(EmptyLine);

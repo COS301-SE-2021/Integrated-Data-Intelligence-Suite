@@ -5,8 +5,11 @@ import com.Report_Service.Report_Service.exception.ReporterException;
 import com.Report_Service.Report_Service.request.ReportDataRequest;
 import com.Report_Service.Report_Service.response.ReportDataResponse;
 import com.Report_Service.Report_Service.service.ReportServiceImpl;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/Report")
@@ -23,7 +26,7 @@ public class ReportServiceController {
      */
     @PostMapping("/visualizeData")
     public @ResponseBody
-    ReportDataResponse visualizeData(@RequestBody ReportDataRequest request) throws ReporterException {
+    ReportDataResponse visualizeData(@RequestBody ReportDataRequest request) throws ReporterException, DocumentException, IOException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("FindEntitiesRequest Object is null");
