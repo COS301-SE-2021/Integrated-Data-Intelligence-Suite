@@ -200,7 +200,7 @@ public class ParseServiceImpl {
                         .withCSVParser(parser)
                         .build();
                 //Check the columns in the uploaded file
-                ArrayList<String> columns = (ArrayList<String>) Arrays.asList(csvReader.readNext());
+                ArrayList<String> columns = new ArrayList<>(Arrays.asList(csvReader.readNext()));
 
                 //Check if the columns exist and get index of required columns. Throw error if they do not exists
                 if(columns.contains(request.getDateCol()) && columns.contains(request.getLocCol()) && columns.contains(request.getInteractionsCol()) && columns.contains(request.getTextCol())) {
@@ -227,6 +227,7 @@ public class ParseServiceImpl {
             }
             catch (Exception ex) {
                 log.error("An error has occurred while parsing: " + ex.getMessage());
+                ex.printStackTrace();
                 throw new ParserException("An error has occurred trying to parse uploaded social data");
             }
 
@@ -391,13 +392,20 @@ public class ParseServiceImpl {
      * @throws IOException This is thrown if the date does not fall within the pre specified formats.
      */
     private void checkDate(String date) throws IOException {
+        int numPassed = 0;
         for (String parse : dateFormats) {
             SimpleDateFormat sdf = new SimpleDateFormat(parse);
             try {
+                //System.out.println(date);
                 sdf.parse(date);
+                //System.out.println("passed");
+                return;
             } catch (ParseException e) {
-                throw new IOException("Invalid date format");
             }
+        }
+
+        if(numPassed != 0) {
+            throw new IOException("Invalid date format");
         }
     }
 }
