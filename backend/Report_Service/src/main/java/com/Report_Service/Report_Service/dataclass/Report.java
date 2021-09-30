@@ -3,7 +3,7 @@ package com.Report_Service.Report_Service.dataclass;
 import java.util.ArrayList;
 
 public class Report {
-    public String Date;
+    public String DateTime;
     public String time;
 
     public String TrendSummary = "";
@@ -18,7 +18,7 @@ public class Report {
     public String TextualAnalysisSummary = "";
     public ArrayList<ArrayList> TextualAnalysisData;
 
-    Report(){
+    public Report(){
 
     }
 }
