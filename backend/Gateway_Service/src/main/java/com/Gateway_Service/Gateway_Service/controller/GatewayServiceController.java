@@ -297,7 +297,7 @@ public class GatewayServiceController {
      * @param col2 This is the location/title
      * @param col3 This is the interactions/description
      * @param col4 This is the date
-     * @param isSocial
+     * @param isSocial If the data is social media or articles
      * @return This contains if the request of uploading a file was successful or not.
      */
     @PostMapping("/upload")
