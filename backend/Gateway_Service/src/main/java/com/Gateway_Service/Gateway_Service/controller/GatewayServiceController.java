@@ -301,7 +301,7 @@ public class GatewayServiceController {
      * @return This contains if the request of uploading a file was successful or not.
      */
     @PostMapping("/upload")
-    public ResponseEntity<Map<String, String>> fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam boolean isSocial) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam boolean isSocial) {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -310,9 +310,10 @@ public class GatewayServiceController {
         assert extension != null;
         if(!extension.equals("csv")) {
             response.put("message", "Incorrect file type uploaded.");
-            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
         }
-
+        ArrayList<ParsedData> socialMediaData = new ArrayList<>();
+        ArrayList<ParsedArticle> newsData = new ArrayList<>();
         try {
             String filename = storageService.store(file);
             //response.put("message", "Successfully saved file");
@@ -321,6 +322,7 @@ public class GatewayServiceController {
             //log.info(file.getOriginalFilename());
             if(isSocial) {
                 ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
+
                 if(response1.isSuccess()) {
                     response.put("success", "true");
                 }
@@ -394,10 +396,10 @@ public class GatewayServiceController {
         }
         catch (Exception e) {
             e.printStackTrace();
-            response.put("message", e.getMessage());
+            //response.put("message", e.getMessage());
         }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     /**
