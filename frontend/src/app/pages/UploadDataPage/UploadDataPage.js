@@ -19,7 +19,7 @@ export default class UploadDataPage extends React.Component {
                 <div id={'upload-content-div'}>
                     <CustomDivider DividerTitle={'Upload your file'}/>
                     <UploadDropZone/>
-                    <CustomDivider DividerTitle={'Upload your file'}/>
+                    <CustomDivider DividerTitle={'Some Title'}/>
                     <UploadSchemaForm/>
                     <button>
                         Analyze
