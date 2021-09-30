@@ -293,11 +293,17 @@ public class GatewayServiceController {
      * This endpoint will be use for uploading a file and saving the file to
      * a temporary directory such that it can be analyzed.
      * @param file This parameter will contain the file itself.
+     * @param col1 This is the text/content
+     * @param col2 This is the location/title
+     * @param col3 This is the interactions/description
+     * @param col4 This is the date
+     * @param isSocial
      * @return This contains if the request of uploading a file was successful or not.
      */
     @PostMapping("/upload")
-    public ResponseEntity<Map<String, String>> fileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, String>> fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam boolean isSocial) {
         Map<String, String> response = new HashMap<>();
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
@@ -308,10 +314,86 @@ public class GatewayServiceController {
         }
 
         try {
-            storageService.store(file);
-            response.put("message", "Successfully saved file");
+            String filename = storageService.store(file);
+            //response.put("message", "Successfully saved file");
+            log.info("[Gateway API] Successfully saved file");
+            log.info("[Gateway API] Running parser");
+            //log.info(file.getOriginalFilename());
+            if(isSocial) {
+                ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
+                if(response1.isSuccess()) {
+                    response.put("success", "true");
+                }
+                else {
+                    response.put("success", "false");
+                }
+                response.put("message", response1.getMessage());
+            }
+            else {
+                ParseUploadedNewsDataResponse response1 = parseClient.parseUploadedNewsData(new ParseUploadedNewsDataRequest(filename, col1, col2, col3, col4));
+                if(response1.isSuccess()) {
+                    response.put("success", "true");
+                }
+                else {
+                    response.put("success", "false");
+                }
+                response.put("message", response1.getMessage());
+            }
+
+            AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
+            AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+
+
+            if(analyseResponse.getFallback() == true) {
+                ErrorGraph errorGraph = new ErrorGraph();
+                errorGraph.Error = analyseResponse.getFallbackMessage();
+
+                ArrayList<Graph> data = new ArrayList<>();
+                data.add(errorGraph);
+
+                outputData.add( data);
+
+                return new ResponseEntity<>(outputData,HttpStatus.OK);
+            }
+
+
+
+            System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+
+            /*********************VISUALISE**********************/
+
+            VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
+                    analyseResponse.getPattenList(),
+                    analyseResponse.getRelationshipList(),
+                    analyseResponse.getPattenList(),
+                    analyseResponse.getTrendList(),
+                    analyseResponse.getAnomalyList(),
+                    analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+            VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
+
+
+            if(visualizeResponse.getFallback() == true) {
+                ErrorGraph errorGraph = new ErrorGraph();
+                errorGraph.Error = analyseResponse.getFallbackMessage();
+
+                ArrayList<Graph> data = new ArrayList<>();
+                data.add(errorGraph);
+
+                outputData.add( data);
+
+                return new ResponseEntity<>(outputData,HttpStatus.OK);
+            }
+
+            System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
+
+
+            for(int i =0; i < visualizeResponse.outputData.size(); i++)
+                outputData.add(visualizeResponse.outputData.get(i));
+
         }
-        catch (GatewayException e) {
+        catch (Exception e) {
+            e.printStackTrace();
             response.put("message", e.getMessage());
         }
 
