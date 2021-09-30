@@ -552,8 +552,6 @@ public class AnalyseServiceImpl {
         }
 
 
-
-
         /*OLD NLP
         ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
         ArrayList<String> entityList = new ArrayList<>();

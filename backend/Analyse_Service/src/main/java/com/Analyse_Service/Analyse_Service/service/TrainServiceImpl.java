@@ -2,7 +2,8 @@ package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
-import com.Analyse_Service.Analyse_Service.exception.AnalyzerException;
+import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
+import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
 import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
@@ -21,9 +22,7 @@ import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.commons.io.FileUtils;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -79,7 +78,7 @@ public class TrainServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainUserModelResponse trainUserModel(TrainUserModelRequest request)
-            throws AnalyzerException {
+            throws AnalyserException {
 
         if (request == null) {
             throw new InvalidRequestException("TrainModelRequest Object is null");
@@ -252,13 +251,13 @@ public class TrainServiceImpl {
             //trainFindTrendsArticlesLR(findTrendsArticlesRequest);
 
 
-            TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
+            TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList, request.getModelName());
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
-            TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
+            TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList, request.getModelName());
             this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
-            TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
+            TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList, request.getModelName());
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
 
 
@@ -278,10 +277,10 @@ public class TrainServiceImpl {
      * This method used to train the overall default app models.
      *
      *
-     * @throws AnalyzerException This is thrown if the request or if any of its attributes are invalid.
+     * @throws AnalyserException This is thrown if the request or if any of its attributes are invalid.
      */
     public void trainApplicationModel()
-            throws AnalyzerException {
+            throws AnalyserException {
 
         ArrayList<ParsedData> dataList = new ArrayList<>();// repos.getParsedDataList();
 
@@ -415,8 +414,6 @@ public class TrainServiceImpl {
 
             parsedDataList.add(rowOfParsed);
         }
-
-
 
         /**************************************************************************************************************/
 
@@ -941,14 +938,23 @@ public class TrainServiceImpl {
                 .setParallelism(2);
 
         System.out.println("trends mlflow");
+
+
         /***********************SETUP MLFLOW - SAVE ***********************/
+
+        /***setup***/
+        String modelName = "FindTrend";
+
+        if(request.getModelName() != null) {
+            modelName = request.getModelName();
+        }
 
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
         String experimentID = "";
         if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("LogisticRegression_Experiment");
+            experimentID = client.createExperiment(modelName + "_Experiment");
         }
         else{
             experimentID = foundExperiment.get().getExperimentId();
@@ -956,9 +962,9 @@ public class TrainServiceImpl {
 
         org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
         MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
+        ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
 
-
+        /***trainModel***/
         TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
         Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
         //predictions.show();
@@ -971,17 +977,16 @@ public class TrainServiceImpl {
 
         //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
 
-        //param
 
+        /***logging***/
+        //param
         client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
         client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
         client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
         client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
 
 
-
         //metrics
-
         /*client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC());
         client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError());
         client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
@@ -1003,7 +1008,9 @@ public class TrainServiceImpl {
 
         //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel";
+        /***saveModel***/
+
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
         String script = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/LogModel.py";
         //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
         lrModel.write().overwrite().save(path);
@@ -1017,62 +1024,14 @@ public class TrainServiceImpl {
 
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
 
-        try {
+        FileUtils.deleteDirectory(new File(path));
 
-            String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
-            CommandLine commandLine = CommandLine.parse(commandPath);
-            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
-            DefaultExecutor executor = new DefaultExecutor();
-            executor.setStreamHandler(new PumpStreamHandler(System.out));
-            executor.execute(commandLine);
-
-
-            /*lrModel.save("Database");
-
-            //File modelFile = new File("../models/LogisticRegressionModel");
-            //client.logArtifact(run.getId(), modelFile);
-
-            //TODO: flavor
-
-
-
-            /*try {
-                executor.execute(commandLine);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex);
-            }*
-
-            //TODO: flavor
-
-
-            //client.logArtifact(run.getId(), modelFile);
-
-            //File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
-
-            /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
-            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
-            mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
-            ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-            String jsonModel = ow.writeValueAsString(modelFile);
-            //String jsonModel = String.valueOf(modelFile);
-
-            LogModel logModel = LogModel.newBuilder()
-                    .setRunId(run.getId())
-                    .setModelJson(jsonModel)
-                    .build();
-
-            System.out.println(logModel);
-
-            ModelRegistry.CreateModelVersion.newBuilder()
-                    .setName("LogisticRegressionModel")
-                    .setRunId(run.getId())
-                    .setSource("artifactstore")
-                    .build();*/
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        /*String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
+        CommandLine commandLine = CommandLine.parse(commandPath);
+        //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setStreamHandler(new PumpStreamHandler(System.out));
+        executor.execute(commandLine);*/
 
         run.endRun();
 
@@ -1752,7 +1711,7 @@ public class TrainServiceImpl {
 
     /**
      * This method used to find a predictions(s) within a given data
-     * A prediction is a prediction...
+     * A prediction is a overall insight. use neural network
      * @param request This is a request object which contains data required to be analysed.
      * @return GetPredictionResponse This object contains data of the predictions found within the input data.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
@@ -2120,7 +2079,7 @@ public class TrainServiceImpl {
      *
      */
     public void CleanModelsRegistry()
-            throws AnalyzerException{
+            throws AnalyserException {
         //todo: do something here
     }
 
