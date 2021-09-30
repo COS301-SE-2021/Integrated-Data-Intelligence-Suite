@@ -1,14 +1,14 @@
 package com.User_Service.User_Service.request;
 
-public class AddReportRequest {
+public class ReportRequest {
     private String reportID;
     private String userID;
 
-    public AddReportRequest() {
+    public ReportRequest() {
 
     }
 
-    public AddReportRequest(String reportID, String userID) {
+    public ReportRequest(String reportID, String userID) {
         this.reportID = reportID;
         this.userID = userID;
     }

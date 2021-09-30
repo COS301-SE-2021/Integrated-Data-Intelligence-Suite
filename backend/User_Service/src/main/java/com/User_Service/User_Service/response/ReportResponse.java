@@ -1,14 +1,14 @@
 package com.User_Service.User_Service.response;
 
-public class AddReportResponse {
+public class ReportResponse {
     private boolean success;
     private String message;
 
-    public AddReportResponse() {
+    public ReportResponse() {
 
     }
 
-    public AddReportResponse(boolean success, String message) {
+    public ReportResponse(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
