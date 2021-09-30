@@ -56,9 +56,9 @@ public class ReportServiceImpl {
         GenerateReportPDFRequest reportPDFRequest = new GenerateReportPDFRequest(newReport);
         GenerateReportPDFResponse reportPDFResponse = this.generateReportPDF(reportPDFRequest);
 
-        OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
+        /*OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
         out.write(reportPDFResponse.getPdf());
-        out.close();
+        out.close();*/
 
         return new ReportDataResponse();
     }
