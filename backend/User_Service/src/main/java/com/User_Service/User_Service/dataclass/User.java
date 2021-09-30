@@ -158,8 +158,8 @@ public class User {
         reportIDs.add(reportID);
     }
 
-    public void removeID(String id) {
-        reportIDs.remove(id);
+    public void removeReportID(String reportID) {
+        reportIDs.remove(reportID);
     }
 
     public List<String> getReportIDs() {

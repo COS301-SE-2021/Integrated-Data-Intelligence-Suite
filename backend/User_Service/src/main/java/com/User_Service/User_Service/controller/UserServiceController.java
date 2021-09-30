@@ -83,8 +83,15 @@ public class UserServiceController {
     }
 
     @PostMapping(value = "/addReport")
-    public @ResponseBody AddReportResponse addReport(@RequestBody AddReportRequest request) throws Exception {
+    public @ResponseBody
+    ReportResponse addReport(@RequestBody ReportRequest request) throws Exception {
         return service.addReport(request);
+    }
+
+    @PostMapping(value = "/removeReport")
+    public @ResponseBody
+    ReportResponse removeReport(@RequestBody ReportRequest request) throws Exception {
+        return service.removeReport(request);
     }
 
     @GetMapping(value = "/getReports/{id}")
