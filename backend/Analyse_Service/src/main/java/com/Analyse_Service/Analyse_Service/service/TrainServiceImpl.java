@@ -1465,7 +1465,7 @@ public class TrainServiceImpl {
      * @return void
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public void trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request)
+    public TrainFindTrendsArticlesResponse trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request)
             throws InvalidRequestException, IOException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
@@ -1788,6 +1788,8 @@ public class TrainServiceImpl {
 
         sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
+
+        return new TrainFindTrendsArticlesResponse(results);
     }
 
 
