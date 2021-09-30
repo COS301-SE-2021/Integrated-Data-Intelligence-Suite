@@ -28,7 +28,7 @@ public class ReportServiceController {
      */
     @PostMapping("/visualizeData")
     public @ResponseBody
-    ReportDataResponse reportData(@RequestBody ReportDataRequest request) throws ReporterException, DocumentException, IOException {
+    ReportDataResponse reportData(@RequestBody ReportDataRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("reportData Request Object is null");
@@ -45,7 +45,7 @@ public class ReportServiceController {
      */
     @PostMapping("/visualizeData")
     public @ResponseBody
-    GetReportDataResponse getReportData(@RequestBody GetReportDataRequest request) throws ReporterException, DocumentException, IOException {
+    GetReportDataResponse getReportData(@RequestBody GetReportDataRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("getReportData Request Object is null");

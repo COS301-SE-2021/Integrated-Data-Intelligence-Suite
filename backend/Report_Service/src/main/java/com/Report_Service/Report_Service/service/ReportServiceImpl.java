@@ -31,7 +31,7 @@ public class ReportServiceImpl {
     @Autowired
     private ReportRepository repository;
 
-    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException, DocumentException, IOException {
+    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -61,7 +61,14 @@ public class ReportServiceImpl {
         newReport.setTextualAnalysisSummary(textualAnalysisDataResponse.getSummary());
 
         GenerateReportPDFRequest reportPDFRequest = new GenerateReportPDFRequest(newReport);
-        GenerateReportPDFResponse reportPDFResponse = this.generateReportPDF(reportPDFRequest);
+        GenerateReportPDFResponse reportPDFResponse = null;
+        try {
+            reportPDFResponse = this.generateReportPDF(reportPDFRequest);
+        } catch (DocumentException e) {
+            throw new ReporterException("Error creating report document");
+        } catch (IOException e) {
+            throw new ReporterException("Error saving or loading report document");
+        }
 
         newReport.setPdf(reportPDFResponse.getPdf());
 
