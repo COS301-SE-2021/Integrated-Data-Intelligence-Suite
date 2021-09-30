@@ -1,14 +1,24 @@
 :root {
-    /*Overall App*/
+    /*Blues*/
     --neon-blue: #5773FA;
-    --dodger-blue: #148dff;
+    /*--dodger-blue: #148dff;*/
+    --dodger-blue: #339CFF;
+    --prussian-blue: #0E2A42;
+
+    /*blacks*/
+    --black-coral: #535C6F;
+
+    /*Whites*/
+    /*Ghost white looks like a bluish white*/
+    --ghost-white: #F2F6FC;
+
+
     /*--light-gray: #f4f7fc;*/
     --light-gray: #F1F2F8;
     --amount-increasing: #00b074;
     --grey-border-color: #e8e8e9;
     --simple-card-title-color: darkgrey;
 
-    --prussian-blue: #0E2A42;
     --cultured: #f9fbfc;
 
 
