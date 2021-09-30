@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.UUID;
 
-@Entity(name = "Reports")
-@Table(name = "Reports")
+@Entity(name = "reports")
+@Table(name = "reports")
 public class PdfReport {
 
     @Id
@@ -20,7 +20,7 @@ public class PdfReport {
             name = "report_sequence",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    UUID ID;
+    UUID id;
 
     byte[] pdf;
 
