@@ -1,0 +1,16 @@
+#upload-schema-form-card {
+    width: 400px;
+}
+
+#upload-schema-form-card > .simple-card-title {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 25px;
+}
+
+#upload-schema-form-card > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 25px;
+}
+
