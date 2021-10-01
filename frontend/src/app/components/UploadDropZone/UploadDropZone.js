@@ -2,12 +2,14 @@ import React from 'react';
 import SimpleCard from '../SimpleCard/SimpleCard';
 import './UploadDropZone.css';
 import { useDropzone } from 'react-dropzone';
-import { RiFile3Fill } from 'react-icons/all';
+import { FaFileCsv, RiFile3Fill } from 'react-icons/all';
 import { Divider } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import CustomDivider from '../CustomDivider/CustomDivider';
 
-export default function UploadDropZone() {
+export default function UploadDropZone(props) {
+    const pushFileArrayUp = (fileArrayObj) => {
+        props.setFileArray(fileArrayObj);
+    };
+
     const {
         getRootProps,
         getInputProps,
@@ -16,16 +18,32 @@ export default function UploadDropZone() {
     } = useDropzone({
         // Disable click and keydown behavior
         noClick: true,
-        noKeyboard: true
+        noKeyboard: true,
+        //update file preview on drop
+        onDrop: () => {
+            files = acceptedFiles.map(file => (
+                <li key={file.path}>
+                    {file.name}
+                    -
+                    {file.size}
+                    bytes
+                </li>
+            ));
+            //pushing the file array up to parent component
+            pushFileArrayUp(acceptedFiles);
+        }
     });
 
-    const files = acceptedFiles.map(file => (
-        <li key={file.path}>
-            {file.name}
-            -
-            {file.size}
-            bytes
-        </li>
+    //updates file preview when file uploaded with dialog (not dropped)
+    let files = acceptedFiles.map(file => (
+        <div key={file.path} className={'file-preview-item'}>
+            <div><FaFileCsv className={'file-preview-csv-icon'}/></div>
+            <div>{file.name}</div>
+            <div>
+                {file.size}
+                bytes
+            </div>
+        </div>
     ));
 
     return (
@@ -35,9 +53,6 @@ export default function UploadDropZone() {
                 cardID={'upload-card'}
                 titleOnTop
             >
-
-                <CustomDivider DividerTitle={'Upload your file'}/>
-
                 <div {...getRootProps({ className: 'dropzone' })}>
                     <input {...getInputProps()} />
                     <div
@@ -53,12 +68,11 @@ export default function UploadDropZone() {
                         </button>
                     </div>
                 </div>
-                <div>
-                    <h4>Files</h4>
-                    <ul>{files}</ul>
+                <div id={'file-preview-div'}>
+                    <h4>File Preview</h4>
+                    {files}
                 </div>
             </SimpleCard>
-
         </>
     );
 }
