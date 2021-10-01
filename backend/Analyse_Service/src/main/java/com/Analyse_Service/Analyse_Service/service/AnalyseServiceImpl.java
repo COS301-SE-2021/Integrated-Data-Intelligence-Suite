@@ -19,6 +19,7 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -103,7 +104,7 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> nlpTextArticle = new ArrayList<>();
         for (int i = 0; i < articleList.size(); i++) {
-            nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle()); ///TODO: shrey used other names like i think message = content; (more was changed)
+            nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle());
         }
 
         FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
@@ -1237,11 +1238,14 @@ public class AnalyseServiceImpl {
             String modelID = splitModelId[1];
 
             File artifact = client.downloadArtifacts(modelID, modelName);
-            lrModel = TrainValidationSplitModel.load(artifact.getPath());
+            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+            lrModel = trainValidationSplit.fit(trainingDF);
+
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
         }
         else{
-            String applicationRegitser = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
-            BufferedReader reader = new BufferedReader(new FileReader(applicationRegitser));
+            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
             String findTrendModelId = reader.readLine();
 
@@ -1249,10 +1253,16 @@ public class AnalyseServiceImpl {
             String modelName = splitModelId[0];
             String modelID = splitModelId[1];
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            lrModel = TrainValidationSplitModel.load(artifact.getPath());
+            //File artifact = client.downloadArtifacts(modelID, modelName);
+            //lrModel = TrainValidationSplitModel.load(artifact.getPath());
 
-                //while (((line = reader.readLine()) != null)) {}
+            File artifact = client.downloadArtifacts(modelID, modelName + "T");
+            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+            lrModel = trainValidationSplit.fit(trainingDF);
+
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
+
+            //while (((line = reader.readLine()) != null)) {}
         }
 
 
@@ -1529,11 +1539,17 @@ public class AnalyseServiceImpl {
             String modelName = splitModelId[0];
             String modelID = splitModelId[2];
 
+            // artifact = client.downloadArtifacts(modelID, modelName);
+            //kmModel = PipelineModel.load(artifact.getPath());
+
             File artifact = client.downloadArtifacts(modelID, modelName);
-            kmModel = PipelineModel.load(artifact.getPath());
+            Pipeline pipeline = Pipeline.load(artifact.getPath());
+            kmModel = pipeline.fit(trainingDF);
+
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
         }
         else{
-            String applicationRegistered = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
             BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
             String findTrendModelId = reader.readLine();
@@ -1542,15 +1558,22 @@ public class AnalyseServiceImpl {
             String[] splitModelId = findTrendModelId.split(":"); //name, id
             String modelName = splitModelId[0];
             String modelID = splitModelId[2];
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            kmModel = PipelineModel.load(artifact.getPath());
+
+            //File artifact = client.downloadArtifacts(modelID, modelName);
+            //kmModel = PipelineModel.load(artifact.getPath());
+
+            File artifact = client.downloadArtifacts(modelID, modelName + "A");
+            Pipeline pipeline = Pipeline.load(artifact.getPath());
+            kmModel = pipeline.fit(trainingDF);
+
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
 
 
         /*******************LOAD & READ MODEL*****************/
-        // PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        //PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
