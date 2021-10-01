@@ -1106,7 +1106,8 @@ public class TrainServiceImpl {
         //lrModel.write().overwrite().save(path);
         trainValidationSplit.write().overwrite().save(path);
 
-        File modelFile = new File(path) ;// "../models/" + modelName);
+
+        File modelFile = new File(path);// "../models/" + modelName);
 
         if(modelFile.exists() && modelFile.isDirectory()){
             System.out.println("nothing wrong with file ");
@@ -1115,8 +1116,15 @@ public class TrainServiceImpl {
         }
         client.logArtifact(run.getId(), modelFile);
 
+
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainSetDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
 
         /*
         String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
@@ -1466,8 +1474,14 @@ public class TrainServiceImpl {
 
         client.logArtifact(run.getId(), modelFile);
 
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainSetDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
 
 
         /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
@@ -2140,8 +2154,14 @@ public class TrainServiceImpl {
 
         client.logArtifact(run.getId(), modelFile);
 
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainingDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
 
         /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
         CommandLine commandLine = CommandLine.parse(commandPath);
