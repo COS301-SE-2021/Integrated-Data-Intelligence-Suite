@@ -98,7 +98,7 @@ public class ReportServiceImpl {
         }
 
 
-        return new GetReportDataResponse(report.get().getPdf());
+        return new GetReportDataResponse(report.get().getPdf(),report.get().getName(),report.get().getDate());
     }
 
     public DeleteReportDataResponse deleteReportData(DeleteReportDataRequest request) throws ReporterException {
