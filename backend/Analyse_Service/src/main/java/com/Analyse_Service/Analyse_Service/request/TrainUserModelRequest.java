@@ -14,8 +14,9 @@ public class TrainUserModelRequest {
 
     }
 
-    public TrainUserModelRequest(String modelName){
+    public TrainUserModelRequest(String modelName, ArrayList<ParsedData> dataList){
         this.modelName = modelName;
+        this.dataList = dataList;
     }
 
     public String getModelName(){
