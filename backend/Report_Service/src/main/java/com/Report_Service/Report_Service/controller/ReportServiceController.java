@@ -7,7 +7,9 @@ import com.Report_Service.Report_Service.request.GetReportDataRequest;
 import com.Report_Service.Report_Service.request.ReportDataRequest;
 import com.Report_Service.Report_Service.response.DeleteReportDataResponse;
 import com.Report_Service.Report_Service.response.GetReportDataResponse;
+import com.Report_Service.Report_Service.request.ShareReportRequest;
 import com.Report_Service.Report_Service.response.ReportDataResponse;
+import com.Report_Service.Report_Service.response.ShareReportResponse;
 import com.Report_Service.Report_Service.service.ReportServiceImpl;
 import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +81,11 @@ public class ReportServiceController {
         }
 
         return service.deleteReportData(request);
+    }
+
+    @PostMapping(value = "/shareReport")
+    public @ResponseBody
+    ShareReportResponse shareReport(@RequestBody ShareReportRequest request) throws Exception {
+        return service.shareReport(request);
     }
 }

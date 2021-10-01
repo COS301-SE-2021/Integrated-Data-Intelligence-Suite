@@ -53,7 +53,7 @@ public class PdfReport {
         return name;
     }
 
-    void setPdf(byte[] pdf){
+    public void setPdf(byte[] pdf){
         this.pdf = pdf;
     }
 
