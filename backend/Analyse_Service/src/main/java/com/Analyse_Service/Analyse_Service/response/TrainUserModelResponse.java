@@ -10,8 +10,10 @@ public class TrainUserModelResponse {
 
     }
 
-    public TrainUserModelResponse(long trainingLength){
+    public TrainUserModelResponse(long trainingLength, String modelName, String modelId){
         this.trainingLength = trainingLength;
+        this.modelName = modelName;
+        this.modelId = modelId;
     }
 
     public long getTrainingLength(){
@@ -26,5 +28,15 @@ public class TrainUserModelResponse {
         return modelName;
     }
 
+    public void setTrainingLength(long trainingLength) {
+        this.trainingLength = trainingLength;
+    }
 
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
 }

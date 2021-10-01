@@ -267,6 +267,8 @@ public class TrainServiceImpl {
 
 
         long duration = 0;// milliseconds
+        String modelId = "";
+        String modelName ="";
         try {
 
             long  startTime = System.currentTimeMillis();
@@ -294,6 +296,8 @@ public class TrainServiceImpl {
             RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel);
             RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
 
+            modelName = registerUserBestModelResponse.getBestModelName();
+            modelId = registerUserBestModelResponse.getBestModelId();
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
         } catch (IOException e) {
@@ -301,7 +305,7 @@ public class TrainServiceImpl {
         }
 
 
-        return new TrainUserModelResponse(duration);
+        return new TrainUserModelResponse(duration,modelId,modelName);
     }
 
 
@@ -449,10 +453,18 @@ public class TrainServiceImpl {
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
             TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
-            this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+            TrainFindTrendsDTResponse findTrendsDTResponse = this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+
+            ArrayList<TrainedModel> trainedModels = new ArrayList<>();
+            trainedModels.add(findTrendsResponse.getTrainedModel());
+            trainedModels.add(findTrendsDTResponse.getTrainedModel());
+            trainedModels.add(findAnomaliesResponse.getTrainedModel());
+
+            RegisterApplicationBestModelRequest registerApplicationBestModelRequest = new RegisterApplicationBestModelRequest(trainedModels);
+            this.registerApplicationBestModel(registerApplicationBestModelRequest);
         } catch (IOException e) {
             throw new TrainingModelException("Failed logging model file");
         }
@@ -1010,7 +1022,7 @@ public class TrainServiceImpl {
 
         String modelName;
         if(request.getModelName() == null) {
-            modelName = "FindTrend";
+            modelName = "_ApplicationModelT";
         }
         else{
             modelName = request.getModelName();
@@ -1094,7 +1106,7 @@ public class TrainServiceImpl {
         }
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(new File(path));
 
         /*
@@ -1368,7 +1380,7 @@ public class TrainServiceImpl {
 
         String modelName;
         if(request.getModelName() == null) {
-            modelName = "FindTrend";
+            modelName = "_ApplicationModelT";
         }
         else{
             modelName = request.getModelName();
@@ -1445,7 +1457,7 @@ public class TrainServiceImpl {
 
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
 
         FileUtils.deleteDirectory(new File(path));
 
@@ -2058,7 +2070,7 @@ public class TrainServiceImpl {
         /***setup***/
         String modelName;
         if(request.getModelName() == null) {
-            modelName = "FindAnomaly";
+            modelName = "_ApplicationModelA";
         }
         else{
             modelName = request.getModelName();
@@ -2117,7 +2129,7 @@ public class TrainServiceImpl {
         File modelFile = new File(path);
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy);
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
         FileUtils.deleteDirectory(new File(path));
 
         /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
@@ -2162,14 +2174,22 @@ public class TrainServiceImpl {
         }
 
         //select best in selection for user
+        TrainedModel trendModelOne = request.getModelList().get(0);
+        TrainedModel trendModelTwo = request.getModelList().get(1);
+        TrainedModel trendModelThree = request.getModelList().get(2);
 
+        String bestModelId = trendModelOne.getModelName();
 
+        if(trendModelOne.getAccuracy() >= trendModelTwo.getAccuracy()){
+            bestModelId = bestModelId + ":" + trendModelOne.getRunId();
+        }
+        else{
+            bestModelId = bestModelId + ":" + trendModelTwo.getRunId();
+        }
 
+        bestModelId = bestModelId + ":" + trendModelThree.getRunId();
 
-
-        TrainedModel BestModel = new TrainedModel();
-
-        return new RegisterUserBestModelResponse(BestModel);
+        return new RegisterUserBestModelResponse(bestModelId, trendModelOne.getModelName());
     }
 
 
@@ -2178,16 +2198,59 @@ public class TrainServiceImpl {
      * along with selecting the method registers that best model under the model name.
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
-    public void registerApplicationBestModel()
-            throws IOException{
+    public void registerApplicationBestModel(RegisterApplicationBestModelRequest request)
+            throws InvalidRequestException, IOException{
+
+        if (request == null) {
+            throw new InvalidRequestException("registerUserBestModel request Object is null");
+        }
+        if (request.getModelList() == null){
+            throw new InvalidRequestException("registerUserBestModel ModelList is null");
+        }
 
         //select best in registry for application
 
-        String BestModelId ="";
-        String filePath = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
-        BufferedReader reader = new BufferedReader(new FileReader(filePath)); //TODO; write
+        String modelName = "_ApplicationModel";
 
-        TrainedModel BestModel = new TrainedModel();
+        /*MlflowClient client = new MlflowClient("http://localhost:5000");
+
+        List<org.mlflow.api.proto.Service.Experiment> experiments = client.listExperiments();
+
+
+        for(int i =0; i < experiments.size(); i++){
+            if(experiments.get(i).getName().equals(modelName + "T")){
+                org.mlflow.api.proto.Service.Experiment foundExperiment =  experiments.get(i);
+                List<org.mlflow.api.proto.Service.RunInfo> runList = client.listRunInfos(foundExperiment.getExperimentId());
+            }
+            if(experiments.get(i).getName().equals(modelName + "A")){
+
+            }
+        }*/
+
+        TrainedModel trendModelOne = request.getModelList().get(0);
+        TrainedModel trendModelTwo = request.getModelList().get(1);
+        TrainedModel trendModelThree = request.getModelList().get(2);
+
+        String bestModelId = modelName;
+
+        if(trendModelOne.getAccuracy() >= trendModelTwo.getAccuracy()){
+            bestModelId = bestModelId + ":" + trendModelOne.getRunId();
+        }
+        else{
+            bestModelId = bestModelId + ":" + trendModelTwo.getRunId();
+        }
+
+        bestModelId = bestModelId + ":" + trendModelThree.getRunId();
+
+
+        String filePath = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+        File file = new File(filePath);
+        file.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(file, false);
+        fos.write(bestModelId.getBytes());
+        fos.close();
+
     }
 
     /**
@@ -2202,8 +2265,6 @@ public class TrainServiceImpl {
         /***********************SETUP MLFLOW - SAVE ***********************/
 
         /***setup***/
-
-        String modelName;
 
         //client
         MlflowClient client = new MlflowClient("http://localhost:5000");
