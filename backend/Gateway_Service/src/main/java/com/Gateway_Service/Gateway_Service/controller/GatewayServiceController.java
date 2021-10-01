@@ -391,19 +391,28 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllReportsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetReportDataByIdRequest request) {
+    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) {
 
         /*********************USER******************/
 
         //GET ALL IDS
-        int maxSizeId =0;
+        int maxSizeId;
+
+        GetUserReportsResponse userReports = userClient.getUserReports(request);
+
+        List<String> reportsList = userReports.getReports();
+
+        maxSizeId = reportsList.size();
 
         /*********************REPORT******************/
 
         ArrayList<GetReportDataByIdResponse> output = new ArrayList<>();
 
-        for(int i =0; i < maxSizeId; i++){
-            output.add(reportClient.getReportDataById(request));
+        GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest();
+
+        for(int i =0; i < maxSizeId; i++) {
+            repRequest.setReportId(UUID.fromString(reportsList.get(i)));
+            output.add(reportClient.getReportDataById(repRequest));
         }
 
         return new ResponseEntity<>(output, HttpStatus.OK);

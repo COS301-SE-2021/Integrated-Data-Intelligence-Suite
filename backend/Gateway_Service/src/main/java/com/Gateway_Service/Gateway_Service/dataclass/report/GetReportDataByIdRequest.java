@@ -16,4 +16,8 @@ public class GetReportDataByIdRequest {
     public UUID getReportId(){
         return reportId;
     }
+
+    public void setReportId(UUID reportId) {
+        this.reportId = reportId;
+    }
 }
