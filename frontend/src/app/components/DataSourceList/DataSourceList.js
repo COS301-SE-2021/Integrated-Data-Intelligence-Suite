@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Popconfirm, message } from 'antd';
-import { Link, Redirect } from 'react-router-dom';
+import { Popconfirm, message } from 'antd';
+import { Link } from 'react-router-dom';
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
 
 const colors = {
@@ -60,19 +60,21 @@ const DataSourceList = () => {
     };
 
     return (
-        <div className="source-list">
+        <div className="settings-component settings-component">
             <div className="add-source">
                 <Link to="/settings/source/new" className="standard-filled button">new Source</Link>
             </div>
             {data && sources === null && setSources(data)}
             {sources !== null && sources.map((source, index) =>(
                 <div>
-                    <div className="source-preview" key={`source ${source.id}${index}`}>
-                        <p className="source-title">{source.name}</p>
-                        <div className="button-div">
-                            <Link className="standard button" to={`/settings/source/${source.id}`}><EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} /></Link>
+                    <div className="settings-list-item" key={`source ${source.id}${index}`}>
+                        <p className="list-item-title">{source.name}</p>
+                        <div className="options-container">
+                            <Link className="standard button" to={`/settings/source/${source.id}`}>
+                                <EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} />
+                            </Link>
                             <Popconfirm
-                              title="Are you sure to delete this task?"
+                              title="Are you sure to delete this item?"
                               onConfirm={()=>handleDelete(source.id)}
                               onCancel={()=>{}}
                               okText="Yes"

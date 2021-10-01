@@ -13,6 +13,7 @@ import VerifyPage from './pages/VerifyPage/VerifyPage';
 import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
+import ReportsPage from "./pages/ReportsPage/ReportsPage";
 import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
 
 
@@ -68,8 +69,12 @@ class App extends Component {
                         <CreditsPage/>
                     </Route>
 
+                    <Route exact path="/reports">
+                        <ReportsPage />
+
                     <Route exact path={'/uploadData'}>
                         <UploadDataPage/>
+
                     </Route>
 
                     <Route path="*">
