@@ -1,6 +1,5 @@
 import React from 'react';
 import './SimplePopup.css';
-import CustomDivider from '../CustomDivider/CustomDivider';
 
 export default class SimplePopup extends React.Component {
     handlePopup = () => {
