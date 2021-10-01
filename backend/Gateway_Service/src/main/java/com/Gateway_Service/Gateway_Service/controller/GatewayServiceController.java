@@ -456,7 +456,7 @@ public class GatewayServiceController {
         String output = "";
 
         //analyseClient.trainData();
-        if(analyseClient.trainData())
+        if(analyseClient.trainApplicationData())
             output = "Success training application";
         else{
             output = "Fail training application";
