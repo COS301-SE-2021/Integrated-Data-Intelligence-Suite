@@ -1,7 +1,7 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
+import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 
 import org.junit.jupiter.api.*;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 public class AnalyseServiceTest {
 
     @Mock
-    private AnalyseServiceParsedDataRepository analyseServiceParsedDataRepository;
+    private TrainingDataRepository trainingDataRepository;
 
 
     @InjectMocks

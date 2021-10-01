@@ -4,8 +4,7 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
+import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
@@ -50,7 +49,7 @@ public class AnalyseServiceImpl {
 
 
     @Autowired
-    private AnalyseServiceParsedDataRepository parsedDataRepository;
+    private TrainingDataRepository parsedDataRepository;
 
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);

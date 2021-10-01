@@ -5,7 +5,7 @@ import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
+import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
@@ -59,7 +59,6 @@ import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -69,7 +68,7 @@ import static org.apache.spark.sql.functions.col;
 public class TrainServiceImpl {
 
     @Autowired
-    private AnalyseServiceParsedDataRepository parsedDataRepository;
+    private TrainingDataRepository parsedDataRepository;
 
     //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
