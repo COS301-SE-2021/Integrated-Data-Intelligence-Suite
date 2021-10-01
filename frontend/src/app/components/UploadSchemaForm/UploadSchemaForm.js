@@ -32,69 +32,76 @@ export default class UploadSchemaForm extends React.Component {
                             <div id={'upload-radio-btn-heading'}>
                                 Choose the type of data your uploading:
                             </div>
-                            <input
-                                type="radio"
-                                value="social-media-type"
-                                name="upload-type-radio-btn"
-                                id={'social-media-radio-btn'}
-                                onClick={() => this.setSocialMediaChecked(true)}
-                            />
-                            Social Media
-                            <input
-                                type="radio"
-                                value="news-type"
-                                name="upload-type-radio-btn"
-                                id={'news-radio-btn'}
-                                onClick={() => this.setSocialMediaChecked(false)}
-                            />
-                            News
+                            <div id={'upload-radio-btn-wrapper'}>
+                                <div>
+
+                                    <input
+                                        type="radio"
+                                        value="social-media-type"
+                                        name="upload-type-radio-btn"
+                                        id={'social-media-radio-btn'}
+                                        onClick={() => this.setSocialMediaChecked(true)}
+                                    />
+                                    Social Media
+                                </div>
+                                <div>
+                                    <input
+                                        type="radio"
+                                        value="news-type"
+                                        name="upload-type-radio-btn"
+                                        id={'news-radio-btn'}
+                                        onClick={() => this.setSocialMediaChecked(false)}
+                                    />
+                                    News
+                                </div>
+                            </div>
                         </div>
 
                         {isSocialMediaChecked
                             ? (
                                 <div id={'upload-input-container'}>
-                                    <p>social media is checked</p>
+                                    {/*<p>social media is checked</p>*/}
                                     <InputBoxWithLabel
-                                        inputLabel={'date'}
+                                        inputLabel={'Date'}
                                         inputName={'schema-edit-box'}
                                     />
 
                                     <InputBoxWithLabel
-                                        inputLabel={'interactions'}
+                                        inputLabel={'Interactions'}
                                         inputName={'schema-edit-box'}
 
                                     />
 
                                     <InputBoxWithLabel
-                                        inputLabel={'text'}
+                                        inputLabel={'Text'}
                                         inputName={'schema-edit-box'}
                                     />
 
                                     <InputBoxWithLabel
-                                        inputLabel={'location'}
+                                        inputLabel={'Location'}
                                         inputName={'schema-edit-box'}
                                     />
                                 </div>
                             ) : (
                                 <div id={'upload-input-container'}>
-                                    <p>news is checked</p>
+                                    {/*<p>news is checked</p>*/}
                                     <InputBoxWithLabel
-                                        inputLabel={'date'}
+                                        inputLabel={'Date'}
                                         inputName={'schema-edit-box'}
                                     />
 
                                     <InputBoxWithLabel
-                                        inputLabel={'content'}
+                                        inputLabel={'Content'}
                                         inputName={'schema-edit-box'}
                                     />
 
                                     <InputBoxWithLabel
-                                        inputLabel={'title'}
+                                        inputLabel={'Title'}
                                         inputName={'schema-edit-box'}
                                     />
 
                                     <InputBoxWithLabel
-                                        inputLabel={'description'}
+                                        inputLabel={'Description'}
                                         inputName={'schema-edit-box'}
                                     />
                                 </div>

@@ -34,6 +34,7 @@
     grid-template-columns: repeat(2, auto);
     grid-template-rows: 100%;
     padding: 25px;
+    padding-bottom: 5px;
 }
 
 .popup-body {
@@ -50,11 +51,13 @@
  */
 .popup-body::-webkit-scrollbar {
     width: 7px;
-    background: transparent;
+    background-color: red;
 }
 
 .popup-body::-webkit-scrollbar-track {
     border-radius: 10px;
+    color: red;
+
 }
 
 .popup-body::-webkit-scrollbar-thumb {
