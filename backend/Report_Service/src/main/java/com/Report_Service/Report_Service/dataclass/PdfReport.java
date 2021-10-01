@@ -21,20 +21,47 @@ public class PdfReport {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     UUID id;
-
     byte[] pdf;
+
+    String name;
+
+    String date;
 
     public PdfReport(){
 
     }
 
-    public PdfReport(byte[] pdf){
+    public PdfReport(byte[] pdf, String name, String date){
         this.pdf = pdf;
+        this.name = name;
+        this.date = date;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public byte[] getPdf(){
+        return this.pdf;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getName() {
+        return name;
     }
 
     void setPdf(byte[] pdf){
         this.pdf = pdf;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
