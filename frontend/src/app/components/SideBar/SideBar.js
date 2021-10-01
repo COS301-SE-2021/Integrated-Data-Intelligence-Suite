@@ -1,10 +1,15 @@
+import React, { Component } from 'react';
 import { Menu, Layout } from 'antd';
 import {
-    BarChartOutlined, HomeOutlined, LaptopOutlined, SettingOutlined,
+    BarChartOutlined,
+    HomeOutlined,
+    LaptopOutlined,
+    SettingOutlined,
 } from '@ant-design/icons';
-import React, { Component } from 'react';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
-import {AiOutlineHeart, AiOutlineHome, HiOutlineDocumentReport} from 'react-icons/all';
+
+import {AiOutlineCloudUpload, AiOutlineHeart, AiOutlineHome, HiOutlineDocumentReport} from 'react-icons/all';
+
 import UserInfoCard from '../UserInfoCard/UserInfoCard';
 
 const {

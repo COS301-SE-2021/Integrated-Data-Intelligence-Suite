@@ -3,12 +3,12 @@ package com.Visualize_Service.Visualize_Service.request;
 import java.util.ArrayList;
 
 public class VisualizeDataRequest {
-    public ArrayList<ArrayList> patternList;
-    public ArrayList<ArrayList> relationshipList;
-    public ArrayList<ArrayList> predictionList;
-    public ArrayList<ArrayList> trendList;
-    public ArrayList<String> anomalyList;
-    public ArrayList<ArrayList> wordList;
+    private ArrayList<ArrayList> patternList;
+    private ArrayList<ArrayList> relationshipList;
+    private ArrayList<ArrayList> predictionList;
+    private ArrayList<ArrayList> trendList;
+    private ArrayList<String> anomalyList;
+    private ArrayList<ArrayList> wordList;
 
     public VisualizeDataRequest(ArrayList<ArrayList> patternList,
                                 ArrayList<ArrayList> relationshipList,

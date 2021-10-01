@@ -156,7 +156,7 @@ public class ImportServiceController {
         try{
             res = service.importData(new ImportDataRequest(key, 100));
 
-        } catch (ImporterException e) {
+        } catch (Exception e) {
 
             return "{\"data\": \"Import failed.\", \"message\" : \""+ e.getMessage() + "\"}";
         }
@@ -225,5 +225,14 @@ public class ImportServiceController {
     @PostMapping(value = "/getSourceById")
     public @ResponseBody GetAPISourceByIdResponse getAPISourceById(@RequestBody GetAPISourceByIdRequest request) throws Exception {
         return service.getAPISourceById(request);
+    }
+
+    @PostMapping(value="/deleteSourceById")
+    public @ResponseBody DeleteSourceResponse deleteSourceById(@RequestBody DeleteSourceRequest request) {
+        try {
+            return service.deleteSourceByID(request);
+        } catch (InvalidImporterRequestException e) {
+            return new DeleteSourceResponse(false, e.getMessage());
+        }
     }
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { Link, Route, Switch } from 'react-router-dom';
 import { HashRouter as Router, Link, Route, Switch } from "react-router-dom"
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
@@ -15,6 +14,7 @@ import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
 import ReportsPage from "./pages/ReportsPage/ReportsPage";
+import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
 
 
 class App extends Component {
@@ -71,6 +71,10 @@ class App extends Component {
 
                     <Route exact path="/reports">
                         <ReportsPage />
+
+                    <Route exact path={'/uploadData'}>
+                        <UploadDataPage/>
+
                     </Route>
 
                     <Route path="*">

@@ -5,7 +5,8 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class CreateMapGraphResponse {
-    public ArrayList<Graph> mapGraphArray;
+    private ArrayList<Graph> mapGraphArray;
+
     public CreateMapGraphResponse(ArrayList<Graph> mapGraphArray){
         this.mapGraphArray = mapGraphArray;
     }

@@ -81,4 +81,21 @@ public class UserServiceController {
     public @ResponseBody UpdateProfileResponse resendCode(@RequestBody UpdateProfileRequest request) throws Exception {
         return service.updateProfile(request);
     }
+
+    @PostMapping(value = "/addReport")
+    public @ResponseBody
+    ReportResponse addReport(@RequestBody ReportRequest request) throws Exception {
+        return service.addReport(request);
+    }
+
+    @PostMapping(value = "/removeReport")
+    public @ResponseBody
+    ReportResponse removeReport(@RequestBody ReportRequest request) throws Exception {
+        return service.removeReport(request);
+    }
+
+    @GetMapping(value = "/getReports/{id}")
+    public @ResponseBody GetUserReportsResponse getReports(@PathVariable String id) throws Exception {
+        return service.getReports(new GetUserReportsRequest(id));
+    }
 }

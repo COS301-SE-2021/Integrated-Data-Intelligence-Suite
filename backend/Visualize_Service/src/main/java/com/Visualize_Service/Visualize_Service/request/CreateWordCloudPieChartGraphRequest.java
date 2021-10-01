@@ -3,7 +3,7 @@ package com.Visualize_Service.Visualize_Service.request;
 import java.util.ArrayList;
 
 public class CreateWordCloudPieChartGraphRequest {
-    public ArrayList<ArrayList> dataList;
+    private ArrayList<ArrayList> dataList;
 
     public CreateWordCloudPieChartGraphRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;

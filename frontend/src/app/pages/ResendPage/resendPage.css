@@ -48,7 +48,9 @@
     position: relative;
     margin:auto;
     /*width: 100vw;*/
+
     /*background: white;*/
+    background: white;
     /*background: linear-gradient(176deg, #1c8efa 70%, #000000 calc(70% + 2px));*/
 }
 
