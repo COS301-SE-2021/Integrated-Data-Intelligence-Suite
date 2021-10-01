@@ -20,7 +20,7 @@ RUN pip install pyspark==3.1.2
 #CMD ["pip" , "install" , "psycopg2"]
 #CMD ["mlfow", "db" , "upgrade" , "postgresql://emerge:emerge0000@analysedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyseDatabase"]
 ENTRYPOINT ["mlflow", "server"]
-# ,"--host" , "0.0.0.0", "--backend-store-uri", "postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase", "--default-artifact-root", "DefaultEndpointsProtocol=https;AccountName=emergeartifactstore;AccountKey=8atYYzEevj5iElQfwWeyEnshETGfftBS75gLXF2O7Ay7HV2DEeXLic0tjeswqGYjPVyXLAIXQzohVMEBtRz9ew==;EndpointSuffix=core.windows.net"]
+# ,"--host" , "0.0.0.0", "--backend-store-uri", "postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase", "--default-artifact-root", "DefaultEndpointsProtocol=https;AccountName=emergeblobstorage;AccountKey=rJuDwXL155pPGGFGowv0ly1KvSC3ZFKToT+RAy1oi1GExovfcU+r60IpVksPBwwHrGf4Nmjf8LJlHUPChA7KFw==;EndpointSuffix=core.windows.net"]
 #CMD ["mlflow", "ui"]
 
 
