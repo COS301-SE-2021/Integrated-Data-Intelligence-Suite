@@ -1,16 +1,23 @@
 #upload-schema-form-card {
     width: 400px;
+    grid-template-rows: 0 auto !important;
 }
 
 #upload-schema-form-card > .simple-card-title {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    padding: 25px;
 }
 
 #upload-schema-form-card > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    padding: 25px;
+    padding: 0;
+}
+
+#upload-radio-btn-container {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: 100%;
+
 }
 
