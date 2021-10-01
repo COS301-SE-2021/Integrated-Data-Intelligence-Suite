@@ -2,7 +2,7 @@ package com.Analyse_Service.Analyse_Service.dataclass;
 
 public class TrainedModel {
 
-
+    private String modelName;
 
     private String modelId;
 
@@ -10,17 +10,46 @@ public class TrainedModel {
 
     private double accuracy;
 
+    private String runId;
+
     public TrainedModel(){
 
     }
 
-    public TrainedModel(String modelId, double accuracy){
+    public TrainedModel(String modelId, double accuracy, String runId, String modelName){
         this.modelId = modelId;
         this.accuracy = accuracy;
+        this.runId = runId;
+        this.modelName = modelName;
+    }
+
+    public String getModelName() {
+        return modelName;
     }
 
     public String getModelId(){
         return this.modelId;
+    }
+
+    public AIType getType(){
+        return this.type;
+    }
+
+    public double getAccuracy(){
+        return this.accuracy;
+    }
+
+    public String getRunId() {
+        return runId;
+    }
+
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
     }
 
     public void setType(AIType type){
@@ -31,11 +60,7 @@ public class TrainedModel {
         this.accuracy = accuracy;
     }
 
-    public AIType getType(){
-        return this.type;
-    }
-
-    public double getAccuracy(){
-        return this.accuracy;
+    public void setRunId(String runId) {
+        this.runId = runId;
     }
 }
