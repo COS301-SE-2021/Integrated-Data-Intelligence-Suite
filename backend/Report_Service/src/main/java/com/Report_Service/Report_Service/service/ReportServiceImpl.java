@@ -77,7 +77,7 @@ public class ReportServiceImpl {
         out.close();*/
 
         //save generated pdf
-        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf());
+        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), "", "");
         repository.save(pdfReport);
 
         return new ReportDataResponse(reportPDFResponse.getPdf());
@@ -97,9 +97,28 @@ public class ReportServiceImpl {
             throw new ReporterException("report service could not find user by given id");
         }
 
-        return new GetReportDataResponse(null);
+
+        return new GetReportDataResponse(report.get().getPdf());
     }
 
+    public DeleteReportDataResponse deleteReportData(DeleteReportDataRequest request) throws ReporterException {
+
+        if (request == null) {
+            throw new InvalidRequestException("Request Object is null");
+        }
+        if (request == null) {
+            throw new InvalidRequestException("Request report id is null");
+        }
+
+        Optional<PdfReport> report =  repository.findUserById(request.getReportId());
+        if(report.isEmpty() == false) {
+            repository.delete(report.get());
+        }else {
+            return new DeleteReportDataResponse(false);
+        }
+
+        return new DeleteReportDataResponse(true);
+    }
 
 
     public GetTrendAnalysisDataResponse getTrendAnalysisData(GetTrendAnalysisDataRequest request) throws InvalidRequestException {
