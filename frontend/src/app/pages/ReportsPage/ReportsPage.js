@@ -112,7 +112,7 @@ const ReportsPage = () => {
                     <div>
                         <iframe
                           title="pdf=preview"
-                          src=""
+                          src="http://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
                           frameBorder="10px"
                           scrolling="auto"
                           height="100%"
