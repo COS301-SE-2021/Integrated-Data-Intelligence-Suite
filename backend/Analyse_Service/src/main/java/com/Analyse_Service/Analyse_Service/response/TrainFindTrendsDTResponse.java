@@ -4,16 +4,16 @@ import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 
 import java.util.ArrayList;
 
-public class TrainGetPredictionResponse {
+public class TrainFindTrendsDTResponse {
     ArrayList<ArrayList> pattenList;
 
     TrainedModel trainedModel;
 
-    public TrainGetPredictionResponse(ArrayList<ArrayList> pattenList){
+    public TrainFindTrendsDTResponse(ArrayList<ArrayList> pattenList){
         this.pattenList = pattenList;
     }
 
-    public TrainGetPredictionResponse(ArrayList<ArrayList> pattenList, TrainedModel trainedModel){
+    public TrainFindTrendsDTResponse(ArrayList<ArrayList> pattenList, TrainedModel trainedModel){
         this.pattenList = pattenList;
         this.trainedModel = trainedModel;
     }

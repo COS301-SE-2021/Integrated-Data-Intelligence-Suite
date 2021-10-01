@@ -5,16 +5,20 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class CreateWordCloudGraphResponse {
-    public ArrayList<Graph> words;
+    private ArrayList<Graph> words;
 
-    public ArrayList<String> wordList;
+    private ArrayList<String> wordList;
 
     public CreateWordCloudGraphResponse(ArrayList<Graph> words, ArrayList<String> wordList){
         this.words = words;
         this.wordList = wordList;
     }
 
-    public ArrayList<Graph> getWordList(){
+    public ArrayList<Graph> getWords(){
         return words;
+    }
+
+    public ArrayList<String> getWordList(){
+        return wordList;
     }
 }

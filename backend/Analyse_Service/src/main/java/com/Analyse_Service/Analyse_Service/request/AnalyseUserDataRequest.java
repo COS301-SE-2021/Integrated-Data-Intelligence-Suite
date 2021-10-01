@@ -5,20 +5,18 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 
 import java.util.ArrayList;
 
-public class AnalyseDataRequest {
-
+public class AnalyseUserDataRequest {
     ArrayList<ParsedData> dataList;
 
-    ArrayList<ParsedArticle> articleList;
+    String modelId;
 
-
-    public AnalyseDataRequest(){
+    public AnalyseUserDataRequest(){
 
     }
 
-    public AnalyseDataRequest(ArrayList<ParsedData> dataList, ArrayList<ParsedArticle> articleList){
+    public AnalyseUserDataRequest(ArrayList<ParsedData> dataList, String modelId){
         this.dataList = dataList;
-        this.articleList = articleList;
+        this.modelId = modelId;
     }
 
 
@@ -26,7 +24,7 @@ public class AnalyseDataRequest {
         return this.dataList;
     }
 
-    public ArrayList<ParsedArticle> getArticleList(){
-        return this.articleList;
+    public String getModelId(){
+        return modelId;
     }
 }

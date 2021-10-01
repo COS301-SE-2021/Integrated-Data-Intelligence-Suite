@@ -5,7 +5,8 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class CreatePieChartGraphResponse {
-    public ArrayList<Graph> PieChartGraphArray;
+    private ArrayList<Graph> PieChartGraphArray;
+
     public CreatePieChartGraphResponse(ArrayList<Graph> PieChartGraphArray){
         this.PieChartGraphArray = PieChartGraphArray;
     }

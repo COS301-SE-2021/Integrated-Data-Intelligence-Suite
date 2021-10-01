@@ -5,7 +5,8 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class CreatePatternGraphResponse {
-    public ArrayList<Graph> NetworkGraphArray;
+    private ArrayList<Graph> NetworkGraphArray;
+
     public CreatePatternGraphResponse(ArrayList<Graph> NetworkGraphArray){
         this.NetworkGraphArray = NetworkGraphArray;
     }

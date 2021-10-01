@@ -3,7 +3,7 @@ package com.Visualize_Service.Visualize_Service.request;
 import java.util.ArrayList;
 
 public class CreatePieChartGraphRequest {
-    public ArrayList<ArrayList> dataList;
+    private ArrayList<ArrayList> dataList;
 
     public CreatePieChartGraphRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;
