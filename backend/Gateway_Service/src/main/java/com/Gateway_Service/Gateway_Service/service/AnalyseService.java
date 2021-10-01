@@ -1,11 +1,7 @@
 package com.Gateway_Service.Gateway_Service.service;
 
-import com.Analyse_Service.Analyse_Service.request.AnalyseUserDataRequest;
-import com.Analyse_Service.Analyse_Service.request.TrainUserModelRequest;
-import com.Analyse_Service.Analyse_Service.response.AnalyseUserDataResponse;
-import com.Analyse_Service.Analyse_Service.response.TrainUserModelResponse;
-import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
