@@ -7,6 +7,10 @@ public class GetReportDataByIdResponse {
 
     String date;
 
+    public GetReportDataByIdResponse(){
+
+    }
+
     public GetReportDataByIdResponse(byte[] pdf, String name, String date){
         this.date = date;
         this.name = name;

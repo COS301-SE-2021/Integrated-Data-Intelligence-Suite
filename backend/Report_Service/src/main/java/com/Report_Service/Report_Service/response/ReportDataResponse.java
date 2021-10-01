@@ -4,6 +4,11 @@ import java.util.UUID;
 
 public class ReportDataResponse {
     UUID id;
+
+    public ReportDataResponse(){
+
+    }
+
     public ReportDataResponse(UUID id){
         this.id = id;
     }

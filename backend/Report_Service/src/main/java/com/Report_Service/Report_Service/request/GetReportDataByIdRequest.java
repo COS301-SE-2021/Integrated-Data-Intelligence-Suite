@@ -6,6 +6,10 @@ public class GetReportDataByIdRequest {
 
     UUID reportId;
 
+    public GetReportDataByIdRequest(){
+
+    }
+
     public GetReportDataByIdRequest(UUID reportId){
         this.reportId= reportId;
     }

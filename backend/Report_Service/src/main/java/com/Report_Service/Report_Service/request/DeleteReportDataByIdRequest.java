@@ -5,6 +5,10 @@ import java.util.UUID;
 public class DeleteReportDataByIdRequest {
     UUID reportId;
 
+    public DeleteReportDataByIdRequest(){
+
+    }
+
     public DeleteReportDataByIdRequest(UUID reportId){
         this.reportId= reportId;
     }

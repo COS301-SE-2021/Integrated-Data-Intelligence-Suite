@@ -9,6 +9,11 @@ public class ReportDataRequest {
     ArrayList<String> Anomalylist;
     ArrayList<ArrayList> wordlist;
 
+
+    public ReportDataRequest(){
+
+    }
+
     public ReportDataRequest(ArrayList<ArrayList> trendlist,
             ArrayList<ArrayList> Realationshiplist,
             ArrayList<ArrayList> Patternlist,
