@@ -372,6 +372,40 @@ public class AnalyseServiceImpl {
     }
 
 
+    public GetModelByIdResponse getModelById (GetModelByIdRequest request)
+            throws AnalyserException {
+
+        if (request == null) {
+            throw new InvalidRequestException("getModelById Request Object is null");
+        }
+
+        if (request.getModelId() == null) {
+            throw new InvalidRequestException("getModelById Request ID is null");
+        }
+
+        /***********************MLFLOW - LOAD ***********************/
+        TrainValidationSplitModel lrModel;
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+
+
+        String[] splitModelId = request.getModelId().split(":"); //name, id, id
+        String modelName = splitModelId[0];
+        String modelID = splitModelId[1];
+        String modelID2 = splitModelId[2];
+
+        File artifact = client.downloadArtifacts(modelID, modelName);
+        File artifact2 = client.downloadArtifacts(modelID2, modelName);
+
+        if( (artifact.exists() == false)  || (artifact2.exists() == false) ){
+            return new GetModelByIdResponse(null, null);
+        }
+
+
+        return new GetModelByIdResponse(modelName, request.getModelId());
+    }
+
+
 
     /**
      * This method used to find an entity of a statement i.e sentiments/parts of speech
