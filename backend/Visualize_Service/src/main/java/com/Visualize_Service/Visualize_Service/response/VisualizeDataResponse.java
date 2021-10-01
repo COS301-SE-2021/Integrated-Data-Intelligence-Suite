@@ -3,7 +3,7 @@ package com.Visualize_Service.Visualize_Service.response;
 import java.util.ArrayList;
 
 public class VisualizeDataResponse {
-    public ArrayList<ArrayList> outputData;
+    private ArrayList<ArrayList> outputData;
 
     public VisualizeDataResponse(){
 

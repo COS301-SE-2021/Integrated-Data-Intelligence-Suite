@@ -35,3 +35,4 @@ build/
 ### resources ###
 !/src/main/resources/
 !/src/test/resources/
+!src\main\java\com\Analyse_Service\Analyse_Service\rri\RegisteredApplicationModels.txt

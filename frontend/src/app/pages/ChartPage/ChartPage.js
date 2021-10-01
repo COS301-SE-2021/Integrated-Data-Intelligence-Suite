@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import {
-    Input,
     Layout,
-    Card,
-    Typography,
 } from 'antd';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
-import DetailsCard from '../../components/DetailsCard/DetailsCard';
 import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
 import '../../components/NetworkGraph/NetworkGraph.css';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
@@ -22,19 +18,15 @@ import SimpleSection from '../../components/SimpleSection/SimpleSection';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import DraggableBarGraph from '../../components/DraggableBarGraph/DraggableBarGraph';
 import OverviewSection from '../../components/OverviewSection/OverviewSection';
-import GraphWithBrushAndZoom from '../../components/GraphWithBrushAndZoom/GraphWithBrushAndZoom';
 import OverviewGraphSection from '../../components/OverviewGraphSection/OverviewGraphSection';
+import SimplePopup from '../../components/SimplePopup/SimplePopup';
+import { AiOutlineUpload } from 'react-icons/all';
+import '../../components/UploadButton/UploadButton.css';
+import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
+import UploadDataPage from '../UploadDataPage/UploadDataPage';
 
 const {
-    Title,
-    Text,
-} = Typography;
-
-const {
-    Header,
-    Footer,
-    Sider,
-    Content,
+    Header
 } = Layout;
 
 function retrieveData() {
@@ -56,40 +48,48 @@ function getLocalUser() {
     return null;
 }
 
-function getRandomSeriesData(total) {
-    const result = [];
-    let lastY = Math.random() * 40 - 20;
-    let y;
-    const firstY = lastY;
-    for (let i = 0; i < Math.max(total, 3); i++) {
-        y = Math.random() * firstY - firstY / 2 + lastY;
-        result.push({
-            left: i,
-            top: y,
-        });
-        lastY = y;
-    }
-    return result;
-}
-
 class ChartPage extends Component {
     constructor(props) {
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.state = { text: '' };
+        this.state = {
+            text: '',
+            isShowingPopup: false
+        };
         this.state.user = getLocalUser();
+        this.showPopup = this.showPopup.bind(this);
     }
+
+    state = {
+        isShowingPopup: false
+    };
 
     handleTextChange(newText) {
         this.setState(({ text: newText }));
     }
 
+    showPopup() {
+        this.setState(({ isShowingPopup: !this.state.isShowingPopup }));
+        console.log(`isPopupShowing: ${this.state.isShowingPopup}`);
+    }
+
     render() {
+        const isPopupShowing = this.state.isShowingPopup;
+
         if (this.state.user) {
             return (
                 <>
                     <Switch>
                         <Route exact path="/chart">
+                            {
+                                this.state.isShowingPopup
+                                    ? (
+                                        <SimplePopup closePopup={this.showPopup}>
+                                            <UploadDataPage/>
+                                        </SimplePopup>
+                                    ) :
+                                    null
+                            }
                             <Layout
                                 id="outer_layout"
                                 className="chart-page"
@@ -97,11 +97,21 @@ class ChartPage extends Component {
                                 <SideBar currentPage={'2'}/>
                                 <Layout id="inner_layout_div">
                                     <Header id="top_bar">
-                                        {/* <Title level={1}>Chart Page Title</Title> */}
                                         <SearchBar
                                             text={this.state.text}
                                             handleTextChange={this.handleTextChange}
                                         />
+
+                                        <button
+                                            id={'upload-btn'}
+                                            onClick={() => {
+                                                this.showPopup(true);
+                                            }}
+                                        >
+                                            <AiOutlineUpload id={'upload-btn-logo'}/>
+                                            Upload
+                                        </button>
+
                                         <UserInfoCard
                                             name="s"
                                         />

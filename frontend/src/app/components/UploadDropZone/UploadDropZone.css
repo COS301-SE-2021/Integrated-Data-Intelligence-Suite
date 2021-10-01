@@ -1,0 +1,108 @@
+#upload-card {
+    /*border: 3px solid red;*/
+    margin-bottom: 0 !important;
+    /*max-width: 400px;*/
+    grid-template-rows: 0 auto !important;
+    width: 100%;
+}
+
+#upload-card > .simple-card-title {
+    /*border-top-left-radius: 10px;*/
+    /*border-top-right-radius: 10px;*/
+    /*padding: 25px;*/
+}
+
+#upload-card > .simple-card-body {
+    background: white;
+    /*padding: 25px;*/
+    /*border-radius: 10px;*/
+    /*border-bottom-left-radius: 10px;*/
+    /*border-bottom-right-radius: 10px;*/
+    grid-template-rows: repeat(2, auto) !important;
+    row-gap: 30px !important;
+}
+
+.dropzone {
+    border-style: dashed;
+    border-width: 2px;
+    /*border-color: #339CFF;*/
+    border-color: var(--dodger-blue);
+    background: #f2f6fc;
+    border-radius: 10px;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    max-width: inherit;
+}
+
+#dropzone-content-div {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(4, auto);
+    align-items: center;
+    justify-items: center;
+    row-gap: 15px;
+    padding: 20px;
+}
+
+#file-icon {
+    width: 50px;
+    height: 50px;
+    color: var(--dodger-blue);
+}
+
+#browse-files-btn {
+    width: max-content;
+    height: 30px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    display: grid;
+    align-content: center;
+    background: var(--dodger-blue);
+    border: var(--dodger-blue);
+    color: white;
+
+}
+
+#upload-instr-p {
+    font-weight: 500;
+    /*color: var(--prussian-blue);*/
+    /*color: #535C6F;*/
+    color: var(--black-coral);
+    width: 70%;
+    text-align: center;
+}
+
+#upload-preview-div {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: 100%;
+
+}
+
+.file-preview-item {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(3, auto);
+    /*border: 3px solid red;*/
+    background: #C6F6D5;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    color: green;
+    font-weight: 500;
+}
+
+.file-preview-csv-icon {
+    height: 32px;
+    width: 32px;
+    color: green;
+}
+
+.file-preview-name {
+    width: 95% !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

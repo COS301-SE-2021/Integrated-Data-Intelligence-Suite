@@ -3,7 +3,7 @@ package com.Visualize_Service.Visualize_Service.request;
 import java.util.ArrayList;
 
 public class CreateLineGraphSentimentsRequest {
-    public ArrayList<ArrayList> dataList;
+    private ArrayList<ArrayList> dataList;
 
     public CreateLineGraphSentimentsRequest(ArrayList<ArrayList> dataList){
         this.dataList = dataList;

@@ -370,7 +370,7 @@ public class ImportServiceImpl {
             return new AddAPISourceResponse(false, "The source does not exist");
         }
 
-        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getAuthType(), request.getAuthorization(), request.getParameters());
+        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getType(), request.getAuthType(), request.getAuthorization(), request.getParameters());
 
         APISource savedSource = apiSourceRepository.save(newSource);
 
@@ -476,5 +476,20 @@ public class ImportServiceImpl {
         else {
             return new GetAPISourceByIdResponse(false, "Failed to fetch API source", null);
         }
+    }
+
+
+    public DeleteSourceResponse deleteSourceByID(DeleteSourceRequest request) throws InvalidImporterRequestException{
+        if(request == null || request.getId() == null){
+            throw new InvalidImporterRequestException("Request is invalid");
+        }
+
+        try{
+
+            apiSourceRepository.deleteById(request.getId());
+        }catch (Exception e){
+            return new DeleteSourceResponse(false, e.getMessage());
+        }
+        return new DeleteSourceResponse(true, "worked");
     }
 }

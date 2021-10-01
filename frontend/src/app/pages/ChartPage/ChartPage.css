@@ -15,6 +15,11 @@
     border: 0;
     /*border-bottom: 0.2em solid #E8E8E9;*/
     /*overflow: hidden;*/
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(3, auto);
+    align-items: center;
 }
 
 /*
@@ -83,7 +88,8 @@
 *
  */
 #inner_layout_div ::-webkit-scrollbar {
-    width: 11px;
+    width: 7px;
+    background: transparent;
 }
 
 #inner_layout_div ::-webkit-scrollbar-track {
@@ -143,7 +149,7 @@
 }
 
 
-#content_section .simple-section-container{
+#content_section .simple-section-container {
     max-width: 1200px;
 }
 
@@ -209,7 +215,6 @@
     border: 2px solid var(--border-color);
     border-radius: 10px;
 }
-
 
 #map-metric-1 > .simple-card-title {
     padding: 10px;

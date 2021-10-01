@@ -1,0 +1,24 @@
+#upload-btn {
+    display: grid;
+    grid-template-columns: 15px auto;
+    grid-template-rows: 100%;
+    column-gap: 15px;
+    height: 40px;
+    width: 200px;
+    align-items: center;
+    background: var(--dodger-blue);
+    color: white;
+    border: var(--dodger-blue);
+    border-radius: 10px;
+    justify-content: center;
+    padding: 20px;
+}
+
+#upload-btn:hover {
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#upload-btn-logo {
+    width: 19px;
+    height: 19px;
+}

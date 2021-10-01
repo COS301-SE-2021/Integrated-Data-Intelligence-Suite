@@ -11,6 +11,7 @@ public class AnalyseDataRequest {
 
     ArrayList<ParsedArticle> articleList;
 
+
     public AnalyseDataRequest(){
 
     }
@@ -19,6 +20,7 @@ public class AnalyseDataRequest {
         this.dataList = dataList;
         this.articleList = articleList;
     }
+
 
     public ArrayList<ParsedData> getDataList(){
         return this.dataList;
