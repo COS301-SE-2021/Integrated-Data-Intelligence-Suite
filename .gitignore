@@ -1,1 +1,3 @@
 backend/Import_Service/src/main/resources/application.properties
+## ignore upload directory ##
+upload/

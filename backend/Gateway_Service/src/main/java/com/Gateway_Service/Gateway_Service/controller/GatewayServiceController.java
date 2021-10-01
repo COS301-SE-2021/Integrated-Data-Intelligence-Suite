@@ -11,23 +11,22 @@ import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
-import com.Gateway_Service.Gateway_Service.service.AnalyseService;
-import com.Gateway_Service.Gateway_Service.service.ImportService;
-import com.Gateway_Service.Gateway_Service.service.ParseService;
+import com.Gateway_Service.Gateway_Service.service.*;
 
 
 //import com.netflix.discovery.DiscoveryClient;
 
-import com.Gateway_Service.Gateway_Service.service.VisualizeService;
-
-import com.Gateway_Service.Gateway_Service.service.UserService;
-
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -53,6 +52,11 @@ public class GatewayServiceController {
   
     @Autowired
     private UserService userClient;
+
+    @Autowired
+    private StorageService storageService;
+
+    private static final Logger log = LoggerFactory.getLogger(GatewayServiceController.class);
 
     //@Autowired
     //private RestTemplate restTemplate;
@@ -283,6 +287,131 @@ public class GatewayServiceController {
     public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
         GetAllAPISourcesResponse response = importClient.getAllAPISources();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This endpoint will be use for uploading a file and saving the file to
+     * a temporary directory such that it can be analyzed.
+     * @param file This parameter will contain the file itself.
+     * @param col1 This is the text/content
+     * @param col2 This is the location/title
+     * @param col3 This is the interactions/description
+     * @param col4 This is the date
+     * @param isSocial If the data is social media or articles
+     * @return This contains if the request of uploading a file was successful or not.
+     */
+    @PostMapping("/upload")
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam boolean isSocial) {
+        Map<String, String> response = new HashMap<>();
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
+
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+        assert extension != null;
+        if(!extension.equals("csv")) {
+            response.put("message", "Incorrect file type uploaded.");
+            return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
+        }
+        ArrayList<ParsedData> socialMediaData = new ArrayList<>();
+        ArrayList<ParsedArticle> newsData = new ArrayList<>();
+        try {
+            String filename = storageService.store(file);
+            //response.put("message", "Successfully saved file");
+            log.info("[Gateway API] Successfully saved file");
+            log.info("[Gateway API] Running parser");
+            //log.info(file.getOriginalFilename());
+            if(isSocial) {
+                ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
+                socialMediaData = response1.getSocialDataList();
+                if(response1.isSuccess()) {
+                    response.put("success", "true");
+                }
+                else {
+                    response.put("success", "false");
+                }
+                response.put("message", response1.getMessage());
+            }
+            else {
+                ParseUploadedNewsDataResponse response1 = parseClient.parseUploadedNewsData(new ParseUploadedNewsDataRequest(filename, col1, col2, col3, col4));
+                newsData = response1.getNewsDataList();
+                if(response1.isSuccess()) {
+                    response.put("success", "true");
+                }
+                else {
+                    response.put("success", "false");
+                }
+                response.put("message", response1.getMessage());
+            }
+
+            if(storageService.deleteFile(filename)) {
+                log.info("[Gateway API] Delete file: " + filename);
+            }
+            else {
+                log.info("[Gateway API] Failed to delete file: " + filename);
+            }
+
+            log.info("[Gateway API] Successfully parsed. Attempting to analyze data");
+
+            AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
+            AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+
+
+            if(analyseResponse.getFallback() == true) {
+                ErrorGraph errorGraph = new ErrorGraph();
+                errorGraph.Error = analyseResponse.getFallbackMessage();
+
+                ArrayList<Graph> data = new ArrayList<>();
+                data.add(errorGraph);
+
+                outputData.add( data);
+
+                return new ResponseEntity<>(outputData,HttpStatus.OK);
+            }
+
+
+
+            System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+            log.info("[Gateway API] Completed analysis. Preparing data for visualization");
+
+
+            /*********************VISUALISE**********************/
+
+            VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
+                    analyseResponse.getPattenList(),
+                    analyseResponse.getRelationshipList(),
+                    analyseResponse.getPattenList(),
+                    analyseResponse.getTrendList(),
+                    analyseResponse.getAnomalyList(),
+                    analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+            VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
+
+
+            if(visualizeResponse.getFallback() == true) {
+                ErrorGraph errorGraph = new ErrorGraph();
+                errorGraph.Error = analyseResponse.getFallbackMessage();
+
+                ArrayList<Graph> data = new ArrayList<>();
+                data.add(errorGraph);
+
+                outputData.add( data);
+
+                return new ResponseEntity<>(outputData,HttpStatus.OK);
+            }
+
+            System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
+            log.info("[Gateway API] Visualize success");
+
+
+            for(int i =0; i < visualizeResponse.outputData.size(); i++)
+                outputData.add(visualizeResponse.outputData.get(i));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            //response.put("message", e.getMessage());
+        }
+
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     /**
