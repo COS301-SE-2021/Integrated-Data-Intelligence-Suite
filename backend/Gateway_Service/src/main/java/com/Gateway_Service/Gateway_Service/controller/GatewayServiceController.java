@@ -2,9 +2,12 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
-import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
+import com.Gateway_Service.Gateway_Service.dataclass.report.GetReportDataByIdRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.report.GetReportDataByIdResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.report.ReportDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.report.ReportDataResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
@@ -14,16 +17,10 @@ import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResp
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.ErrorGraph;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
-import com.Gateway_Service.Gateway_Service.service.AnalyseService;
-import com.Gateway_Service.Gateway_Service.service.ImportService;
-import com.Gateway_Service.Gateway_Service.service.ParseService;
+import com.Gateway_Service.Gateway_Service.service.*;
 
 
 //import com.netflix.discovery.DiscoveryClient;
-
-import com.Gateway_Service.Gateway_Service.service.VisualizeService;
-
-import com.Gateway_Service.Gateway_Service.service.UserService;
 
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 
@@ -37,6 +34,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/")
 public class GatewayServiceController {
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     @Autowired
     private ImportService importClient;
@@ -51,7 +50,7 @@ public class GatewayServiceController {
     private VisualizeService visualizeClient;
 
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private ReportService reportClient;
   
     @Autowired
     private UserService userClient;
@@ -174,7 +173,7 @@ public class GatewayServiceController {
         VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
                 analyseResponse.getPattenList(),
                 analyseResponse.getRelationshipList(),
-                analyseResponse.getPattenList(),
+                analyseResponse.getPredictionList(),
                 analyseResponse.getTrendList(),
                 analyseResponse.getAnomalyList(),
                 analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
@@ -196,6 +195,25 @@ public class GatewayServiceController {
         System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
 
 
+        /*********************REPORT**********************/
+
+        ReportDataRequest reportRequest = new ReportDataRequest(
+                analyseResponse.getTrendList(),
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPattenList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());
+        ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
+
+        ErrorGraph reportGraph = new ErrorGraph();
+        reportGraph.Error = reportResponse.getId().toString();
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);
+
+        System.out.println("***********************REPORT HAS BEEN DONE*************************");
+
+
         for(int i =0; i < visualizeResponse.outputData.size(); i++)
             outputData.add(visualizeResponse.outputData.get(i));
 
@@ -206,42 +224,65 @@ public class GatewayServiceController {
 
     /**
      * This the endpoint for registering the user.
-     * @param form This is the body sent by POST
+     * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
     @PostMapping(value = "/generateReport",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> generateReport(@RequestBody RegisterForm form) {
+    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody GetReportDataByIdRequest request) {
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+
+        GetReportDataByIdResponse output = new GetReportDataByIdResponse();
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/getAllReportsByUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<GetReportDataByIdResponse> getAllReportsByUser(@RequestBody GetReportDataByIdRequest request) {
+
+
+        GetReportDataByIdResponse output = new GetReportDataByIdResponse();
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
 
     /**
      * This the endpoint for registering the user.
-     * @param form This is the body sent by POST
+     * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
     @PostMapping(value = "/trainUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> trainUserModel(@RequestBody RegisterForm form) {
+    public ResponseEntity<TrainUserModelResponse> trainUserModel(@RequestBody TrainUserModelRequest request) {
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+        TrainUserModelResponse output = new TrainUserModelResponse();
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
     /**
      * This the endpoint for registering the user.
-     * @param form This is the body sent by POST
+     * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> analyseUserData(@RequestBody RegisterForm form) {
+    public ResponseEntity<AnalyseUserDataResponse> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+        AnalyseUserDataResponse output = new AnalyseUserDataResponse();
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
 
