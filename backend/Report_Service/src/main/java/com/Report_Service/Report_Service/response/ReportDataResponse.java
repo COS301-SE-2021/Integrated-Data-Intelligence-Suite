@@ -1,12 +1,14 @@
 package com.Report_Service.Report_Service.response;
 
+import java.util.UUID;
+
 public class ReportDataResponse {
-    byte[] pdf;
-    public ReportDataResponse(byte[] pdf){
-        this.pdf = pdf;
+    UUID id;
+    public ReportDataResponse(UUID id){
+        this.id = id;
     }
 
-    public byte[] getPdf() {
-        return pdf;
+    public UUID getId() {
+        return id;
     }
 }
