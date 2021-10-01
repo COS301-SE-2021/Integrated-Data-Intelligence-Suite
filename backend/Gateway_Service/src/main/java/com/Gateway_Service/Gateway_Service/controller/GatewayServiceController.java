@@ -12,6 +12,8 @@ import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.ErrorGraph;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.AnalyseService;
 import com.Gateway_Service.Gateway_Service.service.ImportService;
 import com.Gateway_Service.Gateway_Service.service.ParseService;
@@ -54,10 +56,6 @@ public class GatewayServiceController {
     @Autowired
     private UserService userClient;
 
-    //@Autowired
-    //private RestTemplate restTemplate;
-
-
 
     /**
      * This method is used the map/convert the name os a service to its respective url on a specific host
@@ -68,222 +66,11 @@ public class GatewayServiceController {
         return this.discoveryClient.getInstances(serviceName).get(0).getUri().toString();
     }
 
-    /**
-     * Test function, this method is used to test the servic
-     * @return String This is a string value of a json test
-     *
-    @GetMapping(value ="/{key}", produces = "application/json")
-    public String testNothing(@PathVariable String key) {
-        String output = "";
 
-        ImportTwitterRequest importRequest = new ImportTwitterRequest(key,10);
-        ImportTwitterResponse importResponse = importClient.getTwitterDataJson(importRequest);
+    /*******************************************************************************************************************
+    ***************************************************FRONT-END********************************************************
+    ********************************************************************************************************************/
 
-        if(importResponse.getFallback() == true)
-            output = importResponse.getFallbackMessage();
-        else
-            output = importResponse.getJsonData();
-
-        return output;
-    }*/
-
-
-    @GetMapping(value ="/analyse/trainData", produces = "application/json")
-    public String trainData() {
-        String output = "";
-
-        //analyseClient.trainData();
-        if(analyseClient.trainData())
-            output = "Succsess";
-        else{
-            output = "Fail";
-        }
-        return output;
-    }
-
-
-    /*@GetMapping(value ="test/{line}", produces = "application/json")
-    public String testNothing2(@PathVariable String line) {
-
-        String output = "";
-        AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
-
-        if(analyseResponse.getFallback() == true)
-            output = analyseResponse.getFallbackMessage();
-        else {
-            output = analyseResponse.getSentiment().getCssClass();
-        }
-
-        return output;
-    }*/
-
-    /**
-     * This the endpoint for registering the user.
-     * @param form This is the body sent by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/user/register",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
-        RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        RegisterResponse registerResponse = userClient.register(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
-    }
-
-
-    /*
-    @PostMapping(value = "/user/requestAdmin",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<RegisterAdminResponse> registerAdmin(@RequestBody RegisterForm form) {
-        RegisterAdminRequest registerRequest = new RegisterAdminRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
-    }
-    */
-
-
-    @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
-        GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
-        GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
-        return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
-    }
-
-    /**
-     * This is the endpoint to allow the user to login.
-     * @param request This is the body send by POST
-     * @return This is the response http entity
-     */
-    @PostMapping(value = "/user/login",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        LoginResponse response = userClient.login(request);
-        System.out.println(response.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This is the endpoint to allow the user to verify their account
-     * via email.
-     * @param request This is the body send by POST
-     * @return This is the response http entity
-     */
-    @PostMapping(value = "/user/verify",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
-        System.out.println("Verifying User: " + request.getEmail());
-        VerifyAccountResponse response = userClient.verifyAccount(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for resending the verification code.
-     * @param request This is the body send by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/user/resend",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
-        ResendCodeResponse response = userClient.resendCode(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for resending the verification code.
-     * @param request This is the body send by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/user/updateProfile",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
-        UpdateProfileResponse response = userClient.updateProfile(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for changing the permission of a user
-     * @param request This is the body send by POST
-     * @return This is the response http entity
-     */
-    @PostMapping(value = "/changeUser",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
-        ChangeUserResponse response = userClient.managePermissions(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system
-     * @return This is the response http entity. It contains all the users.
-     */
-    @GetMapping(value = "/user/getAll", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
-        System.out.println("Getting all users from the database");
-        GetAllUsersResponse response = userClient.getAllUsers();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/retrievePrevious", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
-        return null;
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system.
-     * @param jsonRequest This is the body send by POST.
-     * @return This is the response http entity. It contains all the users.
-     */
-    @PostMapping(value = "/addNewApiSource", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
-        String response = importClient.addApiSource(jsonRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system
-     * @param request This is the body send by POST
-     * @return This is the response http entity. It contains all the users.
-     */
-    @PostMapping(value = "/getSourceById", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
-        GetAPISourceByIdResponse response = importClient.getSourceById(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system
-     * @param jsonRequest This is the body send by POST
-     * @return This is the response http entity. It contains all the users.
-     */
-    @PostMapping(value = "/updateAPI", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
-        String response = importClient.editAPISource(jsonRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the api sources.
-     * @return This is the response http entity. It contains all the users.
-     */
-    @GetMapping(value = "/getAllSources", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
-        GetAllAPISourcesResponse response = importClient.getAllAPISources();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
     /**
      * This method is used to facilitate communication to all the Services.
@@ -417,6 +204,224 @@ public class GatewayServiceController {
     }
 
 
+    /**
+     * This the endpoint for registering the user.
+     * @param form This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/generateReport",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<String> generateReport(@RequestBody RegisterForm form) {
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param form This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/trainUserModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<String> trainUserModel(@RequestBody RegisterForm form) {
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for registering the user.
+     * @param form This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/analyseUserData",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<String> analyseUserData(@RequestBody RegisterForm form) {
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+
+    /*******************************************************************************************************************
+     *****************************************************USER**********************************************************
+     *******************************************************************************************************************/
+
+    /**
+     * This the endpoint for registering the user.
+     * @param form This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/register",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
+        RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        RegisterResponse registerResponse = userClient.register(registerRequest);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
+
+
+    /*
+    @PostMapping(value = "/user/requestAdmin",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<RegisterAdminResponse> registerAdmin(@RequestBody RegisterForm form) {
+        RegisterAdminRequest registerRequest = new RegisterAdminRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
+    */
+
+
+    @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
+        GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
+        GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
+        return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
+    }
+
+    /**
+     * This is the endpoint to allow the user to login.
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/user/login",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = userClient.login(request);
+        System.out.println(response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This is the endpoint to allow the user to verify their account
+     * via email.
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/user/verify",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
+        System.out.println("Verifying User: " + request.getEmail());
+        VerifyAccountResponse response = userClient.verifyAccount(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for resending the verification code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/resend",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
+        ResendCodeResponse response = userClient.resendCode(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for resending the verification code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/updateProfile",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
+        UpdateProfileResponse response = userClient.updateProfile(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for changing the permission of a user
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/changeUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
+        ChangeUserResponse response = userClient.managePermissions(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/user/getAll", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
+        System.out.println("Getting all users from the database");
+        GetAllUsersResponse response = userClient.getAllUsers();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/retrievePrevious", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
+        return null;
+    }
+
+    /*******************************************************************************************************************
+     *****************************************************IMPORT********************************************************
+     *******************************************************************************************************************/
+
+    /**
+     * This the endpoint for getting all the users registered on the system.
+     * @param jsonRequest This is the body send by POST.
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/addNewApiSource", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
+        String response = importClient.addApiSource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param request This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/getSourceById", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
+        GetAPISourceByIdResponse response = importClient.getSourceById(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param jsonRequest This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/updateAPI", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
+        String response = importClient.editAPISource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the api sources.
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/getAllSources", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
+        GetAllAPISourcesResponse response = importClient.getAllAPISources();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @GetMapping(value = "/collect/{key}/{from}/{to}", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to){
@@ -442,13 +447,32 @@ public class GatewayServiceController {
     }
 
 
-    public static class Graph{
-        Graph(){}
+    /*******************************************************************************************************************
+     ***************************************************ANALYSE*********************************************************
+     *******************************************************************************************************************/
+
+    @GetMapping(value ="/analyse/trainApplicationData", produces = "application/json")
+    public String trainData() {
+        String output = "";
+
+        //analyseClient.trainData();
+        if(analyseClient.trainData())
+            output = "Success training application";
+        else{
+            output = "Fail training application";
+        }
+        return output;
     }
 
-    public static class ErrorGraph extends Graph{
-        public String Error;
-    }
+
+
+
+
+
+
+
+
+
 
 
 
