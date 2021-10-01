@@ -233,7 +233,7 @@ public class GatewayServiceController {
     public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody GetReportDataByIdRequest request) {
 
 
-        GetReportDataByIdResponse output = new GetReportDataByIdResponse();
+        GetReportDataByIdResponse output = reportClient.getReportDataById(request);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
@@ -246,10 +246,20 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllReportsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetReportDataByIdResponse> getAllReportsByUser(@RequestBody GetReportDataByIdRequest request) {
+    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetReportDataByIdRequest request) {
 
+        /*********************USER******************/
 
-        GetReportDataByIdResponse output = new GetReportDataByIdResponse();
+        //GET ALL IDS
+        int maxSizeId =0;
+
+        /*********************REPORT******************/
+
+        ArrayList<GetReportDataByIdResponse> output = new ArrayList<>();
+
+        for(int i =0; i < maxSizeId; i++){
+            output.add(reportClient.getReportDataById(request));
+        }
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
@@ -265,9 +275,62 @@ public class GatewayServiceController {
     @CrossOrigin
     public ResponseEntity<TrainUserModelResponse> trainUserModel(@RequestBody TrainUserModelRequest request) {
 
-        TrainUserModelResponse output = new TrainUserModelResponse();
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+
+        /*********************PARSE*************************
+
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());
+        ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
+        ArrayList<ParsedData> socialMediaData = parseResponse.getDataList();
+
+        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
+        parseResponse = parseClient.parseImportedData(parseRequestNews);
+        ArrayList<ParsedArticle> newsData = parseResponse.getArticleList();
+
+        if(parseResponse.getFallback() == true) {
+            //outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add();
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = parseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************PARSE HAS BEEN DONE*************************");
+
+
+
+        /*********************ANALYSE*************************/
+
+
+        TrainUserModelRequest analyseRequest = new TrainUserModelRequest("", new ArrayList<ParsedData>());
+        TrainUserModelResponse analyseResponse = analyseClient.trainUserModel(analyseRequest);
+
+
+        /*if(analyseResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }*/
+
+
+
+        System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+
+
+        return new ResponseEntity<>(analyseResponse, HttpStatus.OK);
     }
 
     /**
@@ -278,11 +341,112 @@ public class GatewayServiceController {
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<AnalyseUserDataResponse> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
 
-        AnalyseUserDataResponse output = new AnalyseUserDataResponse();
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+
+        /*********************PARSE*************************
+
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());
+        ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
+        ArrayList<ParsedData> socialMediaData = parseResponse.getDataList();
+
+        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
+        parseResponse = parseClient.parseImportedData(parseRequestNews);
+        ArrayList<ParsedArticle> newsData = parseResponse.getArticleList();
+
+        if(parseResponse.getFallback() == true) {
+            //outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add();
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = parseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************PARSE HAS BEEN DONE*************************");
+
+
+
+        /*********************ANALYSE*************************/
+
+        AnalyseUserDataRequest analyseRequest = new AnalyseUserDataRequest(new ArrayList<ParsedData>(), "");//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseUserDataResponse analyseResponse = analyseClient.analyzeUserData(analyseRequest);
+
+
+        if(analyseResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+
+
+        System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+
+        /*********************VISUALISE**********************/
+
+        VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
+                analyseResponse.getPattenList(),
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPredictionList(),
+                analyseResponse.getTrendList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
+
+
+        if(visualizeResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
+
+
+        /*********************REPORT**********************/
+
+        ReportDataRequest reportRequest = new ReportDataRequest(
+                analyseResponse.getTrendList(),
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPattenList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());
+        ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
+
+        ErrorGraph reportGraph = new ErrorGraph();
+        reportGraph.Error = reportResponse.getId().toString();
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);
+
+        System.out.println("***********************REPORT HAS BEEN DONE*************************");
+
+
+        for(int i =0; i < visualizeResponse.outputData.size(); i++)
+            outputData.add(visualizeResponse.outputData.get(i));
+
+        return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
 
 
