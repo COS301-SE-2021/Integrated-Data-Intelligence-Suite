@@ -31,3 +31,17 @@
     background: white;
 }
 
+#analyse-upload-btn {
+    height: 40px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    display: grid;
+    background: var(--dodger-blue);
+    border: var(--dodger-blue);
+    color: white;
+}
+
+#analyse-upload-btn:hover{
+    background: var(--prussian-blue);
+}
