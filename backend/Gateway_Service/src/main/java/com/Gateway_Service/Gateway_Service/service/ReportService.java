@@ -55,7 +55,7 @@ public class ReportService {
      * @return ParseImportedDataResponse This object contains failure values as data.
      */
     public ReportDataResponse reportDataFallback(ReportDataRequest reportRequest){
-        ReportDataResponse reportDataResponse = new ReportDataResponse();
+        ReportDataResponse reportDataResponse = new ReportDataResponse(null);
         //parseImportedDataResponse.setFallback(true);
         //parseImportedDataResponse.setFallbackMessage("{Failed to get parse data}");
         return reportDataResponse;
