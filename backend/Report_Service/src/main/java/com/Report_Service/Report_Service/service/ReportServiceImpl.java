@@ -35,7 +35,7 @@ public class ReportServiceImpl {
     @Autowired
     private NotificationServiceImpl notificationService;
 
-    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException, DocumentException, IOException {
+    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException{
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
