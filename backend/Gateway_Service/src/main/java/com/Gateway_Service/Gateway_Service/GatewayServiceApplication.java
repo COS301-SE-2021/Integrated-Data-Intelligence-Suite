@@ -1,7 +1,9 @@
 package com.Gateway_Service.Gateway_Service;
 
+import com.Gateway_Service.Gateway_Service.config.StorageConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
+@EnableConfigurationProperties(StorageConfiguration.class)
 @EnableCircuitBreaker
 @EnableEurekaClient
 @EnableScheduling
