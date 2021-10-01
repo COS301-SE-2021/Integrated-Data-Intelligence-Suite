@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -31,7 +32,10 @@ public class ReportServiceImpl {
     @Autowired
     private ReportRepository repository;
 
-    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException {
+    @Autowired
+    private NotificationServiceImpl notificationService;
+
+    public ReportDataResponse reportData(ReportDataRequest request) throws ReporterException, DocumentException, IOException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -599,6 +603,47 @@ public class ReportServiceImpl {
         out.close();*/
 
         return new GenerateReportPDFResponse(output);
+    }
+
+    /**
+     * This method will be used to share a report via email.
+     * @param request This will contain the id of the report and to whom to send it to.
+     * @return This is will return if the sharing of the report was successful or not.
+     * @throws Exception This will be thrown if any errors were encountered while sending report.
+     */
+    public ShareReportResponse shareReport(ShareReportRequest request) throws Exception {
+        if(request == null || request.getReportId() == null || request.getTo() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getTo().isEmpty() || request.getReportId().isEmpty()) {
+                throw new InvalidRequestException("The request attributes are empty");
+            }
+
+            Optional<PdfReport> report = repository.findById(UUID.fromString(request.getReportId()));
+
+            if(report.isPresent()) {
+                PdfReport repExists = report.get();
+                String emailText = "IDIS Report";
+                String to = request.getTo();
+                String from = "emergenoreply@gmail.com";
+                String subject = "IDIS Report";
+
+                SendEmailReportRequest emailRequest = new SendEmailReportRequest(emailText, to, from, subject, repExists.getPdf());
+
+                try {
+                    CompletableFuture<SendEmailReportResponse> emailResponse  = notificationService.shareReportViaEmail(emailRequest);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ShareReportResponse(false, "An error has occurred while sending report email");
+                }
+
+                return new ShareReportResponse(true, "Successfully shared report");
+            }
+            else {
+                return new ShareReportResponse(false, "Failed to share report. Report does not exist");
+            }
+        }
     }
 
     private String getLocation(double latitude , double longitude){
