@@ -51,7 +51,7 @@
  */
 .popup-body::-webkit-scrollbar {
     width: 7px;
-    background-color: red;
+    background-color: white;
 }
 
 .popup-body::-webkit-scrollbar-track {
