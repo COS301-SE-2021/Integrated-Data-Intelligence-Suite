@@ -4,14 +4,28 @@ import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 
 public class RegisterUserBestModelResponse {
 
-    TrainedModel bestModel;
+    String bestModelId;
 
-    public RegisterUserBestModelResponse(TrainedModel bestModel){
-        this.bestModel = bestModel;
+    String bestModelName;
+
+    public RegisterUserBestModelResponse(String bestModelId, String bestModelName){
+        this.bestModelId = bestModelId;
+        this.bestModelName = bestModelName;
     }
 
-    public TrainedModel getBestModel(){
-        return bestModel;
+    public String getBestModelId(){
+        return bestModelId;
     }
 
+    public String getBestModelName() {
+        return bestModelName;
+    }
+
+    public void setBestModelId(String bestModelId) {
+        this.bestModelId = bestModelId;
+    }
+
+    public void setBestModelName(String bestModelName) {
+        this.bestModelName = bestModelName;
+    }
 }
