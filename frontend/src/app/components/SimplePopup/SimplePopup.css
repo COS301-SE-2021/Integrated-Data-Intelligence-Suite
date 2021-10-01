@@ -33,7 +33,7 @@
     display: grid;
     grid-template-columns: repeat(2, auto);
     grid-template-rows: 100%;
-    padding: 15px;
+    padding: 25px;
 }
 
 .popup-body {
@@ -41,7 +41,7 @@
     grid-row-end: 3;
     overflow-y: scroll;
     max-height: 500px;
-    padding: 15px;
+    padding: 25px;
 }
 
 /*
