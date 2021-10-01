@@ -28,7 +28,7 @@ public class ReportServiceController {
      * @return ReportDataResponse This object contains analysed data which has been processed by Report-Service.
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
-    @PostMapping("/visualizeData")
+    @PostMapping("/reportData")
     public @ResponseBody
     ReportDataResponse reportData(@RequestBody ReportDataRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
@@ -45,7 +45,7 @@ public class ReportServiceController {
      * @return GetReportDataResponse This object contains analysed data which has been processed by Report-Service.
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
-    @PostMapping("/visualizeData")
+    @PostMapping("/getReportDataById")
     public @ResponseBody
     GetReportDataResponse getReportData(@RequestBody GetReportDataRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
@@ -66,7 +66,7 @@ public class ReportServiceController {
      * @return DeleteReportDataResponse This object contains analysed data which has been processed by Report-Service.
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
-    @PostMapping("/visualizeData")
+    @PostMapping("/deleteReportDataById")
     public @ResponseBody
     DeleteReportDataResponse deleteReportData(@RequestBody DeleteReportDataRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
