@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-  Layout, Row, Col, Divider,
+  Layout, Row, Col,
 } from 'antd';
-import { CloseCircleTwoTone, CloseOutlined, LeftCircleTwoTone } from '@ant-design/icons';
-import {Link, useHistory} from 'react-router-dom';
+import { LeftCircleTwoTone } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 import DataSourceList from '../../components/DataSourceList/DataSourceList';
 import Users from '../PermissionsPage/Permissions';
 import ProfilePage from '../ProfilePage/ProfilePage';
-// import AddDataSource from '../AddDataSourcePage/AddDataSource';
+import ReportsPage from '../ReportsPage/ReportsPage';
 
 const { Content } = Layout;
 
@@ -28,7 +28,7 @@ const setActive = (component) => {
 function getLocalUser() {
   const localUser = localStorage.getItem('user');
   if (localUser) {
-    console.log("user logged in is ", localUser)
+    console.log('user logged in is ', localUser);
     return JSON.parse(localUser);
   }
   return null;
@@ -58,9 +58,7 @@ const SettingsPage = () => {
                       <div>
                           <div className="component-title-wrapper">
                               <div className="content-title">{component}</div>
-                              <Link to={'/chart'}>
-                                  <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.push('/chart')} />
-                              </Link>
+                              <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.push('/chart')} />
                           </div>
                           { component === 'Profile' && setActive(component) && <ProfilePage />}
                           { component === 'Users' && user && user.isAdmin && setActive(component) && <Users />}

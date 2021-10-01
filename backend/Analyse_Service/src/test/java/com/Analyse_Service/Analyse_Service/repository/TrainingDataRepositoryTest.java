@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class AnalyseServiceParsedDataRepositoryTest {
+public class TrainingDataRepositoryTest {
 
     @Autowired
-    private AnalyseServiceParsedDataRepository analyseServiceParsedDataRepository;
+    private TrainingDataRepository trainingDataRepository;
 
     @Test
     @DisplayName("Fetch parsed by id")

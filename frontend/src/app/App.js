@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Link, Route, Switch } from "react-router-dom"
+import {
+ HashRouter as Router, Link, Route, Switch,
+} from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
 import ChartPage from './pages/ChartPage/ChartPage';
@@ -13,8 +15,8 @@ import VerifyPage from './pages/VerifyPage/VerifyPage';
 import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
+import ReportsPage from './pages/ReportsPage/ReportsPage';
 import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
-
 
 class App extends Component {
     render() {
@@ -22,54 +24,59 @@ class App extends Component {
             <Router>
                 <Switch>
                     <Route exact path="/">
-                        <HomePage/>
+                        <HomePage />
                     </Route>
 
                     <Route exact path="/login">
-                        <LoginPage/>
+                        <LoginPage />
                     </Route>
 
                     <Route exact path="/register">
-                        <RegisterPage/>
+                        <RegisterPage />
                     </Route>
                     <Route exact path="/chart">
-                        <ChartPage/>
+                        <ChartPage />
                     </Route>
 
                     <Route exact path="/verify">
-                        <VerifyPage/>
+                        <VerifyPage />
                     </Route>
 
                     <Route exact path="/permissions">
-                        <Permissions/>
+                        <Permissions />
                     </Route>
 
                     <Route exact path="/resend">
-                        <ResendPage/>
+                        <ResendPage />
                     </Route>
 
                     <Route exact path="/logout">
-                        <LogoutPage/>
+                        <LogoutPage />
                     </Route>
 
                     <Route exact path="/settings">
-                        <SettingsPage/>
+                        <SettingsPage />
                     </Route>
 
                     <Route path="/settings/source/:id">
-                        <AddDataSource/>
+                        <AddDataSource />
                     </Route>
 
                     <Route path="/user/:id">
-                        <UserPermissions/>
+                        <UserPermissions />
                     </Route>
 
-                    <Route exact path={'/credits'}>
-                        <CreditsPage/>
+                    <Route exact path="/credits">
+                        <CreditsPage />
                     </Route>
 
-                    <Route exact path={'/uploadData'}>
-                        <UploadDataPage/>
+                    <Route exact path="/reports">
+                        <ReportsPage />
+                    </Route>
+
+                    <Route exact path="/uploadData">
+                        <UploadDataPage />
+
                     </Route>
 
                     <Route path="*">

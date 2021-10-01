@@ -1,11 +1,12 @@
-package com.Analyse_Service.Analyse_Service.request;
+package com.Gateway_Service.Gateway_Service.dataclass.analyse;
 
-import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+
+
+import com.Gateway_Service.Gateway_Service.dataclass.parse.ParsedData;
 
 import java.util.ArrayList;
 
 public class TrainUserModelRequest {
-
     private String modelName;
 
     ArrayList<ParsedData> dataList;
@@ -14,7 +15,7 @@ public class TrainUserModelRequest {
 
     }
 
-    public TrainUserModelRequest(String modelName, ArrayList<ParsedData> dataList){
+    public TrainUserModelRequest(String modelName , ArrayList<ParsedData> dataList){
         this.modelName = modelName;
         this.dataList = dataList;
     }
@@ -26,6 +27,4 @@ public class TrainUserModelRequest {
     public ArrayList<ParsedData> getDataList(){
         return this.dataList;
     }
-
-
 }

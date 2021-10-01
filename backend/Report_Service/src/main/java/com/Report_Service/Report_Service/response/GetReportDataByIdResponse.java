@@ -1,13 +1,17 @@
 package com.Report_Service.Report_Service.response;
 
-public class GetReportDataResponse {
+public class GetReportDataByIdResponse {
     byte[] pdf;
 
     String name;
 
     String date;
 
-    public GetReportDataResponse(byte[] pdf,String name,String date){
+    public GetReportDataByIdResponse(){
+
+    }
+
+    public GetReportDataByIdResponse(byte[] pdf, String name, String date){
         this.date = date;
         this.name = name;
         this.pdf = pdf;

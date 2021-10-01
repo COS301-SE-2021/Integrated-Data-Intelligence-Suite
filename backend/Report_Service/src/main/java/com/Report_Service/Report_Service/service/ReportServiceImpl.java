@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -87,7 +85,7 @@ public class ReportServiceImpl {
         return new ReportDataResponse(pdfReport.getId());
     }
 
-    public GetReportDataResponse getReportData(GetReportDataRequest request) throws ReporterException {
+    public GetReportDataByIdResponse getReportDataById(GetReportDataByIdRequest request) throws ReporterException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -102,10 +100,10 @@ public class ReportServiceImpl {
         }
 
 
-        return new GetReportDataResponse(report.get().getPdf(),report.get().getName(),report.get().getDate());
+        return new GetReportDataByIdResponse(report.get().getPdf(),report.get().getName(),report.get().getDate());
     }
 
-    public DeleteReportDataResponse deleteReportData(DeleteReportDataRequest request) throws ReporterException {
+    public DeleteReportDataByIdResponse deleteReportDataById(DeleteReportDataByIdRequest request) throws ReporterException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -118,10 +116,10 @@ public class ReportServiceImpl {
         if(report.isEmpty() == false) {
             repository.delete(report.get());
         }else {
-            return new DeleteReportDataResponse(false);
+            return new DeleteReportDataByIdResponse(false);
         }
 
-        return new DeleteReportDataResponse(true);
+        return new DeleteReportDataByIdResponse(true);
     }
 
 

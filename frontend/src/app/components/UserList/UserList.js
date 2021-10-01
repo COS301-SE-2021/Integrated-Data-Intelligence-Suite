@@ -14,12 +14,12 @@ const UserList = (props) => {
   const { users } = props;
 
   return (
-      <div className="source-list">
+      <div className="settings-component">
           { users.map((user) => (
               <div>
-                  <div className="source-preview" key={`user-${user.id}`}>
-                      <p className="source-title">{user.firstName}</p>
-                      <div className="button-div">
+                  <div className="settings-list-item" key={`user-${user.id}`}>
+                      <p className="list-item-title">{user.firstName}</p>
+                      <div className="options-container">
                           <p className="permission-text">{user.permission}</p>
                           <Link className="standard button" to={`user/${user.id}`}><EditTwoTone twoToneColor={colors.blue} style={{ fontSize: iconSize, padding: '10px' }} /></Link>
                       </div>

@@ -2,9 +2,12 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 
-import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
+import com.Gateway_Service.Gateway_Service.dataclass.report.GetReportDataByIdRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.report.GetReportDataByIdResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.report.ReportDataRequest;
+import com.Gateway_Service.Gateway_Service.dataclass.report.ReportDataResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
@@ -13,7 +16,10 @@ import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequ
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
 import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.ErrorGraph;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.*;
+
 
 
 //import com.netflix.discovery.DiscoveryClient;
@@ -36,6 +42,9 @@ import java.util.*;
 public class GatewayServiceController {
 
     @Autowired
+    private DiscoveryClient discoveryClient;
+
+    @Autowired
     private ImportService importClient;
 
     @Autowired
@@ -48,7 +57,7 @@ public class GatewayServiceController {
     private VisualizeService visualizeClient;
 
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private ReportService reportClient;
   
     @Autowired
     private UserService userClient;
@@ -72,222 +81,162 @@ public class GatewayServiceController {
         return this.discoveryClient.getInstances(serviceName).get(0).getUri().toString();
     }
 
+
+    /*******************************************************************************************************************
+    ***************************************************FRONT-END********************************************************
+    ********************************************************************************************************************/
+
+
     /**
-     * Test function, this method is used to test the servic
-     * @return String This is a string value of a json test
-     *
-    @GetMapping(value ="/{key}", produces = "application/json")
-    public String testNothing(@PathVariable String key) {
-        String output = "";
+     * This method is used to facilitate communication to all the Services.
+     * Outputs data related to a topic/key.
+     * @param key This is a path variable of string value
+     * @return ResponseEntity<ArrayList<ArrayList<Graph>>>
+     *     This object contains data representing a response from all the services combined.
+     * @throws Exception This is thrown if exception caught in any of the Services.
+     */
+    @PostMapping(value = "/main/{key}", produces = "application/json")
+    @CrossOrigin
+    //@HystrixCommand(fallbackMethod = "fallback")
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key, @RequestBody SearchRequest request) throws Exception {
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
-        ImportTwitterRequest importRequest = new ImportTwitterRequest(key,10);
-        ImportTwitterResponse importResponse = importClient.getTwitterDataJson(importRequest);
+        System.out.println(request.getUsername());
+        System.out.println(request.getPermission());
+        //ArrayList <String> outputData = new ArrayList<>();
+        HttpHeaders requestHeaders;
 
-        if(importResponse.getFallback() == true)
-            output = importResponse.getFallbackMessage();
-        else
-            output = importResponse.getJsonData();
+        /*********************IMPORT*************************/
 
-        return output;
-    }*/
+        //String url = "http://Import-Service/Import/importData";
+        //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
 
+        ImportDataRequest importRequest = new ImportDataRequest(key,100);
+        ImportDataResponse importResponse = importClient.importData(importRequest);
 
-    @GetMapping(value ="/analyse/trainData", produces = "application/json")
-    public String trainData() {
-        String output = "";
+        if(importResponse.getFallback() == true) {
+            //outputData.add(importResponse.getFallbackMessage());
+            //return new ArrayList<>();//outputData;
 
-        //analyseClient.trainData();
-        if(analyseClient.trainData())
-            output = "Succsess";
-        else{
-            output = "Fail";
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = importResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
-        return output;
-    }
+
+        System.out.println("***********************IMPORT HAS BEEN DONE*************************");
 
 
-    /*@GetMapping(value ="test/{line}", produces = "application/json")
-    public String testNothing2(@PathVariable String line) {
 
-        String output = "";
-        AnalyseDataResponse analyseResponse = analyseClient.findSentiment(line);
+        /*********************PARSE*************************/
 
-        if(analyseResponse.getFallback() == true)
-            output = analyseResponse.getFallbackMessage();
-        else {
-            output = analyseResponse.getSentiment().getCssClass();
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());
+        ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
+        ArrayList<ParsedData> socialMediaData = parseResponse.getDataList();
+
+        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
+        parseResponse = parseClient.parseImportedData(parseRequestNews);
+        ArrayList<ParsedArticle> newsData = parseResponse.getArticleList();
+
+        if(parseResponse.getFallback() == true) {
+            //outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add();
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = parseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
-        return output;
-    }*/
+        System.out.println("***********************PARSE HAS BEEN DONE*************************");
 
-    /**
-     * This the endpoint for registering the user.
-     * @param form This is the body sent by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/user/register",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
-        RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        RegisterResponse registerResponse = userClient.register(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+
+
+        /*********************ANALYSE*************************/
+
+        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+
+
+        if(analyseResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+
+
+        System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+
+        /*********************VISUALISE**********************/
+
+        VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
+                analyseResponse.getPattenList(),
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPredictionList(),
+                analyseResponse.getTrendList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
+        VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
+
+
+        if(visualizeResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
+
+
+        /*********************REPORT**********************/
+
+        ReportDataRequest reportRequest = new ReportDataRequest(
+                analyseResponse.getTrendList(),
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPattenList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());
+        ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
+
+        ErrorGraph reportGraph = new ErrorGraph();
+        reportGraph.Error = reportResponse.getId().toString();
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);
+
+        System.out.println("***********************REPORT HAS BEEN DONE*************************");
+
+
+        for(int i =0; i < visualizeResponse.outputData.size(); i++)
+            outputData.add(visualizeResponse.outputData.get(i));
+
+        return new ResponseEntity<>(outputData,HttpStatus.OK);
+
     }
 
-
-    /*
-    @PostMapping(value = "/user/requestAdmin",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<RegisterAdminResponse> registerAdmin(@RequestBody RegisterForm form) {
-        RegisterAdminRequest registerRequest = new RegisterAdminRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
-    }
-    */
-
-
-    @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
-        GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
-        GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
-        return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
-    }
-
-    /**
-     * This is the endpoint to allow the user to login.
-     * @param request This is the body send by POST
-     * @return This is the response http entity
-     */
-    @PostMapping(value = "/user/login",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        LoginResponse response = userClient.login(request);
-        System.out.println(response.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This is the endpoint to allow the user to verify their account
-     * via email.
-     * @param request This is the body send by POST
-     * @return This is the response http entity
-     */
-    @PostMapping(value = "/user/verify",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
-        System.out.println("Verifying User: " + request.getEmail());
-        VerifyAccountResponse response = userClient.verifyAccount(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for resending the verification code.
-     * @param request This is the body send by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/user/resend",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
-        ResendCodeResponse response = userClient.resendCode(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for resending the verification code.
-     * @param request This is the body send by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/user/updateProfile",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
-        UpdateProfileResponse response = userClient.updateProfile(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for changing the permission of a user
-     * @param request This is the body send by POST
-     * @return This is the response http entity
-     */
-    @PostMapping(value = "/changeUser",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
-        ChangeUserResponse response = userClient.managePermissions(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system
-     * @return This is the response http entity. It contains all the users.
-     */
-    @GetMapping(value = "/user/getAll", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
-        System.out.println("Getting all users from the database");
-        GetAllUsersResponse response = userClient.getAllUsers();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/retrievePrevious", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
-        return null;
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system.
-     * @param jsonRequest This is the body send by POST.
-     * @return This is the response http entity. It contains all the users.
-     */
-    @PostMapping(value = "/addNewApiSource", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
-        String response = importClient.addApiSource(jsonRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system
-     * @param request This is the body send by POST
-     * @return This is the response http entity. It contains all the users.
-     */
-    @PostMapping(value = "/getSourceById", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
-        GetAPISourceByIdResponse response = importClient.getSourceById(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the users registered on the system
-     * @param jsonRequest This is the body send by POST
-     * @return This is the response http entity. It contains all the users.
-     */
-    @PostMapping(value = "/updateAPI", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
-        String response = importClient.editAPISource(jsonRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * This the endpoint for getting all the api sources.
-     * @return This is the response http entity. It contains all the users.
-     */
-    @GetMapping(value = "/getAllSources", produces = "application/json")
-    @CrossOrigin
-    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
-        GetAllAPISourcesResponse response = importClient.getAllAPISources();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
     /**
      * This endpoint will be use for uploading a file and saving the file to
@@ -414,53 +363,75 @@ public class GatewayServiceController {
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
+
+
+
+
     /**
-     * This method is used to facilitate communication to all the Services.
-     * Outputs data related to a topic/key.
-     * @param key This is a path variable of string value
-     * @return ResponseEntity<ArrayList<ArrayList<Graph>>>
-     *     This object contains data representing a response from all the services combined.
-     * @throws Exception This is thrown if exception caught in any of the Services.
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
      */
-    @PostMapping(value = "/main/{key}", produces = "application/json")
+    @PostMapping(value = "/generateReport",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    //@HystrixCommand(fallbackMethod = "fallback")
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key, @RequestBody SearchRequest request) throws Exception {
-        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
+    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody GetReportDataByIdRequest request) {
 
-        System.out.println(request.getUsername());
-        System.out.println(request.getPermission());
-        //ArrayList <String> outputData = new ArrayList<>();
-        HttpHeaders requestHeaders;
 
-        /*********************IMPORT*************************/
+        GetReportDataByIdResponse output = reportClient.getReportDataById(request);
 
-        //String url = "http://Import-Service/Import/importData";
-        //UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("value",key);
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
 
-        ImportDataRequest importRequest = new ImportDataRequest(key,100);
-        ImportDataResponse importResponse = importClient.importData(importRequest);
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/getAllReportsByUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) {
 
-        if(importResponse.getFallback() == true) {
-            //outputData.add(importResponse.getFallbackMessage());
-            //return new ArrayList<>();//outputData;
+        /*********************USER******************/
 
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = importResponse.getFallbackMessage();
+        //GET ALL IDS
+        int maxSizeId;
 
-            ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+        GetUserReportsResponse userReports = userClient.getUserReports(request);
 
-            outputData.add( data);
+        List<String> reportsList = userReports.getReports();
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        maxSizeId = reportsList.size();
+
+        /*********************REPORT******************/
+
+        ArrayList<GetReportDataByIdResponse> output = new ArrayList<>();
+
+        GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest();
+
+        for(int i =0; i < maxSizeId; i++) {
+            repRequest.setReportId(UUID.fromString(reportsList.get(i)));
+            output.add(reportClient.getReportDataById(repRequest));
         }
 
-        System.out.println("***********************IMPORT HAS BEEN DONE*************************");
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/trainUserModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<TrainUserModelResponse> trainUserModel(@RequestBody TrainUserModelRequest request) {
 
 
 
-        /*********************PARSE*************************/
+        /*********************PARSE*************************
 
         ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());
         ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
@@ -490,8 +461,77 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
-        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+
+        TrainUserModelRequest analyseRequest = new TrainUserModelRequest("", new ArrayList<ParsedData>());
+        TrainUserModelResponse analyseResponse = analyseClient.trainUserModel(analyseRequest);
+
+
+        /*if(analyseResponse.getFallback() == true) {
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = analyseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }*/
+
+
+
+        System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
+
+
+
+        return new ResponseEntity<>(analyseResponse, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/analyseUserData",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
+
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
+
+
+        /*********************PARSE*************************
+
+        ParseImportedDataRequest parseRequest = new ParseImportedDataRequest(DataSource.TWITTER, importResponse.getList().get(0).getData(), request.getPermission());
+        ParseImportedDataResponse parseResponse = parseClient.parseImportedData(parseRequest);
+        ArrayList<ParsedData> socialMediaData = parseResponse.getDataList();
+
+        ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
+        parseResponse = parseClient.parseImportedData(parseRequestNews);
+        ArrayList<ParsedArticle> newsData = parseResponse.getArticleList();
+
+        if(parseResponse.getFallback() == true) {
+            //outputData.add(parseResponse.getFallbackMessage());
+            //outputData.add();
+            ErrorGraph errorGraph = new ErrorGraph();
+            errorGraph.Error = parseResponse.getFallbackMessage();
+
+            ArrayList<Graph> data = new ArrayList<>();
+            data.add(errorGraph);
+
+            outputData.add( data);
+
+            return new ResponseEntity<>(outputData,HttpStatus.OK);
+        }
+
+        System.out.println("***********************PARSE HAS BEEN DONE*************************");
+
+
+
+        /*********************ANALYSE*************************/
+
+        AnalyseUserDataRequest analyseRequest = new AnalyseUserDataRequest(new ArrayList<ParsedData>(), "");//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseUserDataResponse analyseResponse = analyseClient.analyzeUserData(analyseRequest);
 
 
         if(analyseResponse.getFallback() == true) {
@@ -516,7 +556,7 @@ public class GatewayServiceController {
         VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
                 analyseResponse.getPattenList(),
                 analyseResponse.getRelationshipList(),
-                analyseResponse.getPattenList(),
+                analyseResponse.getPredictionList(),
                 analyseResponse.getTrendList(),
                 analyseResponse.getAnomalyList(),
                 analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
@@ -538,11 +578,206 @@ public class GatewayServiceController {
         System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
 
 
+        /*********************REPORT**********************/
+
+        ReportDataRequest reportRequest = new ReportDataRequest(
+                analyseResponse.getTrendList(),
+                analyseResponse.getRelationshipList(),
+                analyseResponse.getPattenList(),
+                analyseResponse.getAnomalyList(),
+                analyseResponse.getWordList());
+        ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
+
+        ErrorGraph reportGraph = new ErrorGraph();
+        reportGraph.Error = reportResponse.getId().toString();
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);
+
+        System.out.println("***********************REPORT HAS BEEN DONE*************************");
+
+
         for(int i =0; i < visualizeResponse.outputData.size(); i++)
             outputData.add(visualizeResponse.outputData.get(i));
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
+    }
 
+
+    /*******************************************************************************************************************
+     *****************************************************USER**********************************************************
+     *******************************************************************************************************************/
+
+    /**
+     * This the endpoint for registering the user.
+     * @param form This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/register",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
+        RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        RegisterResponse registerResponse = userClient.register(registerRequest);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
+
+
+    /*
+    @PostMapping(value = "/user/requestAdmin",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<RegisterAdminResponse> registerAdmin(@RequestBody RegisterForm form) {
+        RegisterAdminRequest registerRequest = new RegisterAdminRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+    }
+    */
+
+
+    @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
+        GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
+        GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
+        return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
+    }
+
+    /**
+     * This is the endpoint to allow the user to login.
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/user/login",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = userClient.login(request);
+        System.out.println(response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This is the endpoint to allow the user to verify their account
+     * via email.
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/user/verify",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
+        System.out.println("Verifying User: " + request.getEmail());
+        VerifyAccountResponse response = userClient.verifyAccount(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for resending the verification code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/resend",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
+        ResendCodeResponse response = userClient.resendCode(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for resending the verification code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/updateProfile",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
+        UpdateProfileResponse response = userClient.updateProfile(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for changing the permission of a user
+     * @param request This is the body send by POST
+     * @return This is the response http entity
+     */
+    @PostMapping(value = "/changeUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
+        ChangeUserResponse response = userClient.managePermissions(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/user/getAll", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
+        System.out.println("Getting all users from the database");
+        GetAllUsersResponse response = userClient.getAllUsers();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/retrievePrevious", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
+        return null;
+    }
+
+    /*******************************************************************************************************************
+     *****************************************************IMPORT********************************************************
+     *******************************************************************************************************************/
+
+    /**
+     * This the endpoint for getting all the users registered on the system.
+     * @param jsonRequest This is the body send by POST.
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/addNewApiSource", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
+        String response = importClient.addApiSource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param request This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/getSourceById", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
+        GetAPISourceByIdResponse response = importClient.getSourceById(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param jsonRequest This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/updateAPI", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
+        String response = importClient.editAPISource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the api sources.
+     * @return This is the response http entity. It contains all the users.
+     */
+    @GetMapping(value = "/getAllSources", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
+        GetAllAPISourcesResponse response = importClient.getAllAPISources();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -571,14 +806,22 @@ public class GatewayServiceController {
     }
 
 
-    public static class Graph{
-        Graph(){}
-    }
+    /*******************************************************************************************************************
+     ***************************************************ANALYSE*********************************************************
+     *******************************************************************************************************************/
 
-    public static class ErrorGraph extends Graph{
-        public String Error;
-    }
+    @GetMapping(value ="/analyse/trainApplicationData", produces = "application/json")
+    public String trainData() {
+        String output = "";
 
+        //analyseClient.trainData();
+        if(analyseClient.trainApplicationData())
+            output = "Success training application";
+        else{
+            output = "Fail training application";
+        }
+        return output;
+    }
 
 
 }

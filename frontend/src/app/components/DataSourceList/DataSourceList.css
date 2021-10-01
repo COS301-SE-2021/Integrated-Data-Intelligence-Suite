@@ -1,9 +1,9 @@
-.source-list{
+.settings-component{
     padding-left: 20px;
     line-height: normal;
 }
 
-.source-list .source-preview{
+.settings-component .settings-list-item{
     display: flex;
     background: white;
     padding: 10px;
@@ -12,7 +12,7 @@
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.source-list .source-preview p.source-title{
+.settings-component .settings-list-item p.list-item-title{
     float: left;
     font-size: 15px;
     font-weight: 600;
@@ -21,11 +21,11 @@
     color: black;
 }
 
-.source-preview .button-div{
+.settings-list-item .options-container{
     margin-left: auto;
 }
 
-.source-preview .button-div button{
+.settings-list-item .options-container button{
     margin: 5px;
     border: 1px solid #E8E8E9;
     padding: 5px;
@@ -41,7 +41,7 @@ button.warning{
     color: #FF0800;
 }
 
-.source-list .button.standard-filled{
+.settings-component .button.standard-filled{
     background: #5773FA;
     border: none;
     font-size: 16px;
@@ -51,20 +51,20 @@ button.warning{
     text-transform: capitalize;
     color: white;
 }
-.source-list .add-source{
+.settings-component .add-source{
     margin-bottom: 20px;
 }
 
-.source-list .button.standard-filled:hover{
+.settings-component .button.standard-filled:hover{
     background: #1C8EFA;
 
 }
 
-.source-preview .button-div button.standard:hover{
+.settings-list-item .options-container button.standard:hover{
     border: 1px solid #5773FA;
 }
 
-.source-preview .button-div button.warning:hover{
+.settings-list-item .options-container button.warning:hover{
     border: 1px solid #FF0800;
 }
 
