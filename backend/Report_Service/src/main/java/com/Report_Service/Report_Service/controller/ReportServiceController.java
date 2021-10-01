@@ -2,8 +2,10 @@ package com.Report_Service.Report_Service.controller;
 
 import com.Report_Service.Report_Service.exception.InvalidRequestException;
 import com.Report_Service.Report_Service.exception.ReporterException;
+import com.Report_Service.Report_Service.request.DeleteReportDataRequest;
 import com.Report_Service.Report_Service.request.GetReportDataRequest;
 import com.Report_Service.Report_Service.request.ReportDataRequest;
+import com.Report_Service.Report_Service.response.DeleteReportDataResponse;
 import com.Report_Service.Report_Service.response.GetReportDataResponse;
 import com.Report_Service.Report_Service.response.ReportDataResponse;
 import com.Report_Service.Report_Service.service.ReportServiceImpl;
@@ -23,7 +25,7 @@ public class ReportServiceController {
     /**
      * This method is used to facilitate communication to the Report-Service.
      * @param request This is a request entity which contains a ReportDataRequest object.
-     * @return AnalyseDataResponse This object contains analysed data which has been processed by Report-Service.
+     * @return ReportDataResponse This object contains analysed data which has been processed by Report-Service.
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
     @PostMapping("/visualizeData")
@@ -40,7 +42,7 @@ public class ReportServiceController {
     /**
      * This method is used to facilitate communication to the Report-Service.
      * @param request This is a request entity which contains a ReportDataRequest object.
-     * @return AnalyseDataResponse This object contains analysed data which has been processed by Report-Service.
+     * @return GetReportDataResponse This object contains analysed data which has been processed by Report-Service.
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
     @PostMapping("/visualizeData")
@@ -56,5 +58,26 @@ public class ReportServiceController {
         }
 
         return service.getReportData(request);
+    }
+
+    /**
+     * This method is used to facilitate communication to the Report-Service.
+     * @param request This is a request entity which contains a ReportDataRequest object.
+     * @return DeleteReportDataResponse This object contains analysed data which has been processed by Report-Service.
+     * @throws Exception This is thrown if exception caught in Report-Service.
+     */
+    @PostMapping("/visualizeData")
+    public @ResponseBody
+    DeleteReportDataResponse deleteReportData(@RequestBody DeleteReportDataRequest request) throws ReporterException {
+        //VisualizeDataRequest request = requestEntity.getBody();
+        if (request == null) {
+            throw new InvalidRequestException("getReportData Request Object is null");
+        }
+
+        if (request.getReportId() == null) {
+            throw new InvalidRequestException("getReportData Request ID is null");
+        }
+
+        return service.deleteReportData(request);
     }
 }
