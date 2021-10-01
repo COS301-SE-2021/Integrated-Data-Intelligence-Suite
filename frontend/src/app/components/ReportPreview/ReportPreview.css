@@ -1,0 +1,7 @@
+.main-preview-container{
+    position: absolute;
+    right:0;
+    /*float: right;*/
+    border: 10px solid black;
+    background: red;
+}
