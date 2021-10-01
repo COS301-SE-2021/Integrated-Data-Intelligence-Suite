@@ -2,11 +2,10 @@ package com.Report_Service.Report_Service.request;
 
 import java.util.UUID;
 
-public class GetReportDataRequest {
-
+public class DeleteReportDataByIdRequest {
     UUID reportId;
 
-    public GetReportDataRequest(UUID reportId){
+    public DeleteReportDataByIdRequest(UUID reportId){
         this.reportId= reportId;
     }
 

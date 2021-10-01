@@ -1,9 +1,9 @@
 package com.Report_Service.Report_Service.response;
 
-public class DeleteReportDataResponse {
+public class DeleteReportDataByIdResponse {
     boolean deleted;
 
-    public DeleteReportDataResponse(boolean deleted){
+    public DeleteReportDataByIdResponse(boolean deleted){
         this.deleted = deleted;
     }
 
