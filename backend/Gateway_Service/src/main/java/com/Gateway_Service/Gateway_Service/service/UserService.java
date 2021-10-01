@@ -273,6 +273,80 @@ public class UserService {
 
         return userResponse;
     }
+
+    /**
+     * This function is used to connect to the user service to allow the user to change
+     * their account detials. It sends a request to the user controller and send the request
+     * class to user service.
+     * @param userRequest This class contains the new details of the user to change their current details.
+     * @return This class contains the information if the process of changing their account details
+     * was successful or not.
+     */
+    public GetUserReportsResponse getUserReports(GetUserReportsRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        GetUserReportsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getReports/" + userRequest.getId(), GetUserReportsResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ReportResponse addReportForUser(ReportRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ReportResponse userResponse = restTemplate.postForObject("http://User-Service/User/addReport", request, ReportResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ReportResponse removeReportForUser(ReportRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ReportResponse userResponse = restTemplate.postForObject("http://User-Service/User/removeReport", request, ReportResponse.class);
+
+        return userResponse;
+    }
 }
 
 
