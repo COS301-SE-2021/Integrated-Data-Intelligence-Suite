@@ -1238,10 +1238,15 @@ public class AnalyseServiceImpl {
             String modelID = splitModelId[1];
 
             File artifact = client.downloadArtifacts(modelID, modelName);
+            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
-            lrModel = trainValidationSplit.fit(trainingDF);
+
+            lrModel = trainValidationSplit.fit(trainData);
 
             FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(trainFile.getPath()));
         }
         else{
             String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
@@ -1257,10 +1262,15 @@ public class AnalyseServiceImpl {
             //lrModel = TrainValidationSplitModel.load(artifact.getPath());
 
             File artifact = client.downloadArtifacts(modelID, modelName + "T");
+            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
-            lrModel = trainValidationSplit.fit(trainingDF);
+
+            lrModel = trainValidationSplit.fit(trainData);
 
             FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(trainFile.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
@@ -1543,6 +1553,9 @@ public class AnalyseServiceImpl {
             //kmModel = PipelineModel.load(artifact.getPath());
 
             File artifact = client.downloadArtifacts(modelID, modelName);
+            //File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+            //Dataset<Row> trainData = sparkAnomalies.read().load(trainFile.getPath());
             Pipeline pipeline = Pipeline.load(artifact.getPath());
             kmModel = pipeline.fit(trainingDF);
 
