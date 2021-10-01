@@ -4,6 +4,13 @@ server:
 spring:
   application:
     name: Gateway-Service
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+storage:
+  location:upload
 
 eureka:
   client:
