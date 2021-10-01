@@ -725,8 +725,9 @@ public class GatewayServiceController {
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(modelId);
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
 
-        if(analyseResponse.getModelId() == null) // doesn't find model
+        if(analyseResponse.getModelId() == null) { // doesn't find model
             return;
+        }
 
 
         //TODO: user added new user model
