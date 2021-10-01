@@ -37,11 +37,11 @@ export default function UploadDropZone(props) {
     //updates file preview when file uploaded with dialog (not dropped)
     let files = acceptedFiles.map(file => (
         <div key={file.path} className={'file-preview-item'}>
-            <div><FaFileCsv className={'file-preview-csv-icon'}/></div>
-            <div>{file.name}</div>
-            <div>
-                {file.size}
-                bytes
+            <FaFileCsv className={'file-preview-csv-icon'}/>
+            <div className={'file-preview-name'}>{file.name}</div>
+            <div className={'file-preview-size'}>
+                {(file.size / (1024 * 1024)).toFixed(2)}
+                MB
             </div>
         </div>
     ));
