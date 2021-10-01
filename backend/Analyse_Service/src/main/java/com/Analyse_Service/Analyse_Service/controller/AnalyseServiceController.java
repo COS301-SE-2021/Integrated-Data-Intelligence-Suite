@@ -47,7 +47,7 @@ public class AnalyseServiceController {
      * @return AnalyseDataResponse This object contains analysed data which has been processed by Analyse-Service.
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
-    @PostMapping("/analyzeData")
+    @PostMapping("/analyzeUserData")
     public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException {
         //AnalyseDataRequest request = getBody();
 
