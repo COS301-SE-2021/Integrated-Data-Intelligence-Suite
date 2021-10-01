@@ -77,10 +77,10 @@ public class ReportServiceImpl {
         out.close();*/
 
         //save generated pdf
-        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), "", "");
+        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), "UserReport", newReport.getDateTime());
         repository.save(pdfReport);
 
-        return new ReportDataResponse(reportPDFResponse.getPdf());
+        return new ReportDataResponse(pdfReport.getId());
     }
 
     public GetReportDataResponse getReportData(GetReportDataRequest request) throws ReporterException {
