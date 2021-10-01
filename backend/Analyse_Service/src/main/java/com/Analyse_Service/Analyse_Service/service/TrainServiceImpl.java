@@ -2184,7 +2184,8 @@ public class TrainServiceImpl {
         //select best in registry for application
 
         String BestModelId ="";
-        BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt")); //TODO; write
+        String filePath = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+        BufferedReader reader = new BufferedReader(new FileReader(filePath)); //TODO; write
 
         TrainedModel BestModel = new TrainedModel();
     }

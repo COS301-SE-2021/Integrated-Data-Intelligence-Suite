@@ -40,6 +40,7 @@ import scala.collection.mutable.WrappedArray;
 
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.apache.spark.sql.functions.*;
@@ -1232,7 +1233,7 @@ public class AnalyseServiceImpl {
 
 
         if(request.getModelId() != null) {
-            String[] splitModelId = request.getModelId().split(";"); //name, id
+            String[] splitModelId = request.getModelId().split(":"); //name, id, id
             String modelName = splitModelId[0];
             String modelID = splitModelId[1];
 
@@ -1240,7 +1241,8 @@ public class AnalyseServiceImpl {
             lrModel = TrainValidationSplitModel.load(artifact.getPath());
         }
         else{
-            BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
+            String applicationRegitser = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+            BufferedReader reader = new BufferedReader(new FileReader(applicationRegitser));
 
             String findTrendModelId = reader.readLine();
 
@@ -1523,18 +1525,30 @@ public class AnalyseServiceImpl {
         MlflowClient client = new MlflowClient("http://localhost:5000");
 
 
-        BufferedReader reader = new BufferedReader(new FileReader("../rri/RegisteredApplicationModels.txt"));
+        if(request.getModelId() != null) {
+            String[] splitModelId = request.getModelId().split(":"); //name, id, id
+            String modelName = splitModelId[0];
+            String modelID = splitModelId[2];
 
-        String findTrendModelId = reader.readLine();
-        //findTrendModelId = reader.readLine(); // 2nd line
+            File artifact = client.downloadArtifacts(modelID, modelName);
+            kmModel = PipelineModel.load(artifact.getPath());
+        }
+        else{
+            String applicationRegistered = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
-        String[] splitModelId = findTrendModelId.split(":"); //name, id
-        String modelName = splitModelId[0];
-        String modelID = splitModelId[2];
-        File artifact = client.downloadArtifacts(modelID, modelName);
-        kmModel = PipelineModel.load(artifact.getPath());
+            String findTrendModelId = reader.readLine();
+            //findTrendModelId = reader.readLine(); // 2nd line
 
-        //while (((line = reader.readLine()) != null)) {}
+            String[] splitModelId = findTrendModelId.split(":"); //name, id
+            String modelName = splitModelId[0];
+            String modelID = splitModelId[2];
+            File artifact = client.downloadArtifacts(modelID, modelName);
+            kmModel = PipelineModel.load(artifact.getPath());
+
+            //while (((line = reader.readLine()) != null)) {}
+        }
+
 
         /*******************LOAD & READ MODEL*****************/
         // PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
