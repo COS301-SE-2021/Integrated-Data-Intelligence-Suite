@@ -12,14 +12,13 @@
     /*padding: 25px;*/
 }
 
-
 #upload-card > .simple-card-body {
     background: white;
     /*padding: 25px;*/
     /*border-radius: 10px;*/
     /*border-bottom-left-radius: 10px;*/
     /*border-bottom-right-radius: 10px;*/
-    grid-template-rows: repeat(3, auto) !important;
+    grid-template-rows: repeat(2, auto) !important;
 }
 
 .dropzone {
@@ -72,4 +71,11 @@
     color: var(--black-coral);
     width: 70%;
     text-align: center;
+}
+
+#upload-preview-div {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: 100%;
+
 }
