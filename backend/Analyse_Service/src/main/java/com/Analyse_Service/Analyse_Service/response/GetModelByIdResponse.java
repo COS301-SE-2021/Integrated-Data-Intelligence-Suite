@@ -1,24 +1,19 @@
 package com.Analyse_Service.Analyse_Service.response;
 
-public class TrainUserModelResponse {
+public class GetModelByIdResponse {
 
-    private long trainingLength;
     private String modelName;
     private String modelId;
 
-    public TrainUserModelResponse(){
+    public GetModelByIdResponse(){
 
     }
 
-    public TrainUserModelResponse(long trainingLength, String modelName, String modelId){
-        this.trainingLength = trainingLength;
+    public GetModelByIdResponse(String modelName, String modelId){
         this.modelName = modelName;
         this.modelId = modelId;
     }
 
-    public long getTrainingLength(){
-        return trainingLength;
-    }
 
     public String getModelName(){
         return modelName;
@@ -28,9 +23,6 @@ public class TrainUserModelResponse {
         return modelId;
     }
 
-    public void setTrainingLength(long trainingLength) {
-        this.trainingLength = trainingLength;
-    }
 
     public void setModelName(String modelName) {
         this.modelName = modelName;

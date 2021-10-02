@@ -77,6 +77,36 @@ public class AnalyseService {
     /**
      * This method is used to communicate to the Analyse-Service.
      * @param analyseRequest This is a request object which contains data required to be analysed.
+     * @return AnalyseUserDataResponse This object contains analysed data returned by Analyse-Service
+     */
+    //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
+    public GetModelByIdResponse getModelById(GetModelByIdRequest analyseRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(analyseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        GetModelByIdResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, GetModelByIdResponse.class);
+
+        return analyseResponse;
+    }
+
+
+
+
+    /**
+     * This method is used to communicate to the Analyse-Service.
+     * @param analyseRequest This is a request object which contains data required to be analysed.
      * @return TrainUserModelResponse This object contains trained data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")

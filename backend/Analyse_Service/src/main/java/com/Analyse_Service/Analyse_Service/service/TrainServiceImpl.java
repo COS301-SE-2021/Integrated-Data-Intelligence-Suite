@@ -451,11 +451,17 @@ public class TrainServiceImpl {
             TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
+            System.out.println("finished training 1");
+
             TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
             TrainFindTrendsDTResponse findTrendsDTResponse = this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
+            System.out.println("finished training 2");
+
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+
+            System.out.println("finished training all");
 
             ArrayList<TrainedModel> trainedModels = new ArrayList<>();
             trainedModels.add(findTrendsResponse.getTrainedModel());
@@ -1090,13 +1096,18 @@ public class TrainServiceImpl {
         /***saveModel***/
 
         //*"backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/"*/ "..models/" +modelName;
-        String path =  Paths.get("../models/" +modelName).toString();
+        //String path =  Paths.get("../models/" +modelName).getRoot().toString();
+        //String path =  Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName).getRoot().toString();
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
         System.out.println("Testing new path !!!  " + path);
         String script = Paths.get("../rri/LogModel.py").toString();
 
-        //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
-        lrModel.write().overwrite().save(path);
-        File modelFile = new File(path) ;// "../models/" + modelName);
+
+        //lrModel.write().overwrite().save(path);
+        trainValidationSplit.write().overwrite().save(path);
+
+
+        File modelFile = new File(path);// "../models/" + modelName);
 
         if(modelFile.exists() && modelFile.isDirectory()){
             System.out.println("nothing wrong with file ");
@@ -1105,8 +1116,15 @@ public class TrainServiceImpl {
         }
         client.logArtifact(run.getId(), modelFile);
 
+
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainSetDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
-        FileUtils.deleteDirectory(new File(path));
+        FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
 
         /*
         String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
@@ -1442,23 +1460,28 @@ public class TrainServiceImpl {
         }
 
 
-
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
 
-        String path = Paths.get("../models/" + modelName).toString();
-
+        //String path = Paths.get("../models/" + modelName).toString();
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
         String script = Paths.get("../rri/LogModel.py").toString();
-        dtModel.write().overwrite().save(path);
+
+        //dtModel.write().overwrite().save(path);
+        trainValidationSplit.write().overwrite().save(path);
         File modelFile = new File(path);
-        //client.logArtifact(run.getId(), modelFile);
 
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainSetDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
 
-        FileUtils.deleteDirectory(new File(path));
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
+        FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
 
 
         /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
@@ -2121,15 +2144,24 @@ public class TrainServiceImpl {
         client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        String path = Paths.get("../models/" + modelName).toString();
+        //String path = Paths.get("../models/" + modelName).toString();
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
         String script = Paths.get("../rri/LogModel.py").toString();
 
-        kmModel.write().overwrite().save(path);
+        //kmModel.write().overwrite().save(path);
+        pipeline.write().overwrite().save(path);
         File modelFile = new File(path);
+
         client.logArtifact(run.getId(), modelFile);
 
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainingDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
-        FileUtils.deleteDirectory(new File(path));
+        FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
 
         /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
         CommandLine commandLine = CommandLine.parse(commandPath);
@@ -2242,7 +2274,7 @@ public class TrainServiceImpl {
         bestModelId = bestModelId + ":" + trendModelThree.getRunId();
 
 
-        String filePath = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
         File file = new File(filePath);
         file.createNewFile();
 
