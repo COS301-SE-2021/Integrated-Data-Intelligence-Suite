@@ -101,7 +101,7 @@ public class VisualizeServiceImpl {
                 indexedGraphs.add(selector.getAllGraphs().get(i));
             }
         }
-        outputData.add(indexedGraphs);
+        //outputData.add(indexedGraphs);
 
         /************************Compute Graphs*****************************/
 
