@@ -2,7 +2,11 @@
     /*Blues*/
     --neon-blue: #5773FA;
     /*--dodger-blue: #148dff;*/
+
     --dodger-blue: #339CFF;
+
+
+    --azure: #007AF5;
     --prussian-blue: #0E2A42;
 
     /*blacks*/
@@ -20,8 +24,6 @@
     --simple-card-title-color: darkgrey;
 
     --cultured: #f9fbfc;
-
-
     /*******************************/
     /********Profile Page***********/
     /*******************************/
@@ -29,7 +31,6 @@
     --personal-card-bg: #efefef;
     --personal-info-title: #737373;
     --profile-background: #E8E8E9;
-
 
     /* charts page */
     --border-color: lightgrey;

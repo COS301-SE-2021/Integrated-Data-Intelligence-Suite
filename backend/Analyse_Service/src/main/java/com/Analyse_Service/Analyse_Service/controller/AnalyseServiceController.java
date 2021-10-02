@@ -67,6 +67,22 @@ public class AnalyseServiceController {
     }
 
 
+    @PostMapping("/getModelById")
+    public @ResponseBody
+    GetModelByIdResponse getModelById(@RequestBody GetModelByIdRequest request) throws AnalyserException {
+        //VisualizeDataRequest request = requestEntity.getBody();
+        if (request == null) {
+            throw new InvalidRequestException("getModelById Request Object is null");
+        }
+
+        if (request.getModelId() == null) {
+            throw new InvalidRequestException("getModelById Request ID is null");
+        }
+
+        return analyseService.getModelById(request);
+    }
+
+
     /**
      * This method is used to facilitate communication to the Train-Service.
      * @param request This is a request entity which contains a TrainModelRequest object.
@@ -92,6 +108,9 @@ public class AnalyseServiceController {
 
         return trainService.trainUserModel(request);
     }
+
+
+
 
 
     @GetMapping("/trainApplicationData")

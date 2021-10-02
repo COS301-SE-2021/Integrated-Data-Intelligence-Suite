@@ -4,10 +4,7 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
-import com.Gateway_Service.Gateway_Service.dataclass.report.GetReportDataByIdRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.report.GetReportDataByIdResponse;
-import com.Gateway_Service.Gateway_Service.dataclass.report.ReportDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.report.ReportDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.report.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
@@ -179,6 +176,7 @@ public class GatewayServiceController {
             return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
+        if (analyseResponse.getAnomalyList() == null) System.out.println("Oi its empty");
 
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
@@ -246,11 +244,12 @@ public class GatewayServiceController {
      * @param col2 This is the location/title
      * @param col3 This is the interactions/description
      * @param col4 This is the date
-     * @param isSocial If the data is social media or articles
+     * @param modelID If the data is social media or articles
      * @return This contains if the request of uploading a file was successful or not.
      */
-    @PostMapping("/upload")
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam boolean isSocial) {
+    @PostMapping("/analyzeUpload")
+    @CrossOrigin
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileAnalyzeUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam("modelID") String modelID) {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -262,35 +261,22 @@ public class GatewayServiceController {
             return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
         }
         ArrayList<ParsedData> socialMediaData = new ArrayList<>();
-        ArrayList<ParsedArticle> newsData = new ArrayList<>();
         try {
             String filename = storageService.store(file);
             //response.put("message", "Successfully saved file");
             log.info("[Gateway API] Successfully saved file");
             log.info("[Gateway API] Running parser");
             //log.info(file.getOriginalFilename());
-            if(isSocial) {
-                ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
-                socialMediaData = response1.getSocialDataList();
-                if(response1.isSuccess()) {
-                    response.put("success", "true");
-                }
-                else {
-                    response.put("success", "false");
-                }
-                response.put("message", response1.getMessage());
+            ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
+            socialMediaData = response1.getSocialDataList();
+            if(response1.isSuccess()) {
+                response.put("success", "true");
             }
             else {
-                ParseUploadedNewsDataResponse response1 = parseClient.parseUploadedNewsData(new ParseUploadedNewsDataRequest(filename, col1, col2, col3, col4));
-                newsData = response1.getNewsDataList();
-                if(response1.isSuccess()) {
-                    response.put("success", "true");
-                }
-                else {
-                    response.put("success", "false");
-                }
-                response.put("message", response1.getMessage());
+                response.put("success", "false");
             }
+            response.put("message", response1.getMessage());
+
 
             if(storageService.deleteFile(filename)) {
                 log.info("[Gateway API] Delete file: " + filename);
@@ -301,59 +287,9 @@ public class GatewayServiceController {
 
             log.info("[Gateway API] Successfully parsed. Attempting to analyze data");
 
-            AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
-            AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+            AnalyseUserDataRequest userDataRequest = new AnalyseUserDataRequest(socialMediaData, modelID);
 
-
-            if(analyseResponse.getFallback() == true) {
-                ErrorGraph errorGraph = new ErrorGraph();
-                errorGraph.Error = analyseResponse.getFallbackMessage();
-
-                ArrayList<Graph> data = new ArrayList<>();
-                data.add(errorGraph);
-
-                outputData.add( data);
-
-                return new ResponseEntity<>(outputData,HttpStatus.OK);
-            }
-
-
-
-            System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
-
-            log.info("[Gateway API] Completed analysis. Preparing data for visualization");
-
-
-            /*********************VISUALISE**********************/
-
-            VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
-                    analyseResponse.getPattenList(),
-                    analyseResponse.getRelationshipList(),
-                    analyseResponse.getPattenList(),
-                    analyseResponse.getTrendList(),
-                    analyseResponse.getAnomalyList(),
-                    analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
-            VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
-
-
-            if(visualizeResponse.getFallback() == true) {
-                ErrorGraph errorGraph = new ErrorGraph();
-                errorGraph.Error = analyseResponse.getFallbackMessage();
-
-                ArrayList<Graph> data = new ArrayList<>();
-                data.add(errorGraph);
-
-                outputData.add( data);
-
-                return new ResponseEntity<>(outputData,HttpStatus.OK);
-            }
-
-            System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
-            log.info("[Gateway API] Visualize success");
-
-
-            for(int i =0; i < visualizeResponse.outputData.size(); i++)
-                outputData.add(visualizeResponse.outputData.get(i));
+            return this.analyseUserData(userDataRequest);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -363,8 +299,11 @@ public class GatewayServiceController {
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
-
-
+    @PostMapping(value = "/trainUpload")
+    @CrossOrigin
+    public ResponseEntity<String> fileTrainUpload(@RequestParam("file") MultipartFile file) {
+        return new ResponseEntity<>("Not implemented", HttpStatus.NOT_IMPLEMENTED);
+    }
 
 
     /**
@@ -375,10 +314,12 @@ public class GatewayServiceController {
     @PostMapping(value = "/generateReport",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody GetReportDataByIdRequest request) {
+    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) {
 
+        GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest(UUID.fromString(request.getReportID()));
+        GetReportDataByIdResponse output = reportClient.getReportDataById(repRequest);
 
-        GetReportDataByIdResponse output = reportClient.getReportDataById(request);
+        ReportResponse response = userClient.addReportForUser(request);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
@@ -391,19 +332,28 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllReportsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetReportDataByIdRequest request) {
+    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) {
 
         /*********************USER******************/
 
         //GET ALL IDS
-        int maxSizeId =0;
+        int maxSizeId;
+
+        GetUserReportsResponse userResponse = userClient.getUserReports(request);
+
+        List<String> reportsList = userResponse.getReports();
+
+        maxSizeId = reportsList.size();
 
         /*********************REPORT******************/
 
         ArrayList<GetReportDataByIdResponse> output = new ArrayList<>();
 
-        for(int i =0; i < maxSizeId; i++){
-            output.add(reportClient.getReportDataById(request));
+        GetReportDataByIdRequest reportRequest = new GetReportDataByIdRequest();
+
+        for(int i =0; i < maxSizeId; i++) {
+            reportRequest.setReportId(UUID.fromString(reportsList.get(i)));
+            output.add(reportClient.getReportDataById(reportRequest));
         }
 
         return new ResponseEntity<>(output, HttpStatus.OK);
@@ -415,12 +365,50 @@ public class GatewayServiceController {
      * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
+    @PostMapping(value = "/deleteUserReportById",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) {
+
+        /*********************USER******************/
+
+
+        ReportResponse response = userClient.removeReportForUser(request);
+
+        /*********************REPORT******************/
+
+
+        DeleteReportDataByIdRequest reportRequest = new DeleteReportDataByIdRequest(UUID.fromString(request.getReportID()));
+
+        DeleteReportDataByIdResponse output = reportClient.deleteReportDataById(reportRequest);
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+
+    /*****************TODO: sharing of report function*****************/
+    @PostMapping(value = "/shareReport" , produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ShareReportResponse> shareReport(@RequestBody ShareReportRequest request) {
+        ShareReportResponse response = reportClient.shareReport(request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
     @PostMapping(value = "/trainUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<TrainUserModelResponse> trainUserModel(@RequestBody TrainUserModelRequest request) {
-
-
+        /**TODO: use proper request for parser**/
 
         /*********************PARSE*************************
 
@@ -453,7 +441,7 @@ public class GatewayServiceController {
         /*********************ANALYSE*************************/
 
 
-        TrainUserModelRequest analyseRequest = new TrainUserModelRequest("", new ArrayList<ParsedData>());
+        TrainUserModelRequest analyseRequest = new TrainUserModelRequest("" /*Todo: use modelName (from frontend)*/, new ArrayList<ParsedData>());
         TrainUserModelResponse analyseResponse = analyseClient.trainUserModel(analyseRequest);
 
 
@@ -473,6 +461,8 @@ public class GatewayServiceController {
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
 
+        /**TODO: save to user**/
+
 
 
         return new ResponseEntity<>(analyseResponse, HttpStatus.OK);
@@ -487,9 +477,9 @@ public class GatewayServiceController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
+        /**TODO: use proper request for parser**/
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
-
 
         /*********************PARSE*************************
 
@@ -521,11 +511,11 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        AnalyseUserDataRequest analyseRequest = new AnalyseUserDataRequest(new ArrayList<ParsedData>(), "");//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseUserDataRequest analyseRequest = new AnalyseUserDataRequest(request.getDataList(), request.getModelId());//    DataSource.TWITTER,ImportResponse. getJsonData());
         AnalyseUserDataResponse analyseResponse = analyseClient.analyzeUserData(analyseRequest);
 
 
-        if(analyseResponse.getFallback() == true) {
+        if(analyseResponse.getFallback()) {
             ErrorGraph errorGraph = new ErrorGraph();
             errorGraph.Error = analyseResponse.getFallbackMessage();
 
@@ -554,7 +544,7 @@ public class GatewayServiceController {
         VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
 
 
-        if(visualizeResponse.getFallback() == true) {
+        if(visualizeResponse.getFallback()) {
             ErrorGraph errorGraph = new ErrorGraph();
             errorGraph.Error = analyseResponse.getFallbackMessage();
 
@@ -592,6 +582,109 @@ public class GatewayServiceController {
             outputData.add(visualizeResponse.outputData.get(i));
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
+    }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/getAllModelsByUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetUserReportsRequest request) {
+
+        /*********************USER******************/
+
+        //GET ALL IDS
+        int maxSizeId;
+
+        GetUserReportsResponse userReports = userClient.getUserReports(request);
+
+        List<String> reportsList = userReports.getReports();
+
+        maxSizeId = reportsList.size();
+
+        /*********************REPORT******************/
+
+        ArrayList<GetModelByIdResponse> output = new ArrayList<>();
+
+        GetModelByIdRequest analyseRequest = new GetModelByIdRequest(); // todo, use id
+
+        for(int i =0; i < maxSizeId; i++) {
+            output.add(analyseClient.getModelById(analyseRequest));
+        }
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/deleteUserModelsByUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public void deleteUserModelById(@RequestBody GetUserReportsRequest request) {
+
+        //TODO: user removes from list
+
+        /*********************USER******************/
+
+        GetUserReportsResponse userResponse = userClient.getUserReports(request);
+
+    }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/getSelectedModelId",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<String> getSelectedModelId(@RequestBody GetUserReportsRequest request) {
+
+        //TODO: user returns selected model id
+
+        /*********************USER******************/
+
+        GetUserReportsResponse userResponse = userClient.getUserReports(request);
+
+        String output = "";
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param modelId This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/addUserModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public void addUserModel(@RequestBody String modelId) {
+
+        GetModelByIdRequest analyseRequest = new GetModelByIdRequest(modelId);
+        GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
+
+        if(analyseResponse.getModelId() == null) { // doesn't find model
+            return;
+        }
+
+
+        //TODO: user added new user model
+
+        /*********************USER******************/
+
+        //GetUserReportsResponse userResponse = userClient.getUserReports(request);
+
     }
 
 

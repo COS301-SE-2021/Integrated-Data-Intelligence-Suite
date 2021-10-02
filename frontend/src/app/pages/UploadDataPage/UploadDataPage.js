@@ -36,16 +36,39 @@ export default class UploadDataPage extends React.Component {
         console.log(`array-4-edit-boxes-values: ${array_4_edit_box_values}`);
 
         //3. geting file array
-        const file_array_obj = this.state.fileArray;
-        // console.log(`file array obj double check: ${this.state.fileArray}`);
-        console.log(`file array obj double check: ${file_array_obj}`);
+        console.log(`file array obj double check: ${this.state.fileArray}`);
 
         //4. Make Post request to backend
+
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(obj),
+        // };
+        //
+        // const url = `/main/ENTER_ENDPOINT_HERE`;
+        // console.log(requestOptions)
+        //
+        // fetch(`http://localhost:9000${url}`, requestOptions)
+        //     .then((response) => response.json())
+        //     .then((json) => {
+        //         this.setState((prevState) => ({ showLoadingIcon: false }));
+        //         // remove or stop the loading icon
+        //         this.handleTextChange(json);
+        //     })
+        //     .catch((err) => {
+        //         this.setState((prevState) => ({ showLoadingIcon: false }));
+        //         console.log('error while retrieving data from backend');
+        //         console.log(err.message);
+        //     });
+
+
     }
 
     setFileArrayObj(file_array_obj) {
-        this.setState({ fileArray: file_array_obj });
-        console.log(`file array obj: ${file_array_obj}`);
+        this.setState({ fileArray: file_array_obj }, () => {
+            console.log(`file array obj: ${this.state.fileArray}`);
+        });
     }
 
     render() {
@@ -56,7 +79,7 @@ export default class UploadDataPage extends React.Component {
                     <UploadDropZone
                         setFileArray={this.setFileArrayObj}
                     />
-                    <CustomDivider DividerTitle={'Some Title'}/>
+                    <CustomDivider DividerTitle={'Match Columns'}/>
                     <UploadSchemaForm/>
                     <button
                         id={'analyse-upload-btn'}

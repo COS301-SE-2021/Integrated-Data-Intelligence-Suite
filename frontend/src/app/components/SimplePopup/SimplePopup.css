@@ -6,7 +6,7 @@
     position: absolute;
     z-index: 9999;
     background: rgba(8, 10, 13, 0.5);
-    display: grid;
+    display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -31,7 +31,7 @@
     grid-row-start: 1;
     grid-row-end: 2;
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: auto 40px;
     grid-template-rows: 100%;
     padding: 25px;
     padding-bottom: 5px;
@@ -51,7 +51,7 @@
  */
 .popup-body::-webkit-scrollbar {
     width: 7px;
-    background-color: red;
+    background-color: white;
 }
 
 .popup-body::-webkit-scrollbar-track {

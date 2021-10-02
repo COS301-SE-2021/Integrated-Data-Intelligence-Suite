@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { GrClose } from 'react-icons/all';
 
-const ReportPreview = () => {
-    return (
-        <div className="main-preview-container">
-            <iframe
-              title="pdf=preview"
-              src=""
-              frameBorder="10px"
-              scrolling="auto"
-              height="100%"
-              width="800px"
-            />
-        </div>
-    );
-};
+class ReportPreview extends PureComponent {
+    render() {
+        const {
+            closePopup,
+            className,
+            title,
+        } = this.props;
+        return (
+            <div className={`popup-container ${className}`}>
+                <div className="main-preview-container popup-body">
+                    <div className="popup-title-bar">
+                        <div className="popup-title">
+                            {title || 'Popup'}
+                        </div>
+                        <GrClose className="clickable" style={{ fontSize: '30px' }} onClick={closePopup} />
+                    </div>
+                    <div className="children-div loader">
+                        <iframe
+                          title="pdf=preview"
+                          src="http://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
+                          frameBorder="10"
+                          scrolling="auto"
+                          height="1000vh"
+                          width="800vw"
+                        />
+                    </div>
+                </div>
+            </div>
+
+        );
+    }
+}
 
 export default ReportPreview;

@@ -9,8 +9,7 @@
     background: var(--light-gray);
     max-height: 100vh;
     overflow-y: auto;
-    padding-left: 6%;
-    padding-top: 6%;
+    padding: 3%;
 }
 
 
@@ -62,6 +61,39 @@
     font-weight: 600;
     cursor: default;
 }
+
+.main-preview-container{
+    min-width: 400px;
+    min-height: 400px;
+    margin:auto;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+    border-radius: 5px;
+    background: white;
+    /*padding: 20px;*/
+    background: var(--light-gray);
+    grid-gap: 20px;
+    max-height: inherit;
+    width: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
+
+}
+
+.main-preview-container>.title-bar{
+    display:grid;
+    grid-template-columns: auto 40px;
+}
+
+.main-preview-container .children-div{
+    max-height: calc( 100vh - 200px);
+    overflow-y: scroll;
+}
+
+/*.loader{*/
+/*    background:url("../../assets/loader.gif") center center no-repeat;*/
+/*}*/
 
 
 
