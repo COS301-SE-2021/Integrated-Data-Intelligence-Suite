@@ -5,18 +5,17 @@ import SideBar from '../../components/SideBar/SideBar';
 import './ManageModelsPage.css';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import ModelCard from '../../components/ModelCard/ModelCard';
-import { atom, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import {
     isShowingDeletePopupState,
     isShowingAddTrainingDataPopupState,
     isShowingAddModelPopupState
 } from '../../assets/AtomStore/AtomStore';
-import { BsCloudUpload, GrAdd, RiAddLine } from 'react-icons/all';
+import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
 
-export default function ManageModelsPage(props) {
-
+export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
     const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
@@ -25,14 +24,13 @@ export default function ManageModelsPage(props) {
             <SimplePopup
                 closePopup={() => toggleDeletePopup(false)}
                 popupTitle={'Delete Model'}
+                popupID={'delete-model-popup'}
             >
-                <div>
-                    <div>Are you sure you want to delete this modal?</div>
-                    <div>
-                        <button>Yes</button>
-                        <button>No</button>
-                    </div>
-                </div>
+                <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
+                {/*<div id={'delete-model-btn-container'}>*/}
+                <button id={'delete-model-popup-btn-yes'}>Yes</button>
+                <button id={'delete-model-popup-btn-no'}>No</button>
+                {/*</div>*/}
             </SimplePopup>
         );
 
@@ -89,18 +87,20 @@ export default function ManageModelsPage(props) {
                             >
                                 <div id={'manage-models-btn-row'}>
                                     <button
-                                        className={'simple-btn'}
+                                        className={'simple-btn simple-btn-hover'}
                                         onClick={() => toggleAddTrainingDataPopup(true)}
                                     >
-                                        <BsCloudUpload className={'simple-btn-icon'}/>
+                                        <BsCloudUpload
+                                            className={'simple-btn-icon simple-btn-hover'}
+                                        />
                                         Upload Training Data
                                     </button>
 
                                     <button
-                                        className={'simple-btn'}
+                                        className={'simple-btn simple-btn-hover'}
                                         onClick={() => toggleAddModelPopup(true)}
                                     >
-                                        <RiAddLine className={'simple-btn-icon'}/>
+                                        <RiAddLine className={'simple-btn-icon simple-btn-hover'}/>
                                         Add Model
                                     </button>
                                 </div>
