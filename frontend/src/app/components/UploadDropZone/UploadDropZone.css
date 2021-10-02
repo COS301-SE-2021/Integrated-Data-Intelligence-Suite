@@ -62,7 +62,10 @@
     background: var(--dodger-blue);
     border: var(--dodger-blue);
     color: white;
+}
 
+#browse-files-btn:hover {
+    background: var(--azure);
 }
 
 #upload-instr-p {
@@ -78,7 +81,6 @@
     display: grid;
     grid-template-columns: repeat(2, auto);
     grid-template-rows: 100%;
-
 }
 
 .file-preview-item {
