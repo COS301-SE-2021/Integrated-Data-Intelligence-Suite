@@ -28,19 +28,30 @@
 #manage-models-card > .simple-card-body {
     /*border: 3px solid blue;*/
     display: grid;
-    grid-template-rows: 60px auto;
+    grid-template-rows: max-content auto;
     grid-template-columns: 100%;
 }
 
 #manage-models-btn-row {
     /*border: 3px solid orange;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: max-content;
+    column-gap: 20px;
 }
 
 #manage-models-card-row {
     /*border: 3px solid yellow;*/
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     grid-template-rows: 100%;
     overflow-y: hidden;
+    overflow-x: scroll;
+    column-gap: 20px;
 }
+
+
 
 

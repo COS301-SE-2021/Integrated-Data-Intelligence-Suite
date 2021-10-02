@@ -14,9 +14,13 @@ export default class SimplePopup extends React.Component {
                     <div className="popup-div">
                         <div className="popup-title-bar">
                             <div className="popup-title">
-                                Some Title
+                                {this.props.popupTitle}
                             </div>
-                            <GrClose className="clickable" style={{ fontSize: '30px' }} onClick={closePopup} />
+                            <GrClose
+                                className="clickable"
+                                style={{ fontSize: '24px' }}
+                                onClick={closePopup}
+                            />
                         </div>
                         <div className="popup-body">
                             {children}
