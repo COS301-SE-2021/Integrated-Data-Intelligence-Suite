@@ -1,6 +1,7 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedTrainingData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
@@ -96,7 +97,7 @@ public class TrainServiceImpl {
             }
         }
         if(request.getDataList().size() >0){
-            ParsedData testParsedData = request.getDataList().get(0);
+            ParsedTrainingData testParsedData = request.getDataList().get(0);
 
             if(testParsedData.getTextMessage() != null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Text field null");
@@ -107,10 +108,10 @@ public class TrainServiceImpl {
             if(testParsedData.getDate() != null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Date field null");
             }
-            if(testParsedData.getLikes() != null) {
-                throw new InvalidRequestException("DataList of requested parsedData has Likes field null");
+            if(testParsedData.getInteractions() != null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Interactions field null");
             }
-            if(testParsedData.getTrend() != null) {
+            if(testParsedData.getIsTrending() != null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Trend field null");
             }
         }
@@ -123,7 +124,7 @@ public class TrainServiceImpl {
         System.out.println("*******************USE NLP******************");
 
         /********data*******/
-        ArrayList<ParsedData> dataList = request.getDataList();
+        ArrayList<ParsedTrainingData> dataList = request.getDataList();
         ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
 
         ArrayList<String> nlpTextData = new ArrayList<>();
@@ -188,8 +189,8 @@ public class TrainServiceImpl {
             String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
             String[] dateTime = date.split(" ");
             String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
-            String likes = String.valueOf(dataList.get(i).getLikes());
-            String trend = String.valueOf(dataList.get(i).getTrend());
+            String likes = String.valueOf(dataList.get(i).getInteractions());
+            String trend = String.valueOf(dataList.get(i).getIsTrending());
 
 
             //Random rn = new Random();
