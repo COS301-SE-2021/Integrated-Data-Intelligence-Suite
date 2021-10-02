@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
- HashRouter as Router, Link, Route, Switch,
+    HashRouter as Router, Link, Route, Switch,
 } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
@@ -17,6 +17,7 @@ import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
 import ReportsPage from './pages/ReportsPage/ReportsPage';
 import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
+import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
 
 class App extends Component {
     render() {
@@ -24,59 +25,62 @@ class App extends Component {
             <Router>
                 <Switch>
                     <Route exact path="/">
-                        <HomePage />
+                        <HomePage/>
                     </Route>
 
                     <Route exact path="/login">
-                        <LoginPage />
+                        <LoginPage/>
                     </Route>
 
                     <Route exact path="/register">
-                        <RegisterPage />
+                        <RegisterPage/>
                     </Route>
                     <Route exact path="/chart">
-                        <ChartPage />
+                        <ChartPage/>
                     </Route>
 
                     <Route exact path="/verify">
-                        <VerifyPage />
+                        <VerifyPage/>
                     </Route>
 
                     <Route exact path="/permissions">
-                        <Permissions />
+                        <Permissions/>
                     </Route>
 
                     <Route exact path="/resend">
-                        <ResendPage />
+                        <ResendPage/>
                     </Route>
 
                     <Route exact path="/logout">
-                        <LogoutPage />
+                        <LogoutPage/>
                     </Route>
 
                     <Route exact path="/settings">
-                        <SettingsPage />
+                        <SettingsPage/>
                     </Route>
 
                     <Route path="/settings/source/:id">
-                        <AddDataSource />
+                        <AddDataSource/>
                     </Route>
 
                     <Route path="/user/:id">
-                        <UserPermissions />
+                        <UserPermissions/>
                     </Route>
 
                     <Route exact path="/credits">
-                        <CreditsPage />
+                        <CreditsPage/>
                     </Route>
 
                     <Route exact path="/reports">
-                        <ReportsPage />
+                        <ReportsPage/>
                     </Route>
 
                     <Route exact path="/uploadData">
-                        <UploadDataPage />
+                        <UploadDataPage/>
+                    </Route>
 
+                    <Route exact path={'/manageModels'}>
+                        <ManageModelsPage/>
                     </Route>
 
                     <Route path="*">

@@ -31,7 +31,7 @@
     grid-row-start: 1;
     grid-row-end: 2;
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: auto 40px;
     grid-template-rows: 100%;
     padding: 25px;
     padding-bottom: 5px;
