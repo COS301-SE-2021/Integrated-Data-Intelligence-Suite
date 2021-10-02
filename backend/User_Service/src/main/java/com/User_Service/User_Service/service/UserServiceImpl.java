@@ -687,7 +687,7 @@ public class UserServiceImpl {
      * @throws Exception This will be thrown if an error has been encountered during execution.
      */
     @Transactional
-    public ReportResponse addModel(ModelRequest request) throws Exception {
+    public ModelResponse addModel(ModelRequest request) throws Exception {
         if(request == null || request.getModelID() == null || request.getUserID() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
@@ -704,10 +704,10 @@ public class UserServiceImpl {
                 //Add report id for the user
                 current.addModel(request.getModelID());
                 //Return response
-                return new ReportResponse(true, "Added model");
+                return new ModelResponse(true, "Added model");
             }
             else {
-                return new ReportResponse(false, "User does not exist");
+                return new ModelResponse(false, "User does not exist");
             }
         }
     }
@@ -719,7 +719,7 @@ public class UserServiceImpl {
      * @throws Exception This will be thrown if an error has been encountered during execution.
      */
     @Transactional
-    public ReportResponse removeModel(ModelRequest request) throws Exception {
+    public ModelResponse removeModel(ModelRequest request) throws Exception {
         if(request == null || request.getModelID() == null || request.getUserID() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
@@ -736,10 +736,10 @@ public class UserServiceImpl {
                 //Add report id for the user
                 current.removeModel(request.getModelID());
                 //Return response
-                return new ReportResponse(true, "Added model");
+                return new ModelResponse(true, "Added model");
             }
             else {
-                return new ReportResponse(false, "User does not exist");
+                return new ModelResponse(false, "User does not exist");
             }
         }
     }
@@ -751,7 +751,7 @@ public class UserServiceImpl {
      * @throws Exception This will be thrown if an error has been encountered during execution.
      */
     @Transactional
-    public ReportResponse selectModel(ModelRequest request) throws Exception {
+    public ModelResponse selectModel(ModelRequest request) throws Exception {
         if(request == null || request.getModelID() == null || request.getUserID() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
@@ -768,10 +768,10 @@ public class UserServiceImpl {
                 //Add report id for the user
                 current.selectModel(request.getModelID());
                 //Return response
-                return new ReportResponse(true, "Selected model");
+                return new ModelResponse(true, "Selected model");
             }
             else {
-                return new ReportResponse(false, "User does not exist");
+                return new ModelResponse(false, "User does not exist");
             }
         }
     }
@@ -783,7 +783,7 @@ public class UserServiceImpl {
      * @throws Exception This will be thrown if an error has been encountered during execution.
      */
     @Transactional
-    public ReportResponse deselectModel(ModelRequest request) throws Exception {
+    public ModelResponse deselectModel(ModelRequest request) throws Exception {
         if(request == null || request.getModelID() == null || request.getUserID() == null) {
             throw new InvalidRequestException("The request is invalid");
         }
@@ -800,10 +800,10 @@ public class UserServiceImpl {
                 //Add report id for the user
                 current.deselectModel(request.getModelID());
                 //Return response
-                return new ReportResponse(true, "Deselected model");
+                return new ModelResponse(true, "Deselected model");
             }
             else {
-                return new ReportResponse(false, "User does not exist");
+                return new ModelResponse(false, "User does not exist");
             }
         }
     }
