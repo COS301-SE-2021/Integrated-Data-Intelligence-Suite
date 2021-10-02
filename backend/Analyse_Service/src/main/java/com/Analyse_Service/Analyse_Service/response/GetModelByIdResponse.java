@@ -5,13 +5,17 @@ public class GetModelByIdResponse {
     private String modelName;
     private String modelId;
 
+    private String modelAccuracy;
+
+
     public GetModelByIdResponse(){
 
     }
 
-    public GetModelByIdResponse(String modelName, String modelId){
+    public GetModelByIdResponse(String modelName, String modelId, String modelAccuracy){
         this.modelName = modelName;
         this.modelId = modelId;
+        this.modelAccuracy = modelAccuracy;
     }
 
 
@@ -23,6 +27,9 @@ public class GetModelByIdResponse {
         return modelId;
     }
 
+    public String getModelAccuracy() {
+        return modelAccuracy;
+    }
 
     public void setModelName(String modelName) {
         this.modelName = modelName;
@@ -30,5 +37,9 @@ public class GetModelByIdResponse {
 
     public void setModelId(String modelId) {
         this.modelId = modelId;
+    }
+
+    public void setModelAccuracy(String modelAccuracy) {
+        this.modelAccuracy = modelAccuracy;
     }
 }

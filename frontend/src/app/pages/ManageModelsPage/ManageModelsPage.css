@@ -111,6 +111,20 @@
     width: 100%;
 }
 
+.input-container{
+    display: flex;
+}
+
+.input-container .label{
+    padding: 10px;
+}
+
+.input-container input{
+    width: calc( 100% - 30px);
+    border:none;
+    background: var(--light-gray);
+}
+
 
 
 

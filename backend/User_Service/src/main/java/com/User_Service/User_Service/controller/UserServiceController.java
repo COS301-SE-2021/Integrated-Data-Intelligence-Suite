@@ -98,4 +98,29 @@ public class UserServiceController {
     public @ResponseBody GetUserReportsResponse getReports(@PathVariable String id) throws Exception {
         return service.getReports(new GetUserReportsRequest(id));
     }
+
+    @GetMapping(value = "/getModels/{id}")
+    public @ResponseBody GetModelsResponse getModels(@PathVariable String id) throws Exception {
+        return service.getModels(new GetModelsRequest(id));
+    }
+
+    @PostMapping(value = "/addModel")
+    public @ResponseBody ModelResponse addModel(@RequestBody ModelRequest request) throws Exception {
+        return service.addModel(request);
+    }
+
+    @PostMapping(value = "/removeModel")
+    public @ResponseBody ModelResponse removeModel(@RequestBody ModelRequest request) throws Exception {
+        return service.removeModel(request);
+    }
+
+    @PostMapping(value = "/selectModel")
+    public @ResponseBody ModelResponse selectModel(@RequestBody ModelRequest request) throws Exception {
+        return service.selectModel(request);
+    }
+
+    @PostMapping(value = "/deselectModel")
+    public @ResponseBody ModelResponse deselectModel(@RequestBody ModelRequest request) throws Exception {
+        return service.deselectModel(request);
+    }
 }

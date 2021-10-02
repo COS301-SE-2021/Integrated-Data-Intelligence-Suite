@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
+import javax.ws.rs.GET;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -647,6 +648,166 @@ public class UserServiceImpl {
             }
         }
     }
+
+    /**
+     * This method will return a list of models saved by the user.
+     * @param request This will contain the id of the user.
+     * @return This will contain the response stating if the request was successful or not
+     * and it will contain a list of report IDs.
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public GetModelsResponse getModels(GetModelsRequest request) throws Exception {
+        if(request == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Return response
+                return new GetModelsResponse(true, "Retrieved models", current.getModels());
+            }
+            else {
+                return new GetModelsResponse(false, "User does not exist", null);
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse addModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.addModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Added model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse removeModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.removeModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Added model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse selectModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.selectModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Selected model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse deselectModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.deselectModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Deselected model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
 /*
 =================== Private Functions ====================
  */

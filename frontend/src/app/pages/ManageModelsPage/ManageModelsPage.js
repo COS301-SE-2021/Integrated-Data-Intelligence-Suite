@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import Switch from 'react-bootstrap/Switch';
 import SideBar from '../../components/SideBar/SideBar';
 import './ManageModelsPage.css';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import ModelCard from '../../components/ModelCard/ModelCard';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import {
     isShowingDeletePopupState,
@@ -24,6 +24,10 @@ export default function ManageModelsPage() {
     const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
     const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
     const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
+    const [modelId, setModelId] = useState('');
+    const handleAddModel = () => {
+        // TODO function call to backend to add model to current user's liat of models
+    };
 
     const deletePopupComponent =
         (
@@ -96,6 +100,41 @@ export default function ManageModelsPage() {
                         No
                     </button>
                 </div>
+                =======
+                const addTrainingDataPopupComponent = (
+                <SimplePopup
+                    closePopup={() => toggleAddTrainingDataPopup(false)}
+                    popupTitle="Upload Training Data"
+                >
+                    <div>
+                        <div>xxxx</div>
+                    </div>
+                </SimplePopup>
+                );
+
+                const addModelPopupComponent = (
+                <SimplePopup
+                    closePopup={() => toggleAddModelPopup(false)}
+                    popupTitle="Add Data Model"
+                >
+                    <div className="add-model-container">
+                        <div className="input-container">
+                            <div className="label">ID</div>
+                            <input
+                                type="text"
+                                id="modelIdInput"
+                                placeholder="model id"
+                                value={modelId}
+                                onChange={(event) => setModelId(event.currentTarget.value)}
+                            />
+                        </div>
+                        <div className="button-container">
+                            <button onClick={() => handleAddModel}>Add</button>
+                        </div>
+                    </div>
+                </SimplePopup>
+                );
+                >>>>>>> origin/develop
 
             </SimplePopup>
         );
