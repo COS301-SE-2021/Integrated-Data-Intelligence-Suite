@@ -243,11 +243,11 @@ public class GatewayServiceController {
      * @param col2 This is the location/title
      * @param col3 This is the interactions/description
      * @param col4 This is the date
-     * @param isSocial If the data is social media or articles
+     * @param modelID If the data is social media or articles
      * @return This contains if the request of uploading a file was successful or not.
      */
-    @PostMapping("/upload")
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam boolean isSocial) {
+    @PostMapping("/analyzeUpload")
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileAnalyzeUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam("modelID") String modelID) {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -259,35 +259,22 @@ public class GatewayServiceController {
             return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
         }
         ArrayList<ParsedData> socialMediaData = new ArrayList<>();
-        ArrayList<ParsedArticle> newsData = new ArrayList<>();
         try {
             String filename = storageService.store(file);
             //response.put("message", "Successfully saved file");
             log.info("[Gateway API] Successfully saved file");
             log.info("[Gateway API] Running parser");
             //log.info(file.getOriginalFilename());
-            if(isSocial) {
-                ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
-                socialMediaData = response1.getSocialDataList();
-                if(response1.isSuccess()) {
-                    response.put("success", "true");
-                }
-                else {
-                    response.put("success", "false");
-                }
-                response.put("message", response1.getMessage());
+            ParseUploadedSocialDataResponse response1 = parseClient.parseUploadedSocialData(new ParseUploadedSocialDataRequest(filename, col1, col2, col3, col4));
+            socialMediaData = response1.getSocialDataList();
+            if(response1.isSuccess()) {
+                response.put("success", "true");
             }
             else {
-                ParseUploadedNewsDataResponse response1 = parseClient.parseUploadedNewsData(new ParseUploadedNewsDataRequest(filename, col1, col2, col3, col4));
-                newsData = response1.getNewsDataList();
-                if(response1.isSuccess()) {
-                    response.put("success", "true");
-                }
-                else {
-                    response.put("success", "false");
-                }
-                response.put("message", response1.getMessage());
+                response.put("success", "false");
             }
+            response.put("message", response1.getMessage());
+
 
             if(storageService.deleteFile(filename)) {
                 log.info("[Gateway API] Delete file: " + filename);
@@ -298,59 +285,9 @@ public class GatewayServiceController {
 
             log.info("[Gateway API] Successfully parsed. Attempting to analyze data");
 
-            AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
-            AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+            AnalyseUserDataRequest userDataRequest = new AnalyseUserDataRequest(socialMediaData, modelID);
 
-
-            if(analyseResponse.getFallback() == true) {
-                ErrorGraph errorGraph = new ErrorGraph();
-                errorGraph.Error = analyseResponse.getFallbackMessage();
-
-                ArrayList<Graph> data = new ArrayList<>();
-                data.add(errorGraph);
-
-                outputData.add( data);
-
-                return new ResponseEntity<>(outputData,HttpStatus.OK);
-            }
-
-
-
-            System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
-
-            log.info("[Gateway API] Completed analysis. Preparing data for visualization");
-
-
-            /*********************VISUALISE**********************/
-
-            VisualizeDataRequest visualizeRequest = new VisualizeDataRequest(
-                    analyseResponse.getPattenList(),
-                    analyseResponse.getRelationshipList(),
-                    analyseResponse.getPattenList(),
-                    analyseResponse.getTrendList(),
-                    analyseResponse.getAnomalyList(),
-                    analyseResponse.getWordList());//    DataSource.TWITTER,ImportResponse. getJsonData());
-            VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
-
-
-            if(visualizeResponse.getFallback() == true) {
-                ErrorGraph errorGraph = new ErrorGraph();
-                errorGraph.Error = analyseResponse.getFallbackMessage();
-
-                ArrayList<Graph> data = new ArrayList<>();
-                data.add(errorGraph);
-
-                outputData.add( data);
-
-                return new ResponseEntity<>(outputData,HttpStatus.OK);
-            }
-
-            System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
-            log.info("[Gateway API] Visualize success");
-
-
-            for(int i =0; i < visualizeResponse.outputData.size(); i++)
-                outputData.add(visualizeResponse.outputData.get(i));
+            return this.analyseUserData(userDataRequest);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -372,11 +309,12 @@ public class GatewayServiceController {
     @PostMapping(value = "/generateReport",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody GetReportDataByIdRequest request) {
+    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) {
 
-        GetReportDataByIdResponse output = reportClient.getReportDataById(request);
+        GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest(UUID.fromString(request.getReportID()));
+        GetReportDataByIdResponse output = reportClient.getReportDataById(repRequest);
 
-        /**TODO: save to user**/
+        ReportResponse response = userClient.addReportForUser(request);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
@@ -425,18 +363,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserReportById",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody GetUserReportsRequest request) {
-
-        /**TODO: use report Id from user**/
+    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) {
 
         /*********************USER******************/
 
-        GetUserReportsResponse userResponse = userClient.getUserReports(request);
+
+        ReportResponse response = userClient.removeReportForUser(request);
 
         /*********************REPORT******************/
 
 
-        DeleteReportDataByIdRequest reportRequest = new DeleteReportDataByIdRequest(/*todo: UUID*/);
+        DeleteReportDataByIdRequest reportRequest = new DeleteReportDataByIdRequest(UUID.fromString(request.getReportID()));
 
         DeleteReportDataByIdResponse output = reportClient.deleteReportDataById(reportRequest);
 
@@ -562,11 +499,11 @@ public class GatewayServiceController {
 
         /*********************ANALYSE*************************/
 
-        AnalyseUserDataRequest analyseRequest = new AnalyseUserDataRequest(new ArrayList<ParsedData>(),"" /*TODO: get user model id*/ );//    DataSource.TWITTER,ImportResponse. getJsonData());
+        AnalyseUserDataRequest analyseRequest = new AnalyseUserDataRequest(request.getDataList(), request.getModelId());//    DataSource.TWITTER,ImportResponse. getJsonData());
         AnalyseUserDataResponse analyseResponse = analyseClient.analyzeUserData(analyseRequest);
 
 
-        if(analyseResponse.getFallback() == true) {
+        if(analyseResponse.getFallback()) {
             ErrorGraph errorGraph = new ErrorGraph();
             errorGraph.Error = analyseResponse.getFallbackMessage();
 
@@ -595,7 +532,7 @@ public class GatewayServiceController {
         VisualizeDataResponse visualizeResponse = visualizeClient.visualizeData(visualizeRequest);
 
 
-        if(visualizeResponse.getFallback() == true) {
+        if(visualizeResponse.getFallback()) {
             ErrorGraph errorGraph = new ErrorGraph();
             errorGraph.Error = analyseResponse.getFallbackMessage();
 
