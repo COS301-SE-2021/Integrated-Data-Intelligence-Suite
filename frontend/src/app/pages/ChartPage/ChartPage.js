@@ -43,7 +43,6 @@ function retrieveData() {
 function getLocalUser() {
     const localUser = localStorage.getItem('user');
     if (localUser) {
-        console.log('user logged in is ', localUser);
         return JSON.parse(localUser);
     }
     return null;
@@ -68,16 +67,22 @@ class ChartPage extends Component {
     }
 
     showPopup() {
-        this.setState(({ isShowingPopup: !this.state.isShowingPopup }));
-        console.log(`isPopupShowing: ${this.state.isShowingPopup}`);
+        // this.setState(({ isShowingPopup: !this.state.isShowingPopup }));
+        this.setState(
+            (prevState) => ({
+                isShowingPopup: !prevState.isShowingPopup,
+                }),
+            () => console.log(`isPopupShowing: ${this.state.isShowingPopup}`),
+        );
     }
 
     generateReport() {
-        this.setState(({ showPdf: !state.showPdf }));
+        this.setState((prevState) => ({
+            showPdf: !prevState.showPdf,
+        }));
     }
 
     render() {
-        const isPopupShowing = this.state.isShowingPopup;
         const { user, showPdf } = this.state;
 
         if (user) {
