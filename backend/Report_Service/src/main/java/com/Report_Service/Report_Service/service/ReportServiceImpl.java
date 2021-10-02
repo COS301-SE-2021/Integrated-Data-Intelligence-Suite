@@ -38,6 +38,24 @@ public class ReportServiceImpl {
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
         }
+        if (request.getAnomalylist() == null) {
+            throw new InvalidRequestException("Arraylist of AnomalyList is null");
+        }
+        if (request.getWordlist() == null) {
+            throw new InvalidRequestException("Arraylist of wordlist is null");
+        }
+        /*if (request.getPatternList() == null){
+            throw new InvalidRequestException("Arraylist of PatternList is null");
+        }
+        if (request.getPredictionList() == null){
+            throw new InvalidRequestException("Arraylist of PredictionList is null");
+        }
+        if (request.getRelationshipList() == null) {
+            throw new InvalidRequestException("Arraylist of RelationshipList is null");
+        }*/
+        if (request.getTrendlist() == null) {
+            throw new InvalidRequestException("Arraylist of TrendList is null");
+        }
         //does this work
         GetTrendAnalysisDataRequest trendReq = new GetTrendAnalysisDataRequest(request.getTrendlist());
         GetTrendAnalysisDataResponse trendResp = this.getTrendAnalysisData(trendReq);
