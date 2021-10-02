@@ -240,9 +240,9 @@ public class GatewayServiceController {
      * This endpoint will be use for uploading a file and saving the file to
      * a temporary directory such that it can be analyzed.
      * @param file This parameter will contain the file itself.
-     * @param col1 This is the text/content
-     * @param col2 This is the location/title
-     * @param col3 This is the interactions/description
+     * @param col1 This is the text
+     * @param col2 This is the location
+     * @param col3 This is the interactions
      * @param col4 This is the date
      * @param modelID If the data is social media or articles
      * @return This contains if the request of uploading a file was successful or not.
@@ -301,8 +301,51 @@ public class GatewayServiceController {
 
     @PostMapping(value = "/trainUpload")
     @CrossOrigin
-    public ResponseEntity<String> fileTrainUpload(@RequestParam("file") MultipartFile file) {
-        return new ResponseEntity<>("Not implemented", HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileTrainUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam("c5") String col5, @RequestParam("modelName") String modelname) {
+        Map<String, String> response = new HashMap<>();
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
+
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+        assert extension != null;
+        if(!extension.equals("csv")) {
+            response.put("message", "Incorrect file type uploaded.");
+            return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
+        }
+        ArrayList<ParsedTrainingData> trainingData = new ArrayList<>();
+        try {
+            String filename = storageService.store(file);
+
+            log.info("[Gateway API] Successfully saved file");
+            log.info("[Gateway API] Running parser");
+            ParseUploadedTrainingDataResponse response1 = parseClient.parseUploadedTrainingData(new ParseUploadedTrainingDataRequest(filename, col1, col2, col3, col4, col5));
+            trainingData = response1.getTrainingDataList();
+            if (response1.isSuccess()) {
+                response.put("success", "true");
+            } else {
+                response.put("success", "false");
+            }
+            response.put("message", response1.getMessage());
+
+
+            if (storageService.deleteFile(filename)) {
+                log.info("[Gateway API] Delete file: " + filename);
+            } else {
+                log.info("[Gateway API] Failed to delete file: " + filename);
+            }
+
+            log.info("[Gateway API] Successfully parsed training data. Attempting to analyze data");
+
+            /*
+            TODO: add call to trainUserModel after change to ParsedTrainingData
+             */
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            //response.put("message", e.getMessage());
+        }
+
+        return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
 

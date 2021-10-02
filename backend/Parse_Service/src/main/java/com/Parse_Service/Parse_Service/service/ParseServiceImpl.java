@@ -238,6 +238,67 @@ public class ParseServiceImpl {
         }
     }
 
+    public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest request) throws ParserException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        else {
+            if(request.getFilename() == null || request.getFilename().equals("")) {
+                throw new InvalidRequestException("Filename is null or empty");
+            }
+
+            if(request.getDateCol() == null && request.getLocCol() == null && request.getInteractionsCol() == null && request.getTextCol()== null) {
+                throw new InvalidRequestException("All fields cannot be empty");
+            }
+
+            List<String[]> list = new ArrayList<>();
+            ArrayList<ParsedTrainingData> parsedList = new ArrayList<>();
+            try {
+                CSVParser parser = new CSVParserBuilder()
+                        .withSeparator(',')
+                        .withIgnoreQuotations(true)
+                        .build();
+
+                CSVReader csvReader = new CSVReaderBuilder(new FileReader(request.getFilename()))
+                        .withCSVParser(parser)
+                        .build();
+                //Check the columns in the uploaded file
+                ArrayList<String> columns = new ArrayList<>(Arrays.asList(csvReader.readNext()));
+
+                //Check if the columns exist and get index of required columns. Throw error if they do not exists
+                if(columns.contains(request.getDateCol()) && columns.contains(request.getLocCol()) && columns.contains(request.getInteractionsCol()) && columns.contains(request.getTextCol()) && columns.contains(request.getIsTrendingCol())) {
+                    String[] line;
+                    while ((line = csvReader.readNext()) != null) {
+                        ParsedTrainingData dataEntry = new ParsedTrainingData();
+
+                        //Set the relevant attributes of the ParsedData type
+                        //Parsing date with required formats to test if the date is valid
+                        dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
+                        dataEntry.setInteractions(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
+                        dataEntry.setLocation(line[columns.indexOf(request.getLocCol())]);
+                        dataEntry.setTextMessage(line[columns.indexOf(request.getTextCol())]);
+                        dataEntry.setIsTrending(Integer.parseInt(line[columns.indexOf(request.getIsTrendingCol())]));
+                        parsedList.add(dataEntry);
+                        //System.out.println(dataEntry.getDate());
+                        //list.add(line);
+                    }
+                }
+                else {
+                    throw new IOException("A column does not exist. Failed to parse data");
+                }
+
+                csvReader.close();
+            }
+            catch (Exception ex) {
+                log.error("An error has occurred while parsing: " + ex.getMessage());
+                ex.printStackTrace();
+                throw new ParserException("An error has occurred trying to parse uploaded social data");
+            }
+
+            return new ParseUploadedTrainingDataResponse(true, "Successfully parsed uploaded data", parsedList);
+        }
+    }
+
     /**
      * This function will be used to parse uploaded social media data (mainly CSVs) into the required format
      * for analysis.

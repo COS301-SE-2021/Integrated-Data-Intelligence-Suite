@@ -47,7 +47,7 @@ public class ParseService {
 
     /**
      * This method is used to communicate to the Parse-Service.
-     * @param parseRequest
+     * @param parseRequest This is the request
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
@@ -75,7 +75,35 @@ public class ParseService {
 
     /**
      * This method is used to communicate to the Parse-Service.
-     * @param parseRequest
+     * @param parseRequest This is the request
+     * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
+     */
+    //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
+    public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest parseRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ParseUploadedTrainingDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseTrainingData", request, ParseUploadedTrainingDataResponse.class);
+
+        return parseResponse;
+    }
+
+    /**
+     * This method is used to communicate to the Parse-Service.
+     * @param parseRequest This is the request
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
