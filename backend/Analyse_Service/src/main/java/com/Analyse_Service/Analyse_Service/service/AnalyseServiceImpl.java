@@ -397,17 +397,22 @@ public class AnalyseServiceImpl {
         File artifact = client.downloadArtifacts(modelID, modelName);
         File artifact2 = client.downloadArtifacts(modelID2, modelName);
 
-        client.logArtifact(modelID,artifact);
-        client.logArtifact(modelID2,artifact2);
-
-        try {
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(artifact2.getPath()));
-        } catch (IOException e) {
-            throw new AnalysingModelException("Failed finding model file");
-        }
 
         if( (artifact.exists() == false)  || (artifact2.exists() == false) ){
+
+            try {
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                FileUtils.copyDirectory(artifact, artifactLog);
+                client.logArtifact(modelID,artifactLog);
+                artifactLog.delete();
+
+
+
+
+            } catch (IOException e) {
+                throw new AnalysingModelException("Failed finding model file");
+            }
+
             return new GetModelByIdResponse(null, null);
         }
 
@@ -1284,16 +1289,19 @@ public class AnalyseServiceImpl {
             File artifact = client.downloadArtifacts(modelID, modelName);
             File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
 
-            client.logArtifact(modelID,artifact);
-            client.logArtifact(modelID,trainFile);
-
             Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
             lrModel = trainValidationSplit.fit(trainData);
 
+
+
+
+            /*client.logArtifact(modelID,new File(artifact.getPath()));
+            client.logArtifact(modelID,new File(trainFile.getPath()));
+
             FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(trainFile.getPath()));
+            FileUtils.deleteDirectory(new File(trainFile.getPath()));*/
         }
         else{
             String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
@@ -1305,14 +1313,10 @@ public class AnalyseServiceImpl {
             String modelName = splitModelId[0];
             String modelID = splitModelId[1];
 
-            //File artifact = client.downloadArtifacts(modelID, modelName);
             //lrModel = TrainValidationSplitModel.load(artifact.getPath());
 
             File artifact = client.downloadArtifacts(modelID, modelName + "T");
             File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
-
-            client.logArtifact(modelID,artifact);
-            client.logArtifact(modelID,trainFile);
 
 
             Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
@@ -1320,8 +1324,70 @@ public class AnalyseServiceImpl {
 
             lrModel = trainValidationSplit.fit(trainData);
 
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(trainFile.getPath()));
+
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "T");
+            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+            //artifactLog.cr;
+            //trainFileLog.createNewFile();
+
+            System.out.println("it begins here");
+
+            FileUtils.copyDirectory(artifact, artifactLog);
+            System.out.println("it begins here 1");
+
+            FileUtils.copyDirectory(trainFile, trainFileLog);
+            System.out.println("it begins here 2");
+
+            client.logArtifact(modelID,artifactLog);
+            System.out.println("it begins here 3");
+            client.logArtifact(modelID,trainFileLog);
+
+            artifactLog.delete();
+            trainFileLog.delete();
+
+            //InputStream is = null;
+            //OutputStream os = null;
+
+            /*System.out.println("testit here");
+            InputStream is = new FileInputStream(artifact.getPath());
+            System.out.println("testit here:");
+            OutputStream os = new FileOutputStream(artifactLog.getPath());
+
+            System.out.println("testit here 2");
+                byte[] buffer = new byte[1024];
+                int length = 0;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+
+            System.out.println("testit here 3");
+                is = new FileInputStream(trainFile);
+                os = new FileOutputStream(trainFileLog);
+                buffer = new byte[1024];
+                length = 0;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+
+
+            System.out.println("testit here 4");
+                is.close();
+                os.close();
+
+            System.out.println("testit here 5");
+
+
+
+
+
+            client.logArtifact(modelID,artifactLog);
+            client.logArtifact(modelID,trainFileLog);*/
+
+            System.out.println("testit here 6");
+            System.out.println("testit here 7");
+
+            //FileUtils.deleteDirectory(new File(artifact.getPath()));
+            //FileUtils.deleteDirectory(new File(trainFile.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
@@ -1600,7 +1666,7 @@ public class AnalyseServiceImpl {
             String modelName = splitModelId[0];
             String modelID = splitModelId[2];
 
-            // artifact = client.downloadArtifacts(modelID, modelName);
+
             //kmModel = PipelineModel.load(artifact.getPath());
 
             File artifact = client.downloadArtifacts(modelID, modelName);
@@ -1610,7 +1676,11 @@ public class AnalyseServiceImpl {
             Pipeline pipeline = Pipeline.load(artifact.getPath());
             kmModel = pipeline.fit(trainingDF);
 
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
+
+
+
+            //client.logArtifact(modelID,new File(artifact.getPath()));
+            //FileUtils.deleteDirectory(new File(artifact.getPath()));
         }
         else{
             String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
@@ -1630,7 +1700,9 @@ public class AnalyseServiceImpl {
             Pipeline pipeline = Pipeline.load(artifact.getPath());
             kmModel = pipeline.fit(trainingDF);
 
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
+
+
+            //FileUtils.deleteDirectory(new File(artifact.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
