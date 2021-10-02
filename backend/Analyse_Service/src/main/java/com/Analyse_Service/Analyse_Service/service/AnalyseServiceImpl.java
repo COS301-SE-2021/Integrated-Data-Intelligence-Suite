@@ -407,7 +407,10 @@ public class AnalyseServiceImpl {
                 artifactLog.delete();
 
 
-
+                artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                FileUtils.copyDirectory(artifact2, artifactLog);
+                client.logArtifact(modelID2,artifactLog);
+                artifactLog.delete();
 
             } catch (IOException e) {
                 throw new AnalysingModelException("Failed finding model file");
@@ -1295,7 +1298,17 @@ public class AnalyseServiceImpl {
             lrModel = trainValidationSplit.fit(trainData);
 
 
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
 
+            FileUtils.copyDirectory(artifact, artifactLog);
+            FileUtils.copyDirectory(trainFile, trainFileLog);
+
+            client.logArtifact(modelID,artifactLog);
+            client.logArtifact(modelID,trainFileLog);
+
+            artifactLog.delete();
+            trainFileLog.delete();
 
             /*client.logArtifact(modelID,new File(artifact.getPath()));
             client.logArtifact(modelID,new File(trainFile.getPath()));
@@ -1676,7 +1689,13 @@ public class AnalyseServiceImpl {
             Pipeline pipeline = Pipeline.load(artifact.getPath());
             kmModel = pipeline.fit(trainingDF);
 
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
 
+            FileUtils.copyDirectory(artifact, artifactLog);
+
+            client.logArtifact(modelID,artifactLog);
+
+            artifactLog.delete();
 
 
             //client.logArtifact(modelID,new File(artifact.getPath()));
@@ -1700,7 +1719,13 @@ public class AnalyseServiceImpl {
             Pipeline pipeline = Pipeline.load(artifact.getPath());
             kmModel = pipeline.fit(trainingDF);
 
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "A");
 
+            FileUtils.copyDirectory(artifact, artifactLog);
+
+            client.logArtifact(modelID,artifactLog);
+
+            artifactLog.delete();
 
             //FileUtils.deleteDirectory(new File(artifact.getPath()));
 
