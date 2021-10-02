@@ -1,0 +1,94 @@
+.model-card-container {
+    display: grid;
+    grid-template-rows: max-content 300px;
+    grid-template-columns: 100%;
+    height: 400px;
+    width: 300px;
+    border: 2px solid slategrey;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.model-card-title-bar {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: auto auto;
+    height: 30px;
+}
+
+#model-card-default-tag {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    width: 75px;
+    height: max-content;
+    background: var(--ghost-white);
+    color: var(--dodger-blue);
+    padding: 5px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+#model-card-btn-container {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: right;
+    align-content: center;
+    align-items: center;
+}
+
+
+.model-card-content-section {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.model-card-btn {
+    height: 24px;
+    width: 24px;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    background: white;
+    border: 0;
+}
+
+.model-card-icon {
+    height: inherit;
+    width: inherit;
+}
+
+.model-details-card {
+    /*border: 2px solid black;*/
+    border-radius: 15px;
+}
+
+.model-details-card > .simple-card-title {
+    background: var(--dodger-blue);
+    color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border: 2px solid var(--dodger-blue);
+    display: grid;
+    align-content: center;
+    justify-content: center;
+}
+
+.model-details-card > .simple-card-body {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-top: 2px solid slategrey;
+    border-right: 2px solid slategrey;
+    border-left: 2px solid slategrey;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+
+
+
