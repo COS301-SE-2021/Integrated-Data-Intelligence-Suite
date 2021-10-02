@@ -382,6 +382,13 @@ public class GatewayServiceController {
 
 
     /*****************TODO: sharing of report function*****************/
+    @PostMapping(value = "/shareReport" , produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ShareReportResponse> shareReport(@RequestBody ShareReportRequest request) {
+        ShareReportResponse response = reportClient.shareReport(request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
 
