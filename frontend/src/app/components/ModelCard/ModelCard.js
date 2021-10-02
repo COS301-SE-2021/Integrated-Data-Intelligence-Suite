@@ -48,7 +48,8 @@ export default function ModelCard(props) {
                 <div className={'model-card-content-section'}>
                     <SimpleCard
                         titleOnTop={false}
-                        cardTitle={'Model Name'}
+                        cardID={props.modelID}
+                        cardTitle={props.modelName}
                         extraClassName={'model-details-card'}
                     >
                         <div>Image or Details about Model</div>
