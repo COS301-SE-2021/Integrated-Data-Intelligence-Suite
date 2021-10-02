@@ -1,8 +1,11 @@
 import { Redirect } from 'react-router-dom';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
+import { userAtom } from '../../assets/userAtom';
 
 const LogoutPage = () => {
-  localStorage.clear();
+  const setUser = useSetRecoilState(userAtom);
+  setUser(null);
   return (
       <Redirect to="/login" />
   );
