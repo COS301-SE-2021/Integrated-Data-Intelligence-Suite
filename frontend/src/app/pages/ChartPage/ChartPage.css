@@ -10,7 +10,7 @@
     height: 70px;
     /*padding: 0 1%;*/
     padding: 0;
-    margin: 0;
+    margin: 0 30px;
     /*border: 3px solid red;*/
     border: 0;
     /*border-bottom: 0.2em solid #E8E8E9;*/
@@ -18,7 +18,7 @@
 
     display: grid;
     grid-template-rows: 100%;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(4, auto);
     align-items: center;
 }
 

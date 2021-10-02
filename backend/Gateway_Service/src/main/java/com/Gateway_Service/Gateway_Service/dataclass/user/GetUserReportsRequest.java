@@ -1,6 +1,9 @@
 package com.Gateway_Service.Gateway_Service.dataclass.user;
 
 public class GetUserReportsRequest {
+    /**
+     * This is the id of the user
+     */
     private String id;
 
     public GetUserReportsRequest() {
