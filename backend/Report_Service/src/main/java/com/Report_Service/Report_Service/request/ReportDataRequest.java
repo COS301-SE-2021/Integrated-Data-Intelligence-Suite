@@ -47,4 +47,24 @@ public class ReportDataRequest {
     public ArrayList<ArrayList> getPatternlist() {
         return Patternlist;
     }
+
+    public void setAnomalylist(ArrayList<String> anomalylist) {
+        Anomalylist = anomalylist;
+    }
+
+    public void setPatternlist(ArrayList<ArrayList> patternlist) {
+        Patternlist = patternlist;
+    }
+
+    public void setRealationshiplist(ArrayList<ArrayList> realationshiplist) {
+        Realationshiplist = realationshiplist;
+    }
+
+    public void setTrendlist(ArrayList<ArrayList> trendlist) {
+        this.trendlist = trendlist;
+    }
+
+    public void setWordlist(ArrayList<ArrayList> wordlist) {
+        this.wordlist = wordlist;
+    }
 }
