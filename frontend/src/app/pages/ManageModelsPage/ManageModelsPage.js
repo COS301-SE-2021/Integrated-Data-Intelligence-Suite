@@ -65,18 +65,6 @@ export default function ManageModelsPage() {
             </SimplePopup>
         );
 
-    const addModelPopupComponent =
-        (
-            <SimplePopup
-                closePopup={() => toggleAddModelPopup(false)}
-                popupTitle={'Add Data Model'}
-            >
-                <div>
-                    <div>xxxx</div>
-                </div>
-            </SimplePopup>
-        );
-
     const setDefaultModelPopupComponent =
         (
             <SimplePopup
@@ -100,44 +88,31 @@ export default function ManageModelsPage() {
                         No
                     </button>
                 </div>
-                =======
-                const addTrainingDataPopupComponent = (
-                <SimplePopup
-                    closePopup={() => toggleAddTrainingDataPopup(false)}
-                    popupTitle="Upload Training Data"
-                >
-                    <div>
-                        <div>xxxx</div>
-                    </div>
-                </SimplePopup>
-                );
-
-                const addModelPopupComponent = (
-                <SimplePopup
-                    closePopup={() => toggleAddModelPopup(false)}
-                    popupTitle="Add Data Model"
-                >
-                    <div className="add-model-container">
-                        <div className="input-container">
-                            <div className="label">ID</div>
-                            <input
-                                type="text"
-                                id="modelIdInput"
-                                placeholder="model id"
-                                value={modelId}
-                                onChange={(event) => setModelId(event.currentTarget.value)}
-                            />
-                        </div>
-                        <div className="button-container">
-                            <button onClick={() => handleAddModel}>Add</button>
-                        </div>
-                    </div>
-                </SimplePopup>
-                );
-                >>>>>>> origin/develop
-
             </SimplePopup>
         );
+
+    const addModelPopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleAddModelPopup(false)}
+            popupTitle="Add Data Model"
+        >
+            <div className="add-model-container">
+                <div className="input-container">
+                    <div className="label">ID</div>
+                    <input
+                        type="text"
+                        id="modelIdInput"
+                        placeholder="model id"
+                        value={modelId}
+                        onChange={(event) => setModelId(event.currentTarget.value)}
+                    />
+                </div>
+                <div className="button-container">
+                    <button onClick={() => handleAddModel}>Add</button>
+                </div>
+            </div>
+        </SimplePopup>
+    );
 
     const setNewDefaultDataModel = () => {
         /*
@@ -146,12 +121,6 @@ export default function ManageModelsPage() {
         */
 
         console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
-        let list_of_radio_btn = document.getElementsByName('default');
-        for (let i = 0; i < list_of_radio_btn.length; i++) {
-            if (list_of_radio_btn[i].checked) {
-                console.log(`Chosen Radio Button: ${list_of_radio_btn[i].value}`);
-            }
-        }
 
         //update List of data models with values from backend
         updateListOfDataModels(
@@ -174,6 +143,7 @@ export default function ManageModelsPage() {
             }]
         );
 
+        //Close the popup
         toggleSetDefaultModelPopup(false);
     };
 
