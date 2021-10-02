@@ -5,16 +5,12 @@ import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
 import { styled } from '@mui/material/styles';
 
-export default class UploadDataPage extends React.Component {
+class UploadDataPage extends Component {
     constructor(props) {
         super(props);
         this.state = { fileArray: '' };
         this.setFileArrayObj = this.setFileArrayObj.bind(this);
     }
-
-    state = {
-        fileArray: ''
-    };
 
     handleOnClick() {
         //1. getting value of data type selected
@@ -94,5 +90,8 @@ export default class UploadDataPage extends React.Component {
         );
     }
 }
+
+export {UploadDataPage};
+
 
 
