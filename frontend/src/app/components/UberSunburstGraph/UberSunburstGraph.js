@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Sunburst, LabelSeries } from 'react-vis';
 import { EXTENDED_DISCRETE_COLOR_RANGE } from '../../resources/theme';
-import D3FlareData from '../../datasets/d3-flare-example.json';
+import D3FlareData from '../../assets/datasets/d3-flare-example.json';
 
 const LABEL_STYLE = {
     fontSize: '8px',

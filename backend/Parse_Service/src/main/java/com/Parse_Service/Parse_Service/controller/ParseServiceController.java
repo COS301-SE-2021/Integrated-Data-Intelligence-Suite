@@ -68,6 +68,11 @@ public class ParseServiceController {
         return service.parseUploadedSocialData(request);
     }
 
+    @PostMapping("/parseTrainingData")
+    public @ResponseBody ParseUploadedTrainingDataResponse parseUploadedTrainingData(@RequestBody ParseUploadedTrainingDataRequest request) throws ParserException {
+        return service.parseUploadedTrainingData(request);
+    }
+
     /**
      * This method is used to facilitate communication to the Parse-Service.
      * @param request This is a request entity which contains a ParseUploadedNewsDataRequest object.
