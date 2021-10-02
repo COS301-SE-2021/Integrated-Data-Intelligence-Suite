@@ -14,7 +14,10 @@ export default function ModelCard(props) {
         <>
             <div className={'model-card-container'}>
                 <div className={'model-card-title-bar'}>
-                    <div id={'model-card-default-tag'}>Default</div>
+                    {props.isModelDefault
+                        ? <div id={'model-card-default-tag'}>Default</div>
+                        : null
+                    }
                     <div id={'model-card-btn-container'}>
                         <Tooltip
                             title="Delete Model"

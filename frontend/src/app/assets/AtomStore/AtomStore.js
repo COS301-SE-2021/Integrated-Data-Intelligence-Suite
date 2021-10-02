@@ -20,10 +20,20 @@ export const listOfDataModelsState = atom({
     default:
         [{
             modelID: 'm1',
-            modelName: 'Itachi'
+            modelName: 'Itachi',
+            isModelDefault: false
         }, {
             modelID: 'm2',
-            modelName: 'Sasuke'
+            modelName: 'Sasuke',
+            isModelDefault: false
+        }, {
+            modelID: 'm3',
+            modelName: 'Zabuza',
+            isModelDefault: true
+        }, {
+            modelID: 'm4',
+            modelName: 'Shisui',
+            isModelDefault: false
         }]
 });
 

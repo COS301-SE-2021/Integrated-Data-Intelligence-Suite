@@ -122,10 +122,11 @@ export default function ManageModelsPage() {
 
                                 <div id={'manage-models-card-row'}>
                                     {
-                                        arrayOfModels.map((obj, index) => (
+                                        arrayOfModels.map((obj) => (
                                             <ModelCard
                                                 modelID={obj.modelID}
                                                 modelName={obj.modelName}
+                                                isModelDefault={obj.isModelDefault}
                                             />
                                         ))
                                     }
