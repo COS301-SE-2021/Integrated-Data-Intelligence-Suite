@@ -397,6 +397,16 @@ public class AnalyseServiceImpl {
         File artifact = client.downloadArtifacts(modelID, modelName);
         File artifact2 = client.downloadArtifacts(modelID2, modelName);
 
+        client.logArtifact(modelID,artifact);
+        client.logArtifact(modelID2,artifact2);
+
+        try {
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(artifact2.getPath()));
+        } catch (IOException e) {
+            throw new AnalysingModelException("Failed finding model file");
+        }
+
         if( (artifact.exists() == false)  || (artifact2.exists() == false) ){
             return new GetModelByIdResponse(null, null);
         }
@@ -663,7 +673,7 @@ public class AnalyseServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        sparkNlpProperties.stop();
+        //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -870,7 +880,7 @@ public class AnalyseServiceImpl {
             System.out.println(o.toString());
         }
 
-        sparkPatterns.stop();
+        //sparkPatterns.stop();
 
         System.out.println("pattens stop");
 
@@ -1090,7 +1100,7 @@ public class AnalyseServiceImpl {
         }
         //System.out.println(results.toString());
 
-        sparkRelationships.stop();
+       //sparkRelationships.stop();
 
         return new FindRelationshipsResponse(results);
     }
@@ -1274,6 +1284,9 @@ public class AnalyseServiceImpl {
             File artifact = client.downloadArtifacts(modelID, modelName);
             File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
 
+            client.logArtifact(modelID,artifact);
+            client.logArtifact(modelID,trainFile);
+
             Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
@@ -1297,6 +1310,10 @@ public class AnalyseServiceImpl {
 
             File artifact = client.downloadArtifacts(modelID, modelName + "T");
             File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+            client.logArtifact(modelID,artifact);
+            client.logArtifact(modelID,trainFile);
+
 
             Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
@@ -1373,7 +1390,7 @@ public class AnalyseServiceImpl {
             System.out.println("RESULT TREND : " + results.get(i));
         }
 
-        sparkTrends.stop();
+        //sparkTrends.stop();
         return new FindTrendsResponse(results);
     }
 
@@ -1415,7 +1432,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        sparkPredictions.stop();
+        //sparkPredictions.stop();
         return new GetPredictionResponse(null);
     }
 
@@ -1639,7 +1656,7 @@ public class AnalyseServiceImpl {
                 results.add(rawResults.get(i).get(0).toString());//name
         }
 
-        sparkAnomalies.stop();
+       // sparkAnomalies.stop();
 
         return new FindAnomaliesResponse(results);
     }
