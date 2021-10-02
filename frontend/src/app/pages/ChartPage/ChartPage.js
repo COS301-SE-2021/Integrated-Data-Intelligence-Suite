@@ -71,7 +71,7 @@ class ChartPage extends Component {
         this.setState(
             (prevState) => ({
                 isShowingPopup: !prevState.isShowingPopup,
-                }),
+            }),
             () => console.log(`isPopupShowing: ${this.state.isShowingPopup}`),
         );
     }
@@ -83,7 +83,10 @@ class ChartPage extends Component {
     }
 
     render() {
-        const { user, showPdf } = this.state;
+        const {
+            user,
+            showPdf
+        } = this.state;
 
         if (user) {
             return (
@@ -93,8 +96,11 @@ class ChartPage extends Component {
                             {
                                 this.state.isShowingPopup
                                     ? (
-                                        <SimplePopup closePopup={this.showPopup}>
-                                            <UploadDataPage />
+                                        <SimplePopup
+                                            closePopup={this.showPopup}
+                                            popupTitle={'Upload File'}
+                                        >
+                                            <UploadDataPage/>
                                         </SimplePopup>
                                     ) :
                                     null
@@ -103,122 +109,122 @@ class ChartPage extends Component {
                                 showPdf
                                     ? (
                                         <ReportPreview
-                                          closePopup={this.generateReport}
-                                          className="pdf"
-                                          title="pdf-preview"
+                                            closePopup={this.generateReport}
+                                            className="pdf"
+                                            title="pdf-preview"
                                         />
                                     ) :
                                     null
                             }
 
                             <Layout
-                              id="outer_layout"
-                              className="chart-page"
+                                id="outer_layout"
+                                className="chart-page"
                             >
-                                <SideBar currentPage="2" />
+                                <SideBar currentPage="2"/>
                                 <Layout id="inner_layout_div">
                                     <Header id="top_bar">
                                         <SearchBar
-                                          text={this.state.text}
-                                          handleTextChange={this.handleTextChange}
+                                            text={this.state.text}
+                                            handleTextChange={this.handleTextChange}
                                         />
 
                                         <button
-                                          id="upload-btn"
-                                          className="clickable"
-                                          onClick={() => {
+                                            id="upload-btn"
+                                            className="clickable"
+                                            onClick={() => {
                                                 this.showPopup(true);
                                             }}
                                         >
-                                            <AiOutlineUpload id="upload-btn-logo" />
+                                            <AiOutlineUpload id="upload-btn-logo"/>
                                             Upload
                                         </button>
 
                                         <button
-                                          id="upload-btn"
-                                          className="clickable"
-                                          onClick={() => {
+                                            id="upload-btn"
+                                            className="clickable"
+                                            onClick={() => {
                                                 this.generateReport();
                                             }}
                                         >
-                                            <CgFileDocument id="upload-btn-logo" />
+                                            <CgFileDocument id="upload-btn-logo"/>
                                             Generate Report
                                         </button>
 
                                         <UserInfoCard
-                                          name="s"
+                                            name="s"
                                         />
                                     </Header>
 
                                     <div id="content-section">
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-1"
+                                            cardTitle=""
+                                            cardID="row-1"
                                         >
                                             <OverviewSection
-                                              text={this.state.text}
-                                              key={this.state.text}
+                                                text={this.state.text}
+                                                key={this.state.text}
                                             />
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-2"
+                                            cardTitle=""
+                                            cardID="row-2"
                                         >
                                             <OverviewGraphSection
-                                              text={this.state.text}
-                                              key={this.state.text}
+                                                text={this.state.text}
+                                                key={this.state.text}
                                             />
                                         </SimpleSection>
 
                                         {/* /!* */}
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-3"
+                                            cardTitle=""
+                                            cardID="row-3"
                                         >
                                             <div id="location-section">
                                                 <div id="map-metric-container">
                                                     <SimpleCard
-                                                      cardTitle=""
-                                                      cardID="world-map"
-                                                      titleOnTop
+                                                        cardTitle=""
+                                                        cardID="world-map"
+                                                        titleOnTop
                                                     >
-                                                        <MapCard text={this.state.text} />
+                                                        <MapCard text={this.state.text}/>
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                      cardTitle="Data Frequency"
-                                                      cardID="map-metric-1"
-                                                      titleOnTop
+                                                        cardTitle="Data Frequency"
+                                                        cardID="map-metric-1"
+                                                        titleOnTop
                                                     >
-                                                        <DraggableBarGraph text={this.state.text} />
+                                                        <DraggableBarGraph text={this.state.text}/>
                                                     </SimpleCard>
                                                 </div>
                                             </div>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-4"
+                                            cardTitle=""
+                                            cardID="row-4"
                                         >
                                             <SimpleCard
-                                              cardTitle="Word Cloud"
-                                              cardID="word-cloud-card"
-                                              titleOnTop
+                                                cardTitle="Word Cloud"
+                                                cardID="word-cloud-card"
+                                                titleOnTop
                                             >
                                                 <WordCloud
-                                                  text={this.state.text}
-                                                  key={this.state.text}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
                                                 />
                                             </SimpleCard>
 
                                             <div id="word-cloud-graph-container">
                                                 <SimpleCard
-                                                  cardTitle="Dominant words"
-                                                  cardID="word-graph-2"
-                                                  titleOnTop
+                                                    cardTitle="Dominant words"
+                                                    cardID="word-graph-2"
+                                                    titleOnTop
                                                 >
-                                                    <PieChart text={this.state.text} />
+                                                    <PieChart text={this.state.text}/>
                                                 </SimpleCard>
                                                 {/* <SimpleCard
                                                     cardTitle="Word Sunburst"
@@ -230,46 +236,46 @@ class ChartPage extends Component {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-5"
+                                            cardTitle=""
+                                            cardID="row-5"
                                         >
                                             <SimpleCard
-                                              cardTitle="Relationship Between Entities"
-                                              cardID="network-graph-entities"
-                                              titleOnTop
+                                                cardTitle="Relationship Between Entities"
+                                                cardID="network-graph-entities"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={this.state.text}
-                                                  key={this.state.text}
-                                                  indexOfData={11}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                    indexOfData={11}
                                                 />
                                             </SimpleCard>
 
                                             <SimpleCard
-                                              cardTitle="Relationship Between Patterns"
-                                              cardID="network-graph-patterns"
-                                              titleOnTop
+                                                cardTitle="Relationship Between Patterns"
+                                                cardID="network-graph-patterns"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={this.state.text}
-                                                  key={this.state.text}
-                                                  indexOfData={12}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
+                                                    indexOfData={12}
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-6"
+                                            cardTitle=""
+                                            cardID="row-6"
                                         >
                                             <SimpleCard
-                                              cardTitle="Timeline"
-                                              cardID="anomaly-timeline-card"
-                                              titleOnTop
+                                                cardTitle="Timeline"
+                                                cardID="anomaly-timeline-card"
+                                                titleOnTop
                                             >
                                                 <TimelineGraph
-                                                  text={this.state.text}
-                                                  key={this.state.text}
+                                                    text={this.state.text}
+                                                    key={this.state.text}
                                                 />
                                             </SimpleCard>
 
@@ -302,7 +308,7 @@ class ChartPage extends Component {
         }
         return (
             <>
-                <Redirect to="/login" />
+                <Redirect to="/login"/>
             </>
         );
     }
