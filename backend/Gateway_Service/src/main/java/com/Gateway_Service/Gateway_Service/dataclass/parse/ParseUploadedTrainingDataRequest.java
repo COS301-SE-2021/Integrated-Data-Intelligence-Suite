@@ -12,8 +12,13 @@ public class ParseUploadedTrainingDataRequest {
 
     }
 
-    public ParseUploadedTrainingDataRequest(String filename) {
+    public ParseUploadedTrainingDataRequest(String filename, String textCol, String locCol, String interactionsCol, String dateCol, String isTrendingCol) {
         this.filename = filename;
+        this.textCol = textCol;
+        this.locCol = locCol;
+        this.interactionsCol = interactionsCol;
+        this.dateCol = dateCol;
+        this.isTrendingCol = isTrendingCol;
     }
 
     public String getFilename() {

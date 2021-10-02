@@ -1,7 +1,5 @@
 package com.Gateway_Service.Gateway_Service.dataclass.parse;
 
-import com.Parse_Service.Parse_Service.dataclass.ParsedTrainingData;
-
 import java.util.ArrayList;
 
 public class ParseUploadedTrainingDataResponse {
@@ -19,12 +17,12 @@ public class ParseUploadedTrainingDataResponse {
         this.trainingDataList = dataList;
     }
 
-    public ArrayList<ParsedTrainingData> getSocialDataList(){
+    public ArrayList<ParsedTrainingData> getTrainingDataList(){
         return trainingDataList;
     }
 
-    public void setSocialDataList(ArrayList<ParsedTrainingData> socialDataList) {
-        this.trainingDataList = socialDataList;
+    public void setTrainingDataList(ArrayList<ParsedTrainingData> trainingDataList) {
+        this.trainingDataList = trainingDataList;
     }
 
     public boolean isSuccess() {
