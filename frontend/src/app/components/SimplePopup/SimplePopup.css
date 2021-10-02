@@ -6,7 +6,7 @@
     position: absolute;
     z-index: 9999;
     background: rgba(8, 10, 13, 0.5);
-    display: grid;
+    display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;

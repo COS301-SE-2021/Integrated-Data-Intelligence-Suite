@@ -23,8 +23,8 @@ class ReportPreview extends PureComponent {
                           src="http://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
                           frameBorder="10"
                           scrolling="auto"
-                          height="200px"
-                          width="1000px"
+                          height="1000vh"
+                          width="800vw"
                         />
                     </div>
                 </div>
