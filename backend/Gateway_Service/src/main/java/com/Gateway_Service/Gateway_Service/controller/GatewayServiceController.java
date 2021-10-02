@@ -638,29 +638,6 @@ public class GatewayServiceController {
 
     }
 
-
-    /**
-     * This the endpoint for registering the user.
-     * @param request This is the body sent by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/getSelectedModelId",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<String> getSelectedModelId(@RequestBody GetUserReportsRequest request) {
-
-        //TODO: user returns selected model id
-
-        /*********************USER******************/
-
-        GetUserReportsResponse userResponse = userClient.getUserReports(request);
-
-        String output = "";
-
-        return new ResponseEntity<>(output, HttpStatus.OK);
-    }
-
-
     /**
      * This the endpoint for registering the user.
      * @param modelId This is the body sent by POST
@@ -684,8 +661,32 @@ public class GatewayServiceController {
         /*********************USER******************/
 
         //GetUserReportsResponse userResponse = userClient.getUserReports(request);
-
     }
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/getSelectedModelId",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<String> getModelInfoById(@RequestBody GetUserReportsRequest request) {
+
+        //TODO: user returns selected model id
+
+        /*********************USER******************/
+
+        GetUserReportsResponse userResponse = userClient.getUserReports(request);
+
+        String output = "";
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
+
+
+
 
 
     /*******************************************************************************************************************
