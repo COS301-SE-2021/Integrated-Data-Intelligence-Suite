@@ -3,6 +3,8 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.ErrorGraph;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.InformationGraph;
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
 import com.Gateway_Service.Gateway_Service.dataclass.report.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
@@ -11,9 +13,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
-import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
-import com.Gateway_Service.Gateway_Service.dataclass.gateway.ErrorGraph;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.*;
 
@@ -115,11 +115,11 @@ public class GatewayServiceController {
             //outputData.add(importResponse.getFallbackMessage());
             //return new ArrayList<>();//outputData;
 
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = importResponse.getFallbackMessage();
+            ErrorGraph informationGraph = new ErrorGraph();
+            informationGraph.Error = importResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+            data.add(informationGraph);
 
             outputData.add( data);
 
@@ -143,11 +143,11 @@ public class GatewayServiceController {
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
             //outputData.add();
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = parseResponse.getFallbackMessage();
+            ErrorGraph informationGraph = new ErrorGraph();
+            informationGraph.Error = parseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+            data.add(informationGraph);
 
             outputData.add( data);
 
@@ -165,11 +165,11 @@ public class GatewayServiceController {
 
 
         if(analyseResponse.getFallback() == true) {
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = analyseResponse.getFallbackMessage();
+            ErrorGraph informationGraph = new ErrorGraph();
+            informationGraph.Error = analyseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+            data.add(informationGraph);
 
             outputData.add( data);
 
@@ -195,11 +195,11 @@ public class GatewayServiceController {
 
 
         if(visualizeResponse.getFallback() == true) {
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = analyseResponse.getFallbackMessage();
+            ErrorGraph informationGraph = new ErrorGraph();
+            informationGraph.Error = analyseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+            data.add(informationGraph);
 
             outputData.add( data);
 
@@ -219,17 +219,19 @@ public class GatewayServiceController {
                 analyseResponse.getWordList());
         ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
 
-        ErrorGraph reportGraph = new ErrorGraph();
-        reportGraph.Error = reportResponse.getId().toString();
-        ArrayList<Graph> reportData = new ArrayList<>();
-        reportData.add(reportGraph);
-        outputData.add(reportData);
+
 
         System.out.println("***********************REPORT HAS BEEN DONE*************************");
 
 
         for(int i =0; i < visualizeResponse.outputData.size(); i++)
             outputData.add(visualizeResponse.outputData.get(i));
+
+        InformationGraph reportGraph = new InformationGraph();
+        reportGraph.reportId = reportResponse.getId().toString();
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
 
@@ -466,7 +468,7 @@ public class GatewayServiceController {
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
             //outputData.add();
-            ErrorGraph errorGraph = new ErrorGraph();
+            InformationGraph errorGraph = new InformationGraph();
             errorGraph.Error = parseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
@@ -489,7 +491,7 @@ public class GatewayServiceController {
 
 
         /*if(analyseResponse.getFallback() == true) {
-            ErrorGraph errorGraph = new ErrorGraph();
+            InformationGraph errorGraph = new InformationGraph();
             errorGraph.Error = analyseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
@@ -537,7 +539,7 @@ public class GatewayServiceController {
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
             //outputData.add();
-            ErrorGraph errorGraph = new ErrorGraph();
+            InformationGraph errorGraph = new InformationGraph();
             errorGraph.Error = parseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
@@ -559,11 +561,11 @@ public class GatewayServiceController {
 
 
         if(analyseResponse.getFallback()) {
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = analyseResponse.getFallbackMessage();
+            ErrorGraph informationGraph = new ErrorGraph();
+            informationGraph.Error = analyseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+            data.add(informationGraph);
 
             outputData.add( data);
 
@@ -588,11 +590,11 @@ public class GatewayServiceController {
 
 
         if(visualizeResponse.getFallback()) {
-            ErrorGraph errorGraph = new ErrorGraph();
-            errorGraph.Error = analyseResponse.getFallbackMessage();
+            ErrorGraph informationGraph = new ErrorGraph();
+            informationGraph.Error = analyseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
-            data.add(errorGraph);
+            data.add(informationGraph);
 
             outputData.add( data);
 

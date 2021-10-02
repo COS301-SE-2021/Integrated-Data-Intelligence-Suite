@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import Switch from 'react-bootstrap/Switch';
-import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import SideBar from '../../components/SideBar/SideBar';
 import './ManageModelsPage.css';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
@@ -12,13 +11,16 @@ import {
     isShowingDeletePopupState,
     isShowingAddTrainingDataPopupState,
     isShowingAddModelPopupState,
+    listOfDataModelsState
 } from '../../assets/AtomStore/AtomStore';
+import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
 
 export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
-    const toggleAddModelPopup = useSetRecoilState(isShowingAddModelPopupState);
+    const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
+    const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
     const [modelId, setModelId] = useState('');
 
     const handleAddModel = () =>{
@@ -28,15 +30,24 @@ export default function ManageModelsPage() {
     const deletePopupComponent =
         (
             <SimplePopup
-              closePopup={() => toggleDeletePopup(false)}
-              popupTitle="Delete Model"
-              popupID="delete-model-popup"
+                closePopup={() => toggleDeletePopup(false)}
+                popupTitle={'Delete Model'}
+                popupID={'delete-model-popup'}
             >
-                <div id="delete-model-popup-msg">Are you sure you want to delete this modal?</div>
-                {/* <div id={'delete-model-btn-container'}> */}
-                <button id="delete-model-popup-btn-yes">Yes</button>
-                <button id="delete-model-popup-btn-no">No</button>
-                {/* </div> */}
+                <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
+                <div id={'delete-model-popup-btn-container'}>
+                    <button
+                        id={'delete-model-popup-btn-yes'}
+                    >
+                        Yes
+                    </button>
+                    <button
+                        id={'delete-model-popup-btn-no'}
+                        onClick={() => toggleDeletePopup(false)}
+                    >
+                        No
+                    </button>
+                </div>
             </SimplePopup>
         );
 
@@ -74,7 +85,10 @@ export default function ManageModelsPage() {
         </SimplePopup>
     );
 
+    const arrayOfModels = useRecoilValue(listOfDataModelsState);
+
     return (
+
         <>
             <Switch>
                 <Route exact path="/manageModels">
@@ -95,40 +109,44 @@ export default function ManageModelsPage() {
                             ? addModelPopupComponent
                             : null
                     }
-                    <div id="manage-models-page-container">
-                        <SideBar currentPage="6" />
-                        <div id="manage-models-page-content">
+                    <div id={'manage-models-page-container'}>
+                        <SideBar currentPage={'6'}/>
+                        <div id={'manage-models-page-content'}>
                             <SimpleCard
-                              cardID="manage-models-card"
-                              cardTitle="Manage Your Models"
-                              titleOnTop
+                                cardID={'manage-models-card'}
+                                cardTitle={'Manage Your Models'}
+                                titleOnTop
                             >
-                                <div id="manage-models-btn-row">
+                                <div id={'manage-models-btn-row'}>
                                     <button
-                                      className="simple-btn simple-btn-hover"
-                                      onClick={() => toggleAddTrainingDataPopup(true)}
+                                        className={'simple-btn simple-btn-hover'}
+                                        onClick={() => toggleAddTrainingDataPopup(true)}
                                     >
                                         <BsCloudUpload
-                                          className="simple-btn-icon simple-btn-hover"
+                                            className={'simple-btn-icon simple-btn-hover'}
                                         />
                                         Upload Training Data
                                     </button>
 
                                     <button
-                                      className="simple-btn simple-btn-hover"
-                                      onClick={() => toggleAddModelPopup(true)}
+                                        className={'simple-btn simple-btn-hover'}
+                                        onClick={() => toggleAddModelPopup(true)}
                                     >
-                                        <RiAddLine className="simple-btn-icon simple-btn-hover" />
+                                        <RiAddLine className={'simple-btn-icon simple-btn-hover'}/>
                                         Add Model
                                     </button>
                                 </div>
-                                <div id="manage-models-card-row">
-                                    <ModelCard />
-                                    <ModelCard />
-                                    <ModelCard />
-                                    <ModelCard />
-                                    <ModelCard />
-                                    <ModelCard />
+
+                                <div id={'manage-models-card-row'}>
+                                    {
+                                        arrayOfModels.map((obj) => (
+                                            <ModelCard
+                                                modelID={obj.modelID}
+                                                modelName={obj.modelName}
+                                                isModelDefault={obj.isModelDefault}
+                                            />
+                                        ))
+                                    }
                                 </div>
                             </SimpleCard>
                         </div>
