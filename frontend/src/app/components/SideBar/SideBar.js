@@ -2,20 +2,15 @@ import React, { Component } from 'react';
 import { Menu, Layout } from 'antd';
 import {
     BarChartOutlined,
-    HomeOutlined,
-    LaptopOutlined,
-    SettingOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
 
 import {
-    AiOutlineCloudUpload,
     AiOutlineHeart,
     AiOutlineHome, GrGraphQl,
     HiOutlineDocumentReport
 } from 'react-icons/all';
-
-import UserInfoCard from '../UserInfoCard/UserInfoCard';
 
 const {
     Header,
@@ -88,7 +83,6 @@ class SideBar extends React.Component {
                             <Link to="/chart"/>
                         </Menu.Item>
 
-
                         <Menu.Item
                             key="5"
                             icon={<HiOutlineDocumentReport/>}
@@ -104,7 +98,7 @@ class SideBar extends React.Component {
                             onClick={() => this.setActive('6')}
                         >
                             Models
-                            <Link to="/reports"/>
+                            <Link to="/manageModels"/>
                         </Menu.Item>
 
                         <Menu.Item

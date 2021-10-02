@@ -176,6 +176,7 @@ public class GatewayServiceController {
             return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
+        if (analyseResponse.getAnomalyList() == null) System.out.println("Oi its empty");
 
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
@@ -247,6 +248,7 @@ public class GatewayServiceController {
      * @return This contains if the request of uploading a file was successful or not.
      */
     @PostMapping("/analyzeUpload")
+    @CrossOrigin
     public ResponseEntity<ArrayList<ArrayList<Graph>>> fileAnalyzeUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam("modelID") String modelID) {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
@@ -297,8 +299,11 @@ public class GatewayServiceController {
         return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
-
-
+    @PostMapping(value = "/trainUpload")
+    @CrossOrigin
+    public ResponseEntity<String> fileTrainUpload(@RequestParam("file") MultipartFile file) {
+        return new ResponseEntity<>("Not implemented", HttpStatus.NOT_IMPLEMENTED);
+    }
 
 
     /**
