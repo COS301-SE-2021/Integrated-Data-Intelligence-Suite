@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Dropdown } from 'antd';
 import { CaretUpFilled } from '@ant-design/icons';
 import ExitMenuTooltip from '../ExitMenuTooltip/ExitMenuTooltip';
