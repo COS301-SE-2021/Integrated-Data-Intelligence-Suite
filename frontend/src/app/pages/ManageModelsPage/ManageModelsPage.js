@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import Switch from 'react-bootstrap/Switch';
 import SideBar from '../../components/SideBar/SideBar';
 import './ManageModelsPage.css';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 import ModelCard from '../../components/ModelCard/ModelCard';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import {
     isShowingDeletePopupState,
     isShowingAddTrainingDataPopupState,
-    isShowingAddModelPopupState
+    isShowingAddModelPopupState,
+    listOfDataModelsState
 } from '../../assets/AtomStore/AtomStore';
 import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
@@ -19,6 +20,13 @@ export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
     const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
+    const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
+    const [modelId, setModelId] = useState('');
+
+    const handleAddModel = () =>{
+        // TODO function call to backend to add model to current user's liat of models
+    };
+
     const deletePopupComponent =
         (
             <SimplePopup
@@ -27,17 +35,26 @@ export default function ManageModelsPage() {
                 popupID={'delete-model-popup'}
             >
                 <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
-                {/*<div id={'delete-model-btn-container'}>*/}
-                <button id={'delete-model-popup-btn-yes'}>Yes</button>
-                <button id={'delete-model-popup-btn-no'}>No</button>
-                {/*</div>*/}
+                <div id={'delete-model-popup-btn-container'}>
+                    <button
+                        id={'delete-model-popup-btn-yes'}
+                    >
+                        Yes
+                    </button>
+                    <button
+                        id={'delete-model-popup-btn-no'}
+                        onClick={() => toggleDeletePopup(false)}
+                    >
+                        No
+                    </button>
+                </div>
             </SimplePopup>
         );
 
     const addTrainingDataPopupComponent = (
         <SimplePopup
-            closePopup={() => toggleAddTrainingDataPopup(false)}
-            popupTitle={'Upload Training Data'}
+          closePopup={() => toggleAddTrainingDataPopup(false)}
+          popupTitle="Upload Training Data"
         >
             <div>
                 <div>xxxx</div>
@@ -47,16 +64,31 @@ export default function ManageModelsPage() {
 
     const addModelPopupComponent = (
         <SimplePopup
-            closePopup={() => toggleAddModelPopup(false)}
-            popupTitle={'Add Data Model'}
+          closePopup={() => toggleAddModelPopup(false)}
+          popupTitle="Add Data Model"
         >
-            <div>
-                <div>xxxx</div>
+            <div className="add-model-container">
+                <div className="input-container">
+                    <div className="label">ID</div>
+                    <input
+                      type="text"
+                      id="modelIdInput"
+                      placeholder="model id"
+                      value={modelId}
+                      onChange={(event) => setModelId(event.currentTarget.value)}
+                    />
+                </div>
+                <div className="button-container">
+                    <button onClick={()=>handleAddModel}>Add</button>
+                </div>
             </div>
         </SimplePopup>
     );
 
+    const arrayOfModels = useRecoilValue(listOfDataModelsState);
+
     return (
+
         <>
             <Switch>
                 <Route exact path="/manageModels">
@@ -104,13 +136,17 @@ export default function ManageModelsPage() {
                                         Add Model
                                     </button>
                                 </div>
+
                                 <div id={'manage-models-card-row'}>
-                                    <ModelCard/>
-                                    <ModelCard/>
-                                    <ModelCard/>
-                                    <ModelCard/>
-                                    <ModelCard/>
-                                    <ModelCard/>
+                                    {
+                                        arrayOfModels.map((obj) => (
+                                            <ModelCard
+                                                modelID={obj.modelID}
+                                                modelName={obj.modelName}
+                                                isModelDefault={obj.isModelDefault}
+                                            />
+                                        ))
+                                    }
                                 </div>
                             </SimpleCard>
                         </div>
