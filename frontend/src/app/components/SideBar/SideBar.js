@@ -8,7 +8,12 @@ import {
 } from '@ant-design/icons';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
 
-import {AiOutlineCloudUpload, AiOutlineHeart, AiOutlineHome, HiOutlineDocumentReport} from 'react-icons/all';
+import {
+    AiOutlineCloudUpload,
+    AiOutlineHeart,
+    AiOutlineHome, GrGraphQl,
+    HiOutlineDocumentReport
+} from 'react-icons/all';
 
 import UserInfoCard from '../UserInfoCard/UserInfoCard';
 
@@ -53,17 +58,17 @@ class SideBar extends React.Component {
         return (
             <>
                 <Sider
-                  collapsible={false}
-                  collapsed={collapsed}
-                  onCollapse={this.onCollapse}
-                  id="sidebar_div"
+                    collapsible={false}
+                    collapsed={collapsed}
+                    onCollapse={this.onCollapse}
+                    id="sidebar_div"
                 >
-                    <div id="logo" />
+                    <div id="logo"/>
                     <Menu
-                      id="sidebar_menu"
-                      theme="light"
-                      defaultSelectedKeys={this.props.currentPage}
-                      mode="inline"
+                        id="sidebar_menu"
+                        theme="light"
+                        defaultSelectedKeys={this.props.currentPage}
+                        mode="inline"
                     >
                         {/* <Menu.Item */}
                         {/*    key="1" */}
@@ -75,40 +80,50 @@ class SideBar extends React.Component {
                         {/* </Menu.Item> */}
 
                         <Menu.Item
-                          key="2"
-                          icon={<BarChartOutlined />}
-                          onClick={() => this.setActive('2')}
+                            key="2"
+                            icon={<BarChartOutlined/>}
+                            onClick={() => this.setActive('2')}
                         >
                             Analytics
-                            <Link to="/chart" />
+                            <Link to="/chart"/>
                         </Menu.Item>
 
-                        <Menu.Item
-                          key="3"
-                          icon={<SettingOutlined />}
-                          onClick={() => this.setActive('3')}
-                        >
-                            Settings
-                            <Link to="/settings" />
-                        </Menu.Item>
 
                         <Menu.Item
-                          key="4"
-                          icon={<AiOutlineHeart />}
-                          onClick={() => this.setActive('4')}
-                        >
-                            Credits
-                            <Link to="/credits" />
-                        </Menu.Item>
-                        <Menu.Item
-                          key="5"
-                          icon={<HiOutlineDocumentReport />}
-                          onClick={() => this.setActive('5')}
+                            key="5"
+                            icon={<HiOutlineDocumentReport/>}
+                            onClick={() => this.setActive('5')}
                         >
                             Reports
-                            <Link to="/reports" />
+                            <Link to="/reports"/>
                         </Menu.Item>
 
+                        <Menu.Item
+                            key="6"
+                            icon={<GrGraphQl/>}
+                            onClick={() => this.setActive('6')}
+                        >
+                            Models
+                            <Link to="/reports"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="3"
+                            icon={<SettingOutlined/>}
+                            onClick={() => this.setActive('3')}
+                        >
+                            Settings
+                            <Link to="/settings"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="4"
+                            icon={<AiOutlineHeart/>}
+                            onClick={() => this.setActive('4')}
+                        >
+                            Credits
+                            <Link to="/credits"/>
+                        </Menu.Item>
                     </Menu>
                 </Sider>
             </>

@@ -6,6 +6,8 @@ import { FaFileCsv, RiFile3Fill } from 'react-icons/all';
 import { Divider } from '@mui/material';
 
 export default function UploadDropZone(props) {
+    let isUploaded = false;
+
     const pushFileArrayUp = (fileArrayObj) => {
         props.setFileArray(fileArrayObj);
     };
@@ -21,16 +23,9 @@ export default function UploadDropZone(props) {
         noKeyboard: true,
         //update file preview on drop
         onDrop: () => {
-            files = acceptedFiles.map(file => (
-                <li key={file.path}>
-                    {file.name}
-                    -
-                    {file.size}
-                    bytes
-                </li>
-            ));
             //pushing the file array up to parent component
             pushFileArrayUp(acceptedFiles);
+            isUploaded = true;
         }
     });
 
@@ -69,7 +64,7 @@ export default function UploadDropZone(props) {
                     </div>
                 </div>
                 <div id={'file-preview-div'}>
-                    <h4>File Preview</h4>
+                    {isUploaded ? <h4>File Preview</h4> : null}
                     {files}
                 </div>
             </SimpleCard>
