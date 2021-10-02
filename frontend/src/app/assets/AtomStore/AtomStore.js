@@ -15,5 +15,17 @@ export const isShowingAddModelPopupState = atom({
     default: false
 });
 
+export const listOfDataModelsState = atom({
+    key: 'listOfDataModels',
+    default:
+        [{
+            modelID: 'm1',
+            modelName: 'Itachi'
+        }, {
+            modelID: 'm2',
+            modelName: 'Sasuke'
+        }]
+});
+
 
 
