@@ -1122,9 +1122,20 @@ public class TrainServiceImpl {
         File trainFile = new File(path);
         client.logArtifact(run.getId(), trainFile);
 
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+        File infoFile = new File(filePath);
+        infoFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(infoFile, false);
+        fos.write(String.valueOf(accuracy).getBytes());
+        fos.close();
+        client.logArtifact(run.getId(), infoFile);
+
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
         FileUtils.deleteDirectory(trainFile);
+        FileUtils.deleteDirectory(infoFile);
 
         /*
         String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
@@ -1479,9 +1490,20 @@ public class TrainServiceImpl {
         File trainFile = new File(path);
         client.logArtifact(run.getId(), trainFile);
 
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+        File infoFile = new File(filePath);
+        infoFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(infoFile, false);
+        fos.write(String.valueOf(accuracy).getBytes());
+        fos.close();
+        client.logArtifact(run.getId(), infoFile);
+
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
         FileUtils.deleteDirectory(trainFile);
+        FileUtils.deleteDirectory(infoFile);
 
 
         /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
@@ -2159,9 +2181,20 @@ public class TrainServiceImpl {
         File trainFile = new File(path);
         client.logArtifact(run.getId(), trainFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+        File infoFile = new File(filePath);
+        infoFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(infoFile, false);
+        fos.write(String.valueOf(accuracy).getBytes());
+        fos.close();
+        client.logArtifact(run.getId(), infoFile);
+
+
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
         FileUtils.deleteDirectory(trainFile);
+        FileUtils.deleteDirectory(infoFile);
 
         /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
         CommandLine commandLine = CommandLine.parse(commandPath);
