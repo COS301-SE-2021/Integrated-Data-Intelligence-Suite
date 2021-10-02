@@ -99,6 +99,11 @@ public class UserServiceController {
         return service.getReports(new GetUserReportsRequest(id));
     }
 
+    @GetMapping(value = "/getModels/{id}")
+    public @ResponseBody GetModelsResponse getModels(@PathVariable String id) throws Exception {
+        return service.getModels(new GetModelsRequest(id));
+    }
+
     @PostMapping(value = "/addModel")
     public @ResponseBody ModelResponse addModel(@RequestBody ModelRequest request) throws Exception {
         return service.addModel(request);
