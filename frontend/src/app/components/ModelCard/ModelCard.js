@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ModelCard.css';
 import SimpleCard from '../SimpleCard/SimpleCard';
 import { AiOutlineShareAlt, MdDelete } from 'react-icons/all';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import SimplePopup from '../SimplePopup/SimplePopup';
-import { useRecoilState } from 'recoil';
-import { isShowingDeletePopupState } from '../../assets/AtomStore/AtomStore';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+    isShowingDeletePopupState,
+    isShowingSetDefaultModelPopupState, userSelectedDefaultModelState
+} from '../../assets/AtomStore/AtomStore';
 
 export default function ModelCard(props) {
-    const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
+    const toggleDeletePopup = useSetRecoilState(isShowingDeletePopupState);
+    const toggleSetDefaultPopup = useSetRecoilState(isShowingSetDefaultModelPopupState);
+    const updateUserSelectedDefaultModel = useSetRecoilState(userSelectedDefaultModelState);
+    const clickedRadioButton = (e) => {
+        updateUserSelectedDefaultModel(e.target.id);
+        toggleSetDefaultPopup(true);
+    };
 
     return (
         <>
@@ -45,7 +53,21 @@ export default function ModelCard(props) {
                                 />
                             </button>
                         </Tooltip>
-                        <input type={'radio'}/>
+
+                        <Tooltip
+                            title={'Make Default Data Model'}
+                            arrow
+                            className={'simple-tooltip'}
+                            placement={'top'}
+                        >
+                            <input
+                                type={'radio'}
+                                name="default"
+                                id={props.modelID}
+                                checked={props.isModelDefault}
+                                onClick={(event) => clickedRadioButton(event)}
+                            />
+                        </Tooltip>
                     </div>
                 </div>
                 <div className={'model-card-content-section'}>

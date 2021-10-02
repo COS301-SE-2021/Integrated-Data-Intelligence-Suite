@@ -11,16 +11,19 @@ import {
     isShowingDeletePopupState,
     isShowingAddTrainingDataPopupState,
     isShowingAddModelPopupState,
-    listOfDataModelsState
+    listOfDataModelsState,
+    isShowingSetDefaultModelPopupState, userSelectedDefaultModelState
 } from '../../assets/AtomStore/AtomStore';
 import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
 
 export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
-    const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
     const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
+    const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
+    const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
     const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
+    const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
 
     const deletePopupComponent =
         (
@@ -46,50 +49,117 @@ export default function ManageModelsPage() {
             </SimplePopup>
         );
 
-    const addTrainingDataPopupComponent = (
-        <SimplePopup
-            closePopup={() => toggleAddTrainingDataPopup(false)}
-            popupTitle={'Upload Training Data'}
-        >
-            <div>
-                <div>xxxx</div>
-            </div>
-        </SimplePopup>
-    );
+    const addTrainingDataPopupComponent =
+        (
+            <SimplePopup
+                closePopup={() => toggleAddTrainingDataPopup(false)}
+                popupTitle={'Upload Training Data'}
+            >
+                <div>
+                    <div>xxxx</div>
+                </div>
+            </SimplePopup>
+        );
 
-    const addModelPopupComponent = (
-        <SimplePopup
-            closePopup={() => toggleAddModelPopup(false)}
-            popupTitle={'Add Data Model'}
-        >
-            <div>
-                <div>xxxx</div>
-            </div>
-        </SimplePopup>
-    );
+    const addModelPopupComponent =
+        (
+            <SimplePopup
+                closePopup={() => toggleAddModelPopup(false)}
+                popupTitle={'Add Data Model'}
+            >
+                <div>
+                    <div>xxxx</div>
+                </div>
+            </SimplePopup>
+        );
 
-    const arrayOfModels = useRecoilValue(listOfDataModelsState);
+    const setDefaultModelPopupComponent =
+        (
+            <SimplePopup
+                closePopup={() => toggleSetDefaultModelPopup(false)}
+                popupTitle={'Set Default'}
+            >
+                <div id={'delete-model-popup-msg'}>
+                    Do you want to make this model your default data model?
+                </div>
+                <div id={'delete-model-popup-btn-container'}>
+                    <button
+                        id={'delete-model-popup-btn-yes'}
+                        onClick={() => setNewDefaultDataModel('m2')}
+                    >
+                        Yes
+                    </button>
+                    <button
+                        id={'delete-model-popup-btn-no'}
+                        onClick={() => toggleSetDefaultModelPopup(false)}
+                    >
+                        No
+                    </button>
+                </div>
+
+            </SimplePopup>
+        );
+
+    const setNewDefaultDataModel = () => {
+        /*
+        - make api request to backed with new default model ID
+        - Backend Returns Updated List of models
+        */
+
+        console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
+        let list_of_radio_btn = document.getElementsByName('default');
+        for (let i = 0; i < list_of_radio_btn.length; i++) {
+            if (list_of_radio_btn[i].checked) {
+                console.log(`Chosen Radio Button: ${list_of_radio_btn[i].value}`);
+            }
+        }
+
+        //update List of data models with values from backend
+        updateListOfDataModels(
+            [{
+                modelID: 'm1',
+                modelName: 'Itachi',
+                isModelDefault: true
+            }, {
+                modelID: 'm2',
+                modelName: 'Sasuke',
+                isModelDefault: false
+            }, {
+                modelID: 'm3',
+                modelName: 'Zabuza',
+                isModelDefault: false
+            }, {
+                modelID: 'm4',
+                modelName: 'Shisui',
+                isModelDefault: false
+            }]
+        );
+
+        toggleSetDefaultModelPopup(false);
+    };
 
     return (
-
         <>
             <Switch>
                 <Route exact path="/manageModels">
                     {
-                        useRecoilValue(isShowingDeletePopupState)
+                        isShowingDeletePopup
                             ? deletePopupComponent
                             : null
                     }
-
                     {
-                        useRecoilValue(isShowingAddTrainingDataPopupState)
+                        isShowingAddTrainingDataPopup
                             ? addTrainingDataPopupComponent
                             : null
                     }
-
                     {
-                        useRecoilValue(isShowingAddModelPopupState)
+                        isShowingAddModelPopup
                             ? addModelPopupComponent
+                            : null
+                    }
+                    {
+                        isShowingSetDefaultModelPopup
+                            ? setDefaultModelPopupComponent
                             : null
                     }
                     <div id={'manage-models-page-container'}>
@@ -122,7 +192,7 @@ export default function ManageModelsPage() {
 
                                 <div id={'manage-models-card-row'}>
                                     {
-                                        arrayOfModels.map((obj) => (
+                                        listOfDataModels.map((obj) => (
                                             <ModelCard
                                                 modelID={obj.modelID}
                                                 modelName={obj.modelName}

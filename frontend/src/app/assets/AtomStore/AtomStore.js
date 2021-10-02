@@ -15,6 +15,11 @@ export const isShowingAddModelPopupState = atom({
     default: false
 });
 
+export const isShowingSetDefaultModelPopupState = atom({
+    key: 'isShowingSetDefaultPopup',
+    default: false
+});
+
 export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
     default:
@@ -37,5 +42,9 @@ export const listOfDataModelsState = atom({
         }]
 });
 
+export const userSelectedDefaultModelState = atom({
+    key: 'userSelectedDefaultModel',
+    default: ''
+});
 
 
