@@ -176,6 +176,7 @@ public class GatewayServiceController {
             return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
+        if (analyseResponse.getAnomalyList() == null) System.out.println("Oi its empty");
 
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
