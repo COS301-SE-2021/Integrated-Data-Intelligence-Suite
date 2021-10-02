@@ -274,7 +274,7 @@ public class ParseServiceImpl {
                         //Set the relevant attributes of the ParsedData type
                         //Parsing date with required formats to test if the date is valid
                         dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
-                        dataEntry.setLikes(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
+                        dataEntry.setInteractions(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
                         dataEntry.setLocation(line[columns.indexOf(request.getLocCol())]);
                         dataEntry.setTextMessage(line[columns.indexOf(request.getTextCol())]);
                         dataEntry.setIsTrending(Integer.parseInt(line[columns.indexOf(request.getIsTrendingCol())]));

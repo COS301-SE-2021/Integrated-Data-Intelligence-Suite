@@ -1,4 +1,4 @@
-package com.Parse_Service.Parse_Service.dataclass;
+package com.Gateway_Service.Gateway_Service.dataclass.parse;
 
 public class ParsedTrainingData {
 
