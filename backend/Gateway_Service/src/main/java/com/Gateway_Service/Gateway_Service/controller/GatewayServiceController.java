@@ -255,7 +255,13 @@ public class GatewayServiceController {
      */
     @PostMapping("/analyzeUpload")
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileAnalyzeUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam("modelID") String modelID) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileAnalyzeUpload(@RequestParam("file") MultipartFile file,
+                                                                         @RequestParam("c1") String col1,
+                                                                         @RequestParam("c2") String col2,
+                                                                         @RequestParam("c3") String col3,
+                                                                         @RequestParam("c4") String col4,
+                                                                         @RequestParam("modelID") String modelID)
+    {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -307,7 +313,14 @@ public class GatewayServiceController {
 
     @PostMapping(value = "/trainUpload")
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileTrainUpload(@RequestParam("file") MultipartFile file, @RequestParam("c1") String col1, @RequestParam("c2") String col2, @RequestParam("c3") String col3, @RequestParam("c4") String col4, @RequestParam("c5") String col5, @RequestParam("modelName") String modelname) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileTrainUpload(@RequestParam("file") MultipartFile file,
+                                                                       @RequestParam("c1") String col1,
+                                                                       @RequestParam("c2") String col2,
+                                                                       @RequestParam("c3") String col3,
+                                                                       @RequestParam("c4") String col4,
+                                                                       @RequestParam("c5") String col5,
+                                                                       @RequestParam("modelName") String modelname)
+    {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -658,6 +671,9 @@ public class GatewayServiceController {
         reportData.add(reportGraph);
         outputData.add(reportData);*/
 
+        for(int i =0; i < visualizeResponse.outputData.size(); i++)
+            outputData.add(visualizeResponse.outputData.get(i));
+
 
         InformationGraph reportGraph = new InformationGraph();
         //reportGraph.reportId = reportResponse.getId().toString();
@@ -668,9 +684,6 @@ public class GatewayServiceController {
 
         System.out.println("***********************REPORT HAS BEEN DONE*************************");
 
-
-        for(int i =0; i < visualizeResponse.outputData.size(); i++)
-            outputData.add(visualizeResponse.outputData.get(i));
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
