@@ -363,8 +363,22 @@ public class GatewayServiceController {
              */
 
 
-            TrainUserModelRequest userReport = new TrainUserModelRequest(modelname,trainingData);
-            return this.trainUserModel(userReport);
+            /****************Analyse****************/
+
+            TrainUserModelRequest analyseRequest = new TrainUserModelRequest(modelname,trainingData);
+            ResponseEntity<ArrayList<ArrayList<Graph>>> output =  this.trainUserModel(analyseRequest);
+
+            /****************User****************/
+
+            ArrayList<ArrayList<Graph>> graphArray =  output.getBody();
+
+            TrainResponseGraph trainGraph = (TrainResponseGraph) graphArray.get(0).get(0);
+            TrainUserModelResponse trainResponse = trainGraph.trainResponse;
+
+            ModelRequest modelRequest = new ModelRequest( "",trainResponse.getModelId()); //Todo
+            ModelResponse userResponse = userClient.addModelForUser(modelRequest);
+
+            return output;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -388,7 +402,7 @@ public class GatewayServiceController {
         GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest(UUID.fromString(request.getReportID()));
         GetReportDataByIdResponse output = reportClient.getReportDataById(repRequest);
 
-        ReportResponse response = userClient.addReportForUser(request);
+        ReportResponse userResponse = userClient.addReportForUser(request);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
