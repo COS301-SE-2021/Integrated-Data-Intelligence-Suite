@@ -58,7 +58,6 @@
     grid-template-columns: 100%;
     justify-items: center;
     align-items: center;
-    padding: 0;
 }
 
 #delete-model-popup-msg {
@@ -141,7 +140,7 @@
 
 #share-model-id-icon {
     background: #bed4ff;
-    color: #0086b3;
+    color: var(--dodger-blue);
     font-weight: 500;
     font-size: 20px;
     padding: 3px;
@@ -182,7 +181,7 @@
 
 #share-model-copy-btn {
     background: #bed4ff;
-    color: #0086b3;
+    color: var(--dodger-blue);
     overflow-y: hidden;
     align-content: center;
     align-items: center;
