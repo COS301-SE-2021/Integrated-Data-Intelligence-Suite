@@ -848,7 +848,7 @@ public class TrainServiceImpl {
                             new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                             new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
             itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
@@ -924,7 +924,7 @@ public class TrainServiceImpl {
             }
             else{
                 Row trainRow = RowFactory.create(
-                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()), //trend
                         namedEntities.get(i).get(0).toString(), //name
                         namedEntities.get(i).get(1).toString(), //type
                         Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
@@ -1263,7 +1263,7 @@ public class TrainServiceImpl {
                             new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                             new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
             itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
@@ -1328,7 +1328,7 @@ public class TrainServiceImpl {
             }
             else{
                 Row trainRow = RowFactory.create(
-                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()), //trend
                         namedEntities.get(i).get(0).toString(), //name
                         namedEntities.get(i).get(1).toString(), //type
                         Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
