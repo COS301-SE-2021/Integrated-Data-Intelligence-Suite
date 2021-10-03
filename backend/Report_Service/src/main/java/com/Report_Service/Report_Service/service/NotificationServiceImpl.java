@@ -35,17 +35,22 @@ public class NotificationServiceImpl {
         if(request == null) {
             throw new InvalidRequestException("The request is null");
         }
-        //System.out.println("Sending notification to user.");
+        System.out.println("Sending email to " + request.getTo());
+        System.out.println("Sending email from " + request.getFrom());
+
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.addTo(request.getTo());
         helper.setFrom(request.getFrom());
         helper.setSubject(request.getSubject());
-        helper.addAttachment("report.pdf", new ByteArrayResource(request.getData()));
+        helper.addAttachment("report", new ByteArrayResource(request.getData()));
 
         try {
+            System.out.println("Sending email...");
             emailSender.send(message);
-        } catch (MailException e) {
+            System.out.println("Sent email");
+        } catch (Exception e) {
+            e.printStackTrace();
             return CompletableFuture.completedFuture(new SendEmailReportResponse(false, "An error has occurred while sending an the activation code to user."));
         }
 
