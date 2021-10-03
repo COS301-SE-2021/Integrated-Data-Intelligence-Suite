@@ -17,52 +17,48 @@ export default class UploadDataPage extends React.Component {
     };
 
     handleOnClick() {
-        //1. getting value of data type selected
-        let array_of_radio_btn = document.getElementsByName('upload-type-radio-btn');
-        let data_type_selected;
-        for (let i = 0; i < array_of_radio_btn.length; i++) {
-            if (array_of_radio_btn[i].checked) {
-                data_type_selected = array_of_radio_btn[i].value;
-            }
-        }
-        console.log(`Data-type-selected: ${data_type_selected}`);
+        //getting content inside the 4 edit boxes
+        let text_message = document.getElementById('upload-input-text-msg').value;
+        let location = document.getElementById('upload-input-location').value;
+        let likes = document.getElementById('upload-input-likes').value;
+        let date = document.getElementById('upload-input-date').value;
 
-        //2. getting content inside the 4 edit boxes
-        let array_4_edit_boxes = document.getElementsByName('schema-edit-box');
-        let array_4_edit_box_values = [];
-        for (let i = 0; i < array_4_edit_boxes.length; i++) {
-            array_4_edit_box_values[i] = array_4_edit_boxes[i].value;
-        }
-        console.log(`array-4-edit-boxes-values: ${array_4_edit_box_values}`);
-
-        //3. geting file array
+        // getting file array
         console.log(`file array obj double check: ${this.state.fileArray}`);
 
-        //4. Make Post request to backend
+        // Make Post request to backend
+        /*
+           -  API_REQUEST_OBJ: new id model to add
+           -  API_RESPONSE_OBJ: updated list of data models
+        */
+        let url = '/analyzeUpload';
+        let API_REQUEST_BODY = {
+            file: this.state.fileArray,
+            c1: text_message,
+            c2: location,
+            c3: likes,
+            c4: date,
+            c5: 'modelID'
+        };
+        console.log(API_REQUEST_BODY);
 
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(obj),
-        // };
-        //
-        // const url = `/main/ENTER_ENDPOINT_HERE`;
-        // console.log(requestOptions)
-        //
-        // fetch(`http://localhost:9000${url}`, requestOptions)
-        //     .then((response) => response.json())
-        //     .then((json) => {
-        //         this.setState((prevState) => ({ showLoadingIcon: false }));
-        //         // remove or stop the loading icon
-        //         this.handleTextChange(json);
-        //     })
-        //     .catch((err) => {
-        //         this.setState((prevState) => ({ showLoadingIcon: false }));
-        //         console.log('error while retrieving data from backend');
-        //         console.log(err.message);
-        //     });
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(API_REQUEST_BODY),
+        };
 
-
+        let API_RESPONSE_OBJ = null;
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                this.handleTextChange(API_RESPONSE_OBJ);
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+            });
     }
 
     setFileArrayObj(file_array_obj) {
@@ -83,9 +79,7 @@ export default class UploadDataPage extends React.Component {
                     <UploadSchemaForm/>
                     <button
                         id={'analyse-upload-btn'}
-                        onClick={() =>
-                            this.handleOnClick()
-                        }
+                        onClick={() => this.handleOnClick()}
                     >
                         Analyze
                     </button>
