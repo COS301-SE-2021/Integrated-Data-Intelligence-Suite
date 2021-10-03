@@ -187,12 +187,10 @@
 }
 
 #share-model-id-value {
-    font-size: 20px;
     font-weight: 500;
     padding: 3px;
     border: 1px solid slategrey;
-    border-left: 0;
-    width: 80%;
+    border-left-width: 0;
     overflow-x: auto;
     min-height: 32px;
     max-height: 32px;
@@ -200,6 +198,8 @@
     align-content: center;
     align-items: center;
     display: grid;
+    font-size: 14px;
+
 }
 
 #share-model-copy-icon {
