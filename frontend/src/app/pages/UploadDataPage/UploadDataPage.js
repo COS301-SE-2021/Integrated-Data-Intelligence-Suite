@@ -28,7 +28,7 @@ export default class UploadDataPage extends React.Component {
 
         // Make Post request to backend
         /*
-           -  API_REQUEST_OBJ: 
+           -  API_REQUEST_OBJ: input box values, file array
            -  API_RESPONSE_OBJ: same as search
         */
         let url = '/analyzeUpload';
