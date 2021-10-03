@@ -48,7 +48,7 @@ export default class UploadDataPage extends React.Component {
         formData.append('c2', API_REQUEST_BODY.c2);
         formData.append('c3', API_REQUEST_BODY.c3);
         formData.append('c4', API_REQUEST_BODY.c4);
-        formData.append('c5', API_REQUEST_BODY.c5);
+        formData.append('modelID', API_REQUEST_BODY.modelID);
 
         let API_REQUEST_OBJ = {
             method: 'POST',
