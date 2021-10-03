@@ -108,18 +108,50 @@
     width: 100%;
 }
 
+.add-model-container {
+    display: grid;
+    row-gap: 25px;
+}
+
 .input-container {
     display: flex;
 }
 
 .input-container .label {
-    padding: 10px;
+    background: #bed4ff;
+    color: var(--dodger-blue);
+    font-weight: 500;
+    font-size: 20px;
+    padding: 3px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: 1px solid slategrey;
+    min-height: 32px;
+    max-height: 32px;
+    align-content: center;
+    align-items: center;
+    display: grid;
 }
 
 .input-container input {
-    width: calc(100% - 30px);
-    border: none;
-    background: var(--light-gray);
+    /*width: calc(100% - 30px);*/
+    /*border: none;*/
+    /*background: var(--light-gray);*/
+    font-size: 20px;
+    font-weight: 500;
+    padding: 3px;
+    border: 1px solid slategrey;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 0;
+    width: 80%;
+    overflow-x: auto;
+    min-height: 32px;
+    max-height: 32px;
+    overflow-y: hidden;
+    align-content: center;
+    align-items: center;
+    display: grid;
 }
 
 #upload-training-data-form {
@@ -152,7 +184,6 @@
     align-content: center;
     align-items: center;
     display: grid;
-
 }
 
 #share-model-id-value {
@@ -169,7 +200,6 @@
     align-content: center;
     align-items: center;
     display: grid;
-
 }
 
 #share-model-copy-icon {
