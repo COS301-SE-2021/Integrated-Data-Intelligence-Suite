@@ -95,6 +95,8 @@
     align-items: center;
     color: green;
     font-weight: 500;
+    max-width: 360px;
+
 }
 
 .file-preview-csv-icon {

@@ -22,9 +22,8 @@
     /*top right bottom left */
     /*padding: 15px 15px 15px 15px;*/
     border-radius: 5px;
-    max-height: 600px;
+    max-height: 700px;
     overflow-y: hidden;
-
 }
 
 .popup-title-bar {
@@ -41,7 +40,7 @@
     grid-row-start: 2;
     grid-row-end: 3;
     overflow-y: scroll;
-    max-height: 500px;
+    max-height: 600px;
     padding: 25px;
 }
 
@@ -49,6 +48,7 @@
 *Customizing The Scrollbar
 *
  */
+
 .popup-body::-webkit-scrollbar {
     width: 7px;
     background-color: white;
@@ -57,7 +57,6 @@
 .popup-body::-webkit-scrollbar-track {
     border-radius: 10px;
     color: red;
-
 }
 
 .popup-body::-webkit-scrollbar-thumb {
@@ -68,7 +67,6 @@
 .popup-body::-webkit-scrollbar-thumb:active {
     background: var(--dodger-blue);
 }
-
 
 .popup-close-btn {
     border-radius: 50%;
