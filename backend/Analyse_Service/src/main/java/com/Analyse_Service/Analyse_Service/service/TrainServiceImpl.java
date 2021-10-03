@@ -99,19 +99,19 @@ public class TrainServiceImpl {
         if(request.getDataList().size() >0){
             ParsedTrainingData testParsedData = request.getDataList().get(0);
 
-            if(testParsedData.getTextMessage() != null) {
+            if(testParsedData.getTextMessage() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Text field null");
             }
-            if(testParsedData.getLocation() != null) {
+            if(testParsedData.getLocation() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Location field null");
             }
-            if(testParsedData.getDate() != null) {
+            if(testParsedData.getDate() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Date field null");
             }
-            if(testParsedData.getInteractions() != null) {
+            if(testParsedData.getInteractions() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Interactions field null");
             }
-            if(testParsedData.getIsTrending() != null) {
+            if(testParsedData.getIsTrending() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Trend field null");
             }
         }
@@ -736,7 +736,7 @@ public class TrainServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        //sparkNlpProperties.stop();
+        sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -1151,7 +1151,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
         System.out.println("trends done");
-        //sparkTrends.stop();
+        sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results, trainedModel);
     }
@@ -1518,7 +1518,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-         //sparkTrends.stop();
+         sparkTrends.stop();
          ArrayList<ArrayList> results = new ArrayList<>();
          return new TrainFindTrendsDTResponse(results, trainedModel);
     }
@@ -1852,7 +1852,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkTrends.stop();
+        sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         return new TrainFindTrendsArticlesResponse(results);
@@ -1890,7 +1890,7 @@ public class TrainServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        //sparkPredictions.stop();
+        sparkPredictions.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -2208,7 +2208,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkAnomalies.stop();
+        sparkAnomalies.stop();
 
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results, trainedModel);
