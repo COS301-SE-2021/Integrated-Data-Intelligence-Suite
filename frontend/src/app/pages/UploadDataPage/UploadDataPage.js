@@ -28,8 +28,8 @@ export default class UploadDataPage extends React.Component {
 
         // Make Post request to backend
         /*
-           -  API_REQUEST_OBJ: new id model to add
-           -  API_RESPONSE_OBJ: updated list of data models
+           -  API_REQUEST_OBJ: 
+           -  API_RESPONSE_OBJ: same as search
         */
         let url = '/analyzeUpload';
         let API_REQUEST_BODY = {
