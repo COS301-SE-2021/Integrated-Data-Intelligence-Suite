@@ -23,7 +23,6 @@ export default function UploadDropZone(props) {
         // console.log(`[Dropzone] File Array Obj: ${JSON.stringify(fileArrayObj[0].name)}`);
         // console.log(`[Dropzone] File Array Obj.size: ${fileArrayObj[0].size}`);
         // console.log(`[Dropzone] File Array Obj.name: ${fileArrayObj[0].name}`);
-        console.log(props.isAnalyzeCSVPopupShowing);
         if (isShowingAddTrainingDataPopup) {
             setTrainingData(fileArrayObj);
             // console.log(`[Dropzone] Uploaded Training Set: ${JSON.stringify(uploadedTrainingSet)}`);

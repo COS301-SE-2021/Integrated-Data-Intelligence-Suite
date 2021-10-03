@@ -24,6 +24,99 @@ import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
 import { Tooltip } from '@mui/material';
 
+const mock_add_obj = [
+    {
+        modelID: 'm1',
+        modelName: 'Itachi',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm2',
+        modelName: 'Sasuke',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm3',
+        modelName: 'Zabuza',
+        isModelDefault: true
+    },
+    {
+        modelID: 'm4',
+        modelName: 'Shisui',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm5',
+        modelName: 'Naruto'
+    }
+];
+const mock_delete_obj = [
+    {
+        modelID: 'm1',
+        modelName: 'Itachi',
+        isModelDefault: true
+    },
+    {
+        modelID: 'm2',
+        modelName: 'Sasuke',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm4',
+        modelName: 'Shisui',
+        isModelDefault: false
+    }
+];
+const mock_set_default_response_obj = [
+    {
+        modelID: 'm1',
+        modelName: 'Itachi',
+        isModelDefault: true
+    },
+    {
+        modelID: 'm2',
+        modelName: 'Sasuke',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm3',
+        modelName: 'Zabuza',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm4',
+        modelName: 'Shisui',
+        isModelDefault: false
+    }
+];
+const mock_upload_training_data_response_obj = [
+    {
+        modelID: 'm1',
+        modelName: 'Itachi',
+        isModelDefault: true
+    },
+    {
+        modelID: 'm2',
+        modelName: 'Sasuke',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm3',
+        modelName: 'Zabuza',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm4',
+        modelName: 'Shisui',
+        isModelDefault: false
+    },
+    {
+        modelID: 'm5',
+        modelName: 'Hinata',
+        isModelDefault: false
+    }
+];
+
 export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
@@ -58,36 +151,13 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                // updateListOfDataModels(API_RESPONSE_OBJ);
-
+                updateListOfDataModels(API_RESPONSE_OBJ);
+                // updateListOfDataModels(mock_add_obj);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
-
-        //update data model with data model from backend
-        updateListOfDataModels([{
-            modelID: 'm1',
-            modelName: 'Itachi',
-            isModelDefault: false
-        }, {
-            modelID: 'm2',
-            modelName: 'Sasuke',
-            isModelDefault: false
-        }, {
-            modelID: 'm3',
-            modelName: 'Zabuza',
-            isModelDefault: true
-        }, {
-            modelID: 'm4',
-            modelName: 'Shisui',
-            isModelDefault: false
-        }, {
-            modelID: 'm5',
-            modelName: 'Naruto'
-        }
-        ]);
 
         //close popup
         toggleAddModelPopup(true);
@@ -114,29 +184,13 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                // updateListOfDataModels(API_RESPONSE_OBJ);
+                updateListOfDataModels(API_RESPONSE_OBJ);
+                // updateListOfDataModels(mock_delete_obj);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
-
-        //update List of data models with values from backend
-        updateListOfDataModels(
-            [{
-                modelID: 'm1',
-                modelName: 'Itachi',
-                isModelDefault: true
-            }, {
-                modelID: 'm2',
-                modelName: 'Sasuke',
-                isModelDefault: false
-            }, {
-                modelID: 'm4',
-                modelName: 'Shisui',
-                isModelDefault: false
-            }]
-        );
 
         //Close the popup
         toggleDeletePopup(false);
@@ -162,33 +216,13 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                // updateListOfDataModels(API_RESPONSE_OBJ);
+                updateListOfDataModels(API_RESPONSE_OBJ);
+                // updateListOfDataModels(mock_set_default_response_obj);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
-
-        //update List of data models with values from backend
-        updateListOfDataModels(
-            [{
-                modelID: 'm1',
-                modelName: 'Itachi',
-                isModelDefault: true
-            }, {
-                modelID: 'm2',
-                modelName: 'Sasuke',
-                isModelDefault: false
-            }, {
-                modelID: 'm3',
-                modelName: 'Zabuza',
-                isModelDefault: false
-            }, {
-                modelID: 'm4',
-                modelName: 'Shisui',
-                isModelDefault: false
-            }]
-        );
 
         //Close the popup
         toggleSetDefaultModelPopup(false);
@@ -223,7 +257,6 @@ export default function ManageModelsPage() {
 
         const formData = new FormData();
         formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), API_REQUEST_BODY_TRAIN.file[0].name);
-        // formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), 'trainingSet.csv');
         formData.append('c1', API_REQUEST_BODY_TRAIN.c1);
         formData.append('c2', API_REQUEST_BODY_TRAIN.c2);
         formData.append('c3', API_REQUEST_BODY_TRAIN.c3);
@@ -241,37 +274,13 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                // this.handleTextChange(API_RESPONSE_OBJ);
+                updateListOfDataModels(API_RESPONSE_OBJ);
+                // updateListOfDataModels(mock_upload_training_data_response_obj);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
-
-        //Update List of data Models
-        updateListOfDataModels(
-            [{
-                modelID: 'm1',
-                modelName: 'Itachi',
-                isModelDefault: true
-            }, {
-                modelID: 'm2',
-                modelName: 'Sasuke',
-                isModelDefault: false
-            }, {
-                modelID: 'm3',
-                modelName: 'Zabuza',
-                isModelDefault: false
-            }, {
-                modelID: 'm4',
-                modelName: 'Shisui',
-                isModelDefault: false
-            }, {
-                modelID: 'm5',
-                modelName: 'Hinata',
-                isModelDefault: false
-            }]
-        );
     };
 
     const deletePopupComponent = (
