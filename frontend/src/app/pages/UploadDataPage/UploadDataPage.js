@@ -54,7 +54,7 @@ export default function UploadDataPage(props) {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                this.handleTextChange(API_RESPONSE_OBJ);
+                props.handleTextChange(API_RESPONSE_OBJ);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
