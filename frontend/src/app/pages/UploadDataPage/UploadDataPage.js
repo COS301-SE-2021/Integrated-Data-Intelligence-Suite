@@ -42,10 +42,18 @@ export default class UploadDataPage extends React.Component {
         };
         console.log(API_REQUEST_BODY);
 
+        const formData = new FormData();
+        formData.append('file', API_REQUEST_BODY.file);
+        formData.append('c1', API_REQUEST_BODY.c1);
+        formData.append('c2', API_REQUEST_BODY.c2);
+        formData.append('c3', API_REQUEST_BODY.c3);
+        formData.append('c4', API_REQUEST_BODY.c4);
+        formData.append('c5', API_REQUEST_BODY.c5);
+
         let API_REQUEST_OBJ = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(API_REQUEST_BODY),
+            headers: '',
+            body: formData,
         };
 
         let API_RESPONSE_OBJ = null;
