@@ -138,8 +138,8 @@ const ReportsPage = () => {
             }).catch((err) =>{})
         //setReports((prev)=>prev.filter((item)=> item.id !== currentPdf));
         //message.success('Report Deleted');
-        history.push("/reports")
         //closeDeletePopup();
+        setReports((prev)=>prev.filter((item)=> item.id !== requestObj.reportID));
     };
 
     const handleSearch = (value) => {
