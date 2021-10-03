@@ -4,12 +4,25 @@ import './UploadDropZone.css';
 import { useDropzone } from 'react-dropzone';
 import { FaFileCsv, RiFile3Fill } from 'react-icons/all';
 import { Divider } from '@mui/material';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+    isShowingAddTrainingDataPopupState,
+    uploadedTrainingSetFileState
+} from '../../assets/AtomStore/AtomStore';
 
 export default function UploadDropZone(props) {
     let isUploaded = false;
+    const setTrainingData = useSetRecoilState(uploadedTrainingSetFileState);
+    const isShowingAddTrainingDataPopup = useRecoilValue(isShowingAddTrainingDataPopupState);
 
     const pushFileArrayUp = (fileArrayObj) => {
-        props.setFileArray(fileArrayObj);
+        // props.setFileArray(fileArrayObj);
+
+        if (isShowingAddTrainingDataPopup) {
+            setTrainingData(fileArrayObj);
+            console.log(JSON.stringify(fileArrayObj));
+        }
+
     };
 
     const {
@@ -24,7 +37,7 @@ export default function UploadDropZone(props) {
         //update file preview on drop
         onDrop: () => {
             //pushing the file array up to parent component
-            pushFileArrayUp(acceptedFiles);
+            pushFileArrayUp(acceptedFiles[0]);
             isUploaded = true;
         }
     });
@@ -54,11 +67,21 @@ export default function UploadDropZone(props) {
                         id={'dropzone-content-div'}
                     >
                         <RiFile3Fill id={'file-icon'}/>
-                        <p id={'upload-instr-p'}>
+                        <p
+                            id={'upload-instr-p'}
+                        >
                             Drag and drop your files here to start uploading.
                         </p>
-                        <Divider style={{ width: '50%' }}>OR</Divider>
-                        <button type="button" onClick={open} id={'browse-files-btn'}>
+                        <Divider
+                            style={{ width: '50%' }}
+                        >
+                            OR
+                        </Divider>
+                        <button
+                            type="button"
+                            onClick={open}
+                            id={'browse-files-btn'}
+                        >
                             Browse Files
                         </button>
                     </div>
