@@ -17,17 +17,17 @@ export const isShowingAddModelPopupState = atom({
 
 export const isShowingSetDefaultModelPopupState = atom({
     key: 'isShowingSetDefaultPopup',
-    default: false
+    default: false,
 });
 
 export const isShowingUploadCSVPopupState = atom({
     key: 'isShowingUploadCSVPopupState',
-    default: false
+    default: false,
 });
 
 export const isShowingShareModelPopupState = atom({
     key: 'isShowingShareModelPopup',
-    default: false
+    default: false,
 });
 
 export const listOfDataModelsState = atom({
@@ -58,28 +58,25 @@ export const userState = atom({
 });
 export const userSelectedDefaultModelState = atom({
     key: 'userSelectedDefaultModel',
-    default: ''
+    default: '',
 });
 
 export const userSelectedDeleteModelState = atom({
     key: 'userSelectedDeleteModel',
-    default: ''
+    default: '',
 });
 
 export const userSelectedShareModelState = atom({
     key: 'userSelectedShareModel',
-    default: ''
+    default: '',
 });
 
 export const uploadedTrainingSetFileState = atom({
     key: 'uploadedTrainingSetFile',
-    default: null
+    default: null,
 });
 
 export const uploadedCSVFileState = atom({
     key: 'uploadedCSVFileState',
-    default: null
+    default: null,
 });
-
-
-
