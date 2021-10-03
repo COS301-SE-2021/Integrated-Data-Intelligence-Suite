@@ -118,7 +118,7 @@ public class ReportServiceImpl {
         }
 
 
-        return new GetReportDataByIdResponse(report.get().getPdf(),report.get().getName(),report.get().getDate());
+        return new GetReportDataByIdResponse(report.get().getPdf(),report.get().getName(),report.get().getDate(),request.getReportId());
     }
 
     public DeleteReportDataByIdResponse deleteReportDataById(DeleteReportDataByIdRequest request) throws ReporterException {
