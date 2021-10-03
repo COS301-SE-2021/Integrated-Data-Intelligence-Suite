@@ -395,7 +395,11 @@ export default function ManageModelsPage() {
         >
             <div id={'share-model-container'}>
                 <div id={'share-model-id-icon'}>ID</div>
-                <div id={'share-model-id-value'}>{userSelectedShareModel}</div>
+                <div
+                    id={'share-model-id-value'}
+                >
+                    {userSelectedShareModel}
+                </div>
                 <Tooltip
                     title={'Copy ID'}
                 >
