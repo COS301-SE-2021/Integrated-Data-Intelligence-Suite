@@ -24,7 +24,7 @@ const getSource = (id, structure) => {
                 })
                 .then((res) => {
                     if (!res.ok) {
-                        throw Error(res.error());
+                        throw Error(res.error);
                     }
                     return res.json();
                 })
@@ -182,7 +182,7 @@ const AddDataSource = () => {
                 body: JSON.stringify(newSource),
             }).then((res) => {
             if (!res.ok) {
-                throw Error(res.error());
+                throw Error(res.error);
             }
             return res.json();
         })

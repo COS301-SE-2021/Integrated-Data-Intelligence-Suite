@@ -13,7 +13,7 @@ const useGet = (url) => {
       .then((res) => {
         if (!res.ok) {
           // console.log(res);
-          throw Error(res.error());
+          throw Error(res.error);
         }
         return res.json();
       })
