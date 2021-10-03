@@ -104,7 +104,7 @@ export default function ProfilePage(props) {
                         body: JSON.stringify(requestBody),
                     }).then((res) => {
                     if (!res.ok) {
-                        throw Error(res.error());
+                        throw Error(res.error);
                     }
                     return res.json();
                 })
@@ -159,7 +159,7 @@ export default function ProfilePage(props) {
                 fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/updateProfile`, requestOptions)
                     .then((res) => {
                         if (!res.ok) {
-                            throw Error(res.error());
+                            throw Error(res.error);
                         }
                         return res.json();
                     })

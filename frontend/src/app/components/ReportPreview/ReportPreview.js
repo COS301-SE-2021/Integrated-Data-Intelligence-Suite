@@ -21,7 +21,7 @@ class ReportPreview extends PureComponent {
                 })
                 .then((res) =>{
                     if (res.ok) {
-                        throw Error(res.error());
+                        throw Error(res.error);
                     }
                     return res.json();
                 })

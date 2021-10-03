@@ -5,6 +5,7 @@ import { BsSearch, VscFilePdf } from 'react-icons/all';
 import SideBar from '../../components/SideBar/SideBar';
 import ReportPreview from '../../components/ReportPreview/ReportPreview';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
+import {useHistory} from "react-router-dom";
 
 const colors = {
     red: '#FF120A',
@@ -71,7 +72,7 @@ const getBackendData = () =>{
             })
             .then((res) => {
                 if (!res.ok) {
-                    throw Error(res.error());
+                    throw Error(res.error);
                 }
                 return res.json();
             })
@@ -99,7 +100,7 @@ const ReportsPage = () => {
     const [reports, setReports] = useState(null);
     const [preview, setPreview] = useState(null);
     const [searchKey, setSearchKey] = useState('');
-
+    const history = useHistory();
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [currentPdf, setCurrentPdf] = useState(null);
     const [document, setDocument] = useState(null);
@@ -110,7 +111,7 @@ const ReportsPage = () => {
         const abortCont = new AbortController();
 
         const requestObj = {
-            reportID: currentPdf,
+            reportID: currentPdf.id,
             userID: user.id,
         };
 
@@ -123,21 +124,22 @@ const ReportsPage = () => {
             })
             .then((res)=>{
                 if (!res.ok) {
-                    throw Error(res.error());
+                    throw Error(res.error);
                 }
                 return res.json();
             })
             .then((dataObj) =>{
                 closeDeletePopup();
-                if (dataObj.delete) {
+                if (!dataObj.delete) {
                     message.success('successfully deleted');
                 } else {
                     message.error('could not delete report');
                 }
-            });
-        setReports((prev)=>prev.filter((item)=> item.id !== currentPdf));
-        message.success('Report Deleted');
-        closeDeletePopup();
+            }).catch((err) =>{})
+        //setReports((prev)=>prev.filter((item)=> item.id !== currentPdf));
+        //message.success('Report Deleted');
+        history.push("/reports")
+        //closeDeletePopup();
     };
 
     const handleSearch = (value) => {
