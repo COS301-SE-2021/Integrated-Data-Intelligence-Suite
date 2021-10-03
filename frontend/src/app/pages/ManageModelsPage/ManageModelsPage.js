@@ -222,7 +222,7 @@ export default function ManageModelsPage() {
         console.log(API_REQUEST_BODY_TRAIN);
 
         const formData = new FormData();
-        formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), API_REQUEST_BODY_TRAIN.file.name);
+        formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), API_REQUEST_BODY_TRAIN.file[0].name);
         // formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), 'trainingSet.csv');
         formData.append('c1', API_REQUEST_BODY_TRAIN.c1);
         formData.append('c2', API_REQUEST_BODY_TRAIN.c2);
