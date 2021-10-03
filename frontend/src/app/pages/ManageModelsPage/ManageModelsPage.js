@@ -210,28 +210,38 @@ export default function ManageModelsPage() {
           - API_REQUEST_BODY: ID of data model that has been deleted to backend
           - API_RESPONSE_OBJ: updated list of data models
         */
-        let url = '';
-        let API_REQUEST_BODY = {
-            uploadedTrainingSet: uploadedTrainingDataFileArrayObj,
-            modelName: model_name,
-            date: date,
-            interaction: interaction,
-            text: text,
-            location: location,
-            isTrending: isTrending
+        let url = '/trainUpload';
+        let API_REQUEST_BODY_TRAIN = {
+            file: uploadedTrainingDataFileArrayObj,
+            c1: text,
+            c2: location,
+            c3: interaction,
+            c4: date,
+            c5: isTrending,
+            modelName: model_name
         };
-        console.log(`uploading training data set: ${API_REQUEST_BODY.date}`);
-        let API_REQUEST_OBJ = {
+        console.log(API_REQUEST_BODY_TRAIN);
+
+        const formData = new FormData();
+        formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), 'trainingSet.csv');
+        formData.append('c1', API_REQUEST_BODY_TRAIN.c1);
+        formData.append('c2', API_REQUEST_BODY_TRAIN.c2);
+        formData.append('c3', API_REQUEST_BODY_TRAIN.c3);
+        formData.append('c4', API_REQUEST_BODY_TRAIN.c4);
+        formData.append('c5', API_REQUEST_BODY_TRAIN.c5);
+        formData.append('modelName', API_REQUEST_BODY_TRAIN.modelID);
+
+        const API_REQUEST_OBJ_TRAIN = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(API_REQUEST_BODY),
+            body: formData,
         };
+
         let API_RESPONSE_OBJ = null;
-        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ_TRAIN)
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                // updateListOfDataModels(API_RESPONSE_OBJ);
+                this.handleTextChange(API_RESPONSE_OBJ);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
