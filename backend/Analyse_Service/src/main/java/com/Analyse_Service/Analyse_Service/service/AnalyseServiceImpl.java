@@ -335,25 +335,48 @@ public class AnalyseServiceImpl {
         FindAnomaliesResponse findAnomaliesResponse;
 
         try {
-            FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, request.getModelId()); //TODO
-            findPatternResponse = this.findPattern(findPatternRequest);
-            System.out.println("*******************Ran findPattern******************");
+            if(request.getModelId().equals("Default") == false){
+                FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, request.getModelId()); //TODO
+                findPatternResponse = this.findPattern(findPatternRequest);
+                System.out.println("*******************Ran findPattern******************");
 
-            FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, request.getModelId());
-            findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
-            System.out.println("*******************Ran findRelationships******************");
+                FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, request.getModelId());
+                findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+                System.out.println("*******************Ran findRelationships******************");
 
-            GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
-            getPredictionResponse = this.getPredictions(getPredictionRequest);
-            System.out.println("*******************Ran findPrediction******************");
+                GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
+                getPredictionResponse = this.getPredictions(getPredictionRequest);
+                System.out.println("*******************Ran findPrediction******************");
 
-            FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
-            findTrendsResponse = this.findTrends(findTrendsRequest);
-            System.out.println("*******************Ran findTrends******************");
+                FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
+                findTrendsResponse = this.findTrends(findTrendsRequest);
+                System.out.println("*******************Ran findTrends******************");
 
-            FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
-            findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
-            System.out.println("*******************Ran findAnomalies******************");
+                FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
+                findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+                System.out.println("*******************Ran findAnomalies******************");
+            }
+            else{
+                FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, null); //TODO
+                findPatternResponse = this.findPattern(findPatternRequest);
+                System.out.println("*******************Ran findPattern******************");
+
+                FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, null);
+                findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+                System.out.println("*******************Ran findRelationships******************");
+
+                GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, null); //TODO
+                getPredictionResponse = this.getPredictions(getPredictionRequest);
+                System.out.println("*******************Ran findPrediction******************");
+
+                FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, null);
+                findTrendsResponse = this.findTrends(findTrendsRequest);
+                System.out.println("*******************Ran findTrends******************");
+
+                FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, null);
+                findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+                System.out.println("*******************Ran findAnomalies******************");
+            }
         } catch (IOException e) {
             throw new AnalysingModelException("Failed loading model file");
         }
