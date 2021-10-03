@@ -219,6 +219,9 @@ public class GatewayServiceController {
                 analyseResponse.getWordList());
         ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
 
+        GetReportDataByIdRequest reportRequest2 = new GetReportDataByIdRequest(reportResponse.getId());
+        GetReportDataByIdResponse reportResponse2 = reportClient.getReportDataById(reportRequest2);
+
 
 
         System.out.println("***********************REPORT HAS BEEN DONE*************************");
@@ -228,7 +231,8 @@ public class GatewayServiceController {
             outputData.add(visualizeResponse.outputData.get(i));
 
         InformationGraph reportGraph = new InformationGraph();
-        reportGraph.reportId = reportResponse.getId().toString();
+        //reportGraph.reportId = reportResponse.getId().toString();
+        reportGraph.report = reportResponse2;
         ArrayList<Graph> reportData = new ArrayList<>();
         reportData.add(reportGraph);
         outputData.add(reportData);
