@@ -29,9 +29,40 @@ export default function ManageModelsPage() {
     const [modelId, setModelId] = useState('');
 
     const handleAddModel = () => {
-        // TODO function call to backend to add model to current user's liat of models
-    };
+        console.log(`Model Id Entered in Add: ${modelId}`);
 
+        /*
+        - backend Request: new id model to add
+        - backend response: updated list of data models
+         */
+
+        //update data model with data model from backend
+        updateListOfDataModels([{
+            modelID: 'm1',
+            modelName: 'Itachi',
+            isModelDefault: false
+        }, {
+            modelID: 'm2',
+            modelName: 'Sasuke',
+            isModelDefault: false
+        }, {
+            modelID: 'm3',
+            modelName: 'Zabuza',
+            isModelDefault: true
+        }, {
+            modelID: 'm4',
+            modelName: 'Shisui',
+            isModelDefault: false
+        }, {
+            modelID: 'm5',
+            modelName: 'Naruto'
+        }
+        ]);
+
+        //close popup
+        toggleAddModelPopup(true);
+
+    };
     const deleteDataModel = () => {
         /*
         - Send: ID of data model that has been deleted to backend
@@ -59,95 +90,7 @@ export default function ManageModelsPage() {
 
         //Close the popup
         toggleDeletePopup(false);
-
     };
-
-    const deletePopupComponent =
-        (
-            <SimplePopup
-                closePopup={() => toggleDeletePopup(false)}
-                popupTitle={'Delete Model'}
-                popupID={'delete-model-popup'}
-            >
-                <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
-                <div id={'delete-model-popup-btn-container'}>
-                    <button
-                        id={'delete-model-popup-btn-yes'}
-                        onClick={() => deleteDataModel()}
-                    >
-                        Yes
-                    </button>
-                    <button
-                        id={'delete-model-popup-btn-no'}
-                        onClick={() => toggleDeletePopup(false)}
-                    >
-                        No
-                    </button>
-                </div>
-            </SimplePopup>
-        );
-
-    const addTrainingDataPopupComponent =
-        (
-            <SimplePopup
-                closePopup={() => toggleAddTrainingDataPopup(false)}
-                popupTitle={'Upload Training Data'}
-            >
-                <div>
-                    <div>xxxx</div>
-                </div>
-            </SimplePopup>
-        );
-
-    const setDefaultModelPopupComponent =
-        (
-            <SimplePopup
-                closePopup={() => toggleSetDefaultModelPopup(false)}
-                popupTitle={'Set Default'}
-            >
-                <div id={'delete-model-popup-msg'}>
-                    Do you want to make this model your default data model?
-                </div>
-                <div id={'delete-model-popup-btn-container'}>
-                    <button
-                        id={'delete-model-popup-btn-yes'}
-                        onClick={() => setNewDefaultDataModel()}
-                    >
-                        Yes
-                    </button>
-                    <button
-                        id={'delete-model-popup-btn-no'}
-                        onClick={() => toggleSetDefaultModelPopup(false)}
-                    >
-                        No
-                    </button>
-                </div>
-            </SimplePopup>
-        );
-
-    const addModelPopupComponent = (
-        <SimplePopup
-            closePopup={() => toggleAddModelPopup(false)}
-            popupTitle="Add Data Model"
-        >
-            <div className="add-model-container">
-                <div className="input-container">
-                    <div className="label">ID</div>
-                    <input
-                        type="text"
-                        id="modelIdInput"
-                        placeholder="model id"
-                        value={modelId}
-                        onChange={(event) => setModelId(event.currentTarget.value)}
-                    />
-                </div>
-                <div className="button-container">
-                    <button onClick={() => handleAddModel}>Add</button>
-                </div>
-            </div>
-        </SimplePopup>
-    );
-
     const setNewDefaultDataModel = () => {
         /*
         - make api request to backed with new default model ID
@@ -180,6 +123,93 @@ export default function ManageModelsPage() {
         //Close the popup
         toggleSetDefaultModelPopup(false);
     };
+
+    const deletePopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleDeletePopup(false)}
+            popupTitle={'Delete Model'}
+            popupID={'delete-model-popup'}
+        >
+            <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
+            <div id={'delete-model-popup-btn-container'}>
+                <button
+                    id={'delete-model-popup-btn-yes'}
+                    onClick={() => deleteDataModel()}
+                >
+                    Yes
+                </button>
+                <button
+                    id={'delete-model-popup-btn-no'}
+                    onClick={() => toggleDeletePopup(false)}
+                >
+                    No
+                </button>
+            </div>
+        </SimplePopup>
+    );
+
+    const addTrainingDataPopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleAddTrainingDataPopup(false)}
+            popupTitle={'Upload Training Data'}
+        >
+            <div>
+                <div>xxxx</div>
+            </div>
+        </SimplePopup>
+    );
+
+    const setDefaultModelPopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleSetDefaultModelPopup(false)}
+            popupTitle={'Set Default'}
+        >
+            <div id={'delete-model-popup-msg'}>
+                Do you want to make this model your default data model?
+            </div>
+            <div id={'delete-model-popup-btn-container'}>
+                <button
+                    id={'delete-model-popup-btn-yes'}
+                    onClick={() => setNewDefaultDataModel()}
+                >
+                    Yes
+                </button>
+                <button
+                    id={'delete-model-popup-btn-no'}
+                    onClick={() => toggleSetDefaultModelPopup(false)}
+                >
+                    No
+                </button>
+            </div>
+        </SimplePopup>
+    );
+
+    const addModelPopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleAddModelPopup(false)}
+            popupTitle="Add Data Model"
+        >
+            <div className="add-model-container">
+                <div className="input-container">
+                    <div className="label">ID</div>
+                    <input
+                        type="text"
+                        id="modelIdInput"
+                        placeholder="model id"
+                        value={modelId}
+                        onChange={(event) => setModelId(event.currentTarget.value)}
+                    />
+                </div>
+                <div className="button-container">
+                    <button
+                        onClick={() => handleAddModel()}
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
+        </SimplePopup>
+    );
 
     return (
         <>
