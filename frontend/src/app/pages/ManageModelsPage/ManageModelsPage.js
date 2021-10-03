@@ -207,9 +207,9 @@ export default function ManageModelsPage() {
         let isTrending = document.getElementById('input-training-isTrending').value;
 
         /*
-      - API_REQUEST_BODY: ID of data model that has been deleted to backend
-      - API_RESPONSE_OBJ: updated list of data models
-      */
+          - API_REQUEST_BODY: ID of data model that has been deleted to backend
+          - API_RESPONSE_OBJ: updated list of data models
+        */
         let url = '';
         let API_REQUEST_BODY = {
             uploadedTrainingSet: uploadedTrainingDataFileArrayObj,

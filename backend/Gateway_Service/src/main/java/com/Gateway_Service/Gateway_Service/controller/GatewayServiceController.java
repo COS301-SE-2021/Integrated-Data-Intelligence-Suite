@@ -649,8 +649,19 @@ public class GatewayServiceController {
                 analyseResponse.getWordList());
         ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
 
-        ErrorGraph reportGraph = new ErrorGraph();
+        GetReportDataByIdRequest reportRequest2 = new GetReportDataByIdRequest(reportResponse.getId());
+        GetReportDataByIdResponse reportResponse2 = reportClient.getReportDataById(reportRequest2);
+
+        /*ErrorGraph reportGraph = new ErrorGraph();
         reportGraph.Error = reportResponse.getId().toString();
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);*/
+
+
+        InformationGraph reportGraph = new InformationGraph();
+        //reportGraph.reportId = reportResponse.getId().toString();
+        reportGraph.report = reportResponse2;
         ArrayList<Graph> reportData = new ArrayList<>();
         reportData.add(reportGraph);
         outputData.add(reportData);

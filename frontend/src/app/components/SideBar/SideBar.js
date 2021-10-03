@@ -49,7 +49,6 @@ class SideBar extends React.Component {
             collapsed,
             active,
         } = this.state;
-        console.log('active comp ', active);
         return (
             <>
                 <Sider
