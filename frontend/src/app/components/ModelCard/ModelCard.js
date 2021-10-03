@@ -6,16 +6,24 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
     isShowingDeletePopupState,
-    isShowingSetDefaultModelPopupState, userSelectedDefaultModelState
+    isShowingSetDefaultModelPopupState,
+    userSelectedDefaultModelState,
+    userSelectedDeleteModelState
 } from '../../assets/AtomStore/AtomStore';
 
 export default function ModelCard(props) {
     const toggleDeletePopup = useSetRecoilState(isShowingDeletePopupState);
     const toggleSetDefaultPopup = useSetRecoilState(isShowingSetDefaultModelPopupState);
     const updateUserSelectedDefaultModel = useSetRecoilState(userSelectedDefaultModelState);
+    const updateUserSelectedDeleteModel = useSetRecoilState(userSelectedDeleteModelState);
     const clickedRadioButton = (e) => {
         updateUserSelectedDefaultModel(e.target.id);
         toggleSetDefaultPopup(true);
+    };
+
+    const clickedDeleteButton = (e) => {
+        updateUserSelectedDeleteModel(e.target.id);
+        toggleDeletePopup(true);
     };
 
     return (
@@ -35,7 +43,8 @@ export default function ModelCard(props) {
                         >
                             <button
                                 className={'model-card-delete-btn model-card-btn'}
-                                onClick={() => toggleDeletePopup(true)}
+                                onClick={(event) => clickedDeleteButton(event)}
+                                id={props.modelID}
                             >
                                 <MdDelete className={'model-card-delete-icon model-card-icon'}/>
                             </button>
@@ -47,7 +56,10 @@ export default function ModelCard(props) {
                             className={'simple-tooltip'}
                             placement="top"
                         >
-                            <button className={'model-card-share-btn model-card-btn'}>
+                            <button
+                                className={'model-card-share-btn model-card-btn'}
+                                id={props.modelID}
+                            >
                                 <AiOutlineShareAlt
                                     className={'model-card-share-icon model-card-icon'}
                                 />

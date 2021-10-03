@@ -12,7 +12,8 @@ import {
     isShowingAddTrainingDataPopupState,
     isShowingAddModelPopupState,
     listOfDataModelsState,
-    isShowingSetDefaultModelPopupState, userSelectedDefaultModelState
+    isShowingSetDefaultModelPopupState,
+    userSelectedDefaultModelState, userSelectedDeleteModelState
 } from '../../assets/AtomStore/AtomStore';
 import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
@@ -24,9 +25,41 @@ export default function ManageModelsPage() {
     const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
     const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
     const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
+    const userSelectedDeleteModel = useRecoilValue(userSelectedDeleteModelState);
     const [modelId, setModelId] = useState('');
+
     const handleAddModel = () => {
         // TODO function call to backend to add model to current user's liat of models
+    };
+
+    const deleteDataModel = () => {
+        /*
+        - Send: ID of data model that has been deleted to backend
+        - backend response: updated list of data models
+        */
+
+        console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
+
+        //update List of data models with values from backend
+        updateListOfDataModels(
+            [{
+                modelID: 'm1',
+                modelName: 'Itachi',
+                isModelDefault: true
+            }, {
+                modelID: 'm2',
+                modelName: 'Sasuke',
+                isModelDefault: false
+            }, {
+                modelID: 'm4',
+                modelName: 'Shisui',
+                isModelDefault: false
+            }]
+        );
+
+        //Close the popup
+        toggleDeletePopup(false);
+
     };
 
     const deletePopupComponent =
@@ -40,6 +73,7 @@ export default function ManageModelsPage() {
                 <div id={'delete-model-popup-btn-container'}>
                     <button
                         id={'delete-model-popup-btn-yes'}
+                        onClick={() => deleteDataModel()}
                     >
                         Yes
                     </button>
@@ -77,7 +111,7 @@ export default function ManageModelsPage() {
                 <div id={'delete-model-popup-btn-container'}>
                     <button
                         id={'delete-model-popup-btn-yes'}
-                        onClick={() => setNewDefaultDataModel('m2')}
+                        onClick={() => setNewDefaultDataModel()}
                     >
                         Yes
                     </button>

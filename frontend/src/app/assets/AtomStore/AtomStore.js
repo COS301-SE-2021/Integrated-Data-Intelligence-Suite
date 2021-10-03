@@ -47,4 +47,10 @@ export const userSelectedDefaultModelState = atom({
     default: ''
 });
 
+export const userSelectedDeleteModelState = atom({
+    key: 'userSelectedDeleteModel',
+    default: ''
+});
+
+
 
