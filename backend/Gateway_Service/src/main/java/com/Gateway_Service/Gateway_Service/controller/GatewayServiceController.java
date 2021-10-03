@@ -327,6 +327,8 @@ public class GatewayServiceController {
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
+        System.out.println(file.getOriginalFilename());
+
         assert extension != null;
         if(!extension.equals("csv")) {
             response.put("message", "Incorrect file type uploaded.");
