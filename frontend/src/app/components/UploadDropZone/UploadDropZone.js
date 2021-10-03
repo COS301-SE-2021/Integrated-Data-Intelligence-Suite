@@ -7,22 +7,28 @@ import { Divider } from '@mui/material';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     isShowingAddTrainingDataPopupState,
+    isShowingUploadCSVPopupState,
+    uploadedCSVFileState,
     uploadedTrainingSetFileState
 } from '../../assets/AtomStore/AtomStore';
 
 export default function UploadDropZone(props) {
     let isUploaded = false;
-    const setTrainingData = useSetRecoilState(uploadedTrainingSetFileState);
+    const [uploadedTrainingSet, setTrainingData] = useRecoilState(uploadedTrainingSetFileState);
     const isShowingAddTrainingDataPopup = useRecoilValue(isShowingAddTrainingDataPopupState);
+    const isShowingCSVPopup = useRecoilValue(isShowingUploadCSVPopupState);
+    const setUploadedCSVFile = useSetRecoilState(uploadedCSVFileState);
 
     const pushFileArrayUp = (fileArrayObj) => {
         // props.setFileArray(fileArrayObj);
-
+        console.log(`[Dropzone] File Array Obj: ${JSON.stringify(fileArrayObj)}`);
         if (isShowingAddTrainingDataPopup) {
             setTrainingData(fileArrayObj);
-            console.log(JSON.stringify(fileArrayObj));
+            setTrainingData(fileArrayObj);
+            console.log(`[Dropzone] Uploaded Training Set: ${JSON.stringify(uploadedTrainingSet)}`);
+        } else if (isShowingCSVPopup) {
+            setUploadedCSVFile(fileArrayObj);
         }
-
     };
 
     const {
@@ -37,7 +43,7 @@ export default function UploadDropZone(props) {
         //update file preview on drop
         onDrop: () => {
             //pushing the file array up to parent component
-            pushFileArrayUp(acceptedFiles[0]);
+            pushFileArrayUp(acceptedFiles);
             isUploaded = true;
         }
     });
