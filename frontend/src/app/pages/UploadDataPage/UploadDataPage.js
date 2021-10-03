@@ -36,7 +36,8 @@ export default function UploadDataPage(props) {
 
         const formData = new FormData();
         // formData.append('file', API_REQUEST_BODY.file);
-        formData.append('file', new Blob(API_REQUEST_BODY.file), API_REQUEST_BODY.file.name);
+        console.log(`[anal upload] file name: ${uploadedAnalysingCSVFile.name}`);
+        formData.append('file', new Blob(API_REQUEST_BODY.file), API_REQUEST_BODY.file[0].name);
         formData.append('c1', API_REQUEST_BODY.c1);
         formData.append('c2', API_REQUEST_BODY.c2);
         formData.append('c3', API_REQUEST_BODY.c3);
@@ -65,7 +66,9 @@ export default function UploadDataPage(props) {
         <>
             <div id={'upload-content-div'}>
                 <CustomDivider DividerTitle={'Upload your file'}/>
-                <UploadDropZone/>
+                <UploadDropZone
+                    isAnalyzeCSVPopupShowing={props.isAnalyzeCSVPopupShowing}
+                />
                 <CustomDivider DividerTitle={'Match Columns'}/>
                 <UploadSchemaForm/>
                 <button

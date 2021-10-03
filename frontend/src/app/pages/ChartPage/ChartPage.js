@@ -122,6 +122,7 @@ class ChartPage extends Component {
                                         >
                                             <UploadDataPage
                                                 handleTextChange={this.handleTextChange}
+                                                isAnalyzeCSVPopupShowing={this.state.isShowingPopup}
                                             />
                                         </SimplePopup>
                                     ) :
