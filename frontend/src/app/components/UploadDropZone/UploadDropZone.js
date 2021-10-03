@@ -21,11 +21,12 @@ export default function UploadDropZone(props) {
 
     const pushFileArrayUp = (fileArrayObj) => {
         // props.setFileArray(fileArrayObj);
-        console.log(`[Dropzone] File Array Obj: ${JSON.stringify(fileArrayObj)}`);
+        // console.log(`[Dropzone] File Array Obj: ${JSON.stringify(fileArrayObj)}`);
+        console.log(`[Dropzone] File Array Obj: ${fileArrayObj}`);
         if (isShowingAddTrainingDataPopup) {
             setTrainingData(fileArrayObj);
             setTrainingData(fileArrayObj);
-            console.log(`[Dropzone] Uploaded Training Set: ${JSON.stringify(uploadedTrainingSet)}`);
+            console.log(`[Dropzone] Uploaded Training Set: ${uploadedTrainingSet}`);
         } else if (isShowingCSVPopup) {
             setUploadedCSVFile(fileArrayObj);
         }
@@ -50,7 +51,10 @@ export default function UploadDropZone(props) {
 
     //updates file preview when file uploaded with dialog (not dropped)
     let files = acceptedFiles.map(file => (
-        <div key={file.path} className={'file-preview-item'}>
+        <div
+            key={file.path}
+            className={'file-preview-item'}
+        >
             <FaFileCsv className={'file-preview-csv-icon'}/>
             <div className={'file-preview-name'}>{file.name}</div>
             <div className={'file-preview-size'}>

@@ -67,6 +67,8 @@ class ChartPage extends Component {
 
     handleTextChange(newText) {
         this.setState(({ text: newText }));
+        console.log("Rhuli and sterv")
+        console.log(this.state.text)
     }
 
     showPopup() {
@@ -86,6 +88,8 @@ class ChartPage extends Component {
     }
 
     generateReport(id, pdf, user) {
+        console.log("steve")
+        console.log(pdf)
         this.setState(() => ({
             currentPdf: {
                 reportID: id,
@@ -163,8 +167,8 @@ class ChartPage extends Component {
                                           className="clickable"
                                           onClick={() => {
                                                 this.generateReport(
-                                                    this.state.text[this.state.text.length - 1][0].id,
-                                                    this.state.text[this.state.text.length - 1][0].pdf,
+                                                    this.state.text[this.state.text.length - 1][0].report.id,
+                                                    this.state.text[this.state.text.length - 1][0].report.pdf,
                                                     user,
                                                 );
                                             }}

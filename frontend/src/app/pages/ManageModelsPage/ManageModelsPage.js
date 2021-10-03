@@ -195,8 +195,8 @@ export default function ManageModelsPage() {
         toggleSetDefaultModelPopup(false);
     };
     const handleUploadedTrainingData = () => {
-        console.log(uploadedTrainingDataFileArrayObj);
-        console.log(`uploading training data set: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
+        console.log(`[Uploaded training data set]: ${uploadedTrainingDataFileArrayObj}`);
+        console.log(`[uploading training data set]: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
 
         //fetch values of input boxes
         let model_name = document.getElementById('input-training-model-name').value;
@@ -220,7 +220,7 @@ export default function ManageModelsPage() {
             location: location,
             isTrending: isTrending
         };
-        console.log(`uploading training data set: ${API_REQUEST_OBJ.date}`);
+        console.log(`uploading training data set: ${API_REQUEST_BODY.date}`);
         let API_REQUEST_OBJ = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -380,8 +380,10 @@ export default function ManageModelsPage() {
                 <div className="button-container">
                     <button
                         onClick={() => handleAddModel()}
+                        className={'simple-btn'}
+                        id={'add-model-btn'}
                     >
-                        Add
+                        Add Model
                     </button>
                 </div>
             </div>

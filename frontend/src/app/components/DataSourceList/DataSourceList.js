@@ -21,7 +21,7 @@ const getAllSources = (url) => {
         fetch(`${process.env.REACT_APP_BACKEND_HOST}${url}`, { signal: abortCont.signal })
             .then((res) => {
                 if (!res.ok) {
-                    throw Error(res.error());
+                    throw Error(res.error);
                 }
                 return res.json();
             })
