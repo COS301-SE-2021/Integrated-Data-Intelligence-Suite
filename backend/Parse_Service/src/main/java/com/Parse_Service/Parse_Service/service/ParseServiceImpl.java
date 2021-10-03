@@ -196,7 +196,6 @@ public class ParseServiceImpl {
             try {
                 CSVParser parser = new CSVParserBuilder()
                         .withSeparator(',')
-                        .withIgnoreQuotations(true)
                         .build();
 
                 CSVReader csvReader = new CSVReaderBuilder(new FileReader(request.getFilename()))
@@ -467,7 +466,7 @@ public class ParseServiceImpl {
             } catch (ParseException e) {
             }
         }
-
-        throw new IOException("Invalid date format");
+        return date;
+        //throw new IOException("Invalid date format");
     }
 }

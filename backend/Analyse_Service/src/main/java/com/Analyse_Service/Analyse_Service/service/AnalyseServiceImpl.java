@@ -127,9 +127,9 @@ public class AnalyseServiceImpl {
 
             String text = dataList.get(i).getTextMessage();
             String location = dataList.get(i).getLocation();
-            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
-            String[] dateTime = date.split(" ");
-            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            //String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
+            //String[] dateTime = date.split(" ");
+            String formattedDate = "Jul 02 2020";//dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
             String likes = String.valueOf(dataList.get(i).getLikes());
 
             //Random rn = new Random();
