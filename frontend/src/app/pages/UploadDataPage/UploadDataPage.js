@@ -38,7 +38,7 @@ export default class UploadDataPage extends React.Component {
             c2: location,
             c3: likes,
             c4: date,
-            c5: 'modelID'
+            modelID: 'Default'
         };
         console.log(API_REQUEST_BODY);
 
