@@ -1,18 +1,18 @@
-import { atom, useRecoilState } from 'recoil';
+import { atom } from 'recoil';
 
 export const isShowingDeletePopupState = atom({
     key: 'isShowingDeletePopup',
-    default: false
+    default: false,
 });
 
 export const isShowingAddTrainingDataPopupState = atom({
     key: 'isShowingAddTrainingDataPopup',
-    default: false
+    default: false,
 });
 
 export const isShowingAddModelPopupState = atom({
     key: 'isShowingAddModelPopup',
-    default: false
+    default: false,
 });
 
 export const listOfDataModelsState = atom({
@@ -21,21 +21,23 @@ export const listOfDataModelsState = atom({
         [{
             modelID: 'm1',
             modelName: 'Itachi',
-            isModelDefault: false
+            isModelDefault: false,
         }, {
             modelID: 'm2',
             modelName: 'Sasuke',
-            isModelDefault: false
+            isModelDefault: false,
         }, {
             modelID: 'm3',
             modelName: 'Zabuza',
-            isModelDefault: true
+            isModelDefault: true,
         }, {
             modelID: 'm4',
             modelName: 'Shisui',
-            isModelDefault: false
-        }]
+            isModelDefault: false,
+        }],
 });
 
-
-
+export const userState = atom({
+    key: 'user',
+    default: null,
+});
