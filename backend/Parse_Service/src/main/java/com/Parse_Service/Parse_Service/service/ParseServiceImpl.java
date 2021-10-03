@@ -255,7 +255,6 @@ public class ParseServiceImpl {
             try {
                 CSVParser parser = new CSVParserBuilder()
                         .withSeparator(',')
-                        .withIgnoreQuotations(true)
                         .build();
 
                 CSVReader csvReader = new CSVReaderBuilder(new FileReader(request.getFilename()))

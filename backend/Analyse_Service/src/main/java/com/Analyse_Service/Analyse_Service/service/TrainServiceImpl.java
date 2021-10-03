@@ -99,19 +99,19 @@ public class TrainServiceImpl {
         if(request.getDataList().size() >0){
             ParsedTrainingData testParsedData = request.getDataList().get(0);
 
-            if(testParsedData.getTextMessage() != null) {
+            if(testParsedData.getTextMessage() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Text field null");
             }
-            if(testParsedData.getLocation() != null) {
+            if(testParsedData.getLocation() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Location field null");
             }
-            if(testParsedData.getDate() != null) {
+            if(testParsedData.getDate() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Date field null");
             }
-            if(testParsedData.getInteractions() != null) {
+            if(testParsedData.getInteractions() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Interactions field null");
             }
-            if(testParsedData.getIsTrending() != null) {
+            if(testParsedData.getIsTrending() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Trend field null");
             }
         }
@@ -848,7 +848,7 @@ public class TrainServiceImpl {
                             new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                             new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
             itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
@@ -924,7 +924,7 @@ public class TrainServiceImpl {
             }
             else{
                 Row trainRow = RowFactory.create(
-                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()), //trend
                         namedEntities.get(i).get(0).toString(), //name
                         namedEntities.get(i).get(1).toString(), //type
                         Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
@@ -1263,7 +1263,7 @@ public class TrainServiceImpl {
                             new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                             new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
             itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
@@ -1328,7 +1328,7 @@ public class TrainServiceImpl {
             }
             else{
                 Row trainRow = RowFactory.create(
-                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()), //trend
                         namedEntities.get(i).get(0).toString(), //name
                         namedEntities.get(i).get(1).toString(), //type
                         Double.parseDouble(namedEntities.get(i).get(2).toString()), //number

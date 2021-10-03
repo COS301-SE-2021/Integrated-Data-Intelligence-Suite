@@ -11,11 +11,13 @@
     grid-column-end: 3;
     /*border: 3px solid black;*/
     overflow-y: hidden;
+    max-height: 100vh;
     padding: 3%;
 }
 
 #manage-models-card {
     /*border: 3px solid deeppink;*/
+    row-gap: 30px;
 }
 
 #manage-models-card > .simple-card-title {

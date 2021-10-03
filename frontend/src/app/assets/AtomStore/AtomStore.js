@@ -56,6 +56,7 @@ export const userState = atom({
     key: 'user',
     default: null,
 });
+
 export const userSelectedDefaultModelState = atom({
     key: 'userSelectedDefaultModel',
     default: '',

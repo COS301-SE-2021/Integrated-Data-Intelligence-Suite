@@ -3,96 +3,83 @@ import './UploadDataPage.css';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
-import { styled } from '@mui/material/styles';
+import { useRecoilValue } from 'recoil';
+import { uploadedCSVFileState } from '../../assets/AtomStore/AtomStore';
 
-export default class UploadDataPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { fileArray: '' };
-        this.setFileArrayObj = this.setFileArrayObj.bind(this);
-    }
+export default function UploadDataPage(props) {
+    const uploadedAnalysingCSVFile = useRecoilValue(uploadedCSVFileState);
+    const handleOnClick = () => {
+        //getting content inside the 4 edit boxes
+        let text_message = document.getElementById('upload-input-text-msg').value;
+        let location = document.getElementById('upload-input-location').value;
+        let likes = document.getElementById('upload-input-likes').value;
+        let date = document.getElementById('upload-input-date').value;
 
-    state = {
-        fileArray: ''
+        // getting file array
+        console.log(`file array obj double check: ${uploadedAnalysingCSVFile}`);
+
+        // Make Post request to backend
+        /*
+           -  API_REQUEST_OBJ: input box values, file array
+           -  API_RESPONSE_OBJ: same as search
+        */
+        let url = '/analyzeUpload';
+        let API_REQUEST_BODY = {
+            file: uploadedAnalysingCSVFile,
+            c1: text_message,
+            c2: location,
+            c3: likes,
+            c4: date,
+            modelID: 'Default'
+        };
+        console.log(API_REQUEST_BODY);
+
+        const formData = new FormData();
+        // formData.append('file', API_REQUEST_BODY.file);
+        console.log(`[anal upload] file name: ${uploadedAnalysingCSVFile.name}`);
+        formData.append('file', new Blob(API_REQUEST_BODY.file), API_REQUEST_BODY.file[0].name);
+        formData.append('c1', API_REQUEST_BODY.c1);
+        formData.append('c2', API_REQUEST_BODY.c2);
+        formData.append('c3', API_REQUEST_BODY.c3);
+        formData.append('c4', API_REQUEST_BODY.c4);
+        formData.append('modelID', API_REQUEST_BODY.modelID);
+
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            body: formData,
+        };
+
+        let API_RESPONSE_OBJ = null;
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                props.handleTextChange(API_RESPONSE_OBJ);
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+            });
     };
 
-    handleOnClick() {
-        //1. getting value of data type selected
-        let array_of_radio_btn = document.getElementsByName('upload-type-radio-btn');
-        let data_type_selected;
-        for (let i = 0; i < array_of_radio_btn.length; i++) {
-            if (array_of_radio_btn[i].checked) {
-                data_type_selected = array_of_radio_btn[i].value;
-            }
-        }
-        console.log(`Data-type-selected: ${data_type_selected}`);
-
-        //2. getting content inside the 4 edit boxes
-        let array_4_edit_boxes = document.getElementsByName('schema-edit-box');
-        let array_4_edit_box_values = [];
-        for (let i = 0; i < array_4_edit_boxes.length; i++) {
-            array_4_edit_box_values[i] = array_4_edit_boxes[i].value;
-        }
-        console.log(`array-4-edit-boxes-values: ${array_4_edit_box_values}`);
-
-        //3. geting file array
-        console.log(`file array obj double check: ${this.state.fileArray}`);
-
-        //4. Make Post request to backend
-
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(obj),
-        // };
-        //
-        // const url = `/main/ENTER_ENDPOINT_HERE`;
-        // console.log(requestOptions)
-        //
-        // fetch(`http://localhost:9000${url}`, requestOptions)
-        //     .then((response) => response.json())
-        //     .then((json) => {
-        //         this.setState((prevState) => ({ showLoadingIcon: false }));
-        //         // remove or stop the loading icon
-        //         this.handleTextChange(json);
-        //     })
-        //     .catch((err) => {
-        //         this.setState((prevState) => ({ showLoadingIcon: false }));
-        //         console.log('error while retrieving data from backend');
-        //         console.log(err.message);
-        //     });
-
-
-    }
-
-    setFileArrayObj(file_array_obj) {
-        this.setState({ fileArray: file_array_obj }, () => {
-            console.log(`file array obj: ${this.state.fileArray}`);
-        });
-    }
-
-    render() {
-        return (
-            <>
-                <div id={'upload-content-div'}>
-                    <CustomDivider DividerTitle={'Upload your file'}/>
-                    <UploadDropZone
-                        setFileArray={this.setFileArrayObj}
-                    />
-                    <CustomDivider DividerTitle={'Match Columns'}/>
-                    <UploadSchemaForm/>
-                    <button
-                        id={'analyse-upload-btn'}
-                        onClick={() =>
-                            this.handleOnClick()
-                        }
-                    >
-                        Analyze
-                    </button>
-                </div>
-            </>
-        );
-    }
+    return (
+        <>
+            <div id={'upload-content-div'}>
+                <CustomDivider DividerTitle={'Upload your file'}/>
+                <UploadDropZone
+                    isAnalyzeCSVPopupShowing={props.isAnalyzeCSVPopupShowing}
+                />
+                <CustomDivider DividerTitle={'Match Columns'}/>
+                <UploadSchemaForm/>
+                <button
+                    id={'analyse-upload-btn'}
+                    onClick={() => handleOnClick()}
+                >
+                    Analyze
+                </button>
+            </div>
+        </>
+    );
 }
 
 

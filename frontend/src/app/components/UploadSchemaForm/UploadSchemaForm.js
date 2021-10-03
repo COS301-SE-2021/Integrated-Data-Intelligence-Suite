@@ -28,85 +28,61 @@ export default class UploadSchemaForm extends React.Component {
                     titleOnTop
                 >
                     <div id={'upload-schema-form-container'}>
-                        <div id={'upload-radio-btn-container'}>
-                            <div id={'upload-radio-btn-heading'}>
-                                Choose the type of data your uploading:
-                            </div>
-                            <div id={'upload-radio-btn-wrapper'}>
-                                <div>
+                        {/*<div id={'upload-radio-btn-container'}>*/}
+                        {/*    <div id={'upload-radio-btn-heading'}>*/}
+                        {/*        Choose the type of data your uploading:*/}
+                        {/*    </div>*/}
+                        {/*    <div id={'upload-radio-btn-wrapper'}>*/}
+                        {/*        <div>*/}
 
-                                    <input
-                                        type="radio"
-                                        value="social-media-type"
-                                        name="upload-type-radio-btn"
-                                        id={'social-media-radio-btn'}
-                                        onClick={() => this.setSocialMediaChecked(true)}
-                                    />
-                                    Social Media
-                                </div>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        value="news-type"
-                                        name="upload-type-radio-btn"
-                                        id={'news-radio-btn'}
-                                        onClick={() => this.setSocialMediaChecked(false)}
-                                    />
-                                    News
-                                </div>
-                            </div>
+                        {/*            <input*/}
+                        {/*                type="radio"*/}
+                        {/*                value="social-media-type"*/}
+                        {/*                name="upload-type-radio-btn"*/}
+                        {/*                id={'social-media-radio-btn'}*/}
+                        {/*                onClick={() => this.setSocialMediaChecked(true)}*/}
+                        {/*            />*/}
+                        {/*            Social Media*/}
+                        {/*        </div>*/}
+                        {/*        <div>*/}
+                        {/*            <input*/}
+                        {/*                type="radio"*/}
+                        {/*                value="news-type"*/}
+                        {/*                name="upload-type-radio-btn"*/}
+                        {/*                id={'news-radio-btn'}*/}
+                        {/*                onClick={() => this.setSocialMediaChecked(false)}*/}
+                        {/*            />*/}
+                        {/*            News*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
+
+                        <div id={'upload-input-container'}>
+                            {/*<p>social media is checked</p>*/}
+                            <InputBoxWithLabel
+                                inputLabel={'Text Message'}
+                                inputName={'schema-edit-box'}
+                                inputID={'upload-input-text-msg'}
+                            />
+
+                            <InputBoxWithLabel
+                                inputLabel={'Location'}
+                                inputName={'schema-edit-box'}
+                                inputID={'upload-input-location'}
+                            />
+
+                            <InputBoxWithLabel
+                                inputLabel={'Likes'}
+                                inputName={'schema-edit-box'}
+                                inputID={'upload-input-likes'}
+                            />
+
+                            <InputBoxWithLabel
+                                inputLabel={'Date'}
+                                inputName={'schema-edit-box'}
+                                inputID={'upload-input-date'}
+                            />
                         </div>
-
-                        {isSocialMediaChecked
-                            ? (
-                                <div id={'upload-input-container'}>
-                                    {/*<p>social media is checked</p>*/}
-                                    <InputBoxWithLabel
-                                        inputLabel={'Date'}
-                                        inputName={'schema-edit-box'}
-                                    />
-
-                                    <InputBoxWithLabel
-                                        inputLabel={'Interactions'}
-                                        inputName={'schema-edit-box'}
-
-                                    />
-
-                                    <InputBoxWithLabel
-                                        inputLabel={'Text'}
-                                        inputName={'schema-edit-box'}
-                                    />
-
-                                    <InputBoxWithLabel
-                                        inputLabel={'Location'}
-                                        inputName={'schema-edit-box'}
-                                    />
-                                </div>
-                            ) : (
-                                <div id={'upload-input-container'}>
-                                    {/*<p>news is checked</p>*/}
-                                    <InputBoxWithLabel
-                                        inputLabel={'Date'}
-                                        inputName={'schema-edit-box'}
-                                    />
-
-                                    <InputBoxWithLabel
-                                        inputLabel={'Content'}
-                                        inputName={'schema-edit-box'}
-                                    />
-
-                                    <InputBoxWithLabel
-                                        inputLabel={'Title'}
-                                        inputName={'schema-edit-box'}
-                                    />
-
-                                    <InputBoxWithLabel
-                                        inputLabel={'Description'}
-                                        inputName={'schema-edit-box'}
-                                    />
-                                </div>
-                            )
-                        }
                     </div>
                 </SimpleCard>
             </>
