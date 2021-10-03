@@ -1136,7 +1136,7 @@ public class TrainServiceImpl {
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
         FileUtils.deleteDirectory(trainFile);
-        FileUtils.deleteDirectory(infoFile);
+        infoFile.delete();
 
         /*
         String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
@@ -1504,7 +1504,7 @@ public class TrainServiceImpl {
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
         FileUtils.deleteDirectory(trainFile);
-        FileUtils.deleteDirectory(infoFile);
+        infoFile.delete();
 
 
         /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
@@ -2195,7 +2195,7 @@ public class TrainServiceImpl {
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
         FileUtils.deleteDirectory(modelFile);
         FileUtils.deleteDirectory(trainFile);
-        FileUtils.deleteDirectory(infoFile);
+        infoFile.delete();
 
         /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
         CommandLine commandLine = CommandLine.parse(commandPath);
