@@ -9,6 +9,7 @@
     grid-row-end: 2;
     color: var(--prussian-blue);
     font-weight: 500;
+    margin: 0;
 }
 
 .simple-input-box {

@@ -325,6 +325,7 @@ export default function ManageModelsPage() {
                     type={'button'}
                     id={'upload-training-data-btn'}
                     onClick={() => handleUploadedTrainingData()}
+                    className={'simple-btn'}
                 >
                     Upload Training Data
                 </button>
