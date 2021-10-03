@@ -426,9 +426,9 @@ public class AnalyseServiceImpl {
                     Random rn = new Random();
                     int answer = rn.nextInt(97) + 51;
 
-                    modelAccuracy = answer + "%";
+                    modelAccuracy = String.valueOf(answer);
                 }else{
-                    modelAccuracy = (Double.parseDouble(foundAccuracy)*100) + "%";
+                    modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
                 }
 
 
