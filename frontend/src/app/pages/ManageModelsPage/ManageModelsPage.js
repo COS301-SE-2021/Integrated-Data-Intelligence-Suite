@@ -15,23 +15,26 @@ import {
     isShowingSetDefaultModelPopupState,
     userSelectedDefaultModelState,
     userSelectedDeleteModelState,
-    uploadedTrainingSetFileState
+    uploadedTrainingSetFileState, isShowingShareModelPopupState, userSelectedShareModelState
 } from '../../assets/AtomStore/AtomStore';
-import { BsCloudUpload, RiAddLine } from 'react-icons/all';
+import { BsCloudUpload, IoCopyOutline, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
 import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
+import { Tooltip } from '@mui/material';
 
 export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
     const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
     const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
+    const [isShowingShareModelPopup, toggleShareModelPopup] = useRecoilState(isShowingShareModelPopupState);
     const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
     const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
     const userSelectedDeleteModel = useRecoilValue(userSelectedDeleteModelState);
+    const userSelectedShareModel = useRecoilValue(userSelectedShareModelState);
     const uploadedTrainingDataFileArrayObj = useRecoilValue(uploadedTrainingSetFileState);
     const [modelId, setModelId] = useState('');
 
@@ -385,6 +388,27 @@ export default function ManageModelsPage() {
         </SimplePopup>
     );
 
+    const shareModelPopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleShareModelPopup(false)}
+            popupTitle={'Share Model'}
+        >
+            <div id={'share-model-container'}>
+                <div id={'share-model-id-icon'}>ID</div>
+                <div id={'share-model-id-value'}>{userSelectedShareModel}</div>
+                <Tooltip
+                    title={'Copy ID'}
+                >
+                    <button
+                        id={'share-model-copy-btn'}
+                    >
+                        <IoCopyOutline id={'share-model-copy-icon'}/>
+                    </button>
+                </Tooltip>
+            </div>
+        </SimplePopup>
+    );
+
     return (
         <>
             <Switch>
@@ -409,12 +433,17 @@ export default function ManageModelsPage() {
                             ? setDefaultModelPopupComponent
                             : null
                     }
+                    {
+                        isShowingShareModelPopup
+                            ? shareModelPopupComponent
+                            : null
+                    }
                     <div id={'manage-models-page-container'}>
                         <SideBar currentPage={'6'}/>
                         <div id={'manage-models-page-content'}>
                             <SimpleCard
                                 cardID={'manage-models-card'}
-                                cardTitle={'Manage Your Models'}
+                                cardTitle={'Manage Your Data Models'}
                                 titleOnTop
                             >
                                 <div id={'manage-models-btn-row'}>

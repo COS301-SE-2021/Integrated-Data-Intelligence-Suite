@@ -25,6 +25,11 @@ export const isShowingUploadCSVPopupState = atom({
     default: false
 });
 
+export const isShowingShareModelPopupState = atom({
+    key: 'isShowingShareModelPopup',
+    default: false
+});
+
 export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
     default:
@@ -54,6 +59,11 @@ export const userSelectedDefaultModelState = atom({
 
 export const userSelectedDeleteModelState = atom({
     key: 'userSelectedDeleteModel',
+    default: ''
+});
+
+export const userSelectedShareModelState = atom({
+    key: 'userSelectedShareModel',
     default: ''
 });
 

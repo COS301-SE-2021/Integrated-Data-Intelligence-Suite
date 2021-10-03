@@ -6,16 +6,18 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
     isShowingDeletePopupState,
-    isShowingSetDefaultModelPopupState,
+    isShowingSetDefaultModelPopupState, isShowingShareModelPopupState,
     userSelectedDefaultModelState,
-    userSelectedDeleteModelState
+    userSelectedDeleteModelState, userSelectedShareModelState
 } from '../../assets/AtomStore/AtomStore';
 
 export default function ModelCard(props) {
     const toggleDeletePopup = useSetRecoilState(isShowingDeletePopupState);
     const toggleSetDefaultPopup = useSetRecoilState(isShowingSetDefaultModelPopupState);
+    const setShareModelPopup = useSetRecoilState(isShowingShareModelPopupState);
     const updateUserSelectedDefaultModel = useSetRecoilState(userSelectedDefaultModelState);
     const updateUserSelectedDeleteModel = useSetRecoilState(userSelectedDeleteModelState);
+    const updateUserSelectedShareModel = useSetRecoilState(userSelectedShareModelState);
     const clickedRadioButton = (e) => {
         updateUserSelectedDefaultModel(e.target.id);
         toggleSetDefaultPopup(true);
@@ -24,6 +26,13 @@ export default function ModelCard(props) {
     const clickedDeleteButton = (e) => {
         updateUserSelectedDeleteModel(e.target.id);
         toggleDeletePopup(true);
+    };
+
+    const clickedShareModelButton = (e) => {
+        console.log(e);
+        console.log(`[Share Model] ID of item clicked: ${e.target.id}`);
+        updateUserSelectedShareModel(e.target.id);
+        setShareModelPopup(true);
     };
 
     return (
@@ -59,9 +68,11 @@ export default function ModelCard(props) {
                             <button
                                 className={'model-card-share-btn model-card-btn'}
                                 id={props.modelID}
+                                onClick={(event) => clickedShareModelButton(event)}
                             >
                                 <AiOutlineShareAlt
                                     className={'model-card-share-icon model-card-icon'}
+                                    id={props.modelID}
                                 />
                             </button>
                         </Tooltip>

@@ -134,6 +134,73 @@
     border-radius: 5px;
 }
 
+#share-model-container {
+    display: flex;
+    align-items: center;
+}
+
+#share-model-id-icon {
+    background: #bed4ff;
+    color: #0086b3;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 3px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: 1px solid slategrey;
+    min-height: 32px;
+    max-height: 32px;
+    align-content: center;
+    align-items: center;
+    display: grid;
+
+}
+
+#share-model-id-value {
+    font-size: 20px;
+    font-weight: 500;
+    padding: 3px;
+    border: 1px solid slategrey;
+    border-left: 0;
+    width: 80%;
+    overflow-x: auto;
+    min-height: 32px;
+    max-height: 32px;
+    overflow-y: hidden;
+    align-content: center;
+    align-items: center;
+    display: grid;
+
+}
+
+#share-model-copy-icon {
+    min-height: 32px;
+    max-height: 32px;
+    background: #bed4ff;
+    color: #0086b3;
+}
+
+#share-model-copy-btn {
+    background: #bed4ff;
+    color: #0086b3;
+    overflow-y: hidden;
+    align-content: center;
+    align-items: center;
+    display: grid;
+    font-weight: 600;
+    font-size: 20px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    min-height: 32px;
+    max-height: 32px;
+    border: 1px solid slategrey;
+    border-left: 0;
+
+}
+
+
+
+
 
 
 
