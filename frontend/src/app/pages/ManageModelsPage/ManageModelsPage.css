@@ -17,6 +17,7 @@
 
 #manage-models-card {
     /*border: 3px solid deeppink;*/
+    row-gap: 30px;
 }
 
 #manage-models-card > .simple-card-title {
