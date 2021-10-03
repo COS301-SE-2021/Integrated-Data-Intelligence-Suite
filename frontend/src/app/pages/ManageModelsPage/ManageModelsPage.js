@@ -20,7 +20,6 @@ import {
 import { BsCloudUpload, IoCopyOutline, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
-import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
 import { Tooltip } from '@mui/material';
@@ -223,7 +222,8 @@ export default function ManageModelsPage() {
         console.log(API_REQUEST_BODY_TRAIN);
 
         const formData = new FormData();
-        formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), 'trainingSet.csv');
+        formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), API_REQUEST_BODY_TRAIN.file.name);
+        // formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), 'trainingSet.csv');
         formData.append('c1', API_REQUEST_BODY_TRAIN.c1);
         formData.append('c2', API_REQUEST_BODY_TRAIN.c2);
         formData.append('c3', API_REQUEST_BODY_TRAIN.c3);
@@ -241,7 +241,7 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                this.handleTextChange(API_RESPONSE_OBJ);
+                // this.handleTextChange(API_RESPONSE_OBJ);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');

@@ -20,13 +20,11 @@ export default function UploadDropZone(props) {
     const setUploadedCSVFile = useSetRecoilState(uploadedCSVFileState);
 
     const pushFileArrayUp = (fileArrayObj) => {
-        // props.setFileArray(fileArrayObj);
         // console.log(`[Dropzone] File Array Obj: ${JSON.stringify(fileArrayObj)}`);
-        console.log(`[Dropzone] File Array Obj: ${fileArrayObj}`);
+        // console.log(`[Dropzone] File Array Obj: ${fileArrayObj.size}`);
         if (isShowingAddTrainingDataPopup) {
             setTrainingData(fileArrayObj);
-            setTrainingData(fileArrayObj);
-            console.log(`[Dropzone] Uploaded Training Set: ${uploadedTrainingSet}`);
+            // console.log(`[Dropzone] Uploaded Training Set: ${JSON.stringify(uploadedTrainingSet)}`);
         } else if (isShowingCSVPopup) {
             setUploadedCSVFile(fileArrayObj);
         }
@@ -44,7 +42,7 @@ export default function UploadDropZone(props) {
         //update file preview on drop
         onDrop: () => {
             //pushing the file array up to parent component
-            pushFileArrayUp(acceptedFiles);
+            pushFileArrayUp(acceptedFiles[0]);
             isUploaded = true;
         }
     });

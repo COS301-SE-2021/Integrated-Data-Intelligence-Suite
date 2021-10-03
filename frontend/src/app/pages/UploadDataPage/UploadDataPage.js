@@ -3,20 +3,12 @@ import './UploadDataPage.css';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
-import { styled } from '@mui/material/styles';
+import { useRecoilValue } from 'recoil';
+import { uploadedCSVFileState } from '../../assets/AtomStore/AtomStore';
 
-export default class UploadDataPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { fileArray: '' };
-        this.setFileArrayObj = this.setFileArrayObj.bind(this);
-    }
-
-    state = {
-        fileArray: ''
-    };
-
-    handleOnClick() {
+export default function UploadDataPage(props) {
+    const uploadedAnalysingCSVFile = useRecoilValue(uploadedCSVFileState);
+    const handleOnClick = () => {
         //getting content inside the 4 edit boxes
         let text_message = document.getElementById('upload-input-text-msg').value;
         let location = document.getElementById('upload-input-location').value;
@@ -24,7 +16,7 @@ export default class UploadDataPage extends React.Component {
         let date = document.getElementById('upload-input-date').value;
 
         // getting file array
-        console.log(`file array obj double check: ${this.state.fileArray}`);
+        console.log(`file array obj double check: ${uploadedAnalysingCSVFile}`);
 
         // Make Post request to backend
         /*
@@ -33,7 +25,7 @@ export default class UploadDataPage extends React.Component {
         */
         let url = '/analyzeUpload';
         let API_REQUEST_BODY = {
-            file: this.state.fileArray,
+            file: uploadedAnalysingCSVFile,
             c1: text_message,
             c2: location,
             c3: likes,
@@ -43,7 +35,8 @@ export default class UploadDataPage extends React.Component {
         console.log(API_REQUEST_BODY);
 
         const formData = new FormData();
-        formData.append('file', API_REQUEST_BODY.file);
+        // formData.append('file', API_REQUEST_BODY.file);
+        formData.append('file', new Blob(API_REQUEST_BODY.file), API_REQUEST_BODY.file.name);
         formData.append('c1', API_REQUEST_BODY.c1);
         formData.append('c2', API_REQUEST_BODY.c2);
         formData.append('c3', API_REQUEST_BODY.c3);
@@ -52,7 +45,6 @@ export default class UploadDataPage extends React.Component {
 
         let API_REQUEST_OBJ = {
             method: 'POST',
-            headers: '',
             body: formData,
         };
 
@@ -67,34 +59,24 @@ export default class UploadDataPage extends React.Component {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
-    }
+    };
 
-    setFileArrayObj(file_array_obj) {
-        this.setState({ fileArray: file_array_obj }, () => {
-            console.log(`file array obj: ${this.state.fileArray}`);
-        });
-    }
-
-    render() {
-        return (
-            <>
-                <div id={'upload-content-div'}>
-                    <CustomDivider DividerTitle={'Upload your file'}/>
-                    <UploadDropZone
-                        setFileArray={this.setFileArrayObj}
-                    />
-                    <CustomDivider DividerTitle={'Match Columns'}/>
-                    <UploadSchemaForm/>
-                    <button
-                        id={'analyse-upload-btn'}
-                        onClick={() => this.handleOnClick()}
-                    >
-                        Analyze
-                    </button>
-                </div>
-            </>
-        );
-    }
+    return (
+        <>
+            <div id={'upload-content-div'}>
+                <CustomDivider DividerTitle={'Upload your file'}/>
+                <UploadDropZone/>
+                <CustomDivider DividerTitle={'Match Columns'}/>
+                <UploadSchemaForm/>
+                <button
+                    id={'analyse-upload-btn'}
+                    onClick={() => handleOnClick()}
+                >
+                    Analyze
+                </button>
+            </div>
+        </>
+    );
 }
 
 

@@ -67,8 +67,8 @@ class ChartPage extends Component {
 
     handleTextChange(newText) {
         this.setState(({ text: newText }));
-        console.log("Rhuli and sterv")
-        console.log(this.state.text)
+        console.log('Rhuli and sterv');
+        console.log(this.state.text);
     }
 
     showPopup() {
@@ -88,8 +88,8 @@ class ChartPage extends Component {
     }
 
     generateReport(id, pdf, user) {
-        console.log("steve")
-        console.log(pdf)
+        console.log('steve');
+        console.log(pdf);
         this.setState(() => ({
             currentPdf: {
                 reportID: id,
