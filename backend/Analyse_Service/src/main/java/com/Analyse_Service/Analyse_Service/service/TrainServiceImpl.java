@@ -736,7 +736,7 @@ public class TrainServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        sparkNlpProperties.stop();
+        //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -1151,7 +1151,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
         System.out.println("trends done");
-        sparkTrends.stop();
+        //sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results, trainedModel);
     }
@@ -1518,7 +1518,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-         sparkTrends.stop();
+         //sparkTrends.stop();
          ArrayList<ArrayList> results = new ArrayList<>();
          return new TrainFindTrendsDTResponse(results, trainedModel);
     }
@@ -1852,7 +1852,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        sparkTrends.stop();
+        //sparkTrends.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         return new TrainFindTrendsArticlesResponse(results);
@@ -1890,7 +1890,7 @@ public class TrainServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        sparkPredictions.stop();
+        //sparkPredictions.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -2208,7 +2208,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        sparkAnomalies.stop();
+        //sparkAnomalies.stop();
 
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results, trainedModel);
