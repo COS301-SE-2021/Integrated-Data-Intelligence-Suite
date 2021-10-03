@@ -39,9 +39,30 @@ export default function ManageModelsPage() {
         console.log(`Model Id Entered in Add: ${modelId}`);
 
         /*
-        - backend Request: new id model to add
-        - backend response: updated list of data models
+        -  API_REQUEST_OBJ: new id model to add
+        -  API_RESPONSE_OBJ: updated list of data models
          */
+        let url = '';
+        let API_REQUEST_BODY = {
+            modelID: modelId,
+        };
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(API_REQUEST_BODY),
+        };
+        let API_RESPONSE_OBJ = null;
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                // updateListOfDataModels(API_RESPONSE_OBJ);
+
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+            });
 
         //update data model with data model from backend
         updateListOfDataModels([{
@@ -71,12 +92,32 @@ export default function ManageModelsPage() {
 
     };
     const deleteDataModel = () => {
-        /*
-        - Send: ID of data model that has been deleted to backend
-        - backend response: updated list of data models
-        */
-
         console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
+
+        /*
+        - API_REQUEST_BODY: ID of data model that has been deleted to backend
+        - API_RESPONSE_OBJ: updated list of data models
+        */
+        let url = '';
+        let API_REQUEST_BODY = {
+            modelID: userSelectedDeleteModel,
+        };
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(API_REQUEST_BODY),
+        };
+        let API_RESPONSE_OBJ = null;
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                // updateListOfDataModels(API_RESPONSE_OBJ);
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+            });
 
         //update List of data models with values from backend
         updateListOfDataModels(
@@ -99,12 +140,32 @@ export default function ManageModelsPage() {
         toggleDeletePopup(false);
     };
     const setNewDefaultDataModel = () => {
-        /*
-        - make api request to backed with new default model ID
-        - Backend Returns Updated List of models
-        */
-
         console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
+
+        /*
+        - API_REQUEST_BODY: ID of data model that has been deleted to backend
+        - API_RESPONSE_OBJ: updated list of data models
+        */
+        let url = '';
+        let API_REQUEST_BODY = {
+            modelID: userSelectedDefaultModel,
+        };
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(API_REQUEST_BODY),
+        };
+        let API_RESPONSE_OBJ = null;
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                // updateListOfDataModels(API_RESPONSE_OBJ);
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+            });
 
         //update List of data models with values from backend
         updateListOfDataModels(
@@ -132,6 +193,7 @@ export default function ManageModelsPage() {
     };
     const handleUploadedTrainingData = () => {
         console.log(uploadedTrainingDataFileArrayObj);
+        console.log(`uploading training data set: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
 
         //fetch values of input boxes
         let model_name = document.getElementById('input-training-model-name').value;
@@ -140,7 +202,13 @@ export default function ManageModelsPage() {
         let text = document.getElementById('input-training-text').value;
         let location = document.getElementById('input-training-location').value;
         let isTrending = document.getElementById('input-training-isTrending').value;
-        let API_REQUEST_OBJ = {
+
+        /*
+      - API_REQUEST_BODY: ID of data model that has been deleted to backend
+      - API_RESPONSE_OBJ: updated list of data models
+      */
+        let url = '';
+        let API_REQUEST_BODY = {
             uploadedTrainingSet: uploadedTrainingDataFileArrayObj,
             modelName: model_name,
             date: date,
@@ -149,14 +217,23 @@ export default function ManageModelsPage() {
             location: location,
             isTrending: isTrending
         };
-
-        console.log(`uploading training data set: ${JSON.stringify(API_REQUEST_OBJ)}`);
         console.log(`uploading training data set: ${API_REQUEST_OBJ.date}`);
-
-        /*
-            - API REQUEST: [File array Obj, field1, ... field6]
-            - API RESPONSE: updated list of data models
-        */
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(API_REQUEST_BODY),
+        };
+        let API_RESPONSE_OBJ = null;
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                // updateListOfDataModels(API_RESPONSE_OBJ);
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+            });
 
         //Update List of data Models
         updateListOfDataModels(
@@ -366,6 +443,7 @@ export default function ManageModelsPage() {
                                                 modelID={obj.modelID}
                                                 modelName={obj.modelName}
                                                 isModelDefault={obj.isModelDefault}
+                                                key={obj.modelID}
                                             />
                                         ))
                                     }

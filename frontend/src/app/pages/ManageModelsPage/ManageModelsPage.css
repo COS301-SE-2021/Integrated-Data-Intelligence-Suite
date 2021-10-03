@@ -49,7 +49,7 @@
     grid-template-rows: 100%;
     overflow-y: hidden;
     overflow-x: scroll;
-    column-gap: 20px;
+    column-gap: 30px;
 }
 
 #delete-model-popup > .popup-body {
