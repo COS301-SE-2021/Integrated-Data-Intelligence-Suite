@@ -4,7 +4,8 @@ package com.Gateway_Service.Gateway_Service.controller;
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.ErrorGraph;
-import com.Gateway_Service.Gateway_Service.dataclass.gateway.InformationGraph;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.ReportGraph;
+import com.Gateway_Service.Gateway_Service.dataclass.gateway.TrainResponseGraph;
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
 import com.Gateway_Service.Gateway_Service.dataclass.report.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.GetUserRequest;
@@ -230,7 +231,7 @@ public class GatewayServiceController {
         for(int i =0; i < visualizeResponse.outputData.size(); i++)
             outputData.add(visualizeResponse.outputData.get(i));
 
-        InformationGraph reportGraph = new InformationGraph();
+        ReportGraph reportGraph = new ReportGraph();
         //reportGraph.reportId = reportResponse.getId().toString();
         reportGraph.report = reportResponse2;
         ArrayList<Graph> reportData = new ArrayList<>();
@@ -358,6 +359,10 @@ public class GatewayServiceController {
             /*
             TODO: add call to trainUserModel after change to ParsedTrainingData
              */
+
+
+            TrainUserModelRequest userReport = new TrainUserModelRequest(modelname,trainingData);
+            return this.trainUserModel(userReport);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -500,8 +505,10 @@ public class GatewayServiceController {
     @PostMapping(value = "/trainUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<TrainUserModelResponse> trainUserModel(@RequestBody TrainUserModelRequest request) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> trainUserModel(@RequestBody TrainUserModelRequest request) {
         /**TODO: use proper request for parser**/
+
+        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
         /*********************PARSE*************************
 
@@ -516,7 +523,7 @@ public class GatewayServiceController {
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
             //outputData.add();
-            InformationGraph errorGraph = new InformationGraph();
+            ReportGraph errorGraph = new ReportGraph();
             errorGraph.Error = parseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
@@ -534,12 +541,20 @@ public class GatewayServiceController {
         /*********************ANALYSE*************************/
 
 
-        TrainUserModelRequest analyseRequest = new TrainUserModelRequest("" /*Todo: use modelName (from frontend)*/, new ArrayList<ParsedData>());
+        TrainUserModelRequest analyseRequest = new TrainUserModelRequest(request.getModelName(),request.getDataList() );
         TrainUserModelResponse analyseResponse = analyseClient.trainUserModel(analyseRequest);
 
 
+        TrainResponseGraph reportGraph = new TrainResponseGraph();
+        //reportGraph.reportId = reportResponse.getId().toString();
+        reportGraph.trainResponse = analyseResponse;
+        ArrayList<Graph> reportData = new ArrayList<>();
+        reportData.add(reportGraph);
+        outputData.add(reportData);
+
+
         /*if(analyseResponse.getFallback() == true) {
-            InformationGraph errorGraph = new InformationGraph();
+            ReportGraph errorGraph = new ReportGraph();
             errorGraph.Error = analyseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
@@ -558,7 +573,7 @@ public class GatewayServiceController {
 
 
 
-        return new ResponseEntity<>(analyseResponse, HttpStatus.OK);
+        return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
 
     /**
@@ -587,7 +602,7 @@ public class GatewayServiceController {
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
             //outputData.add();
-            InformationGraph errorGraph = new InformationGraph();
+            ReportGraph errorGraph = new ReportGraph();
             errorGraph.Error = parseResponse.getFallbackMessage();
 
             ArrayList<Graph> data = new ArrayList<>();
@@ -675,7 +690,7 @@ public class GatewayServiceController {
             outputData.add(visualizeResponse.outputData.get(i));
 
 
-        InformationGraph reportGraph = new InformationGraph();
+        ReportGraph reportGraph = new ReportGraph();
         //reportGraph.reportId = reportResponse.getId().toString();
         reportGraph.report = reportResponse2;
         ArrayList<Graph> reportData = new ArrayList<>();
