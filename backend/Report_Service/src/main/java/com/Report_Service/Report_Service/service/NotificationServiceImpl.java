@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -43,7 +44,8 @@ public class NotificationServiceImpl {
         helper.addTo(request.getTo());
         helper.setFrom(request.getFrom());
         helper.setSubject(request.getSubject());
-        helper.addAttachment("report", new ByteArrayResource(request.getData()));
+        helper.addAttachment(MimeUtility.encodeText(""), new ByteArrayResource(request.getData()),"application/pdf");
+        helper.setText("", true);
 
         try {
             System.out.println("Sending email...");
