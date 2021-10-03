@@ -6,8 +6,8 @@ export default function InputBoxWithLabel(props) {
         <>
             <div className={'simple-input-container'}>
                 <p
-                    className={'simple-input-label'}
                     id={props.inputLabelID}
+                    className={'simple-input-label'}
                 >
                     {props.inputLabel}
                 </p>

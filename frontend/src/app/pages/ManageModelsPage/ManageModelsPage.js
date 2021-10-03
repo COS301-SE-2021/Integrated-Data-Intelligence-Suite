@@ -13,10 +13,16 @@ import {
     isShowingAddModelPopupState,
     listOfDataModelsState,
     isShowingSetDefaultModelPopupState,
-    userSelectedDefaultModelState, userSelectedDeleteModelState
+    userSelectedDefaultModelState,
+    userSelectedDeleteModelState,
+    uploadedTrainingSetFileState
 } from '../../assets/AtomStore/AtomStore';
 import { BsCloudUpload, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
+import CustomDivider from '../../components/CustomDivider/CustomDivider';
+import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
+import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
+import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
 
 export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
@@ -26,6 +32,7 @@ export default function ManageModelsPage() {
     const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
     const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
     const userSelectedDeleteModel = useRecoilValue(userSelectedDeleteModelState);
+    const uploadedTrainingDataFileArrayObj = useRecoilValue(uploadedTrainingSetFileState);
     const [modelId, setModelId] = useState('');
 
     const handleAddModel = () => {
@@ -123,6 +130,59 @@ export default function ManageModelsPage() {
         //Close the popup
         toggleSetDefaultModelPopup(false);
     };
+    const handleUploadedTrainingData = () => {
+        console.log(uploadedTrainingDataFileArrayObj);
+
+        //fetch values of input boxes
+        let model_name = document.getElementById('input-training-model-name').value;
+        let date = document.getElementById('input-training-date').value;
+        let interaction = document.getElementById('input-training-interaction').value;
+        let text = document.getElementById('input-training-text').value;
+        let location = document.getElementById('input-training-location').value;
+        let isTrending = document.getElementById('input-training-isTrending').value;
+        let API_REQUEST_OBJ = {
+            uploadedTrainingSet: uploadedTrainingDataFileArrayObj,
+            modelName: model_name,
+            date: date,
+            interaction: interaction,
+            text: text,
+            location: location,
+            isTrending: isTrending
+        };
+
+        console.log(`uploading training data set: ${JSON.stringify(API_REQUEST_OBJ)}`);
+        console.log(`uploading training data set: ${API_REQUEST_OBJ.date}`);
+
+        /*
+            - API REQUEST: [File array Obj, field1, ... field6]
+            - API RESPONSE: updated list of data models
+        */
+
+        //Update List of data Models
+        updateListOfDataModels(
+            [{
+                modelID: 'm1',
+                modelName: 'Itachi',
+                isModelDefault: true
+            }, {
+                modelID: 'm2',
+                modelName: 'Sasuke',
+                isModelDefault: false
+            }, {
+                modelID: 'm3',
+                modelName: 'Zabuza',
+                isModelDefault: false
+            }, {
+                modelID: 'm4',
+                modelName: 'Shisui',
+                isModelDefault: false
+            }, {
+                modelID: 'm5',
+                modelName: 'Hinata',
+                isModelDefault: false
+            }]
+        );
+    };
 
     const deletePopupComponent = (
         <SimplePopup
@@ -153,8 +213,44 @@ export default function ManageModelsPage() {
             closePopup={() => toggleAddTrainingDataPopup(false)}
             popupTitle={'Upload Training Data'}
         >
-            <div>
-                <div>xxxx</div>
+            <div id={'upload-content-div'}>
+                <CustomDivider DividerTitle={'Upload your file'}/>
+                <UploadDropZone/>
+                <CustomDivider DividerTitle={'Match Columns'}/>
+                <div id={'upload-training-data-form'}>
+                    <InputBoxWithLabel
+                        inputLabel={'Model Name'}
+                        inputID={'input-training-model-name'}
+                    />
+                    <InputBoxWithLabel
+                        inputLabel={'Date'}
+                        inputID={'input-training-date'}
+                    />
+                    <InputBoxWithLabel
+                        inputLabel={'Interaction'}
+                        inputID={'input-training-interaction'}
+                    />
+                    <InputBoxWithLabel
+                        inputLabel={'Text'}
+                        inputID={'input-training-text'}
+                    />
+                    <InputBoxWithLabel
+                        inputLabel={'Location'}
+                        inputID={'input-training-location'}
+                    />
+                    <InputBoxWithLabel
+                        inputLabel={'isTrending'}
+                        inputID={'input-training-isTrending'}
+                    />
+                </div>
+
+                <button
+                    type={'button'}
+                    id={'upload-training-data-btn'}
+                    onClick={() => handleUploadedTrainingData()}
+                >
+                    Upload Training Data
+                </button>
             </div>
         </SimplePopup>
     );

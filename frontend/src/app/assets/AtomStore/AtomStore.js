@@ -1,4 +1,4 @@
-import { atom, useRecoilState } from 'recoil';
+import { atom } from 'recoil';
 
 export const isShowingDeletePopupState = atom({
     key: 'isShowingDeletePopup',
@@ -50,6 +50,11 @@ export const userSelectedDefaultModelState = atom({
 export const userSelectedDeleteModelState = atom({
     key: 'userSelectedDeleteModel',
     default: ''
+});
+
+export const uploadedTrainingSetFileState = atom({
+    key: 'uploadedTrainingSetFile',
+    default: null
 });
 
 
