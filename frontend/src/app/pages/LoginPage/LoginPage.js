@@ -6,6 +6,8 @@ import {
     Form, Input, Button, Checkbox, Card, Divider, message
 } from 'antd';
 import LoginButton from '../../components/LoginButton/LoginButton';
+import {useSetRecoilState} from "recoil";
+import {userState} from "../../assets/AtomStore/AtomStore";
 
 // Validation Function
 const validate = (values) => {
@@ -26,6 +28,7 @@ const validate = (values) => {
 };
 
 export default function LoginPage(props) {
+    const setUser = useSetRecoilState(userState);
     const history = useHistory();
     const formik = useFormik({
         initialValues: {
@@ -47,6 +50,7 @@ export default function LoginPage(props) {
                     email: values.email,
                 };
                 localStorage.setItem('user', JSON.stringify(localuser));
+                setUser(localuser);
                 history.push('/chart');
             } else {
                 const requestOptions = {
@@ -59,6 +63,7 @@ export default function LoginPage(props) {
                     .then((json) => {
                         if (json.success) {
                             localStorage.setItem('user', json.id);
+                            setUser(JSON.parse(json.id));
                             message.success(json.message);
                             history.push('/chart');
                         } else {
