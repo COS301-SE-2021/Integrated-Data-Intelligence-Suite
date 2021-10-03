@@ -15,7 +15,7 @@ public class GetModelByIdRequest {
         return modelId;
     }
 
-    public String setModelId(String modelId) {
+    public void setModelId(String modelId) {
         this.modelId = modelId;
     }
 }
