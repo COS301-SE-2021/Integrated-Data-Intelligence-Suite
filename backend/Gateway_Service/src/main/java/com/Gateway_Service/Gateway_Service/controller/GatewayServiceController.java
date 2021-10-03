@@ -678,7 +678,7 @@ public class GatewayServiceController {
 
         GetModelsResponse userResponse = userClient.getUserModels(request);
 
-        //List<String> reportsList = userResponse.getModels();
+        Map<String, Boolean> models = userResponse.getModels();
 
         maxSizeId = 0;//reportsList.size();
 
@@ -688,7 +688,8 @@ public class GatewayServiceController {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(); // todo, use id
 
-        for(int i =0; i < maxSizeId; i++) {
+        for (Map.Entry<String,Boolean> entry : models.entrySet()) {
+            analyseRequest.setModelId(entry.getKey());
             output.add(analyseClient.getModelById(analyseRequest));
         }
 

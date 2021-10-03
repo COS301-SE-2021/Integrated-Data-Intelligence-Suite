@@ -20,6 +20,11 @@ export const isShowingSetDefaultModelPopupState = atom({
     default: false
 });
 
+export const isShowingUploadCSVPopupState = atom({
+    key: 'isShowingUploadCSVPopupState',
+    default: false
+});
+
 export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
     default:
@@ -54,6 +59,11 @@ export const userSelectedDeleteModelState = atom({
 
 export const uploadedTrainingSetFileState = atom({
     key: 'uploadedTrainingSetFile',
+    default: null
+});
+
+export const uploadedCSVFileState = atom({
+    key: 'uploadedCSVFileState',
     default: null
 });
 
