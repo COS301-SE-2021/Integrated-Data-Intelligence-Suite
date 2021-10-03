@@ -1,6 +1,7 @@
 package com.Analyse_Service.Analyse_Service.request;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedTrainingData;
 
 import java.util.ArrayList;
 
@@ -8,13 +9,13 @@ public class TrainUserModelRequest {
 
     private String modelName;
 
-    ArrayList<ParsedData> dataList;
+    ArrayList<ParsedTrainingData> dataList;
 
     public TrainUserModelRequest(){
 
     }
 
-    public TrainUserModelRequest(String modelName, ArrayList<ParsedData> dataList){
+    public TrainUserModelRequest(String modelName, ArrayList<ParsedTrainingData> dataList){
         this.modelName = modelName;
         this.dataList = dataList;
     }
@@ -23,7 +24,7 @@ public class TrainUserModelRequest {
         return modelName;
     }
 
-    public ArrayList<ParsedData> getDataList(){
+    public ArrayList<ParsedTrainingData> getDataList(){
         return this.dataList;
     }
 

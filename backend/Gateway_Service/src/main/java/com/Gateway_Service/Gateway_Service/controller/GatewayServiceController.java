@@ -219,6 +219,9 @@ public class GatewayServiceController {
                 analyseResponse.getWordList());
         ReportDataResponse reportResponse = reportClient.reportData(reportRequest);
 
+        GetReportDataByIdRequest reportRequest2 = new GetReportDataByIdRequest(reportResponse.getId());
+        GetReportDataByIdResponse reportResponse2 = reportClient.getReportDataById(reportRequest2);
+
 
 
         System.out.println("***********************REPORT HAS BEEN DONE*************************");
@@ -228,7 +231,8 @@ public class GatewayServiceController {
             outputData.add(visualizeResponse.outputData.get(i));
 
         InformationGraph reportGraph = new InformationGraph();
-        reportGraph.reportId = reportResponse.getId().toString();
+        //reportGraph.reportId = reportResponse.getId().toString();
+        reportGraph.report = reportResponse2;
         ArrayList<Graph> reportData = new ArrayList<>();
         reportData.add(reportGraph);
         outputData.add(reportData);
@@ -409,16 +413,38 @@ public class GatewayServiceController {
      * This the endpoint for registering the user.
      * @param request This is the body sent by POST
      * @return This is the response http entity.
+     *
+    @PostMapping(value = "/getUserReportById",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<GetReportDataByIdResponse> getUserReportById(@RequestBody ReportRequest request) {
+
+        /*********************USER******************
+
+
+        ReportResponse response = userClient.removeReportForUser(request);
+
+        /*********************REPORT******************
+
+
+        GetReportDataByIdRequest reportRequest = new GetReportDataByIdRequest();
+
+        GetReportDataByIdResponse output = reportClient.getReportDataById(reportRequest);
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }*/
+
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
      */
     @PostMapping(value = "/deleteUserReportById",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) {
 
-        /*********************USER******************/
-
-
-        ReportResponse response = userClient.removeReportForUser(request);
 
         /*********************REPORT******************/
 
@@ -427,7 +453,16 @@ public class GatewayServiceController {
 
         DeleteReportDataByIdResponse output = reportClient.deleteReportDataById(reportRequest);
 
+
+
+        /*********************USER******************/
+        if(output.getDeleted()) {
+            ReportResponse userResponse = userClient.removeReportForUser(request);
+        }
+
         return new ResponseEntity<>(output, HttpStatus.OK);
+
+
     }
 
 
@@ -638,18 +673,18 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetUserReportsRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) {
 
         /*********************USER******************/
 
         //GET ALL IDS
         int maxSizeId;
 
-        GetUserReportsResponse userReports = userClient.getUserReports(request);
+        GetModelsResponse userResponse = userClient.getUserModels(request);
 
-        List<String> reportsList = userReports.getReports();
+        Map<String, Boolean> models = userResponse.getModels();
 
-        maxSizeId = reportsList.size();
+        maxSizeId = 0;//reportsList.size();
 
         /*********************REPORT******************/
 
@@ -657,7 +692,8 @@ public class GatewayServiceController {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(); // todo, use id
 
-        for(int i =0; i < maxSizeId; i++) {
+        for (Map.Entry<String,Boolean> entry : models.entrySet()) {
+            analyseRequest.setModelId(entry.getKey());
             output.add(analyseClient.getModelById(analyseRequest));
         }
 
@@ -667,33 +703,58 @@ public class GatewayServiceController {
 
     /**
      * This the endpoint for registering the user.
-     * @param modelId This is the body sent by POST
+     * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
-    @PostMapping(value = "/deleteUserModelsByUser",
+    @PostMapping(value = "/getSelectedModelId",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public void deleteUserModelById(@RequestBody String modelId) {
+    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody ModelRequest request) {
 
-        //TODO: user removes from list
+        //TODO: user returns selected model id
 
         /*********************USER******************/
 
         GetUserReportsResponse userResponse = userClient.getUserReports(new GetUserReportsRequest());
 
+        /*********************ANALYSE******************/
+
+        GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
+        GetModelByIdResponse output = analyseClient.getModelById(analyseRequest);
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
     /**
      * This the endpoint for registering the user.
-     * @param modelId This is the body sent by POST
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/deleteUserModelsByUser",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public void deleteUserModelById(@RequestBody ModelRequest request) {
+
+        //TODO: user removes from list
+
+        /*********************USER******************/
+
+
+        ModelResponse userResponse = userClient.removeModelForUser(request);
+
+    }
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public void addUserModel(@RequestBody String modelId) {
+    public void addUserModel(@RequestBody ModelRequest request) {
 
-        GetModelByIdRequest analyseRequest = new GetModelByIdRequest(modelId);
+        GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
 
         if(analyseResponse.getModelId() == null) { // doesn't find model
@@ -705,33 +766,8 @@ public class GatewayServiceController {
 
         /*********************USER******************/
 
-        //GetUserReportsResponse userResponse = userClient.getUserReports(request);
+        ModelResponse userResponse = userClient.addModelForUser(request);
     }
-
-
-    /**
-     * This the endpoint for registering the user.
-     * @param modelId This is the body sent by POST
-     * @return This is the response http entity.
-     */
-    @PostMapping(value = "/getSelectedModelId",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody String modelId) {
-
-        //TODO: user returns selected model id
-
-        /*********************USER******************/
-
-        GetUserReportsResponse userResponse = userClient.getUserReports(new GetUserReportsRequest());
-
-        /*********************ANALYSE******************/
-
-        GetModelByIdResponse output = analyseClient.getModelById(new GetModelByIdRequest());
-
-        return new ResponseEntity<>(output, HttpStatus.OK);
-    }
-
 
 
 

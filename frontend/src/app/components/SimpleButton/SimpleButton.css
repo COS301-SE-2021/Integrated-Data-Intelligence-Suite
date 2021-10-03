@@ -6,16 +6,16 @@
     padding: 10px;
     font-weight: 500;
     column-gap: 10px;
-    border-radius: 25px;
-    background: white;
-    color: black;
-    border: 1px solid var(--dodger-blue);
+    color: white;
+    background: var(--dodger-blue);
+    border-radius: 5px;
+    border: var(--dodger-blue);
 }
 
 .simple-btn-icon {
     width: 20px;
     height: 20px;
-    color: var(--dodger-blue);
+    color: white;
 }
 
 .simple-btn-hover:hover {
