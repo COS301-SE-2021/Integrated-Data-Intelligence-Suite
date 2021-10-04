@@ -10,7 +10,8 @@
 
     /*Whites*/
     /*Ghost white looks like a bluish white*/
-    --ghost-white: #F2F6FC;
+    --light-blue-white-bg: #F2F6FC;
+    --dark-blue-white-bg: #bed4ff;
     --white-border-color: #D6D6D6;
 
 
@@ -38,5 +39,7 @@
     /* settings page */
     --black-border-color: black;
     --green-blue-title: #35a4b2;
+
+    --heart-icon-bg-hover: #FFADAD;
 
 }
