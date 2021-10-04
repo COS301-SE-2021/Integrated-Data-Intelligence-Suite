@@ -1021,6 +1021,19 @@ public class GatewayServiceController {
     }
 
     /**
+     * This the endpoint for getting all the users registered on the system
+     * @param request This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/deleteSource", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<DeleteSourceResponse> deleteSource(@RequestBody DeleteSourceRequest request) {
+        log.info("[API] Deleting api source");
+        DeleteSourceResponse response = importClient.deleteSource(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
      * This the endpoint for getting all the api sources.
      * @return This is the response http entity. It contains all the users.
      */
