@@ -53,8 +53,8 @@ public class User {
     @ElementCollection
     @CollectionTable(name = "models",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
-    @MapKeyColumn(name = "selected")
-    @Column(name = "model_id")
+    @MapKeyColumn(name = "model_id")
+    @Column(name = "selected")
     private Map<String, Boolean> models = new HashMap<>();
 
 
