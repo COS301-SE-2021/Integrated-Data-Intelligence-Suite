@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 
 const getSource = (id, structure) => {
-    const [data, setData] = useState(structure);
+    const [data, setData] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
 
@@ -61,12 +61,12 @@ const AddDataSource = () => {
     const { id } = useParams();
     const history = useHistory();
     const [form, setForm] = useState(null);
-    const [url, setUrl] = useState('');
-    const [name, setName] = useState('');
-    const [authType, setAuthType] = useState('none');
-    const [token, setToken] = useState('');
-    const [queryKey, setQueryKey] = useState('');
-    const [method, setmethod] = useState('GET');
+    const [url, setUrl] = useState(null);
+    const [name, setName] = useState(null);
+    const [authType, setAuthType] = useState(null);
+    const [token, setToken] = useState(null);
+    const [queryKey, setQueryKey] = useState(null);
+    const [method, setmethod] = useState(null);
     const [submitLoading, setSubmitLoading] = useState(false);
 
     const structure = {
