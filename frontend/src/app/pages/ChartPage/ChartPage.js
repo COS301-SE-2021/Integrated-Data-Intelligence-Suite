@@ -202,6 +202,153 @@ const ChartPage = () => {
 
                                 <UserInfoCard />
                             </Header>
+                            {
+                                backendData !== null &&
+                                (
+                                    <div id="content-section">
+                                        <SimpleSection
+                                          cardTitle=""
+                                          cardID="row-1"
+                                        >
+                                            <OverviewSection
+                                              text={backendData}
+                                              key={backendData}
+                                            />
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                          cardTitle=""
+                                          cardID="row-2"
+                                        >
+                                            <OverviewGraphSection
+                                              text={backendData}
+                                              key={backendData}
+                                            />
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                          cardTitle=""
+                                          cardID="row-3"
+                                        >
+                                            <div id="location-section">
+                                                <div id="map-metric-container">
+                                                    <SimpleCard
+                                                      cardTitle=""
+                                                      cardID="world-map"
+                                                      titleOnTop
+                                                    >
+                                                        <MapCard text={backendData} />
+                                                    </SimpleCard>
+
+                                                    <SimpleCard
+                                                      cardTitle="Data Frequency"
+                                                      cardID="map-metric-1"
+                                                      titleOnTop
+                                                    >
+                                                        <DraggableBarGraph text={backendData} />
+                                                    </SimpleCard>
+                                                </div>
+                                            </div>
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                          cardTitle=""
+                                          cardID="row-4"
+                                        >
+                                            <SimpleCard
+                                              cardTitle="Word Cloud"
+                                              cardID="word-cloud-card"
+                                              titleOnTop
+                                            >
+                                                <WordCloud
+                                                  text={backendData}
+                                                  key={backendData}
+                                                />
+                                            </SimpleCard>
+
+                                            <div id="word-cloud-graph-container">
+                                                <SimpleCard
+                                                  cardTitle="Dominant words"
+                                                  cardID="word-graph-2"
+                                                  titleOnTop
+                                                >
+                                                    <PieChart text={backendData} />
+                                                </SimpleCard>
+                                                {/* <SimpleCard
+                                                    cardTitle="Word Sunburst"
+                                                    cardID="word-graph-1"
+                                                >
+                                                    Word Graph1
+                                                </SimpleCard> */}
+                                            </div>
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                          cardTitle=""
+                                          cardID="row-5"
+                                        >
+                                            <SimpleCard
+                                              cardTitle="Relationship Between Entities"
+                                              cardID="network-graph-entities"
+                                              titleOnTop
+                                            >
+                                                <NetworkGraphCard
+                                                  text={cloneDeep(backendData)}
+                                                  key={cloneDeep(backendData)}
+                                                  indexOfData={11}
+                                                />
+                                            </SimpleCard>
+
+                                            <SimpleCard
+                                              cardTitle="Relationship Between Patterns"
+                                              cardID="network-graph-patterns"
+                                              titleOnTop
+                                            >
+                                                <NetworkGraphCard
+                                                  text={cloneDeep(backendData)}
+                                                  key={cloneDeep(backendData)}
+                                                  indexOfData={12}
+                                                />
+                                            </SimpleCard>
+                                        </SimpleSection>
+
+                                        <SimpleSection
+                                          cardTitle=""
+                                          cardID="row-6"
+                                        >
+                                            <SimpleCard
+                                              cardTitle="Timeline"
+                                              cardID="anomaly-timeline-card"
+                                              titleOnTop
+                                            >
+                                                <TimelineGraph
+                                                  text={backendData}
+                                                  key={backendData}
+                                                />
+                                            </SimpleCard>
+
+                                            {/* <SimpleCard */}
+                                            {/*    cardTitle="Scatter Plot" */}
+                                            {/*    cardID="anomaly-scatter-plot" */}
+                                            {/*    titleOnTop */}
+                                            {/* > */}
+                                            {/*    Scatter Plot */}
+                                            {/* </SimpleCard> */}
+
+                                            {/* <SimpleCard */}
+                                            {/*    cardTitle="Line Graph" */}
+                                            {/*    cardID="anomaly-line-graph" */}
+                                            {/* > */}
+                                            {/*    <GraphWithBrushAndZoom */}
+                                            {/*        text={backendData} */}
+                                            {/*        key={backendData} */}
+                                            {/*    /> */}
+                                            {/* </SimpleCard> */}
+                                        </SimpleSection>
+                                        {/** !/ */}
+                                    </div>
+                                )
+                            }
                         </Layout>
                     </Layout>
                 </Route>
