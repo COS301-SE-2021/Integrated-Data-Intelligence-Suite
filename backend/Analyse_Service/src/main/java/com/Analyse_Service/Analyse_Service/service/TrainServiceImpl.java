@@ -295,8 +295,7 @@ public class TrainServiceImpl {
 
             RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel, request.getModelName());
             RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
-
-            modelName = registerUserBestModelResponse.getBestModelName();
+            
             modelId = registerUserBestModelResponse.getBestModelId();
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
@@ -305,7 +304,7 @@ public class TrainServiceImpl {
         }
 
 
-        return new TrainUserModelResponse(duration,modelId,modelName);
+        return new TrainUserModelResponse(duration,modelId,request.getModelName());
     }
 
 
