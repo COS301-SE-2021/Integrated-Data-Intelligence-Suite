@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 import Switch from 'react-bootstrap/Switch';
 import SideBar from '../../components/SideBar/SideBar';
@@ -26,7 +26,6 @@ import '../../components/SimpleButton/SimpleButton.css';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
-import { Tooltip } from '@mui/material';
 import ModelCardLoader from '../../components/ModelCardLoader/ModelCardLoader';
 
 const mock_add_obj = [
@@ -123,56 +122,10 @@ const mock_upload_training_data_response_obj = [
 ];
 
 export default function ManageModelsPage() {
+    /*
+    * DELETE MODEL
+    */
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
-    const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
-    const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
-    const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
-    const [isShowingShareModelPopup, toggleShareModelPopup] = useRecoilState(isShowingShareModelPopupState);
-    const [isShowingModelCardLoader, setIsShowingModelCardLoader] = useRecoilState(isShowingModelCardLoaderState);
-    const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
-    const [modelId, setModelId] = useState('');
-    const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
-    const userSelectedDeleteModel = useRecoilValue(userSelectedDeleteModelState);
-    const userSelectedShareModel = useRecoilValue(userSelectedShareModelState);
-    const uploadedTrainingDataFileArrayObj = useRecoilValue(uploadedTrainingSetFileState);
-    const userAtom = useRecoilValue(userState);
-
-    const handleAddModel = () => {
-        // console.log(`Model Id Entered in Add: ${modelId}`);
-        /*
-        -  API_REQUEST_OBJ: new id model to add
-        -  API_RESPONSE_OBJ: updated list of data models
-         */
-        let url = '';
-        let API_REQUEST_BODY = {
-            modelID: modelId,
-            user: userAtom.id
-        };
-        let API_REQUEST_OBJ = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(API_REQUEST_BODY),
-        };
-        let API_RESPONSE_OBJ = null;
-        setIsShowingModelCardLoader(true);
-        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
-            .then((response) => response.json())
-            .then((json) => {
-                API_RESPONSE_OBJ = json;
-                // updateListOfDataModels(mock_add_obj);
-                updateListOfDataModels(API_RESPONSE_OBJ);
-                setIsShowingModelCardLoader(false);
-            })
-            .catch((err) => {
-                // setIsShowingModelCardLoader(false);
-                setIsShowingModelCardLoader(false);
-                console.log('error while retrieving data from backend');
-                console.log(err.message);
-            });
-
-        //close popup
-        toggleAddModelPopup(true);
-    };
     const deleteDataModel = () => {
         // console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
 
@@ -209,16 +162,48 @@ export default function ManageModelsPage() {
         //Close the popup
         toggleDeletePopup(false);
     };
-    const setNewDefaultDataModel = () => {
-        // console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
+    const handleCloseDeletePopup = () => {
+        toggleDeletePopup(false);
+        setUserSelectedDeleteModel(null);
+    };
+    const deletePopupComponent = (
+        <SimplePopup
+            closePopup={() => handleCloseDeletePopup()}
+            popupTitle={'Delete Model'}
+            popupID={'delete-model-popup'}
+            popupExtraClassNames={'confirmationPopup'}
+        >
+            <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
+            <div id={'delete-model-popup-btn-container'}>
+                <button
+                    id={'delete-model-popup-btn-yes'}
+                    onClick={() => deleteDataModel()}
+                >
+                    Yes
+                </button>
+                <button
+                    id={'delete-model-popup-btn-no'}
+                    onClick={() => handleCloseDeletePopup()}
+                >
+                    No
+                </button>
+            </div>
+        </SimplePopup>
+    );
 
+    /*
+    * ADD MODEL
+    */
+    const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
+    const handleAddModel = () => {
+        // console.log(`Model Id Entered in Add: ${modelId}`);
         /*
-        - API_REQUEST_BODY: ID of data model that has been deleted to backend
-        - API_RESPONSE_OBJ: updated list of data models
-        */
+        -  API_REQUEST_OBJ: new id model to add
+        -  API_RESPONSE_OBJ: updated list of data models
+         */
         let url = '';
         let API_REQUEST_BODY = {
-            modelID: userSelectedDefaultModel,
+            modelID: modelId,
             user: userAtom.id
         };
         let API_REQUEST_OBJ = {
@@ -232,19 +217,54 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
+                // updateListOfDataModels(mock_add_obj);
                 updateListOfDataModels(API_RESPONSE_OBJ);
-                // updateListOfDataModels(mock_set_default_response_obj);
                 setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
+                // setIsShowingModelCardLoader(false);
+                setIsShowingModelCardLoader(false);
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
-                setIsShowingModelCardLoader(false);
             });
 
-        //Close the popup
-        toggleSetDefaultModelPopup(false);
+        //close popup
+        toggleAddModelPopup(true);
     };
+    const addModelPopupComponent = (
+        <SimplePopup
+            closePopup={() => toggleAddModelPopup(false)}
+            popupTitle="Add Data Model"
+        >
+            <div className="add-model-container">
+                <div className="input-container">
+                    <div className="label">ID</div>
+                    <input
+                        type="text"
+                        id="modelIdInput"
+                        placeholder="model id"
+                        value={modelId}
+                        onChange={(event) => setModelId(event.currentTarget.value)}
+                    />
+                </div>
+                <div className="button-container">
+                    <button
+                        onClick={() => handleAddModel()}
+                        className={'simple-btn'}
+                        id={'add-model-btn'}
+                    >
+                        Add Model
+                    </button>
+                </div>
+            </div>
+        </SimplePopup>
+    );
+
+    /*
+    * UPLOAD TRAINING DATA
+    */
+    const uploadedTrainingDataFileArrayObj = useRecoilValue(uploadedTrainingSetFileState);
+    const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
     const handleUploadedTrainingData = () => {
         // console.log(`[Uploaded training data set]: ${uploadedTrainingDataFileArrayObj}`);
         // console.log(`[uploading training data set]: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
@@ -305,31 +325,6 @@ export default function ManageModelsPage() {
                 setIsShowingModelCardLoader(false);
             });
     };
-
-    const deletePopupComponent = (
-        <SimplePopup
-            closePopup={() => toggleDeletePopup(false)}
-            popupTitle={'Delete Model'}
-            popupID={'delete-model-popup'}
-        >
-            <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
-            <div id={'delete-model-popup-btn-container'}>
-                <button
-                    id={'delete-model-popup-btn-yes'}
-                    onClick={() => deleteDataModel()}
-                >
-                    Yes
-                </button>
-                <button
-                    id={'delete-model-popup-btn-no'}
-                    onClick={() => toggleDeletePopup(false)}
-                >
-                    No
-                </button>
-            </div>
-        </SimplePopup>
-    );
-
     const addTrainingDataPopupComponent = (
         <SimplePopup
             closePopup={() => toggleAddTrainingDataPopup(false)}
@@ -378,10 +373,58 @@ export default function ManageModelsPage() {
         </SimplePopup>
     );
 
+    /*
+    * SELECT DEFAULT MODEL
+     */
+    const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
+    const setUserSelectedDefaultModel = useSetRecoilState(userSelectedDefaultModelState);
+    const setNewDefaultDataModel = () => {
+        // console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
+
+        /*
+        - API_REQUEST_BODY: ID of data model that has been deleted to backend
+        - API_RESPONSE_OBJ: updated list of data models
+        */
+        let url = '';
+        let API_REQUEST_BODY = {
+            modelID: userSelectedDefaultModel,
+            // user: userAtom.id
+        };
+        let API_REQUEST_OBJ = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(API_REQUEST_BODY),
+        };
+        let API_RESPONSE_OBJ = null;
+        setIsShowingModelCardLoader(true);
+        fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
+            .then((response) => response.json())
+            .then((json) => {
+                API_RESPONSE_OBJ = json;
+                // updateListOfDataModels(API_RESPONSE_OBJ);
+                setIsShowingModelCardLoader(false);
+            })
+            .catch((err) => {
+                console.log('error while retrieving data from backend');
+                console.log(err.message);
+                setIsShowingModelCardLoader(false);
+            });
+
+        updateListOfDataModels(mock_set_default_response_obj);
+
+        //Close the popup
+        toggleSetDefaultModelPopup(false);
+    };
+    const handleCloseSetDefaultPopup = () => {
+        toggleSetDefaultModelPopup(false);
+        setUserSelectedDefaultModel(null);
+    };
     const setDefaultModelPopupComponent = (
         <SimplePopup
-            closePopup={() => toggleSetDefaultModelPopup(false)}
+            closePopup={() => handleCloseSetDefaultPopup()}
             popupTitle={'Set Default'}
+            popupID={'delete-model-popup'}
+            popupExtraClassNames={'confirmationPopup'}
         >
             <div id={'delete-model-popup-msg'}>
                 Do you want to make this model your default data model?
@@ -395,7 +438,7 @@ export default function ManageModelsPage() {
                 </button>
                 <button
                     id={'delete-model-popup-btn-no'}
-                    onClick={() => toggleSetDefaultModelPopup(false)}
+                    onClick={() => handleCloseSetDefaultPopup()}
                 >
                     No
                 </button>
@@ -403,38 +446,18 @@ export default function ManageModelsPage() {
         </SimplePopup>
     );
 
-    const addModelPopupComponent = (
-        <SimplePopup
-            closePopup={() => toggleAddModelPopup(false)}
-            popupTitle="Add Data Model"
-        >
-            <div className="add-model-container">
-                <div className="input-container">
-                    <div className="label">ID</div>
-                    <input
-                        type="text"
-                        id="modelIdInput"
-                        placeholder="model id"
-                        value={modelId}
-                        onChange={(event) => setModelId(event.currentTarget.value)}
-                    />
-                </div>
-                <div className="button-container">
-                    <button
-                        onClick={() => handleAddModel()}
-                        className={'simple-btn'}
-                        id={'add-model-btn'}
-                    >
-                        Add Model
-                    </button>
-                </div>
-            </div>
-        </SimplePopup>
-    );
-
+    /*
+    * SHARE MODEL
+     */
+    const [isShowingShareModelPopup, toggleShareModelPopup] = useRecoilState(isShowingShareModelPopupState);
+    const [userSelectedShareModel, setUserSelectedShareModel] = useRecoilState(userSelectedShareModelState);
+    const handleCloseShareModelPopup = () => {
+        toggleShareModelPopup(false);
+        setUserSelectedShareModel(null);
+    };
     const shareModelPopupComponent = (
         <SimplePopup
-            closePopup={() => toggleShareModelPopup(false)}
+            closePopup={() => handleCloseShareModelPopup()}
             popupTitle={'Share Model'}
         >
             <div id={'share-model-container'}>
@@ -444,19 +467,34 @@ export default function ManageModelsPage() {
                 >
                     {userSelectedShareModel}
                 </div>
-                <Tooltip
-                    title={'Copy ID'}
-                >
-                    <button
-                        id={'share-model-copy-btn'}
-                    >
-                        <IoCopyOutline id={'share-model-copy-icon'}/>
-                    </button>
-                </Tooltip>
+
+                {isTextCopied
+                    ? (
+                        <button
+                            id={'share-model-copy-btn'}
+                            onClick={() => copyIDtoClipboard()}
+                        >
+                            Copied!
+                            <IoCopyOutline id={'share-model-copy-icon'}/>
+                        </button>
+                    )
+                    : (
+                        <button
+                            id={'share-model-copy-btn'}
+                            onClick={() => copyIDtoClipboard()}
+                        >
+                            Copy
+                            <IoCopyOutline id={'share-model-copy-icon'}/>
+                        </button>
+                    )}
             </div>
         </SimplePopup>
     );
 
+    /*
+    * Card Loader
+    */
+    const [isShowingModelCardLoader, setIsShowingModelCardLoader] = useRecoilState(isShowingModelCardLoaderState);
     const modelCardLoadingComponent = (
         <>
             <ModelCardLoader/>
@@ -466,6 +504,35 @@ export default function ManageModelsPage() {
             <ModelCardLoader/>
         </>
     );
+
+    /*
+    * Models, List of Data Models
+    */
+    const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
+    const [modelId, setModelId] = useState('');
+
+    /*
+    * User Selection
+    */
+    const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
+    const [userSelectedDeleteModel, setUserSelectedDeleteModel] = useRecoilState(userSelectedDeleteModelState);
+
+    /*
+    * User and Clipboard
+    */
+    const userAtom = useRecoilValue(userState);
+    const [isTextCopied, setIsTextCopied] = useState(false);
+    const copyIDtoClipboard = () => {
+        /* Get the text field */
+        let copyText = document.getElementById('share-model-id-value').innerHTML;
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText)
+            .then(setIsTextCopied(true))
+            .then(setTimeout(() => {
+                setIsTextCopied(false);
+            }, 1300));
+    };
 
     return (
         <>

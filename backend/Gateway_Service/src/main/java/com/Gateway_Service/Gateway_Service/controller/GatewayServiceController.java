@@ -140,6 +140,16 @@ public class GatewayServiceController {
         ParseImportedDataRequest parseRequestNews = new ParseImportedDataRequest(DataSource.NEWSARTICLE, importResponse.getList().get(1).getData(), request.getPermission());
         parseResponse = parseClient.parseImportedData(parseRequestNews);
         ArrayList<ParsedArticle> newsData = parseResponse.getArticleList();
+        ArrayList<ArrayList<ParsedData>> otherdata = new ArrayList<>();
+        if(importResponse.getList().size() > 2) {
+            ParseImportedDataRequest parseRequestOther = new ParseImportedDataRequest(DataSource.ADDED, importResponse.getList().get(1).getData(), request.getPermission());
+
+            for(int i = 2; i < importResponse.getList().size(); i++) {
+                parseRequestOther.setSourceName(importResponse.getList().get(i).getSourceName());
+                parseResponse = parseClient.parseImportedData(parseRequestOther);
+                otherdata.add(parseResponse.getDataList());
+            }
+        }
 
         if(parseResponse.getFallback() == true) {
             //outputData.add(parseResponse.getFallbackMessage());
@@ -898,7 +908,6 @@ public class GatewayServiceController {
     @CrossOrigin
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         LoginResponse response = userClient.login(request);
-        System.out.println(response.getMessage());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

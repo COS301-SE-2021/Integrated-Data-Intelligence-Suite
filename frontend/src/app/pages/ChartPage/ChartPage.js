@@ -112,27 +112,17 @@ const ChartPage = () => {
     };
 
     const structureBackendData = (data) => {
-        setBackendData(data);
-        setTotalLikes(data[0]);
-        setMostProminentWords(data[1]);
-        setNumberOfTrends(data[2]);
-        setNumberOfAnomalies(data[3]);
+        if (data !== null && data.length > 0) {
+            setBackendData(data);
+            if (data[0].length > 0) {
+                setTotalLikes(data[0][0].words);
+                setOverallSentiment(data[1][0].words);
+                setNumberOfAnomalies(data[3][0].words);
+                setNumberOfTrends(data[2][0].words);
+            }
 
-        setAverageInteraction(data[4]);
-        setOverallSentiment(data[5]);
-        setEngagementPerProvince(data[6]);
-
-        setMapData(data[7]);
-        setDataFrequency(data[8]);
-
-        setWordCloud(data[9]);
-        setDominantWords(data[10]);
-
-        setEntitiesRelationship(data[11]);
-        setPatternsRelationship(data[12]);
-
-        setAnomalies(data[13]);
-        setCurrentPdf(data[data.length - 1][0]);
+            setCurrentPdf(data[data.length - 1][0].report);
+        }
     };
     //
     if (!user) return <Redirect to="/login" />;
@@ -163,6 +153,7 @@ const ChartPage = () => {
                                   className="pdf"
                                   title="pdf-preview"
                                   currentFile={currentPdf}
+                                  userID={user.id}
                                 />
                             ) :
                             null
@@ -210,10 +201,7 @@ const ChartPage = () => {
                                           cardTitle=""
                                           cardID="row-1"
                                         >
-                                            <OverviewSection
-                                              text={backendData}
-                                              key={backendData}
-                                            />
+                                            <OverviewSection />
                                         </SimpleSection>
 
                                         <SimpleSection

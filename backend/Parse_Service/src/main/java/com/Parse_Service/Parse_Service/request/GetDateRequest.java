@@ -3,8 +3,11 @@ package com.Parse_Service.Parse_Service.request;
 public class GetDateRequest {
     private String jsonString;
 
-    public GetDateRequest(String jsonString) {
+    private String key;
+
+    public GetDateRequest(String jsonString, String key) {
         this.jsonString = jsonString;
+        this.key = key;
     }
 
     public String getJsonString() {
@@ -13,5 +16,13 @@ public class GetDateRequest {
 
     public void setJsonString(String jsonString) {
         this.jsonString = jsonString;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

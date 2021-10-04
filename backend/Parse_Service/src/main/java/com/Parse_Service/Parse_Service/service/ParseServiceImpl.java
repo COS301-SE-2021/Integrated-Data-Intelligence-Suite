@@ -24,7 +24,6 @@ import com.Parse_Service.Parse_Service.response.*;
 import com.Parse_Service.Parse_Service.dataclass.*;
 import com.Parse_Service.Parse_Service.rri.SocialMediaExtractor;
 
-import javax.swing.text.html.parser.Parser;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -100,22 +99,22 @@ public class ParseServiceImpl {
                         SocialMediaExtractor extractor = new SocialMediaExtractor();
 
                         //parse text data from post
-                        GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString());
+                        GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString(), "text");
                         GetTextResponse textResponse = extractor.getText(textRequest);
                         parsedData.setTextMessage(textResponse.getText());
 
                         //parse date data from post
-                        GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString());
+                        GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString(), "created_at");
                         GetDateResponse dateResponse = extractor.getDate(dateRequest);
                         parsedData.setDate(dateResponse.getDate());
 
                         //parse location data from post
-                        GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString());
+                        GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString(), "loc");
                         GetLocationResponse locationResponse = extractor.getLocation(locationRequest);
                         parsedData.setLocation(locationResponse.getLocation());
 
                         //parse likes from post
-                        GetLikesRequest likesRequest = new GetLikesRequest(jsonArray.get(i).toString());
+                        GetLikesRequest likesRequest = new GetLikesRequest(jsonArray.get(i).toString(), "retweet_count");
                         GetLikesResponse likesResponse = extractor.getInteractions(likesRequest);
                         parsedData.setLikes(likesResponse.getLikes());
 
@@ -148,6 +147,41 @@ public class ParseServiceImpl {
                     }
                     if(request.getPermission().equals("IMPORTING")) {
                         //articleRepository.saveAll(parsedArticlesList);
+                    }
+                }
+                else if(request.getType() == DataSource.ADDED) {
+                    Optional<SocialMediaProperties> find = socialMediaPropertiesRepository.findSocialMediaPropertiesByName(request.getSourceName());
+                    if(find.isPresent()) {
+                        SocialMediaProperties prop = find.get();
+                        JSONArray jsonArray = obj.getJSONArray(prop.getCollectionProp());
+
+                        for (int i=0; i < jsonArray.length(); i++){
+                            //create and set node
+                            ParsedData parsedData = new ParsedData();
+                            SocialMediaExtractor extractor = new SocialMediaExtractor();
+
+                            //parse text data from post
+                            GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString(), prop.getTextProp());
+                            GetTextResponse textResponse = extractor.getText(textRequest);
+                            parsedData.setTextMessage(textResponse.getText());
+
+                            //parse date data from post
+                            GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString(), prop.getDateProp());
+                            GetDateResponse dateResponse = extractor.getDate(dateRequest);
+                            parsedData.setDate(dateResponse.getDate());
+
+                            //parse location data from post
+                            GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString(), prop.getLocationProp());
+                            GetLocationResponse locationResponse = extractor.getLocation(locationRequest);
+                            parsedData.setLocation(locationResponse.getLocation());
+
+                            //parse likes from post
+                            GetLikesRequest likesRequest = new GetLikesRequest(jsonArray.get(i).toString(), prop.getInteractionsProp());
+                            GetLikesResponse likesResponse = extractor.getInteractions(likesRequest);
+                            parsedData.setLikes(likesResponse.getLikes());
+
+                            parsedList.add(parsedData);
+                        }
                     }
                 }
             }

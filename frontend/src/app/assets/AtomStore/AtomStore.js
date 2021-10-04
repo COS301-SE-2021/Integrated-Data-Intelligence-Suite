@@ -39,7 +39,7 @@ export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
     default:
         [{
-            modelID: 'm1',
+            modelID: 'm1111111111111111111111111111111111111111111111111111111111111111111111111111',
             modelName: 'Itachi',
             isModelDefault: false,
         }, {
@@ -64,17 +64,17 @@ export const userState = atom({
 
 export const userSelectedDefaultModelState = atom({
     key: 'userSelectedDefaultModel',
-    default: '',
+    default: null,
 });
 
 export const userSelectedDeleteModelState = atom({
     key: 'userSelectedDeleteModel',
-    default: '',
+    default: null,
 });
 
 export const userSelectedShareModelState = atom({
     key: 'userSelectedShareModel',
-    default: '',
+    default: null,
 });
 
 export const uploadedTrainingSetFileState = atom({
@@ -94,7 +94,7 @@ export const dataFromBackendState = atom({
 
 export const totalLikedState = atom({
     key: 'totalLikes',
-    default: null,
+    default: [],
 });
 
 export const mostProminentSentimentState = atom({
@@ -104,7 +104,7 @@ export const mostProminentSentimentState = atom({
 
 export const numberOfAnomaliesState = atom({
     key: 'numberOfAnomalies',
-    default: null,
+    default: [],
 });
 
 export const averageInteractionState = atom({
@@ -144,7 +144,7 @@ export const patternsRelationshipsState = atom({
 
 export const numberOfTrendsState = atom({
     key: 'numberOfTrends',
-    default: null,
+    default: [],
 });
 
 export const anomaliesState = atom({
@@ -154,7 +154,7 @@ export const anomaliesState = atom({
 
 export const overallSentimentState = atom({
     key: 'overallSentiment',
-    default: null,
+    default: [],
 });
 
 export const reportState = atom({

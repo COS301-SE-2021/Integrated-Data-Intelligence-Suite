@@ -55,8 +55,24 @@ const DataSourceList = () => {
     const { data, isPending, error } = getAllSources('/getAllSources');
 
     const handleDelete = (sourceId) =>{
+        const requestBody = {
+            id: sourceId,
+        };
         setSources((prev)=>prev.filter((item)=> item.id !== sourceId));
-        message.success(`deleted ${sourceId}`);
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+        };
+        fetch(`${process.env.REACT_APP_BACKEND_HOST}/deleteSource`, requestOptions)
+            .then((response) => response.json())
+            .then((json) => {
+                if (json.success) {
+                    message.success(json.message);
+                } else {
+                    message.error(json.message);
+                }
+            });
     };
 
     return (
