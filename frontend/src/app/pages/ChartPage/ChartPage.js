@@ -121,7 +121,7 @@ const ChartPage = () => {
                 setNumberOfTrends(data[2][0].words);
             }
 
-            setCurrentPdf(data[data.length - 1]);
+            setCurrentPdf(data[data.length - 1][0].report);
         }
     };
     //
@@ -153,6 +153,7 @@ const ChartPage = () => {
                                   className="pdf"
                                   title="pdf-preview"
                                   currentFile={currentPdf}
+                                  userID={user.id}
                                 />
                             ) :
                             null
