@@ -20,6 +20,7 @@ import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -522,7 +523,10 @@ public class AnalyseServiceImpl {
                 .master("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                //.config("spark.driver.memory", "4g")
                 .getOrCreate();
+
+
 
         /*******************SETUP DATA*****************/
         System.out.println("*******************SETUP DATA*****************");

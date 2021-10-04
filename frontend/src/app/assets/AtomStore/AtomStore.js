@@ -35,26 +35,31 @@ export const isShowingModelCardLoaderState = atom({
     default: false,
 });
 
+// export const listOfDataModelsState = atom({
+//     key: 'listOfDataModels',
+//     default:
+//         [{
+//             modelID: 'm1111111111111111111111111111111111111111111111111111111111111111111111111111',
+//             modelName: 'Itachi',
+//             isModelDefault: false,
+//         }, {
+//             modelID: 'm2',
+//             modelName: 'Sasuke',
+//             isModelDefault: false,
+//         }, {
+//             modelID: 'm3',
+//             modelName: 'Zabuza',
+//             isModelDefault: true,
+//         }, {
+//             modelID: 'm4',
+//             modelName: 'Shisui',
+//             isModelDefault: false,
+//         }],
+// });
+
 export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
-    default:
-        [{
-            modelID: 'm1111111111111111111111111111111111111111111111111111111111111111111111111111',
-            modelName: 'Itachi',
-            isModelDefault: false,
-        }, {
-            modelID: 'm2',
-            modelName: 'Sasuke',
-            isModelDefault: false,
-        }, {
-            modelID: 'm3',
-            modelName: 'Zabuza',
-            isModelDefault: true,
-        }, {
-            modelID: 'm4',
-            modelName: 'Shisui',
-            isModelDefault: false,
-        }],
+    default: null,
 });
 
 export const userState = atom({
