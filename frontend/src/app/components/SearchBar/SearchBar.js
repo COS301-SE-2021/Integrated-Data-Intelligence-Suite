@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import './SearchBar.css';
-import template_json from '../../Mocks/messageMock.json';
+import templateJson from '../../Mocks/messageMock.json';
 
 const { Search } = Input;
 
@@ -29,7 +29,7 @@ class SearchBar extends React.Component {
 
     // Runs when the search button is clicked
     onSearch(values) {
-        //this.handleTextChange(template_json);
+        //this.handleTextChange(templateJson);
 
         // Show loading icon while API request is waiting for data
         this.setState((prevState) => ({ showLoadingIcon: true }));
