@@ -147,3 +147,51 @@
     color: var(--dodger-blue);
 
 }
+
+
+.report-button-container{
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+#share-model-id-value.id-div{
+    display: flex;
+    font-size: 14px;
+    text-wrap: none;
+}
+
+.primary-btn{
+    margin: 15px 0;
+    background: var(--dodger-blue);
+    color: white;
+    font-size: 16px;
+    border:none;
+    border-radius: 5px;
+    justify-self: center;
+}
+
+.primary-btn:hover{
+    background: var(--neon-blue);
+    color: var(--light-gray);
+}
+
+#email-input-box:focus-visible{
+    outline: none;
+
+}
+
+#email-label{
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dodger-blue);
+    margin: 5px 0;
+}
+
+#email-input-box{
+    border: 2px solid var(--dodger-blue);
+    padding: 6px;
+}

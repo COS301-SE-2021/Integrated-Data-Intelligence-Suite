@@ -16,6 +16,7 @@ export default function InputBoxWithLabel(props) {
                     id={props.inputID}
                     name={props.inputName}
                     value={props.inputValue}
+                    placeholder={props.placeholder}
                     className={'simple-input-box'}
                 />
             </div>

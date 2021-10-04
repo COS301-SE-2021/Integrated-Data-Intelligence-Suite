@@ -320,7 +320,8 @@ public class GatewayServiceController {
                                                                        @RequestParam("c3") String col3,
                                                                        @RequestParam("c4") String col4,
                                                                        @RequestParam("c5") String col5,
-                                                                       @RequestParam("modelName") String modelname)
+                                                                       @RequestParam("modelName") String modelname,
+                                                                       @RequestParam("user") String userId)
     {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
@@ -375,7 +376,7 @@ public class GatewayServiceController {
             TrainResponseGraph trainGraph = (TrainResponseGraph) graphArray.get(0).get(0);
             TrainUserModelResponse trainResponse = trainGraph.trainResponse;
 
-            ModelRequest modelRequest = new ModelRequest( "",trainResponse.getModelId()); //Todo
+            ModelRequest modelRequest = new ModelRequest(userId, trainResponse.getModelId()); //Todo
             ModelResponse userResponse = userClient.addModelForUser(modelRequest);
 
             return output;
@@ -905,6 +906,32 @@ public class GatewayServiceController {
     @CrossOrigin
     public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
         ResendCodeResponse response = userClient.resendCode(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for sending the OTP code.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/sendOTP",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ResendCodeResponse> sendOTP(@RequestBody ResendCodeRequest request) {
+        ResendCodeResponse response = userClient.resendCode(request);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for resetting the password for the user.
+     * @param request This is the body send by POST
+     * @return This is the response http entity.
+     */
+    @PostMapping(value = "/user/resetPassword",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+        ResetPasswordResponse response = userClient.resetPassword(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
