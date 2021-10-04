@@ -268,7 +268,7 @@ export default function ManageModelsPage() {
         formData.append('c3', API_REQUEST_BODY_TRAIN.c3);
         formData.append('c4', API_REQUEST_BODY_TRAIN.c4);
         formData.append('c5', API_REQUEST_BODY_TRAIN.c5);
-        formData.append('modelName', API_REQUEST_BODY_TRAIN.modelID);
+        formData.append('modelName', API_REQUEST_BODY_TRAIN.modelName);
         formData.append('user', API_REQUEST_BODY_TRAIN.user);
 
         const API_REQUEST_OBJ_TRAIN = {
