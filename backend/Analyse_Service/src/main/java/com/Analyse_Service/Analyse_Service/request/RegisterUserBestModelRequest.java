@@ -6,13 +6,20 @@ import java.util.ArrayList;
 
 public class RegisterUserBestModelRequest {
 
+    private String modelName;
+
     private ArrayList<TrainedModel> modelList = new ArrayList<>();
 
-    public RegisterUserBestModelRequest(ArrayList<TrainedModel> modelList){
+    public RegisterUserBestModelRequest(ArrayList<TrainedModel> modelList, String modelName){
         this.modelList = modelList;
+        this.modelName = modelName;
     }
 
     public ArrayList<TrainedModel> getModelList(){
         return modelList;
+    }
+
+    public String getModelName() {
+        return modelName;
     }
 }

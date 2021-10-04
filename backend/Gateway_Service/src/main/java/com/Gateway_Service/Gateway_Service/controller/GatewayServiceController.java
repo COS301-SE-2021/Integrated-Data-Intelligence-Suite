@@ -314,7 +314,7 @@ public class GatewayServiceController {
 
     @PostMapping(value = "/trainUpload")
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileTrainUpload(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> fileTrainUpload(@RequestParam("file") MultipartFile file,
                                                                        @RequestParam("c1") String col1,
                                                                        @RequestParam("c2") String col2,
                                                                        @RequestParam("c3") String col3,
@@ -324,7 +324,7 @@ public class GatewayServiceController {
                                                                        @RequestParam("user") String userId)
     {
         Map<String, String> response = new HashMap<>();
-        ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
+        ArrayList<GetModelByIdResponse> outputData = new ArrayList<>();
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
@@ -359,27 +359,26 @@ public class GatewayServiceController {
 
             log.info("[Gateway API] Successfully parsed training data. Attempting to analyze data");
 
-            /*
-            TODO: add call to trainUserModel after change to ParsedTrainingData
-             */
-
 
             /****************Analyse****************/
 
             TrainUserModelRequest analyseRequest = new TrainUserModelRequest(modelname,trainingData);
-            ResponseEntity<ArrayList<ArrayList<Graph>>> output =  this.trainUserModel(analyseRequest);
+            ResponseEntity<ArrayList<ArrayList<Graph>>> analyseResponse =  this.trainUserModel(analyseRequest);
 
-            /****************User****************/
+            GetModelsRequest analyseRequest2 = new GetModelsRequest(userId);
 
-            ArrayList<ArrayList<Graph>> graphArray =  output.getBody();
 
+            ArrayList<ArrayList<Graph>> graphArray =  analyseResponse.getBody();
             TrainResponseGraph trainGraph = (TrainResponseGraph) graphArray.get(0).get(0);
             TrainUserModelResponse trainResponse = trainGraph.trainResponse;
 
-            ModelRequest modelRequest = new ModelRequest(userId, trainResponse.getModelId()); //Todo
+            /****************User****************/
+
+            ModelRequest modelRequest = new ModelRequest(userId, trainResponse.getModelId());
             ModelResponse userResponse = userClient.addModelForUser(modelRequest);
 
-            return output;
+
+            return this.getAllModelsByUser(analyseRequest2);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -501,7 +500,7 @@ public class GatewayServiceController {
     }
 
 
-    /*****************TODO: sharing of report function*****************/
+
     @PostMapping(value = "/shareReport" , produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ShareReportResponse> shareReport(@RequestBody ShareReportRequest request) {
@@ -509,8 +508,6 @@ public class GatewayServiceController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 
 
 
@@ -523,7 +520,7 @@ public class GatewayServiceController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ArrayList<ArrayList<Graph>>> trainUserModel(@RequestBody TrainUserModelRequest request) {
-        /**TODO: use proper request for parser**/
+
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -586,9 +583,6 @@ public class GatewayServiceController {
 
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
 
-        /**TODO: save to user**/
-
-
 
         return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
@@ -602,7 +596,6 @@ public class GatewayServiceController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
-        /**TODO: use proper request for parser**/
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -746,7 +739,7 @@ public class GatewayServiceController {
 
         ArrayList<GetModelByIdResponse> output = new ArrayList<>();
 
-        GetModelByIdRequest analyseRequest = new GetModelByIdRequest(); // todo, use id
+        GetModelByIdRequest analyseRequest = new GetModelByIdRequest();
 
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
@@ -789,15 +782,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public void deleteUserModelById(@RequestBody ModelRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) {
 
         //TODO: user removes from list
 
         /*********************USER******************/
 
-
         ModelResponse userResponse = userClient.removeModelForUser(request);
 
+
+        GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
+        return this.getAllModelsByUser(analyseRequest2);
     }
 
     /**
@@ -808,21 +803,23 @@ public class GatewayServiceController {
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public void addUserModel(@RequestBody ModelRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
 
+        GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
+
         if(analyseResponse.getModelId() == null) { // doesn't find model
-            return;
+            return this.getAllModelsByUser(analyseRequest2); //todo: out failure
         }
-
-
-        //TODO: user added new user model
 
         /*********************USER******************/
 
         ModelResponse userResponse = userClient.addModelForUser(request);
+
+
+        return this.getAllModelsByUser(analyseRequest2);
     }
 
 
