@@ -140,6 +140,33 @@ const ChartPage = () => {
         <>
             <Switch>
                 <Route exact path="/chart">
+                    {
+                        showCSV
+                            ? (
+                                <SimplePopup
+                                  closePopup={()=> setShowCSV(false)}
+                                  popupTitle="Upload File"
+                                >
+                                    <UploadDataPage
+                                      handleTextChange={structureBackendData}
+                                      isAnalyzeCSVPopupShowing={showCSV}
+                                    />
+                                </SimplePopup>
+                            ) :
+                            null
+                    }
+                    {
+                        showPdf
+                            ? (
+                                <ReportPreview
+                                  closePopup={() => setShowPdf(false)}
+                                  className="pdf"
+                                  title="pdf-preview"
+                                  currentFile={currentPdf}
+                                />
+                            ) :
+                            null
+                    }
                     <Layout
                       id="outer_layout"
                       className="chart-page"
@@ -157,9 +184,7 @@ const ChartPage = () => {
                                   type="button"
                                   id="upload-btn"
                                   className="clickable"
-                                  onClick={() => {
-                                        /* showPopup(true); */
-                                    }}
+                                  onClick={() => setShowCSV(true)}
                                 >
                                     <AiOutlineUpload id="upload-btn-logo" />
                                     Upload
@@ -169,9 +194,7 @@ const ChartPage = () => {
                                   type="button"
                                   id="upload-btn"
                                   className="clickable"
-                                  onClick={() => {
-                                        // generateReport();
-                                    }}
+                                  onClick={() => setShowPdf(true)}
                                 >
                                     <CgFileDocument id="upload-btn-logo" />
                                     Generate Report
