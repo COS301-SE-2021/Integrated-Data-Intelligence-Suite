@@ -5,6 +5,7 @@ public class GetModelByIdResponse {
     private String modelName;
     private String modelId;
     private String modelAccuracy;
+    private boolean isModelDefault;
 
     boolean fallback = false;
     String fallbackMessage = "";
@@ -18,6 +19,7 @@ public class GetModelByIdResponse {
         this.modelName = modelName;
         this.modelId = modelId;
         this.modelAccuracy = modelAccuracy;
+        this.isModelDefault = false;
     }
 
 
@@ -33,6 +35,10 @@ public class GetModelByIdResponse {
         return modelAccuracy;
     }
 
+    public boolean getIsModelDefault(){
+        return isModelDefault;
+    }
+
     public void setModelName(String modelName) {
         this.modelName = modelName;
     }
@@ -43,6 +49,10 @@ public class GetModelByIdResponse {
 
     public void setModelAccuracy(String modelAccuracy) {
         this.modelAccuracy = modelAccuracy;
+    }
+
+    public void setIsModelDefault(boolean isDefault) {
+        this.isModelDefault = isDefault;
     }
 
 

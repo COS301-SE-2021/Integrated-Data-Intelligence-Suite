@@ -743,7 +743,10 @@ public class GatewayServiceController {
 
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
-            output.add(analyseClient.getModelById(analyseRequest));
+
+            GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
+            AnalyseResponse.setIsModelDefault(entry.getValue());
+            output.add(AnalyseResponse);
         }
 
         return new ResponseEntity<>(output, HttpStatus.OK);
