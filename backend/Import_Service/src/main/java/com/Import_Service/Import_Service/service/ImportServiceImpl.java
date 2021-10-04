@@ -245,7 +245,7 @@ public class ImportServiceImpl {
 
             String twitterData = twitterResponse.getJsonData();
 
-            list.add(new ImportedData(DataSource.TWITTER, twitterData));
+            list.add(new ImportedData(DataSource.TWITTER, twitterData, "Twitter"));
 
         } catch (Exception e){
             System.out.println("\n\n twitter error: "+e.getMessage());
@@ -260,7 +260,7 @@ public class ImportServiceImpl {
 
             String newsData = newsResponse.getData();
 
-            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData));
+            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData, "News"));
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
@@ -321,7 +321,7 @@ public class ImportServiceImpl {
                         oneFailedFlag = true;
                     }
 
-                    list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
+                    list.add(new ImportedData(DataSource.ADDED, Objects.requireNonNull(response.body()).string(), s.getName()));
                 }
                 catch (IOException e) {
                     //Log error if request is invalid
@@ -460,7 +460,7 @@ public class ImportServiceImpl {
     /**
      * This method is used to retrieve a specific API source based on the Id of an API source.
      * @param request This contains the ID of an APISource that is being requested.
-     * @return This will return whether editing an API source was successful and APISource if it found one.
+     * @return This will return whether finding the API source was successful and APISource if it found one.
      * @throws Exception This will be thrown if the request is invalid.
      */
     public GetAPISourceByIdResponse getAPISourceById(GetAPISourceByIdRequest request) throws Exception {
@@ -478,18 +478,39 @@ public class ImportServiceImpl {
         }
     }
 
-
-    public DeleteSourceResponse deleteSourceByID(DeleteSourceRequest request) throws InvalidImporterRequestException{
+    /**
+     * This method will delete the source based on the id of the source.
+     * @param request This contains the ID of an APISource that is being requested.
+     * @return This will return whether deleting an API source was successful and APISource if it found one.
+     * @throws Exception This will be thrown if the request is invalid.
+     */
+    @Transactional
+    public DeleteSourceResponse deleteSourceByID(DeleteSourceRequest request) throws InvalidImporterRequestException {
         if(request == null || request.getId() == null){
             throw new InvalidImporterRequestException("Request is invalid");
         }
 
-        try{
+        Optional<APISource> source = apiSourceRepository.findById(request.getId());
 
-            apiSourceRepository.deleteById(request.getId());
-        }catch (Exception e){
-            return new DeleteSourceResponse(false, e.getMessage());
+        if(source.isPresent()) {
+            try{
+                APISource existingSource = source.get();
+
+                Map<String, String> parameters = existingSource.getParameters();
+
+                for (Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator(); it.hasNext();) {
+                    existingSource.removeParameter(it.next().getKey());
+                }
+
+                apiSourceRepository.deleteById(existingSource.getId());
+            }
+            catch (Exception e){
+                log.error(e.getMessage());
+                e.printStackTrace();
+                return new DeleteSourceResponse(false, "Failed to delete source");
+            }
         }
-        return new DeleteSourceResponse(true, "worked");
+
+        return new DeleteSourceResponse(true, "Deleted source");
     }
 }

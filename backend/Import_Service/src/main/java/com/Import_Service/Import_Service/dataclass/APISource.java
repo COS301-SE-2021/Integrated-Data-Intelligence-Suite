@@ -127,4 +127,14 @@ public class APISource {
     public void setType(ApiType type) {
         this.type = type;
     }
+
+    public void removeAllParameters() {
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            parameters.remove(entry.getKey());
+        }
+    }
+
+    public void removeParameter(String key) {
+        parameters.remove(key);
+    }
 }

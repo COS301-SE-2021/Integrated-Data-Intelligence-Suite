@@ -31,7 +31,7 @@ public class SocialMediaExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        String responseText = obj.getString("text");
+        String responseText = obj.getString(request.getKey());
 
         String regex = "[^\\p{L}\\p{N}\\p{P}\\p{Z}]";
         Pattern pattern = Pattern.compile(
@@ -63,7 +63,7 @@ public class SocialMediaExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        String dateTimeInfo = obj.getString("created_at");
+        String dateTimeInfo = obj.getString(request.getKey());
         String responseDate = dateTimeInfo;
 
         GetDateResponse response = new GetDateResponse(responseDate);
@@ -156,7 +156,7 @@ public class SocialMediaExtractor implements Extractor {
 
         String jsonString = request.getJsonString();
         JSONObject obj = new JSONObject(jsonString);
-        likes = obj.getInt("retweet_count");
+        likes = obj.getInt(request.getKey());
 
         return new GetLikesResponse(likes);
     }

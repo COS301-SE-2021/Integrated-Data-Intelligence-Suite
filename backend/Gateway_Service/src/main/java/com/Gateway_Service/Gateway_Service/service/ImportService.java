@@ -194,6 +194,25 @@ public class ImportService {
         return response;
     }
 
+    public DeleteSourceResponse deleteSource(DeleteSourceRequest sourceByIdRequest)  {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(sourceByIdRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        DeleteSourceResponse response = restTemplate.postForObject("http://Import-Service/Import/deleteSourceById", request, DeleteSourceResponse.class);
+
+        return response;
+    }
+
     public GetAllAPISourcesResponse getAllAPISources()  {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
