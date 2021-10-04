@@ -30,6 +30,11 @@ export const isShowingShareModelPopupState = atom({
     default: false,
 });
 
+export const isShowingModelCardLoaderState = atom({
+    key: 'isShowingModelCardLoader',
+    default: false
+});
+
 export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
     default:
@@ -81,3 +86,4 @@ export const uploadedCSVFileState = atom({
     key: 'uploadedCSVFileState',
     default: null,
 });
+

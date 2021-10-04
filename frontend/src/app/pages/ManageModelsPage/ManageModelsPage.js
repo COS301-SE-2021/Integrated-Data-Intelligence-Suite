@@ -17,7 +17,9 @@ import {
     userSelectedDeleteModelState,
     uploadedTrainingSetFileState,
     isShowingShareModelPopupState,
-    userSelectedShareModelState, userState
+    userSelectedShareModelState,
+    userState,
+    isShowingModelCardLoaderState
 } from '../../assets/AtomStore/AtomStore';
 import { BsCloudUpload, IoCopyOutline, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
@@ -25,6 +27,7 @@ import CustomDivider from '../../components/CustomDivider/CustomDivider';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
 import { Tooltip } from '@mui/material';
+import ModelCardLoader from '../../components/ModelCardLoader/ModelCardLoader';
 
 const mock_add_obj = [
     {
@@ -125,17 +128,17 @@ export default function ManageModelsPage() {
     const [isShowingAddTrainingDataPopup, toggleAddTrainingDataPopup] = useRecoilState(isShowingAddTrainingDataPopupState);
     const [isShowingSetDefaultModelPopup, toggleSetDefaultModelPopup] = useRecoilState(isShowingSetDefaultModelPopupState);
     const [isShowingShareModelPopup, toggleShareModelPopup] = useRecoilState(isShowingShareModelPopupState);
+    const [isShowingModelCardLoader, setIsShowingModelCardLoader] = useRecoilState(isShowingModelCardLoaderState);
     const [listOfDataModels, updateListOfDataModels] = useRecoilState(listOfDataModelsState);
+    const [modelId, setModelId] = useState('');
     const userSelectedDefaultModel = useRecoilValue(userSelectedDefaultModelState);
     const userSelectedDeleteModel = useRecoilValue(userSelectedDeleteModelState);
     const userSelectedShareModel = useRecoilValue(userSelectedShareModelState);
     const uploadedTrainingDataFileArrayObj = useRecoilValue(uploadedTrainingSetFileState);
     const userAtom = useRecoilValue(userState);
-    const [modelId, setModelId] = useState('');
 
     const handleAddModel = () => {
         // console.log(`Model Id Entered in Add: ${modelId}`);
-
         /*
         -  API_REQUEST_OBJ: new id model to add
         -  API_RESPONSE_OBJ: updated list of data models
@@ -151,14 +154,18 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
+        setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                updateListOfDataModels(API_RESPONSE_OBJ);
-                // updateListOfDataModels(mock_add_obj);
+                updateListOfDataModels(mock_add_obj);
+                // updateListOfDataModels(API_RESPONSE_OBJ);
+                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
+                // setIsShowingModelCardLoader(false);
+                setIsShowingModelCardLoader(false);
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
@@ -184,16 +191,19 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
+        setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
                 // updateListOfDataModels(mock_delete_obj);
+                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
+                setIsShowingModelCardLoader(false);
             });
 
         //Close the popup
@@ -217,16 +227,19 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
+        setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
                 // updateListOfDataModels(mock_set_default_response_obj);
+                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
+                setIsShowingModelCardLoader(false);
             });
 
         //Close the popup
@@ -276,16 +289,19 @@ export default function ManageModelsPage() {
         };
 
         let API_RESPONSE_OBJ = null;
+        setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ_TRAIN)
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
                 // updateListOfDataModels(mock_upload_training_data_response_obj);
+                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
+                setIsShowingModelCardLoader(false);
             });
     };
 
@@ -440,6 +456,16 @@ export default function ManageModelsPage() {
         </SimplePopup>
     );
 
+    const modelCardLoadingComponent = (
+        <>
+            <ModelCardLoader/>
+            <ModelCardLoader/>
+            <ModelCardLoader/>
+            <ModelCardLoader/>
+            <ModelCardLoader/>
+        </>
+    );
+
     return (
         <>
             <Switch>
@@ -499,14 +525,21 @@ export default function ManageModelsPage() {
 
                                 <div id={'manage-models-card-row'}>
                                     {
-                                        listOfDataModels.map((obj) => (
-                                            <ModelCard
-                                                modelID={obj.modelID}
-                                                modelName={obj.modelName}
-                                                isModelDefault={obj.isModelDefault}
-                                                key={obj.modelID}
-                                            />
-                                        ))
+                                        isShowingModelCardLoader
+                                            ? modelCardLoadingComponent
+                                            : null
+                                    }
+                                    {
+                                        isShowingModelCardLoader
+                                            ? null
+                                            : listOfDataModels.map((obj) => (
+                                                <ModelCard
+                                                    modelID={obj.modelID}
+                                                    modelName={obj.modelName}
+                                                    isModelDefault={obj.isModelDefault}
+                                                    key={obj.modelID}
+                                                />
+                                            ))
                                     }
                                 </div>
                             </SimpleCard>
