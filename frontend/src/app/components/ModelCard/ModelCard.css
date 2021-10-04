@@ -70,9 +70,11 @@
 .model-details-card {
     /*border: 2px solid black;*/
     border-radius: 15px;
+    grid-template-rows: auto 4em !important;
 }
 
 .model-details-card > .simple-card-title {
+    font-size: 20px;
     background: var(--dodger-blue);
     color: white;
     border-bottom-left-radius: 15px;
@@ -86,7 +88,7 @@
 .model-details-card > .simple-card-body {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    border-top: 0.1em solid  var(--white-border-color);
+    border-top: 0.1em solid var(--white-border-color);
     border-right: 0.1em solid var(--white-border-color);
     border-left: 0.1em solid var(--white-border-color);
     display: grid;

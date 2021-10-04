@@ -100,7 +100,7 @@ export default function ModelCard(props) {
                         cardTitle={props.modelName}
                         extraClassName={'model-details-card'}
                     >
-                        <div>Image or Details about Model</div>
+                        <div>Image</div>
                     </SimpleCard>
                 </div>
             </div>
