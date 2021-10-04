@@ -153,6 +153,7 @@ const ChartPage = () => {
                                   className="pdf"
                                   title="pdf-preview"
                                   currentFile={currentPdf}
+                                  userID={user.id}
                                 />
                             ) :
                             null

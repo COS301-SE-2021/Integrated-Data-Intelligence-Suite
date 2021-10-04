@@ -3,12 +3,12 @@ import { GrClose } from 'react-icons/all';
 
 class ReportPreview extends PureComponent {
     componentDidMount() {
-        if (this.props.currentFile.reportID) {
+        if (this.props.currentFile.id && this.props.userID) {
             const abortCont = new AbortController();
 
             const requestObj = {
-                reportID: this.props.currentFile.reportID,
-                userID: this.props.currentFile.userID,
+                reportID: this.props.currentFile.id,
+                userID: this.props.userID,
             };
 
             fetch(`${process.env.REACT_APP_BACKEND_HOST}/generateReport`,
