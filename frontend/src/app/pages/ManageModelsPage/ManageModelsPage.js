@@ -15,7 +15,9 @@ import {
     isShowingSetDefaultModelPopupState,
     userSelectedDefaultModelState,
     userSelectedDeleteModelState,
-    uploadedTrainingSetFileState, isShowingShareModelPopupState, userSelectedShareModelState
+    uploadedTrainingSetFileState,
+    isShowingShareModelPopupState,
+    userSelectedShareModelState, userState
 } from '../../assets/AtomStore/AtomStore';
 import { BsCloudUpload, IoCopyOutline, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
@@ -128,6 +130,7 @@ export default function ManageModelsPage() {
     const userSelectedDeleteModel = useRecoilValue(userSelectedDeleteModelState);
     const userSelectedShareModel = useRecoilValue(userSelectedShareModelState);
     const uploadedTrainingDataFileArrayObj = useRecoilValue(uploadedTrainingSetFileState);
+    const userAtom = useRecoilValue(userState);
     const [modelId, setModelId] = useState('');
 
     const handleAddModel = () => {
@@ -140,6 +143,7 @@ export default function ManageModelsPage() {
         let url = '';
         let API_REQUEST_BODY = {
             modelID: modelId,
+            user: userAtom.id
         };
         let API_REQUEST_OBJ = {
             method: 'POST',
@@ -161,7 +165,6 @@ export default function ManageModelsPage() {
 
         //close popup
         toggleAddModelPopup(true);
-
     };
     const deleteDataModel = () => {
         console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
@@ -173,6 +176,7 @@ export default function ManageModelsPage() {
         let url = '';
         let API_REQUEST_BODY = {
             modelID: userSelectedDeleteModel,
+            user: userAtom.id
         };
         let API_REQUEST_OBJ = {
             method: 'POST',
@@ -205,6 +209,7 @@ export default function ManageModelsPage() {
         let url = '';
         let API_REQUEST_BODY = {
             modelID: userSelectedDefaultModel,
+            user: userAtom.id
         };
         let API_REQUEST_OBJ = {
             method: 'POST',
@@ -251,7 +256,8 @@ export default function ManageModelsPage() {
             c3: interaction,
             c4: date,
             c5: isTrending,
-            modelName: model_name
+            modelName: model_name,
+            user: userAtom.id
         };
         console.log(API_REQUEST_BODY_TRAIN);
 
