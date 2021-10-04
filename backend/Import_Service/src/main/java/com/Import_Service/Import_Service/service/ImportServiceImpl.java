@@ -277,42 +277,43 @@ public class ImportServiceImpl {
         //Looping through the added sources
         if(!sources.isEmpty()) {
             for (APISource s : sources) {
-                //Building URL
-                String apiUrl = s.getUrl();
-                if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
-                    apiUrl += "?";
-                }
 
-                apiUrl += s.getSearchKey() + "=" + keyword;
-
-                Map<String, String> params = s.getParameters();
-
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
-                }
-
-                //Building the request for various type of authorization
-                if (s.getAuthType() == AuthorizationType.apiKey) {
-                    apiUrl += "&apiKey=" + s.getAuthorization();
-
-                    req = new Request.Builder()
-                            .url(apiUrl)
-                            .method(s.getMethod(), null)
-                            .build();
-                } else if (s.getAuthType() == AuthorizationType.bearer) {
-                    req = new Request.Builder()
-                            .addHeader("Authorization", "Bearer " + s.getAuthorization())
-                            .url(apiUrl)
-                            .method(s.getMethod(), null)
-                            .build();
-                } else {
-                    req = new Request.Builder()
-                            .url(apiUrl)
-                            .method(s.getMethod(), null)
-                            .build();
-                }
-                //Attempting to execute query
                 try {
+                    //Building URL
+                    String apiUrl = s.getUrl();
+                    if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
+                        apiUrl += "?";
+                    }
+
+                    apiUrl += s.getSearchKey() + "=" + keyword;
+
+                    Map<String, String> params = s.getParameters();
+
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                        apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
+                    }
+
+                    //Building the request for various type of authorization
+                    if (s.getAuthType() == AuthorizationType.apiKey) {
+                        apiUrl += "&apiKey=" + s.getAuthorization();
+
+                        req = new Request.Builder()
+                                .url(apiUrl)
+                                .method(s.getMethod(), null)
+                                .build();
+                    } else if (s.getAuthType() == AuthorizationType.bearer) {
+                        req = new Request.Builder()
+                                .addHeader("Authorization", "Bearer " + s.getAuthorization())
+                                .url(apiUrl)
+                                .method(s.getMethod(), null)
+                                .build();
+                    } else {
+                        req = new Request.Builder()
+                                .url(apiUrl)
+                                .method(s.getMethod(), null)
+                                .build();
+                    }
+                    //Attempting to execute query
                     Response response = client.newCall(req).execute();
                     //Log error if response was unsuccessful
                     if (!response.isSuccessful()) {
@@ -323,7 +324,7 @@ public class ImportServiceImpl {
 
                     list.add(new ImportedData(DataSource.ADDED, Objects.requireNonNull(response.body()).string(), s.getName()));
                 }
-                catch (IOException e) {
+                catch (Exception e) {
                     //Log error if request is invalid
                     log.warn("Error executing request for " + s.getName());
                     oneFailedFlag = true;
