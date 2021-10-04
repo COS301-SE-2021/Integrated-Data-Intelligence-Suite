@@ -11,7 +11,10 @@ export default class SimplePopup extends React.Component {
         return (
             <>
                 <div className="popup-container">
-                    <div className="popup-div" id={this.props.popupID}>
+                    <div
+                        className={`popup-div ${this.props.popupExtraClassNames}`}
+                        id={this.props.popupID}
+                    >
                         <div className="popup-title-bar">
                             <div className="popup-title">
                                 {this.props.popupTitle}
