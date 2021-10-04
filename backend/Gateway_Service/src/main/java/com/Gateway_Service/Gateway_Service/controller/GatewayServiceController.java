@@ -807,6 +807,36 @@ public class GatewayServiceController {
      * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
+    @PostMapping(value = "/selectModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) {
+
+        GetModelsRequest getAllReq = new GetModelsRequest(request.getUserID());
+
+        GetModelsResponse getAll = userClient.getUserModels(getAllReq);
+
+        Map<String, Boolean> models = getAll.getModels();
+
+
+        ModelRequest deselectReq = new ModelRequest(request.getUserID(), "");
+        for (Map.Entry<String,Boolean> entry : models.entrySet()) {
+            deselectReq.setModelID(entry.getKey());
+            ModelResponse deselectResp = userClient.deselectModel(deselectReq);
+        }
+
+        ModelResponse userResponse = userClient.selectModel(request);
+
+
+        GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
+        return this.getAllModelsByUser(analyseRequest2);
+    }
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
@@ -849,19 +879,6 @@ public class GatewayServiceController {
         RegisterResponse registerResponse = userClient.register(registerRequest);
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
-
-
-    /*
-    @PostMapping(value = "/user/requestAdmin",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<RegisterAdminResponse> registerAdmin(@RequestBody RegisterForm form) {
-        RegisterAdminRequest registerRequest = new RegisterAdminRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
-    }
-    */
-
 
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
@@ -1021,6 +1038,19 @@ public class GatewayServiceController {
     @CrossOrigin
     public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
         String response = importClient.editAPISource(jsonRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * This the endpoint for getting all the users registered on the system
+     * @param request This is the body send by POST
+     * @return This is the response http entity. It contains all the users.
+     */
+    @PostMapping(value = "/deleteSource", produces = "application/json")
+    @CrossOrigin
+    public ResponseEntity<DeleteSourceResponse> deleteSource(@RequestBody DeleteSourceRequest request) {
+        log.info("[API] Deleting api source");
+        DeleteSourceResponse response = importClient.deleteSource(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
