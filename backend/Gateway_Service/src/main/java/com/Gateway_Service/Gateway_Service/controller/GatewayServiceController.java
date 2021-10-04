@@ -359,8 +359,8 @@ public class GatewayServiceController {
 
             log.info("[Gateway API] Successfully parsed training data. Attempting to analyze data");
 
-
             /****************Analyse****************/
+
 
             TrainUserModelRequest analyseRequest = new TrainUserModelRequest(modelname,trainingData);
             ResponseEntity<ArrayList<ArrayList<Graph>>> analyseResponse =  this.trainUserModel(analyseRequest);
