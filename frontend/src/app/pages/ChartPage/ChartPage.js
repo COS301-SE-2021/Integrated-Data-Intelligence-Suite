@@ -5,7 +5,9 @@ import {
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AiOutlineUpload, CgFileDocument } from 'react-icons/all';
 import { Header } from 'antd/es/layout/layout';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+ useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState,
+} from 'recoil';
 import Search from 'antd/es/input/Search';
 import { reset } from 'enzyme/build/configuration';
 import SideBar from '../../components/SideBar/SideBar';
@@ -29,8 +31,10 @@ import '../../components/UploadButton/UploadButton.css';
 import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDataPage from '../UploadDataPage/UploadDataPage';
 import ReportPreview from '../../components/ReportPreview/ReportPreview';
-import template_json from '../../Mocks/messageMock.json';
+import templateJson from '../../Mocks/messageMock.json';
 import {
+    backendDataState,
+    currentPdfState,
     userState,
     totalLikedState,
     mostProminentSentimentState,
@@ -42,26 +46,34 @@ import {
     mapDataState,
     dataFrequencyState,
     wordCloudState,
-    dominantWordsState, entitiesRelationshipsState, patternsRelationshipsState, anomaliesState
+    dominantWordsState,
+    entitiesRelationshipsState,
+    patternsRelationshipsState,
+    anomaliesState, displayAnalyticsPdfState, isShowingUploadCSVPopupState,
 } from '../../assets/AtomStore/AtomStore';
 
 const ChartPage = () => {
     const [searchLoading, setSearchLoading] = useState(false);
 
-    const setTotalLikesState = useSetRecoilState(totalLikedState);
-    const setMostProminentWordsState = useSetRecoilState(mostProminentSentimentState);
-    const setNumberOfTrendsState = useSetRecoilState(numberOfTrendsState);
-    const setNumberOfAnomaliesState = useSetRecoilState(numberOfAnomaliesState);
-    const setAverageInteractionState = useSetRecoilState(averageInteractionState);
-    const setOverallSentimentState = useSetRecoilState(overallSentimentState);
-    const setEngagementPerProvinceState = useSetRecoilState(engagementPerProvinceState);
-    const setMapDataState = useSetRecoilState(mapDataState);
-    const setDataFrequencyState = useSetRecoilState(dataFrequencyState);
-    const setWordCloudState = useSetRecoilState(wordCloudState);
-    const setDominantWordsState = useSetRecoilState(dominantWordsState);
-    const setEntitiesRelationshipState = useSetRecoilState(entitiesRelationshipsState);
-    const setPatternsRelationshipState = useSetRecoilState(patternsRelationshipsState);
-    const setAnomaliesState = useSetRecoilState(anomaliesState);
+    const [backendData, setBackendData] = useRecoilState(backendDataState);
+    const [totalLikes, setTotalLikes] = useRecoilState(totalLikedState);
+    const [mostProminentWords, setMostProminentWords] = useRecoilState(mostProminentSentimentState);
+    const [numberOfTrends, setNumberOfTrends] = useRecoilState(numberOfTrendsState);
+    const [numberOfAnomalies, setNumberOfAnomalies] = useRecoilState(numberOfAnomaliesState);
+    const [averageInteraction, setAverageInteraction] = useRecoilState(averageInteractionState);
+    const [overallSentiment, setOverallSentiment] = useRecoilState(overallSentimentState);
+    const [engagementPerProvince, setEngagementPerProvince] = useRecoilState(engagementPerProvinceState);
+    const [eapData, setMapData] = useRecoilState(mapDataState);
+    const [dataFrequency, setDataFrequency] = useRecoilState(dataFrequencyState);
+    const [wordCloud, setWordCloud] = useRecoilState(wordCloudState);
+    const [dominantWords, setDominantWords] = useRecoilState(dominantWordsState);
+    const [entitiesRelationship, setEntitiesRelationship] = useRecoilState(entitiesRelationshipsState);
+    const [patternsRelationship, setPatternsRelationship] = useRecoilState(patternsRelationshipsState);
+    const [anomalies, setAnomalies] = useRecoilState(anomaliesState);
+
+    const [showCSV, setShowCSV] = useRecoilState(isShowingUploadCSVPopupState);
+    const [showPdf, setShowPdf] = useRecoilState(displayAnalyticsPdfState);
+    const [currentPdf, setCurrentPdf] = useRecoilState(currentPdfState);
 
     const user = useRecoilValue(userState);
 
