@@ -108,7 +108,7 @@ const VerifyPage = () => {
         //
         //     <form onSubmit={formikResend.handleSubmit}>
         //         <Form.Item>
-        //             <ResendButton />
+        //             <SendOTPButton />
         //         </Form.Item>
         //     </form>
         //

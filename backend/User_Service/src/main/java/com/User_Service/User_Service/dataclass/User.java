@@ -40,6 +40,8 @@ public class User {
 
     Boolean isVerified;
 
+    String passwordOTP = "";
+
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     Date dateCreated;
@@ -149,6 +151,14 @@ public class User {
 
     public void setVerified(Boolean verified) {
         isVerified = verified;
+    }
+
+    public String getPasswordOTP() {
+        return passwordOTP;
+    }
+
+    public void setPasswordOTP(String passwordOTP) {
+        this.passwordOTP = passwordOTP;
     }
 
     public Date getDateCreated() {

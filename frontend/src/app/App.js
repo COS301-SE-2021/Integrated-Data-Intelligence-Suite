@@ -18,6 +18,8 @@ import CreditsPage from './pages/CreditsPage/CreditsPage';
 import ReportsPage from './pages/ReportsPage/ReportsPage';
 import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
 import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
+import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
+import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
 
 class App extends Component {
     render() {
@@ -81,6 +83,14 @@ class App extends Component {
 
                     <Route exact path={'/manageModels'}>
                         <ManageModelsPage/>
+                    </Route>
+
+                    <Route exact path={'/sendOTP'}>
+                        <SendOTPPage/>
+                    </Route>
+
+                    <Route exact path={'/resetPassword'}>
+                        <ResetPasswordPage/>
                     </Route>
 
                     <Route path="*">

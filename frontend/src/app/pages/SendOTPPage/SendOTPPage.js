@@ -5,8 +5,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
     Form, Input, Card, Divider, message, Button,
 } from 'antd';
-import './resendPage.css';
-import ResendButton from './ResendButton';
+import './SendOTPPage.css';
+import SendOTPButton from './SendOTPButton';
 
 // Validation Function
 const validate = (values) => {
@@ -21,7 +21,7 @@ const validate = (values) => {
     return errors;
 };
 
-const ResendPage = () => {
+const SendOTPPage = () => {
     const history = useHistory();
 
     const formik = useFormik({
@@ -35,12 +35,13 @@ const ResendPage = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values),
             };
-            fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/resend`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/sendOTP`, requestOptions)
                 .then((response) => response.json()).then((json) => {
                 if (json.success) {
                     // localStorage.setItem("user", json.id)
                     message.success(json.message);
-                    history.go(-1);
+                    localStorage.setItem('email', values.email);
+                    history.push('/resetPassword');
                 } else {
                     message.error(json.message);
                 }
@@ -49,63 +50,6 @@ const ResendPage = () => {
     });
 
     return (
-        // <Card
-        //   id="login_card"
-        //   className="loginCard"
-        //   title="Step 2: Verify your account"
-        // >
-        //
-        //     <form onSubmit={formikVerify.handleSubmit}>
-        //         <Form.Item
-        //           className="input_item_div"
-        //         >
-        //             <Input
-        //               id="email"
-        //               name="email"
-        //               type="email"
-        //               placeholder="Email"
-        //               onChange={formikVerify.handleChange}
-        //               onBlur={formikVerify.handleBlur}
-        //               value={formikVerify.values.email}
-        //               prefix={<UserOutlined className="site-form-item-icon" />}
-        //             />
-        //         </Form.Item>
-        //
-        //         <Form.Item
-        //           className="input_item_div"
-        //         >
-        //             <Input
-        //               id="verificationCode"
-        //               name="verificationCode"
-        //               type="text"
-        //               placeholder="Verification code"
-        //               value={formikVerify.values.verificationCode}
-        //               onChange={formikVerify.handleChange}
-        //               onBlur={formikVerify.handleBlur} // When the user leaves the form field
-        //               prefix={<LockOutlined className="site-form-item-icon" />}
-        //             />
-        //             {/* {formik.touched.password && formik.errors.password ? ( */}
-        //             {/*    <p>{formik.errors.password}</p>) : null} */}
-        //
-        //         </Form.Item>
-        //
-        //         <Form.Item>
-        //             <VerifyButton />
-        //         </Form.Item>
-        //
-        //         <Divider className="or_divider">
-        //             OR
-        //         </Divider>
-        //     </form>
-        //
-        //     <form onSubmit={formikResend.handleSubmit}>
-        //         <Form.Item>
-        //             <SendOTPButton />
-        //         </Form.Item>
-        //     </form>
-        //
-        // </Card>
-
         <>
             <div id="login-custom-bg">
                 <div id="top-left-block" />
@@ -116,7 +60,7 @@ const ResendPage = () => {
             <div id="verify-background">
                 <div id="verify-form-container">
                     <div id="verify-card">
-                        <div id="verify-card-title">Resend Verification Code</div>
+                        <div id="verify-card-title">Send OTP</div>
                         <form onSubmit={formik.handleSubmit}>
                             <Form.Item
                               className="input_item_div"
@@ -134,7 +78,7 @@ const ResendPage = () => {
                             </Form.Item>
 
                             <Form.Item>
-                                <ResendButton />
+                                <SendOTPButton />
                             </Form.Item>
 
                             <Divider className="or_divider">
@@ -142,7 +86,7 @@ const ResendPage = () => {
                             </Divider>
 
                             <Form.Item>
-                                <Link to="/verify" className="register_link">
+                                <Link to="/" className="register_link">
                                     Go back
                                 </Link>
                             </Form.Item>
@@ -155,4 +99,4 @@ const ResendPage = () => {
     );
 };
 
-export default ResendPage;
+export default SendOTPPage;

@@ -202,9 +202,9 @@ export default function LoginPage(props) {
                             <Form.Item
                                 className="forgot_password_link_container"
                             >
-                                <a className="forgot_password_link" href="">
-                                    Forgot password
-                                </a>
+                                <Link to="/sendOTP" className="register_link">
+                                    Forgot password?
+                                </Link>
                             </Form.Item>
                             <Divider className="or_divider">
                                 OR

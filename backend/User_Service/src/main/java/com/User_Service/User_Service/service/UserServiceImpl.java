@@ -418,7 +418,16 @@ public class UserServiceImpl {
         if(request == null) {
             throw new InvalidRequestException("The resetPassword request is null");
         }
-        if(request.getEmail() == null || request.getNewPassword() == null) {
+        if(request.getEmail() == null || request.getNewPassword() == null || request.getOtp() == null) {
+            if(request.getOtp() == null) {
+                System.out.println("OTP is null");
+            }
+            if(request.getNewPassword() == null || request.getNewPassword().isEmpty()) {
+                System.out.println("PAssword is null");
+            }
+            if(request.getEmail() == null) {
+                System.out.println("email is null");
+            }
             throw new InvalidRequestException("Reset password request contains null");
         }
 
@@ -428,8 +437,18 @@ public class UserServiceImpl {
             return new ResetPasswordResponse(false, "Email does not exist");
         }
         else {
+            User user = usersByEmail.get();
+
+            if(request.getOtp().isEmpty()) {
+                return new ResetPasswordResponse(false, "Incorrect OTP");
+            }
+
+            if(!request.getOtp().equals(user.getPasswordOTP())) {
+                return new ResetPasswordResponse(false, "The OTP does not match");
+            }
+
             String newPassword = request.getNewPassword();
-            UUID id = usersByEmail.get().getId();
+            UUID id = user.getId();
             //hash new password
             String hashedPass;
             int iterations = 1000;
@@ -443,12 +462,62 @@ public class UserServiceImpl {
             byte[] hash = skf.generateSecret(spec).getEncoded();
             hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
             int passUpdate = repository.updatePassword(id, hashedPass);
+            repository.updatePasswordOTP(user.getId(), "");
             if(passUpdate == 0) {
                 return new ResetPasswordResponse(false, "Password not updated");
             }
             else {
                 return new ResetPasswordResponse(true, "Password successfully updated");
             }
+        }
+    }
+
+    /**
+     * This function will allow the user to reset their password and store the new password
+     * in the database.
+     * @param request This class will contain the new password of the user.
+     * @return This class will contain if the password reset process was successful.
+     */
+    @Transactional
+    public ResendCodeResponse sendOTP(ResendCodeRequest request) throws InvalidRequestException, InvalidKeySpecException, NoSuchAlgorithmException {
+        if(request == null) {
+            throw new InvalidRequestException("The resetPassword request is null");
+        }
+        if(request.getEmail() == null) {
+            throw new InvalidRequestException("Reset password request contains null");
+        }
+
+        //check if the emails exists
+        Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
+        if(usersByEmail.isEmpty()) {
+            return new ResendCodeResponse(false, "Email does not exist");
+        }
+        else {
+            User user = usersByEmail.get();
+
+            //Generate 6 digit OTP
+            Random rnd = new Random();
+            int number = rnd.nextInt(999999);
+            String otp = String.format("%06d", number);
+
+            String emailText = "Your OTP to change your password is:\n";
+            emailText += otp;
+            String to = user.getEmail();
+            String from = "emergenoreply@gmail.com";
+            String subject = "IDIS Password OTP";
+
+            repository.updatePasswordOTP(user.getId(), otp);
+
+            SendEmailNotificationRequest emailRequest = new SendEmailNotificationRequest(emailText, to, from, subject);
+
+            try {
+                CompletableFuture<SendEmailNotificationResponse> emailResponse  = notificationService.sendEmailNotification(emailRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResendCodeResponse(false, "An error has occurred while sending the OTP");
+            }
+
+            return new ResendCodeResponse(true, "Password OTP sent");
         }
     }
 
