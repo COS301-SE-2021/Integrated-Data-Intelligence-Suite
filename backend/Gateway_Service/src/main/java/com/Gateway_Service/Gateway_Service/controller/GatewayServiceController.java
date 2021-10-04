@@ -880,19 +880,6 @@ public class GatewayServiceController {
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 
-
-    /*
-    @PostMapping(value = "/user/requestAdmin",
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @CrossOrigin
-    public ResponseEntity<RegisterAdminResponse> registerAdmin(@RequestBody RegisterForm form) {
-        RegisterAdminRequest registerRequest = new RegisterAdminRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        RegisterAdminResponse registerResponse = userClient.requestAdmin(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
-    }
-    */
-
-
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
