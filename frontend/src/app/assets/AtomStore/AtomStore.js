@@ -35,11 +35,6 @@ export const isShowingModelCardLoaderState = atom({
     default: false,
 });
 
-export const isShowingPdf = atom({
-    key: 'isShowingShareModelPopup',
-    default: false,
-});
-
 export const listOfDataModelsState = atom({
     key: 'listOfDataModels',
     default:
@@ -162,7 +157,27 @@ export const overallSentimentState = atom({
     default: null,
 });
 
+export const reportState = atom({
+    ket: 'searchReport',
+    default: null,
+});
+
 export const mapDataState = atom({
     key: 'mapData',
     default: null,
+});
+
+export const currentPdfState = atom({
+    key: 'currentPdf',
+    default: null,
+});
+
+export const displayAnalyticsPdfState = atom({
+    key: 'displayAnalyticsPdf',
+    default: false,
+});
+
+export const backendDataState = atom({
+    key: 'backendData',
+    default: '',
 });
