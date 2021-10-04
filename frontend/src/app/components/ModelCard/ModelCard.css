@@ -27,7 +27,7 @@
     grid-column-end: 2;
     width: 75px;
     height: max-content;
-    background: var(--ghost-white);
+    background: var(--light-blue-white-bg);
     color: var(--dodger-blue);
     padding: 5px;
     border-radius: 10px;
@@ -62,7 +62,7 @@
 }
 
 .model-card-btn:hover {
-    background: var(--ghost-white);
+    background: var(--light-blue-white-bg);
     color: var(--dodger-blue);
 }
 
@@ -105,7 +105,7 @@
 
 .model-details-card > .simple-card-body:hover {
     background: #ccf2ff;
-    background: var(--ghost-white);
+    background: var(--light-blue-white-bg);
     border: 1px solid var(--dodger-blue);
 }
 
@@ -121,7 +121,7 @@
     color: #0086b3;
     /*border: 3px solid black;*/
     /*background: #ccf2ff;*/
-    background: var(--ghost-white);
+    background: var(--light-blue-white-bg);
     position: relative;
     left: 50%;
     bottom: 0;
