@@ -741,6 +741,10 @@ public class GatewayServiceController {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest();
 
+        //add/show default
+        GetModelByIdResponse defaultModel = new GetModelByIdResponse("Default", "Default", "Dynamic");
+        output.add(defaultModel);
+
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
 
