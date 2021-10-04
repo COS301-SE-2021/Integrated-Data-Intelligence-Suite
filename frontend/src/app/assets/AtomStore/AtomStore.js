@@ -32,7 +32,12 @@ export const isShowingShareModelPopupState = atom({
 
 export const isShowingModelCardLoaderState = atom({
     key: 'isShowingModelCardLoader',
-    default: false
+    default: false,
+});
+
+export const isShowingPdf = atom({
+    key: 'isShowingShareModelPopup',
+    default: false,
 });
 
 export const listOfDataModelsState = atom({
@@ -87,3 +92,77 @@ export const uploadedCSVFileState = atom({
     default: null,
 });
 
+export const dataFromBackendState = atom({
+    key: 'dataFromBackend',
+    default: null,
+});
+
+export const totalLikedState = atom({
+    key: 'totalLikes',
+    default: null,
+});
+
+export const mostProminentSentimentState = atom({
+    key: 'mostProminentSentiment',
+    default: null,
+});
+
+export const numberOfAnomaliesState = atom({
+    key: 'numberOfAnomalies',
+    default: null,
+});
+
+export const averageInteractionState = atom({
+    key: 'averageInteraction',
+    default: null,
+});
+
+export const engagementPerProvinceState = atom({
+    key: 'engagementPerProvince',
+    default: null,
+});
+
+export const wordCloudState = atom({
+    key: 'wordCloud',
+    default: null,
+});
+
+export const dominantWordsState = atom({
+    key: 'dominantWords',
+    default: null,
+});
+
+export const dataFrequencyState = atom({
+    key: 'dataFrequency',
+    default: null,
+});
+
+export const entitiesRelationshipsState = atom({
+    key: 'entitiesRelationships',
+    default: null,
+});
+
+export const patternsRelationshipsState = atom({
+    key: 'patternsRelationships',
+    default: null,
+});
+
+export const numberOfTrendsState = atom({
+    key: 'numberOfTrends',
+    default: null,
+});
+
+export const anomaliesState = atom({
+    key: 'anomalies',
+    default: null,
+});
+
+export const overallSentimentState = atom({
+    key: 'overallSentiment',
+    default: null,
+});
+
+export const mapDataState = atom({
+    key: 'mapData',
+    default: null,
+});
