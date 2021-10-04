@@ -807,6 +807,36 @@ public class GatewayServiceController {
      * @param request This is the body sent by POST
      * @return This is the response http entity.
      */
+    @PostMapping(value = "/selectModel",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @CrossOrigin
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) {
+
+        GetModelsRequest getAllReq = new GetModelsRequest(request.getUserID());
+
+        GetModelsResponse getAll = userClient.getUserModels(getAllReq);
+
+        Map<String, Boolean> models = getAll.getModels();
+
+
+        ModelRequest deselectReq = new ModelRequest(request.getUserID(), "");
+        for (Map.Entry<String,Boolean> entry : models.entrySet()) {
+            deselectReq.setModelID(entry.getKey());
+            ModelResponse deselectResp = userClient.deselectModel(deselectReq);
+        }
+
+        ModelResponse userResponse = userClient.selectModel(request);
+
+
+        GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
+        return this.getAllModelsByUser(analyseRequest2);
+    }
+
+    /**
+     * This the endpoint for registering the user.
+     * @param request This is the body sent by POST
+     * @return This is the response http entity.
+     */
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin

@@ -466,6 +466,60 @@ public class UserService {
 
         return userResponse;
     }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ModelResponse selectModel(ModelRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/selectModel", request, ModelResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ModelResponse deselectModel(ModelRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/deselectModel", request, ModelResponse.class);
+
+        return userResponse;
+    }
 }
 
 
