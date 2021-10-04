@@ -1,7 +1,7 @@
 import React from 'react';
 import './ModelCard.css';
 import SimpleCard from '../SimpleCard/SimpleCard';
-import { AiOutlineShareAlt, MdDelete } from 'react-icons/all';
+import { AiFillHeart, AiOutlineHeart, AiOutlineShareAlt, MdDelete } from 'react-icons/all';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
@@ -83,13 +83,31 @@ export default function ModelCard(props) {
                             className={'simple-tooltip'}
                             placement={'top'}
                         >
-                            <input
+                            <button
                                 type={'radio'}
                                 name="default"
                                 id={props.modelID}
-                                checked={props.isModelDefault}
+                                // checked={props.isModelDefault}
                                 onClick={(event) => clickedRadioButton(event)}
-                            />
+                                className={'select-default-btn'}
+                            >
+                                {
+                                    props.isModelDefault
+                                        ? (
+                                            <AiFillHeart
+                                                id={props.modelID}
+                                                className={'heart-icon-filled'}
+                                            />
+                                        )
+                                        : (
+                                            <AiOutlineHeart
+                                                id={props.modelID}
+                                                className={'heart-icon-not-filled'}
+                                            />
+                                        )
+                                }
+                            </button>
+
                         </Tooltip>
                     </div>
                 </div>

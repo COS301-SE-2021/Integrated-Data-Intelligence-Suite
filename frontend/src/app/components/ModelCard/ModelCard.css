@@ -52,24 +52,29 @@
 }
 
 .model-card-btn {
-    height: 24px;
-    width: 24px;
     display: grid;
     align-content: center;
     justify-content: center;
     background: white;
     border: 0;
+    padding: 2px;
+    border-radius: 50%;
+}
+
+.model-card-btn:hover {
+    background: var(--ghost-white);
+    color: var(--dodger-blue);
 }
 
 .model-card-icon {
-    height: inherit;
-    width: inherit;
+    height: 20px;
+    width: 20px;
 }
 
 .model-details-card {
     /*border: 2px solid black;*/
     border-radius: 15px;
-    grid-template-rows: auto 4em !important;
+    grid-template-rows: auto 3.4em !important;
 }
 
 .model-details-card > .simple-card-title {
@@ -100,12 +105,13 @@
 
 .model-details-card > .simple-card-body:hover {
     background: #ccf2ff;
+    background: var(--ghost-white);
+    border: 1px solid var(--dodger-blue);
 }
 
 .model-details-card > .simple-card-body:hover > .model-image {
     opacity: 0;
 }
-
 
 .model-image {
     transition: .3s cubic-bezier(.6, .4, 0, 1);
@@ -113,8 +119,9 @@
 
 .model-extra-details-div {
     color: #0086b3;
-    border: 3px solid black;
-    background: #ccf2ff;
+    /*border: 3px solid black;*/
+    /*background: #ccf2ff;*/
+    background: var(--ghost-white);
     position: relative;
     left: 50%;
     bottom: 0;
@@ -126,6 +133,7 @@
     line-height: 1.4;
     letter-spacing: -.035em;
     align-self: center;
+    text-align: center;
 }
 
 .simple-card-body:hover > .model-extra-details-div {
@@ -135,6 +143,40 @@
     transition: all .2s ease-out;
     bottom: 230% !important;
 
+}
+
+.heart-icon-filled {
+    color: red;
+    height: 20px;
+    width: 20px;
+}
+
+.heart-icon-not-filled {
+    height: 24px;
+    width: 24px;
+}
+
+.select-default-btn {
+    padding: 2px;
+    border-radius: 50%;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    background: white;
+    border: 0;
+}
+
+.select-default-btn:hover {
+    background: var(--heart-icon-bg-hover);
+}
+
+.select-default-btn:hover > .heart-icon-not-filled {
+    color: red;
+}
+
+.model-card-share-btn {
+    border-radius: 50%;
+    padding: 2px;
 }
 
 
