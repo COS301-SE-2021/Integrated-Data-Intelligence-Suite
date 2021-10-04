@@ -293,10 +293,9 @@ public class TrainServiceImpl {
             trainedModel.add(findAnomaliesResponse.getTrainedModel());
 
 
-            RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel);
+            RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel, request.getModelName());
             RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
-
-            modelName = registerUserBestModelResponse.getBestModelName();
+            
             modelId = registerUserBestModelResponse.getBestModelId();
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
@@ -305,7 +304,7 @@ public class TrainServiceImpl {
         }
 
 
-        return new TrainUserModelResponse(duration,modelId,modelName);
+        return new TrainUserModelResponse(duration,modelId,request.getModelName());
     }
 
 
@@ -2241,9 +2240,9 @@ public class TrainServiceImpl {
         //select best in selection for user
         TrainedModel trendModelOne = request.getModelList().get(0);
         TrainedModel trendModelTwo = request.getModelList().get(1);
-        TrainedModel trendModelThree = request.getModelList().get(2);
+        TrainedModel anomalyModel = request.getModelList().get(2);
 
-        String bestModelId = trendModelOne.getModelName();
+        String bestModelId = request.getModelName();
 
         if(trendModelOne.getAccuracy() >= trendModelTwo.getAccuracy()){
             bestModelId = bestModelId + ":" + trendModelOne.getRunId();
@@ -2252,9 +2251,9 @@ public class TrainServiceImpl {
             bestModelId = bestModelId + ":" + trendModelTwo.getRunId();
         }
 
-        bestModelId = bestModelId + ":" + trendModelThree.getRunId();
+        bestModelId = bestModelId + ":" + anomalyModel.getRunId();
 
-        return new RegisterUserBestModelResponse(bestModelId, trendModelOne.getModelName());
+        return new RegisterUserBestModelResponse(bestModelId, request.getModelName());
     }
 
 
