@@ -60,6 +60,10 @@
     grid-template-columns: 100%;
     justify-items: center;
     align-items: center;
+    padding: 0;
+    padding-top: 25px;
+    overflow: hidden;
+    row-gap: 15px;
 }
 
 #delete-model-popup-msg {
@@ -67,6 +71,10 @@
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--prussian-blue);
+
 }
 
 #delete-model-popup-btn-yes {
@@ -76,9 +84,10 @@
     width: 100%;
     background: white;
     font-weight: 500;
+    font-size: 20px;
+    border: 0;
     border-bottom-left-radius: 5px;
-    border: 1px solid black
-
+    border-right: 0.01em solid var(--white-border-color);
 }
 
 #delete-model-popup-btn-yes:hover {
@@ -87,15 +96,17 @@
 }
 
 #delete-model-popup-btn-no {
-    border: 1px solid black;
-    border-left: 0;
+    font-size: 20px;
+    border: 0;
     grid-column-start: 2;
     grid-column-end: 2;
-    color: blue;
+    color: var(--dodger-blue);
     width: 100%;
     background: white;
     font-weight: 500;
     border-bottom-right-radius: 5px;
+    border-right: 0.01em solid var(--white-border-color);
+    padding: 5px;
 }
 
 #delete-model-popup-btn-no:hover {
@@ -108,6 +119,7 @@
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: 100%;
     width: 100%;
+    border: 1px solid var(--white-border-color);
 }
 
 .add-model-container {
@@ -180,9 +192,9 @@
     padding: 3px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    border: 1px solid slategrey;
-    min-height: 32px;
-    max-height: 32px;
+    border: 1px solid var(--white-border-color);
+    min-height: 40px;
+    max-height: 40px;
     align-content: center;
     align-items: center;
     display: grid;
@@ -190,19 +202,44 @@
 
 #share-model-id-value {
     font-weight: 500;
-    padding: 3px;
-    border: 1px solid slategrey;
+    padding: 5px;
+    border: 1px solid var(--white-border-color);
     border-left-width: 0;
-    overflow-x: auto;
-    min-height: 32px;
-    max-height: 32px;
+    overflow-x: hidden;
     overflow-y: hidden;
+    text-overflow: ellipsis;
+    min-height: 40px;
+    max-height: 40px;
     align-content: center;
     align-items: center;
     display: grid;
-    font-size: 14px;
-
+    font-size: 20px;
+    min-width: 300px;
+    max-width: 300px;
+    width: 80%;
 }
+
+/*#share-model-id-value::-webkit-scrollbar {*/
+/*    padding: 0 !important;*/
+/*    width: 0.1em !important;*/
+/*    background: transparent;*/
+/*}*/
+
+/*#share-model-id-value::-webkit-scrollbar-track {*/
+/*    border-radius: 5px;*/
+/*    width: 3px;*/
+/*}*/
+
+/*#share-model-id-value ::-webkit-scrollbar-thumb {*/
+/*    width: 3px;*/
+/*    border-radius: 5px;*/
+/*    background: grey;*/
+/*}*/
+
+/*#share-model-id-value::-webkit-scrollbar-thumb:active {*/
+/*    background: var(--dodger-blue);*/
+/*}*/
+
 
 #share-model-copy-icon {
     min-height: 32px;
@@ -214,21 +251,26 @@
 #share-model-copy-btn {
     background: #bed4ff;
     color: var(--dodger-blue);
-    overflow-y: hidden;
     align-content: center;
     align-items: center;
-    display: grid;
+    display: flex;
+    column-gap: 10px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 15px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    min-height: 32px;
-    max-height: 32px;
-    border: 1px solid slategrey;
+    min-height: 40px;
+    max-height: 40px;
+    border: 1px solid var(--white-border-color);
     border-left: 0;
-
+    text-align: center;
+    overflow: hidden;
+    width: 89px;
 }
 
+.confirmation-popup > .popup-body > #delete-model-popup-msg {
+    padding: 13px;
+}
 
 
 
