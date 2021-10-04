@@ -10,6 +10,7 @@ import {
 } from 'recoil';
 import Search from 'antd/es/input/Search';
 import { reset } from 'enzyme/build/configuration';
+import { cloneDeep } from 'lodash';
 import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
 import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
@@ -105,32 +106,34 @@ const ChartPage = () => {
             })
             .catch((err) => {
                 setSearchLoading(false);
-                structureBackendData(template_json);
+                structureBackendData(templateJson);
                 console.log(err.message);
             });
     };
 
     const structureBackendData = (data) => {
-        setTotalLikesState(data[0]);
-        setMostProminentWordsState(data[1]);
-        setNumberOfTrendsState(data[2]);
-        setNumberOfAnomaliesState(data[3]);
+        setBackendData(data);
+        setTotalLikes(data[0]);
+        setMostProminentWords(data[1]);
+        setNumberOfTrends(data[2]);
+        setNumberOfAnomalies(data[3]);
 
-        setAverageInteractionState(data[4]);
-        setOverallSentimentState(data[5]);
-        setEngagementPerProvinceState(data[6]);
+        setAverageInteraction(data[4]);
+        setOverallSentiment(data[5]);
+        setEngagementPerProvince(data[6]);
 
-        setMapDataState(data[7]);
-        setDataFrequencyState(data[8]);
+        setMapData(data[7]);
+        setDataFrequency(data[8]);
 
-        setWordCloudState(data[9]);
-        setDominantWordsState(data[10]);
+        setWordCloud(data[9]);
+        setDominantWords(data[10]);
 
-        setEntitiesRelationshipState(data[11]);
-        setPatternsRelationshipState(data[12]);
+        setEntitiesRelationship(data[11]);
+        setPatternsRelationship(data[12]);
 
-        setAnomaliesState(data[13]);
-    }
+        setAnomalies(data[13]);
+        setCurrentPdf(data[data.length - 1][0]);
+    };
     //
     if (!user) return <Redirect to="/login" />;
     return (
