@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+const { useEffect } = require('react');
+const { useState } = require('react');
 
-export default function usePost(user, body, header) {
+const usePost = (url, body, header) => {
     const [data, setData] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
@@ -26,12 +27,18 @@ export default function usePost(user, body, header) {
                 setIsPending(false);
                 setError(null);
             })
-            .catch((error) =>{
+            .catch((error) => {
                 if (error.name !== 'AbortError') {
                     setError(error.message);
                     setIsPending(false);
                 }
             });
     }, [url]);
-    return { data, isPending, error };
-}
+    return {
+        data,
+        isPending,
+        error
+    };
+};
+
+export default usePost;

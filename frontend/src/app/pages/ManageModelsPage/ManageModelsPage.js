@@ -534,6 +534,69 @@ export default function ManageModelsPage() {
             }, 1300));
     };
 
+    /* GET ALL MODELS FROM BACKEND */
+    let response_from_use_post = null;
+    const getAllModelsFromBackend = (url, body, header) => {
+        const [data, setData] = useState(null);
+        const [isPending, setIsPending] = useState(true);
+        const [error, setError] = useState(null);
+
+        useEffect(() => {
+            const abortCont = new AbortController();
+
+            setIsShowingModelCardLoader(true);
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}${url}`,
+                {
+                    signal: abortCont.signal,
+                    method: 'POST',
+                    headers: header,
+                    body: JSON.stringify(body),
+                })
+                .then((res) => {
+                    if (!res.ok) {
+                        setIsShowingModelCardLoader(false);
+                        throw Error(res.error);
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    setData(data);
+                    setIsPending(false);
+                    setError(null);
+                    setIsShowingModelCardLoader(false);
+                })
+                .catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        setError(error.message);
+                        setIsPending(false);
+                    }
+                    setIsShowingModelCardLoader(false);
+                });
+        }, [url]);
+        return {
+            data,
+            isPending,
+            error
+        };
+    };
+
+    function getLocalUser() {
+        const localUser = localStorage.getItem('user');
+        if (localUser) {
+            // console.log('user logged in is ', localUser);
+            return JSON.parse(localUser);
+        }
+        return null;
+    }
+
+    let localUser = getLocalUser();
+
+    const {
+        data,
+        isPending,
+        error
+    } = getAllModelsFromBackend('/getAllModelsByUser', JSON.stringify({ userID: localUser.id }), 'Content-Type: application/json');
+
     return (
         <>
             <Switch>
@@ -598,16 +661,27 @@ export default function ManageModelsPage() {
                                             : null
                                     }
                                     {
-                                        isShowingModelCardLoader
-                                            ? null
-                                            : listOfDataModels.map((obj) => (
-                                                <ModelCard
-                                                    modelID={obj.modelID}
-                                                    modelName={obj.modelName}
-                                                    isModelDefault={obj.isModelDefault}
-                                                    key={obj.modelID}
-                                                />
-                                            ))
+                                        data
+                                        && listOfDataModels === null
+                                        && updateListOfDataModels(data)
+                                    }
+                                    {
+                                        listOfDataModels === null
+                                            ? (setIsShowingModelCardLoader(true) && modelCardLoadingComponent)
+                                            : null
+                                    }
+                                    {
+                                        listOfDataModels !== null
+                                        && (setIsShowingModelCardLoader(false))
+                                        &&
+                                        listOfDataModels.map((obj) => (
+                                            <ModelCard
+                                                modelID={obj.modelID}
+                                                modelName={obj.modelName}
+                                                isModelDefault={obj.isModelDefault}
+                                                key={obj.modelID}
+                                            />
+                                        ))
                                     }
                                 </div>
                             </SimpleCard>
