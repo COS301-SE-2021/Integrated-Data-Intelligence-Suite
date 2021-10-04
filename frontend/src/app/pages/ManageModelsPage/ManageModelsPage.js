@@ -159,8 +159,8 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                updateListOfDataModels(mock_add_obj);
-                // updateListOfDataModels(API_RESPONSE_OBJ);
+                // updateListOfDataModels(mock_add_obj);
+                updateListOfDataModels(API_RESPONSE_OBJ);
                 setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
