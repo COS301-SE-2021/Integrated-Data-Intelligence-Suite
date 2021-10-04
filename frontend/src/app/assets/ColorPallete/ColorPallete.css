@@ -1,11 +1,7 @@
 :root {
     /*Blues*/
     --neon-blue: #5773FA;
-    /*--dodger-blue: #148dff;*/
-
     --dodger-blue: #339CFF;
-
-
     --azure: #007AF5;
     --prussian-blue: #0E2A42;
 
@@ -15,6 +11,7 @@
     /*Whites*/
     /*Ghost white looks like a bluish white*/
     --ghost-white: #F2F6FC;
+    --white-border-color: #D6D6D6;
 
 
     /*--light-gray: #f4f7fc;*/
@@ -22,7 +19,6 @@
     --amount-increasing: #00b074;
     --grey-border-color: #e8e8e9;
     --simple-card-title-color: darkgrey;
-
     --cultured: #f9fbfc;
     /*******************************/
     /********Profile Page***********/

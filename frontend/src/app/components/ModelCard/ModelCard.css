@@ -7,7 +7,7 @@
 
     min-width: 300px;
     max-width: 300px;
-    border: 2px solid slategrey;
+    border: 0.1em solid var(--white-border-color);
     border-radius: 15px;
     padding: 15px;
     row-gap: 20px;
@@ -86,9 +86,9 @@
 .model-details-card > .simple-card-body {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    border-top: 2px solid slategrey;
-    border-right: 2px solid slategrey;
-    border-left: 2px solid slategrey;
+    border-top: 0.1em solid  var(--white-border-color);
+    border-right: 0.1em solid var(--white-border-color);
+    border-left: 0.1em solid var(--white-border-color);
     display: grid;
     justify-items: center;
     align-items: center;
