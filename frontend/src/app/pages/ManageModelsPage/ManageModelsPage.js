@@ -134,7 +134,7 @@ export default function ManageModelsPage() {
     const [modelId, setModelId] = useState('');
 
     const handleAddModel = () => {
-        console.log(`Model Id Entered in Add: ${modelId}`);
+        // console.log(`Model Id Entered in Add: ${modelId}`);
 
         /*
         -  API_REQUEST_OBJ: new id model to add
@@ -167,7 +167,7 @@ export default function ManageModelsPage() {
         toggleAddModelPopup(true);
     };
     const deleteDataModel = () => {
-        console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
+        // console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
 
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
@@ -200,7 +200,7 @@ export default function ManageModelsPage() {
         toggleDeletePopup(false);
     };
     const setNewDefaultDataModel = () => {
-        console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
+        // console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
 
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
@@ -233,8 +233,8 @@ export default function ManageModelsPage() {
         toggleSetDefaultModelPopup(false);
     };
     const handleUploadedTrainingData = () => {
-        console.log(`[Uploaded training data set]: ${uploadedTrainingDataFileArrayObj}`);
-        console.log(`[uploading training data set]: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
+        // console.log(`[Uploaded training data set]: ${uploadedTrainingDataFileArrayObj}`);
+        // console.log(`[uploading training data set]: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
 
         //fetch values of input boxes
         let model_name = document.getElementById('input-training-model-name').value;
