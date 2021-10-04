@@ -660,16 +660,7 @@ export default function ManageModelsPage() {
                                             ? modelCardLoadingComponent
                                             : null
                                     }
-                                    {
-                                        data
-                                        && listOfDataModels === null
-                                        && updateListOfDataModels(data)
-                                    }
-                                    {
-                                        listOfDataModels === null
-                                            ? (setIsShowingModelCardLoader(true) && modelCardLoadingComponent)
-                                            : null
-                                    }
+                                    {data && listOfDataModels === null && updateListOfDataModels(data)}
                                     {
                                         listOfDataModels !== null
                                         && (setIsShowingModelCardLoader(false))
