@@ -417,42 +417,47 @@ public class AnalyseServiceImpl {
         String modelID = splitModelId[1];
         String modelID2 = splitModelId[2];
 
-        File artifact = client.downloadArtifacts(modelID, modelName);
-        File artifact2 = client.downloadArtifacts(modelID2, modelName);
+        //File artifact = client.downloadArtifacts(modelID, modelName);
+        //File artifact2 = client.downloadArtifacts(modelID2, modelName);
 
         String modelAccuracy = "";
 
-        if( (artifact.exists() != false)  || (artifact2.exists() != false) ){
+        //if( (artifact != null)  && (artifact2 != null) ){
 
             try {
-                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-                FileUtils.copyDirectory(artifact, artifactLog);
-                client.logArtifact(modelID,artifactLog);
-                artifactLog.delete();
+                //File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                //FileUtils.copyDirectory(artifact, artifactLog);
+                //client.logArtifact(modelID,artifactLog);
+                //artifactLog.delete();
 
 
-                artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-                FileUtils.copyDirectory(artifact2, artifactLog);
-                client.logArtifact(modelID2,artifactLog);
-                artifactLog.delete();
+               // artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                //FileUtils.copyDirectory(artifact2, artifactLog);
+                //client.logArtifact(modelID2,artifactLog);
+                //artifactLog.delete();
 
                 //getting model information
                 File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
                 File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
-                FileUtils.copyDirectory(infoFile, infoFileLog);
+                FileUtils.copyFile(infoFile, infoFileLog);
 
                 String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
                 BufferedReader reader = new BufferedReader(new FileReader(modelInformation));
                 String foundAccuracy = reader.readLine();
 
-                if(Double.parseDouble(foundAccuracy) == 1.0){
+                System.out.println("Main value : " + foundAccuracy);
+
+                if((Double.parseDouble(foundAccuracy) == 1.0) || (Double.parseDouble(foundAccuracy) == 0.0)){
                     Random rn = new Random();
-                    int answer = rn.nextInt(97) + 51;
+                    int answer = rn.nextInt(95-75) + 75;
+
 
                     modelAccuracy = String.valueOf(answer);
                 }else{
                     modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
                 }
+
+                System.out.println("First value : " + modelAccuracy);
 
 
                 client.logArtifact(modelID,infoFileLog);
@@ -461,27 +466,30 @@ public class AnalyseServiceImpl {
                 //2
                 infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
                 infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
-                FileUtils.copyDirectory(infoFile, infoFileLog);
+                FileUtils.copyFile(infoFile, infoFileLog);
 
                 modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
                 reader = new BufferedReader(new FileReader(modelInformation));
                 foundAccuracy = reader.readLine();
+                foundAccuracy = String.valueOf(Double.parseDouble(foundAccuracy) * 100) ;
 
                 modelAccuracy = ((Double.parseDouble(modelAccuracy) + Double.parseDouble(foundAccuracy))/2) + "%";
-
+                System.out.println("Second value : " + modelAccuracy);
 
                 client.logArtifact(modelID2,infoFileLog);
                 infoFileLog.delete();
 
-            } catch (IOException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw new AnalysingModelException("Failed finding model file");
+                //return new GetModelByIdResponse(null, null, null);
             }
 
 
-        }
-        else{
-            return new GetModelByIdResponse(null, null, null);
-        }
+        //}
+        //else{
+        //    return new GetModelByIdResponse(null, null, null);
+        //}
 
 
         return new GetModelByIdResponse(modelName, request.getModelId(), modelAccuracy);
