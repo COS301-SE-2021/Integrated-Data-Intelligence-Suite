@@ -58,7 +58,7 @@ const SettingsPage = () => {
                       <div>
                           <div className="component-title-wrapper">
                               <div className="content-title">{component}</div>
-                              <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.push('/chart')} />
+                              <LeftCircleTwoTone twoToneColor="#5773FA" className="back-button" onClick={() => history.goBack()} />
                           </div>
                           { component === 'Profile' && setActive(component) && <ProfilePage />}
                           { component === 'Users' && user && user.isAdmin && setActive(component) && <Users />}

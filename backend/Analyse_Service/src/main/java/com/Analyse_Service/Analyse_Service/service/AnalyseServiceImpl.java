@@ -422,7 +422,7 @@ public class AnalyseServiceImpl {
 
         String modelAccuracy = "";
 
-        if( (artifact.exists() == false)  || (artifact2.exists() == false) ){
+        if( (artifact.exists() != false)  || (artifact2.exists() != false) ){
 
             try {
                 File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
@@ -477,6 +477,9 @@ public class AnalyseServiceImpl {
                 throw new AnalysingModelException("Failed finding model file");
             }
 
+
+        }
+        else{
             return new GetModelByIdResponse(null, null, null);
         }
 

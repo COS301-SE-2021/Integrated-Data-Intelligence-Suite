@@ -359,8 +359,8 @@ public class GatewayServiceController {
 
             log.info("[Gateway API] Successfully parsed training data. Attempting to analyze data");
 
-
             /****************Analyse****************/
+
 
             TrainUserModelRequest analyseRequest = new TrainUserModelRequest(modelname,trainingData);
             ResponseEntity<ArrayList<ArrayList<Graph>>> analyseResponse =  this.trainUserModel(analyseRequest);
@@ -741,9 +741,16 @@ public class GatewayServiceController {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest();
 
+        //add/show default
+        GetModelByIdResponse defaultModel = new GetModelByIdResponse("Default", "Default", "Dynamic");
+        output.add(defaultModel);
+
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
-            output.add(analyseClient.getModelById(analyseRequest));
+
+            GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
+            AnalyseResponse.setIsModelDefault(entry.getValue());
+            output.add(AnalyseResponse);
         }
 
         return new ResponseEntity<>(output, HttpStatus.OK);
