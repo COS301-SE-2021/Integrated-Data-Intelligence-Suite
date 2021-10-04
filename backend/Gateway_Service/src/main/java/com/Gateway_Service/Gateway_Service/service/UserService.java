@@ -184,6 +184,51 @@ public class UserService {
         return userResponse;
     }
 
+    public ResendCodeResponse sendOTP(ResendCodeRequest userRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/sendOTP", request, ResendCodeResponse.class);
+
+        return userResponse;
+    }
+
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest userRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(userRequest.getNewPassword() + " " + userRequest.getEmail() + " " + userRequest.getOtp());
+
+        ResetPasswordResponse userResponse = restTemplate.postForObject("http://User-Service/User/resetPassword", request, ResetPasswordResponse.class);
+
+        return userResponse;
+    }
+
     public GetUserResponse getUser(GetUserRequest userRequest){
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);

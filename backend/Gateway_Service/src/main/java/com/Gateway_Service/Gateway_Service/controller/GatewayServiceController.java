@@ -918,7 +918,7 @@ public class GatewayServiceController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ResendCodeResponse> sendOTP(@RequestBody ResendCodeRequest request) {
-        ResendCodeResponse response = userClient.resendCode(request);
+        ResendCodeResponse response = userClient.sendOTP(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -931,6 +931,7 @@ public class GatewayServiceController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
     public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+        System.out.println(request.getNewPassword());
         ResetPasswordResponse response = userClient.resetPassword(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

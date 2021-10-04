@@ -1,4 +1,4 @@
-package com.User_Service.User_Service.request;
+package com.Gateway_Service.Gateway_Service.dataclass.user;
 
 public class ResetPasswordRequest {
     private String newPassword;

@@ -77,6 +77,16 @@ public class UserServiceController {
         return service.resendCode(request);
     }
 
+    @PostMapping(value = "/sendOTP")
+    public @ResponseBody ResendCodeResponse sendOTP(@RequestBody ResendCodeRequest request) throws Exception {
+        return service.sendOTP(request);
+    }
+
+    @PostMapping(value = "/resetPassword")
+    public @ResponseBody ResetPasswordResponse resetPassword(@RequestBody ResetPasswordRequest request) throws Exception {
+        return service.resetPassword(request);
+    }
+
     @PostMapping(value = "/updateProfile")
     public @ResponseBody UpdateProfileResponse resendCode(@RequestBody UpdateProfileRequest request) throws Exception {
         return service.updateProfile(request);
