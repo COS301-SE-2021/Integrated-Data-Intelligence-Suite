@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { GrClose } from 'react-icons/all';
-import {data} from "browserslist";
 
 class ReportPreview extends PureComponent {
     componentDidMount() {
@@ -38,8 +37,8 @@ class ReportPreview extends PureComponent {
             title,
             currentFile,
         } = this.props;
-        console.log('pdf is ');
-        console.log({currentFile})
+        // console.log('pdf is ');
+        // console.log({ currentFile });
         // console.log(<iframe title="myframe" src="http://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf" />);
         return (
             <div className={`popup-container ${className}`}>
@@ -54,7 +53,7 @@ class ReportPreview extends PureComponent {
                         <iframe
                           id="pdf-frame"
                           title="pdf=preview"
-                          src={`data:application/pdf;base64,${currentFile.data}`}
+                          src={`data:application/pdf;base64,${currentFile.data || currentFile.pdf}`}
                           frameBorder="10"
                           scrolling="auto"
                           height="1000vh"
