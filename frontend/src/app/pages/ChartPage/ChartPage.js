@@ -121,7 +121,7 @@ const ChartPage = () => {
                 setNumberOfTrends(data[2][0].words);
             }
 
-            setCurrentPdf(data[data.length - 1][0]);
+            setCurrentPdf(data[data.length - 1][0].report);
         }
     };
     //
