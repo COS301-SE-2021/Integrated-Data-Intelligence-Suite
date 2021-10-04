@@ -120,6 +120,8 @@ const ChartPage = () => {
                 setNumberOfAnomalies(data[3][0].words);
                 setNumberOfTrends(data[2][0].words);
             }
+
+            setCurrentPdf(data[data.length - 1]);
         }
     };
     //
