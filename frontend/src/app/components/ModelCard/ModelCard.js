@@ -1,39 +1,67 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './ModelCard.css';
 import SimpleCard from '../SimpleCard/SimpleCard';
 import { AiFillHeart, AiOutlineHeart, AiOutlineShareAlt, MdDelete } from 'react-icons/all';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
     isShowingDeletePopupState,
-    isShowingSetDefaultModelPopupState, isShowingShareModelPopupState,
+    isShowingSetDefaultModelPopupState,
+    isShowingShareModelPopupState,
     userSelectedDefaultModelState,
-    userSelectedDeleteModelState, userSelectedShareModelState
+    userSelectedDeleteModelState,
+    userSelectedShareModelState
 } from '../../assets/AtomStore/AtomStore';
 
 export default function ModelCard(props) {
-    const toggleDeletePopup = useSetRecoilState(isShowingDeletePopupState);
-    const toggleSetDefaultPopup = useSetRecoilState(isShowingSetDefaultModelPopupState);
+    const setShowDefaultPopup = useSetRecoilState(isShowingSetDefaultModelPopupState);
     const setShareModelPopup = useSetRecoilState(isShowingShareModelPopupState);
-    const updateUserSelectedDefaultModel = useSetRecoilState(userSelectedDefaultModelState);
-    const updateUserSelectedDeleteModel = useSetRecoilState(userSelectedDeleteModelState);
-    const updateUserSelectedShareModel = useSetRecoilState(userSelectedShareModelState);
-    const clickedRadioButton = (e) => {
-        updateUserSelectedDefaultModel(e.target.id);
-        toggleSetDefaultPopup(true);
-    };
+    const setShowDeleteModelPopup = useSetRecoilState(isShowingDeletePopupState);
+    const [userSelectedDefaultModel, updateUserSelectedDefaultModel] = useRecoilState(userSelectedDefaultModelState);
+    const [userSelectedDeleteModel, updateUserSelectedDeleteModel] = useRecoilState(userSelectedDeleteModelState);
+    const [userSelectedShareModel, updateUserSelectedShareModel] = useRecoilState(userSelectedShareModelState);
 
-    const clickedDeleteButton = (e) => {
-        updateUserSelectedDeleteModel(e.target.id);
-        toggleDeletePopup(true);
+    /*
+    * DELETE
+    */
+    const clickedDeleteButton = (modelID) => {
+        updateUserSelectedDeleteModel(modelID);
     };
+    useEffect(() => {
+        if (userSelectedDeleteModel === null) {
+            setShowDeleteModelPopup(false);
+        } else {
+            setShowDeleteModelPopup(true);
+        }
+    }, [userSelectedDeleteModel]);
 
-    const clickedShareModelButton = (e) => {
-        console.log(e);
-        console.log(`[Share Model] ID of item clicked: ${e.target.id}`);
-        updateUserSelectedShareModel(e.target.id);
-        setShareModelPopup(true);
+    /*
+    * SHARE
+    */
+    const clickedShareModelButton = (modelID) => {
+        updateUserSelectedShareModel(modelID);
     };
+    useEffect(() => {
+        if (userSelectedShareModel === null) {
+            setShareModelPopup(false);
+        } else {
+            setShareModelPopup(true);
+        }
+    }, [userSelectedShareModel]);
+
+    /*
+    * SET DEFAULT
+    */
+    const clickedRadioButton = (modelID) => {
+        updateUserSelectedDefaultModel(modelID);
+    };
+    useEffect(() => {
+        if (userSelectedDefaultModel === null) {
+            setShowDefaultPopup(false);
+        } else {
+            setShowDefaultPopup(true);
+        }
+    }, [userSelectedDefaultModel]);
 
     return (
         <>
@@ -52,7 +80,7 @@ export default function ModelCard(props) {
                         >
                             <button
                                 className={'model-card-delete-btn model-card-btn'}
-                                onClick={(event) => clickedDeleteButton(event)}
+                                onClick={() => clickedDeleteButton(props.modelID)}
                                 id={props.modelID}
                             >
                                 <MdDelete className={'model-card-delete-icon model-card-icon'}/>
@@ -68,7 +96,7 @@ export default function ModelCard(props) {
                             <button
                                 className={'model-card-share-btn model-card-btn'}
                                 id={props.modelID}
-                                onClick={(event) => clickedShareModelButton(event)}
+                                onClick={() => clickedShareModelButton(props.modelID)}
                             >
                                 <AiOutlineShareAlt
                                     className={'model-card-share-icon model-card-icon'}
@@ -88,7 +116,7 @@ export default function ModelCard(props) {
                                 name="default"
                                 id={props.modelID}
                                 // checked={props.isModelDefault}
-                                onClick={(event) => clickedRadioButton(event)}
+                                onClick={() => clickedRadioButton(props.modelID)}
                                 className={'select-default-btn'}
                             >
                                 {
