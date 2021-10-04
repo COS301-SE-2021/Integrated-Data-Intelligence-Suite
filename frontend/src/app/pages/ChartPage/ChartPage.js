@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
     Layout,
 } from 'antd';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AiOutlineUpload, CgFileDocument } from 'react-icons/all';
+import { Header } from 'antd/es/layout/layout';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import Search from 'antd/es/input/Search';
+import { reset } from 'enzyme/build/configuration';
 import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
 import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
@@ -25,322 +29,147 @@ import '../../components/UploadButton/UploadButton.css';
 import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDataPage from '../UploadDataPage/UploadDataPage';
 import ReportPreview from '../../components/ReportPreview/ReportPreview';
-import pdfTemplate from '../../Mocks/pdf';
+import template_json from '../../Mocks/messageMock.json';
+import {
+    userState,
+    totalLikedState,
+    mostProminentSentimentState,
+    numberOfTrendsState,
+    numberOfAnomaliesState,
+    averageInteractionState,
+    overallSentimentState,
+    engagementPerProvinceState,
+    mapDataState,
+    dataFrequencyState,
+    wordCloudState,
+    dominantWordsState, entitiesRelationshipsState, patternsRelationshipsState, anomaliesState
+} from '../../assets/AtomStore/AtomStore';
 
-const {
-    Header,
-} = Layout;
+const ChartPage = () => {
+    const [searchLoading, setSearchLoading] = useState(false);
 
-function retrieveData() {
-    fetch(`${process.env.REACT_APP_BACKEND_HOST}/retrievePrevious`)
-        .then((res) => {
-            if (!res.ok) {
-                return null;
-            }
-            return res.json();
-        });
-}
+    const setTotalLikesState = useSetRecoilState(totalLikedState);
+    const setMostProminentWordsState = useSetRecoilState(mostProminentSentimentState);
+    const setNumberOfTrendsState = useSetRecoilState(numberOfTrendsState);
+    const setNumberOfAnomaliesState = useSetRecoilState(numberOfAnomaliesState);
+    const setAverageInteractionState = useSetRecoilState(averageInteractionState);
+    const setOverallSentimentState = useSetRecoilState(overallSentimentState);
+    const setEngagementPerProvinceState = useSetRecoilState(engagementPerProvinceState);
+    const setMapDataState = useSetRecoilState(mapDataState);
+    const setDataFrequencyState = useSetRecoilState(dataFrequencyState);
+    const setWordCloudState = useSetRecoilState(wordCloudState);
+    const setDominantWordsState = useSetRecoilState(dominantWordsState);
+    const setEntitiesRelationshipState = useSetRecoilState(entitiesRelationshipsState);
+    const setPatternsRelationshipState = useSetRecoilState(patternsRelationshipsState);
+    const setAnomaliesState = useSetRecoilState(anomaliesState);
 
-function getLocalUser() {
-    const localUser = localStorage.getItem('user');
-    if (localUser) {
-        return JSON.parse(localUser);
-    }
-    return null;
-}
+    const user = useRecoilValue(userState);
 
-class ChartPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            text: '',
-            isShowingPopup: false,
-            showPdf: false,
-            currentPdf: null,
+    const handleSearch = (value) =>{
+        setSearchLoading(true);
+        const jsonObj = {
+            permission: user.permission,
+            username: user.username,
         };
-        this.state.user = getLocalUser();
-        this.state.tempPdf = pdfTemplate();
-        this.showPopup = this.showPopup.bind(this);
-        this.generateReport = this.generateReport.bind(this);
-        this.handleTextChange = this.handleTextChange.bind(this);
+
+        const abortCont = new AbortController();
+        const requestObj = {
+            signal: abortCont.signal,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(jsonObj),
+        };
+        const url = `http://localhost:9000/main/${value}`;
+        fetch(url, requestObj)
+            .then((res) =>{
+                if (!res.ok) {
+                    throw (res.error());
+                }
+                return res.json();
+            })
+            .then((data)=>{
+                setSearchLoading(false);
+                structureBackendData(data);
+            })
+            .catch((err) => {
+                setSearchLoading(false);
+                structureBackendData(template_json);
+                console.log(err.message);
+            });
+    };
+
+    const structureBackendData = (data) => {
+        setTotalLikesState(data[0]);
+        setMostProminentWordsState(data[1]);
+        setNumberOfTrendsState(data[2]);
+        setNumberOfAnomaliesState(data[3]);
+
+        setAverageInteractionState(data[4]);
+        setOverallSentimentState(data[5]);
+        setEngagementPerProvinceState(data[6]);
+
+        setMapDataState(data[7]);
+        setDataFrequencyState(data[8]);
+
+        setWordCloudState(data[9]);
+        setDominantWordsState(data[10]);
+
+        setEntitiesRelationshipState(data[11]);
+        setPatternsRelationshipState(data[12]);
+
+        setAnomaliesState(data[13]);
     }
+    //
+    if (!user) return <Redirect to="/login" />;
+    return (
+        <>
+            <Switch>
+                <Route exact path="/chart">
+                    <Layout
+                      id="outer_layout"
+                      className="chart-page"
+                    >
+                        <SideBar currentPage="2" />
+                        <Layout id="inner_layout_div">
+                            <Header id="top_bar">
+                                <Search
+                                  placeholder="search..."
+                                  onSearch={handleSearch}
+                                  loading={searchLoading}
+                                />
 
-    handleTextChange(newText) {
-        this.setState(({ text: newText }));
-        console.log('Rhuli and sterv');
-        console.log(this.state.text);
-    }
+                                <button
+                                  type="button"
+                                  id="upload-btn"
+                                  className="clickable"
+                                  onClick={() => {
+                                        /* showPopup(true); */
+                                    }}
+                                >
+                                    <AiOutlineUpload id="upload-btn-logo" />
+                                    Upload
+                                </button>
 
-    showPopup() {
-        // this.setState(({ isShowingPopup: !this.state.isShowingPopup }));
-        this.setState(
-            (prevState) => ({
-                isShowingPopup: !prevState.isShowingPopup,
-            }),
-            () => console.log(`isPopupShowing: ${this.state.isShowingPopup}`),
-        );
-    }
+                                <button
+                                  type="button"
+                                  id="upload-btn"
+                                  className="clickable"
+                                  onClick={() => {
+                                        // generateReport();
+                                    }}
+                                >
+                                    <CgFileDocument id="upload-btn-logo" />
+                                    Generate Report
+                                </button>
 
-    disablePreview() {
-        this.setState({
-            showPdf: false,
-        });
-    }
-
-    generateReport(id, pdf, user) {
-        console.log('steve');
-        console.log(pdf);
-        this.setState(() => ({
-            currentPdf: {
-                reportID: id,
-                data: pdf,
-                userID: user.id,
-            },
-            showPdf: true,
-        }));
-    }
-
-    render() {
-        const {
-            user,
-            showPdf,
-            currentPdf,
-            tempPdf,
-        } = this.state;
-
-        if (user) {
-            return (
-                <>
-                    <Switch>
-                        <Route exact path="/chart">
-                            {
-                                this.state.isShowingPopup
-                                    ? (
-                                        <SimplePopup
-                                            closePopup={this.showPopup}
-                                            popupTitle="Upload File"
-                                        >
-                                            <UploadDataPage
-                                                handleTextChange={this.handleTextChange}
-                                                isAnalyzeCSVPopupShowing={this.state.isShowingPopup}
-                                            />
-                                        </SimplePopup>
-                                    ) :
-                                    null
-                            }
-                            {
-                                showPdf
-                                    ? (
-                                        <ReportPreview
-                                            closePopup={() => this.disablePreview()}
-                                            className="pdf"
-                                            title="pdf-preview"
-                                            currentFile={currentPdf}
-                                        />
-                                    ) :
-                                    null
-                            }
-
-                            <Layout
-                                id="outer_layout"
-                                className="chart-page"
-                            >
-                                <SideBar currentPage="2"/>
-                                <Layout id="inner_layout_div">
-                                    <Header id="top_bar">
-                                        <SearchBar
-                                            text={this.state.text}
-                                            handleTextChange={this.handleTextChange}
-                                        />
-
-                                        <button
-                                            id="upload-btn"
-                                            className="clickable"
-                                            onClick={() => {
-                                                this.showPopup(true);
-                                            }}
-                                        >
-                                            <AiOutlineUpload id="upload-btn-logo"/>
-                                            Upload
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            id="upload-btn"
-                                            className="clickable"
-                                            onClick={() => {
-                                                this.generateReport(
-                                                    this.state.text[this.state.text.length - 1][0].report.id,
-                                                    this.state.text[this.state.text.length - 1][0].report.pdf,
-                                                    user,
-                                                );
-                                            }}
-                                        >
-                                            <CgFileDocument id="upload-btn-logo"/>
-                                            Generate Report
-                                        </button>
-
-                                        <UserInfoCard
-                                            name="s"
-                                        />
-                                    </Header>
-
-                                    <div id="content-section">
-                                        <SimpleSection
-                                            cardTitle=""
-                                            cardID="row-1"
-                                        >
-                                            <OverviewSection
-                                                text={this.state.text}
-                                                key={this.state.text}
-                                            />
-                                        </SimpleSection>
-
-                                        <SimpleSection
-                                            cardTitle=""
-                                            cardID="row-2"
-                                        >
-                                            <OverviewGraphSection
-                                                text={this.state.text}
-                                                key={this.state.text}
-                                            />
-                                        </SimpleSection>
-
-                                        {/* /!* */}
-                                        <SimpleSection
-                                            cardTitle=""
-                                            cardID="row-3"
-                                        >
-                                            <div id="location-section">
-                                                <div id="map-metric-container">
-                                                    <SimpleCard
-                                                        cardTitle=""
-                                                        cardID="world-map"
-                                                        titleOnTop
-                                                    >
-                                                        <MapCard text={this.state.text}/>
-                                                    </SimpleCard>
-
-                                                    <SimpleCard
-                                                        cardTitle="Data Frequency"
-                                                        cardID="map-metric-1"
-                                                        titleOnTop
-                                                    >
-                                                        <DraggableBarGraph text={this.state.text}/>
-                                                    </SimpleCard>
-                                                </div>
-                                            </div>
-                                        </SimpleSection>
-
-                                        <SimpleSection
-                                            cardTitle=""
-                                            cardID="row-4"
-                                        >
-                                            <SimpleCard
-                                                cardTitle="Word Cloud"
-                                                cardID="word-cloud-card"
-                                                titleOnTop
-                                            >
-                                                <WordCloud
-                                                    text={this.state.text}
-                                                    key={this.state.text}
-                                                />
-                                            </SimpleCard>
-
-                                            <div id="word-cloud-graph-container">
-                                                <SimpleCard
-                                                    cardTitle="Dominant words"
-                                                    cardID="word-graph-2"
-                                                    titleOnTop
-                                                >
-                                                    <PieChart text={this.state.text}/>
-                                                </SimpleCard>
-                                                {/* <SimpleCard
-                                                    cardTitle="Word Sunburst"
-                                                    cardID="word-graph-1"
-                                                >
-                                                    Word Graph1
-                                                </SimpleCard> */}
-                                            </div>
-                                        </SimpleSection>
-
-                                        <SimpleSection
-                                            cardTitle=""
-                                            cardID="row-5"
-                                        >
-                                            <SimpleCard
-                                                cardTitle="Relationship Between Entities"
-                                                cardID="network-graph-entities"
-                                                titleOnTop
-                                            >
-                                                <NetworkGraphCard
-                                                    text={this.state.text}
-                                                    key={this.state.text}
-                                                    indexOfData={11}
-                                                />
-                                            </SimpleCard>
-
-                                            <SimpleCard
-                                                cardTitle="Relationship Between Patterns"
-                                                cardID="network-graph-patterns"
-                                                titleOnTop
-                                            >
-                                                <NetworkGraphCard
-                                                    text={this.state.text}
-                                                    key={this.state.text}
-                                                    indexOfData={12}
-                                                />
-                                            </SimpleCard>
-                                        </SimpleSection>
-
-                                        <SimpleSection
-                                            cardTitle=""
-                                            cardID="row-6"
-                                        >
-                                            <SimpleCard
-                                                cardTitle="Timeline"
-                                                cardID="anomaly-timeline-card"
-                                                titleOnTop
-                                            >
-                                                <TimelineGraph
-                                                    text={this.state.text}
-                                                    key={this.state.text}
-                                                />
-                                            </SimpleCard>
-
-                                            {/* <SimpleCard */}
-                                            {/*    cardTitle="Scatter Plot" */}
-                                            {/*    cardID="anomaly-scatter-plot" */}
-                                            {/*    titleOnTop */}
-                                            {/* > */}
-                                            {/*    Scatter Plot */}
-                                            {/* </SimpleCard> */}
-
-                                            {/* <SimpleCard */}
-                                            {/*    cardTitle="Line Graph" */}
-                                            {/*    cardID="anomaly-line-graph" */}
-                                            {/* > */}
-                                            {/*    <GraphWithBrushAndZoom */}
-                                            {/*        text={this.state.text} */}
-                                            {/*        key={this.state.text} */}
-                                            {/*    /> */}
-                                            {/* </SimpleCard> */}
-                                        </SimpleSection>
-                                        {/** !/ */}
-                                    </div>
-                                </Layout>
-                            </Layout>
-                        </Route>
-                    </Switch>
-                </>
-            );
-        }
-        return (
-            <>
-                <Redirect to="/login"/>
-            </>
-        );
-    }
-}
+                                <UserInfoCard />
+                            </Header>
+                        </Layout>
+                    </Layout>
+                </Route>
+            </Switch>
+        </>
+    );
+};
 
 export default ChartPage;
