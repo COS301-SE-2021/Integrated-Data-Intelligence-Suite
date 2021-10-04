@@ -3,9 +3,10 @@ package com.Gateway_Service.Gateway_Service.dataclass.parse;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 
 public class ParseImportedDataRequest {
-    DataSource type;
-    String jsonString;
-    String permission;
+    private DataSource type;
+    private String jsonString;
+    private String permission;
+    private String sourceName;
 
     public ParseImportedDataRequest() {
 
@@ -39,5 +40,13 @@ public class ParseImportedDataRequest {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
 }

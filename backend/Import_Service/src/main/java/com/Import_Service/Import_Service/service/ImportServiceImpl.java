@@ -245,7 +245,7 @@ public class ImportServiceImpl {
 
             String twitterData = twitterResponse.getJsonData();
 
-            list.add(new ImportedData(DataSource.TWITTER, twitterData));
+            list.add(new ImportedData(DataSource.TWITTER, twitterData, "Twitter"));
 
         } catch (Exception e){
             System.out.println("\n\n twitter error: "+e.getMessage());
@@ -260,7 +260,7 @@ public class ImportServiceImpl {
 
             String newsData = newsResponse.getData();
 
-            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData));
+            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData, "News"));
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
@@ -321,7 +321,7 @@ public class ImportServiceImpl {
                         oneFailedFlag = true;
                     }
 
-                    list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
+                    list.add(new ImportedData(DataSource.ADDED, Objects.requireNonNull(response.body()).string(), s.getName()));
                 }
                 catch (IOException e) {
                     //Log error if request is invalid
