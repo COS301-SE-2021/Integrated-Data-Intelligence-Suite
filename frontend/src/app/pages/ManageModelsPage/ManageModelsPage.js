@@ -147,7 +147,7 @@ export default function ManageModelsPage() {
         const url = '/deleteUserModelsByUser';
         const API_REQUEST_BODY = {
             modelID: userSelectedDeleteModel,
-            user: localUser.id,
+            userID: localUser.id,
         };
         const API_REQUEST_OBJ = {
             method: 'POST',
@@ -215,7 +215,7 @@ export default function ManageModelsPage() {
         const url = '/addUserModel';
         const API_REQUEST_BODY = {
             modelID: modelId,
-            user: localUser.id,
+            userID: localUser.id,
         };
         const API_REQUEST_OBJ = {
             method: 'POST',
@@ -228,7 +228,6 @@ export default function ManageModelsPage() {
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
-                // updateListOfDataModels(mock_add_obj);
                 updateListOfDataModels(API_RESPONSE_OBJ);
                 setIsShowingModelCardLoader(false);
             })
@@ -301,7 +300,7 @@ export default function ManageModelsPage() {
             c4: date,
             c5: isTrending,
             modelName: model_name,
-            user: localUser.id,
+            userID: localUser.id,
         };
         console.log(API_REQUEST_BODY_TRAIN);
 
@@ -399,7 +398,7 @@ export default function ManageModelsPage() {
         const url = '/selectModel';
         const API_REQUEST_BODY = {
             modelID: userSelectedDefaultModel,
-            user: localUser.id
+            userID: localUser.id
         };
         const API_REQUEST_OBJ = {
             method: 'POST',
@@ -595,7 +594,6 @@ export default function ManageModelsPage() {
             error,
         };
     };
-
 
     const {
         data,
