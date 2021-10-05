@@ -160,14 +160,14 @@ export default function ManageModelsPage() {
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
+                setIsShowingModelCardLoader(false);
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
-                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
+                setIsShowingModelCardLoader(false);
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
-                setIsShowingModelCardLoader(false);
             });
 
         // Close the popup
