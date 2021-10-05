@@ -147,7 +147,7 @@ export default function ModelCard(props) {
                         extraClassName={'model-details-card'}
                     >
                         <div className={'model-image'}>Image</div>
-                        <span className={'model-extra-details-div'}>Details About Model</span>
+                        <span className={'model-extra-details-div'}>{`Accuracy: ${props.modelAccuracy}`}</span>
                     </SimpleCard>
                 </div>
             </div>
