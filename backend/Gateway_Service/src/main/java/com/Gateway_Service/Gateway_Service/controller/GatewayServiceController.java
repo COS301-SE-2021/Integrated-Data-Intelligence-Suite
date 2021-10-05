@@ -857,7 +857,7 @@ public class GatewayServiceController {
 
         GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
 
-        if(analyseResponse.getModelId() == null) { // doesn't find model
+        if(analyseResponse.getModelID() == null) { // doesn't find model
             return this.getAllModelsByUser(analyseRequest2); //todo: out failure
         }
 
