@@ -156,13 +156,12 @@ export default function ManageModelsPage() {
         };
         let API_RESPONSE_OBJ = null;
         setIsShowingModelCardLoader(true);
-        updateListOfDataModels([{}]);
+        updateListOfDataModels(null);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
-                // updateListOfDataModels(mock_delete_obj);
                 setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
@@ -421,8 +420,6 @@ export default function ManageModelsPage() {
                 setIsShowingModelCardLoader(false);
             });
 
-        // updateListOfDataModels(mock_set_default_response_obj);
-
         // Close the popup
         toggleSetDefaultModelPopup(false);
     };
@@ -667,7 +664,7 @@ export default function ManageModelsPage() {
                                     }
                                     {
                                         isShowingModelCardLoader
-                                            ? updateListOfDataModels([{}])
+                                            ? updateListOfDataModels(null)
                                             : null
                                     }
                                     {data && listOfDataModels === null && updateListOfDataModels(data) && (setIsShowingModelCardLoader(false))}
