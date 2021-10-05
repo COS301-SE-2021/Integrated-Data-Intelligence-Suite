@@ -739,6 +739,8 @@ public class GatewayServiceController {
         //GET ALL IDS
         int maxSizeId;
 
+
+
         GetModelsResponse userResponse = userClient.getUserModels(request);
 
         Map<String, Boolean> models = userResponse.getModels();
