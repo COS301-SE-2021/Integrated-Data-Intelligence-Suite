@@ -684,6 +684,7 @@ export default function ManageModelsPage() {
                                                 modelName={obj.modelName}
                                                 isModelDefault={obj.isModelDefault}
                                                 key={obj.modelID}
+                                                modelAccuracy={obj.modelAccuracy}
                                             />
                                         ))
                                     }

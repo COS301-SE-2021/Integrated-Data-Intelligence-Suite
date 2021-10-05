@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 
 const getSource = (id, structure) => {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(structure);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
 
