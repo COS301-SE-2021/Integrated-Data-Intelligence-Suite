@@ -667,7 +667,8 @@ export default function ManageModelsPage() {
                                             ? updateListOfDataModels(null)
                                             : null
                                     }
-                                    {data && listOfDataModels === null && updateListOfDataModels(data) && (setIsShowingModelCardLoader(false))}
+                                    {data && (setIsShowingModelCardLoader(false))}
+                                    {data && listOfDataModels === null && updateListOfDataModels(data)}
                                     {
                                         listOfDataModels !== null
                                         &&
