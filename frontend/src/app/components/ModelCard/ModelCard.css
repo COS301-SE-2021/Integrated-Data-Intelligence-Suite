@@ -134,6 +134,7 @@
     letter-spacing: -.035em;
     align-self: center;
     text-align: center;
+    justify-self: left;
 }
 
 .simple-card-body:hover > .model-extra-details-div {
@@ -141,8 +142,10 @@
     /*bottom: 50%;*/
     transform: translate3d(-50%, 50%, 0);
     transition: all .2s ease-out;
-    bottom: 230% !important;
-
+    bottom: 380% !important;
+    text-align: center;
+    align-self: center;
+    justify-self: left;
 }
 
 .heart-icon-filled {
