@@ -3,7 +3,7 @@ package com.Gateway_Service.Gateway_Service.dataclass.analyse;
 public class GetModelByIdResponse {
 
     private String modelName;
-    private String modelId;
+    private String modelID;
     private String modelAccuracy;
     private boolean isModelDefault;
 
@@ -15,9 +15,9 @@ public class GetModelByIdResponse {
 
     }
 
-    public GetModelByIdResponse(String modelName, String modelId, String modelAccuracy){
+    public GetModelByIdResponse(String modelName, String modelID, String modelAccuracy){
         this.modelName = modelName;
-        this.modelId = modelId;
+        this.modelID = modelID;
         this.modelAccuracy = modelAccuracy;
         this.isModelDefault = false;
     }
@@ -27,8 +27,8 @@ public class GetModelByIdResponse {
         return modelName;
     }
 
-    public String getModelId(){
-        return modelId;
+    public String getModelID(){
+        return modelID;
     }
 
     public String getModelAccuracy() {
@@ -43,8 +43,8 @@ public class GetModelByIdResponse {
         this.modelName = modelName;
     }
 
-    public void setModelId(String modelId) {
-        this.modelId = modelId;
+    public void setModelID(String modelID) {
+        this.modelID = modelID;
     }
 
     public void setModelAccuracy(String modelAccuracy) {
