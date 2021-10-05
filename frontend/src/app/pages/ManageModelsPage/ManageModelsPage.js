@@ -161,8 +161,8 @@ export default function ManageModelsPage() {
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
-                setIsShowingModelCardLoader(false);
                 updateListOfDataModels(json);
+                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
                 setIsShowingModelCardLoader(false);
