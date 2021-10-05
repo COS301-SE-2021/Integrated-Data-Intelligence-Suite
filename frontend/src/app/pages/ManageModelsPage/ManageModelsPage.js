@@ -122,6 +122,17 @@ const mock_upload_training_data_response_obj = [
 ];
 
 export default function ManageModelsPage() {
+    function getLocalUser() {
+        const localUser = localStorage.getItem('user');
+        if (localUser) {
+            // console.log('user logged in is ', localUser);
+            return JSON.parse(localUser);
+        }
+        return null;
+    }
+
+    const localUser = getLocalUser();
+
     /*
     * DELETE MODEL
     */
@@ -136,7 +147,7 @@ export default function ManageModelsPage() {
         const url = '/deleteUserModelsByUser';
         const API_REQUEST_BODY = {
             modelID: userSelectedDeleteModel,
-            user: userAtom.id,
+            user: localUser.id,
         };
         const API_REQUEST_OBJ = {
             method: 'POST',
@@ -204,7 +215,7 @@ export default function ManageModelsPage() {
         const url = '/addUserModel';
         const API_REQUEST_BODY = {
             modelID: modelId,
-            user: userAtom.id,
+            user: localUser.id,
         };
         const API_REQUEST_OBJ = {
             method: 'POST',
@@ -290,7 +301,7 @@ export default function ManageModelsPage() {
             c4: date,
             c5: isTrending,
             modelName: model_name,
-            user: userAtom.id,
+            user: localUser.id,
         };
         console.log(API_REQUEST_BODY_TRAIN);
 
@@ -388,7 +399,7 @@ export default function ManageModelsPage() {
         const url = '/selectModel';
         const API_REQUEST_BODY = {
             modelID: userSelectedDefaultModel,
-            // user: userAtom.id
+            user: localUser.id
         };
         const API_REQUEST_OBJ = {
             method: 'POST',
@@ -585,16 +596,7 @@ export default function ManageModelsPage() {
         };
     };
 
-    function getLocalUser() {
-        const localUser = localStorage.getItem('user');
-        if (localUser) {
-            // console.log('user logged in is ', localUser);
-            return JSON.parse(localUser);
-        }
-        return null;
-    }
 
-    const localUser = getLocalUser();
     const {
         data,
         isPending,
