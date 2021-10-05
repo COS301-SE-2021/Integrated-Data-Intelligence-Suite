@@ -155,15 +155,14 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
-        handleCloseDeletePopup()
+        handleCloseDeletePopup();
         updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
                 setIsShowingModelCardLoader(false);
-                API_RESPONSE_OBJ = json;
-                updateListOfDataModels(API_RESPONSE_OBJ);
+                updateListOfDataModels(json);
             })
             .catch((err) => {
                 setIsShowingModelCardLoader(false);
@@ -200,6 +199,14 @@ export default function ManageModelsPage() {
             </div>
         </SimplePopup>
     );
+
+    useEffect(() => {
+        if (listOfDataModels === null) {
+            setIsShowingModelCardLoader(true);
+        } else {
+            setIsShowingModelCardLoader(false);
+        }
+    }, [listOfDataModels]);
 
     /*
     * ADD MODEL
