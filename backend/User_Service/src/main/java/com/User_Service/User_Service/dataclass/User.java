@@ -194,7 +194,8 @@ public class User {
     }
 
     public void selectModel(String modelID) {
-        this.models.replace(modelID, true);
+        this.models.remove(modelID);
+        this.models.put(modelID, true);
     }
 
     public void deselectModel(String modelID) {
