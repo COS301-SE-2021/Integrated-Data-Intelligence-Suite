@@ -156,8 +156,8 @@ export default function ManageModelsPage() {
         };
         let API_RESPONSE_OBJ = null;
         toggleDeletePopup(false);
-        setIsShowingModelCardLoader(true);
         updateListOfDataModels(null);
+        setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
@@ -172,8 +172,6 @@ export default function ManageModelsPage() {
                 console.log(err.message);
             });
 
-        // Close the popup
-        toggleDeletePopup(false);
     };
     const handleCloseDeletePopup = () => {
         toggleDeletePopup(false);
@@ -225,13 +223,16 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
+        // close popup
+        toggleAddModelPopup(false);
+        updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
                 setIsShowingModelCardLoader(false);
-                API_RESPONSE_OBJ = json;
-                updateListOfDataModels(API_RESPONSE_OBJ);
+                // API_RESPONSE_OBJ = json;
+                updateListOfDataModels(json);
             })
             .catch((err) => {
                 // setIsShowingModelCardLoader(false);
@@ -239,9 +240,6 @@ export default function ManageModelsPage() {
                 console.log('error while retrieving data from backend');
                 console.log(err.message);
             });
-
-        // close popup
-        toggleAddModelPopup(false);
     };
     const addModelPopupComponent = (
         <SimplePopup
