@@ -155,7 +155,7 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
-        handleCloseDeletePopup();
+        //handleCloseDeletePopup();
         updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
@@ -671,7 +671,7 @@ export default function ManageModelsPage() {
                                     {/*        ? updateListOfDataModels(null)*/}
                                     {/*        : null*/}
                                     {/*}*/}
-                                    {data && (setIsShowingModelCardLoader(false))}
+                                    {/*{data && (setIsShowingModelCardLoader(false))}*/}
                                     {data && listOfDataModels === null && updateListOfDataModels(data)}
                                     {
                                         !isShowingModelCardLoader
