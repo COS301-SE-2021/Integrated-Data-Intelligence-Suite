@@ -139,7 +139,7 @@ export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const deleteDataModel = () => {
         // console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
-
+        updateListOfDataModels(null);
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
