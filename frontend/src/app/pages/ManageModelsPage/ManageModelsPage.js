@@ -140,7 +140,6 @@ export default function ManageModelsPage() {
     const deleteDataModel = () => {
         // console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
         toggleDeletePopup(false);
-        updateListOfDataModels(null);
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
@@ -161,7 +160,6 @@ export default function ManageModelsPage() {
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
-                handleCloseDeletePopup();
                 setIsShowingModelCardLoader(false);
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
