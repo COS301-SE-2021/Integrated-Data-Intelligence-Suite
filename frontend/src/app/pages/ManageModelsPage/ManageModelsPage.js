@@ -139,6 +139,7 @@ export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const deleteDataModel = () => {
         // console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
+        toggleDeletePopup(false);
         updateListOfDataModels(null);
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
@@ -155,14 +156,13 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
-        toggleDeletePopup(false);
         updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
+                handleCloseDeletePopup();
                 setIsShowingModelCardLoader(false);
-
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
             })
@@ -223,7 +223,6 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
-        // close popup
         toggleAddModelPopup(false);
         updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
@@ -390,7 +389,8 @@ export default function ManageModelsPage() {
     const setUserSelectedDefaultModel = useSetRecoilState(userSelectedDefaultModelState);
     const setNewDefaultDataModel = () => {
         // console.log(`User Chose this model as Default: ${userSelectedDefaultModel}`);
-
+        // Close the popup
+        toggleSetDefaultModelPopup(false);
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
@@ -410,9 +410,9 @@ export default function ManageModelsPage() {
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
+                setIsShowingModelCardLoader(false);
                 API_RESPONSE_OBJ = json;
                 updateListOfDataModels(API_RESPONSE_OBJ);
-                setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
                 console.log('error while retrieving data from backend');
@@ -420,8 +420,6 @@ export default function ManageModelsPage() {
                 setIsShowingModelCardLoader(false);
             });
 
-        // Close the popup
-        toggleSetDefaultModelPopup(false);
     };
     const handleCloseSetDefaultPopup = () => {
         toggleSetDefaultModelPopup(false);
