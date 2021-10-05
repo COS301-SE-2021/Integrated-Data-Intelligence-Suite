@@ -139,7 +139,7 @@ export default function ManageModelsPage() {
     const [isShowingDeletePopup, toggleDeletePopup] = useRecoilState(isShowingDeletePopupState);
     const deleteDataModel = () => {
         // console.log(`User Chose this model as Default: ${userSelectedDeleteModel}`);
-        toggleDeletePopup(false);
+
         /*
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
@@ -155,6 +155,7 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
+        handleCloseDeletePopup()
         updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
@@ -172,8 +173,8 @@ export default function ManageModelsPage() {
 
     };
     const handleCloseDeletePopup = () => {
-        toggleDeletePopup(false);
         setUserSelectedDeleteModel(null);
+        toggleDeletePopup(false);
     };
     const deletePopupComponent = (
         <SimplePopup
@@ -206,6 +207,7 @@ export default function ManageModelsPage() {
     const [isShowingAddModelPopup, toggleAddModelPopup] = useRecoilState(isShowingAddModelPopupState);
     const handleAddModel = () => {
         // console.log(`Model Id Entered in Add: ${modelId}`);
+
         /*
         -  API_REQUEST_OBJ: new id model to add
         -  API_RESPONSE_OBJ: updated list of data models
@@ -221,7 +223,6 @@ export default function ManageModelsPage() {
             body: JSON.stringify(API_REQUEST_BODY),
         };
         let API_RESPONSE_OBJ = null;
-        toggleAddModelPopup(false);
         updateListOfDataModels(null);
         setIsShowingModelCardLoader(true);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
@@ -658,14 +659,16 @@ export default function ManageModelsPage() {
                                             ? modelCardLoadingComponent
                                             : null
                                     }
-                                    {
-                                        isShowingModelCardLoader
-                                            ? updateListOfDataModels(null)
-                                            : null
-                                    }
+                                    {/*{*/}
+                                    {/*    isShowingModelCardLoader*/}
+                                    {/*        ? updateListOfDataModels(null)*/}
+                                    {/*        : null*/}
+                                    {/*}*/}
                                     {data && (setIsShowingModelCardLoader(false))}
                                     {data && listOfDataModels === null && updateListOfDataModels(data)}
                                     {
+                                        !isShowingModelCardLoader
+                                        &&
                                         listOfDataModels !== null
                                         &&
                                         listOfDataModels.map((obj) => (
