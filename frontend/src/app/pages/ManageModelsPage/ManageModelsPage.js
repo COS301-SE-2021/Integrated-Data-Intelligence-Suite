@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 import Switch from 'react-bootstrap/Switch';
+import { BsCloudUpload, IoCopyOutline, RiAddLine } from 'react-icons/all';
 import SideBar from '../../components/SideBar/SideBar';
 import './ManageModelsPage.css';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
@@ -19,9 +20,8 @@ import {
     isShowingShareModelPopupState,
     userSelectedShareModelState,
     userState,
-    isShowingModelCardLoaderState
+    isShowingModelCardLoaderState,
 } from '../../assets/AtomStore/AtomStore';
-import { BsCloudUpload, IoCopyOutline, RiAddLine } from 'react-icons/all';
 import '../../components/SimpleButton/SimpleButton.css';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
@@ -32,93 +32,93 @@ const mock_add_obj = [
     {
         modelID: 'm1',
         modelName: 'Itachi',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm2',
         modelName: 'Sasuke',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm3',
         modelName: 'Zabuza',
-        isModelDefault: true
+        isModelDefault: true,
     },
     {
         modelID: 'm4',
         modelName: 'Shisui',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm5',
-        modelName: 'Naruto'
-    }
+        modelName: 'Naruto',
+    },
 ];
 const mock_delete_obj = [
     {
         modelID: 'm1',
         modelName: 'Itachi',
-        isModelDefault: true
+        isModelDefault: true,
     },
     {
         modelID: 'm2',
         modelName: 'Sasuke',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm4',
         modelName: 'Shisui',
-        isModelDefault: false
-    }
+        isModelDefault: false,
+    },
 ];
 const mock_set_default_response_obj = [
     {
         modelID: 'm1',
         modelName: 'Itachi',
-        isModelDefault: true
+        isModelDefault: true,
     },
     {
         modelID: 'm2',
         modelName: 'Sasuke',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm3',
         modelName: 'Zabuza',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm4',
         modelName: 'Shisui',
-        isModelDefault: false
-    }
+        isModelDefault: false,
+    },
 ];
 const mock_upload_training_data_response_obj = [
     {
         modelID: 'm1',
         modelName: 'Itachi',
-        isModelDefault: true
+        isModelDefault: true,
     },
     {
         modelID: 'm2',
         modelName: 'Sasuke',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm3',
         modelName: 'Zabuza',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm4',
         modelName: 'Shisui',
-        isModelDefault: false
+        isModelDefault: false,
     },
     {
         modelID: 'm5',
         modelName: 'Hinata',
-        isModelDefault: false
-    }
+        isModelDefault: false,
+    },
 ];
 
 export default function ManageModelsPage() {
@@ -133,12 +133,12 @@ export default function ManageModelsPage() {
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
         */
-        let url = '';
-        let API_REQUEST_BODY = {
+        const url = '';
+        const API_REQUEST_BODY = {
             modelID: userSelectedDeleteModel,
-            user: userAtom.id
+            user: userAtom.id,
         };
-        let API_REQUEST_OBJ = {
+        const API_REQUEST_OBJ = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(API_REQUEST_BODY),
@@ -159,7 +159,7 @@ export default function ManageModelsPage() {
                 setIsShowingModelCardLoader(false);
             });
 
-        //Close the popup
+        // Close the popup
         toggleDeletePopup(false);
     };
     const handleCloseDeletePopup = () => {
@@ -168,22 +168,22 @@ export default function ManageModelsPage() {
     };
     const deletePopupComponent = (
         <SimplePopup
-            closePopup={() => handleCloseDeletePopup()}
-            popupTitle={'Delete Model'}
-            popupID={'delete-model-popup'}
-            popupExtraClassNames={'confirmationPopup'}
+          closePopup={() => handleCloseDeletePopup()}
+          popupTitle="Delete Model"
+          popupID="delete-model-popup"
+          popupExtraClassNames="confirmationPopup"
         >
-            <div id={'delete-model-popup-msg'}>Are you sure you want to delete this modal?</div>
-            <div id={'delete-model-popup-btn-container'}>
+            <div id="delete-model-popup-msg">Are you sure you want to delete this modal?</div>
+            <div id="delete-model-popup-btn-container">
                 <button
-                    id={'delete-model-popup-btn-yes'}
-                    onClick={() => deleteDataModel()}
+                  id="delete-model-popup-btn-yes"
+                  onClick={() => deleteDataModel()}
                 >
                     Yes
                 </button>
                 <button
-                    id={'delete-model-popup-btn-no'}
-                    onClick={() => handleCloseDeletePopup()}
+                  id="delete-model-popup-btn-no"
+                  onClick={() => handleCloseDeletePopup()}
                 >
                     No
                 </button>
@@ -201,12 +201,12 @@ export default function ManageModelsPage() {
         -  API_REQUEST_OBJ: new id model to add
         -  API_RESPONSE_OBJ: updated list of data models
          */
-        let url = '';
-        let API_REQUEST_BODY = {
+        const url = '';
+        const API_REQUEST_BODY = {
             modelID: modelId,
-            user: userAtom.id
+            user: userAtom.id,
         };
-        let API_REQUEST_OBJ = {
+        const API_REQUEST_OBJ = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(API_REQUEST_BODY),
@@ -228,30 +228,30 @@ export default function ManageModelsPage() {
                 console.log(err.message);
             });
 
-        //close popup
+        // close popup
         toggleAddModelPopup(true);
     };
     const addModelPopupComponent = (
         <SimplePopup
-            closePopup={() => toggleAddModelPopup(false)}
-            popupTitle="Add Data Model"
+          closePopup={() => toggleAddModelPopup(false)}
+          popupTitle="Add Data Model"
         >
             <div className="add-model-container">
                 <div className="input-container">
                     <div className="label">ID</div>
                     <input
-                        type="text"
-                        id="modelIdInput"
-                        placeholder="model id"
-                        value={modelId}
-                        onChange={(event) => setModelId(event.currentTarget.value)}
+                      type="text"
+                      id="modelIdInput"
+                      placeholder="model id"
+                      value={modelId}
+                      onChange={(event) => setModelId(event.currentTarget.value)}
                     />
                 </div>
                 <div className="button-container">
                     <button
-                        onClick={() => handleAddModel()}
-                        className={'simple-btn'}
-                        id={'add-model-btn'}
+                      onClick={() => handleAddModel()}
+                      className="simple-btn"
+                      id="add-model-btn"
                     >
                         Add Model
                     </button>
@@ -269,20 +269,20 @@ export default function ManageModelsPage() {
         // console.log(`[Uploaded training data set]: ${uploadedTrainingDataFileArrayObj}`);
         // console.log(`[uploading training data set]: ${JSON.stringify(uploadedTrainingDataFileArrayObj)}`);
 
-        //fetch values of input boxes
-        let model_name = document.getElementById('input-training-model-name').value;
-        let date = document.getElementById('input-training-date').value;
-        let interaction = document.getElementById('input-training-interaction').value;
-        let text = document.getElementById('input-training-text').value;
-        let location = document.getElementById('input-training-location').value;
-        let isTrending = document.getElementById('input-training-isTrending').value;
+        // fetch values of input boxes
+        const model_name = document.getElementById('input-training-model-name').value;
+        const date = document.getElementById('input-training-date').value;
+        const interaction = document.getElementById('input-training-interaction').value;
+        const text = document.getElementById('input-training-text').value;
+        const location = document.getElementById('input-training-location').value;
+        const isTrending = document.getElementById('input-training-isTrending').value;
 
         /*
           - API_REQUEST_BODY: ID of data model that has been deleted to backend
           - API_RESPONSE_OBJ: updated list of data models
         */
-        let url = '/trainUpload';
-        let API_REQUEST_BODY_TRAIN = {
+        const url = '/trainUpload';
+        const API_REQUEST_BODY_TRAIN = {
             file: uploadedTrainingDataFileArrayObj,
             c1: text,
             c2: location,
@@ -290,7 +290,7 @@ export default function ManageModelsPage() {
             c4: date,
             c5: isTrending,
             modelName: model_name,
-            user: userAtom.id
+            user: userAtom.id,
         };
         console.log(API_REQUEST_BODY_TRAIN);
 
@@ -327,45 +327,45 @@ export default function ManageModelsPage() {
     };
     const addTrainingDataPopupComponent = (
         <SimplePopup
-            closePopup={() => toggleAddTrainingDataPopup(false)}
-            popupTitle={'Upload Training Data'}
+          closePopup={() => toggleAddTrainingDataPopup(false)}
+          popupTitle="Upload Training Data"
         >
-            <div id={'upload-content-div'}>
-                <CustomDivider DividerTitle={'Upload your file'}/>
-                <UploadDropZone/>
-                <CustomDivider DividerTitle={'Match Columns'}/>
-                <div id={'upload-training-data-form'}>
+            <div id="upload-content-div">
+                <CustomDivider DividerTitle="Upload your file" />
+                <UploadDropZone />
+                <CustomDivider DividerTitle="Match Columns" />
+                <div id="upload-training-data-form">
                     <InputBoxWithLabel
-                        inputLabel={'Model Name'}
-                        inputID={'input-training-model-name'}
+                      inputLabel="Model Name"
+                      inputID="input-training-model-name"
                     />
                     <InputBoxWithLabel
-                        inputLabel={'Date'}
-                        inputID={'input-training-date'}
+                      inputLabel="Date"
+                      inputID="input-training-date"
                     />
                     <InputBoxWithLabel
-                        inputLabel={'Interaction'}
-                        inputID={'input-training-interaction'}
+                      inputLabel="Interaction"
+                      inputID="input-training-interaction"
                     />
                     <InputBoxWithLabel
-                        inputLabel={'Text'}
-                        inputID={'input-training-text'}
+                      inputLabel="Text"
+                      inputID="input-training-text"
                     />
                     <InputBoxWithLabel
-                        inputLabel={'Location'}
-                        inputID={'input-training-location'}
+                      inputLabel="Location"
+                      inputID="input-training-location"
                     />
                     <InputBoxWithLabel
-                        inputLabel={'isTrending'}
-                        inputID={'input-training-isTrending'}
+                      inputLabel="isTrending"
+                      inputID="input-training-isTrending"
                     />
                 </div>
 
                 <button
-                    type={'button'}
-                    id={'upload-training-data-btn'}
-                    onClick={() => handleUploadedTrainingData()}
-                    className={'simple-btn'}
+                  type="button"
+                  id="upload-training-data-btn"
+                  onClick={() => handleUploadedTrainingData()}
+                  className="simple-btn"
                 >
                     Upload Training Data
                 </button>
@@ -385,12 +385,12 @@ export default function ManageModelsPage() {
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
         */
-        let url = '';
-        let API_REQUEST_BODY = {
+        const url = '';
+        const API_REQUEST_BODY = {
             modelID: userSelectedDefaultModel,
             // user: userAtom.id
         };
-        let API_REQUEST_OBJ = {
+        const API_REQUEST_OBJ = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(API_REQUEST_BODY),
@@ -412,7 +412,7 @@ export default function ManageModelsPage() {
 
         updateListOfDataModels(mock_set_default_response_obj);
 
-        //Close the popup
+        // Close the popup
         toggleSetDefaultModelPopup(false);
     };
     const handleCloseSetDefaultPopup = () => {
@@ -421,24 +421,24 @@ export default function ManageModelsPage() {
     };
     const setDefaultModelPopupComponent = (
         <SimplePopup
-            closePopup={() => handleCloseSetDefaultPopup()}
-            popupTitle={'Set Default'}
-            popupID={'delete-model-popup'}
-            popupExtraClassNames={'confirmationPopup'}
+          closePopup={() => handleCloseSetDefaultPopup()}
+          popupTitle="Set Default"
+          popupID="delete-model-popup"
+          popupExtraClassNames="confirmationPopup"
         >
-            <div id={'delete-model-popup-msg'}>
+            <div id="delete-model-popup-msg">
                 Do you want to make this model your default data model?
             </div>
-            <div id={'delete-model-popup-btn-container'}>
+            <div id="delete-model-popup-btn-container">
                 <button
-                    id={'delete-model-popup-btn-yes'}
-                    onClick={() => setNewDefaultDataModel()}
+                  id="delete-model-popup-btn-yes"
+                  onClick={() => setNewDefaultDataModel()}
                 >
                     Yes
                 </button>
                 <button
-                    id={'delete-model-popup-btn-no'}
-                    onClick={() => handleCloseSetDefaultPopup()}
+                  id="delete-model-popup-btn-no"
+                  onClick={() => handleCloseSetDefaultPopup()}
                 >
                     No
                 </button>
@@ -457,13 +457,13 @@ export default function ManageModelsPage() {
     };
     const shareModelPopupComponent = (
         <SimplePopup
-            closePopup={() => handleCloseShareModelPopup()}
-            popupTitle={'Share Model'}
+          closePopup={() => handleCloseShareModelPopup()}
+          popupTitle="Share Model"
         >
-            <div id={'share-model-container'}>
-                <div id={'share-model-id-icon'}>ID</div>
+            <div id="share-model-container">
+                <div id="share-model-id-icon">ID</div>
                 <div
-                    id={'share-model-id-value'}
+                  id="share-model-id-value"
                 >
                     {userSelectedShareModel}
                 </div>
@@ -471,20 +471,20 @@ export default function ManageModelsPage() {
                 {isTextCopied
                     ? (
                         <button
-                            id={'share-model-copy-btn'}
-                            onClick={() => copyIDtoClipboard()}
+                          id="share-model-copy-btn"
+                          onClick={() => copyIDtoClipboard()}
                         >
                             Copied!
-                            <IoCopyOutline id={'share-model-copy-icon'}/>
+                            <IoCopyOutline id="share-model-copy-icon" />
                         </button>
                     )
                     : (
                         <button
-                            id={'share-model-copy-btn'}
-                            onClick={() => copyIDtoClipboard()}
+                          id="share-model-copy-btn"
+                          onClick={() => copyIDtoClipboard()}
                         >
                             Copy
-                            <IoCopyOutline id={'share-model-copy-icon'}/>
+                            <IoCopyOutline id="share-model-copy-icon" />
                         </button>
                     )}
             </div>
@@ -497,11 +497,11 @@ export default function ManageModelsPage() {
     const [isShowingModelCardLoader, setIsShowingModelCardLoader] = useRecoilState(isShowingModelCardLoaderState);
     const modelCardLoadingComponent = (
         <>
-            <ModelCardLoader/>
-            <ModelCardLoader/>
-            <ModelCardLoader/>
-            <ModelCardLoader/>
-            <ModelCardLoader/>
+            <ModelCardLoader />
+            <ModelCardLoader />
+            <ModelCardLoader />
+            <ModelCardLoader />
+            <ModelCardLoader />
         </>
     );
 
@@ -524,7 +524,7 @@ export default function ManageModelsPage() {
     const [isTextCopied, setIsTextCopied] = useState(false);
     const copyIDtoClipboard = () => {
         /* Get the text field */
-        let copyText = document.getElementById('share-model-id-value').innerHTML;
+        const copyText = document.getElementById('share-model-id-value').innerHTML;
 
         /* Copy the text inside the text field */
         navigator.clipboard.writeText(copyText)
@@ -535,7 +535,7 @@ export default function ManageModelsPage() {
     };
 
     /* GET ALL MODELS FROM BACKEND */
-    let response_from_use_post = null;
+    const response_from_use_post = null;
     const getAllModelsFromBackend = (url, body, header) => {
         const [data, setData] = useState(null);
         const [isPending, setIsPending] = useState(true);
@@ -560,6 +560,8 @@ export default function ManageModelsPage() {
                     return res.json();
                 })
                 .then((data) => {
+                    console.log("manage models")
+                    console.log(data);
                     setData(data);
                     setIsPending(false);
                     setError(null);
@@ -576,7 +578,7 @@ export default function ManageModelsPage() {
         return {
             data,
             isPending,
-            error
+            error,
         };
     };
 
@@ -589,13 +591,13 @@ export default function ManageModelsPage() {
         return null;
     }
 
-    let localUser = getLocalUser();
+    const localUser = getLocalUser();
 
     const {
         data,
         isPending,
-        error
-    } = getAllModelsFromBackend('/getAllModelsByUser', JSON.stringify({ userID: localUser.id }), 'Content-Type: application/json');
+        error,
+    } = getAllModelsFromBackend('/getAllModelsByUser', { userID: localUser.id }, { 'Content-Type': 'application/json' });
 
     return (
         <>
@@ -626,35 +628,35 @@ export default function ManageModelsPage() {
                             ? shareModelPopupComponent
                             : null
                     }
-                    <div id={'manage-models-page-container'}>
-                        <SideBar currentPage={'6'}/>
-                        <div id={'manage-models-page-content'}>
+                    <div id="manage-models-page-container">
+                        <SideBar currentPage="6" />
+                        <div id="manage-models-page-content">
                             <SimpleCard
-                                cardID={'manage-models-card'}
-                                cardTitle={'Manage Your Data Models'}
-                                titleOnTop
+                              cardID="manage-models-card"
+                              cardTitle="Manage Your Data Models"
+                              titleOnTop
                             >
-                                <div id={'manage-models-btn-row'}>
+                                <div id="manage-models-btn-row">
                                     <button
-                                        className={'simple-btn simple-btn-hover'}
-                                        onClick={() => toggleAddTrainingDataPopup(true)}
+                                      className="simple-btn simple-btn-hover"
+                                      onClick={() => toggleAddTrainingDataPopup(true)}
                                     >
                                         <BsCloudUpload
-                                            className={'simple-btn-icon simple-btn-hover'}
+                                          className="simple-btn-icon simple-btn-hover"
                                         />
                                         Upload Training Data
                                     </button>
 
                                     <button
-                                        className={'simple-btn simple-btn-hover'}
-                                        onClick={() => toggleAddModelPopup(true)}
+                                      className="simple-btn simple-btn-hover"
+                                      onClick={() => toggleAddModelPopup(true)}
                                     >
-                                        <RiAddLine className={'simple-btn-icon simple-btn-hover'}/>
+                                        <RiAddLine className="simple-btn-icon simple-btn-hover" />
                                         Add Model
                                     </button>
                                 </div>
 
-                                <div id={'manage-models-card-row'}>
+                                <div id="manage-models-card-row">
                                     {
                                         isShowingModelCardLoader
                                             ? modelCardLoadingComponent
@@ -667,10 +669,10 @@ export default function ManageModelsPage() {
                                         &&
                                         listOfDataModels.map((obj) => (
                                             <ModelCard
-                                                modelID={obj.modelID}
-                                                modelName={obj.modelName}
-                                                isModelDefault={obj.isModelDefault}
-                                                key={obj.modelID}
+                                              modelID={obj.modelID}
+                                              modelName={obj.modelName}
+                                              isModelDefault={obj.isModelDefault}
+                                              key={obj.modelID}
                                             />
                                         ))
                                     }
