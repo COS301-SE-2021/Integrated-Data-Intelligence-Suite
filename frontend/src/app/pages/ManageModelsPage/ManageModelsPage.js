@@ -122,6 +122,14 @@ const mock_upload_training_data_response_obj = [
 ];
 
 export default function ManageModelsPage() {
+    useEffect(() => {
+        if (listOfDataModels === null) {
+            setIsShowingModelCardLoader(true);
+        } else {
+            setIsShowingModelCardLoader(false);
+        }
+    }, [listOfDataModels]);
+
     function getLocalUser() {
         const localUser = localStorage.getItem('user');
         if (localUser) {
@@ -199,14 +207,6 @@ export default function ManageModelsPage() {
             </div>
         </SimplePopup>
     );
-
-    useEffect(() => {
-        if (listOfDataModels === null) {
-            setIsShowingModelCardLoader(true);
-        } else {
-            setIsShowingModelCardLoader(false);
-        }
-    }, [listOfDataModels]);
 
     /*
     * ADD MODEL
