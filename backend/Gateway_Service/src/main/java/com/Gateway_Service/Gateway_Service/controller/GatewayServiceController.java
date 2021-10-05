@@ -753,15 +753,19 @@ public class GatewayServiceController {
 
         //add/show default
         GetModelByIdResponse defaultModel = new GetModelByIdResponse("Default", "Default", "Dynamic");
+        boolean foundSelected = true;
         output.add(defaultModel);
 
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
 
             GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
+            if(entry.getValue().equals(true))
+                foundSelected= false;
             AnalyseResponse.setIsModelDefault(entry.getValue());
             output.add(AnalyseResponse);
         }
+        output.get(0).setIsModelDefault(foundSelected);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
