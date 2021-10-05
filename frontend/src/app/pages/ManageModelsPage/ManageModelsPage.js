@@ -385,7 +385,7 @@ export default function ManageModelsPage() {
         - API_REQUEST_BODY: ID of data model that has been deleted to backend
         - API_RESPONSE_OBJ: updated list of data models
         */
-        const url = '';
+        const url = '/selectModel';
         const API_REQUEST_BODY = {
             modelID: userSelectedDefaultModel,
             // user: userAtom.id
