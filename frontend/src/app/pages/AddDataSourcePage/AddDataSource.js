@@ -61,12 +61,12 @@ const AddDataSource = () => {
     const { id } = useParams();
     const history = useHistory();
     const [form, setForm] = useState(null);
-    const [url, setUrl] = useState(null);
-    const [name, setName] = useState(null);
-    const [authType, setAuthType] = useState(null);
-    const [token, setToken] = useState(null);
-    const [queryKey, setQueryKey] = useState(null);
-    const [method, setmethod] = useState(null);
+    const [url, setUrl] = useState('');
+    const [name, setName] = useState('');
+    const [authType, setAuthType] = useState('none');
+    const [token, setToken] = useState('');
+    const [queryKey, setQueryKey] = useState('');
+    const [method, setmethod] = useState('GET');
     const [submitLoading, setSubmitLoading] = useState(false);
 
     const structure = {
