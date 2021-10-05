@@ -662,7 +662,12 @@ export default function ManageModelsPage() {
                                 <div id="manage-models-card-row">
                                     {
                                         isShowingModelCardLoader
-                                            ? modelCardLoadingComponent && updateListOfDataModels([{}])
+                                            ? modelCardLoadingComponent
+                                            : null
+                                    }
+                                    {
+                                        isShowingModelCardLoader
+                                            ? updateListOfDataModels([{}])
                                             : null
                                     }
                                     {data && listOfDataModels === null && updateListOfDataModels(data) && (setIsShowingModelCardLoader(false))}
