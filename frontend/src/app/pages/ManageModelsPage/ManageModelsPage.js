@@ -156,6 +156,7 @@ export default function ManageModelsPage() {
         };
         let API_RESPONSE_OBJ = null;
         setIsShowingModelCardLoader(true);
+        updateListOfDataModels([{}]);
         fetch(`http://localhost:9000${url}`, API_REQUEST_OBJ)
             .then((response) => response.json())
             .then((json) => {
@@ -661,7 +662,7 @@ export default function ManageModelsPage() {
                                 <div id="manage-models-card-row">
                                     {
                                         isShowingModelCardLoader
-                                            ? modelCardLoadingComponent
+                                            ? modelCardLoadingComponent && updateListOfDataModels([{}])
                                             : null
                                     }
                                     {data && listOfDataModels === null && updateListOfDataModels(data) && (setIsShowingModelCardLoader(false))}
