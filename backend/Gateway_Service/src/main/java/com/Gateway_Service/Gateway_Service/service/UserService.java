@@ -26,12 +26,6 @@ public class UserService {
      *         or not.
      */
     public ChangeUserResponse managePermissions(ChangeUserRequest userRequest) {
-        /*HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<ChangeUserRequest> requestEntity = new HttpEntity<ChangeUserRequest>(request, requestHeaders);
-        ResponseEntity<ChangeUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/changepermission", HttpMethod.POST, requestEntity, ChangeUserResponse.class);
-        return responseEntity.getBody();*/
-
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -82,11 +76,6 @@ public class UserService {
      * @return This class contains the information if the saving of the user was successful.
      */
     public RegisterResponse register(RegisterRequest userRequest) {
-        /*HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<RegisterRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/register", HttpMethod.POST, requestEntity, RegisterResponse.class);
-        return responseEntity.getBody();*/
 
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
@@ -107,40 +96,6 @@ public class UserService {
 
         return userResponse;
     }
-
-    /**
-     * This function is used to connect to the user service to allow the user to register
-     * to the system. It sends a request to the user controller and send the request
-     * class to user service.
-     * @param userRequest This class contains all the information of the user to be saved.
-     * @return This class contains the information if the saving of the user was successful.
-     */
-    /*
-    public RegisterAdminResponse requestAdmin(RegisterAdminRequest userRequest) {
-        /*HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<RegisterRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<RegisterResponse> responseEntity = restTemplate.exchange("http://User-Service/User/register", HttpMethod.POST, requestEntity, RegisterResponse.class);
-        return responseEntity.getBody();
-
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
-        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
-
-        HttpEntity<String> request = null;
-        try {
-            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        RegisterAdminResponse userResponse = restTemplate.postForObject("http://User-Service/User/requestAdmin", request, RegisterAdminResponse.class);
-
-        return userResponse;
-    }
-    */
 
     public VerifyAccountResponse verifyAccount(VerifyAccountRequest userRequest) {
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
@@ -184,12 +139,52 @@ public class UserService {
         return userResponse;
     }
 
-    public GetUserResponse getUser(GetUserRequest userRequest){
-        /*HttpHeaders requestHeaders = new HttpHeaders();
+    public ResendCodeResponse sendOTP(ResendCodeRequest userRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<GetUserRequest> requestEntity = new HttpEntity<GetUserRequest>(request, requestHeaders);
-        ResponseEntity<GetUserResponse> responseEntity = restTemplate.exchange("http://User-Service/User/getUser", HttpMethod.POST, requestEntity, GetUserResponse.class);
-        return responseEntity.getBody();*/
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/sendOTP", request, ResendCodeResponse.class);
+
+        return userResponse;
+    }
+
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest userRequest) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(userRequest.getNewPassword() + " " + userRequest.getEmail() + " " + userRequest.getOtp());
+
+        ResetPasswordResponse userResponse = restTemplate.postForObject("http://User-Service/User/resetPassword", request, ResetPasswordResponse.class);
+
+        return userResponse;
+    }
+
+    public GetUserResponse getUser(GetUserRequest userRequest){
 
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
@@ -218,11 +213,6 @@ public class UserService {
      * @return This class contains the information if the logging process was successful.
      */
     public LoginResponse login(LoginRequest userRequest) {
-        /*HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<LoginRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
-        ResponseEntity<LoginResponse> responseEntity = restTemplate.exchange("http://User-Service/User/login", HttpMethod.POST, requestEntity, LoginResponse.class);
-        return responseEntity.getBody();*/
 
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
@@ -270,6 +260,208 @@ public class UserService {
             e.printStackTrace();
         }
         UpdateProfileResponse userResponse = restTemplate.postForObject("http://User-Service/User/updateProfile", request, UpdateProfileResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service to allow the user to change
+     * their account detials. It sends a request to the user controller and send the request
+     * class to user service.
+     * @param userRequest This class contains the new details of the user to change their current details.
+     * @return This class contains the information if the process of changing their account details
+     * was successful or not.
+     */
+    public GetUserReportsResponse getUserReports(GetUserReportsRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        GetUserReportsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getReports/" + userRequest.getId(), GetUserReportsResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ReportResponse addReportForUser(ReportRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ReportResponse userResponse = restTemplate.postForObject("http://User-Service/User/addReport", request, ReportResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ReportResponse removeReportForUser(ReportRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ReportResponse userResponse = restTemplate.postForObject("http://User-Service/User/removeReport", request, ReportResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service to allow the user to change
+     * their account detials. It sends a request to the user controller and send the request
+     * class to user service.
+     * @param userRequest This class contains the new details of the user to change their current details.
+     * @return This class contains the information if the process of changing their account details
+     * was successful or not.
+     */
+    public GetModelsResponse getUserModels(GetModelsRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        GetModelsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getModels/" + userRequest.getUserID(), GetModelsResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ModelResponse addModelForUser(ModelRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/addModel", request, ModelResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ModelResponse removeModelForUser(ModelRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/removeModel", request, ModelResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ModelResponse selectModel(ModelRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/selectModel", request, ModelResponse.class);
+
+        return userResponse;
+    }
+
+    /**
+     * This function is used to connect to the user service
+     * @param userRequest This class contains the new reports.
+     * @return This class contains the information if the request was successful or not.
+     */
+    public ModelResponse deselectModel(ModelRequest userRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(userRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/deselectModel", request, ModelResponse.class);
 
         return userResponse;
     }

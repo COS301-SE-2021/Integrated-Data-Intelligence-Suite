@@ -5,7 +5,8 @@ import com.Visualize_Service.Visualize_Service.dataclass.Graph;
 import java.util.ArrayList;
 
 public class CreateBarGraphResponse {
-    public ArrayList<Graph> BarGraphArray;
+    private ArrayList<Graph> BarGraphArray;
+
     public CreateBarGraphResponse(ArrayList<Graph> BarGraphArray){
         this.BarGraphArray = BarGraphArray;
     }

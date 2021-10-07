@@ -1,0 +1,27 @@
+.simple-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    padding: 10px;
+    font-weight: 500;
+    column-gap: 10px;
+    color: white;
+    background: var(--dodger-blue);
+    border-radius: 5px;
+    border: var(--dodger-blue);
+}
+
+.simple-btn-icon {
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
+.simple-btn-hover:hover {
+    color: white !important;
+    background: var(--prussian-blue);
+}
+
+
+

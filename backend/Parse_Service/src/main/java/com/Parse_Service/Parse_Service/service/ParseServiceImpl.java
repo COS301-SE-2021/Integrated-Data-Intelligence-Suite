@@ -1,11 +1,16 @@
 package com.Parse_Service.Parse_Service.service;
 
+import com.Parse_Service.Parse_Service.exception.ParserException;
 import com.Parse_Service.Parse_Service.repository.ArticleRepository;
 import com.Parse_Service.Parse_Service.repository.DataRepository;
 import com.Parse_Service.Parse_Service.repository.NewsPropertiesRepository;
 import com.Parse_Service.Parse_Service.repository.SocialMediaPropertiesRepository;
 import com.Parse_Service.Parse_Service.rri.ArticleExtractor;
 import com.Parse_Service.Parse_Service.rri.DataSource;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +24,10 @@ import com.Parse_Service.Parse_Service.response.*;
 import com.Parse_Service.Parse_Service.dataclass.*;
 import com.Parse_Service.Parse_Service.rri.SocialMediaExtractor;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -35,6 +44,18 @@ public class ParseServiceImpl {
 
     @Autowired
     private NewsPropertiesRepository newsPropertiesRepository;
+
+    private static final String[] dateFormats = {
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",   "yyyy-MM-dd'T'HH:mm:ssZ",
+            "yyyy-MM-dd'T'HH:mm:ss",      "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd HH:mm:ss",
+            "MM/dd/yyyy HH:mm:ss",        "MM/dd/yyyy'T'HH:mm:ss.SSS'Z'",
+            "dd/MM/yyyy HH:mm:ss",        "dd/MM/yyyy'T'HH:mm:ss.SSS'Z'",
+            "MM/dd/yyyy'T'HH:mm:ss.SSSZ", "MM/dd/yyyy'T'HH:mm:ss.SSS",
+            "dd/MM/yyyy'T'HH:mm:ss.SSSZ", "dd/MM/yyyy'T'HH:mm:ss.SSS",
+            "MM/dd/yyyy'T'HH:mm:ssZ",     "MM/dd/yyyy'T'HH:mm:ss",
+            "dd/MM/yyyy'T'HH:mm:ssZ",     "dd/MM/yyyy'T'HH:mm:ss",
+            "yyyy:MM:dd HH:mm:ss",        "yyyyMMdd", };
 
     private static final Logger log = LoggerFactory.getLogger(ParseServiceImpl.class);
 
@@ -54,7 +75,7 @@ public class ParseServiceImpl {
      * @throws JSONException This is thrown if the JSONObject or JSONArray does not exist
      *         for a specific key.
      */
-    public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws InvalidRequestException, JSONException {
+    public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest request) throws ParserException {
         if (request == null) {
             throw new InvalidRequestException("The request object is null");
         }
@@ -63,69 +84,112 @@ public class ParseServiceImpl {
                 throw new InvalidRequestException("The request contains null values");
             }
 
+            log.info("Parsing imported data");
             System.out.println(request.getJsonString());
             JSONObject obj = new JSONObject(request.getJsonString());
             ArrayList<ParsedData> parsedList = new ArrayList<>();
             ArrayList<ParsedArticle> parsedArticlesList = new ArrayList<>();
 
-            if (request.getType() == DataSource.TWITTER) {
-                JSONArray jsonArray = obj.getJSONArray("statuses");
-                for (int i=0; i < jsonArray.length(); i++){
-                    //create and set node
-                    ParsedData parsedData = new ParsedData();
-                    SocialMediaExtractor extractor = new SocialMediaExtractor();
+            try {
+                if (request.getType() == DataSource.TWITTER) {
+                    JSONArray jsonArray = obj.getJSONArray("statuses");
+                    for (int i=0; i < jsonArray.length(); i++){
+                        //create and set node
+                        ParsedData parsedData = new ParsedData();
+                        SocialMediaExtractor extractor = new SocialMediaExtractor();
 
-                    //parse text data from post
-                    GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString());
-                    GetTextResponse textResponse = extractor.getText(textRequest);
-                    parsedData.setTextMessage(textResponse.getText());
+                        //parse text data from post
+                        GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString(), "text");
+                        GetTextResponse textResponse = extractor.getText(textRequest);
+                        parsedData.setTextMessage(textResponse.getText());
 
-                    //parse date data from post
-                    GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString());
-                    GetDateResponse dateResponse = extractor.getDate(dateRequest);
-                    parsedData.setDate(dateResponse.getDate());
+                        //parse date data from post
+                        GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString(), "created_at");
+                        GetDateResponse dateResponse = extractor.getDate(dateRequest);
+                        parsedData.setDate(dateResponse.getDate());
 
-                    //parse location data from post
-                    GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString());
-                    GetLocationResponse locationResponse = extractor.getLocation(locationRequest);
-                    parsedData.setLocation(locationResponse.getLocation());
+                        //parse location data from post
+                        GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString(), "loc");
+                        GetLocationResponse locationResponse = extractor.getLocation(locationRequest);
+                        parsedData.setLocation(locationResponse.getLocation());
 
-                    //parse likes from post
-                    GetLikesRequest likesRequest = new GetLikesRequest(jsonArray.get(i).toString());
-                    GetLikesResponse likesResponse = extractor.getInteractions(likesRequest);
-                    parsedData.setLikes(likesResponse.getLikes());
+                        //parse likes from post
+                        GetLikesRequest likesRequest = new GetLikesRequest(jsonArray.get(i).toString(), "retweet_count");
+                        GetLikesResponse likesResponse = extractor.getInteractions(likesRequest);
+                        parsedData.setLikes(likesResponse.getLikes());
 
-                    parsedList.add(parsedData);
+                        parsedList.add(parsedData);
+                    }
+                    if(request.getPermission().equals("IMPORTING")) {
+                        dataRepository.saveAll(parsedList);
+                    }
                 }
-                if(request.getPermission().equals("IMPORTING")) {
-                    dataRepository.saveAll(parsedList);
+                else if(request.getType() == DataSource.NEWSARTICLE) {
+                    JSONArray jsonArray = obj.getJSONArray("articles");
+                    for(int i = 0; i < jsonArray.length() && i < 100; i++) {
+                        ParsedArticle article = new ParsedArticle();
+                        ArticleExtractor extractor = new ArticleExtractor();
+
+                        //parse title from article
+                        article.setTitle(extractor.getTitle(jsonArray.get(i).toString()));
+
+                        //parse description from article
+                        article.setDescription(extractor.getDescription(jsonArray.get(i).toString()));
+
+                        //parse description from article
+                        article.setContent(extractor.getContent(jsonArray.get(i).toString()));
+
+                        //parse description from article
+                        article.setDate(extractor.getDate(jsonArray.get(i).toString()));
+
+                        //add parsed article to list
+                        parsedArticlesList.add(article);
+                    }
+                    if(request.getPermission().equals("IMPORTING")) {
+                        //articleRepository.saveAll(parsedArticlesList);
+                    }
+                }
+                else if(request.getType() == DataSource.ADDED) {
+                    Optional<SocialMediaProperties> find = socialMediaPropertiesRepository.findSocialMediaPropertiesByName(request.getSourceName());
+                    if(find.isPresent()) {
+                        SocialMediaProperties prop = find.get();
+                        JSONArray jsonArray = obj.getJSONArray(prop.getCollectionProp());
+
+                        for (int i=0; i < jsonArray.length(); i++){
+                            //create and set node
+                            ParsedData parsedData = new ParsedData();
+                            SocialMediaExtractor extractor = new SocialMediaExtractor();
+
+                            //parse text data from post
+                            GetTextRequest textRequest = new GetTextRequest(jsonArray.get(i).toString(), prop.getTextProp());
+                            GetTextResponse textResponse = extractor.getText(textRequest);
+                            parsedData.setTextMessage(textResponse.getText());
+
+                            //parse date data from post
+                            GetDateRequest dateRequest = new GetDateRequest(jsonArray.get(i).toString(), prop.getDateProp());
+                            GetDateResponse dateResponse = extractor.getDate(dateRequest);
+                            parsedData.setDate(dateResponse.getDate());
+
+                            //parse location data from post
+                            GetLocationRequest locationRequest = new GetLocationRequest(jsonArray.get(i).toString(), prop.getLocationProp());
+                            GetLocationResponse locationResponse = extractor.getLocation(locationRequest);
+                            parsedData.setLocation(locationResponse.getLocation());
+
+                            //parse likes from post
+                            GetLikesRequest likesRequest = new GetLikesRequest(jsonArray.get(i).toString(), prop.getInteractionsProp());
+                            GetLikesResponse likesResponse = extractor.getInteractions(likesRequest);
+                            parsedData.setLikes(likesResponse.getLikes());
+
+                            parsedList.add(parsedData);
+                        }
+                    }
                 }
             }
-            else if(request.getType() == DataSource.NEWSARTICLE) {
-                JSONArray jsonArray = obj.getJSONArray("articles");
-                for(int i = 0; i < jsonArray.length() && i < 100; i++) {
-                    ParsedArticle article = new ParsedArticle();
-                    ArticleExtractor extractor = new ArticleExtractor();
-
-                    //parse title from article
-                    article.setTitle(extractor.getTitle(jsonArray.get(i).toString()));
-
-                    //parse description from article
-                    article.setDescription(extractor.getDescription(jsonArray.get(i).toString()));
-
-                    //parse description from article
-                    article.setContent(extractor.getContent(jsonArray.get(i).toString()));
-
-                    //parse description from article
-                    article.setDate(extractor.getDate(jsonArray.get(i).toString()));
-
-                    //add parsed article to list
-                    parsedArticlesList.add(article);
-                }
-                if(request.getPermission().equals("IMPORTING")) {
-                    //articleRepository.saveAll(parsedArticlesList);
-                }
+            catch (JSONException e) {
+                log.info("Failed to parse data: " + e.getMessage());
+                throw new ParserException("Failed to parse imported data");
             }
+
 
             if(parsedList.isEmpty() && parsedArticlesList.isEmpty()) {
                 log.warn("Failed to parse the imported data");
@@ -136,6 +200,202 @@ public class ParseServiceImpl {
                 return new ParseImportedDataResponse(true, "Parsed imported data", parsedList, parsedArticlesList);
             }
 
+        }
+    }
+
+    /**
+     * This function will be used to parse uploaded social media data (mainly CSVs) into the required format
+     * for analysis.
+     * @param request This class will contain the filename and the necessary columns that will be
+     *                used for analysis.
+     * @return This is the response that will contain the success value, a message, and a list of
+     * parsed data.
+     * @throws ParserException This is thrown if there are any errors encountered while parsing.
+     */
+    public ParseUploadedSocialDataResponse parseUploadedSocialData(ParseUploadedSocialDataRequest request) throws ParserException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        else {
+            if(request.getFilename() == null || request.getFilename().equals("")) {
+                throw new InvalidRequestException("Filename is null or empty");
+            }
+
+            if(request.getDateCol() == null && request.getLocCol() == null && request.getInteractionsCol() == null && request.getTextCol()== null) {
+                throw new InvalidRequestException("All fields cannot be empty");
+            }
+
+            List<String[]> list = new ArrayList<>();
+            ArrayList<ParsedData> parsedList = new ArrayList<>();
+            try {
+                CSVParser parser = new CSVParserBuilder()
+                        .withSeparator(',')
+                        .build();
+
+                CSVReader csvReader = new CSVReaderBuilder(new FileReader(request.getFilename()))
+                        .withCSVParser(parser)
+                        .build();
+                //Check the columns in the uploaded file
+                ArrayList<String> columns = new ArrayList<>(Arrays.asList(csvReader.readNext()));
+
+                //Check if the columns exist and get index of required columns. Throw error if they do not exists
+                if(columns.contains(request.getDateCol()) && columns.contains(request.getLocCol()) && columns.contains(request.getInteractionsCol()) && columns.contains(request.getTextCol())) {
+                    String[] line;
+                    while ((line = csvReader.readNext()) != null) {
+                        ParsedData dataEntry = new ParsedData();
+
+                        //Set the relevant attributes of the ParsedData type
+                        //Parsing date with required formats to test if the date is valid
+                        dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
+                        dataEntry.setLikes(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
+                        dataEntry.setLocation(line[columns.indexOf(request.getLocCol())]);
+                        dataEntry.setTextMessage(line[columns.indexOf(request.getTextCol())]);
+                        parsedList.add(dataEntry);
+                        System.out.println(dataEntry.getDate());
+                        //list.add(line);
+                    }
+                }
+                else {
+                    throw new IOException("A column does not exist. Failed to parse data");
+                }
+
+                csvReader.close();
+            }
+            catch (Exception ex) {
+                log.error("An error has occurred while parsing: " + ex.getMessage());
+                ex.printStackTrace();
+                throw new ParserException("An error has occurred trying to parse uploaded social data");
+            }
+
+            return new ParseUploadedSocialDataResponse(true, "Successfully parsed uploaded data", parsedList);
+        }
+    }
+
+    public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest request) throws ParserException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        else {
+            if(request.getFilename() == null || request.getFilename().equals("")) {
+                throw new InvalidRequestException("Filename is null or empty");
+            }
+
+            if(request.getDateCol() == null && request.getLocCol() == null && request.getInteractionsCol() == null && request.getTextCol()== null) {
+                throw new InvalidRequestException("All fields cannot be empty");
+            }
+
+            List<String[]> list = new ArrayList<>();
+            ArrayList<ParsedTrainingData> parsedList = new ArrayList<>();
+            try {
+                CSVParser parser = new CSVParserBuilder()
+                        .withSeparator(',')
+                        .build();
+
+                CSVReader csvReader = new CSVReaderBuilder(new FileReader(request.getFilename()))
+                        .withCSVParser(parser)
+                        .build();
+                //Check the columns in the uploaded file
+                ArrayList<String> columns = new ArrayList<>(Arrays.asList(csvReader.readNext()));
+
+                //Check if the columns exist and get index of required columns. Throw error if they do not exists
+                if(columns.contains(request.getDateCol()) && columns.contains(request.getLocCol()) && columns.contains(request.getInteractionsCol()) && columns.contains(request.getTextCol()) && columns.contains(request.getIsTrendingCol())) {
+                    String[] line;
+                    while ((line = csvReader.readNext()) != null) {
+                        ParsedTrainingData dataEntry = new ParsedTrainingData();
+
+                        //Set the relevant attributes of the ParsedData type
+                        //Parsing date with required formats to test if the date is valid
+                        dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
+                        dataEntry.setInteractions(Integer.parseInt(line[columns.indexOf(request.getInteractionsCol())]));
+                        dataEntry.setLocation(line[columns.indexOf(request.getLocCol())]);
+                        dataEntry.setTextMessage(line[columns.indexOf(request.getTextCol())]);
+                        dataEntry.setIsTrending(Integer.parseInt(line[columns.indexOf(request.getIsTrendingCol())]));
+                        parsedList.add(dataEntry);
+                        //System.out.println(dataEntry.getDate());
+                        //list.add(line);
+                    }
+                }
+                else {
+                    throw new IOException("A column does not exist. Failed to parse data");
+                }
+
+                csvReader.close();
+            }
+            catch (Exception ex) {
+                log.error("An error has occurred while parsing: " + ex.getMessage());
+                ex.printStackTrace();
+                throw new ParserException("An error has occurred trying to parse uploaded social data");
+            }
+
+            return new ParseUploadedTrainingDataResponse(true, "Successfully parsed uploaded data", parsedList);
+        }
+    }
+
+    /**
+     * This function will be used to parse uploaded social media data (mainly CSVs) into the required format
+     * for analysis.
+     * @param request This class will contain the filename and the necessary columns that will be
+     *                used for analysis.
+     * @return This is the response that will contain the success value, a message, and a list of
+     * parsed data.
+     * @throws ParserException This is thrown if there are any errors encountered while parsing.
+     */
+    public ParseUploadedNewsDataResponse parseUploadedNewsData(ParseUploadedNewsDataRequest request) throws ParserException {
+        if(request == null) {
+            throw new InvalidRequestException("The request is null");
+        }
+        else {
+            if(request.getFilename() == null || request.getFilename().equals("")) {
+                throw new InvalidRequestException("Filename is null or empty");
+            }
+
+            if(request.getDateCol() == null && request.getContentCol() == null && request.getTitleCol() == null && request.getDescCol()== null) {
+                throw new InvalidRequestException("All fields cannot be empty");
+            }
+
+            List<String[]> list = new ArrayList<>();
+            ArrayList<ParsedArticle> articlesList = new ArrayList<>();
+            try {
+                CSVParser parser = new CSVParserBuilder()
+                        .withSeparator(',')
+                        .withIgnoreQuotations(true)
+                        .build();
+
+                CSVReader csvReader = new CSVReaderBuilder(new FileReader(request.getFilename()))
+                        .withCSVParser(parser)
+                        .build();
+                //Check the columns in the uploaded file
+                ArrayList<String> columns = new ArrayList<>(Arrays.asList(csvReader.readNext()));
+
+                //Check if the columns exist and get index of required columns. Throw error if they do not exists
+                if(columns.contains(request.getDateCol()) && columns.contains(request.getContentCol()) && columns.contains(request.getTitleCol()) && columns.contains(request.getDescCol())) {
+                    String[] line;
+                    while ((line = csvReader.readNext()) != null) {
+                        ParsedArticle dataEntry = new ParsedArticle();
+
+                        //Set the relevant attributes of the ParsedArticle type
+                        //Parsing date with required formats to test if the date is valid
+                        dataEntry.setDate(checkDate(line[columns.indexOf(request.getDateCol())]));
+                        dataEntry.setContent(line[columns.indexOf(request.getContentCol())]);
+                        dataEntry.setDescription(line[columns.indexOf(request.getDescCol())]);
+                        dataEntry.setTitle(line[columns.indexOf(request.getTitleCol())]);
+                        articlesList.add(dataEntry);
+                        //list.add(line);
+                    }
+                }
+                else {
+                    throw new IOException("A column does not exist. Failed to parse data");
+                }
+
+                csvReader.close();
+            }
+            catch (Exception ex) {
+                log.error("An error has occurred while parsing: " + ex.getMessage());
+                ex.printStackTrace();
+                throw new ParserException("An error has occurred trying to parse uploaded news data");
+            }
+
+            return new ParseUploadedNewsDataResponse(true, "Successfully parsed uploaded data", articlesList);
         }
     }
 
@@ -220,5 +480,26 @@ public class ParseServiceImpl {
             }
 
         }
+    }
+
+    /**
+     * This is a private function to check if the date is within the required format.
+     * @param date This is the string that contains the date.
+     * @throws IOException This is thrown if the date does not fall within the pre specified formats.
+     */
+    private String checkDate(String date) throws IOException {
+        int numPassed = 0;
+        for (String parse : dateFormats) {
+            SimpleDateFormat sdf = new SimpleDateFormat(parse);
+            try {
+                //System.out.println(date);
+                Date parsedDate = sdf.parse(date);
+                //System.out.println("passed");
+                return parsedDate.getDate() + "/" + (parsedDate.getMonth() + 1) + "/" + (parsedDate.getYear() + 1900);
+            } catch (ParseException e) {
+            }
+        }
+        return date;
+        //throw new IOException("Invalid date format");
     }
 }

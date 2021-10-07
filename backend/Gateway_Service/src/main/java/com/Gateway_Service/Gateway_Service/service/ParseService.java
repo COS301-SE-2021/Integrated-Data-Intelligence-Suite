@@ -1,8 +1,7 @@
 package com.Gateway_Service.Gateway_Service.service;
 
 
-import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataRequest;
-import com.Gateway_Service.Gateway_Service.dataclass.parse.ParseImportedDataResponse;
+import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,6 +41,117 @@ public class ParseService {
             e.printStackTrace();
         }
         ParseImportedDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseImportedData", request, ParseImportedDataResponse.class);
+
+        return parseResponse;
+    }
+
+    /**
+     * This method is used to communicate to the Parse-Service.
+     * @param parseRequest This is the request
+     * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
+     */
+    //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
+    public ParseUploadedSocialDataResponse parseUploadedSocialData(ParseUploadedSocialDataRequest parseRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ParseUploadedSocialDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedSocialData", request, ParseUploadedSocialDataResponse.class);
+
+        return parseResponse;
+    }
+
+    /**
+     * This method is used to communicate to the Parse-Service.
+     * @param parseRequest This is the request
+     * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
+     */
+    //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
+    public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest parseRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ParseUploadedTrainingDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseTrainingData", request, ParseUploadedTrainingDataResponse.class);
+
+        return parseResponse;
+    }
+
+    /**
+     * This method is used to communicate to the Parse-Service.
+     * @param parseRequest This is the request
+     * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
+     */
+    //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
+    public ParseUploadedNewsDataResponse parseUploadedNewsData(ParseUploadedNewsDataRequest parseRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        ParseUploadedNewsDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedNewsData", request, ParseUploadedNewsDataResponse.class);
+
+        return parseResponse;
+    }
+
+    /**
+     * This method is used to communicate to the Parse-Service.
+     * @param parseRequest This is the request
+     * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
+     */
+    public AddSocialMediaPropertiesResponse addSocialMediaPropertiesRequest(AddSocialMediaPropertiesRequest parseRequest) {
+
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        AddSocialMediaPropertiesResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/addSocialMediaProperties", request, AddSocialMediaPropertiesResponse.class);
 
         return parseResponse;
     }

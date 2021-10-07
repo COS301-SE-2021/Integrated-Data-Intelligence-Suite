@@ -274,7 +274,7 @@ public class ParseServiceControllerTest {
     public void parseDataNullRequest() throws Exception {
 
 
-        ParseImportedDataRequest parseImportedDataRequest = new ParseImportedDataRequest(DataSource.TWITTER,"{}", "Admin");
+        ParseImportedDataRequest parseImportedDataRequest = new ParseImportedDataRequest(DataSource.TWITTER,"{}", "Admin", "Twitter");
 
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
@@ -312,7 +312,7 @@ public class ParseServiceControllerTest {
     @DisplayName("When parseRequest is Success")
     public void parseDataSuccessfulRequest() throws Exception {
 
-        ParseImportedDataRequest parseImportedDataRequest = new ParseImportedDataRequest(DataSource.TWITTER,"{}", "Admin");
+        ParseImportedDataRequest parseImportedDataRequest = new ParseImportedDataRequest(DataSource.TWITTER,"{}", "Admin", "Twitter");
 
         ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json

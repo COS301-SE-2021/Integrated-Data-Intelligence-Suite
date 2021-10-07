@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -39,6 +37,24 @@ public class ReportServiceImpl {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
+        }
+        if (request.getAnomalylist() == null) {
+            throw new InvalidRequestException("Arraylist of AnomalyList is null");
+        }
+        if (request.getWordlist() == null) {
+            throw new InvalidRequestException("Arraylist of wordlist is null");
+        }
+        /*if (request.getPatternList() == null){
+            throw new InvalidRequestException("Arraylist of PatternList is null");
+        }
+        if (request.getPredictionList() == null){
+            throw new InvalidRequestException("Arraylist of PredictionList is null");
+        }
+        if (request.getRelationshipList() == null) {
+            throw new InvalidRequestException("Arraylist of RelationshipList is null");
+        }*/
+        if (request.getTrendlist() == null) {
+            throw new InvalidRequestException("Arraylist of TrendList is null");
         }
         //does this work
         GetTrendAnalysisDataRequest trendReq = new GetTrendAnalysisDataRequest(request.getTrendlist());
@@ -79,15 +95,16 @@ public class ReportServiceImpl {
         /*OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
         out.write(reportPDFResponse.getPdf());
         out.close();*/
+        String name = "Report_" + newReport.getDateTime();
 
         //save generated pdf
-        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), "UserReport", newReport.getDateTime());
+        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), name, newReport.getDateTime());
         repository.save(pdfReport);
 
         return new ReportDataResponse(pdfReport.getId());
     }
 
-    public GetReportDataResponse getReportData(GetReportDataRequest request) throws ReporterException {
+    public GetReportDataByIdResponse getReportDataById(GetReportDataByIdRequest request) throws ReporterException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -102,10 +119,10 @@ public class ReportServiceImpl {
         }
 
 
-        return new GetReportDataResponse(report.get().getPdf(),report.get().getName(),report.get().getDate());
+        return new GetReportDataByIdResponse(report.get().getPdf(),report.get().getName(),report.get().getDate(),request.getReportId());
     }
 
-    public DeleteReportDataResponse deleteReportData(DeleteReportDataRequest request) throws ReporterException {
+    public DeleteReportDataByIdResponse deleteReportDataById(DeleteReportDataByIdRequest request) throws ReporterException {
 
         if (request == null) {
             throw new InvalidRequestException("Request Object is null");
@@ -118,10 +135,10 @@ public class ReportServiceImpl {
         if(report.isEmpty() == false) {
             repository.delete(report.get());
         }else {
-            return new DeleteReportDataResponse(false);
+            return new DeleteReportDataByIdResponse(false);
         }
 
-        return new DeleteReportDataResponse(true);
+        return new DeleteReportDataByIdResponse(true);
     }
 
 

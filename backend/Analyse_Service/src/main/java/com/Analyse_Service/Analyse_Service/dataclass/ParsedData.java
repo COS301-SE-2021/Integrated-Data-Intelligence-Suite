@@ -10,10 +10,10 @@ public class ParsedData {
     private Long id;
 
 
-    private String textMessage;
-    private String date;
-    private String location;
-    private Integer likes;
+    private String textMessage = null;
+    private String date = null;
+    private String location = null;
+    private Integer likes = null;
 
     public ParsedData() {
 
@@ -58,5 +58,7 @@ public class ParsedData {
     public void setLikes(Integer likes) {
         this.likes = likes;
     }
+
+
 
 }

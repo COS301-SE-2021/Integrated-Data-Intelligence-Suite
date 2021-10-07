@@ -24,6 +24,9 @@
 //Register Page
 @import "pages/RegisterPage/RegisterPage.css";
 
+//Reports Page
+@import "pages/ReportsPage/ReportsPage.css";
+
 //Permissions Page
 @import "pages/PermissionsPage/Permissions.css";
 //@import "../styles/UserPermissions/UserPermissions.css";
@@ -45,7 +48,7 @@
 @import 'components/ExitMenuTooltip/ExitMenuTooltip.css';
 
 //Color Pallete
-@import "assets/ColorPallete.css";
+@import "assets/ColorPallete/ColorPallete.css";
 
 //React-vis
 @import "./node_modules/react-vis/dist/style";

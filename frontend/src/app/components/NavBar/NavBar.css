@@ -10,7 +10,7 @@
 
 #nav-bar-logo {
     background: var(--cultured);
-    background-image: url("../../assets/idis-logo-prussian-blue.png") !important;
+    background-image: url("../../assets/logos/idis-logo-prussian-blue.png") !important;
     background-size: cover;
     background-position: center;
     color: black;

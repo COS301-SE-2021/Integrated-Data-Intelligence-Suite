@@ -3,14 +3,16 @@ package com.User_Service.User_Service.request;
 public class ResetPasswordRequest {
     private String newPassword;
     private String email;
+    private String otp;
 
     public ResetPasswordRequest() {
 
     }
 
-    public ResetPasswordRequest(String newPassword, String email) {
+    public ResetPasswordRequest(String newPassword, String email, String otp) {
         this.newPassword = newPassword;
         this.email = email;
+        this.otp = otp;
     }
 
     public String getEmail() {
@@ -27,5 +29,13 @@ public class ResetPasswordRequest {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

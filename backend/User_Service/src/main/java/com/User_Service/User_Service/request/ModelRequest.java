@@ -1,0 +1,32 @@
+package com.User_Service.User_Service.request;
+
+public class ModelRequest {
+    private String modelID;
+
+    private String userID;
+
+    public ModelRequest() {
+
+    }
+
+    public ModelRequest(String userID, String modelID) {
+        this.userID = userID;
+        this.modelID = modelID;
+    }
+
+    public String getModelID() {
+        return modelID;
+    }
+
+    public void setModelID(String modelID) {
+        this.modelID = modelID;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+}

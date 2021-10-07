@@ -15,6 +15,7 @@
         <module name="Visualize_Service" />
         <module name="Registry_Service" />
         <module name="Gateway_Service" />
+        <module name="Report_Service" />
         <module name="Parse_Service" />
       </profile>
     </annotationProcessing>
@@ -28,6 +29,7 @@
       <module name="IntegratedDataIntelligenceSuite" target="11" />
       <module name="Parse_Service" target="11" />
       <module name="Registry_Service" target="11" />
+      <module name="Report_Service" target="11" />
       <module name="spring-boot-jpa-h2" target="11" />
       <module name="User_Service" target="11" />
       <module name="Visualize_Service" target="11" />
@@ -43,6 +45,7 @@
       <module name="IntegratedDataIntelligenceSuite" options="-parameters" />
       <module name="Parse_Service" options="-parameters" />
       <module name="Registry_Service" options="-parameters" />
+      <module name="Report_Service" options="-parameters" />
       <module name="User_Service" options="-parameters" />
       <module name="Visualize_Service" options="-parameters" />
       <module name="backend" options="-parameters" />
