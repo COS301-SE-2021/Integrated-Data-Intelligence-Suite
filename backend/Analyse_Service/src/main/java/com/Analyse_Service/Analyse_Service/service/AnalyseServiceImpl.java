@@ -53,6 +53,8 @@ public class AnalyseServiceImpl {
     @Autowired
     private TrainingDataRepository parsedDataRepository;
 
+    private SparkSession sparkNlpProperties;
+
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 
@@ -517,7 +519,7 @@ public class AnalyseServiceImpl {
         /*******************SETUP SPARK*****************/
         System.out.println("*******************SETUP SPARK*****************");
 
-        SparkSession sparkNlpProperties = SparkSession
+        sparkNlpProperties = SparkSession
                 .builder()
                 .appName("NlpProperties")
                 .master("local")
@@ -988,7 +990,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
         SparkSession sparkRelationships = SparkSession
                 .builder()
@@ -1060,7 +1062,7 @@ public class AnalyseServiceImpl {
                 "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
-        Dataset<Row> itemsDF = sparkRelationships.createDataFrame(relationshipData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(relationshipData, schema);
         itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
@@ -1218,7 +1220,7 @@ public class AnalyseServiceImpl {
         rootLoggerL.setLevel(Level.ERROR);
         Logger.getLogger("org.apache").setLevel(Level.ERROR);
         Logger.getLogger("org").setLevel(Level.ERROR);
-        Logger.getLogger("akka").setLevel(Level.ERROR);*/
+        Logger.getLogger("akka").setLevel(Level.ERROR);*
 
         SparkSession sparkTrends = SparkSession
                 .builder()
@@ -1299,7 +1301,7 @@ public class AnalyseServiceImpl {
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1353,7 +1355,7 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
@@ -1368,7 +1370,7 @@ public class AnalyseServiceImpl {
             File artifact = client.downloadArtifacts(modelID, modelName);
             File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
 
-            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
+            Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
             lrModel = trainValidationSplit.fit(trainData);
@@ -1408,7 +1410,7 @@ public class AnalyseServiceImpl {
             File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
 
 
-            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
+            Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
             TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
             lrModel = trainValidationSplit.fit(trainData);
@@ -1608,7 +1610,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
         SparkSession sparkAnomalies = SparkSession
                 .builder()
@@ -1696,7 +1698,7 @@ public class AnalyseServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema);
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -1743,7 +1745,7 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
 
         /***********************MLFLOW - LOAD ***********************/
         PipelineModel kmModel;
