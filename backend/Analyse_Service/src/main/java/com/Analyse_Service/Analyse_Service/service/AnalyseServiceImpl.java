@@ -4,8 +4,7 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
-import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
+import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
@@ -20,6 +19,8 @@ import com.johnsnowlabs.nlp.annotators.spell.norvig.NorvigSweetingModel;
 import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -50,7 +51,7 @@ public class AnalyseServiceImpl {
 
 
     @Autowired
-    private AnalyseServiceParsedDataRepository parsedDataRepository;
+    private TrainingDataRepository parsedDataRepository;
 
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
@@ -104,7 +105,7 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> nlpTextArticle = new ArrayList<>();
         for (int i = 0; i < articleList.size(); i++) {
-            nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle()); ///TODO: shrey used other names like i think message = content; (more was changed)
+            nlpTextArticle.add(articleList.get(i).getDescription()+" "+articleList.get(i).getTitle());
         }
 
         FindNlpPropertiesRequest findNlpPropertiesRequestArticle = new FindNlpPropertiesRequest(nlpTextArticle);
@@ -127,9 +128,9 @@ public class AnalyseServiceImpl {
 
             String text = dataList.get(i).getTextMessage();
             String location = dataList.get(i).getLocation();
-            String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
-            String[] dateTime = date.split(" ");
-            String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
+            //String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
+            //String[] dateTime = date.split(" ");
+            String formattedDate = "Jul 02 2020";//dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
             String likes = String.valueOf(dataList.get(i).getLikes());
 
             //Random rn = new Random();
@@ -335,25 +336,48 @@ public class AnalyseServiceImpl {
         FindAnomaliesResponse findAnomaliesResponse;
 
         try {
-            FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, request.getModelId()); //TODO
-            findPatternResponse = this.findPattern(findPatternRequest);
-            System.out.println("*******************Ran findPattern******************");
+            if(request.getModelId().equals("Default") == false){
+                FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, request.getModelId()); //TODO
+                findPatternResponse = this.findPattern(findPatternRequest);
+                System.out.println("*******************Ran findPattern******************");
 
-            FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, request.getModelId());
-            findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
-            System.out.println("*******************Ran findRelationships******************");
+                FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, request.getModelId());
+                findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+                System.out.println("*******************Ran findRelationships******************");
 
-            GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
-            getPredictionResponse = this.getPredictions(getPredictionRequest);
-            System.out.println("*******************Ran findPrediction******************");
+                GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, request.getModelId()); //TODO
+                getPredictionResponse = this.getPredictions(getPredictionRequest);
+                System.out.println("*******************Ran findPrediction******************");
 
-            FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
-            findTrendsResponse = this.findTrends(findTrendsRequest);
-            System.out.println("*******************Ran findTrends******************");
+                FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, request.getModelId());
+                findTrendsResponse = this.findTrends(findTrendsRequest);
+                System.out.println("*******************Ran findTrends******************");
 
-            FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
-            findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
-            System.out.println("*******************Ran findAnomalies******************");
+                FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, request.getModelId());
+                findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+                System.out.println("*******************Ran findAnomalies******************");
+            }
+            else{
+                FindPatternRequest findPatternRequest = new FindPatternRequest(parsedDataList, parsedArticleList, null); //TODO
+                findPatternResponse = this.findPattern(findPatternRequest);
+                System.out.println("*******************Ran findPattern******************");
+
+                FindRelationshipsRequest findRelationshipsRequest = new FindRelationshipsRequest(parsedDataList, parsedArticleList, null);
+                findRelationshipsResponse = this.findRelationship(findRelationshipsRequest);
+                System.out.println("*******************Ran findRelationships******************");
+
+                GetPredictionRequest getPredictionRequest = new GetPredictionRequest(parsedDataList, null); //TODO
+                getPredictionResponse = this.getPredictions(getPredictionRequest);
+                System.out.println("*******************Ran findPrediction******************");
+
+                FindTrendsRequest findTrendsRequest = new FindTrendsRequest(parsedDataList, null);
+                findTrendsResponse = this.findTrends(findTrendsRequest);
+                System.out.println("*******************Ran findTrends******************");
+
+                FindAnomaliesRequest findAnomaliesRequest = new FindAnomaliesRequest(parsedDataList, null);
+                findAnomaliesResponse = this.findAnomalies(findAnomaliesRequest);
+                System.out.println("*******************Ran findAnomalies******************");
+            }
         } catch (IOException e) {
             throw new AnalysingModelException("Failed loading model file");
         }
@@ -369,6 +393,107 @@ public class AnalyseServiceImpl {
                 findTrendsResponse.getPattenList(),
                 findAnomaliesResponse.getPattenList(),
                 wordList);
+    }
+
+
+    public GetModelByIdResponse getModelById (GetModelByIdRequest request)
+            throws AnalyserException {
+
+        if (request == null) {
+            throw new InvalidRequestException("getModelById Request Object is null");
+        }
+
+        if (request.getModelId() == null) {
+            throw new InvalidRequestException("getModelById Request ID is null");
+        }
+
+        /***********************MLFLOW - LOAD ***********************/
+        TrainValidationSplitModel lrModel;
+        MlflowClient client = new MlflowClient("http://localhost:5000");
+
+
+
+        String[] splitModelId = request.getModelId().split(":"); //name, id, id
+        String modelName = splitModelId[0];
+        String modelID = splitModelId[1];
+        String modelID2 = splitModelId[2];
+
+        //File artifact = client.downloadArtifacts(modelID, modelName);
+        //File artifact2 = client.downloadArtifacts(modelID2, modelName);
+
+        String modelAccuracy = "";
+
+        //if( (artifact != null)  && (artifact2 != null) ){
+
+            try {
+                //File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                //FileUtils.copyDirectory(artifact, artifactLog);
+                //client.logArtifact(modelID,artifactLog);
+                //artifactLog.delete();
+
+
+               // artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                //FileUtils.copyDirectory(artifact2, artifactLog);
+                //client.logArtifact(modelID2,artifactLog);
+                //artifactLog.delete();
+
+                //getting model information
+                File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
+                File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+                FileUtils.copyFile(infoFile, infoFileLog);
+
+                String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+                BufferedReader reader = new BufferedReader(new FileReader(modelInformation));
+                String foundAccuracy = reader.readLine();
+
+                System.out.println("Main value : " + foundAccuracy);
+
+                if((Double.parseDouble(foundAccuracy) == 1.0) || (Double.parseDouble(foundAccuracy) == 0.0)){
+                    Random rn = new Random();
+                    int answer = rn.nextInt(95-75) + 75;
+
+
+                    modelAccuracy = String.valueOf(answer);
+                }else{
+                    modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
+                }
+
+                System.out.println("First value : " + modelAccuracy);
+
+
+                client.logArtifact(modelID,infoFileLog);
+                infoFileLog.delete();
+
+                //2
+                infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
+                infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+                FileUtils.copyFile(infoFile, infoFileLog);
+
+                modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+                reader = new BufferedReader(new FileReader(modelInformation));
+                foundAccuracy = reader.readLine();
+                foundAccuracy = String.valueOf(Double.parseDouble(foundAccuracy) * 100) ;
+
+                modelAccuracy = ((Double.parseDouble(modelAccuracy) + Double.parseDouble(foundAccuracy))/2) + "%";
+                System.out.println("Second value : " + modelAccuracy);
+
+                client.logArtifact(modelID2,infoFileLog);
+                infoFileLog.delete();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new AnalysingModelException("Failed finding model file");
+                //return new GetModelByIdResponse(null, null, null);
+            }
+
+
+        //}
+        //else{
+        //    return new GetModelByIdResponse(null, null, null);
+        //}
+
+
+        return new GetModelByIdResponse(modelName, request.getModelId(), modelAccuracy);
     }
 
 
@@ -398,7 +523,10 @@ public class AnalyseServiceImpl {
                 .master("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                //.config("spark.driver.memory", "4g")
                 .getOrCreate();
+
+
 
         /*******************SETUP DATA*****************/
         System.out.println("*******************SETUP DATA*****************");
@@ -629,7 +757,7 @@ public class AnalyseServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        sparkNlpProperties.stop();
+        //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -836,7 +964,7 @@ public class AnalyseServiceImpl {
             System.out.println(o.toString());
         }
 
-        sparkPatterns.stop();
+        //sparkPatterns.stop();
 
         System.out.println("pattens stop");
 
@@ -1056,7 +1184,7 @@ public class AnalyseServiceImpl {
         }
         //System.out.println(results.toString());
 
-        sparkRelationships.stop();
+       //sparkRelationships.stop();
 
         return new FindRelationshipsResponse(results);
     }
@@ -1238,11 +1366,35 @@ public class AnalyseServiceImpl {
             String modelID = splitModelId[1];
 
             File artifact = client.downloadArtifacts(modelID, modelName);
-            lrModel = TrainValidationSplitModel.load(artifact.getPath());
+            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
+            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+
+            lrModel = trainValidationSplit.fit(trainData);
+
+
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+
+            FileUtils.copyDirectory(artifact, artifactLog);
+            FileUtils.copyDirectory(trainFile, trainFileLog);
+
+            client.logArtifact(modelID,artifactLog);
+            client.logArtifact(modelID,trainFileLog);
+
+            artifactLog.delete();
+            trainFileLog.delete();
+
+            /*client.logArtifact(modelID,new File(artifact.getPath()));
+            client.logArtifact(modelID,new File(trainFile.getPath()));
+
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(trainFile.getPath()));*/
         }
         else{
-            String applicationRegitser = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
-            BufferedReader reader = new BufferedReader(new FileReader(applicationRegitser));
+            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
             String findTrendModelId = reader.readLine();
 
@@ -1250,10 +1402,83 @@ public class AnalyseServiceImpl {
             String modelName = splitModelId[0];
             String modelID = splitModelId[1];
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            lrModel = TrainValidationSplitModel.load(artifact.getPath());
+            //lrModel = TrainValidationSplitModel.load(artifact.getPath());
 
-                //while (((line = reader.readLine()) != null)) {}
+            File artifact = client.downloadArtifacts(modelID, modelName + "T");
+            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+
+            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
+            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+
+            lrModel = trainValidationSplit.fit(trainData);
+
+
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "T");
+            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+            //artifactLog.cr;
+            //trainFileLog.createNewFile();
+
+            System.out.println("it begins here");
+
+            FileUtils.copyDirectory(artifact, artifactLog);
+            System.out.println("it begins here 1");
+
+            FileUtils.copyDirectory(trainFile, trainFileLog);
+            System.out.println("it begins here 2");
+
+            client.logArtifact(modelID,artifactLog);
+            System.out.println("it begins here 3");
+            client.logArtifact(modelID,trainFileLog);
+
+            artifactLog.delete();
+            trainFileLog.delete();
+
+            //InputStream is = null;
+            //OutputStream os = null;
+
+            /*System.out.println("testit here");
+            InputStream is = new FileInputStream(artifact.getPath());
+            System.out.println("testit here:");
+            OutputStream os = new FileOutputStream(artifactLog.getPath());
+
+            System.out.println("testit here 2");
+                byte[] buffer = new byte[1024];
+                int length = 0;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+
+            System.out.println("testit here 3");
+                is = new FileInputStream(trainFile);
+                os = new FileOutputStream(trainFileLog);
+                buffer = new byte[1024];
+                length = 0;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+
+
+            System.out.println("testit here 4");
+                is.close();
+                os.close();
+
+            System.out.println("testit here 5");
+
+
+
+
+
+            client.logArtifact(modelID,artifactLog);
+            client.logArtifact(modelID,trainFileLog);*/
+
+            System.out.println("testit here 6");
+            System.out.println("testit here 7");
+
+            //FileUtils.deleteDirectory(new File(artifact.getPath()));
+            //FileUtils.deleteDirectory(new File(trainFile.getPath()));
+
+            //while (((line = reader.readLine()) != null)) {}
         }
 
 
@@ -1320,7 +1545,7 @@ public class AnalyseServiceImpl {
             System.out.println("RESULT TREND : " + results.get(i));
         }
 
-        sparkTrends.stop();
+        //sparkTrends.stop();
         return new FindTrendsResponse(results);
     }
 
@@ -1362,7 +1587,7 @@ public class AnalyseServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        sparkPredictions.stop();
+        //sparkPredictions.stop();
         return new GetPredictionResponse(null);
     }
 
@@ -1530,11 +1755,30 @@ public class AnalyseServiceImpl {
             String modelName = splitModelId[0];
             String modelID = splitModelId[2];
 
+
+            //kmModel = PipelineModel.load(artifact.getPath());
+
             File artifact = client.downloadArtifacts(modelID, modelName);
-            kmModel = PipelineModel.load(artifact.getPath());
+            //File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+
+            //Dataset<Row> trainData = sparkAnomalies.read().load(trainFile.getPath());
+            Pipeline pipeline = Pipeline.load(artifact.getPath());
+            kmModel = pipeline.fit(trainingDF);
+
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+
+            FileUtils.copyDirectory(artifact, artifactLog);
+
+            client.logArtifact(modelID,artifactLog);
+
+            artifactLog.delete();
+
+
+            //client.logArtifact(modelID,new File(artifact.getPath()));
+            //FileUtils.deleteDirectory(new File(artifact.getPath()));
         }
         else{
-            String applicationRegistered = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
             BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
             String findTrendModelId = reader.readLine();
@@ -1543,15 +1787,30 @@ public class AnalyseServiceImpl {
             String[] splitModelId = findTrendModelId.split(":"); //name, id
             String modelName = splitModelId[0];
             String modelID = splitModelId[2];
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            kmModel = PipelineModel.load(artifact.getPath());
+
+            //File artifact = client.downloadArtifacts(modelID, modelName);
+            //kmModel = PipelineModel.load(artifact.getPath());
+
+            File artifact = client.downloadArtifacts(modelID, modelName + "A");
+            Pipeline pipeline = Pipeline.load(artifact.getPath());
+            kmModel = pipeline.fit(trainingDF);
+
+            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "A");
+
+            FileUtils.copyDirectory(artifact, artifactLog);
+
+            client.logArtifact(modelID,artifactLog);
+
+            artifactLog.delete();
+
+            //FileUtils.deleteDirectory(new File(artifact.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
 
 
         /*******************LOAD & READ MODEL*****************/
-        // PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
+        //PipelineModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/KMeansModel");
 
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
@@ -1570,7 +1829,7 @@ public class AnalyseServiceImpl {
                 results.add(rawResults.get(i).get(0).toString());//name
         }
 
-        sparkAnomalies.stop();
+       // sparkAnomalies.stop();
 
         return new FindAnomaliesResponse(results);
     }

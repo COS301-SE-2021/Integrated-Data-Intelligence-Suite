@@ -14,7 +14,6 @@ public class ParsedData {
     private String date = null;
     private String location = null;
     private Integer likes = null;
-    private Integer trend = null;
 
     public ParsedData() {
 
@@ -60,12 +59,6 @@ public class ParsedData {
         this.likes = likes;
     }
 
-    public Integer getTrend() {
-        return trend;
-    }
 
-    public void setTrend(Integer likes) {
-        this.trend = trend;
-    }
 
 }

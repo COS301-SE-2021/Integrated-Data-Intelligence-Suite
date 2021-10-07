@@ -21,9 +21,11 @@ const colors = [
     '#FF0800',
     '#5fa7c8',
 ];
+
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
 const index = 9;
 // let data_from_backend;
 // const words_from_backend = [];
@@ -35,7 +37,7 @@ function wordFreq(text) {
         const freqMap = {};
         let _i = 0;
         const words_1 = words;
-        console.log('There maybe an error here');
+        // console.log('There maybe an error here');
         for (; _i < words_1.length; _i++) {
             const w = words_1[_i].toLowerCase();
             if (!freqMap[w]) {
@@ -44,8 +46,8 @@ function wordFreq(text) {
             freqMap[w] += 1;
         }
 
-        console.log('HEre lies a freq map');
-        console.log(freqMap);
+        // console.log('HEre lies a freq map');
+        // console.log(freqMap);
         const max = Math.max(...Object.values(freqMap));
         const lst = Object.keys(freqMap)
             .map(function (word) {
@@ -54,7 +56,7 @@ function wordFreq(text) {
                     value: Math.floor((freqMap[word] / max) * 50),
                 });
             });
-        console.log(lst);
+        // console.log(lst);
         return lst;
     }
 
@@ -103,7 +105,7 @@ function WordCloud(props) {
     const [wordsArray, setWordsArray] = useState(words);
     const [windowWidth, setWindowWidth] = useState(getWindowSize());
 
-    useEffect(()=>{
+    useEffect(() => {
         const lst = getDataFromProps(props.text);
         console.log('works array found to be ');
         console.log(lst);
@@ -123,25 +125,25 @@ function WordCloud(props) {
     return (
         <div className="wordcloud" id="word-cloud-outer-container">
             <Wordcloud
-              key={wordsArray}
-              words={wordsArray}
-              width={windowWidth * 0.7}
-              height={windowWidth * 0.6}
-              font="Impact"
-              padding={2}
-              fontSize={(datum) => fontScale(datum.value)}
-              spiral="archimedean"
-              rotate={0}
-              random={fixedValueGenerator}
+                key={wordsArray}
+                words={wordsArray}
+                width={windowWidth * 0.7}
+                height={windowWidth * 0.6}
+                font="Impact"
+                padding={2}
+                fontSize={(datum) => fontScale(datum.value)}
+                spiral="archimedean"
+                rotate={0}
+                random={fixedValueGenerator}
             >
                 {(cloudWords) => cloudWords.map((w, i) => (
                     <Text
-                      key={w.text}
-                      fill={colors[getRndInteger(0, colors.length)]}
-                      textAnchor="middle"
-                      transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-                      fontSize={w.size}
-                      fontFamily={w.font}
+                        key={w.text}
+                        fill={colors[getRndInteger(0, colors.length)]}
+                        textAnchor="middle"
+                        transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                        fontSize={w.size}
+                        fontFamily={w.font}
                     >
                         {w.text}
                     </Text>

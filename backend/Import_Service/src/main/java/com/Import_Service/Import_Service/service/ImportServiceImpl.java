@@ -245,7 +245,7 @@ public class ImportServiceImpl {
 
             String twitterData = twitterResponse.getJsonData();
 
-            list.add(new ImportedData(DataSource.TWITTER, twitterData));
+            list.add(new ImportedData(DataSource.TWITTER, twitterData, "Twitter"));
 
         } catch (Exception e){
             System.out.println("\n\n twitter error: "+e.getMessage());
@@ -260,7 +260,7 @@ public class ImportServiceImpl {
 
             String newsData = newsResponse.getData();
 
-            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData));
+            list.add(new ImportedData(DataSource.NEWSARTICLE, newsData, "News"));
 
         } catch (Exception e) {
             System.out.println("\n\n newsAPI error:"+e.getMessage());
@@ -277,42 +277,43 @@ public class ImportServiceImpl {
         //Looping through the added sources
         if(!sources.isEmpty()) {
             for (APISource s : sources) {
-                //Building URL
-                String apiUrl = s.getUrl();
-                if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
-                    apiUrl += "?";
-                }
 
-                apiUrl += s.getSearchKey() + "=" + keyword;
-
-                Map<String, String> params = s.getParameters();
-
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
-                }
-
-                //Building the request for various type of authorization
-                if (s.getAuthType() == AuthorizationType.apiKey) {
-                    apiUrl += "&apiKey=" + s.getAuthorization();
-
-                    req = new Request.Builder()
-                            .url(apiUrl)
-                            .method(s.getMethod(), null)
-                            .build();
-                } else if (s.getAuthType() == AuthorizationType.bearer) {
-                    req = new Request.Builder()
-                            .addHeader("Authorization", "Bearer " + s.getAuthorization())
-                            .url(apiUrl)
-                            .method(s.getMethod(), null)
-                            .build();
-                } else {
-                    req = new Request.Builder()
-                            .url(apiUrl)
-                            .method(s.getMethod(), null)
-                            .build();
-                }
-                //Attempting to execute query
                 try {
+                    //Building URL
+                    String apiUrl = s.getUrl();
+                    if (apiUrl.charAt(apiUrl.length() - 1) != '?') {
+                        apiUrl += "?";
+                    }
+
+                    apiUrl += s.getSearchKey() + "=" + keyword;
+
+                    Map<String, String> params = s.getParameters();
+
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                        apiUrl += "&" + entry.getKey() + "=" + entry.getValue();
+                    }
+
+                    //Building the request for various type of authorization
+                    if (s.getAuthType() == AuthorizationType.apiKey) {
+                        apiUrl += "&apiKey=" + s.getAuthorization();
+
+                        req = new Request.Builder()
+                                .url(apiUrl)
+                                .method(s.getMethod(), null)
+                                .build();
+                    } else if (s.getAuthType() == AuthorizationType.bearer) {
+                        req = new Request.Builder()
+                                .addHeader("Authorization", "Bearer " + s.getAuthorization())
+                                .url(apiUrl)
+                                .method(s.getMethod(), null)
+                                .build();
+                    } else {
+                        req = new Request.Builder()
+                                .url(apiUrl)
+                                .method(s.getMethod(), null)
+                                .build();
+                    }
+                    //Attempting to execute query
                     Response response = client.newCall(req).execute();
                     //Log error if response was unsuccessful
                     if (!response.isSuccessful()) {
@@ -321,9 +322,9 @@ public class ImportServiceImpl {
                         oneFailedFlag = true;
                     }
 
-                    list.add(new ImportedData(DataSource.TWITTER, Objects.requireNonNull(response.body()).string()));
+                    list.add(new ImportedData(DataSource.ADDED, Objects.requireNonNull(response.body()).string(), s.getName()));
                 }
-                catch (IOException e) {
+                catch (Exception e) {
                     //Log error if request is invalid
                     log.warn("Error executing request for " + s.getName());
                     oneFailedFlag = true;
@@ -370,7 +371,7 @@ public class ImportServiceImpl {
             return new AddAPISourceResponse(false, "The source does not exist");
         }
 
-        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getAuthType(), request.getAuthorization(), request.getParameters());
+        APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getType(), request.getAuthType(), request.getAuthorization(), request.getParameters());
 
         APISource savedSource = apiSourceRepository.save(newSource);
 
@@ -460,7 +461,7 @@ public class ImportServiceImpl {
     /**
      * This method is used to retrieve a specific API source based on the Id of an API source.
      * @param request This contains the ID of an APISource that is being requested.
-     * @return This will return whether editing an API source was successful and APISource if it found one.
+     * @return This will return whether finding the API source was successful and APISource if it found one.
      * @throws Exception This will be thrown if the request is invalid.
      */
     public GetAPISourceByIdResponse getAPISourceById(GetAPISourceByIdRequest request) throws Exception {
@@ -476,5 +477,41 @@ public class ImportServiceImpl {
         else {
             return new GetAPISourceByIdResponse(false, "Failed to fetch API source", null);
         }
+    }
+
+    /**
+     * This method will delete the source based on the id of the source.
+     * @param request This contains the ID of an APISource that is being requested.
+     * @return This will return whether deleting an API source was successful and APISource if it found one.
+     * @throws Exception This will be thrown if the request is invalid.
+     */
+    @Transactional
+    public DeleteSourceResponse deleteSourceByID(DeleteSourceRequest request) throws InvalidImporterRequestException {
+        if(request == null || request.getId() == null){
+            throw new InvalidImporterRequestException("Request is invalid");
+        }
+
+        Optional<APISource> source = apiSourceRepository.findById(request.getId());
+
+        if(source.isPresent()) {
+            try{
+                APISource existingSource = source.get();
+
+                Map<String, String> parameters = existingSource.getParameters();
+
+                for (Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator(); it.hasNext();) {
+                    existingSource.removeParameter(it.next().getKey());
+                }
+
+                apiSourceRepository.deleteById(existingSource.getId());
+            }
+            catch (Exception e){
+                log.error(e.getMessage());
+                e.printStackTrace();
+                return new DeleteSourceResponse(false, "Failed to delete source");
+            }
+        }
+
+        return new DeleteSourceResponse(true, "Deleted source");
     }
 }

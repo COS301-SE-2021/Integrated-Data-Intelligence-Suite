@@ -40,6 +40,7 @@ public class NotificationServiceImpl {
 
         try {
             emailSender.send(message);
+            System.out.println("Sent email");
         } catch (MailException e) {
             return CompletableFuture.completedFuture(new SendEmailNotificationResponse(false, "An error has occurred while sending an the activation code to user."));
         }

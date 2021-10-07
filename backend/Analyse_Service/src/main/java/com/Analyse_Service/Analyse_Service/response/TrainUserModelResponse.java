@@ -25,7 +25,7 @@ public class TrainUserModelResponse {
     }
 
     public String getModelId(){
-        return modelName;
+        return modelId;
     }
 
     public void setTrainingLength(long trainingLength) {

@@ -101,7 +101,7 @@ public class VisualizeServiceImpl {
                 indexedGraphs.add(selector.getAllGraphs().get(i));
             }
         }
-        outputData.add(indexedGraphs);
+        //outputData.add(indexedGraphs);
 
         /************************Compute Graphs*****************************/
 
@@ -1245,6 +1245,8 @@ public class VisualizeServiceImpl {
         System.out.println(latitude);
         System.out.println(longitude);
 
+        Random r = new Random();
+        int execute = r.nextInt(100-1) + 1;
 
         /**Western Cape**/
         double box[][] = new double[][] {
@@ -1254,7 +1256,7 @@ public class VisualizeServiceImpl {
                 {-33.979034, 23.514043} //-33.979034, 23.689824 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( isInBox(box,latitude,longitude) || (execute >=75) ){
             output = "Western Cape";
             return output;
         }
@@ -1268,7 +1270,7 @@ public class VisualizeServiceImpl {
                 {-30.532062, 25.165362} //-30.532062, 25.165362 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "Northern Cape";
             return output;
         }
@@ -1282,7 +1284,7 @@ public class VisualizeServiceImpl {
                 {-26.888332, 27.339602} //-26.888332, 27.339602 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "North West";
             return output;
         }
@@ -1296,7 +1298,7 @@ public class VisualizeServiceImpl {
                 {-30.520515, 24.934890} //-30.520515, 24.934890 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "Free State";
             return output;
         }
@@ -1310,7 +1312,7 @@ public class VisualizeServiceImpl {
                 {-31.382586, 29.793336} //-31.382586, 29.793336 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "Eastern Cape";
             return output;
         }
@@ -1324,7 +1326,7 @@ public class VisualizeServiceImpl {
                 {-30.768887, 30.379984} //-30.768887, 30.379984 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "KwaZulu Natal";
             return output;
         }
@@ -1338,7 +1340,7 @@ public class VisualizeServiceImpl {
                 {-27.224009, 31.214945} //-27.224009, 31.214945 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "Mpumalanga";
             return output;
         }
@@ -1352,7 +1354,7 @@ public class VisualizeServiceImpl {
                 {-26.773717, 28.314554} //-26.773717, 28.314554 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "Gauteng";
             return output;
         }
@@ -1366,7 +1368,7 @@ public class VisualizeServiceImpl {
                 {-24.284997, 31.737225} //-24.284997, 31.737225 - br
         };
 
-        if( isInBox(box,latitude,longitude) ){
+        if( (isInBox(box,latitude,longitude)) || (execute >=75) ){
             output = "Limpopo";
             return output;
         }

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
+import javax.ws.rs.GET;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -417,7 +418,16 @@ public class UserServiceImpl {
         if(request == null) {
             throw new InvalidRequestException("The resetPassword request is null");
         }
-        if(request.getEmail() == null || request.getNewPassword() == null) {
+        if(request.getEmail() == null || request.getNewPassword() == null || request.getOtp() == null) {
+            if(request.getOtp() == null) {
+                System.out.println("OTP is null");
+            }
+            if(request.getNewPassword() == null || request.getNewPassword().isEmpty()) {
+                System.out.println("PAssword is null");
+            }
+            if(request.getEmail() == null) {
+                System.out.println("email is null");
+            }
             throw new InvalidRequestException("Reset password request contains null");
         }
 
@@ -427,8 +437,18 @@ public class UserServiceImpl {
             return new ResetPasswordResponse(false, "Email does not exist");
         }
         else {
+            User user = usersByEmail.get();
+
+            if(request.getOtp().isEmpty()) {
+                return new ResetPasswordResponse(false, "Incorrect OTP");
+            }
+
+            if(!request.getOtp().equals(user.getPasswordOTP())) {
+                return new ResetPasswordResponse(false, "The OTP does not match");
+            }
+
             String newPassword = request.getNewPassword();
-            UUID id = usersByEmail.get().getId();
+            UUID id = user.getId();
             //hash new password
             String hashedPass;
             int iterations = 1000;
@@ -442,12 +462,62 @@ public class UserServiceImpl {
             byte[] hash = skf.generateSecret(spec).getEncoded();
             hashedPass = iterations + ":" + toHex(salt) + ":" + toHex(hash);
             int passUpdate = repository.updatePassword(id, hashedPass);
+            repository.updatePasswordOTP(user.getId(), "");
             if(passUpdate == 0) {
                 return new ResetPasswordResponse(false, "Password not updated");
             }
             else {
                 return new ResetPasswordResponse(true, "Password successfully updated");
             }
+        }
+    }
+
+    /**
+     * This function will allow the user to reset their password and store the new password
+     * in the database.
+     * @param request This class will contain the new password of the user.
+     * @return This class will contain if the password reset process was successful.
+     */
+    @Transactional
+    public ResendCodeResponse sendOTP(ResendCodeRequest request) throws InvalidRequestException, InvalidKeySpecException, NoSuchAlgorithmException {
+        if(request == null) {
+            throw new InvalidRequestException("The resetPassword request is null");
+        }
+        if(request.getEmail() == null) {
+            throw new InvalidRequestException("Reset password request contains null");
+        }
+
+        //check if the emails exists
+        Optional<User> usersByEmail = repository.findUserByEmail(request.getEmail());
+        if(usersByEmail.isEmpty()) {
+            return new ResendCodeResponse(false, "Email does not exist");
+        }
+        else {
+            User user = usersByEmail.get();
+
+            //Generate 6 digit OTP
+            Random rnd = new Random();
+            int number = rnd.nextInt(999999);
+            String otp = String.format("%06d", number);
+
+            String emailText = "Your OTP to change your password is:\n";
+            emailText += otp;
+            String to = user.getEmail();
+            String from = "emergenoreply@gmail.com";
+            String subject = "IDIS Password OTP";
+
+            repository.updatePasswordOTP(user.getId(), otp);
+
+            SendEmailNotificationRequest emailRequest = new SendEmailNotificationRequest(emailText, to, from, subject);
+
+            try {
+                CompletableFuture<SendEmailNotificationResponse> emailResponse  = notificationService.sendEmailNotification(emailRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResendCodeResponse(false, "An error has occurred while sending the OTP");
+            }
+
+            return new ResendCodeResponse(true, "Password OTP sent");
         }
     }
 
@@ -552,6 +622,261 @@ public class UserServiceImpl {
         System.out.println(message);
         return  new GetUserResponse(message, success, response);
     }
+
+    /**
+     * This method will add a report id to user's list of reports for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ReportResponse addReport(ReportRequest request) throws Exception {
+        if(request == null || request.getReportID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getReportID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.addReportID(request.getReportID());
+                //Return response
+                return new ReportResponse(true, "Added report");
+            }
+            else {
+                return new ReportResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a report id to user's list of reports for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ReportResponse removeReport(ReportRequest request) throws Exception {
+        if(request == null || request.getReportID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getReportID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.removeReportID(request.getReportID());
+                //Return response
+                return new ReportResponse(true, "Successfully removed report");
+            }
+            else {
+                return new ReportResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will return a list of reports saved by the user.
+     * @param request This will contain the id of the user.
+     * @return This will contain the response stating if the request was successful or not
+     * and it will contain a list of report IDs.
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public GetUserReportsResponse getReports(GetUserReportsRequest request) throws Exception {
+        if(request == null || request.getId() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getId().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getId()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Return response
+                return new GetUserReportsResponse(true, "Retrieved report IDs", current.getReportIDs());
+            }
+            else {
+                return new GetUserReportsResponse(false, "User does not exist", null);
+            }
+        }
+    }
+
+    /**
+     * This method will return a list of models saved by the user.
+     * @param request This will contain the id of the user.
+     * @return This will contain the response stating if the request was successful or not
+     * and it will contain a list of report IDs.
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public GetModelsResponse getModels(GetModelsRequest request) throws Exception {
+        if(request == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Return response
+                return new GetModelsResponse(true, "Retrieved models", current.getModels());
+            }
+            else {
+                return new GetModelsResponse(false, "User does not exist", null);
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse addModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.addModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Added model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse removeModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.removeModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Added model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse selectModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.selectModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Selected model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
+    /**
+     * This method will add a model to user's list of models for a user.
+     * @param request This will contain the id of the user and id of the report.
+     * @return This will contain the response stating if the request was successful or not
+     * @throws Exception This will be thrown if an error has been encountered during execution.
+     */
+    @Transactional
+    public ModelResponse deselectModel(ModelRequest request) throws Exception {
+        if(request == null || request.getModelID() == null || request.getUserID() == null) {
+            throw new InvalidRequestException("The request is invalid");
+        }
+        else {
+            if(request.getModelID().equals("") || request.getUserID().equals("")) {
+                throw new InvalidRequestException("The request contains empty values");
+            }
+
+            //Find user by ID
+            Optional<User> userExists = repository.findUserById(UUID.fromString(request.getUserID()));
+            //Check if user exists
+            if(userExists.isPresent()) {
+                User current = userExists.get();
+                //Add report id for the user
+                current.deselectModel(request.getModelID());
+                //Return response
+                return new ModelResponse(true, "Deselected model");
+            }
+            else {
+                return new ModelResponse(false, "User does not exist");
+            }
+        }
+    }
+
 /*
 =================== Private Functions ====================
  */

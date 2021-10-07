@@ -4,8 +4,7 @@ import com.User_Service.User_Service.rri.Permission;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Entity(name = "users")
 @Table(name = "users")
@@ -41,9 +40,23 @@ public class User {
 
     Boolean isVerified;
 
+    String passwordOTP = "";
+
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     Date dateCreated;
+
+    @ElementCollection
+            @CollectionTable(name = "report_ids")
+    List<String> reportIDs = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "models",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "model_id")
+    @Column(name = "selected")
+    private Map<String, Boolean> models = new HashMap<>();
+
 
     public User() {
 
@@ -140,12 +153,61 @@ public class User {
         isVerified = verified;
     }
 
+    public String getPasswordOTP() {
+        return passwordOTP;
+    }
+
+    public void setPasswordOTP(String passwordOTP) {
+        this.passwordOTP = passwordOTP;
+    }
+
     public Date getDateCreated() {
         return dateCreated;
     }
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public void addReportID(String reportID) {
+        reportIDs.add(reportID);
+    }
+
+    public void removeReportID(String reportID) {
+        reportIDs.remove(reportID);
+    }
+
+    public List<String> getReportIDs() {
+        return reportIDs;
+    }
+
+    public void setReportIDs(ArrayList<String> reportIDs) {
+        this.reportIDs = reportIDs;
+    }
+
+    public Map<String, Boolean> getModels() {
+        return models;
+    }
+
+    public void setModels(Map<String, Boolean> models) {
+        this.models = models;
+    }
+
+    public void selectModel(String modelID) {
+        this.models.remove(modelID);
+        this.models.put(modelID, true);
+    }
+
+    public void deselectModel(String modelID) {
+        this.models.remove(modelID, false);
+    }
+
+    public void addModel(String modelID) {
+        this.models.put(modelID, false);
+    }
+
+    public void removeModel(String modelID) {
+        this.models.remove(modelID);
     }
 
     @Override

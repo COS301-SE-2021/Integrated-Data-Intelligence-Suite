@@ -1,5 +1,6 @@
 package com.Import_Service.Import_Service.dataclass;
 
+import com.Import_Service.Import_Service.rri.ApiType;
 import com.Import_Service.Import_Service.rri.AuthorizationType;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class APISource {
     private String searchKey;
 
     @Enumerated(EnumType.STRING)
+    private ApiType type;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "auth_type")
     private AuthorizationType authType;
 
@@ -37,11 +41,12 @@ public class APISource {
     @Column(name = "param_value")
     private Map<String, String> parameters;
 
-    public APISource(String name, String url, String method, String search, AuthorizationType authType, String authorization, Map<String, String> parameters) {
+    public APISource(String name, String url, String method, String search, ApiType type, AuthorizationType authType, String authorization, Map<String, String> parameters) {
         this.name = name;
         this.url = url;
         this.method = method;
         this.searchKey = search;
+        this.type = type;
         this.authType = authType;
         this.authorization = authorization;
         this.parameters = parameters;
@@ -113,5 +118,23 @@ public class APISource {
 
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
+    }
+
+    public ApiType getType() {
+        return type;
+    }
+
+    public void setType(ApiType type) {
+        this.type = type;
+    }
+
+    public void removeAllParameters() {
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            parameters.remove(entry.getKey());
+        }
+    }
+
+    public void removeParameter(String key) {
+        parameters.remove(key);
     }
 }

@@ -1,11 +1,12 @@
 package com.Analyse_Service.Analyse_Service.service;
 
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
+import com.Analyse_Service.Analyse_Service.dataclass.ParsedTrainingData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
-import com.Analyse_Service.Analyse_Service.repository.AnalyseServiceParsedDataRepository;
+import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 
@@ -59,7 +60,6 @@ import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -69,7 +69,7 @@ import static org.apache.spark.sql.functions.col;
 public class TrainServiceImpl {
 
     @Autowired
-    private AnalyseServiceParsedDataRepository parsedDataRepository;
+    private TrainingDataRepository parsedDataRepository;
 
     //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
@@ -97,21 +97,21 @@ public class TrainServiceImpl {
             }
         }
         if(request.getDataList().size() >0){
-            ParsedData testParsedData = request.getDataList().get(0);
+            ParsedTrainingData testParsedData = request.getDataList().get(0);
 
-            if(testParsedData.getTextMessage() != null) {
+            if(testParsedData.getTextMessage() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Text field null");
             }
-            if(testParsedData.getLocation() != null) {
+            if(testParsedData.getLocation() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Location field null");
             }
-            if(testParsedData.getDate() != null) {
+            if(testParsedData.getDate() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Date field null");
             }
-            if(testParsedData.getLikes() != null) {
-                throw new InvalidRequestException("DataList of requested parsedData has Likes field null");
+            if(testParsedData.getInteractions() == null) {
+                throw new InvalidRequestException("DataList of requested parsedData has Interactions field null");
             }
-            if(testParsedData.getTrend() != null) {
+            if(testParsedData.getIsTrending() == null) {
                 throw new InvalidRequestException("DataList of requested parsedData has Trend field null");
             }
         }
@@ -124,7 +124,7 @@ public class TrainServiceImpl {
         System.out.println("*******************USE NLP******************");
 
         /********data*******/
-        ArrayList<ParsedData> dataList = request.getDataList();
+        ArrayList<ParsedTrainingData> dataList = request.getDataList();
         ArrayList<ArrayList> parsedDataList = new ArrayList<>(); //TODO: used to send all other functions
 
         ArrayList<String> nlpTextData = new ArrayList<>();
@@ -189,8 +189,8 @@ public class TrainServiceImpl {
             String date = dataList.get(i).getDate();//Mon Jul 08 07:13:29 +0000 2019
             String[] dateTime = date.split(" ");
             String formattedDate = dateTime[1] + " " + dateTime[2] + " " + dateTime[5];
-            String likes = String.valueOf(dataList.get(i).getLikes());
-            String trend = String.valueOf(dataList.get(i).getTrend());
+            String likes = String.valueOf(dataList.get(i).getInteractions());
+            String trend = String.valueOf(dataList.get(i).getIsTrending());
 
 
             //Random rn = new Random();
@@ -293,10 +293,9 @@ public class TrainServiceImpl {
             trainedModel.add(findAnomaliesResponse.getTrainedModel());
 
 
-            RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel);
+            RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel, request.getModelName());
             RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
-
-            modelName = registerUserBestModelResponse.getBestModelName();
+            
             modelId = registerUserBestModelResponse.getBestModelId();
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
@@ -305,7 +304,7 @@ public class TrainServiceImpl {
         }
 
 
-        return new TrainUserModelResponse(duration,modelId,modelName);
+        return new TrainUserModelResponse(duration,modelId,request.getModelName());
     }
 
 
@@ -452,11 +451,17 @@ public class TrainServiceImpl {
             TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
 
+            System.out.println("finished training 1");
+
             TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
             TrainFindTrendsDTResponse findTrendsDTResponse = this.trainFindTrendsDecisionTree(findTrendsDTRequest);
 
+            System.out.println("finished training 2");
+
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+
+            System.out.println("finished training all");
 
             ArrayList<TrainedModel> trainedModels = new ArrayList<>();
             trainedModels.add(findTrendsResponse.getTrainedModel());
@@ -842,7 +847,7 @@ public class TrainServiceImpl {
                             new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                             new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
             itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
@@ -918,7 +923,7 @@ public class TrainServiceImpl {
             }
             else{
                 Row trainRow = RowFactory.create(
-                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()), //trend
                         namedEntities.get(i).get(0).toString(), //name
                         namedEntities.get(i).get(1).toString(), //type
                         Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
@@ -1091,13 +1096,18 @@ public class TrainServiceImpl {
         /***saveModel***/
 
         //*"backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/"*/ "..models/" +modelName;
-        String path =  Paths.get("../models/" +modelName).toString();
+        //String path =  Paths.get("../models/" +modelName).getRoot().toString();
+        //String path =  Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName).getRoot().toString();
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
         System.out.println("Testing new path !!!  " + path);
         String script = Paths.get("../rri/LogModel.py").toString();
 
-        //PipelineModel bestModel = (PipelineModel) lrModel.bestModel();
-        lrModel.write().overwrite().save(path);
-        File modelFile = new File(path) ;// "../models/" + modelName);
+
+        //lrModel.write().overwrite().save(path);
+        trainValidationSplit.write().overwrite().save(path);
+
+
+        File modelFile = new File(path);// "../models/" + modelName);
 
         if(modelFile.exists() && modelFile.isDirectory()){
             System.out.println("nothing wrong with file ");
@@ -1106,8 +1116,26 @@ public class TrainServiceImpl {
         }
         client.logArtifact(run.getId(), modelFile);
 
+
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainSetDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+        File infoFile = new File(filePath);
+        infoFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(infoFile, false);
+        fos.write(String.valueOf(accuracy).getBytes());
+        fos.close();
+        client.logArtifact(run.getId(), infoFile);
+
+
         TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
-        FileUtils.deleteDirectory(new File(path));
+        FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
+        infoFile.delete();
 
         /*
         String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
@@ -1234,7 +1262,7 @@ public class TrainServiceImpl {
                             new StructField("Date", DataTypes.StringType, false, Metadata.empty()),
                             new StructField("Likes", DataTypes.IntegerType, false, Metadata.empty()),
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
-                            new StructField("IsTrending", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
             itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
@@ -1299,7 +1327,7 @@ public class TrainServiceImpl {
             }
             else{
                 Row trainRow = RowFactory.create(
-                        Integer.parseInt(namedEntities.get(i).get(3).toString()), //trend
+                        Double.parseDouble(namedEntities.get(i).get(3).toString()), //trend
                         namedEntities.get(i).get(0).toString(), //name
                         namedEntities.get(i).get(1).toString(), //type
                         Double.parseDouble(namedEntities.get(i).get(2).toString()), //number
@@ -1443,23 +1471,39 @@ public class TrainServiceImpl {
         }
 
 
-
         //custom tags
         client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
         client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
 
-        String path = Paths.get("../models/" + modelName).toString();
-
+        //String path = Paths.get("../models/" + modelName).toString();
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
         String script = Paths.get("../rri/LogModel.py").toString();
-        dtModel.write().overwrite().save(path);
+
+        //dtModel.write().overwrite().save(path);
+        trainValidationSplit.write().overwrite().save(path);
         File modelFile = new File(path);
-        //client.logArtifact(run.getId(), modelFile);
 
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainSetDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
 
-        FileUtils.deleteDirectory(new File(path));
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+        File infoFile = new File(filePath);
+        infoFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(infoFile, false);
+        fos.write(String.valueOf(accuracy).getBytes());
+        fos.close();
+        client.logArtifact(run.getId(), infoFile);
+
+
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
+        FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
+        infoFile.delete();
 
 
         /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
@@ -2122,15 +2166,35 @@ public class TrainServiceImpl {
         client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
         //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
-        String path = Paths.get("../models/" + modelName).toString();
+        //String path = Paths.get("../models/" + modelName).toString();
+        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
         String script = Paths.get("../rri/LogModel.py").toString();
 
-        kmModel.write().overwrite().save(path);
+        //kmModel.write().overwrite().save(path);
+        pipeline.write().overwrite().save(path);
         File modelFile = new File(path);
+
         client.logArtifact(run.getId(), modelFile);
 
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
-        FileUtils.deleteDirectory(new File(path));
+        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+        trainingDF.write().save(path);
+        File trainFile = new File(path);
+        client.logArtifact(run.getId(), trainFile);
+
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+        File infoFile = new File(filePath);
+        infoFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(infoFile, false);
+        fos.write(String.valueOf(accuracy).getBytes());
+        fos.close();
+        client.logArtifact(run.getId(), infoFile);
+
+
+        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
+        FileUtils.deleteDirectory(modelFile);
+        FileUtils.deleteDirectory(trainFile);
+        infoFile.delete();
 
         /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
         CommandLine commandLine = CommandLine.parse(commandPath);
@@ -2176,9 +2240,9 @@ public class TrainServiceImpl {
         //select best in selection for user
         TrainedModel trendModelOne = request.getModelList().get(0);
         TrainedModel trendModelTwo = request.getModelList().get(1);
-        TrainedModel trendModelThree = request.getModelList().get(2);
+        TrainedModel anomalyModel = request.getModelList().get(2);
 
-        String bestModelId = trendModelOne.getModelName();
+        String bestModelId = request.getModelName();
 
         if(trendModelOne.getAccuracy() >= trendModelTwo.getAccuracy()){
             bestModelId = bestModelId + ":" + trendModelOne.getRunId();
@@ -2187,9 +2251,9 @@ public class TrainServiceImpl {
             bestModelId = bestModelId + ":" + trendModelTwo.getRunId();
         }
 
-        bestModelId = bestModelId + ":" + trendModelThree.getRunId();
+        bestModelId = bestModelId + ":" + anomalyModel.getRunId();
 
-        return new RegisterUserBestModelResponse(bestModelId, trendModelOne.getModelName());
+        return new RegisterUserBestModelResponse(bestModelId, request.getModelName());
     }
 
 
@@ -2243,7 +2307,7 @@ public class TrainServiceImpl {
         bestModelId = bestModelId + ":" + trendModelThree.getRunId();
 
 
-        String filePath = Paths.get(".../rri/RegisteredApplicationModels.txt").toString();
+        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
         File file = new File(filePath);
         file.createNewFile();
 

@@ -77,8 +77,60 @@ public class UserServiceController {
         return service.resendCode(request);
     }
 
+    @PostMapping(value = "/sendOTP")
+    public @ResponseBody ResendCodeResponse sendOTP(@RequestBody ResendCodeRequest request) throws Exception {
+        return service.sendOTP(request);
+    }
+
+    @PostMapping(value = "/resetPassword")
+    public @ResponseBody ResetPasswordResponse resetPassword(@RequestBody ResetPasswordRequest request) throws Exception {
+        return service.resetPassword(request);
+    }
+
     @PostMapping(value = "/updateProfile")
     public @ResponseBody UpdateProfileResponse resendCode(@RequestBody UpdateProfileRequest request) throws Exception {
         return service.updateProfile(request);
+    }
+
+    @PostMapping(value = "/addReport")
+    public @ResponseBody
+    ReportResponse addReport(@RequestBody ReportRequest request) throws Exception {
+        return service.addReport(request);
+    }
+
+    @PostMapping(value = "/removeReport")
+    public @ResponseBody
+    ReportResponse removeReport(@RequestBody ReportRequest request) throws Exception {
+        return service.removeReport(request);
+    }
+
+    @GetMapping(value = "/getReports/{id}")
+    public @ResponseBody GetUserReportsResponse getReports(@PathVariable String id) throws Exception {
+        return service.getReports(new GetUserReportsRequest(id));
+    }
+
+    @GetMapping(value = "/getModels/{id}")
+    public @ResponseBody GetModelsResponse getModels(@PathVariable String id) throws Exception {
+        return service.getModels(new GetModelsRequest(id));
+    }
+
+    @PostMapping(value = "/addModel")
+    public @ResponseBody ModelResponse addModel(@RequestBody ModelRequest request) throws Exception {
+        return service.addModel(request);
+    }
+
+    @PostMapping(value = "/removeModel")
+    public @ResponseBody ModelResponse removeModel(@RequestBody ModelRequest request) throws Exception {
+        return service.removeModel(request);
+    }
+
+    @PostMapping(value = "/selectModel")
+    public @ResponseBody ModelResponse selectModel(@RequestBody ModelRequest request) throws Exception {
+        return service.selectModel(request);
+    }
+
+    @PostMapping(value = "/deselectModel")
+    public @ResponseBody ModelResponse deselectModel(@RequestBody ModelRequest request) throws Exception {
+        return service.deselectModel(request);
     }
 }

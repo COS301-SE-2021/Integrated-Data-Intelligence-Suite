@@ -303,7 +303,7 @@ public class ParseServiceControllerIntegrationTests {
     @DisplayName("Test_Parse_Imported_Data_Social_Media_Data")
     public void testParseImportedData() {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "VIEWING");
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "VIEWING", "News");
 
         HttpEntity<ParseImportedDataRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<ParseImportedDataResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/Parse/parseImportedData", HttpMethod.POST, requestEntity, ParseImportedDataResponse.class);
@@ -317,7 +317,7 @@ public class ParseServiceControllerIntegrationTests {
     @DisplayName("Test_Parse_Imported_Data_News_Data")
     public void testParseImportedDataNews() {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.NEWSARTICLE, mockArticleData, "VIEWING");
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.NEWSARTICLE, mockArticleData, "VIEWING", "News");
 
         HttpEntity<ParseImportedDataRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<ParseImportedDataResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/Parse/parseImportedData", HttpMethod.POST, requestEntity, ParseImportedDataResponse.class);
@@ -331,7 +331,7 @@ public class ParseServiceControllerIntegrationTests {
     @DisplayName("Test_Parse_Imported_Data_Social_Media_Data_IMPORTING")
     public void testParseImportedDataSave() {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "IMPORTING");
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.TWITTER, mockTwitterData, "IMPORTING", "Twitter");
 
         HttpEntity<ParseImportedDataRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<ParseImportedDataResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/Parse/parseImportedData", HttpMethod.POST, requestEntity, ParseImportedDataResponse.class);
@@ -345,7 +345,7 @@ public class ParseServiceControllerIntegrationTests {
     @DisplayName("Test_Parse_Imported_Data_News_Data_IMPORTING")
     public void testParseImportedDataNewsSave() {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.NEWSARTICLE, mockArticleData, "IMPORTING");
+        ParseImportedDataRequest request = new ParseImportedDataRequest(DataSource.NEWSARTICLE, mockArticleData, "IMPORTING", "News");
 
         HttpEntity<ParseImportedDataRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
         ResponseEntity<ParseImportedDataResponse> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/Parse/parseImportedData", HttpMethod.POST, requestEntity, ParseImportedDataResponse.class);
