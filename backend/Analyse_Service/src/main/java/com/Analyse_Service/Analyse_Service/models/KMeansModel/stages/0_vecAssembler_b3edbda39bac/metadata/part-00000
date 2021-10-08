@@ -1,1 +1,0 @@
-{"class":"org.apache.spark.ml.feature.VectorAssembler","timestamp":1632152489794,"sparkVersion":"3.1.2","uid":"vecAssembler_b3edbda39bac","paramMap":{"outputCol":"features","inputCols":["AmountOfEntities","Latitude","Latitude","Like"]},"defaultParamMap":{"handleInvalid":"error","outputCol":"vecAssembler_b3edbda39bac__output"}}
