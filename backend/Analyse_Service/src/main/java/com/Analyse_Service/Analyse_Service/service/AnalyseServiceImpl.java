@@ -21,7 +21,9 @@ import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -54,6 +56,18 @@ public class AnalyseServiceImpl {
     private TrainingDataRepository parsedDataRepository;
 
     private SparkSession sparkNlpProperties;
+
+    /********************************HELPER********************************/
+    public static class GetRow implements Function<Row, Row> {
+        public Row call(Row s) { return s; }
+    }
+
+    /*class GetRow implements ForeachFunction<ArrayList<Row>,Row> {
+        public void call(ArrayList<Row> s, Row row) {
+            s.add(row);
+        }
+    }*/
+
 
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
@@ -519,14 +533,31 @@ public class AnalyseServiceImpl {
         /*******************SETUP SPARK*****************/
         System.out.println("*******************SETUP SPARK*****************");
 
-        sparkNlpProperties = SparkSession
-                .builder()
-                .appName("NlpProperties")
-                .master("local")
+        SparkConf conf = new SparkConf().
+                setAppName("NlpProperties")
+                .setMaster("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                //.config("spark.driver.memory", "4g")
+                .set("spark.driver.memory", "6g")
+                .set("spark.executor.memory", "6g")
+                .set("spark.memory.fraction", "0.5")
+                .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+                .registerKryoClasses(new Class[]{AnalyseServiceImpl.class});
+
+        sparkNlpProperties = SparkSession
+                .builder()
+                //.appName("NlpProperties")
+                //.master("local")
+                //.config("spark.driver.memory", "6g")
+                //.config("spark.executor.memory", "6g")
+                //.config("spark.memory.fraction", "0.5")
+                .config(conf)
                 .getOrCreate();
+
+
+        //SparkContext
+        //JavaSparkContext sc = new JavaSparkContext(conf);
+        //sparkNlpProperties. = conf.
 
 
 
@@ -598,11 +629,17 @@ public class AnalyseServiceImpl {
 
 
         /**sentiment**/
-        Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
-        List<Row> sentimentRowData = sentimentDataset.collectAsList();
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
-            Row sentimentRow = sentimentRowData.get(dataIndex);
-            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //vaue
+        Dataset<Row> sentimentDataset = results.select(col("sentiment.result")).cache();
+        Iterator<Row> sentimentIterator = sentimentDataset.toLocalIterator();
+        //List<Row> sentimentRowData = sentimentDataset.collectAsList();
+
+
+        ///for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
+        while(sentimentIterator.hasNext()){
+            Row sentimentRow = sentimentIterator.next();//sentimentRowData.get(dataIndex);
+            //Row sentimentRow = (Row) sentimentDataset.head(dataIndex);
+
+            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //value
             List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
 
             String sentiment = "no sentiment";
@@ -621,20 +658,34 @@ public class AnalyseServiceImpl {
         }
 
 
-        /**Named entity recognised**/
-        Dataset<Row> nerDataset = results.select(col("ner.result"));
-        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
+        System.out.println("DATA COUNT : sentiments" );
 
-        List<Row> textRowData = chunkDataset.collectAsList();
-        List<Row> entityRowData = nerDataset.collectAsList();
+        /**Named entity recognised**/
+        Dataset<Row> entityTypeDataset = results.select(col("ner.result")).cache();
+        Dataset<Row> entityNameDataset = results.select(col("chunk.result")).cache();
+
+
+        Iterator<Row> entityTypeIterator = sentimentDataset.toLocalIterator();
+        Iterator<Row> entityNameIterator = sentimentDataset.toLocalIterator();
+
+        //List<Row> entityTypeRowData = entityTypeDataset.collectAsList();
+        //List<Row> entityNameRowData = entityNameDataset.collectAsList();
 
         for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
             //System.out.println("getting response : " + dataIndex);
 
             ArrayList<String> listData =  new ArrayList<>();
 
-            Row textRow = textRowData.get(dataIndex);
-            Row entityRow = entityRowData.get(dataIndex);
+            Row textRow = entityTypeIterator.next(); //entityNameRowData.get(dataIndex);
+
+            System.out.println(" +:old:+... "+ dataIndex );
+            System.out.println(textRow.toString());
+
+            Row sentimentRowo =  entityNameDataset.head();// .head(dataIndex);
+            System.out.println(" +:new:+... "+ dataIndex );
+            System.out.println(sentimentRowo.toString());
+
+            Row entityRow = entityNameIterator.next(); //entityTypeRowData.get(dataIndex);
 
             WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
             WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
@@ -689,6 +740,8 @@ public class AnalyseServiceImpl {
             response.get(dataIndex).setNamedEntities(nameEntities);
             entityList.add(listData);
         }
+
+        System.out.println("*******************READ MODEL DATA : DONE*****************");
 
 
         /*OLD NLP
@@ -1301,7 +1354,7 @@ public class AnalyseServiceImpl {
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2); // .read().parquet("...");
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2).cache(); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1487,7 +1540,7 @@ public class AnalyseServiceImpl {
         /******************* READ MODEL*****************/
 
         //TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-        Dataset<Row> result = lrModel.transform(trainingDF);
+        Dataset<Row> result = lrModel.transform(trainingDF).cache();
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
@@ -1698,7 +1751,7 @@ public class AnalyseServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema).cache();
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -1818,7 +1871,7 @@ public class AnalyseServiceImpl {
 
         //summary.filter(col("prediction").
         Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
-        Dataset<Row> rawResults2 = Results.select("Text","prediction");
+        Dataset<Row> rawResults2 = Results.select("Text","prediction").cache();
         List<Row> rawResults = rawResults2.select("Text").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************");
@@ -1837,7 +1890,13 @@ public class AnalyseServiceImpl {
     }
 
 
+
+
+
+
 }
+
+
 
 
 
