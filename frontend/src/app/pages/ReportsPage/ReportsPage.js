@@ -116,7 +116,7 @@ const ReportsPage = () => {
             })
             .then((dataObj) =>{
                 closeDeletePopup();
-                if (dataObj.delete) {
+                if (!dataObj.delete) {
                     message.success('successfully deleted');
                 } else {
                     message.error('could not delete report');

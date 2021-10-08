@@ -739,6 +739,8 @@ public class GatewayServiceController {
         //GET ALL IDS
         int maxSizeId;
 
+
+
         GetModelsResponse userResponse = userClient.getUserModels(request);
 
         Map<String, Boolean> models = userResponse.getModels();
@@ -753,15 +755,19 @@ public class GatewayServiceController {
 
         //add/show default
         GetModelByIdResponse defaultModel = new GetModelByIdResponse("Default", "Default", "Dynamic");
+        boolean foundSelected = true;
         output.add(defaultModel);
 
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
 
             GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
+            if(entry.getValue().equals(true))
+                foundSelected= false;
             AnalyseResponse.setIsModelDefault(entry.getValue());
             output.add(AnalyseResponse);
         }
+        output.get(0).setIsModelDefault(foundSelected);
 
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
@@ -857,7 +863,7 @@ public class GatewayServiceController {
 
         GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
 
-        if(analyseResponse.getModelId() == null) { // doesn't find model
+        if(analyseResponse.getModelID() == null) { // doesn't find model
             return this.getAllModelsByUser(analyseRequest2); //todo: out failure
         }
 

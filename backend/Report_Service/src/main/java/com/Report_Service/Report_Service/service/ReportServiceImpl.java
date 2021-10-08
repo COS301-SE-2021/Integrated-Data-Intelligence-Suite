@@ -95,9 +95,10 @@ public class ReportServiceImpl {
         /*OutputStream out = new FileOutputStream("C:\\Users\\User-PC\\Desktop\\sampelpdfs\\iTextHelloWorld.pdf");
         out.write(reportPDFResponse.getPdf());
         out.close();*/
+        String name = "Report_" + newReport.getDateTime();
 
         //save generated pdf
-        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), "UserReport", newReport.getDateTime());
+        PdfReport pdfReport = new PdfReport(reportPDFResponse.getPdf(), name, newReport.getDateTime());
         repository.save(pdfReport);
 
         return new ReportDataResponse(pdfReport.getId());
