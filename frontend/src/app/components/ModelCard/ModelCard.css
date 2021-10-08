@@ -1,0 +1,185 @@
+.model-card-container {
+    display: grid;
+    grid-template-rows: max-content 300px;
+    grid-template-columns: 100%;
+    min-height: 400px;
+    max-height: 400px;
+
+    min-width: 300px;
+    max-width: 300px;
+    border: 0.1em solid var(--white-border-color);
+    border-radius: 15px;
+    padding: 15px;
+    row-gap: 20px;
+}
+
+.model-card-title-bar {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: auto auto;
+    height: 30px;
+}
+
+#model-card-default-tag {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    width: 75px;
+    height: max-content;
+    background: var(--light-blue-white-bg);
+    color: var(--dodger-blue);
+    padding: 5px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+#model-card-btn-container {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(3, max-content);
+    column-gap: 10px;
+    justify-content: right;
+    align-content: center;
+    align-items: center;
+}
+
+.model-card-content-section {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.model-card-btn {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    background: white;
+    border: 0;
+    padding: 2px;
+    border-radius: 50%;
+}
+
+.model-card-btn:hover {
+    background: var(--light-blue-white-bg);
+    color: var(--dodger-blue);
+}
+
+.model-card-icon {
+    height: 20px;
+    width: 20px;
+}
+
+.model-details-card {
+    /*border: 2px solid black;*/
+    border-radius: 15px;
+    grid-template-rows: auto 3.4em !important;
+}
+
+.model-details-card > .simple-card-title {
+    font-size: 20px;
+    background: var(--dodger-blue);
+    color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border: 2px solid var(--dodger-blue);
+    display: grid;
+    align-content: center;
+    justify-content: center;
+}
+
+.model-details-card > .simple-card-body {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-top: 0.1em solid var(--white-border-color);
+    border-right: 0.1em solid var(--white-border-color);
+    border-left: 0.1em solid var(--white-border-color);
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    transition: .3s cubic-bezier(.6, .4, 0, 1);
+    overflow: hidden;
+
+}
+
+.model-details-card > .simple-card-body:hover {
+    background: #ccf2ff;
+    background: var(--light-blue-white-bg);
+    border: 1px solid var(--dodger-blue);
+}
+
+.model-details-card > .simple-card-body:hover > .model-image {
+    opacity: 0;
+}
+
+.model-image {
+    transition: .3s cubic-bezier(.6, .4, 0, 1);
+}
+
+.model-extra-details-div {
+    color: #0086b3;
+    /*border: 3px solid black;*/
+    /*background: #ccf2ff;*/
+    background: var(--light-blue-white-bg);
+    position: relative;
+    left: 50%;
+    bottom: 0;
+    transform: translate3d(-50%, 100%, 0);
+    transition: .3s cubic-bezier(.6, .4, 0, 1);
+    opacity: 0;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.4;
+    letter-spacing: -.035em;
+    align-self: center;
+    text-align: center;
+    justify-self: left;
+}
+
+.simple-card-body:hover > .model-extra-details-div {
+    opacity: 1;
+    /*bottom: 50%;*/
+    transform: translate3d(-50%, 50%, 0);
+    transition: all .2s ease-out;
+    bottom: 380% !important;
+    text-align: center;
+    align-self: center;
+    justify-self: left;
+}
+
+.heart-icon-filled {
+    color: red;
+    height: 20px;
+    width: 20px;
+}
+
+.heart-icon-not-filled {
+    height: 24px;
+    width: 24px;
+}
+
+.select-default-btn {
+    padding: 2px;
+    border-radius: 50%;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    background: white;
+    border: 0;
+}
+
+.select-default-btn:hover {
+    background: var(--heart-icon-bg-hover);
+}
+
+.select-default-btn:hover > .heart-icon-not-filled {
+    color: red;
+}
+
+.model-card-share-btn {
+    border-radius: 50%;
+    padding: 2px;
+}
+
+

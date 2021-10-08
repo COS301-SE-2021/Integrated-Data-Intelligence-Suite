@@ -1,11 +1,12 @@
 import { useFormik } from 'formik';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {
-    Form, Input, Button, Checkbox, Card, Divider, message
+    Form, Input, Button, Divider, message,
 } from 'antd';
-import LoginButton from '../../components/LoginButton/LoginButton';
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../../assets/AtomStore/AtomStore';
 
 // Validation Function
 const validate = (values) => {
@@ -26,6 +27,8 @@ const validate = (values) => {
 };
 
 export default function LoginPage(props) {
+    const setUser = useSetRecoilState(userState);
+    const [loginLoading, setLoginLoading] = useState(false);
     const history = useHistory();
     const formik = useFormik({
         initialValues: {
@@ -34,12 +37,13 @@ export default function LoginPage(props) {
         },
         validate,
         onSubmit: (values) => {
+            setLoginLoading(true);
             // alert(JSON.stringify(values, null, 2));
 
             if (values.email === 'myron@gmail.com' && values.password === '123') {
                 const localuser = {
                     id: 'b5aa283d-35d1-421d-a8c6-42dd3e115463',
-                    username: 'myron',
+                    username: 'Myron Lopes',
                     firstName: 'Myron',
                     lastName: 'Maugi',
                     admin: true,
@@ -47,6 +51,7 @@ export default function LoginPage(props) {
                     email: values.email,
                 };
                 localStorage.setItem('user', JSON.stringify(localuser));
+                setUser(localuser);
                 history.push('/chart');
             } else {
                 const requestOptions = {
@@ -57,8 +62,10 @@ export default function LoginPage(props) {
                 fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/login`, requestOptions)
                     .then((response) => response.json())
                     .then((json) => {
+                        setLoginLoading(false);
                         if (json.success) {
                             localStorage.setItem('user', json.id);
+                            setUser(JSON.parse(json.id));
                             message.success(json.message);
                             history.push('/chart');
                         } else {
@@ -136,10 +143,10 @@ export default function LoginPage(props) {
         // </div>
         <>
             <div id="login-custom-bg">
-                <div id="top-left-block"/>
-                <div id="top-right-block"/>
-                <div id="bottom-left-block"/>
-                <div id="bottom-right-block"/>
+                <div id="top-left-block" />
+                <div id="top-right-block" />
+                <div id="bottom-left-block" />
+                <div id="bottom-right-block" />
             </div>
             <div id="login-background">
                 <div id="login-form-container">
@@ -147,32 +154,32 @@ export default function LoginPage(props) {
                         <div id="login-card-title">Login</div>
                         <form onSubmit={formik.handleSubmit} id="login-form">
                             <Form.Item
-                                className="input_item_div"
+                              className="input_item_div"
                             >
                                 <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="Email address"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.email}
-                                    prefix={<UserOutlined className="site-form-item-icon"/>}
+                                  id="email"
+                                  name="email"
+                                  type="email"
+                                  placeholder="Email address"
+                                  onChange={formik.handleChange}
+                                  onBlur={formik.handleBlur}
+                                  value={formik.values.email}
+                                  prefix={<UserOutlined className="site-form-item-icon" />}
                                 />
                             </Form.Item>
 
                             <Form.Item
-                                className="input_item_div"
+                              className="input_item_div"
                             >
                                 <Input.Password
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur} // When the user leaves the form field
-                                    prefix={<LockOutlined className="site-form-item-icon"/>}
+                                  id="password"
+                                  name="password"
+                                  type="password"
+                                  placeholder="Password"
+                                  value={formik.values.password}
+                                  onChange={formik.handleChange}
+                                  onBlur={formik.handleBlur} // When the user leaves the form field
+                                  prefix={<LockOutlined className="site-form-item-icon" />}
                                 />
                                 {/* {formik.touched.password && formik.errors.password ? ( */}
                                 {/*    <p>{formik.errors.password}</p>) : null} */}
@@ -180,7 +187,15 @@ export default function LoginPage(props) {
                             </Form.Item>
 
                             <Form.Item>
-                                <LoginButton/>
+                                <Button
+                                  type="primary"
+                                  htmlType="submit"
+                                  className="login_button"
+                                  loading={loginLoading}
+                                    // onClick={addError}
+                                >
+                                    Log in
+                                </Button>
                             </Form.Item>
 
                             <Divider className="or_divider">
@@ -195,11 +210,11 @@ export default function LoginPage(props) {
                             </Form.Item>
 
                             <Form.Item
-                                className="forgot_password_link_container"
+                              className="forgot_password_link_container"
                             >
-                                <a className="forgot_password_link" href="">
-                                    Forgot password
-                                </a>
+                                <Link to="/sendOTP" className="register_link">
+                                    Forgot password?
+                                </Link>
                             </Form.Item>
                             <Divider className="or_divider">
                                 OR
@@ -213,7 +228,7 @@ export default function LoginPage(props) {
                             </Form.Item>
                         </form>
                     </div>
-                    <div id="login-card-svg-bg"/>
+                    <div id="login-card-svg-bg" />
                 </div>
             </div>
         </>

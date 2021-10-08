@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-//import { Link, Route, Switch } from 'react-router-dom';
-import { HashRouter as Router, Link, Route, Switch } from "react-router-dom"
+import React from 'react';
+import {
+    HashRouter as Router, Link, Redirect, Route, Switch,
+} from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import LoginPage from './pages/LoginPage/LoginPage';
-import HomePage from './pages/HomePage/HomePage';
 import ChartPage from './pages/ChartPage/ChartPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import UserPermissions from './pages/UserPermissionsPage/UserPermissions';
@@ -14,70 +15,99 @@ import VerifyPage from './pages/VerifyPage/VerifyPage';
 import ResendPage from './pages/ResendPage/ResendPage';
 import './App.scss';
 import CreditsPage from './pages/CreditsPage/CreditsPage';
+import ReportsPage from './pages/ReportsPage/ReportsPage';
+import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
+import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
+import { userState } from './assets/AtomStore/AtomStore';
+import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
+import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
 
+function App() {
+    const user = useRecoilValue(userState);
+    return (
+        <Router>
+            <Switch>
+                <Route exact path="/">
+                    {
+                        !user && <Redirect to="/login" />
+                    }
+                    {
+                        user && <Redirect to="/chart" />
+                    }
+                </Route>
 
-class App extends Component {
-    render() {
-        return (
-            <Router>
-                <Switch>
-                    <Route exact path="/">
-                        <HomePage/>
-                    </Route>
+                <Route exact path="/login">
+                    <LoginPage />
+                </Route>
 
-                    <Route exact path="/login">
-                        <LoginPage/>
-                    </Route>
+                <Route exact path="/register">
+                    <RegisterPage />
+                </Route>
+                <Route exact path="/chart">
+                    <ChartPage />
+                </Route>
 
-                    <Route exact path="/register">
-                        <RegisterPage/>
-                    </Route>
-                    <Route exact path="/chart">
-                        <ChartPage/>
-                    </Route>
+                <Route exact path="/verify">
+                    <VerifyPage />
+                </Route>
 
-                    <Route exact path="/verify">
-                        <VerifyPage/>
-                    </Route>
+                <Route exact path="/permissions">
+                    <Permissions />
+                </Route>
 
-                    <Route exact path="/permissions">
-                        <Permissions/>
-                    </Route>
+                <Route exact path="/resend">
+                    <ResendPage />
+                </Route>
 
-                    <Route exact path="/resend">
-                        <ResendPage/>
-                    </Route>
+                <Route exact path="/logout">
+                    <LogoutPage />
+                </Route>
 
-                    <Route exact path="/logout">
-                        <LogoutPage/>
-                    </Route>
+                <Route exact path="/settings">
+                    <SettingsPage />
+                </Route>
 
-                    <Route exact path="/settings">
-                        <SettingsPage/>
-                    </Route>
+                <Route path="/settings/source/:id">
+                    <AddDataSource />
+                </Route>
 
-                    <Route path="/settings/source/:id">
-                        <AddDataSource/>
-                    </Route>
+                <Route path="/user/:id">
+                    <UserPermissions />
+                </Route>
 
-                    <Route path="/user/:id">
-                        <UserPermissions/>
-                    </Route>
+                <Route exact path="/credits">
+                    <CreditsPage />
+                </Route>
 
-                    <Route exact path={'/credits'}>
-                        <CreditsPage/>
-                    </Route>
+                <Route exact path="/reports">
+                    <ReportsPage />
+                </Route>
 
-                    <Route path="*">
-                        <div>
-                            <h2>Page not Found</h2>
-                            <Link to="/"> back to home page</Link>
-                        </div>
-                    </Route>
-                </Switch>
-            </Router>
-        );
-    }
+                <Route exact path="/uploadData">
+                    <UploadDataPage />
+                </Route>
+
+                <Route exact path="/manageModels">
+                    <ManageModelsPage />
+                </Route>
+
+                <Route exact path="/sendOTP">
+                    <SendOTPPage />
+                </Route>
+
+                <Route exact path="/resetPassword">
+                    <ResetPasswordPage />
+                </Route>
+
+                <Route path="*">
+                    <div>
+                        <h2>Page not Found</h2>
+                        <Link to="/"> back to home page</Link>
+                    </div>
+                </Route>
+            </Switch>
+        </Router>
+    );
 }
 
 export default App;

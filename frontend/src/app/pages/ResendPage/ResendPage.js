@@ -35,7 +35,7 @@ const ResendPage = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values),
             };
-            fetch(`${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/user/resend`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/resend`, requestOptions)
                 .then((response) => response.json()).then((json) => {
                 if (json.success) {
                     // localStorage.setItem("user", json.id)
@@ -100,7 +100,7 @@ const ResendPage = () => {
         //
         //     <form onSubmit={formikResend.handleSubmit}>
         //         <Form.Item>
-        //             <ResendButton />
+        //             <SendOTPButton />
         //         </Form.Item>
         //     </form>
         //

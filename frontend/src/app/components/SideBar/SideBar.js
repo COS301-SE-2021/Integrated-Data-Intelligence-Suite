@@ -1,11 +1,16 @@
+import React, { Component } from 'react';
 import { Menu, Layout } from 'antd';
 import {
-    BarChartOutlined, HomeOutlined, LaptopOutlined, SettingOutlined,
+    BarChartOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
-import React, { Component } from 'react';
 import { BrowserRouter, Link, Router } from 'react-router-dom';
-import { AiOutlineHeart, AiOutlineHome } from 'react-icons/all';
-import UserInfoCard from '../UserInfoCard/UserInfoCard';
+
+import {
+    AiOutlineHeart,
+    AiOutlineHome, GrGraphQl,
+    HiOutlineDocumentReport
+} from 'react-icons/all';
 
 const {
     Header,
@@ -44,7 +49,6 @@ class SideBar extends React.Component {
             collapsed,
             active,
         } = this.state;
-        console.log('active comp ', active);
         return (
             <>
                 <Sider
@@ -60,14 +64,14 @@ class SideBar extends React.Component {
                         defaultSelectedKeys={this.props.currentPage}
                         mode="inline"
                     >
-                        {/*<Menu.Item*/}
-                        {/*    key="1"*/}
-                        {/*    icon={<AiOutlineHome/>}*/}
-                        {/*    onClick={() => this.setActive('1')}*/}
-                        {/*>*/}
-                        {/*    Home*/}
-                        {/*    <Link to="/"/>*/}
-                        {/*</Menu.Item>*/}
+                        {/* <Menu.Item */}
+                        {/*    key="1" */}
+                        {/*    icon={<AiOutlineHome/>} */}
+                        {/*    onClick={() => this.setActive('1')} */}
+                        {/* > */}
+                        {/*    Home */}
+                        {/*    <Link to="/"/> */}
+                        {/* </Menu.Item> */}
 
                         <Menu.Item
                             key="2"
@@ -76,6 +80,24 @@ class SideBar extends React.Component {
                         >
                             Analytics
                             <Link to="/chart"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="5"
+                            icon={<HiOutlineDocumentReport/>}
+                            onClick={() => this.setActive('5')}
+                        >
+                            Reports
+                            <Link to="/reports"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="6"
+                            icon={<GrGraphQl/>}
+                            onClick={() => this.setActive('6')}
+                        >
+                            Models
+                            <Link to="/manageModels"/>
                         </Menu.Item>
 
                         <Menu.Item

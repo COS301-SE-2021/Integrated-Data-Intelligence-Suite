@@ -137,7 +137,7 @@
     position: relative;
     top: 50px;
     background: var(--cultured);
-    background: url("../../assets/app-image.png");
+    background: url("../../assets/logos/app-image.png");
     background-size: 900px;
     background-repeat: no-repeat;
     border-radius: 10px;
