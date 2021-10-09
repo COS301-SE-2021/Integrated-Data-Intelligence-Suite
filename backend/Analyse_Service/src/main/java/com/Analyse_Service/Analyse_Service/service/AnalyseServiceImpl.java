@@ -57,18 +57,6 @@ public class AnalyseServiceImpl {
 
     private SparkSession sparkNlpProperties;
 
-    /********************************HELPER********************************/
-    public static class GetRow implements Function<Row, Row> {
-        public Row call(Row s) { return s; }
-    }
-
-    /*class GetRow implements ForeachFunction<ArrayList<Row>,Row> {
-        public void call(ArrayList<Row> s, Row row) {
-            s.add(row);
-        }
-    }*/
-
-
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
 

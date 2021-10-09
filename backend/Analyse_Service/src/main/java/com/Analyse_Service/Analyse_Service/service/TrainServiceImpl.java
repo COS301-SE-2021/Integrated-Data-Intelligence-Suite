@@ -22,6 +22,7 @@ import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -70,6 +71,8 @@ public class TrainServiceImpl {
 
     @Autowired
     private TrainingDataRepository parsedDataRepository;
+
+    private SparkSession sparkNlpProperties;
 
     //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
@@ -496,12 +499,25 @@ public class TrainServiceImpl {
         /*******************SETUP SPARK*****************/
         System.out.println("*******************SETUP SPARK*****************");
 
-        SparkSession sparkNlpProperties = SparkSession
-                .builder()
-                .appName("NlpProperties")
-                .master("local")
+        SparkConf conf = new SparkConf().
+                setAppName("NlpProperties")
+                .setMaster("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .set("spark.driver.memory", "6g")
+                .set("spark.executor.memory", "6g")
+                .set("spark.memory.fraction", "0.5")
+                .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+                .registerKryoClasses(new Class[]{TrainServiceImpl.class});
+
+        sparkNlpProperties = SparkSession
+                .builder()
+                //.appName("NlpProperties")
+                //.master("local")
+                //.config("spark.driver.memory", "6g")
+                //.config("spark.executor.memory", "6g")
+                //.config("spark.memory.fraction", "0.5")
+                .config(conf)
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -735,7 +751,7 @@ public class TrainServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        sparkNlpProperties.stop();
+        //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -758,19 +774,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -835,7 +838,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -850,7 +853,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -936,7 +939,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1150,7 +1153,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
         System.out.println("trends done");
-        sparkTrends.stop();
+        //sparkNlpProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results, trainedModel);
     }
@@ -1173,18 +1176,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -1250,7 +1241,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -1265,7 +1256,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -1340,7 +1331,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1517,9 +1508,9 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-         sparkTrends.stop();
-         ArrayList<ArrayList> results = new ArrayList<>();
-         return new TrainFindTrendsDTResponse(results, trainedModel);
+        //sparkNlpProperties.stop();
+        ArrayList<ArrayList> results = new ArrayList<>();
+        return new TrainFindTrendsDTResponse(results, trainedModel);
     }
 
 
@@ -1539,19 +1530,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -1619,7 +1597,7 @@ public class TrainServiceImpl {
                 });
 
 
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2);
         itemsDF.show(itemsDF.collectAsList().size());
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1686,7 +1664,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1851,7 +1829,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        sparkTrends.stop();
+        //sparkNlpProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         return new TrainFindTrendsArticlesResponse(results);
@@ -1874,14 +1852,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkPredictions = SparkSession
-                .builder()
-                .appName("Predictions")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
 
         /*******************SETUP DATA*****************/
 
@@ -1889,7 +1859,7 @@ public class TrainServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        sparkPredictions.stop();
+        //sparkNlpProperties.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -1909,17 +1879,7 @@ public class TrainServiceImpl {
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
-        //must fix this
-        /*******************SETUP SPARK*****************/
 
-        SparkSession sparkAnomalies = SparkSession
-                .builder()
-                .appName("Anomalies")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
 
         /*******************SETUP DATA*****************/
 
@@ -1998,7 +1958,7 @@ public class TrainServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema);
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -2061,7 +2021,7 @@ public class TrainServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
 
         /*******************SETUP PIPELINE MODEL*****************/
         //features
@@ -2207,7 +2167,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        sparkAnomalies.stop();
+        //sparkNlpProperties.stop();
 
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results, trainedModel);
