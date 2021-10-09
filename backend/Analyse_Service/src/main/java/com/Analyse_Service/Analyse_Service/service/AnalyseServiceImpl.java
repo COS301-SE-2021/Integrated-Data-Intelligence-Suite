@@ -621,7 +621,9 @@ public class AnalyseServiceImpl {
         System.out.println("*******************READ MODEL DATA*****************");
 
         ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
-        long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
+        Dataset<Row> finalOutput = results.select(col("sentiment.result") ,col("ner.result"), col("chunk.result"));
+        Iterator<Row> finalOutputIterator = finalOutput.toLocalIterator();
+        Long dataCount = finalOutput.count();
 
         System.out.println("DATA COUNT : " + dataCount);
 
@@ -629,17 +631,21 @@ public class AnalyseServiceImpl {
 
 
         /**sentiment**/
-        Dataset<Row> sentimentDataset = results.select(col("sentiment.result")).cache();
-        Iterator<Row> sentimentIterator = sentimentDataset.toLocalIterator();
+        Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
+        //Iterator<Row> sentimentIterator = sentimentDataset.toLocalIterator();
         //List<Row> sentimentRowData = sentimentDataset.collectAsList();
 
 
-        ///for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
-        while(sentimentIterator.hasNext()){
-            Row sentimentRow = sentimentIterator.next();//sentimentRowData.get(dataIndex);
+        for(int dataIndex = 0; dataIndex < dataCount; dataIndex++) {
+        //while(sentimentIterator.hasNext()){
+            Row outputRow = finalOutputIterator.next();//sentimentIterator.next();//sentimentRowData.get(dataIndex);
+
+            System.out.println("DATA COUNT : sentiments = " + dataIndex);
+            System.out.println(outputRow.toString());
+
             //Row sentimentRow = (Row) sentimentDataset.head(dataIndex);
 
-            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //value
+            WrappedArray wrappedArray = (WrappedArray) outputRow.get(0); //sentiment
             List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
 
             String sentiment = "no sentiment";
@@ -655,40 +661,31 @@ public class AnalyseServiceImpl {
 
             //System.out.println("added response : " + dataIndex);
             response.add(new FindNlpPropertiesResponse(sentiment, null));
-        }
 
 
-        System.out.println("DATA COUNT : sentiments" );
 
-        /**Named entity recognised**/
-        Dataset<Row> entityTypeDataset = results.select(col("ner.result")).cache();
-        Dataset<Row> entityNameDataset = results.select(col("chunk.result")).cache();
+        /**Named entity recognised**
+        Dataset<Row> entityTypeDataset = results.select(col("ner.result"));
+        Dataset<Row> entityNameDatasets = results.select(col("chunk.result"));
 
 
-        Iterator<Row> entityTypeIterator = sentimentDataset.toLocalIterator();
-        Iterator<Row> entityNameIterator = sentimentDataset.toLocalIterator();
+        Iterator<Row> entityTypeIterator = entityTypeDataset.toLocalIterator();
+        Iterator<Row> entityNameIterator = entityNameDatasets.toLocalIterator();
 
         //List<Row> entityTypeRowData = entityTypeDataset.collectAsList();
-        //List<Row> entityNameRowData = entityNameDataset.collectAsList();
+        //List<Row> entityNameRowData = entityNameDatasets.collectAsList();
 
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
+        //int dataIndex = 0;
+        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){*/
+        //while((entityTypeIterator.hasNext())){
             //System.out.println("getting response : " + dataIndex);
-
             ArrayList<String> listData =  new ArrayList<>();
 
-            Row textRow = entityTypeIterator.next(); //entityNameRowData.get(dataIndex);
+            //Row textRow = entityTypeIterator.next(); //entityNameRowData.get(dataIndex);
+            //Row entityRow = entityNameIterator.next(); //entityTypeRowData.get(dataIndex);
 
-            System.out.println(" +:old:+... "+ dataIndex );
-            System.out.println(textRow.toString());
-
-            Row sentimentRowo =  entityNameDataset.head();// .head(dataIndex);
-            System.out.println(" +:new:+... "+ dataIndex );
-            System.out.println(sentimentRowo.toString());
-
-            Row entityRow = entityNameIterator.next(); //entityTypeRowData.get(dataIndex);
-
-            WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
-            WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
+            WrappedArray wrappedArrayEntity = (WrappedArray) outputRow.get(1);
+            WrappedArray wrappedArrayText = (WrappedArray) outputRow.get(2);
 
             List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
             List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
@@ -696,7 +693,7 @@ public class AnalyseServiceImpl {
             ArrayList<ArrayList> nameEntities = new ArrayList<>();  //text, entity
             int entityIndex = 0;
 
-            for (int i = 0; i < innerTextRowData.size(); i++) {
+            for (int i = 0; i < innerEntityRowData.size(); i++) {
                 //System.out.println(innerEntityRowData.get(i));
 
                 String nameEntityText = "";
@@ -739,6 +736,7 @@ public class AnalyseServiceImpl {
 
             response.get(dataIndex).setNamedEntities(nameEntities);
             entityList.add(listData);
+            //dataIndex = dataIndex +1;
         }
 
         System.out.println("*******************READ MODEL DATA : DONE*****************");
@@ -815,6 +813,7 @@ public class AnalyseServiceImpl {
         //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
+
     }
 
 
