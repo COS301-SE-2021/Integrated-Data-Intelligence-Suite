@@ -997,20 +997,23 @@ public class AnalyseServiceImpl {
         fpModel.freqItemsets().show(1000);
         fpModel.associationRules().show(1000);
 
-        List<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
+        Iterator<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").toLocalIterator();
+
         ArrayList<ArrayList> results = new ArrayList<>();
 
         System.out.println("patterns data extract ");
-        for (int i = 0; i < pData.size(); i++) {
+
+        while(pData.hasNext()){
             ArrayList<String> row = new ArrayList<>();
+            Row dataRow = pData.next();
 
-            for (int j = 0; j < pData.get(i).getList(0).size(); j++)
-                row.add(pData.get(i).getList(0).get(j).toString()); //1) antecedent, feq
+            for (int j = 0; j < dataRow.getList(0).size(); j++)
+                row.add(dataRow.getList(0).get(j).toString()); //1) antecedent, feq
 
-            for (int k = 0; k < pData.get(i).getList(1).size(); k++)
-                row.add(pData.get(i).getList(1).get(k).toString()); //2) consequent
+            for (int k = 0; k < dataRow.getList(1).size(); k++)
+                row.add(dataRow.getList(1).get(k).toString()); //2) consequent
 
-            row.add(pData.get(i).get(2).toString()); //3) confidence
+            row.add(dataRow.get(2).toString()); //3) confidence
             //row.add(pData.get(i).get(3).toString()); //4) support
             results.add(row);
         }
@@ -1225,13 +1228,16 @@ public class AnalyseServiceImpl {
         /*******************READ MODEL OUTPUT*****************/
 
         fpModel.freqItemsets().show(1000,1000);
-        List<Row> Rdata = fpModel.freqItemsets().collectAsList();
+        Iterator<Row> Rdata = fpModel.freqItemsets().toLocalIterator();
 
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < Rdata.size(); i++) {
+        //for (int i = 0; i < Rdata.size(); i++) {
+        while(Rdata.hasNext()){
             ArrayList<String> row = new ArrayList<>();
-            for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
-                row.add(Rdata.get(i).getList(0).get(j).toString());
+            Row dataRow = Rdata.next();
+
+            for (int j = 0; j < dataRow.getList(0).size(); j++){
+                row.add(dataRow.getList(0).get(j).toString());
             }
             //row.add(Rdata.get(i).get(1).toString());
             results.add(row);
@@ -1773,25 +1779,28 @@ public class AnalyseServiceImpl {
         //group named entity
 
 
-        List<Row> textData = itemsDF.select("*").collectAsList();
+        Iterator<Row> textData = itemsDF.select("*").toLocalIterator();
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < textData.size(); i++){
+        //for(int i=0; i < textData.size(); i++){
+        while(textData.hasNext()){
 
-            String[] locationData = textData.get(i).get(5).toString().split(","); // location
+            Row dataRow = textData.next();
+
+            String[] locationData = dataRow.get(5).toString().split(","); // location
 
             Row trainRow = RowFactory.create(
-                    textData.get(i).get(0).toString(), //text
-                    textData.get(i).get(1), //EntityTypes
-                    textData.get(i).get(2), //EntityTypeNumbers
-                    (int) textData.get(i).get(3), // amountOfEntities
-                    textData.get(i).get(4).toString(), //Sentiment
-                    textData.get(i).get(5).toString(), //Location
+                    dataRow.get(0).toString(), //text
+                    dataRow.get(1), //EntityTypes
+                    dataRow.get(2), //EntityTypeNumbers
+                    (int) dataRow.get(3), // amountOfEntities
+                    dataRow.get(4).toString(), //Sentiment
+                    dataRow.get(5).toString(), //Location
                     Float.parseFloat(locationData[0]),//Latitude
                     Float.parseFloat(locationData[1]),//Longitude
-                    textData.get(i).get(6), //Date
-                    textData.get(i).get(7) //Like
+                    dataRow.get(6), //Date
+                    dataRow.get(7) //Like
             );
 
             trainSet.add(trainRow);
@@ -1879,8 +1888,10 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
-            if(rawResults.get(i).get(0) != null)
-                results.add(rawResults.get(i).get(0).toString());//name
+            Row dataRow = rawResults.get(i);
+
+            if(dataRow.get(0) != null)
+                results.add(dataRow.get(0).toString());//name
         }
 
        // sparkAnomalies.stop();
