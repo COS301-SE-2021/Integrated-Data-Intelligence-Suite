@@ -580,7 +580,9 @@ public class TrainServiceImpl {
         System.out.println("*******************READ MODEL DATA*****************");
 
         ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
-        long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
+        Dataset<Row> finalOutput = results.select(col("sentiment.result") ,col("ner.result"), col("chunk.result"));
+        Iterator<Row> finalOutputIterator = finalOutput.toLocalIterator();
+        Long dataCount = finalOutput.count();
 
         System.out.println("DATA COUNT : " + dataCount);
 
@@ -589,10 +591,21 @@ public class TrainServiceImpl {
 
         /**sentiment**/
         Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
-        List<Row> sentimentRowData = sentimentDataset.collectAsList();
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
-            Row sentimentRow = sentimentRowData.get(dataIndex);
-            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //vaue
+        //Iterator<Row> sentimentIterator = sentimentDataset.toLocalIterator();
+        //List<Row> sentimentRowData = sentimentDataset.collectAsList();
+
+
+        for(int dataIndex = 0; dataIndex < dataCount; dataIndex++) {
+            //while(sentimentIterator.hasNext()){
+            /***SENTIMENT***/
+            Row outputRow = finalOutputIterator.next();//sentimentIterator.next();//sentimentRowData.get(dataIndex);
+
+            System.out.println("DATA COUNT : sentiments = " + dataIndex);
+            System.out.println(outputRow.toString());
+
+            //Row sentimentRow = (Row) sentimentDataset.head(dataIndex);
+
+            WrappedArray wrappedArray = (WrappedArray) outputRow.get(0); //sentiment
             List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
 
             String sentiment = "no sentiment";
@@ -606,28 +619,15 @@ public class TrainServiceImpl {
                 sentiment = "Neutral";
             }
 
+            /***NAME ENTITY***/
             //System.out.println("added response : " + dataIndex);
             response.add(new FindNlpPropertiesResponse(sentiment, null));
-        }
 
-
-        /**Named entity recognised**/
-        Dataset<Row> nerDataset = results.select(col("ner.result"));
-        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
-
-        List<Row> textRowData = chunkDataset.collectAsList();
-        List<Row> entityRowData = nerDataset.collectAsList();
-
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
-            //System.out.println("getting response : " + dataIndex);
 
             ArrayList<String> listData =  new ArrayList<>();
 
-            Row textRow = textRowData.get(dataIndex);
-            Row entityRow = entityRowData.get(dataIndex);
-
-            WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
-            WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
+            WrappedArray wrappedArrayEntity = (WrappedArray) outputRow.get(1);
+            WrappedArray wrappedArrayText = (WrappedArray) outputRow.get(2);
 
             List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
             List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
@@ -635,7 +635,7 @@ public class TrainServiceImpl {
             ArrayList<ArrayList> nameEntities = new ArrayList<>();  //text, entity
             int entityIndex = 0;
 
-            for (int i = 0; i < innerTextRowData.size(); i++) {
+            for (int i = 0; i < innerEntityRowData.size(); i++) {
                 //System.out.println(innerEntityRowData.get(i));
 
                 String nameEntityText = "";
@@ -678,8 +678,8 @@ public class TrainServiceImpl {
 
             response.get(dataIndex).setNamedEntities(nameEntities);
             entityList.add(listData);
+            //dataIndex = dataIndex +1;
         }
-
 
 
 
@@ -1645,8 +1645,12 @@ public class TrainServiceImpl {
         for (int i = 0; i < minSize; i++) {
             List<Row> sen = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(namedEntities.get(i).get(0).toString())).collectAsList();
             double sent = 0.0;
-            if (sen.get(0).get(0).toString().equals("Positive")) sent = 2.0;
-            else if (sen.get(0).get(0).toString().equals("Negative")) sent = 1.0;
+            if (sen.get(0).get(0).toString().equals("Positive")) {
+                sent = 2.0;
+            }
+            else if (sen.get(0).get(0).toString().equals("Negative")) {
+                sent = 1.0;
+            }
             double trending = 0.0;
             if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
                 trending = 1.0;
@@ -1981,13 +1985,15 @@ public class TrainServiceImpl {
         //group named entity
 
 
-        List<Row> textData = itemsDF.select("*").collectAsList();
+        Iterator<Row> textData = itemsDF.select("*").toLocalIterator();
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < textData.size(); i++){
+        //for(int i=0; i < textData.size(); i++){
+        while(textData.hasNext()){
 
-            Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
+            Row dataRow = textData.next();
+            Object amountOfEntitiesObject = dataRow.get(2); //amount = func(EntityTypeNumbers)
 
             List<?> amountOfEntities = new ArrayList<>();
             if (amountOfEntitiesObject.getClass().isArray()) {
@@ -1999,22 +2005,22 @@ public class TrainServiceImpl {
             System.out.println("entity count");
             System.out.println(amountOfEntities);
 
-            String[] locationData = textData.get(i).get(5).toString().split(","); // location
+            String[] locationData = dataRow.get(5).toString().split(","); // location
 
             Row trainRow = RowFactory.create(
-                    textData.get(i).get(0).toString(), //text
-                    textData.get(i).get(1), //EntityTypes
-                    textData.get(i).get(2), //EntityTypeNumbers
+                    dataRow.get(0).toString(), //text
+                    dataRow.get(1), //EntityTypes
+                    dataRow.get(2), //EntityTypeNumbers
                     //amountOfEntities.size(),
                     //((ArrayList<?>) textData.get(i).get(2)).size(),//AmountOfEntities
                     //amountOfEntities.size(), //AmountOfEntities
-                    Integer.parseInt(textData.get(i).get(3).toString()), //AmountOfEntities
-                    textData.get(i).get(4).toString(), //Sentiment
-                    textData.get(i).get(5).toString(), //Location
+                    Integer.parseInt(dataRow.get(3).toString()), //AmountOfEntities
+                    dataRow.get(4).toString(), //Sentiment
+                    dataRow.get(5).toString(), //Location
                     Float.parseFloat(locationData[0]),//Latitude
                     Float.parseFloat(locationData[1]),//Longitude
-                    textData.get(i).get(6), //Date
-                    textData.get(i).get(7) //Like
+                    dataRow.get(6), //Date
+                    dataRow.get(7) //Like
             );
 
 
