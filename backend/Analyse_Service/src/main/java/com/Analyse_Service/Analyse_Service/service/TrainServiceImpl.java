@@ -2315,10 +2315,7 @@ public class TrainServiceImpl {
         List<org.mlflow.api.proto.Service.Experiment> experiment = client.listExperiments();
 
 
-
-
         run.endRun();
-
         /***********************SETUP MLFLOW - SAVE ***********************/
     }
 

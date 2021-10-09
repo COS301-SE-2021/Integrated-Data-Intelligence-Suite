@@ -484,6 +484,8 @@ public class AnalyseServiceImpl {
                 client.logArtifact(modelID2,infoFileLog);
                 infoFileLog.delete();
 
+                //FileUtils.deleteDirectory(new File(infoFileLog.getPath()));
+
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new AnalysingModelException("Failed finding model file");
@@ -1435,10 +1437,10 @@ public class AnalyseServiceImpl {
             trainFileLog.delete();
 
             /*client.logArtifact(modelID,new File(artifact.getPath()));
-            client.logArtifact(modelID,new File(trainFile.getPath()));
+            client.logArtifact(modelID,new File(trainFile.getPath()));*/
 
             FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(trainFile.getPath()));*/
+            FileUtils.deleteDirectory(new File(trainFile.getPath()));
         }
         else{
             String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
@@ -1467,64 +1469,19 @@ public class AnalyseServiceImpl {
             //artifactLog.cr;
             //trainFileLog.createNewFile();
 
-            System.out.println("it begins here");
 
             FileUtils.copyDirectory(artifact, artifactLog);
-            System.out.println("it begins here 1");
-
             FileUtils.copyDirectory(trainFile, trainFileLog);
-            System.out.println("it begins here 2");
 
             client.logArtifact(modelID,artifactLog);
-            System.out.println("it begins here 3");
             client.logArtifact(modelID,trainFileLog);
 
             artifactLog.delete();
             trainFileLog.delete();
 
-            //InputStream is = null;
-            //OutputStream os = null;
 
-            /*System.out.println("testit here");
-            InputStream is = new FileInputStream(artifact.getPath());
-            System.out.println("testit here:");
-            OutputStream os = new FileOutputStream(artifactLog.getPath());
-
-            System.out.println("testit here 2");
-                byte[] buffer = new byte[1024];
-                int length = 0;
-                while ((length = is.read(buffer)) > 0) {
-                    os.write(buffer, 0, length);
-                }
-
-            System.out.println("testit here 3");
-                is = new FileInputStream(trainFile);
-                os = new FileOutputStream(trainFileLog);
-                buffer = new byte[1024];
-                length = 0;
-                while ((length = is.read(buffer)) > 0) {
-                    os.write(buffer, 0, length);
-                }
-
-
-            System.out.println("testit here 4");
-                is.close();
-                os.close();
-
-            System.out.println("testit here 5");
-
-
-
-
-
-            client.logArtifact(modelID,artifactLog);
-            client.logArtifact(modelID,trainFileLog);*/
-
-            System.out.println("testit here 6");
-            System.out.println("testit here 7");
-
-            //FileUtils.deleteDirectory(new File(artifact.getPath()));
-            //FileUtils.deleteDirectory(new File(trainFile.getPath()));
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(trainFile.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
@@ -1826,7 +1783,7 @@ public class AnalyseServiceImpl {
 
 
             //client.logArtifact(modelID,new File(artifact.getPath()));
-            //FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
         }
         else{
             String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
@@ -1854,7 +1811,7 @@ public class AnalyseServiceImpl {
 
             artifactLog.delete();
 
-            //FileUtils.deleteDirectory(new File(artifact.getPath()));
+            FileUtils.deleteDirectory(new File(artifact.getPath()));
 
             //while (((line = reader.readLine()) != null)) {}
         }
