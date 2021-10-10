@@ -172,7 +172,12 @@ public class GatewayServiceController {
         /*********************ANALYSE*************************/
 
         AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
-        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+        AnalyseDataResponse analyseResponse = null;
+        try {
+            analyseResponse = analyseClient.analyzeData(analyseRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         if(analyseResponse.getFallback() == true) {
