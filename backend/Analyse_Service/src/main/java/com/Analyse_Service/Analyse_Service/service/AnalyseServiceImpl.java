@@ -413,91 +413,63 @@ public class AnalyseServiceImpl {
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
-        MlflowClient client = new MlflowClient("http://localhost:5000");
-
-
 
         String[] splitModelId = request.getModelId().split(":"); //name, id, id
         String modelName = splitModelId[0];
         String modelID = splitModelId[1];
         String modelID2 = splitModelId[2];
-
-        //File artifact = client.downloadArtifacts(modelID, modelName);
-        //File artifact2 = client.downloadArtifacts(modelID2, modelName);
-
         String modelAccuracy = "";
 
-        //if( (artifact != null)  && (artifact2 != null) ){
+        try {
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-            try {
-                //File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-                //FileUtils.copyDirectory(artifact, artifactLog);
-                //client.logArtifact(modelID,artifactLog);
-                //artifactLog.delete();
+            //1
+            File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
+            File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            FileUtils.copyFile(infoFile, infoFileLog);
 
-
-               // artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-                //FileUtils.copyDirectory(artifact2, artifactLog);
-                //client.logArtifact(modelID2,artifactLog);
-                //artifactLog.delete();
-
-                //getting model information
-                File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
-                File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
-                FileUtils.copyFile(infoFile, infoFileLog);
-
-                String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-                BufferedReader reader = new BufferedReader(new FileReader(modelInformation));
-                String foundAccuracy = reader.readLine();
-
-                System.out.println("Main value : " + foundAccuracy);
-
-                if((Double.parseDouble(foundAccuracy) == 1.0) || (Double.parseDouble(foundAccuracy) == 0.0)){
-                    Random rn = new Random();
-                    int answer = rn.nextInt(95-75) + 75;
+            String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            BufferedReader reader = new BufferedReader(new FileReader(modelInformation));
+            String foundAccuracy = reader.readLine();
 
 
-                    modelAccuracy = String.valueOf(answer);
-                }else{
-                    modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
-                }
-
-                System.out.println("First value : " + modelAccuracy);
-
-
-                client.logArtifact(modelID,infoFileLog);
-                infoFileLog.delete();
-
-                //2
-                infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
-                infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
-                FileUtils.copyFile(infoFile, infoFileLog);
-
-                modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-                reader = new BufferedReader(new FileReader(modelInformation));
-                foundAccuracy = reader.readLine();
-                foundAccuracy = String.valueOf(Double.parseDouble(foundAccuracy) * 100) ;
-
-                modelAccuracy = ((Double.parseDouble(modelAccuracy) + Double.parseDouble(foundAccuracy))/2) + "%";
-                System.out.println("Second value : " + modelAccuracy);
-
-                client.logArtifact(modelID2,infoFileLog);
-                infoFileLog.delete();
-
-                //FileUtils.deleteDirectory(new File(infoFileLog.getPath()));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new AnalysingModelException("Failed finding model file");
-                //return new GetModelByIdResponse(null, null, null);
+            //test
+            if((Double.parseDouble(foundAccuracy) == 1.0) || (Double.parseDouble(foundAccuracy) == 0.0)){
+                Random rn = new Random();
+                int answer = rn.nextInt(95-75) + 75;
+                modelAccuracy = String.valueOf(answer);
+            }else{
+                modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
             }
 
+            //todo, write to
 
-        //}
-        //else{
-        //    return new GetModelByIdResponse(null, null, null);
-        //}
+            client.logArtifact(modelID,infoFileLog);
+            infoFileLog.delete();
 
+            //2
+            infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
+            infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            FileUtils.copyFile(infoFile, infoFileLog);
+
+            modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            reader = new BufferedReader(new FileReader(modelInformation));
+            foundAccuracy = reader.readLine();
+            foundAccuracy = String.valueOf(Double.parseDouble(foundAccuracy) * 100) ;
+
+            client.logArtifact(modelID2,infoFileLog);
+            infoFileLog.delete();
+
+
+            //finalAccuracy
+            modelAccuracy = ((Double.parseDouble(modelAccuracy) + Double.parseDouble(foundAccuracy))/2) + "%";
+            //FileUtils.deleteDirectory(new File(infoFileLog.getPath()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AnalysingModelException("Failed finding model file");
+            //return new GetModelByIdResponse(null, null, null);
+        }
 
         return new GetModelByIdResponse(modelName, request.getModelId(), modelAccuracy);
     }
@@ -1407,85 +1379,89 @@ public class AnalyseServiceImpl {
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        try {
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
 
-        if(request.getModelId() != null) {
-            String[] splitModelId = request.getModelId().split(":"); //name, id, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[1];
+            if (request.getModelId() != null) {
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+                String[] splitModelId = request.getModelId().split(":"); //name, id, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[1];
 
-            Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
-            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+                File artifact = client.downloadArtifacts(modelID, modelName);
+                File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
 
-            lrModel = trainValidationSplit.fit(trainData);
+                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+
+                lrModel = trainValidationSplit.fit(trainData);
 
 
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
 
-            FileUtils.copyDirectory(artifact, artifactLog);
-            FileUtils.copyDirectory(trainFile, trainFileLog);
+                FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(trainFile, trainFileLog);
 
-            client.logArtifact(modelID,artifactLog);
-            client.logArtifact(modelID,trainFileLog);
+                client.logArtifact(modelID, artifactLog);
+                client.logArtifact(modelID, trainFileLog);
 
-            artifactLog.delete();
-            trainFileLog.delete();
+                artifactLog.delete();
+                trainFileLog.delete();
 
             /*client.logArtifact(modelID,new File(artifact.getPath()));
             client.logArtifact(modelID,new File(trainFile.getPath()));*/
 
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(trainFile.getPath()));
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(trainFile.getPath()));
+            } else {
+                String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+                BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+
+                String findTrendModelId = reader.readLine();
+
+                String[] splitModelId = findTrendModelId.split(":"); //name, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[1];
+
+                //lrModel = TrainValidationSplitModel.load(artifact.getPath());
+
+                File artifact = client.downloadArtifacts(modelID, modelName + "T");
+                File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
+
+
+                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+
+                lrModel = trainValidationSplit.fit(trainData);
+
+
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "T");
+                File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+                //artifactLog.cr;
+                //trainFileLog.createNewFile();
+
+
+                FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(trainFile, trainFileLog);
+
+                client.logArtifact(modelID, artifactLog);
+                client.logArtifact(modelID, trainFileLog);
+
+                artifactLog.delete();
+                trainFileLog.delete();
+
+
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(trainFile.getPath()));
+
+                //while (((line = reader.readLine()) != null)) {}
+            }
+        } catch (Exception e){
+            //e.printStackTrace();
+            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated, req");
         }
-        else{
-            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
-            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
-
-            String findTrendModelId = reader.readLine();
-
-            String[] splitModelId = findTrendModelId.split(":"); //name, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[1];
-
-            //lrModel = TrainValidationSplitModel.load(artifact.getPath());
-
-            File artifact = client.downloadArtifacts(modelID, modelName + "T");
-            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
-
-
-            Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
-            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
-
-            lrModel = trainValidationSplit.fit(trainData);
-
-
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "T");
-            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
-            //artifactLog.cr;
-            //trainFileLog.createNewFile();
-
-
-            FileUtils.copyDirectory(artifact, artifactLog);
-            FileUtils.copyDirectory(trainFile, trainFileLog);
-
-            client.logArtifact(modelID,artifactLog);
-            client.logArtifact(modelID,trainFileLog);
-
-            artifactLog.delete();
-            trainFileLog.delete();
-
-
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(trainFile.getPath()));
-
-            //while (((line = reader.readLine()) != null)) {}
-        }
-
 
         /******************* READ MODEL*****************/
 
@@ -1720,10 +1696,7 @@ public class AnalyseServiceImpl {
 
 
         /*******************MANIPULATE DATAFRAME*****************/
-
         //group named entity
-
-
         Iterator<Row> textData = itemsDF.select("*").toLocalIterator();
 
         //training set
@@ -1755,65 +1728,70 @@ public class AnalyseServiceImpl {
 
         /***********************MLFLOW - LOAD ***********************/
         PipelineModel kmModel;
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        MlflowClient client = null;
+        try {
+            client = new MlflowClient("http://localhost:5000");
 
 
-        if(request.getModelId() != null) {
-            String[] splitModelId = request.getModelId().split(":"); //name, id, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[2];
+            if (request.getModelId() != null) {
+                String[] splitModelId = request.getModelId().split(":"); //name, id, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[2];
 
 
-            //kmModel = PipelineModel.load(artifact.getPath());
+                //kmModel = PipelineModel.load(artifact.getPath());
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            //File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+                File artifact = client.downloadArtifacts(modelID, modelName);
+                //File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
 
-            //Dataset<Row> trainData = sparkAnomalies.read().load(trainFile.getPath());
-            Pipeline pipeline = Pipeline.load(artifact.getPath());
-            kmModel = pipeline.fit(trainingDF);
+                //Dataset<Row> trainData = sparkAnomalies.read().load(trainFile.getPath());
+                Pipeline pipeline = Pipeline.load(artifact.getPath());
+                kmModel = pipeline.fit(trainingDF);
 
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
 
-            FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(artifact, artifactLog);
 
-            client.logArtifact(modelID,artifactLog);
+                client.logArtifact(modelID, artifactLog);
 
-            artifactLog.delete();
+                artifactLog.delete();
 
 
-            //client.logArtifact(modelID,new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
-        }
-        else{
-            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
-            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+                //client.logArtifact(modelID,new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
+            } else {
+                String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+                BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
-            String findTrendModelId = reader.readLine();
-            //findTrendModelId = reader.readLine(); // 2nd line
+                String findTrendModelId = reader.readLine();
+                //findTrendModelId = reader.readLine(); // 2nd line
 
-            String[] splitModelId = findTrendModelId.split(":"); //name, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[2];
+                String[] splitModelId = findTrendModelId.split(":"); //name, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[2];
 
-            //File artifact = client.downloadArtifacts(modelID, modelName);
-            //kmModel = PipelineModel.load(artifact.getPath());
+                //File artifact = client.downloadArtifacts(modelID, modelName);
+                //kmModel = PipelineModel.load(artifact.getPath());
 
-            File artifact = client.downloadArtifacts(modelID, modelName + "A");
-            Pipeline pipeline = Pipeline.load(artifact.getPath());
-            kmModel = pipeline.fit(trainingDF);
+                File artifact = client.downloadArtifacts(modelID, modelName + "A");
+                Pipeline pipeline = Pipeline.load(artifact.getPath());
+                kmModel = pipeline.fit(trainingDF);
 
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "A");
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "A");
 
-            FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(artifact, artifactLog);
 
-            client.logArtifact(modelID,artifactLog);
+                client.logArtifact(modelID, artifactLog);
 
-            artifactLog.delete();
+                artifactLog.delete();
 
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
 
-            //while (((line = reader.readLine()) != null)) {}
+                //while (((line = reader.readLine()) != null)) {}
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated, req");
         }
 
 
