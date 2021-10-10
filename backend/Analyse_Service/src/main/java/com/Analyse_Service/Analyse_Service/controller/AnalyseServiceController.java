@@ -48,22 +48,16 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/analyzeUserData")
-    public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException {
+    public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request)  {
         //AnalyseDataRequest request = getBody();
 
-        if (request == null) {
-            throw new InvalidRequestException("AnalyzeDataRequest Object is null");
-        }
+        try {
+            return analyseService.analyzeUserData(request);
+        } catch (Exception e){
+            e.printStackTrace();
 
-        if (request.getDataList() == null){
-            throw new InvalidRequestException("AnalyseData DataList is null");
         }
-
-        if (request.getModelId() == null){
-            throw new InvalidRequestException("AnalyseData modelID is null");
-        }
-
-        return analyseService.analyzeUserData(request);
+        return null;
     }
 
 
