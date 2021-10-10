@@ -80,7 +80,7 @@ public class GatewayServiceControllerTest {
 
 
 
-    @Test
+    /*@Test
     @DisplayName("gateway check connection")
     public void gatewayRequestConnection() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/main/key"))
@@ -122,7 +122,7 @@ public class GatewayServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(results -> Assertions.assertFalse(results.getResolvedException() instanceof GatewayException));
 
-        AnalyseDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);*/
+        AnalyseDataResponse returnClass = mapper.readValue(result.andReturn().getResponse().getContentAsString(), AnalyseDataResponse.class);*
     }
 
 
