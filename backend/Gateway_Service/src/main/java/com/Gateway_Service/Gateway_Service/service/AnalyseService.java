@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -17,6 +18,8 @@ public class AnalyseService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+
 
     /**
      * This method is used to communicate to the Analyse-Service.
@@ -68,7 +71,13 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        AnalyseUserDataResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeUserData", request, AnalyseUserDataResponse.class);
+
+        AnalyseUserDataResponse analyseResponse = null;
+        try {
+            analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeUserData", request, AnalyseUserDataResponse.class);
+        } catch (HttpStatusCodeException e){
+            e.printStackTrace();
+        }
 
         return analyseResponse;
     }
@@ -96,6 +105,7 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         GetModelByIdResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, GetModelByIdResponse.class);
 
         return analyseResponse;
