@@ -2,11 +2,14 @@ package com.Gateway_Service.Gateway_Service.service;
 
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
+import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
+import com.Gateway_Service.Gateway_Service.rri.ServiceErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -27,8 +30,8 @@ public class AnalyseService {
      * @return AnalyseDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) throws AnalyserException {
+        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -56,7 +59,7 @@ public class AnalyseService {
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -89,8 +92,8 @@ public class AnalyseService {
      * @return AnalyseUserDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public GetModelByIdResponse getModelById(GetModelByIdRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public GetModelByIdResponse getModelById(GetModelByIdRequest analyseRequest) throws AnalyserException {
+        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -106,9 +109,26 @@ public class AnalyseService {
             e.printStackTrace();
         }
 
-        GetModelByIdResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, GetModelByIdResponse.class);
+        //GetModelByIdResponse analyseResponse = null;
+        ResponseEntity<?> analyseResponse = null;
 
-        return analyseResponse;
+        //try {
+            //response = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, ResponseEntity.class);
+        //analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<GetModelByIdResponse>() {});
+
+
+        return (GetModelByIdResponse) analyseResponse.getBody();
+        //return analyseResponse;
     }
 
 
