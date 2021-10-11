@@ -261,10 +261,7 @@ const ChartPage = () => {
                                               cardID="word-cloud-card"
                                               titleOnTop
                                             >
-                                                <WordCloud
-                                                  text={backendData}
-                                                  key={backendData}
-                                                />
+                                                <WordCloud />
                                             </SimpleCard>
 
                                             <div id="word-cloud-graph-container">
