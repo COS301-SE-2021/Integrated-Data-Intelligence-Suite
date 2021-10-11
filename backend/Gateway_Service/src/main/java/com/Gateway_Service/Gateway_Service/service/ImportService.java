@@ -1,12 +1,18 @@
 package com.Gateway_Service.Gateway_Service.service;
 
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.impor.*;
+import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
+import com.Gateway_Service.Gateway_Service.exception.ImporterException;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
+import com.Gateway_Service.Gateway_Service.rri.ServiceErrorResponse;
+import com.Import_Service.Import_Service.response.AddAPISourceResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,7 +34,7 @@ public class ImportService {
             @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE"),
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "90000") },*/
             fallbackMethod = "getTwitterDataJsonFallback")
-    public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest)  {
+    public ImportTwitterResponse getTwitterDataJson(ImportTwitterRequest importRequest) throws ImporterException {
 
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -40,7 +46,7 @@ public class ImportService {
 
         return importResponse;*/
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -55,9 +61,25 @@ public class ImportService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ImportTwitterResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/getTwitterDataJson", request, ImportTwitterResponse.class);
+        //ImportTwitterResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/getTwitterDataJson", request, ImportTwitterResponse.class);
 
-        return importResponse;
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
+        return (ImportTwitterResponse) importResponse.getBody();
     }
 
 
@@ -67,9 +89,9 @@ public class ImportService {
      * @return ImportDataResponse This object contains imported data returned by Import-Service
      */
     //@HystrixCommand(fallbackMethod = "importDataFallback")
-    public ImportDataResponse importData(ImportDataRequest importRequest) {
+    public ImportDataResponse importData(ImportDataRequest importRequest) throws ImporterException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -84,59 +106,72 @@ public class ImportService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ImportDataResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/importData", request, ImportDataResponse.class);
+        //ImportDataResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/importData", request, ImportDataResponse.class);
 
-        return importResponse;
-    }
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/importData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-    /**
-     * This method is used to return fail values if communication to the Import-Service fails.
-     * @param importRequest This param is used to identify the method.
-     * @return ImportTwitterResponse This object contains failure values as data.
-     */
-    public ImportTwitterResponse getTwitterDataJsonFallback(ImportTwitterRequest importRequest){
-        ImportTwitterResponse importTwitterResponse =  new ImportTwitterResponse(null);
-        importTwitterResponse.setFallback(true);
-        importTwitterResponse.setFallbackMessage("{Failed to get twitter data}");
-        return importTwitterResponse;
-    }
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
 
-    /**
-     * This method is used to return fail values if communication to the Import-Service fails.
-     * @param importRequest This param is used to identify the method.
-     * @return ImportDataResponse This object contains failure values as data.
-     */
-    public ImportDataResponse importDataFallback(ImportDataRequest importRequest){
-        //return "Import Service is not working...try again later";
-        ImportDataResponse importDataResponse =  new ImportDataResponse(false, null, null);
-        importDataResponse.setFallback(true);
-        importDataResponse.setFallbackMessage("{Failed to get import data}");
-        return importDataResponse;
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/importData",HttpMethod.POST,request,new ParameterizedTypeReference<ImportDataResponse>() {});
+        return (ImportDataResponse) importResponse.getBody();
     }
 
 
-    public ImportTwitterResponse importDatedData(ImportTwitterRequest importRequest) {
+
+    public ImportTwitterResponse importDatedData(ImportTwitterRequest importRequest) throws ImporterException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ImportTwitterRequest> requestEntity = new HttpEntity<>(importRequest, requestHeaders);
+        //HttpEntity<ImportTwitterRequest> requestEntity = new HttpEntity<>(importRequest, requestHeaders);
 
-        ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/importDatedData", HttpMethod.POST, requestEntity, ImportTwitterResponse.class);
-        ImportTwitterResponse importTwitterResponse = responseEntity.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        return  importTwitterResponse;
+        HttpEntity<String> request = null;
+        try {
+            request = new HttpEntity<>(mapper.writeValueAsString(importRequest),requestHeaders);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        //ResponseEntity<ImportTwitterResponse> responseEntity = restTemplate.exchange("http://Import-Service/Import/importDatedData", HttpMethod.POST, requestEntity, ImportTwitterResponse.class);
+        //ImportTwitterResponse importTwitterResponse = responseEntity.getBody();
+
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/importDatedData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/importDatedData",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
+        return (ImportTwitterResponse) importResponse.getBody();
     }
 
-    public ImportTwitterResponse getDatedDataFallback(ImportTwitterRequest importRequest){
-        ImportTwitterResponse importTwitterResponse = new ImportTwitterResponse(null);
-        importTwitterResponse.setFallback(true);
-        importTwitterResponse.setFallbackMessage("{failed to get import data}");
-        return importTwitterResponse;
-    }
 
 
-    public String addApiSource(String jsonString) {
+    public AddAPISourceResponse addApiSource(String jsonString) throws ImporterException {
 
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -158,9 +193,25 @@ public class ImportService {
 
         HttpEntity<String> request;
         request = new HttpEntity<>(jsonString ,requestHeaders);
-        String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/addApiSource", request, String.class);
+        //String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/addApiSource", request, String.class);
 
-        return jsonResponse;
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/addApiSource",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/addApiSource",HttpMethod.POST,request,new ParameterizedTypeReference<AddAPISourceResponse>() {});
+        return (AddAPISourceResponse) importResponse.getBody();
     }
 
     public GetAPISourceByIdResponse getSourceById(GetAPISourceByIdRequest sourceByIdRequest)  {
@@ -192,6 +243,32 @@ public class ImportService {
         GetAPISourceByIdResponse response = restTemplate.postForObject("http://Import-Service/Import/getSourceById", request, GetAPISourceByIdResponse.class);
 
         return response;
+
+
+
+
+
+
+
+
+
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
+        return (ImportTwitterResponse) importResponse.getBody();
     }
 
     public DeleteSourceResponse deleteSource(DeleteSourceRequest sourceByIdRequest)  {
@@ -211,6 +288,29 @@ public class ImportService {
         DeleteSourceResponse response = restTemplate.postForObject("http://Import-Service/Import/deleteSourceById", request, DeleteSourceResponse.class);
 
         return response;
+
+
+
+
+
+
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
+        return (ImportTwitterResponse) importResponse.getBody();
     }
 
     public GetAllAPISourcesResponse getAllAPISources()  {
@@ -221,9 +321,32 @@ public class ImportService {
         GetAllAPISourcesResponse response = restTemplate.getForObject("http://Import-Service/Import/getAllSources", GetAllAPISourcesResponse.class);
 
         return response;
+
+
+
+
+
+
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
+        return (ImportTwitterResponse) importResponse.getBody();
     }
 
-    public String editAPISource(String jsonString)  {
+    public EditAPISourceResponse editAPISource(String jsonString) throws ImporterException {
 
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -235,15 +358,35 @@ public class ImportService {
 
         return importResponse;*/
 
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
+        mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
+
         HttpEntity<String> request;
         request = new HttpEntity<>(jsonString ,requestHeaders);
-        String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/updateAPI", request, String.class);
+        //String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/updateAPI", request, String.class);
 
-        return jsonResponse;
+        ResponseEntity<?> importResponse = null;
+        importResponse = restTemplate.exchange("http://Import-Service/Import/updateAPI",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ImporterException(errors);
+            }
+        }
+
+        importResponse = restTemplate.exchange("http://Import-Service/Import/updateAPI",HttpMethod.POST,request,new ParameterizedTypeReference<EditAPISourceResponse>() {});
+        return (EditAPISourceResponse) importResponse.getBody();
+
     }
 
     /*@GetMapping(value = "/importData")
@@ -251,5 +394,39 @@ public class ImportService {
 
     @GetMapping(value = "/getTwitterDataJson")
     ImportTwitterResponse getTwitterDataJson(@RequestParam("request") ImportTwitterRequest request) throws Exception ;*/
+
+
+    /**
+     * This method is used to return fail values if communication to the Import-Service fails.
+     * @param importRequest This param is used to identify the method.
+     * @return ImportTwitterResponse This object contains failure values as data.
+     */
+    public ImportTwitterResponse getTwitterDataJsonFallback(ImportTwitterRequest importRequest){
+        ImportTwitterResponse importTwitterResponse =  new ImportTwitterResponse(null);
+        importTwitterResponse.setFallback(true);
+        importTwitterResponse.setFallbackMessage("{Failed to get twitter data}");
+        return importTwitterResponse;
+    }
+
+    /**
+     * This method is used to return fail values if communication to the Import-Service fails.
+     * @param importRequest This param is used to identify the method.
+     * @return ImportDataResponse This object contains failure values as data.
+     */
+    public ImportDataResponse importDataFallback(ImportDataRequest importRequest){
+        //return "Import Service is not working...try again later";
+        ImportDataResponse importDataResponse =  new ImportDataResponse(false, null, null);
+        importDataResponse.setFallback(true);
+        importDataResponse.setFallbackMessage("{Failed to get import data}");
+        return importDataResponse;
+    }
+
+    public ImportTwitterResponse getDatedDataFallback(ImportTwitterRequest importRequest){
+        ImportTwitterResponse importTwitterResponse = new ImportTwitterResponse(null);
+        importTwitterResponse.setFallback(true);
+        importTwitterResponse.setFallbackMessage("{failed to get import data}");
+        return importTwitterResponse;
+    }
+
 
 }
