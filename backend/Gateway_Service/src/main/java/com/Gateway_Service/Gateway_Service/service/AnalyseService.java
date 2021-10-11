@@ -46,9 +46,20 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        AnalyseDataResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeData", request, AnalyseDataResponse.class);
 
-        return analyseResponse;
+
+        ResponseEntity<?> analyseResponse = null;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseDataResponse>() {});
+        return (AnalyseDataResponse) analyseResponse.getBody();
     }
 
 
@@ -58,7 +69,7 @@ public class AnalyseService {
      * @return AnalyseUserDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest analyseRequest) {
+    public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest analyseRequest) throws AnalyserException {
         //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -75,14 +86,19 @@ public class AnalyseService {
             e.printStackTrace();
         }
 
-        AnalyseUserDataResponse analyseResponse = null;
-        try {
-            analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeUserData", request, AnalyseUserDataResponse.class);
-        } catch (HttpStatusCodeException e){
-            e.printStackTrace();
+
+        ResponseEntity<?> analyseResponse = null;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeUserData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+            }
         }
 
-        return analyseResponse;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeUserData",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseUserDataResponse>() {});
+        return (AnalyseUserDataResponse) analyseResponse.getBody();
     }
 
 
@@ -109,12 +125,8 @@ public class AnalyseService {
             e.printStackTrace();
         }
 
-        //GetModelByIdResponse analyseResponse = null;
-        ResponseEntity<?> analyseResponse = null;
 
-        //try {
-            //response = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, ResponseEntity.class);
-        //analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        ResponseEntity<?> analyseResponse = null;
         analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
@@ -125,10 +137,7 @@ public class AnalyseService {
         }
 
         analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<GetModelByIdResponse>() {});
-
-
         return (GetModelByIdResponse) analyseResponse.getBody();
-        //return analyseResponse;
     }
 
 
@@ -140,7 +149,7 @@ public class AnalyseService {
      * @return TrainUserModelResponse This object contains trained data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public TrainUserModelResponse trainUserModel(TrainUserModelRequest analyseRequest) {
+    public TrainUserModelResponse trainUserModel(TrainUserModelRequest analyseRequest) throws AnalyserException {
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -156,9 +165,20 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        TrainUserModelResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/trainUserModel", request, TrainUserModelResponse.class);
+        //TrainUserModelResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/trainUserModel", request, TrainUserModelResponse.class);
 
-        return analyseResponse;
+        ResponseEntity<?> analyseResponse = null;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/trainUserModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/trainUserModel",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseDataResponse>() {});
+        return (TrainUserModelResponse) analyseResponse.getBody();
     }
 
 
