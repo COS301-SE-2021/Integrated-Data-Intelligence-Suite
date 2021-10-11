@@ -12,6 +12,7 @@ import {
     AiOutlineHome, FiSettings, GoGraph, GrGraphQl, HiOutlineCube,
     HiOutlineDocumentReport
 } from 'react-icons/all';
+import UserInfoCard from "../UserInfoCard/UserInfoCard";
 
 const {
     Header,
@@ -120,6 +121,8 @@ class SideBar extends React.Component {
                         {/*    <Link to="/credits"/>*/}
                         {/*</Menu.Item>*/}
                     </Menu>
+                    <UserInfoCard/>
+
                 </Sider>
             </>
         );
