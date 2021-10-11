@@ -315,10 +315,7 @@ const ChartPage = () => {
                                               cardID="anomaly-timeline-card"
                                               titleOnTop
                                             >
-                                                <TimelineGraph
-                                                  text={backendData}
-                                                  key={backendData}
-                                                />
+                                                <TimelineGraph />
                                             </SimpleCard>
 
                                             {/* <SimpleCard */}
