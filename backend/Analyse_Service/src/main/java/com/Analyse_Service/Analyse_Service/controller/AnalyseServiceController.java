@@ -31,7 +31,7 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/analyzeData")
-    public @ResponseBody AnalyseDataResponse analyzeData(@RequestBody AnalyseDataRequest request) throws AnalyserException {
+    public @ResponseBody ResponseEntity<?> analyzeData(@RequestBody AnalyseDataRequest request) throws AnalyserException {
         //AnalyseDataRequest request = getBody();
 
         if (request == null) {
@@ -42,7 +42,15 @@ public class AnalyseServiceController {
             throw new InvalidRequestException("AnalyseData DataList is null");
         }
 
-        return analyseService.analyzeData(request);
+        AnalyseDataResponse analyseDataResponse = null;
+        try{
+            analyseDataResponse = analyseService.analyzeData(request);
+        } catch (AnalyserException e){
+            throw new AnalyserException(e.getMessage());
+        }
+
+        //return getModelByIdResponse;
+        return new ResponseEntity<>(analyseDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
 
@@ -53,16 +61,26 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/analyzeUserData")
-    public @ResponseBody AnalyseUserDataResponse analyzeUserData(@RequestBody AnalyseUserDataRequest request)  {
+    public @ResponseBody ResponseEntity<?> analyzeUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException {
         //AnalyseDataRequest request = getBody();
-
-        try {
-            return analyseService.analyzeUserData(request);
-        } catch (Exception e){
-            e.printStackTrace();
-
+        if (request == null) {
+            throw new InvalidRequestException("getModelById Request Object is null");
         }
-        return null;
+
+        if (request.getModelId() == null) {
+            throw new InvalidRequestException("getModelById Request ID is null");
+        }
+
+        AnalyseUserDataResponse analyseUserDataResponse = null;
+
+        try{
+            analyseUserDataResponse = analyseService.analyzeUserData(request);
+        } catch (AnalyserException e){
+            throw new AnalyserException(e.getMessage());
+        }
+
+        //return getModelByIdResponse;
+        return new ResponseEntity<>(analyseUserDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
 
@@ -73,8 +91,7 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Analyse-Service.
      */
     @PostMapping("/getModelById")
-    public @ResponseBody
-    ResponseEntity<?> getModelById(@RequestBody GetModelByIdRequest request) throws AnalyserException {
+    public @ResponseBody ResponseEntity<?> getModelById(@RequestBody GetModelByIdRequest request) throws AnalyserException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("getModelById Request Object is null");
@@ -103,9 +120,7 @@ public class AnalyseServiceController {
      * @throws Exception This is thrown if exception caught in Train-Service.
      */
     @PostMapping("/trainUserModel")
-    public @ResponseBody
-    TrainUserModelResponse trainUserModel(@RequestBody TrainUserModelRequest request)
-            throws AnalyserException {
+    public @ResponseBody ResponseEntity<?> trainUserModel(@RequestBody TrainUserModelRequest request) throws AnalyserException {
         //AnalyseDataRequest request = getBody();
         if (request == null) {
             throw new InvalidRequestException("TrainModelRequest Object is null");
@@ -119,7 +134,15 @@ public class AnalyseServiceController {
             throw new InvalidRequestException("Model Name is null");
         }
 
-        return trainService.trainUserModel(request);
+        TrainUserModelResponse trainUserModelResponse = null;
+        try{
+            trainUserModelResponse = trainService.trainUserModel(request);
+        } catch (AnalyserException e){
+            throw new AnalyserException(e.getMessage());
+        }
+
+        //return getModelByIdResponse;
+        return new ResponseEntity<>(trainUserModelResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
 
