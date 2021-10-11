@@ -413,7 +413,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/generateReport",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) throws ReporterException {
+    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) throws ReporterException, UserException {
 
         GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest(UUID.fromString(request.getReportID()));
         GetReportDataByIdResponse output = reportClient.getReportDataById(repRequest);
@@ -431,7 +431,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllReportsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) throws ReporterException {
+    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) throws ReporterException, UserException {
 
         /*********************USER******************/
 
@@ -493,7 +493,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserReportById",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) throws ReporterException {
+    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) throws ReporterException, UserException {
 
 
         /*********************REPORT******************/
@@ -738,7 +738,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) throws AnalyserException {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) throws AnalyserException, UserException {
 
         /*********************USER******************/
 
@@ -786,7 +786,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getSelectedModelId",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody ModelRequest request) throws AnalyserException {
+    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         //TODO: user returns selected model id
 
@@ -810,7 +810,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) throws AnalyserException {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         //TODO: user removes from list
 
@@ -831,7 +831,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/selectModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) throws AnalyserException {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         GetModelsRequest getAllReq = new GetModelsRequest(request.getUserID());
 
@@ -861,7 +861,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) throws AnalyserException {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
@@ -869,7 +869,8 @@ public class GatewayServiceController {
         GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
 
         if(analyseResponse.getModelID() == null) { // doesn't find model
-            return this.getAllModelsByUser(analyseRequest2); //todo: out failure
+            //return this.getAllModelsByUser(analyseRequest2); //todo: out failure
+            throw new AnalyserException("Model id is not found");
         }
 
         /*********************USER******************/
@@ -895,7 +896,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/register",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) throws UserException {
         RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
         RegisterResponse registerResponse = userClient.register(registerRequest);
         return new ResponseEntity<>(registerResponse, HttpStatus.OK);
@@ -903,7 +904,7 @@ public class GatewayServiceController {
 
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id) throws UserException {
         GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
         GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
         return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
@@ -917,7 +918,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/login",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws UserException {
         LoginResponse response = userClient.login(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -931,7 +932,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/verify",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
+    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) throws UserException {
         System.out.println("Verifying User: " + request.getEmail());
         VerifyAccountResponse response = userClient.verifyAccount(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
@@ -945,7 +946,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/resend",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
+    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) throws UserException {
         ResendCodeResponse response = userClient.resendCode(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -958,7 +959,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/sendOTP",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ResendCodeResponse> sendOTP(@RequestBody ResendCodeRequest request) {
+    public ResponseEntity<ResendCodeResponse> sendOTP(@RequestBody ResendCodeRequest request) throws UserException {
         ResendCodeResponse response = userClient.sendOTP(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -971,7 +972,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/resetPassword",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request) throws UserException {
         System.out.println(request.getNewPassword());
         ResetPasswordResponse response = userClient.resetPassword(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
@@ -985,7 +986,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/updateProfile",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
+    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) throws UserException {
         UpdateProfileResponse response = userClient.updateProfile(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -998,7 +999,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/changeUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
+    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) throws UserException {
         ChangeUserResponse response = userClient.managePermissions(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -1009,7 +1010,7 @@ public class GatewayServiceController {
      */
     @GetMapping(value = "/user/getAll", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
+    public ResponseEntity<GetAllUsersResponse> getAllUsers() throws UserException {
         System.out.println("Getting all users from the database");
         GetAllUsersResponse response = userClient.getAllUsers();
         return new ResponseEntity<>(response, HttpStatus.OK);
