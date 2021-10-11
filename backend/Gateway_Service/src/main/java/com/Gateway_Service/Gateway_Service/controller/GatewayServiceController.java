@@ -1032,7 +1032,7 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) throws ImporterException {
         String response = importClient.addApiSource(jsonRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -1044,7 +1044,7 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/getSourceById", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
+    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) throws ImporterException {
         GetAPISourceByIdResponse response = importClient.getSourceById(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -1068,7 +1068,7 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/deleteSource", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<DeleteSourceResponse> deleteSource(@RequestBody DeleteSourceRequest request) {
+    public ResponseEntity<DeleteSourceResponse> deleteSource(@RequestBody DeleteSourceRequest request) throws ImporterException {
         log.info("[API] Deleting api source");
         DeleteSourceResponse response = importClient.deleteSource(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -1080,7 +1080,7 @@ public class GatewayServiceController {
      */
     @GetMapping(value = "/getAllSources", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
+    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() throws ImporterException {
         GetAllAPISourcesResponse response = importClient.getAllAPISources();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
