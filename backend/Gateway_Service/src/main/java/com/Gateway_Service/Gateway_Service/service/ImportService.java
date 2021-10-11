@@ -214,7 +214,7 @@ public class ImportService {
         return (AddAPISourceResponse) importResponse.getBody();
     }
 
-    public GetAPISourceByIdResponse getSourceById(GetAPISourceByIdRequest sourceByIdRequest)  {
+    public GetAPISourceByIdResponse getSourceById(GetAPISourceByIdRequest sourceByIdRequest) throws ImporterException {
 
         /*HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -240,20 +240,10 @@ public class ImportService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        GetAPISourceByIdResponse response = restTemplate.postForObject("http://Import-Service/Import/getSourceById", request, GetAPISourceByIdResponse.class);
-
-        return response;
-
-
-
-
-
-
-
-
+        //GetAPISourceByIdResponse response = restTemplate.postForObject("http://Import-Service/Import/getSourceById", request, GetAPISourceByIdResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
@@ -267,11 +257,11 @@ public class ImportService {
             }
         }
 
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
-        return (ImportTwitterResponse) importResponse.getBody();
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<GetAPISourceByIdResponse>() {});
+        return (GetAPISourceByIdResponse) importResponse.getBody();
     }
 
-    public DeleteSourceResponse deleteSource(DeleteSourceRequest sourceByIdRequest)  {
+    public DeleteSourceResponse deleteSource(DeleteSourceRequest sourceByIdRequest) throws ImporterException {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -285,17 +275,10 @@ public class ImportService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        DeleteSourceResponse response = restTemplate.postForObject("http://Import-Service/Import/deleteSourceById", request, DeleteSourceResponse.class);
-
-        return response;
-
-
-
-
-
+        //DeleteSourceResponse response = restTemplate.postForObject("http://Import-Service/Import/deleteSourceById", request, DeleteSourceResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        importResponse = restTemplate.exchange("http://Import-Service/Import/deleteSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
@@ -309,26 +292,19 @@ public class ImportService {
             }
         }
 
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
-        return (ImportTwitterResponse) importResponse.getBody();
+        importResponse = restTemplate.exchange("http://Import-Service/Import/deleteSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<DeleteSourceResponse>() {});
+        return (DeleteSourceResponse) importResponse.getBody();
     }
 
-    public GetAllAPISourcesResponse getAllAPISources()  {
+    public GetAllAPISourcesResponse getAllAPISources() throws ImporterException {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> request = new HttpEntity<>(requestHeaders);
-        GetAllAPISourcesResponse response = restTemplate.getForObject("http://Import-Service/Import/getAllSources", GetAllAPISourcesResponse.class);
-
-        return response;
-
-
-
-
-
+        //GetAllAPISourcesResponse response = restTemplate.getForObject("http://Import-Service/Import/getAllSources", GetAllAPISourcesResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.GET,null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
@@ -342,8 +318,8 @@ public class ImportService {
             }
         }
 
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ImportTwitterResponse>() {});
-        return (ImportTwitterResponse) importResponse.getBody();
+        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.GET,null,new ParameterizedTypeReference<GetAllAPISourcesResponse>() {});
+        return (GetAllAPISourcesResponse) importResponse.getBody();
     }
 
     public EditAPISourceResponse editAPISource(String jsonString) throws ImporterException {
@@ -386,7 +362,6 @@ public class ImportService {
 
         importResponse = restTemplate.exchange("http://Import-Service/Import/updateAPI",HttpMethod.POST,request,new ParameterizedTypeReference<EditAPISourceResponse>() {});
         return (EditAPISourceResponse) importResponse.getBody();
-
     }
 
     /*@GetMapping(value = "/importData")
