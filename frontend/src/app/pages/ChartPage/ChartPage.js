@@ -238,7 +238,7 @@ const ChartPage = () => {
                                                       cardID="world-map"
                                                       titleOnTop
                                                     >
-                                                        <MapCard text={backendData} />
+                                                        <MapCard />
                                                     </SimpleCard>
 
                                                     <SimpleCard
