@@ -535,7 +535,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/trainUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> trainUserModel(@RequestBody TrainUserModelRequest request) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> trainUserModel(@RequestBody TrainUserModelRequest request) throws AnalyserException {
 
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
@@ -611,7 +611,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException {
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -764,7 +764,7 @@ public class GatewayServiceController {
         output.add(defaultModel);
 
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
-            analyseRequest.setModelId(entry.getKey());
+            analyseRequest.setModelId(null);
 
             GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
             if(entry.getValue().equals(true))
