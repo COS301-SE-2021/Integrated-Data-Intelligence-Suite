@@ -17,6 +17,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResp
 import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
 import com.Gateway_Service.Gateway_Service.exception.ParserException;
 import com.Gateway_Service.Gateway_Service.exception.ReporterException;
+import com.Gateway_Service.Gateway_Service.exception.VisualizerException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.*;
@@ -613,7 +614,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException, ParserException, ReporterException {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException, ParserException, ReporterException, VisualizerException {
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 

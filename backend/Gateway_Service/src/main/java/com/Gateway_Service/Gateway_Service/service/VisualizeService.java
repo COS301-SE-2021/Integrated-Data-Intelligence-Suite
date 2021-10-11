@@ -1,12 +1,17 @@
 package com.Gateway_Service.Gateway_Service.service;
 
+import com.Gateway_Service.Gateway_Service.dataclass.report.ShareReportResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.exception.ReporterException;
+import com.Gateway_Service.Gateway_Service.exception.VisualizerException;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
+import com.Gateway_Service.Gateway_Service.rri.ServiceErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +28,7 @@ public class VisualizeService {
      * @return AnalyseDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "visualizeDataFallback")
-    public VisualizeDataResponse visualizeData(VisualizeDataRequest visualizeRequest) {
+    public VisualizeDataResponse visualizeData(VisualizeDataRequest visualizeRequest) throws VisualizerException {
 
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
@@ -40,9 +45,25 @@ public class VisualizeService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        VisualizeDataResponse visualizeResponse = restTemplate.postForObject("http://Visualize-Service/Visualize/visualizeData", request, VisualizeDataResponse.class);
+        //VisualizeDataResponse visualizeResponse = restTemplate.postForObject("http://Visualize-Service/Visualize/visualizeData", request, VisualizeDataResponse.class);
 
-        return visualizeResponse;
+        ResponseEntity<?> visualizeResponse = null;
+        visualizeResponse = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(visualizeResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) visualizeResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new VisualizerException(errors);
+            }
+        }
+
+        visualizeResponse = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData",HttpMethod.POST,request,new ParameterizedTypeReference<VisualizeDataResponse>() {});
+        return (VisualizeDataResponse) visualizeResponse.getBody();
     }
 
     /**
