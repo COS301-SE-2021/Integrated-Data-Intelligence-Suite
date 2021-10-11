@@ -26,18 +26,20 @@ public class VisualizeServiceImpl {
         if (request.getAnomalyList() == null) {
             throw new InvalidRequestException("Arraylist of AnomalyList is null");
         }
-        /*if (request.getPatternList() == null){
+        if (request.getPatternList() == null){
             throw new InvalidRequestException("Arraylist of PatternList is null");
         }
-        if (request.getPredictionList() == null){
-            throw new InvalidRequestException("Arraylist of PredictionList is null");
-        }*/
         if (request.getRelationshipList() == null) {
             throw new InvalidRequestException("Arraylist of RelationshipList is null");
         }
         if (request.getTrendList() == null) {
             throw new InvalidRequestException("Arraylist of TrendList is null");
         }
+        /*
+        if (request.getPredictionList() == null){
+            throw new InvalidRequestException("Arraylist of PredictionList is null");
+        }
+        */
 
         ArrayList<ArrayList> outputData = new ArrayList<>();
 

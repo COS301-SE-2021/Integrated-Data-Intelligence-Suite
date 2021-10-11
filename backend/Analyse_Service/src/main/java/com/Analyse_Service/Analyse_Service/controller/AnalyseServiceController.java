@@ -49,7 +49,6 @@ public class AnalyseServiceController {
             throw new AnalyserException(e.getMessage());
         }
 
-        //return getModelByIdResponse;
         return new ResponseEntity<>(analyseDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -79,7 +78,6 @@ public class AnalyseServiceController {
             throw new AnalyserException(e.getMessage());
         }
 
-        //return getModelByIdResponse;
         return new ResponseEntity<>(analyseUserDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -108,7 +106,6 @@ public class AnalyseServiceController {
             throw new AnalyserException(e.getMessage());
         }
 
-        //return getModelByIdResponse;
         return new ResponseEntity<>(getModelByIdResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -141,7 +138,6 @@ public class AnalyseServiceController {
             throw new AnalyserException(e.getMessage());
         }
 
-        //return getModelByIdResponse;
         return new ResponseEntity<>(trainUserModelResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
