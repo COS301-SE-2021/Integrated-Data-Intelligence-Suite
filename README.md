@@ -39,6 +39,7 @@ It aims to enhance the fluidity at which data can be imported and processed, the
 * [Architectural Document](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
 * [User Manual](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
 * [Technical Installation](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
+* [Testing Policy](https://drive.google.com/drive/folders/10fYhXaRXfoVa2CuwIZXvIz6KQ6MV8RLk?usp=sharing)
 
 <a name="project-board"></a>
 ## Project Management Tools
