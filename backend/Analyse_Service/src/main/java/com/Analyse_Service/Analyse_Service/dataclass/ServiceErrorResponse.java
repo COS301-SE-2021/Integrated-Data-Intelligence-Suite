@@ -9,6 +9,8 @@ import java.util.List;
 
 @Data
 public class ServiceErrorResponse {
+    public ServiceErrorResponse(){}
+
     private HttpStatus status;
     private List<String> errors;
     private LocalDateTime timeStamp;
