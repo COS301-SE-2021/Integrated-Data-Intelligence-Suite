@@ -15,6 +15,8 @@ import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
 import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
+import com.Gateway_Service.Gateway_Service.exception.ParserException;
+import com.Gateway_Service.Gateway_Service.exception.ReporterException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.*;
@@ -413,7 +415,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/generateReport",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) {
+    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) throws ReporterException {
 
         GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest(UUID.fromString(request.getReportID()));
         GetReportDataByIdResponse output = reportClient.getReportDataById(repRequest);
@@ -431,7 +433,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllReportsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) {
+    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) throws ReporterException {
 
         /*********************USER******************/
 
@@ -493,7 +495,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserReportById",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) {
+    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) throws ReporterException {
 
 
         /*********************REPORT******************/
@@ -519,7 +521,7 @@ public class GatewayServiceController {
 
     @PostMapping(value = "/shareReport" , produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ShareReportResponse> shareReport(@RequestBody ShareReportRequest request) {
+    public ResponseEntity<ShareReportResponse> shareReport(@RequestBody ShareReportRequest request) throws ReporterException {
         ShareReportResponse response = reportClient.shareReport(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -611,7 +613,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException {
+    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException, ParserException, ReporterException {
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -1088,7 +1090,7 @@ public class GatewayServiceController {
 
     @GetMapping(value = "/collect/{key}/{from}/{to}", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to){
+    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to) throws ParserException {
 
 
         ImportTwitterResponse res = importClient.importDatedData(new ImportTwitterRequest(key, from, to));
