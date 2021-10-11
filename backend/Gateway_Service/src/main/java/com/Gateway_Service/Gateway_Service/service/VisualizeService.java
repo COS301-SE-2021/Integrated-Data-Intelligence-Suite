@@ -30,8 +30,6 @@ public class VisualizeService {
     //@HystrixCommand(fallbackMethod = "visualizeDataFallback")
     public VisualizeDataResponse visualizeData(VisualizeDataRequest visualizeRequest) throws VisualizerException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 

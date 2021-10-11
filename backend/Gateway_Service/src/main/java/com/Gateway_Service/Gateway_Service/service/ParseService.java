@@ -30,8 +30,6 @@ public class ParseService {
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) throws ParserException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -73,8 +71,6 @@ public class ParseService {
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseUploadedSocialDataResponse parseUploadedSocialData(ParseUploadedSocialDataRequest parseRequest) throws ParserException {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -118,8 +114,6 @@ public class ParseService {
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest parseRequest) throws ParserException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -162,8 +156,6 @@ public class ParseService {
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ParseUploadedNewsDataResponse parseUploadedNewsData(ParseUploadedNewsDataRequest parseRequest) throws ParserException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -204,8 +196,6 @@ public class ParseService {
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     public AddSocialMediaPropertiesResponse addSocialMediaPropertiesRequest(AddSocialMediaPropertiesRequest parseRequest) throws ParserException {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);

@@ -32,8 +32,6 @@ public class ReportService {
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ReportDataResponse reportData(ReportDataRequest reportRequest) throws ReporterException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -76,8 +74,6 @@ public class ReportService {
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public GetReportDataByIdResponse getReportDataById(GetReportDataByIdRequest reportRequest) throws ReporterException {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -122,8 +118,6 @@ public class ReportService {
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public DeleteReportDataByIdResponse deleteReportDataById(DeleteReportDataByIdRequest reportRequest) throws ReporterException {
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
@@ -165,8 +159,6 @@ public class ReportService {
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
     public ShareReportResponse shareReport(ShareReportRequest reportRequest) throws ReporterException {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
