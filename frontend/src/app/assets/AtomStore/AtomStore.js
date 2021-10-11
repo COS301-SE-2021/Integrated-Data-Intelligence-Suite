@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const isShowingDeletePopupState = atom({
     key: 'isShowingDeletePopup',
@@ -39,7 +39,7 @@ export const isShowingModelCardLoaderState = atom({
 //     key: 'listOfDataModels',
 //     default:
 //         [{
-//             modelID: 'm1111111111111111111111111111111111111111111111111111111111111111111111111111',
+//             modelID: 'm1',
 //             modelName: 'Itachi',
 //             isModelDefault: false,
 //         }, {
@@ -129,22 +129,17 @@ export const wordCloudState = atom({
 
 export const dominantWordsState = atom({
     key: 'dominantWords',
-    default: null,
-});
-
-export const dataFrequencyState = atom({
-    key: 'dataFrequency',
-    default: null,
+    default: [],
 });
 
 export const entitiesRelationshipsState = atom({
     key: 'entitiesRelationships',
-    default: null,
+    default: [],
 });
 
 export const patternsRelationshipsState = atom({
     key: 'patternsRelationships',
-    default: null,
+    default: [],
 });
 
 export const numberOfTrendsState = atom({
@@ -162,14 +157,19 @@ export const overallSentimentState = atom({
     default: [],
 });
 
+export const sentimentDistributionState = atom({
+    key: 'sentimentalDistribution',
+    default: [],
+});
+
 export const reportState = atom({
-    ket: 'searchReport',
+    key: 'searchReport',
     default: null,
 });
 
 export const mapDataState = atom({
     key: 'mapData',
-    default: null,
+    default: [],
 });
 
 export const currentPdfState = atom({
@@ -185,4 +185,59 @@ export const displayAnalyticsPdfState = atom({
 export const backendDataState = atom({
     key: 'backendData',
     default: '',
+});
+
+export const dataFrequencyState = atom({
+    key: 'dataFrequency',
+    default: [],
+});
+
+// might use this function later on when optimising word cloud
+// export const wordCloudDataSelector = selector({
+//     key: 'wordCloudData',
+//     get: ({ get }) => {
+//         const text = get(wordCloudState);
+//         if (typeof text !== 'undefined') {
+//             // console.log(text);
+//             const words = text.replace(/\./g, '')
+//                 .split(/\s/);
+//             const freqMap = {};
+//
+//             const wordList = words;
+//
+//             for (let i = 0; i < wordList.length; i = i + 1) {
+//                 const w = wordList[i].toLowerCase();
+//                 if (!freqMap[w]) {
+//                     freqMap[w] = 0;
+//                 }
+//                 freqMap[w] += 1;
+//             }
+//             const max = Math.max(...Object.values(freqMap));
+//             return Object.keys(freqMap)
+//                 .map((word) => {
+//                     return ({
+//                         text: word,
+//                         value: Math.floor((freqMap[word] / max) * 50),
+//                     });
+//                 });
+//         }
+//         return null;
+//     },
+// });
+
+export const dataFreqSelector = selector({
+    key: 'dataFreq',
+    get: ({ get }) => {
+        const dataFreq = get(dataFrequencyState);
+        if (dataFreq) {
+            const dataPoints = Object.values(dataFreq).map((item, i) => ({
+                x0: i, x: i + 1, y: item.y, classname: item.x,
+            }));
+            const legendPoints = Object.values(dataFreq).map((item, i) => ({
+                    title: `${i}-${item.x}`, color: '#ffffff',
+                }));
+            return { dataPoints, legendPoints };
+        }
+        return { dataPoints: [], legendPoints: [] };
+    },
 });
