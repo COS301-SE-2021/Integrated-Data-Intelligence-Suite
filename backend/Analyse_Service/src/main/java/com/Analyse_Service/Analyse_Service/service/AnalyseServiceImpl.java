@@ -466,7 +466,7 @@ public class AnalyseServiceImpl {
             //FileUtils.deleteDirectory(new File(infoFileLog.getPath()));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw new AnalysingModelException("Failed finding model file");
             //return new GetModelByIdResponse(null, null, null);
         }
