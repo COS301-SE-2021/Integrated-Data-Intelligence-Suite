@@ -14,9 +14,12 @@
     --dark-blue-white-bg: #bed4ff;
     --white-border-color: #D6D6D6;
 
+    /*Dark mode*/
+    --light-black: #1E2022;
+    --dark-black: #181A1B;
+    --black-border: #333739;
+    --pink: #E80057;
 
-    /*--light-gray: #f4f7fc;*/
-    --light-gray: #F1F2F8;
     --amount-increasing: #00b074;
     --grey-border-color: #e3e3e3;
     --simple-card-title-color: darkgrey;
