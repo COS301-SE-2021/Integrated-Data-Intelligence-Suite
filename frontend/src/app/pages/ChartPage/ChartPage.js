@@ -224,10 +224,7 @@ const ChartPage = () => {
                                           cardTitle=""
                                           cardID="row-2"
                                         >
-                                            <OverviewGraphSection
-                                              text={backendData}
-                                              key={backendData}
-                                            />
+                                            <OverviewGraphSection />
                                         </SimpleSection>
 
                                         <SimpleSection
