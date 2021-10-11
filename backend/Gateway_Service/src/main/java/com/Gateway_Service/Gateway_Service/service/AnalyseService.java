@@ -54,7 +54,12 @@ public class AnalyseService {
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
-                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
             }
         }
 
@@ -93,7 +98,12 @@ public class AnalyseService {
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
-                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
             }
         }
 
@@ -132,7 +142,12 @@ public class AnalyseService {
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
-                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
             }
         }
 
@@ -173,7 +188,12 @@ public class AnalyseService {
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
-                throw new AnalyserException(serviceErrorResponse.getErrors().get(0));
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
             }
         }
 
