@@ -270,7 +270,7 @@ const ChartPage = () => {
                                                   cardID="word-graph-2"
                                                   titleOnTop
                                                 >
-                                                    <PieChart text={backendData} />
+                                                    <PieChart dominantWords={backendData[10]} />
                                                 </SimpleCard>
                                                 {/* <SimpleCard
                                                     cardTitle="Word Sunburst"
