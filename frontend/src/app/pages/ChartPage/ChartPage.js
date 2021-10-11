@@ -291,9 +291,7 @@ const ChartPage = () => {
                                               titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={cloneDeep(backendData)}
-                                                  key={cloneDeep(backendData)}
-                                                  indexOfData={11}
+                                                  graphData={cloneDeep(entitiesRelationship)}
                                                 />
                                             </SimpleCard>
 
@@ -303,9 +301,7 @@ const ChartPage = () => {
                                               titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={cloneDeep(backendData)}
-                                                  key={cloneDeep(backendData)}
-                                                  indexOfData={12}
+                                                  graphData={cloneDeep(patternsRelationship)}
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
