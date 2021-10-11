@@ -14,10 +14,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
-import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
-import com.Gateway_Service.Gateway_Service.exception.ParserException;
-import com.Gateway_Service.Gateway_Service.exception.ReporterException;
-import com.Gateway_Service.Gateway_Service.exception.VisualizerException;
+import com.Gateway_Service.Gateway_Service.exception.*;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.*;
@@ -1059,7 +1056,7 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/updateAPI", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) throws ImporterException {
         String response = importClient.editAPISource(jsonRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -1091,7 +1088,7 @@ public class GatewayServiceController {
 
     @GetMapping(value = "/collect/{key}/{from}/{to}", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to) throws ParserException {
+    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to) throws ParserException, ImporterException {
 
 
         ImportTwitterResponse res = importClient.importDatedData(new ImportTwitterRequest(key, from, to));
