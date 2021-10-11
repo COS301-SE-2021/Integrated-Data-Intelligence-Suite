@@ -1,12 +1,17 @@
 package com.Analyse_Service.Analyse_Service.controller;
 
+import com.Analyse_Service.Analyse_Service.dataclass.ServiceErrorResponse;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
+import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
 import com.Analyse_Service.Analyse_Service.service.TrainServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -61,9 +66,15 @@ public class AnalyseServiceController {
     }
 
 
+    /**
+     * This method is used to facilitate communication to the Analyse-Service.
+     * @param request This is a request entity which contains a GetModelByIdRequest object.
+     * @return GetModelByIdResponse This object contains model information of id
+     * @throws Exception This is thrown if exception caught in Analyse-Service.
+     */
     @PostMapping("/getModelById")
     public @ResponseBody
-    GetModelByIdResponse getModelById(@RequestBody GetModelByIdRequest request) throws AnalyserException {
+    ResponseEntity<?> getModelById(@RequestBody GetModelByIdRequest request) throws AnalyserException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("getModelById Request Object is null");
@@ -73,7 +84,15 @@ public class AnalyseServiceController {
             throw new InvalidRequestException("getModelById Request ID is null");
         }
 
-        return analyseService.getModelById(request);
+        GetModelByIdResponse getModelByIdResponse = null;
+        try{
+            getModelByIdResponse = analyseService.getModelById(request);
+        } catch (AnalyserException e){
+            throw new AnalyserException(e.getMessage());
+        }
+
+        //return getModelByIdResponse;
+        return new ResponseEntity<>(getModelByIdResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
 
@@ -102,9 +121,6 @@ public class AnalyseServiceController {
 
         return trainService.trainUserModel(request);
     }
-
-
-
 
 
     @GetMapping("/trainApplicationData")
