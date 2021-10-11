@@ -46,7 +46,6 @@ public class ImportService {
 
         return importResponse;*/
 
-        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -90,8 +89,6 @@ public class ImportService {
      */
     //@HystrixCommand(fallbackMethod = "importDataFallback")
     public ImportDataResponse importData(ImportDataRequest importRequest) throws ImporterException {
-
-        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);

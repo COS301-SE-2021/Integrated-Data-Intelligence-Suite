@@ -31,7 +31,6 @@ public class AnalyseService {
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) throws AnalyserException {
-        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -75,7 +74,6 @@ public class AnalyseService {
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest analyseRequest) throws AnalyserException {
-        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -119,7 +117,6 @@ public class AnalyseService {
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public GetModelByIdResponse getModelById(GetModelByIdRequest analyseRequest) throws AnalyserException {
-        //restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -165,7 +162,6 @@ public class AnalyseService {
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
     public TrainUserModelResponse trainUserModel(TrainUserModelRequest analyseRequest) throws AnalyserException {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
