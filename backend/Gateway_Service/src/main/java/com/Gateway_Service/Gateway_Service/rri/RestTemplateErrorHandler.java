@@ -28,7 +28,7 @@ public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
     @Override
     public void handleError(ClientHttpResponse httpResponse) throws IOException {
 
-        System.out.println("getting there");
+        /*System.out.println("getting there");
         System.out.println(httpResponse.getStatusCode());
         System.out.println(httpResponse.getHeaders());
         System.out.println(httpResponse.getBody());
@@ -47,7 +47,7 @@ public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
         else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
             // handle CLIENT_ERROR
 
-            throw new GatewayException("gateway failed to connect");
-        }
+            throw new AnalyserException("gateway failed to connect");
+        }*/
     }
 }
