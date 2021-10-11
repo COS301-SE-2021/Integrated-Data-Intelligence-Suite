@@ -14,6 +14,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
 import com.Gateway_Service.Gateway_Service.service.*;
@@ -173,11 +174,11 @@ public class GatewayServiceController {
 
         AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
         AnalyseDataResponse analyseResponse = null;
-        try {
+        //try {
             analyseResponse = analyseClient.analyzeData(analyseRequest);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        //}catch (Exception e){
+         //   e.printStackTrace();
+        //}
 
 
         if(analyseResponse.getFallback() == true) {
@@ -737,13 +738,12 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) throws AnalyserException {
 
         /*********************USER******************/
 
         //GET ALL IDS
         int maxSizeId;
-
 
 
         GetModelsResponse userResponse = userClient.getUserModels(request);
@@ -786,7 +786,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getSelectedModelId",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody ModelRequest request) {
+    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody ModelRequest request) throws AnalyserException {
 
         //TODO: user returns selected model id
 
@@ -810,7 +810,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) throws AnalyserException {
 
         //TODO: user removes from list
 
@@ -831,7 +831,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/selectModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) throws AnalyserException {
 
         GetModelsRequest getAllReq = new GetModelsRequest(request.getUserID());
 
@@ -861,7 +861,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) {
+    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) throws AnalyserException {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
