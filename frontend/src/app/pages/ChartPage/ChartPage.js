@@ -1,24 +1,19 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Layout,
 } from 'antd';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AiOutlineUpload, CgFileDocument } from 'react-icons/all';
 import { Header } from 'antd/es/layout/layout';
-import {
- useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState,
-} from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import Search from 'antd/es/input/Search';
-import { reset } from 'enzyme/build/configuration';
 import { cloneDeep } from 'lodash';
 import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
-import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
+
 import '../../components/NetworkGraph/NetworkGraph.css';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
-import SearchBar from '../../components/SearchBar/SearchBar';
-import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
-import PieChart from '../../components/PieChart/PieChart';
+
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
 import 'rc-slider/assets/index.css';
@@ -29,7 +24,6 @@ import OverviewSection from '../../components/OverviewSection/OverviewSection';
 import OverviewGraphSection from '../../components/OverviewGraphSection/OverviewGraphSection';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import '../../components/UploadButton/UploadButton.css';
-import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDataPage from '../UploadDataPage/UploadDataPage';
 import ReportPreview from '../../components/ReportPreview/ReportPreview';
 import templateJson from '../../Mocks/messageMock.json';
@@ -50,8 +44,11 @@ import {
     dominantWordsState,
     entitiesRelationshipsState,
     patternsRelationshipsState,
-    anomaliesState, displayAnalyticsPdfState, isShowingUploadCSVPopupState,
+    anomaliesState, displayAnalyticsPdfState, isShowingUploadCSVPopupState, sentimentDistributionState,
 } from '../../assets/AtomStore/AtomStore';
+import PieChart from '../../components/PieChart/PieChart';
+import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
+import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
 
 const ChartPage = () => {
     const [searchLoading, setSearchLoading] = useState(false);
@@ -61,6 +58,7 @@ const ChartPage = () => {
     const [mostProminentWords, setMostProminentWords] = useRecoilState(mostProminentSentimentState);
     const [numberOfTrends, setNumberOfTrends] = useRecoilState(numberOfTrendsState);
     const [numberOfAnomalies, setNumberOfAnomalies] = useRecoilState(numberOfAnomaliesState);
+    const [sentimentDistribution, setSentimentDistribution] = useRecoilState(sentimentDistributionState);
     const [averageInteraction, setAverageInteraction] = useRecoilState(averageInteractionState);
     const [overallSentiment, setOverallSentiment] = useRecoilState(overallSentimentState);
     const [engagementPerProvince, setEngagementPerProvince] = useRecoilState(engagementPerProvinceState);
@@ -107,7 +105,6 @@ const ChartPage = () => {
             .catch((err) => {
                 setSearchLoading(false);
                 structureBackendData(templateJson);
-                console.log(err.message);
             });
     };
 
@@ -115,10 +112,29 @@ const ChartPage = () => {
         if (data !== null && data.length > 0) {
             setBackendData(data);
             if (data[0].length > 0) {
+                // Row 1
                 setTotalLikes(data[0][0].words);
                 setOverallSentiment(data[1][0].words);
-                setNumberOfAnomalies(data[3][0].words);
                 setNumberOfTrends(data[2][0].words);
+                setNumberOfAnomalies(data[3][0].words);
+
+                // Row 2
+                setAverageInteraction(data[4]);
+                setSentimentDistribution(data[5]);
+                setEngagementPerProvince(data[6]);
+
+                // Row 3
+                setMapData(data[7]);
+                setDataFrequency(data[8]);
+
+                // Row 3
+                setWordCloud(data[9][0]);
+
+                // Row 4
+                setEntitiesRelationship(data[11]);
+                setPatternsRelationship(data[12]);
+
+                setAnomalies(data[13]);
             }
 
             setCurrentPdf(data[data.length - 1][0].report);
