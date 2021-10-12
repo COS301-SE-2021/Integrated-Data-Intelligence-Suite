@@ -123,9 +123,9 @@
     box-shadow: none;
     font-size: 0;
     float: right;
-    transform: rotate(
-            180deg
-    );
+    /*transform: rotate(*/
+    /*        45deg*/
+    /*);*/
     /*margin-top: 24px;*/
     width: 31px;
     height: 23px;
