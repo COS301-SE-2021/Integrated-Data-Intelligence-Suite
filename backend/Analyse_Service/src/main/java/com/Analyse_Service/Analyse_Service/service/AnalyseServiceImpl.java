@@ -21,15 +21,19 @@ import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.ForeachFunction;
+import org.apache.spark.internal.config.R;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 //import org.apache.spark.ml.feature.Tokenizer;
+import org.apache.spark.ml.clustering.KMeans;
+import org.apache.spark.ml.clustering.KMeansModel;
+import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.fpm.FPGrowth;
 import org.apache.spark.ml.fpm.FPGrowthModel;
+import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.ml.tuning.*;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
@@ -1740,6 +1744,44 @@ public class AnalyseServiceImpl {
         /***********************MLFLOW - LOAD ***********************/
         PipelineModel kmModel;
         MlflowClient client = null;
+
+        VectorAssembler assembler = new VectorAssembler()
+                //.setInputCols(new String[]{"EntityTypeNumbers", "AmountOfEntities", "Latitude", "Latitude", "Like"})
+                .setInputCols(new String[]{"AmountOfEntities", "Latitude", "Latitude", "Like"})
+                .setOutputCol("features");
+
+        Dataset<Row> features = assembler.transform(trainingDF);
+        KMeans kmeans = new KMeans().setSeed(1L).setFeaturesCol("features").setPredictionCol("prediction");
+        KMeansModel model = kmeans.fit(features);
+
+// Make predictions
+        Dataset<Row> predictions = model.transform(features);
+
+        ArrayList<Double> distances = new ArrayList<>();
+        ArrayList<Vector> feats = new ArrayList<>();
+        ArrayList<Vector> centers = new ArrayList<>();
+
+
+       Dataset<Row> willBeUsed = predictions.select("features","prediction");
+        Iterator<Row> finalOutputIterator = willBeUsed.toLocalIterator();
+        Long dataCount = willBeUsed.count();
+
+        for (int k = 0; k < dataCount; k++) {
+            Row outputRow = finalOutputIterator.next();
+
+            Vector Features = (Vector) outputRow.get(0); //Features
+
+
+            Integer centerPrediction = (Integer) outputRow.get(1); //Features
+
+
+            distances.add(dist(Features,model.clusterCenters()[centerPrediction]));
+
+        }
+
+
+
+
         try {
             client = new MlflowClient("http://localhost:5000");
 
@@ -1819,6 +1861,10 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
         System.out.println("/*******************Outputs begin*****************");
+        System.out.println("Distances: ");
+        for (int h = 0; h < distances.size(); h++) {
+            System.out.println(distances.get(h));
+        }
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
@@ -1831,6 +1877,10 @@ public class AnalyseServiceImpl {
        // sparkAnomalies.stop();
 
         return new FindAnomaliesResponse(results);
+    }
+
+    public double dist(Vector features, Vector center){
+        return Vectors.sqdist(features,center);
     }
 
 
