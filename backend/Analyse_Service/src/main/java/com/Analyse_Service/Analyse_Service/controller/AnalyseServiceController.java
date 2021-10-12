@@ -100,11 +100,11 @@ public class AnalyseServiceController {
         }
 
         GetModelByIdResponse getModelByIdResponse = null;
-        try{
+        //try{
             getModelByIdResponse = analyseService.getModelById(request);
-        } catch (AnalyserException e){
-            throw new AnalyserException(e.getMessage());
-        }
+        //} catch (AnalyserException e){
+            //throw new AnalyserException(e.getMessage());
+        //}
 
         return new ResponseEntity<>(getModelByIdResponse, new HttpHeaders(), HttpStatus.OK);
     }

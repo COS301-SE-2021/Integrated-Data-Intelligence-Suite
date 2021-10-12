@@ -3,6 +3,7 @@ package com.Gateway_Service.Gateway_Service.service;
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
 import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
+import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
 import com.Gateway_Service.Gateway_Service.rri.ServiceErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -134,7 +135,12 @@ public class AnalyseService {
 
 
         ResponseEntity<?> analyseResponse = null;
-        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //try {
+            analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById", HttpMethod.POST, request, new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //} catch (Exception e){
+        //    throw new GatewayException("Failed to connect to analyse service");
+        //}
+
 
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
