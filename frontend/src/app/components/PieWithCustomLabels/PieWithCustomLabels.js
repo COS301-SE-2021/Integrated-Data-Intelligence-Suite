@@ -8,10 +8,10 @@ export default function PieWithCustomLabels({ text }) {
             <VictoryPie
               animate={{ duration: 1000 }}
               style={{ labels: { fill: 'white' } }}
-              innerRadius={100}
+              innerRadius={130}
               labelComponent={<PieCustomLabel />}
               data={text}
-              colorScale={['#00b074', 'red']}
+              colorScale={['#208AAE', '#E80057']}
             />
         </>
     );
