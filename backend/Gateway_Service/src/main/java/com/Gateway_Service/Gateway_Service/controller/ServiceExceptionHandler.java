@@ -28,7 +28,7 @@ public class ServiceExceptionHandler {
         ServiceErrorResponse serviceErrorResponse = new ServiceErrorResponse();
 
         serviceErrorResponse.setTimeStamp(LocalDateTime.now());
-        serviceErrorResponse.setPathUri(request.getDescription(true));
+        serviceErrorResponse.setPathUri(exc.getClass().getName() + "; " + request.getDescription(true));
         serviceErrorResponse.setStatus(HttpStatus.BAD_REQUEST);
         serviceErrorResponse.setErrors(Arrays.asList(exc.getMessage()));
         //exc.printStackTrace();

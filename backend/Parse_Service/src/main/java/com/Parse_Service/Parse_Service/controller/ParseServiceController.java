@@ -6,6 +6,7 @@ import com.Parse_Service.Parse_Service.request.*;
 import com.Parse_Service.Parse_Service.response.*;
 
 import com.Parse_Service.Parse_Service.service.ParseServiceImpl;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpHeaders;
@@ -40,14 +41,22 @@ public class ParseServiceController {
 
     /**
      * This method is used to facilitate communication to the Parse-Service.
-     * @param request This is a request entity which contains a AddSocialMediaPropertiesRequest object.
+     * @param jsonString This is a request entity which contains a AddSocialMediaPropertiesRequest object.
      * @return AddSocialMediaPropertiesResponse This object contains the success and message after performing task.
      * @throws Exception This is thrown if an error was encountered.
      */
     @PostMapping("/addSocialMediaProperties")
-    public @ResponseBody ResponseEntity<?> addSocialMediaProperties(@RequestBody AddSocialMediaPropertiesRequest request) throws Exception {
-
+    public @ResponseBody ResponseEntity<?> addSocialMediaProperties(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        String name = obj.getString("name");
+        String interProp = obj.getString("interactions");
+        String locProp = obj.getString("location");
+        String dateProp = obj.getString("date");
+        String textProp = obj.getString("text");
+        String collectionsProp = obj.getString("collections");
+        AddSocialMediaPropertiesRequest request = new AddSocialMediaPropertiesRequest(name, interProp, locProp, dateProp, textProp, collectionsProp);
         AddSocialMediaPropertiesResponse addSocialMediaPropertiesResponse = service.addSocialMediaProperties(request);
+
         return new ResponseEntity<>(addSocialMediaPropertiesResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
