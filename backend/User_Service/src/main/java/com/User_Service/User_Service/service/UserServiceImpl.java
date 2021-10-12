@@ -466,7 +466,7 @@ public class UserServiceImpl {
                 return new ResetPasswordResponse(false, "Incorrect OTP");
             }
 
-            if(!request.getOtp().matches("[0-9]+")) {
+            if(!request.getOtp().matches("[0-9]+") || request.getOtp().length() > 6) {
                 return new ResetPasswordResponse(false, "Invalid OTP");
             }
 
