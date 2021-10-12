@@ -1,234 +1,69 @@
-import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import {
-    Form, Input, Button, Divider, message,
-} from 'antd';
-import { useSetRecoilState } from 'recoil';
-import { userState } from '../../assets/AtomStore/AtomStore';
+import LoginCard from '../../components/LoginCard/LoginCard';
+import RegisterCard from '../../components/RegisterCard';
 
 // Validation Function
-const validate = (values) => {
-    const errors = {};
+export default function LoginPage() {
+    const [showLoginForm, setShowLoginForm] = useState(true);
 
-    // email validation
-    if (!values.email) {
-        errors.email = 'Required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
+    function animate(initialAnimation, cb, event) {
+        cb(!initialAnimation);
+        const button = document.getElementById('login-card-svg-bg');
+        const loginForm = document.getElementById('login-card');
+        const registerForm = document.getElementById('register-card');
+        if (!initialAnimation) {
+            loginForm.classList.remove('fadeOut');
+            registerForm.classList.remove('fadeIn');
+            button.classList.remove('slideRight');
+
+            button.classList.add('slideLeft');
+            loginForm.classList.add('fadeIn');
+            registerForm.classList.add('fadeOut');
+            button.children[0].innerHTML = 'Register';
+            // console.log(registerForm);
+        } else {
+            loginForm.classList.remove('fadeIn');
+            registerForm.classList.remove('fadeOut');
+            registerForm.classList.remove('disabled');
+            button.classList.remove('slideLeft');
+
+            button.classList.add('slideRight');
+            loginForm.classList.add('fadeOut');
+            registerForm.classList.add('fadeIn');
+            button.children[0].innerHTML = 'Login';
+
+            // console.log(registerForm);
+        }
     }
-
-    // password validation
-    if (!values.password) {
-        errors.password = 'required';
-    }
-    return errors;
-};
-
-export default function LoginPage(props) {
-    const setUser = useSetRecoilState(userState);
-    const [loginLoading, setLoginLoading] = useState(false);
-    const history = useHistory();
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validate,
-        onSubmit: (values) => {
-            setLoginLoading(true);
-            // alert(JSON.stringify(values, null, 2));
-
-            if (values.email === 'myron@gmail.com' && values.password === '123') {
-                const localuser = {
-                    id: 'b5aa283d-35d1-421d-a8c6-42dd3e115463',
-                    username: 'Myron Lopes',
-                    firstName: 'Myron',
-                    lastName: 'Maugi',
-                    admin: true,
-                    permission: 'IMPORTING',
-                    email: values.email,
-                };
-                localStorage.setItem('user', JSON.stringify(localuser));
-                setUser(localuser);
-                history.push('/chart');
-            } else {
-                const requestOptions = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(values),
-                };
-                fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/login`, requestOptions)
-                    .then((response) => response.json())
-                    .then((json) => {
-                        setLoginLoading(false);
-                        if (json.success) {
-                            localStorage.setItem('user', json.id);
-                            setUser(JSON.parse(json.id));
-                            message.success(json.message);
-                            history.push('/chart');
-                        } else {
-                            message.error(json.message);
-                        }
-                    });
-            }
-        },
-    });
 
     return (
-        // <div
-        //     id="login_card"
-        //     className="loginCard"
-        //     title="Login"
-        // >
-        //
-        //     <form onSubmit={formik.handleSubmit}>
-        //         <Form.Item
-        //             className="input_item_div"
-        //         >
-        //             <Input
-        //                 id="email"
-        //                 name="email"
-        //                 type="email"
-        //                 placeholder="email"
-        //                 onChange={formik.handleChange}
-        //                 onBlur={formik.handleBlur}
-        //                 value={formik.values.email}
-        //                 prefix={<UserOutlined className="site-form-item-icon"/>}
-        //             />
-        //         </Form.Item>
-        //
-        //         <Form.Item
-        //             className="input_item_div"
-        //         >
-        //             <Input.Password
-        //                 id="password"
-        //                 name="password"
-        //                 type="password"
-        //                 placeholder="password"
-        //                 value={formik.values.password}
-        //                 onChange={formik.handleChange}
-        //                 onBlur={formik.handleBlur} // When the user leaves the form field
-        //                 prefix={<LockOutlined className="site-form-item-icon"/>}
-        //             />
-        //             {/* {formik.touched.password && formik.errors.password ? ( */}
-        //             {/*    <p>{formik.errors.password}</p>) : null} */}
-        //
-        //         </Form.Item>
-        //
-        //         <Form.Item>
-        //             <LoginButton/>
-        //         </Form.Item>
-        //
-        //         <Divider className="or_divider">
-        //             OR
-        //         </Divider>
-        //
-        //         <Form.Item>
-        //             Don't have an account?
-        //             <Link to="/register">
-        //                 <a className="register_link" href="#">register now!</a>
-        //             </Link>
-        //         </Form.Item>
-        //
-        //         <Form.Item
-        //             className="forgot_password_link_container"
-        //         >
-        //             <a className="forgot_password_link" href="">
-        //                 Forgot password
-        //             </a>
-        //         </Form.Item>
-        //     </form>
-        // </div>
         <>
-            <div id="login-custom-bg">
-                <div id="top-left-block" />
-                <div id="top-right-block" />
-                <div id="bottom-left-block" />
-                <div id="bottom-right-block" />
+            <div className="area">
+                <ul className="circles">
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                </ul>
             </div>
-            <div id="login-background">
+            <div id="login-background" className="login-page">
                 <div id="login-form-container">
-                    <div id="login-card">
-                        <div id="login-card-title">Login</div>
-                        <form onSubmit={formik.handleSubmit} id="login-form">
-                            <Form.Item
-                              className="input_item_div"
-                            >
-                                <Input
-                                  id="email"
-                                  name="email"
-                                  type="email"
-                                  placeholder="Email address"
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={formik.values.email}
-                                  prefix={<UserOutlined className="site-form-item-icon" />}
-                                />
-                            </Form.Item>
 
-                            <Form.Item
-                              className="input_item_div"
-                            >
-                                <Input.Password
-                                  id="password"
-                                  name="password"
-                                  type="password"
-                                  placeholder="Password"
-                                  value={formik.values.password}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur} // When the user leaves the form field
-                                  prefix={<LockOutlined className="site-form-item-icon" />}
-                                />
-                                {/* {formik.touched.password && formik.errors.password ? ( */}
-                                {/*    <p>{formik.errors.password}</p>) : null} */}
-
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button
-                                  type="primary"
-                                  htmlType="submit"
-                                  className="login_button"
-                                  loading={loginLoading}
-                                    // onClick={addError}
-                                >
-                                    Log in
-                                </Button>
-                            </Form.Item>
-
-                            <Divider className="or_divider">
-                                OR
-                            </Divider>
-
-                            <Form.Item>
-                                Don't have an account?
-                                <Link to="/register" className="register_link">
-                                    Register now!
-                                </Link>
-                            </Form.Item>
-
-                            <Form.Item
-                              className="forgot_password_link_container"
-                            >
-                                <Link to="/sendOTP" className="register_link">
-                                    Forgot password?
-                                </Link>
-                            </Form.Item>
-                            <Divider className="or_divider">
-                                OR
-                            </Divider>
-
-                            <Form.Item>
-                                Cannot login?
-                                <Link to="/verify" className="register_link">
-                                    Click here to verify account!
-                                </Link>
-                            </Form.Item>
-                        </form>
+                    <div>
+                        <div>
+                            <LoginCard />
+                            <RegisterCard />
+                        </div>
                     </div>
-                    <div id="login-card-svg-bg" />
+                    <div id="login-card-svg-bg">
+                        <button className="clickable" onClick={(event) =>animate(showLoginForm, setShowLoginForm, event)}>Register</button>
+                    </div>
                 </div>
             </div>
         </>

@@ -368,7 +368,7 @@ public class ImportServiceImpl {
         Optional<APISource> findByName = apiSourceRepository.findAPISourceByName(request.getName());
 
         if(findByName.isPresent()) {
-            return new AddAPISourceResponse(false, "The source does not exist");
+            return new AddAPISourceResponse(false, "The source already exists");
         }
 
         APISource newSource = new APISource(request.getName(), request.getUrl(), request.getMethod(), request.getSearch(), request.getType(), request.getAuthType(), request.getAuthorization(), request.getParameters());
