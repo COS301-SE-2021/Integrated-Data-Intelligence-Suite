@@ -145,6 +145,11 @@
     max-width: 1200px;
 }
 
+#overview-graph-metric-2 > .simple-card-body > .VictoryContainer > svg {
+    background: var(--dark-black);
+}
+
+
 /*******************************************/
 /******************Row 3********************/
 /***************Location Row****************/
@@ -167,12 +172,6 @@
     grid-template-rows: repeat(2, auto);
 }
 
-#word-cloud-graph-container > .simple-card-container {
-    border: 1px solid var(--border-color);
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-}
 
 #world-map > .simple-card-title {
     padding: 10px 10px 10px 0px;
@@ -248,7 +247,6 @@
 #row-4 {
     grid-row-start: 4;
     grid-row-end: 5;
-    /*border: 3px solid black;*/
 
     /*Display of the Body of the Word Cloud Section*/
     /**/
@@ -268,16 +266,41 @@
 #word-cloud-card {
     grid-column-start: 1;
     grid-column-end: 2;
-    background: white;
+    background: var(--dark-black);
     padding: 10px;
     border-radius: 10px;
-    border: solid 2px var(--border-color);
+    border: 1px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#word-cloud-card > .simple-card-title {
+    background: var(--dark-black);
+    text-align: center;
+    color: white;
+
+}
+
+#word-cloud-card:hover {
+    border: 1px solid var(--pink);
+}
+
+#word-cloud-graph-container > .simple-card-container {
+    border: 1px solid transparent;
+    background: var(--dark-black);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+
+#word-graph-2 > .simple-card-body {
+    background: var(--dark-black);
 }
 
 #word-cloud-outer-container {
     display: flex;
     align-content: center;
-
+    background: var(--dark-black);
 }
 
 #word-cloud-outer-container > div {
@@ -302,16 +325,19 @@
     /*Display of the body of the container*/
     display: grid;
     align-items: center;
-    /*grid-template-columns: 100%;*/
-    /*grid-template-rows: 1fr 1fr;*/
-    /*row-gap: 10px;*/
+    border-radius: 10px;
+    background: var(--dark-black);
+    border: 1px solid transparent;
+}
+
+#word-cloud-graph-container:hover {
+    border: 1px solid var(--pink);
 }
 
 #word-cloud-graph-container > div {
     display: flex;
     /*margin-right: auto;*/
     /*margin-left: auto;*/
-
 }
 
 #word-graph-1 {
@@ -324,8 +350,13 @@
     grid-row-end: 2;
     padding: 10px;
     border: 2px solid var(--border-color);
-    background: white;
+    background: var(--dark-black);
     border-radius: 10px;
+}
+
+#word-graph-2 > .simple-card-title {
+    background: var(--dark-black);
+    text-align: center;
 }
 
 /*********************************************/
