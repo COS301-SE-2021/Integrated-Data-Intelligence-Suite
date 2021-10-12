@@ -1,12 +1,17 @@
 import React from 'react';
 import {
- VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryTooltip,
+    VictoryAxis,
+    VictoryBar,
+    VictoryChart,
+    VictoryLabel,
+    VictoryTooltip,
 } from 'victory';
 
 // Color States
-const ColorDefault = '#4666FF';
-const ColorGray = '#CAD0E3';
+const ColorDefault = '#E80057';
+const ColorGray = 'rgba(232,0,87,0.26)';
 
+// eslint-disable-next-line react/prop-types
 export default function VictoryBarGraph({ xAxisLabel, yAxisLabel, text }) {
     return (
         <VictoryChart
@@ -19,19 +24,30 @@ export default function VictoryBarGraph({ xAxisLabel, yAxisLabel, text }) {
                     tickLabels: {
                         angle: 45,
                         textAnchor: 'start',
+                        stroke: '#fff',
                     },
+                    axis: { stroke: 'rgba(0,0,0,0)' },
                 }}
               fixLabelOverlap
               axisLabelComponent={<VictoryLabel dx={-12} />}
             />
-
             <VictoryAxis
               dependentAxis
               label={yAxisLabel}
               fixLabelOverlap
+              style={{
+                    axis: { stroke: 'rgba(0,0,0,0)' },
+                    grid: {
+                        stroke: '#fff',
+                        strokeDasharray: '4,8',
+                        strokeWidth: 0.2,
+                    },
+                    tickLabels: {
+                        stroke: '#fff',
+                    },
+                }}
             />
             <VictoryBar
-              cornerRadius={15}
               alignment="middle"
               padding={{
                     top: 20,
@@ -43,15 +59,14 @@ export default function VictoryBarGraph({ xAxisLabel, yAxisLabel, text }) {
               labelComponent={(
                   <VictoryTooltip
                     constrainToVisibleArea
-                    flyoutHeight={40}
-                    flyoutWidth={40}
                     flyoutPadding={10}
                     flyoutStyle={{
-                            stroke: '#4666FF',
+                            stroke: ColorDefault,
                             strokeWidth: 2,
-                            fill: 'white',
+                            fill: ColorDefault,
+                            marginBottom: 50,
                         }}
-                    style={{ fill: '#4666FF' }}
+                    style={{ fill: '#fff' }}
                   />
                 )}
               events={[

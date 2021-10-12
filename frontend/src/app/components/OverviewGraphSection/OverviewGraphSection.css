@@ -4,7 +4,7 @@
 #row-2 {
     grid-row-start: 2;
     grid-row-end: 3;
-    grid-template-rows: 0em auto;
+    grid-template-rows: 0 auto;
     margin-bottom: 0;
 }
 
@@ -14,7 +14,7 @@
     grid-template-rows: 100%;
     /*border: 3px solid black;*/
     column-gap: 2%;
-    background: var(--light-gray);
+
 }
 
 #overview-graph-metric-1 {
@@ -22,25 +22,43 @@
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    border: 1px solid transparent;
+    border-radius: 10px;
+}
+
+#overview-graph-metric-1:hover {
+    border: 1px solid var(--pink);
+}
+
+#overview-graph-metric-2:hover {
+    border: 1px solid var(--pink);
+}
+
+#overview-graph-metric-3:hover {
+    border: 1px solid var(--pink);
 }
 
 #overview-graph-metric-1 > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-top: 2px solid var(--grey-border-color);
-    border-left: 2px solid var(--grey-border-color);
-    border-right: 2px solid var(--grey-border-color);
+    /*border-top: 2px solid var(--black-border);*/
+    /*border-left: 2px solid var(--black-border);*/
+    /*border-right: 2px solid var(--black-border);*/
     color: var(--simple-card-title-color);
+    /*border-bottom: 1px solid var(--black-border);*/
+
+
 }
 
 #overview-graph-metric-1 > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    border-bottom: 2px solid var(--grey-border-color);
-    border-left: 2px solid var(--grey-border-color);
-    border-right: 2px solid var(--grey-border-color);
+    /*border-bottom: 2px solid var(--black-border);*/
+    /*border-left: 2px solid var(--black-border);*/
+    /*border-right: 2px solid var(--black-border);*/
 }
 
 #overview-graph-metric-2 {
@@ -48,26 +66,32 @@
     grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    border: 1px solid transparent;
+    border-radius: 10px;
+
 }
 
 #overview-graph-metric-2 > .simple-card-title {
     padding: 10px;
     /*padding-left: 0px;*/
-    text-align: left;
+    text-align: center;
     color: var(--simple-card-title-color);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-top: 2px solid var(--grey-border-color);
-    border-left: 2px solid var(--grey-border-color);
-    border-right: 2px solid var(--grey-border-color);
+    /*border-bottom: 1px solid var(--black-border);*/
+
+    /*border-top: 2px solid var(--black-border);*/
+    /*border-left: 2px solid var(--black-border);*/
+    /*border-right: 2px solid var(--black-border);*/
 }
 
 #overview-graph-metric-2 > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    border-bottom: 2px solid var(--grey-border-color);
-    border-left: 2px solid var(--grey-border-color);
-    border-right: 2px solid var(--grey-border-color);
+    /*border-bottom: 2px solid var(--black-border);*/
+    /*border-left: 2px solid var(--black-border);*/
+    /*border-right: 2px solid var(--black-border);*/
 }
 
 #overview-graph-metric-3 {
@@ -75,25 +99,23 @@
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    border: 1px solid transparent;
+    border-radius: 10px;
+
 }
 
 #overview-graph-metric-3 > .simple-card-title {
     padding: 10px;
     /*padding-left: 0px;*/
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-top: 2px solid var(--grey-border-color);
-    border-left: 2px solid var(--grey-border-color);
-    border-right: 2px solid var(--grey-border-color);
+    /*border-bottom: 1px solid var(--black-border);*/
     color: var(--simple-card-title-color);
 }
 
 #overview-graph-metric-3 > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    border-bottom: 2px solid var(--grey-border-color);
-    border-left: 2px solid var(--grey-border-color);
-    border-right: 2px solid var(--grey-border-color);
-
 }
