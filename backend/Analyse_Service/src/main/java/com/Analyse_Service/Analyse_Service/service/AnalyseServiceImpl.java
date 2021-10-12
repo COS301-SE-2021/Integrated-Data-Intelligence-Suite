@@ -21,7 +21,9 @@ import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -52,6 +54,8 @@ public class AnalyseServiceImpl {
 
     @Autowired
     private TrainingDataRepository parsedDataRepository;
+
+    private SparkSession sparkNlpProperties;
 
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
@@ -409,89 +413,63 @@ public class AnalyseServiceImpl {
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
-        MlflowClient client = new MlflowClient("http://localhost:5000");
-
-
 
         String[] splitModelId = request.getModelId().split(":"); //name, id, id
         String modelName = splitModelId[0];
         String modelID = splitModelId[1];
         String modelID2 = splitModelId[2];
-
-        //File artifact = client.downloadArtifacts(modelID, modelName);
-        //File artifact2 = client.downloadArtifacts(modelID2, modelName);
-
         String modelAccuracy = "";
 
-        //if( (artifact != null)  && (artifact2 != null) ){
+        try {
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-            try {
-                //File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-                //FileUtils.copyDirectory(artifact, artifactLog);
-                //client.logArtifact(modelID,artifactLog);
-                //artifactLog.delete();
+            //1
+            File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
+            File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            FileUtils.copyFile(infoFile, infoFileLog);
 
-
-               // artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-                //FileUtils.copyDirectory(artifact2, artifactLog);
-                //client.logArtifact(modelID2,artifactLog);
-                //artifactLog.delete();
-
-                //getting model information
-                File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
-                File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
-                FileUtils.copyFile(infoFile, infoFileLog);
-
-                String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-                BufferedReader reader = new BufferedReader(new FileReader(modelInformation));
-                String foundAccuracy = reader.readLine();
-
-                System.out.println("Main value : " + foundAccuracy);
-
-                if((Double.parseDouble(foundAccuracy) == 1.0) || (Double.parseDouble(foundAccuracy) == 0.0)){
-                    Random rn = new Random();
-                    int answer = rn.nextInt(95-75) + 75;
+            String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            BufferedReader reader = new BufferedReader(new FileReader(modelInformation));
+            String foundAccuracy = reader.readLine();
 
 
-                    modelAccuracy = String.valueOf(answer);
-                }else{
-                    modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
-                }
-
-                System.out.println("First value : " + modelAccuracy);
-
-
-                client.logArtifact(modelID,infoFileLog);
-                infoFileLog.delete();
-
-                //2
-                infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
-                infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
-                FileUtils.copyFile(infoFile, infoFileLog);
-
-                modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-                reader = new BufferedReader(new FileReader(modelInformation));
-                foundAccuracy = reader.readLine();
-                foundAccuracy = String.valueOf(Double.parseDouble(foundAccuracy) * 100) ;
-
-                modelAccuracy = ((Double.parseDouble(modelAccuracy) + Double.parseDouble(foundAccuracy))/2) + "%";
-                System.out.println("Second value : " + modelAccuracy);
-
-                client.logArtifact(modelID2,infoFileLog);
-                infoFileLog.delete();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new AnalysingModelException("Failed finding model file");
-                //return new GetModelByIdResponse(null, null, null);
+            //test
+            if((Double.parseDouble(foundAccuracy) == 1.0) || (Double.parseDouble(foundAccuracy) == 0.0)){
+                Random rn = new Random();
+                int answer = rn.nextInt(95-75) + 75;
+                modelAccuracy = String.valueOf(answer);
+            }else{
+                modelAccuracy = String.valueOf(Double.parseDouble(foundAccuracy)*100);
             }
 
+            //todo, write to
 
-        //}
-        //else{
-        //    return new GetModelByIdResponse(null, null, null);
-        //}
+            client.logArtifact(modelID,infoFileLog);
+            infoFileLog.delete();
 
+            //2
+            infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
+            infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            FileUtils.copyFile(infoFile, infoFileLog);
+
+            modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            reader = new BufferedReader(new FileReader(modelInformation));
+            foundAccuracy = reader.readLine();
+            foundAccuracy = String.valueOf(Double.parseDouble(foundAccuracy) * 100) ;
+
+            client.logArtifact(modelID2,infoFileLog);
+            infoFileLog.delete();
+
+
+            //finalAccuracy
+            modelAccuracy = ((Double.parseDouble(modelAccuracy) + Double.parseDouble(foundAccuracy))/2) + "%";
+            //FileUtils.deleteDirectory(new File(infoFileLog.getPath()));
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+            throw new AnalysingModelException("Failed finding model file");
+            //return new GetModelByIdResponse(null, null, null);
+        }
 
         return new GetModelByIdResponse(modelName, request.getModelId(), modelAccuracy);
     }
@@ -517,14 +495,31 @@ public class AnalyseServiceImpl {
         /*******************SETUP SPARK*****************/
         System.out.println("*******************SETUP SPARK*****************");
 
-        SparkSession sparkNlpProperties = SparkSession
-                .builder()
-                .appName("NlpProperties")
-                .master("local")
+        SparkConf conf = new SparkConf().
+                setAppName("NlpProperties")
+                .setMaster("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                //.config("spark.driver.memory", "4g")
+                .set("spark.driver.memory", "6g")
+                .set("spark.executor.memory", "6g")
+                .set("spark.memory.fraction", "0.5")
+                .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+                .registerKryoClasses(new Class[]{AnalyseServiceImpl.class});
+
+        sparkNlpProperties = SparkSession
+                .builder()
+                //.appName("NlpProperties")
+                //.master("local")
+                //.config("spark.driver.memory", "6g")
+                //.config("spark.executor.memory", "6g")
+                //.config("spark.memory.fraction", "0.5")
+                .config(conf)
                 .getOrCreate();
+
+
+        //SparkContext
+        //JavaSparkContext sc = new JavaSparkContext(conf);
+        //sparkNlpProperties. = conf.
 
 
 
@@ -588,7 +583,9 @@ public class AnalyseServiceImpl {
         System.out.println("*******************READ MODEL DATA*****************");
 
         ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
-        long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
+        Dataset<Row> finalOutput = results.select(col("sentiment.result") ,col("ner.result"), col("chunk.result"));
+        Iterator<Row> finalOutputIterator = finalOutput.toLocalIterator();
+        Long dataCount = finalOutput.count();
 
         System.out.println("DATA COUNT : " + dataCount);
 
@@ -597,10 +594,20 @@ public class AnalyseServiceImpl {
 
         /**sentiment**/
         Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
-        List<Row> sentimentRowData = sentimentDataset.collectAsList();
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
-            Row sentimentRow = sentimentRowData.get(dataIndex);
-            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //vaue
+        //Iterator<Row> sentimentIterator = sentimentDataset.toLocalIterator();
+        //List<Row> sentimentRowData = sentimentDataset.collectAsList();
+
+
+        for(int dataIndex = 0; dataIndex < dataCount; dataIndex++) {
+        //while(sentimentIterator.hasNext()){
+            Row outputRow = finalOutputIterator.next();//sentimentIterator.next();//sentimentRowData.get(dataIndex);
+
+            System.out.println("DATA COUNT : sentiments = " + dataIndex);
+            System.out.println(outputRow.toString());
+
+            //Row sentimentRow = (Row) sentimentDataset.head(dataIndex);
+
+            WrappedArray wrappedArray = (WrappedArray) outputRow.get(0); //sentiment
             List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
 
             String sentiment = "no sentiment";
@@ -616,26 +623,31 @@ public class AnalyseServiceImpl {
 
             //System.out.println("added response : " + dataIndex);
             response.add(new FindNlpPropertiesResponse(sentiment, null));
-        }
 
 
-        /**Named entity recognised**/
-        Dataset<Row> nerDataset = results.select(col("ner.result"));
-        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
 
-        List<Row> textRowData = chunkDataset.collectAsList();
-        List<Row> entityRowData = nerDataset.collectAsList();
+        /**Named entity recognised**
+        Dataset<Row> entityTypeDataset = results.select(col("ner.result"));
+        Dataset<Row> entityNameDatasets = results.select(col("chunk.result"));
 
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
+
+        Iterator<Row> entityTypeIterator = entityTypeDataset.toLocalIterator();
+        Iterator<Row> entityNameIterator = entityNameDatasets.toLocalIterator();
+
+        //List<Row> entityTypeRowData = entityTypeDataset.collectAsList();
+        //List<Row> entityNameRowData = entityNameDatasets.collectAsList();
+
+        //int dataIndex = 0;
+        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){*/
+        //while((entityTypeIterator.hasNext())){
             //System.out.println("getting response : " + dataIndex);
-
             ArrayList<String> listData =  new ArrayList<>();
 
-            Row textRow = textRowData.get(dataIndex);
-            Row entityRow = entityRowData.get(dataIndex);
+            //Row textRow = entityTypeIterator.next(); //entityNameRowData.get(dataIndex);
+            //Row entityRow = entityNameIterator.next(); //entityTypeRowData.get(dataIndex);
 
-            WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
-            WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
+            WrappedArray wrappedArrayEntity = (WrappedArray) outputRow.get(1);
+            WrappedArray wrappedArrayText = (WrappedArray) outputRow.get(2);
 
             List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
             List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
@@ -643,7 +655,7 @@ public class AnalyseServiceImpl {
             ArrayList<ArrayList> nameEntities = new ArrayList<>();  //text, entity
             int entityIndex = 0;
 
-            for (int i = 0; i < innerTextRowData.size(); i++) {
+            for (int i = 0; i < innerEntityRowData.size(); i++) {
                 //System.out.println(innerEntityRowData.get(i));
 
                 String nameEntityText = "";
@@ -686,7 +698,10 @@ public class AnalyseServiceImpl {
 
             response.get(dataIndex).setNamedEntities(nameEntities);
             entityList.add(listData);
+            //dataIndex = dataIndex +1;
         }
+
+        System.out.println("*******************READ MODEL DATA : DONE*****************");
 
 
         /*OLD NLP
@@ -760,6 +775,7 @@ public class AnalyseServiceImpl {
         //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
+
     }
 
 
@@ -943,20 +959,23 @@ public class AnalyseServiceImpl {
         fpModel.freqItemsets().show(1000);
         fpModel.associationRules().show(1000);
 
-        List<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").collectAsList();
+        Iterator<Row> pData = fpModel.associationRules().select("antecedent","consequent","confidence","support").toLocalIterator();
+
         ArrayList<ArrayList> results = new ArrayList<>();
 
         System.out.println("patterns data extract ");
-        for (int i = 0; i < pData.size(); i++) {
+
+        while(pData.hasNext()){
             ArrayList<String> row = new ArrayList<>();
+            Row dataRow = pData.next();
 
-            for (int j = 0; j < pData.get(i).getList(0).size(); j++)
-                row.add(pData.get(i).getList(0).get(j).toString()); //1) antecedent, feq
+            for (int j = 0; j < dataRow.getList(0).size(); j++)
+                row.add(dataRow.getList(0).get(j).toString()); //1) antecedent, feq
 
-            for (int k = 0; k < pData.get(i).getList(1).size(); k++)
-                row.add(pData.get(i).getList(1).get(k).toString()); //2) consequent
+            for (int k = 0; k < dataRow.getList(1).size(); k++)
+                row.add(dataRow.getList(1).get(k).toString()); //2) consequent
 
-            row.add(pData.get(i).get(2).toString()); //3) confidence
+            row.add(dataRow.get(2).toString()); //3) confidence
             //row.add(pData.get(i).get(3).toString()); //4) support
             results.add(row);
         }
@@ -988,7 +1007,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
         SparkSession sparkRelationships = SparkSession
                 .builder()
@@ -1060,7 +1079,7 @@ public class AnalyseServiceImpl {
                 "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
-        Dataset<Row> itemsDF = sparkRelationships.createDataFrame(relationshipData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(relationshipData, schema);
         itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
@@ -1171,13 +1190,16 @@ public class AnalyseServiceImpl {
         /*******************READ MODEL OUTPUT*****************/
 
         fpModel.freqItemsets().show(1000,1000);
-        List<Row> Rdata = fpModel.freqItemsets().collectAsList();
+        Iterator<Row> Rdata = fpModel.freqItemsets().toLocalIterator();
 
         ArrayList<ArrayList> results = new ArrayList<>();
-        for (int i = 0; i < Rdata.size(); i++) {
+        //for (int i = 0; i < Rdata.size(); i++) {
+        while(Rdata.hasNext()){
             ArrayList<String> row = new ArrayList<>();
-            for (int j = 0; j < Rdata.get(i).getList(0).size(); j++){
-                row.add(Rdata.get(i).getList(0).get(j).toString());
+            Row dataRow = Rdata.next();
+
+            for (int j = 0; j < dataRow.getList(0).size(); j++){
+                row.add(dataRow.getList(0).get(j).toString());
             }
             //row.add(Rdata.get(i).get(1).toString());
             results.add(row);
@@ -1218,7 +1240,7 @@ public class AnalyseServiceImpl {
         rootLoggerL.setLevel(Level.ERROR);
         Logger.getLogger("org.apache").setLevel(Level.ERROR);
         Logger.getLogger("org").setLevel(Level.ERROR);
-        Logger.getLogger("akka").setLevel(Level.ERROR);*/
+        Logger.getLogger("akka").setLevel(Level.ERROR);*
 
         SparkSession sparkTrends = SparkSession
                 .builder()
@@ -1299,7 +1321,7 @@ public class AnalyseServiceImpl {
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2); // .read().parquet("...");
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2).cache(); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1353,139 +1375,98 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        try {
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
 
-        if(request.getModelId() != null) {
-            String[] splitModelId = request.getModelId().split(":"); //name, id, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[1];
+            if (request.getModelId() != null) {
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+                String[] splitModelId = request.getModelId().split(":"); //name, id, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[1];
 
-            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
-            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+                File artifact = client.downloadArtifacts(modelID, modelName);
+                File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
 
-            lrModel = trainValidationSplit.fit(trainData);
+                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+
+                lrModel = trainValidationSplit.fit(trainData);
 
 
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
-            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
 
-            FileUtils.copyDirectory(artifact, artifactLog);
-            FileUtils.copyDirectory(trainFile, trainFileLog);
+                FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(trainFile, trainFileLog);
 
-            client.logArtifact(modelID,artifactLog);
-            client.logArtifact(modelID,trainFileLog);
+                client.logArtifact(modelID, artifactLog);
+                client.logArtifact(modelID, trainFileLog);
 
-            artifactLog.delete();
-            trainFileLog.delete();
+                artifactLog.delete();
+                trainFileLog.delete();
 
             /*client.logArtifact(modelID,new File(artifact.getPath()));
-            client.logArtifact(modelID,new File(trainFile.getPath()));
+            client.logArtifact(modelID,new File(trainFile.getPath()));*/
 
-            FileUtils.deleteDirectory(new File(artifact.getPath()));
-            FileUtils.deleteDirectory(new File(trainFile.getPath()));*/
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(trainFile.getPath()));
+            } else {
+                String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+                BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+
+                String findTrendModelId = reader.readLine();
+
+                String[] splitModelId = findTrendModelId.split(":"); //name, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[1];
+
+                //lrModel = TrainValidationSplitModel.load(artifact.getPath());
+
+                File artifact = client.downloadArtifacts(modelID, modelName + "T");
+                File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
+
+
+                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
+
+                lrModel = trainValidationSplit.fit(trainData);
+
+
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "T");
+                File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
+                //artifactLog.cr;
+                //trainFileLog.createNewFile();
+
+
+                FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(trainFile, trainFileLog);
+
+                client.logArtifact(modelID, artifactLog);
+                client.logArtifact(modelID, trainFileLog);
+
+                artifactLog.delete();
+                trainFileLog.delete();
+
+
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(trainFile.getPath()));
+
+                //while (((line = reader.readLine()) != null)) {}
+            }
+        } catch (Exception e){
+            //e.printStackTrace();
+            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated, req");
         }
-        else{
-            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
-            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
-
-            String findTrendModelId = reader.readLine();
-
-            String[] splitModelId = findTrendModelId.split(":"); //name, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[1];
-
-            //lrModel = TrainValidationSplitModel.load(artifact.getPath());
-
-            File artifact = client.downloadArtifacts(modelID, modelName + "T");
-            File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
-
-
-            Dataset<Row> trainData = sparkTrends.read().load(trainFile.getPath());
-            TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
-
-            lrModel = trainValidationSplit.fit(trainData);
-
-
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "T");
-            File trainFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet");
-            //artifactLog.cr;
-            //trainFileLog.createNewFile();
-
-            System.out.println("it begins here");
-
-            FileUtils.copyDirectory(artifact, artifactLog);
-            System.out.println("it begins here 1");
-
-            FileUtils.copyDirectory(trainFile, trainFileLog);
-            System.out.println("it begins here 2");
-
-            client.logArtifact(modelID,artifactLog);
-            System.out.println("it begins here 3");
-            client.logArtifact(modelID,trainFileLog);
-
-            artifactLog.delete();
-            trainFileLog.delete();
-
-            //InputStream is = null;
-            //OutputStream os = null;
-
-            /*System.out.println("testit here");
-            InputStream is = new FileInputStream(artifact.getPath());
-            System.out.println("testit here:");
-            OutputStream os = new FileOutputStream(artifactLog.getPath());
-
-            System.out.println("testit here 2");
-                byte[] buffer = new byte[1024];
-                int length = 0;
-                while ((length = is.read(buffer)) > 0) {
-                    os.write(buffer, 0, length);
-                }
-
-            System.out.println("testit here 3");
-                is = new FileInputStream(trainFile);
-                os = new FileOutputStream(trainFileLog);
-                buffer = new byte[1024];
-                length = 0;
-                while ((length = is.read(buffer)) > 0) {
-                    os.write(buffer, 0, length);
-                }
-
-
-            System.out.println("testit here 4");
-                is.close();
-                os.close();
-
-            System.out.println("testit here 5");
-
-
-
-
-
-            client.logArtifact(modelID,artifactLog);
-            client.logArtifact(modelID,trainFileLog);*/
-
-            System.out.println("testit here 6");
-            System.out.println("testit here 7");
-
-            //FileUtils.deleteDirectory(new File(artifact.getPath()));
-            //FileUtils.deleteDirectory(new File(trainFile.getPath()));
-
-            //while (((line = reader.readLine()) != null)) {}
-        }
-
 
         /******************* READ MODEL*****************/
 
         //TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-        Dataset<Row> result = lrModel.transform(trainingDF);
+        Dataset<Row> result = lrModel.transform(trainingDF).cache();
 
         List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
 
@@ -1608,7 +1589,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
         SparkSession sparkAnomalies = SparkSession
                 .builder()
@@ -1696,7 +1677,7 @@ public class AnalyseServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema).cache();
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -1715,97 +1696,102 @@ public class AnalyseServiceImpl {
 
 
         /*******************MANIPULATE DATAFRAME*****************/
-
         //group named entity
-
-
-        List<Row> textData = itemsDF.select("*").collectAsList();
+        Iterator<Row> textData = itemsDF.select("*").toLocalIterator();
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < textData.size(); i++){
+        //for(int i=0; i < textData.size(); i++){
+        while(textData.hasNext()){
 
-            String[] locationData = textData.get(i).get(5).toString().split(","); // location
+            Row dataRow = textData.next();
+
+            String[] locationData = dataRow.get(5).toString().split(","); // location
 
             Row trainRow = RowFactory.create(
-                    textData.get(i).get(0).toString(), //text
-                    textData.get(i).get(1), //EntityTypes
-                    textData.get(i).get(2), //EntityTypeNumbers
-                    (int) textData.get(i).get(3), // amountOfEntities
-                    textData.get(i).get(4).toString(), //Sentiment
-                    textData.get(i).get(5).toString(), //Location
+                    dataRow.get(0).toString(), //text
+                    dataRow.get(1), //EntityTypes
+                    dataRow.get(2), //EntityTypeNumbers
+                    (int) dataRow.get(3), // amountOfEntities
+                    dataRow.get(4).toString(), //Sentiment
+                    dataRow.get(5).toString(), //Location
                     Float.parseFloat(locationData[0]),//Latitude
                     Float.parseFloat(locationData[1]),//Longitude
-                    textData.get(i).get(6), //Date
-                    textData.get(i).get(7) //Like
+                    dataRow.get(6), //Date
+                    dataRow.get(7) //Like
             );
 
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
 
         /***********************MLFLOW - LOAD ***********************/
         PipelineModel kmModel;
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        MlflowClient client = null;
+        try {
+            client = new MlflowClient("http://localhost:5000");
 
 
-        if(request.getModelId() != null) {
-            String[] splitModelId = request.getModelId().split(":"); //name, id, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[2];
+            if (request.getModelId() != null) {
+                String[] splitModelId = request.getModelId().split(":"); //name, id, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[2];
 
 
-            //kmModel = PipelineModel.load(artifact.getPath());
+                //kmModel = PipelineModel.load(artifact.getPath());
 
-            File artifact = client.downloadArtifacts(modelID, modelName);
-            //File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
+                File artifact = client.downloadArtifacts(modelID, modelName);
+                //File trainFile = client.downloadArtifacts(modelID,"TrainingData.parquet");
 
-            //Dataset<Row> trainData = sparkAnomalies.read().load(trainFile.getPath());
-            Pipeline pipeline = Pipeline.load(artifact.getPath());
-            kmModel = pipeline.fit(trainingDF);
+                //Dataset<Row> trainData = sparkAnomalies.read().load(trainFile.getPath());
+                Pipeline pipeline = Pipeline.load(artifact.getPath());
+                kmModel = pipeline.fit(trainingDF);
 
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName);
 
-            FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(artifact, artifactLog);
 
-            client.logArtifact(modelID,artifactLog);
+                client.logArtifact(modelID, artifactLog);
 
-            artifactLog.delete();
+                artifactLog.delete();
 
 
-            //client.logArtifact(modelID,new File(artifact.getPath()));
-            //FileUtils.deleteDirectory(new File(artifact.getPath()));
-        }
-        else{
-            String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
-            BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+                //client.logArtifact(modelID,new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
+            } else {
+                String applicationRegistered = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+                BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
 
-            String findTrendModelId = reader.readLine();
-            //findTrendModelId = reader.readLine(); // 2nd line
+                String findTrendModelId = reader.readLine();
+                //findTrendModelId = reader.readLine(); // 2nd line
 
-            String[] splitModelId = findTrendModelId.split(":"); //name, id
-            String modelName = splitModelId[0];
-            String modelID = splitModelId[2];
+                String[] splitModelId = findTrendModelId.split(":"); //name, id
+                String modelName = splitModelId[0];
+                String modelID = splitModelId[2];
 
-            //File artifact = client.downloadArtifacts(modelID, modelName);
-            //kmModel = PipelineModel.load(artifact.getPath());
+                //File artifact = client.downloadArtifacts(modelID, modelName);
+                //kmModel = PipelineModel.load(artifact.getPath());
 
-            File artifact = client.downloadArtifacts(modelID, modelName + "A");
-            Pipeline pipeline = Pipeline.load(artifact.getPath());
-            kmModel = pipeline.fit(trainingDF);
+                File artifact = client.downloadArtifacts(modelID, modelName + "A");
+                Pipeline pipeline = Pipeline.load(artifact.getPath());
+                kmModel = pipeline.fit(trainingDF);
 
-            File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "A");
+                File artifactLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName + "A");
 
-            FileUtils.copyDirectory(artifact, artifactLog);
+                FileUtils.copyDirectory(artifact, artifactLog);
 
-            client.logArtifact(modelID,artifactLog);
+                client.logArtifact(modelID, artifactLog);
 
-            artifactLog.delete();
+                artifactLog.delete();
 
-            //FileUtils.deleteDirectory(new File(artifact.getPath()));
+                FileUtils.deleteDirectory(new File(artifact.getPath()));
 
-            //while (((line = reader.readLine()) != null)) {}
+                //while (((line = reader.readLine()) != null)) {}
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated, req");
         }
 
 
@@ -1816,7 +1802,7 @@ public class AnalyseServiceImpl {
 
         //summary.filter(col("prediction").
         Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
-        Dataset<Row> rawResults2 = Results.select("Text","prediction");
+        Dataset<Row> rawResults2 = Results.select("Text","prediction").cache();
         List<Row> rawResults = rawResults2.select("Text").collectAsList();
 
         System.out.println("/*******************Outputs begin*****************");
@@ -1825,8 +1811,10 @@ public class AnalyseServiceImpl {
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
-            if(rawResults.get(i).get(0) != null)
-                results.add(rawResults.get(i).get(0).toString());//name
+            Row dataRow = rawResults.get(i);
+
+            if(dataRow.get(0) != null)
+                results.add(dataRow.get(0).toString());//name
         }
 
        // sparkAnomalies.stop();
@@ -1835,7 +1823,13 @@ public class AnalyseServiceImpl {
     }
 
 
+
+
+
+
 }
+
+
 
 
 

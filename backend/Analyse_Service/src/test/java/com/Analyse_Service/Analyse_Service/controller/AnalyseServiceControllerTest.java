@@ -6,6 +6,7 @@ import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.request.AnalyseDataRequest;
 import com.Analyse_Service.Analyse_Service.response.AnalyseDataResponse;
 import com.Analyse_Service.Analyse_Service.service.AnalyseServiceImpl;
+import com.Analyse_Service.Analyse_Service.service.TrainServiceImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -55,7 +56,10 @@ public class AnalyseServiceControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private AnalyseServiceImpl service;
+    private AnalyseServiceImpl analyseService;
+
+    @MockBean
+    private TrainServiceImpl trainService;
 
     @Test
     @DisplayName("When analyze check connection")
@@ -87,7 +91,7 @@ public class AnalyseServiceControllerTest {
         String requestJson=ow.writeValueAsString(analyseRequest);
 
         AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null,null,null,null,null,null);
-        when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+        when(analyseService.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")
@@ -135,7 +139,7 @@ public class AnalyseServiceControllerTest {
         String requestJson = ow.writeValueAsString(analyseRequest);
 
         AnalyseDataResponse analyseDataResponse = new AnalyseDataResponse(null, null, null, null, null,null);
-        when(service.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
+        when(analyseService.analyzeData(any(AnalyseDataRequest.class))).thenReturn(analyseDataResponse);
 
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/Analyse/analyzeData")

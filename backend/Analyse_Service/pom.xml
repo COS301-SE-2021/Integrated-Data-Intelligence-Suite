@@ -18,6 +18,12 @@
 		<spring-cloud.version>Hoxton.SR11</spring-cloud.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -151,6 +157,30 @@
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-sql_2.12</artifactId>
 			<version>3.1.2</version>
+		</dependency>
+
+
+
+
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+
+		<!--dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1</version>
+			<scope>provided</scope>
+		</dependency-->
+
+
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!--dependency>

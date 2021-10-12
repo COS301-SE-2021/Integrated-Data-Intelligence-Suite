@@ -5,7 +5,10 @@ import com.User_Service.User_Service.request.*;
 import com.User_Service.User_Service.response.*;
 import com.User_Service.User_Service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,9 +24,10 @@ public class UserServiceController {
      * @throws Exception Thrown when any exceptions are encountered
      */
     @PostMapping(value = "/changeUser")
-    public @ResponseBody ChangeUserResponse changeUser(@RequestBody ChangeUserRequest request) throws Exception {
-        //ChangeUserRequest request = requestEntity.getBody();
-        return service.changeUser(request);
+    public @ResponseBody ResponseEntity<?> changeUser(@RequestBody ChangeUserRequest request) throws Exception {
+
+        ChangeUserResponse changeUserResponse = service.changeUser(request);
+        return new ResponseEntity<>(changeUserResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -32,105 +36,141 @@ public class UserServiceController {
      * @throws Exception Thrown when any exceptions are encountered
      */
     @GetMapping(value = "/getAll",  produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody GetAllUsersResponse getAllUsers() throws Exception {
-        //GetAllUsersRequest request = requestEntity.getBody();
-        return service.getAllUsers();
+    public @ResponseBody ResponseEntity<?> getAllUsers() throws Exception {
+
+        GetAllUsersResponse getAllUsersResponse = service.getAllUsers();
+        return new ResponseEntity<>(getAllUsersResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/getUser" , produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody GetUserResponse getUser(@RequestBody GetUserRequest request) throws Exception{
-        //GetUserRequest request = requestEntity.getBody();
-        return service.getUser(request);
+    public @ResponseBody ResponseEntity<?> getUser(@RequestBody GetUserRequest request) throws Exception{
+
+        GetUserResponse getUserResponse = service.getUser(request);
+        return new ResponseEntity<>(getUserResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")
-    public @ResponseBody RegisterResponse register(@RequestBody RegisterRequest request) throws Exception {
-        //RegisterRequest request = requestEntity.getBody();
-        return service.register(request);
+    public @ResponseBody ResponseEntity<?> register(@RequestBody RegisterRequest request) throws Exception {
+
+        RegisterResponse registerResponse = service.register(request);
+        return new ResponseEntity<>(registerResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/requestAdmin")
-    public @ResponseBody
-    RequestAdminResponse registerAdmin(@RequestBody RequestAdminRequest request) throws Exception {
-        //RegisterRequest request = requestEntity.getBody();
-        return service.requestAdmin(request);
+    public @ResponseBody ResponseEntity<?> registerAdmin(@RequestBody RequestAdminRequest request) throws Exception {
+
+        RequestAdminResponse requestAdminResponse = service.requestAdmin(request);
+        return new ResponseEntity<>(requestAdminResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/login")
-    public @ResponseBody LoginResponse login(@RequestBody LoginRequest request) throws Exception {
-        //LoginRequest request = requestEntity.getBody();
-        return service.login(request);
+    public @ResponseBody ResponseEntity<?> login(@RequestBody LoginRequest request) throws Exception {
+
+        LoginResponse loginResponse= service.login(request);
+        return new ResponseEntity<>(loginResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/getCurrentUser", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody GetCurrentUserResponse getCurrentUser(@RequestBody GetCurrentUserRequest request) throws Exception {
-        return service.getCurrentUser(request);
+    public @ResponseBody ResponseEntity<?> getCurrentUser(@RequestBody GetCurrentUserRequest request) throws Exception {
+
+        GetCurrentUserResponse getCurrentUserResponse =  service.getCurrentUser(request);
+        return new ResponseEntity<>(getCurrentUserResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/verifyAccount")
-    public @ResponseBody VerifyAccountResponse verifyAccount(@RequestBody VerifyAccountRequest request) throws Exception {
-        return service.verifyAccount(request);
+    public @ResponseBody ResponseEntity<?> verifyAccount(@RequestBody VerifyAccountRequest request) throws Exception {
+
+        VerifyAccountResponse verifyAccountResponse = service.verifyAccount(request);
+        return new ResponseEntity<>(verifyAccountResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/resendCode")
-    public @ResponseBody ResendCodeResponse resendCode(@RequestBody ResendCodeRequest request) throws Exception {
-        return service.resendCode(request);
+    public @ResponseBody ResponseEntity<?> resendCode(@RequestBody ResendCodeRequest request) throws Exception {
+
+        ResendCodeResponse resendCodeResponse = service.resendCode(request);
+        return new ResponseEntity<>(resendCodeResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/sendOTP")
-    public @ResponseBody ResendCodeResponse sendOTP(@RequestBody ResendCodeRequest request) throws Exception {
-        return service.sendOTP(request);
+    public @ResponseBody ResponseEntity<?> sendOTP(@RequestBody ResendCodeRequest request) throws Exception {
+
+        ResendCodeResponse resendCodeResponse = service.sendOTP(request);
+        return new ResponseEntity<>(resendCodeResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/resetPassword")
-    public @ResponseBody ResetPasswordResponse resetPassword(@RequestBody ResetPasswordRequest request) throws Exception {
-        return service.resetPassword(request);
+    public @ResponseBody ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) throws Exception {
+
+        ResetPasswordResponse resetPasswordResponse = service.resetPassword(request);
+        return new ResponseEntity<>(resetPasswordResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/updateProfile")
-    public @ResponseBody UpdateProfileResponse resendCode(@RequestBody UpdateProfileRequest request) throws Exception {
-        return service.updateProfile(request);
+    public @ResponseBody ResponseEntity<?> resendCode(@RequestBody UpdateProfileRequest request) throws Exception {
+
+        UpdateProfileResponse updateProfileResponse = service.updateProfile(request);
+        return new ResponseEntity<>(updateProfileResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
+
+
+
     @PostMapping(value = "/addReport")
-    public @ResponseBody
-    ReportResponse addReport(@RequestBody ReportRequest request) throws Exception {
-        return service.addReport(request);
+    public @ResponseBody ResponseEntity<?> addReport(@RequestBody ReportRequest request) throws Exception {
+
+        ReportResponse reportResponse = service.addReport(request);
+        return new ResponseEntity<>(reportResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/removeReport")
-    public @ResponseBody
-    ReportResponse removeReport(@RequestBody ReportRequest request) throws Exception {
-        return service.removeReport(request);
+    public @ResponseBody ResponseEntity<?> removeReport(@RequestBody ReportRequest request) throws Exception {
+
+        ReportResponse reportResponse = service.removeReport(request);;
+        return new ResponseEntity<>(reportResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getReports/{id}")
-    public @ResponseBody GetUserReportsResponse getReports(@PathVariable String id) throws Exception {
-        return service.getReports(new GetUserReportsRequest(id));
+    public @ResponseBody ResponseEntity<?> getReports(@PathVariable String id) throws Exception {
+
+        GetUserReportsResponse getUserReportsResponse = service.getReports(new GetUserReportsRequest(id));
+        return new ResponseEntity<>(getUserReportsResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
+
+
+
     @GetMapping(value = "/getModels/{id}")
-    public @ResponseBody GetModelsResponse getModels(@PathVariable String id) throws Exception {
-        return service.getModels(new GetModelsRequest(id));
+    public @ResponseBody ResponseEntity<?> getModels(@PathVariable String id) throws Exception {
+
+        GetModelsResponse getModelsResponse = service.getModels(new GetModelsRequest(id));
+        return new ResponseEntity<>(getModelsResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/addModel")
-    public @ResponseBody ModelResponse addModel(@RequestBody ModelRequest request) throws Exception {
-        return service.addModel(request);
+    public @ResponseBody ResponseEntity<?> addModel(@RequestBody ModelRequest request) throws Exception {
+
+        ModelResponse modelResponse = service.addModel(request);
+        return new ResponseEntity<>(modelResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/removeModel")
-    public @ResponseBody ModelResponse removeModel(@RequestBody ModelRequest request) throws Exception {
-        return service.removeModel(request);
+    public @ResponseBody ResponseEntity<?> removeModel(@RequestBody ModelRequest request) throws Exception {
+
+        ModelResponse modelResponse = service.removeModel(request);
+        return new ResponseEntity<>(modelResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/selectModel")
-    public @ResponseBody ModelResponse selectModel(@RequestBody ModelRequest request) throws Exception {
-        return service.selectModel(request);
+    public @ResponseBody ResponseEntity<?> selectModel(@RequestBody ModelRequest request) throws Exception {
+
+        ModelResponse modelResponse = service.selectModel(request);
+        return new ResponseEntity<>(modelResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/deselectModel")
-    public @ResponseBody ModelResponse deselectModel(@RequestBody ModelRequest request) throws Exception {
-        return service.deselectModel(request);
+    public @ResponseBody ResponseEntity<?> deselectModel(@RequestBody ModelRequest request) throws Exception {
+
+        ModelResponse modelResponse = service.deselectModel(request);
+        return new ResponseEntity<>(modelResponse, new HttpHeaders(), HttpStatus.OK);
     }
 }

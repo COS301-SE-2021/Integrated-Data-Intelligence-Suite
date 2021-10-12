@@ -9,7 +9,10 @@ import com.Import_Service.Import_Service.rri.AuthorizationType;
 import com.Import_Service.Import_Service.service.ImportServiceImpl;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.json.*;
@@ -39,13 +42,14 @@ public class ImportServiceController {
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
     @PostMapping(value = "/importData")
-    public @ResponseBody ImportDataResponse importData(@RequestBody ImportDataRequest request) throws Exception{
+    public @ResponseBody ResponseEntity<?> importData(@RequestBody ImportDataRequest request) throws Exception{
 
         if(request == null) {
             throw new InvalidImporterRequestException("Request object is null.");
         }
 
-        return service.importData(request);
+        ImportDataResponse importDataResponse = service.importData(request);
+        return new ResponseEntity<>(importDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -56,9 +60,10 @@ public class ImportServiceController {
      * @throws Exception This is thrown if exception caught in Import-Service.
      */
     @PostMapping(value = "/getTwitterDataJson")
-    public @ResponseBody ImportTwitterResponse getTwitterDataJson(@RequestBody ImportTwitterRequest request) throws Exception {
+    public @ResponseBody ResponseEntity<?> getTwitterDataJson(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        return service.getTwitterDataJson(request);
+        ImportTwitterResponse importTwitterResponse = service.getTwitterDataJson(request);
+        return new ResponseEntity<>(importTwitterResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -68,11 +73,89 @@ public class ImportServiceController {
      * @return ImportTwitterResponse. This object contains imported data which has been processed by Import-Service.
      */
     @PostMapping(value = "/importDatedData", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ImportTwitterResponse importDatedData(@RequestBody ImportTwitterRequest request) throws Exception {
+    public @ResponseBody ResponseEntity<?> importDatedData(@RequestBody ImportTwitterRequest request) throws Exception {
 
-        return service.importDatedData(request);
+        ImportTwitterResponse importTwitterResponse = service.importDatedData(request);
+        return new ResponseEntity<>(importTwitterResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
+
+
+    @PostMapping(value = "/addApiSource")
+    public @ResponseBody ResponseEntity<?> addApiSource(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        String name = obj.getString("name");
+        String url = obj.getString("url");
+        String method = obj.getString("method");
+        String searchKey = obj.getString("searchKey");
+        String auth = obj.getString("authorization");
+        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
+        Map<String, String> params = new LinkedHashMap<>();
+        JSONArray paramsArray = obj.getJSONArray("parameters");
+        for(int i = 0; i < paramsArray.length(); i++) {
+            JSONObject paramObj = paramsArray.getJSONObject(i);
+            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
+        }
+
+
+        AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, authType, auth, params);
+
+        AddAPISourceResponse addAPISourceResponse = service.addAPISource(request);
+        return new ResponseEntity<>(addAPISourceResponse, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/updateAPI")
+    public @ResponseBody ResponseEntity<?> editAPISource(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        Long id = obj.getLong("id");
+        String name = obj.getString("name");
+        String url = obj.getString("url");
+        String method = obj.getString("method");
+        String searchKey = obj.getString("searchKey");
+        String auth = obj.getString("authorization");
+        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
+        Map<String, String> params = new LinkedHashMap<>();
+        JSONArray paramsArray = obj.getJSONArray("parameters");
+        for(int i = 0; i < paramsArray.length(); i++) {
+            JSONObject paramObj = paramsArray.getJSONObject(i);
+            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
+        }
+
+
+        EditAPISourceRequest request = new EditAPISourceRequest(id, name, url, method, searchKey, authType, auth, params);
+        EditAPISourceResponse editAPISourceResponse = service.editAPISource(request);
+        return new ResponseEntity<>(editAPISourceResponse, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getAllSources")
+    public @ResponseBody ResponseEntity<?> getAllAPISources() {
+
+        GetAllAPISourcesResponse getAllAPISourcesResponse = service.getAllAPISources();
+        return new ResponseEntity<>(getAllAPISourcesResponse, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/getSourceById")
+    public @ResponseBody ResponseEntity<?> getAPISourceById(@RequestBody GetAPISourceByIdRequest request) throws Exception {
+
+        GetAPISourceByIdResponse getAPISourceByIdResponse = service.getAPISourceById(request);
+        return new ResponseEntity<>(getAPISourceByIdResponse, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping(value="/deleteSourceById")
+    public @ResponseBody  ResponseEntity<?> deleteSourceById(@RequestBody DeleteSourceRequest request) {
+
+        DeleteSourceResponse deleteSourceResponse = null;
+
+        try {
+            deleteSourceResponse =  service.deleteSourceByID(request);
+        } catch (InvalidImporterRequestException e) {
+            deleteSourceResponse = new DeleteSourceResponse(false, e.getMessage());
+        }
+
+        return new ResponseEntity<>(deleteSourceResponse, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    /***********************************TEST************************************/
 
     /**
      * This method retrieves twitter data based on a search key
@@ -173,66 +256,7 @@ public class ImportServiceController {
             lst.add(str.getData());
 
         }
+
         return lst.toString();
-    }
-
-    @PostMapping(value = "/addApiSource")
-    public @ResponseBody AddAPISourceResponse addApiSource(@RequestBody String jsonString) throws Exception {
-        JSONObject obj = new JSONObject(jsonString);
-        String name = obj.getString("name");
-        String url = obj.getString("url");
-        String method = obj.getString("method");
-        String searchKey = obj.getString("searchKey");
-        String auth = obj.getString("authorization");
-        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
-        Map<String, String> params = new LinkedHashMap<>();
-        JSONArray paramsArray = obj.getJSONArray("parameters");
-        for(int i = 0; i < paramsArray.length(); i++) {
-            JSONObject paramObj = paramsArray.getJSONObject(i);
-            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
-        }
-
-        AddAPISourceRequest request = new AddAPISourceRequest(name, url, method, searchKey, authType, auth, params);
-        return service.addAPISource(request);
-    }
-
-    @PostMapping(value = "/updateAPI")
-    public @ResponseBody EditAPISourceResponse editAPISource(@RequestBody String jsonString) throws Exception {
-        JSONObject obj = new JSONObject(jsonString);
-        Long id = obj.getLong("id");
-        String name = obj.getString("name");
-        String url = obj.getString("url");
-        String method = obj.getString("method");
-        String searchKey = obj.getString("searchKey");
-        String auth = obj.getString("authorization");
-        AuthorizationType authType = AuthorizationType.valueOf(obj.getString("authType"));
-        Map<String, String> params = new LinkedHashMap<>();
-        JSONArray paramsArray = obj.getJSONArray("parameters");
-        for(int i = 0; i < paramsArray.length(); i++) {
-            JSONObject paramObj = paramsArray.getJSONObject(i);
-            params.put(paramObj.getString("parameter"), paramObj.getString("value"));
-        }
-
-        EditAPISourceRequest request = new EditAPISourceRequest(id, name, url, method, searchKey, authType, auth, params);
-        return service.editAPISource(request);
-    }
-
-    @GetMapping(value = "/getAllSources")
-    public @ResponseBody GetAllAPISourcesResponse getAllAPISources() {
-        return service.getAllAPISources();
-    }
-
-    @PostMapping(value = "/getSourceById")
-    public @ResponseBody GetAPISourceByIdResponse getAPISourceById(@RequestBody GetAPISourceByIdRequest request) throws Exception {
-        return service.getAPISourceById(request);
-    }
-
-    @PostMapping(value="/deleteSourceById")
-    public @ResponseBody DeleteSourceResponse deleteSourceById(@RequestBody DeleteSourceRequest request) {
-        try {
-            return service.deleteSourceByID(request);
-        } catch (InvalidImporterRequestException e) {
-            return new DeleteSourceResponse(false, e.getMessage());
-        }
     }
 }
