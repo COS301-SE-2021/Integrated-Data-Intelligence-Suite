@@ -22,6 +22,7 @@ const OverviewGraphSection = () => {
                   cardTitle="Average Interaction for each trend"
                   cardID="overview-graph-metric-1"
                   titleOnTop
+                  extraClassName="chart-page-card"
                 >
                     {
                         averageInteraction &&
@@ -42,6 +43,7 @@ const OverviewGraphSection = () => {
                   cardTitle="Sentiment Distribution"
                   cardID="overview-graph-metric-2"
                   titleOnTop
+                  extraClassName="chart-page-card"
                 >
                     {
                         sentimentDistribution &&
@@ -58,6 +60,8 @@ const OverviewGraphSection = () => {
                   cardTitle="Engagement per Province"
                   cardID="overview-graph-metric-3"
                   titleOnTop
+                  extraClassName="chart-page-card"
+
                 >
                     {
                         engagementData &&
