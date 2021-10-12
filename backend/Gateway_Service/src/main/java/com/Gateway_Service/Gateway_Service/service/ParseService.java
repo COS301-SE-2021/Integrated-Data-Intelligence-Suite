@@ -195,7 +195,7 @@ public class ParseService {
      * @param parseRequest This is the request
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
-    public AddSocialMediaPropertiesResponse addSocialMediaPropertiesRequest(AddSocialMediaPropertiesRequest parseRequest) throws ParserException {
+    public AddSocialMediaPropertiesResponse addSocialMediaPropertiesRequest(String parseRequest) throws ParserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -204,12 +204,8 @@ public class ParseService {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
         mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true);
 
-        HttpEntity<String> request = null;
-        try {
-            request = new HttpEntity<>(mapper.writeValueAsString(parseRequest),requestHeaders);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        HttpEntity<String> request = new HttpEntity<>(parseRequest,requestHeaders);
+
         //AddSocialMediaPropertiesResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/addSocialMediaProperties", request, AddSocialMediaPropertiesResponse.class);
 
         ResponseEntity<?> parseResponse = null;
