@@ -17,6 +17,7 @@ import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResp
 import com.Gateway_Service.Gateway_Service.exception.*;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
+import com.Gateway_Service.Gateway_Service.rri.ServiceSuccesResponse;
 import com.Gateway_Service.Gateway_Service.service.*;
 
 
@@ -33,6 +34,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -330,7 +332,7 @@ public class GatewayServiceController {
 
     @PostMapping(value = "/trainUpload")
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> fileTrainUpload(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> fileTrainUpload(@RequestParam("file") MultipartFile file,
                                                                        @RequestParam("c1") String col1,
                                                                        @RequestParam("c2") String col2,
                                                                        @RequestParam("c3") String col3,
@@ -738,7 +740,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) throws AnalyserException, UserException {
+    public ResponseEntity<?> getAllModelsByUser(@RequestBody GetModelsRequest request) throws AnalyserException, UserException {
 
         /*********************USER******************/
 
@@ -764,7 +766,7 @@ public class GatewayServiceController {
         output.add(defaultModel);
 
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
-            analyseRequest.setModelId(null);
+            analyseRequest.setModelId(entry.getKey());
 
             GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
             if(entry.getValue().equals(true))
@@ -774,7 +776,17 @@ public class GatewayServiceController {
         }
         output.get(0).setIsModelDefault(foundSelected);
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(output);
+        //exc.printStackTrace();
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
 
@@ -810,7 +822,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) throws AnalyserException, UserException {
+    public ResponseEntity<?> deleteUserModelById(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         //TODO: user removes from list
 
@@ -831,7 +843,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/selectModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
+    public ResponseEntity<?> selectModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         GetModelsRequest getAllReq = new GetModelsRequest(request.getUserID());
 
@@ -861,7 +873,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
+    public ResponseEntity<?> addUserModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
@@ -1034,7 +1046,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) throws ImporterException {
-        String response = importClient.addApiSource(jsonRequest);
+        String response = ""; //importClient.addApiSource(jsonRequest); //TODO
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -1058,7 +1070,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/updateAPI", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) throws ImporterException {
-        String response = importClient.editAPISource(jsonRequest);
+        String response = "" ; //importClient.editAPISource(jsonRequest); //TODO
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
