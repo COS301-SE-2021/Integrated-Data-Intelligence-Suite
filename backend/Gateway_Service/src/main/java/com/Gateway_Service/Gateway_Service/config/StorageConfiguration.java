@@ -8,7 +8,7 @@ public class StorageConfiguration {
     /**
      * Folder location for storing files
      */
-    private String location = "upload";
+    private String location = "../upload";
 
     public String getLocation() {
         return location;
