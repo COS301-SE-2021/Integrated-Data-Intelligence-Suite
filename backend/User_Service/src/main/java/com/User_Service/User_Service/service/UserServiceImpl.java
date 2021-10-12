@@ -158,6 +158,10 @@ public class UserServiceImpl {
             return new RegisterResponse(false, "Password should contain at least one digit");
         }
 
+        if(!checkPasswordUpper(request.getPassword())) {
+            return new RegisterResponse(false, "Password should contains at least one upper case character.");
+        }
+
         String password = request.getPassword();
         String hashedPass;
         //Hashing the password
@@ -955,7 +959,7 @@ public class UserServiceImpl {
      * @param str This is the password that needs to be checked.
      * @return Returns true if a Uppercase was detected. False if not.
      */
-    private static boolean checkString(String str) {
+    private static boolean checkPasswordUpper(String str) {
         char ch;
         boolean capitalFlag = false;
         boolean lowerCaseFlag = false;
