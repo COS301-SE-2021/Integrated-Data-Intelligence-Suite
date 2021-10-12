@@ -12,6 +12,9 @@ import com.Report_Service.Report_Service.response.ReportDataResponse;
 import com.Report_Service.Report_Service.response.ShareReportResponse;
 import com.Report_Service.Report_Service.service.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,14 +31,14 @@ public class ReportServiceController {
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
     @PostMapping("/reportData")
-    public @ResponseBody
-    ReportDataResponse reportData(@RequestBody ReportDataRequest request) throws ReporterException {
+    public @ResponseBody ResponseEntity<?> reportData(@RequestBody ReportDataRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("reportData Request Object is null");
         }
 
-        return service.reportData(request);
+        ReportDataResponse reportDataResponse = service.reportData(request);
+        return new ResponseEntity<>(reportDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -45,8 +48,7 @@ public class ReportServiceController {
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
     @PostMapping("/getReportDataById")
-    public @ResponseBody
-    GetReportDataByIdResponse getReportDataById(@RequestBody GetReportDataByIdRequest request) throws ReporterException {
+    public @ResponseBody ResponseEntity<?> getReportDataById(@RequestBody GetReportDataByIdRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("getReportData Request Object is null");
@@ -56,7 +58,8 @@ public class ReportServiceController {
             throw new InvalidRequestException("getReportData Request ID is null");
         }
 
-        return service.getReportDataById(request);
+        GetReportDataByIdResponse getReportDataByIdResponse = service.getReportDataById(request);
+        return new ResponseEntity<>(getReportDataByIdResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -66,8 +69,7 @@ public class ReportServiceController {
      * @throws Exception This is thrown if exception caught in Report-Service.
      */
     @PostMapping("/deleteReportDataById")
-    public @ResponseBody
-    DeleteReportDataByIdResponse deleteReportDataById(@RequestBody DeleteReportDataByIdRequest request) throws ReporterException {
+    public @ResponseBody ResponseEntity<?> deleteReportDataById(@RequestBody DeleteReportDataByIdRequest request) throws ReporterException {
         //VisualizeDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("getReportData Request Object is null");
@@ -77,12 +79,13 @@ public class ReportServiceController {
             throw new InvalidRequestException("getReportData Request ID is null");
         }
 
-        return service.deleteReportDataById(request);
+        DeleteReportDataByIdResponse deleteReportDataById = service.deleteReportDataById(request);
+        return new ResponseEntity<>(deleteReportDataById, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/shareReport")
-    public @ResponseBody
-    ShareReportResponse shareReport(@RequestBody ShareReportRequest request) throws Exception {
-        return service.shareReport(request);
+    public @ResponseBody ResponseEntity<?> shareReport(@RequestBody ShareReportRequest request) throws Exception {
+        ShareReportResponse shareReportResponse = service.shareReport(request);
+        return new ResponseEntity<>(shareReportResponse, new HttpHeaders(), HttpStatus.OK);
     }
 }

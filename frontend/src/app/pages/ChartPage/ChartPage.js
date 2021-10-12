@@ -1,24 +1,19 @@
-import React, { Component, useState } from 'react';
+import React, {useState} from 'react';
 import {
     Layout,
 } from 'antd';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { AiOutlineUpload, CgFileDocument } from 'react-icons/all';
-import { Header } from 'antd/es/layout/layout';
-import {
- useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState,
-} from 'recoil';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {AiOutlineUpload, CgFileDocument} from 'react-icons/all';
+import {Header} from 'antd/es/layout/layout';
+import {useRecoilState, useRecoilValue, useResetRecoilState} from 'recoil';
 import Search from 'antd/es/input/Search';
-import { reset } from 'enzyme/build/configuration';
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
-import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
+
 import '../../components/NetworkGraph/NetworkGraph.css';
 import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
-import SearchBar from '../../components/SearchBar/SearchBar';
-import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
-import PieChart from '../../components/PieChart/PieChart';
+
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
 import 'rc-slider/assets/index.css';
@@ -29,7 +24,6 @@ import OverviewSection from '../../components/OverviewSection/OverviewSection';
 import OverviewGraphSection from '../../components/OverviewGraphSection/OverviewGraphSection';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import '../../components/UploadButton/UploadButton.css';
-import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDataPage from '../UploadDataPage/UploadDataPage';
 import ReportPreview from '../../components/ReportPreview/ReportPreview';
 import templateJson from '../../Mocks/messageMock.json';
@@ -50,8 +44,11 @@ import {
     dominantWordsState,
     entitiesRelationshipsState,
     patternsRelationshipsState,
-    anomaliesState, displayAnalyticsPdfState, isShowingUploadCSVPopupState,
+    anomaliesState, displayAnalyticsPdfState, isShowingUploadCSVPopupState, sentimentDistributionState,
 } from '../../assets/AtomStore/AtomStore';
+import PieChart from '../../components/PieChart/PieChart';
+import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
+import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
 
 const ChartPage = () => {
     const [searchLoading, setSearchLoading] = useState(false);
@@ -61,6 +58,7 @@ const ChartPage = () => {
     const [mostProminentWords, setMostProminentWords] = useRecoilState(mostProminentSentimentState);
     const [numberOfTrends, setNumberOfTrends] = useRecoilState(numberOfTrendsState);
     const [numberOfAnomalies, setNumberOfAnomalies] = useRecoilState(numberOfAnomaliesState);
+    const [sentimentDistribution, setSentimentDistribution] = useRecoilState(sentimentDistributionState);
     const [averageInteraction, setAverageInteraction] = useRecoilState(averageInteractionState);
     const [overallSentiment, setOverallSentiment] = useRecoilState(overallSentimentState);
     const [engagementPerProvince, setEngagementPerProvince] = useRecoilState(engagementPerProvinceState);
@@ -78,7 +76,7 @@ const ChartPage = () => {
 
     const user = useRecoilValue(userState);
 
-    const handleSearch = (value) =>{
+    const handleSearch = (value) => {
         setSearchLoading(true);
         const jsonObj = {
             permission: user.permission,
@@ -89,25 +87,24 @@ const ChartPage = () => {
         const requestObj = {
             signal: abortCont.signal,
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(jsonObj),
         };
         const url = `http://localhost:9000/main/${value}`;
         fetch(url, requestObj)
-            .then((res) =>{
+            .then((res) => {
                 if (!res.ok) {
                     throw (res.error());
                 }
                 return res.json();
             })
-            .then((data)=>{
+            .then((data) => {
                 setSearchLoading(false);
                 structureBackendData(data);
             })
             .catch((err) => {
                 setSearchLoading(false);
                 structureBackendData(templateJson);
-                console.log(err.message);
             });
     };
 
@@ -115,17 +112,36 @@ const ChartPage = () => {
         if (data !== null && data.length > 0) {
             setBackendData(data);
             if (data[0].length > 0) {
+                // Row 1
                 setTotalLikes(data[0][0].words);
                 setOverallSentiment(data[1][0].words);
-                setNumberOfAnomalies(data[3][0].words);
                 setNumberOfTrends(data[2][0].words);
+                setNumberOfAnomalies(data[3][0].words);
+
+                // Row 2
+                setAverageInteraction(data[4]);
+                setSentimentDistribution(data[5]);
+                setEngagementPerProvince(data[6]);
+
+                // Row 3
+                setMapData(data[7]);
+                setDataFrequency(data[8]);
+
+                // Row 3
+                setWordCloud(data[9][0]);
+
+                // Row 4
+                setEntitiesRelationship(data[11]);
+                setPatternsRelationship(data[12]);
+
+                setAnomalies(data[13]);
             }
 
             setCurrentPdf(data[data.length - 1][0].report);
         }
     };
     //
-    if (!user) return <Redirect to="/login" />;
+    if (!user) return <Redirect to="/login"/>;
     return (
         <>
             <Switch>
@@ -134,12 +150,12 @@ const ChartPage = () => {
                         showCSV
                             ? (
                                 <SimplePopup
-                                  closePopup={()=> setShowCSV(false)}
-                                  popupTitle="Upload File"
+                                    closePopup={() => setShowCSV(false)}
+                                    popupTitle="Upload File"
                                 >
                                     <UploadDataPage
-                                      handleTextChange={structureBackendData}
-                                      isAnalyzeCSVPopupShowing={showCSV}
+                                        handleTextChange={structureBackendData}
+                                        isAnalyzeCSVPopupShowing={showCSV}
                                     />
                                 </SimplePopup>
                             ) :
@@ -149,118 +165,115 @@ const ChartPage = () => {
                         showPdf
                             ? (
                                 <ReportPreview
-                                  closePopup={() => setShowPdf(false)}
-                                  className="pdf"
-                                  title="pdf-preview"
-                                  currentFile={currentPdf}
-                                  userID={user.id}
+                                    closePopup={() => setShowPdf(false)}
+                                    className="pdf"
+                                    title="pdf-preview"
+                                    currentFile={currentPdf}
+                                    userID={user.id}
                                 />
                             ) :
                             null
                     }
                     <Layout
-                      id="outer_layout"
-                      className="chart-page"
+                        id="outer_layout"
+                        className="chart-page"
                     >
-                        <SideBar currentPage="2" />
+                        <SideBar currentPage="2"/>
                         <Layout id="inner_layout_div">
                             <Header id="top_bar">
                                 <Search
-                                  placeholder="search..."
-                                  onSearch={handleSearch}
-                                  loading={searchLoading}
+                                    placeholder="search..."
+                                    onSearch={handleSearch}
+                                    loading={searchLoading}
                                 />
 
                                 <button
-                                  type="button"
-                                  id="upload-btn"
-                                  className="clickable"
-                                  onClick={() => setShowCSV(true)}
+                                    type="button"
+                                    id="upload-btn"
+                                    className="simple-btn"
+                                    onClick={() => setShowCSV(true)}
                                 >
-                                    <AiOutlineUpload id="upload-btn-logo" />
-                                    Upload
+                                    <AiOutlineUpload
+                                        // id="upload-btn-logo"
+                                        className={'simple-btn-icon'}
+                                    />
+                                    Upload CSV
                                 </button>
 
                                 <button
-                                  type="button"
-                                  id="upload-btn"
-                                  className="clickable"
-                                  onClick={() => setShowPdf(true)}
+                                    type="button"
+                                    id="upload-btn"
+                                    className="simple-btn"
+                                    onClick={() => setShowPdf(true)}
                                 >
-                                    <CgFileDocument id="upload-btn-logo" />
+                                    <CgFileDocument id="upload-btn-logo"/>
                                     Generate Report
                                 </button>
 
-                                <UserInfoCard />
+                                {/*<UserInfoCard/>*/}
                             </Header>
                             {
                                 backendData !== null &&
                                 (
                                     <div id="content-section">
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-1"
+                                            cardTitle=""
+                                            cardID="row-1"
                                         >
-                                            <OverviewSection />
+                                            <OverviewSection/>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-2"
+                                            cardTitle=""
+                                            cardID="row-2"
                                         >
-                                            <OverviewGraphSection
-                                              text={backendData}
-                                              key={backendData}
-                                            />
+                                            <OverviewGraphSection/>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-3"
+                                            cardTitle=""
+                                            cardID="row-3"
                                         >
                                             <div id="location-section">
                                                 <div id="map-metric-container">
                                                     <SimpleCard
-                                                      cardTitle=""
-                                                      cardID="world-map"
-                                                      titleOnTop
+                                                        cardTitle=""
+                                                        cardID="world-map"
+                                                        titleOnTop
                                                     >
-                                                        <MapCard text={backendData} />
+                                                        <MapCard/>
                                                     </SimpleCard>
 
                                                     <SimpleCard
-                                                      cardTitle="Data Frequency"
-                                                      cardID="map-metric-1"
-                                                      titleOnTop
+                                                        cardTitle="Data Frequency"
+                                                        cardID="map-metric-1"
+                                                        titleOnTop
                                                     >
-                                                        <DraggableBarGraph text={backendData} />
+                                                        <DraggableBarGraph text={backendData}/>
                                                     </SimpleCard>
                                                 </div>
                                             </div>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-4"
+                                            cardTitle=""
+                                            cardID="row-4"
                                         >
                                             <SimpleCard
-                                              cardTitle="Word Cloud"
-                                              cardID="word-cloud-card"
-                                              titleOnTop
+                                                cardTitle="Word Cloud"
+                                                cardID="word-cloud-card"
+                                                titleOnTop
                                             >
-                                                <WordCloud
-                                                  text={backendData}
-                                                  key={backendData}
-                                                />
+                                                <WordCloud/>
                                             </SimpleCard>
 
                                             <div id="word-cloud-graph-container">
                                                 <SimpleCard
-                                                  cardTitle="Dominant words"
-                                                  cardID="word-graph-2"
-                                                  titleOnTop
+                                                    cardTitle="Dominant words"
+                                                    cardID="word-graph-2"
+                                                    titleOnTop
                                                 >
-                                                    <PieChart text={backendData} />
+                                                    <PieChart dominantWords={backendData[10]}/>
                                                 </SimpleCard>
                                                 {/* <SimpleCard
                                                     cardTitle="Word Sunburst"
@@ -272,47 +285,40 @@ const ChartPage = () => {
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-5"
+                                            cardTitle=""
+                                            cardID="row-5"
                                         >
                                             <SimpleCard
-                                              cardTitle="Relationship Between Entities"
-                                              cardID="network-graph-entities"
-                                              titleOnTop
+                                                cardTitle="Relationship Between Entities"
+                                                cardID="network-graph-entities"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={cloneDeep(backendData)}
-                                                  key={cloneDeep(backendData)}
-                                                  indexOfData={11}
+                                                    graphData={cloneDeep(entitiesRelationship)}
                                                 />
                                             </SimpleCard>
 
                                             <SimpleCard
-                                              cardTitle="Relationship Between Patterns"
-                                              cardID="network-graph-patterns"
-                                              titleOnTop
+                                                cardTitle="Relationship Between Patterns"
+                                                cardID="network-graph-patterns"
+                                                titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={cloneDeep(backendData)}
-                                                  key={cloneDeep(backendData)}
-                                                  indexOfData={12}
+                                                    graphData={cloneDeep(patternsRelationship)}
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
 
                                         <SimpleSection
-                                          cardTitle=""
-                                          cardID="row-6"
+                                            cardTitle=""
+                                            cardID="row-6"
                                         >
                                             <SimpleCard
-                                              cardTitle="Timeline"
-                                              cardID="anomaly-timeline-card"
-                                              titleOnTop
+                                                cardTitle="Timeline"
+                                                cardID="anomaly-timeline-card"
+                                                titleOnTop
                                             >
-                                                <TimelineGraph
-                                                  text={backendData}
-                                                  key={backendData}
-                                                />
+                                                <TimelineGraph/>
                                             </SimpleCard>
 
                                             {/* <SimpleCard */}

@@ -1,71 +1,70 @@
 /*************************************************************/
 /********************* Sidebar(Left)  ***************************/
 #sidebar_div[style] {
-    background: white;
-    border-right: 0.2em solid #E8E8E9;
-    /*border: 3px solid #5873f9;*/
+    background: var(--dark-black);
+    border-right: 1px solid var(--black-border);
     /*width: 168px !important;*/
     /*min-width: 0 !important;*/
     /*max-width: 190px !important;*/
-    width: 160px !important;
+    width: 175px !important;
     min-width: 0 !important;
-    max-width: 160px !important;
+    max-width: 175px !important;
     height: 100vh;
 }
 
 #sidebar_menu {
     background: transparent;
-    color: #333333;
+    color: white;
     border: 0;
-    /*border: 3px solid red;*/
-    height: 87%;
-    padding: 10px;
-    padding-top: 30px;
+    height: 80%;
+    padding: 30px 10px 10px;
+    font-weight: 400;
+}
+
+.sidebar-icon {
+    color: var(--pink);
+    height: 24px;
+    width: 24px;
 }
 
 #sidebar_menu > li {
-    /*padding-left: 24px;*/
-    /*border: 2px solid red;*/
     width: 100%;
-    /*margin-left: 12px;*/
-    /*margin-right: 0px;*/
-    /*margin-bottom: 14px;*/
-    margin-top: 8px;
-    /*padding-right: 24px;*/
+    margin-top: 16px;
     border-radius: 6px;
-    /*padding-bottom: 11px;*/
-    /*padding-top: 10px;*/
     height: 45px;
     background: transparent;
+    font-weight: 500;
 }
 
-/*When a Sidebar Menu item when it has been selected(clicked on)*/
+/*When a Sidebar Menu item has been selected(clicked on)*/
 #sidebar_menu > li.ant-menu-item-selected {
     border: 0;
-    /*background: #5773FA;*/
-    background: var(--dodger-blue);
-    /*color: var(--neon-blue);*/
-    color: white
-    /*border-left: 3px solid #5773FA;*/
-    /*background: white;*/
-
-}
-
-/*When a Sidebar Menu item when it has been Hovered over*/
-#sidebar_menu > li.ant-menu-item-active {
-    /*border: 0;*/
-    background: #9ACEFE;
-    /*color: #5773FA;*/
+    background: var(--pink);
     color: white;
-    /*border-left: 3px solid #5773FA;*/
+    font-weight: 600;
 }
+
+/*Side bar icon  of selected page*/
+#sidebar_menu > li.ant-menu-item-selected .sidebar-icon {
+    color: white;
+}
+
+/*When a Sidebar Menu item has been Hovered over*/
+#sidebar_menu > li.ant-menu-item-active {
+    background: #FF337E;
+    color: white;
+}
+
+/*Sidebar icon during on hover*/
+#sidebar_menu > li.ant-menu-item-active .sidebar-icon {
+    color: white;
+}
+
 
 /*Hovering over a menu item that is active or selected*/
 #sidebar_menu > li.ant-menu-item-active.ant-menu-item-selected {
-    /*border: 0;*/
-    /*color: white;*/
     color: white;
-    background: var(--dodger-blue);
+    background: var(--pink);
 }
 
 /**/
@@ -78,12 +77,7 @@
 /* The Collapse/Expand Trigger(arrow) at the Top of the SideBar*/
 .ant-layout-sider-trigger[style] {
     /* Positions the Trigger at the top of*/
-    /*Comment this out and Set 'bottom:0' to position trigger at the bottom*/
     bottom: 0;
-    /*max-width: 168px !important;*/
-    /*width: 168px !important;*/
-    /*margin: 0;*/
-    /*max-width: 190px !important;*/
     background: white;
     color: black;
     width: 80px !important;
@@ -97,21 +91,13 @@
 }
 
 #logo {
-    height: 10%;
-    /*margin: 16px;*/
+    height: 90px;
     margin: 0;
-    /*background: rgb(252, 0, 64);*/
-    /*line-height: 3px;*/
-    /*border: 3px solid black;*/
-    /*display: grid;*/
-    /*grid-template-columns: 100%;*/
-    /*grid-template-rows: 100%;*/
-    background: white;
-    background-image: url("../../assets/logos/idis-logo.png") !important;
+    background: var(--dark-black);
+    background-image: url("../../assets/logos/IDIS_White_Cube.png") !important;
     background-size: cover;
     background-position: center;
     color: black;
-    /*align-content: center;*/
 }
 
 #logo-image[style] {

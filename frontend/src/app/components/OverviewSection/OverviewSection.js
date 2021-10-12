@@ -27,9 +27,7 @@ export default function OverviewSection() {
                         totalLikes &&
                         (
                             <ValueWithPercentChange
-                              isIncreasing
                               rawValue={totalLikes}
-                              key={totalLikes}
                             />
                         )
                     }

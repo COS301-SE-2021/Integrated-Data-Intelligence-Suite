@@ -4,6 +4,7 @@ import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedTrainingData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
+import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
 import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
@@ -22,6 +23,7 @@ import com.johnsnowlabs.nlp.embeddings.UniversalSentenceEncoder;
 import com.johnsnowlabs.nlp.embeddings.WordEmbeddingsModel;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
@@ -70,6 +72,8 @@ public class TrainServiceImpl {
 
     @Autowired
     private TrainingDataRepository parsedDataRepository;
+
+    private SparkSession sparkNlpProperties;
 
     //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
@@ -496,12 +500,25 @@ public class TrainServiceImpl {
         /*******************SETUP SPARK*****************/
         System.out.println("*******************SETUP SPARK*****************");
 
-        SparkSession sparkNlpProperties = SparkSession
-                .builder()
-                .appName("NlpProperties")
-                .master("local")
+        SparkConf conf = new SparkConf().
+                setAppName("NlpProperties")
+                .setMaster("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .set("spark.driver.memory", "6g")
+                .set("spark.executor.memory", "6g")
+                .set("spark.memory.fraction", "0.5")
+                .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+                .registerKryoClasses(new Class[]{TrainServiceImpl.class});
+
+        sparkNlpProperties = SparkSession
+                .builder()
+                //.appName("NlpProperties")
+                //.master("local")
+                //.config("spark.driver.memory", "6g")
+                //.config("spark.executor.memory", "6g")
+                //.config("spark.memory.fraction", "0.5")
+                .config(conf)
                 .getOrCreate();
 
         /*******************SETUP DATA*****************/
@@ -564,7 +581,9 @@ public class TrainServiceImpl {
         System.out.println("*******************READ MODEL DATA*****************");
 
         ArrayList<FindNlpPropertiesResponse> response = new ArrayList<>();
-        long dataCount = results.select(col("sentiment") ,col("ner"), col("chunk")).collectAsList().size();
+        Dataset<Row> finalOutput = results.select(col("sentiment.result") ,col("ner.result"), col("chunk.result"));
+        Iterator<Row> finalOutputIterator = finalOutput.toLocalIterator();
+        Long dataCount = finalOutput.count();
 
         System.out.println("DATA COUNT : " + dataCount);
 
@@ -573,10 +592,21 @@ public class TrainServiceImpl {
 
         /**sentiment**/
         Dataset<Row> sentimentDataset = results.select(col("sentiment.result"));
-        List<Row> sentimentRowData = sentimentDataset.collectAsList();
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++) {
-            Row sentimentRow = sentimentRowData.get(dataIndex);
-            WrappedArray wrappedArray = (WrappedArray) sentimentRow.get(0); //vaue
+        //Iterator<Row> sentimentIterator = sentimentDataset.toLocalIterator();
+        //List<Row> sentimentRowData = sentimentDataset.collectAsList();
+
+
+        for(int dataIndex = 0; dataIndex < dataCount; dataIndex++) {
+            //while(sentimentIterator.hasNext()){
+            /***SENTIMENT***/
+            Row outputRow = finalOutputIterator.next();//sentimentIterator.next();//sentimentRowData.get(dataIndex);
+
+            System.out.println("DATA COUNT : sentiments = " + dataIndex);
+            System.out.println(outputRow.toString());
+
+            //Row sentimentRow = (Row) sentimentDataset.head(dataIndex);
+
+            WrappedArray wrappedArray = (WrappedArray) outputRow.get(0); //sentiment
             List<String> innerSentimentRowData = JavaConversions.seqAsJavaList(wrappedArray);
 
             String sentiment = "no sentiment";
@@ -590,28 +620,15 @@ public class TrainServiceImpl {
                 sentiment = "Neutral";
             }
 
+            /***NAME ENTITY***/
             //System.out.println("added response : " + dataIndex);
             response.add(new FindNlpPropertiesResponse(sentiment, null));
-        }
 
-
-        /**Named entity recognised**/
-        Dataset<Row> nerDataset = results.select(col("ner.result"));
-        Dataset<Row> chunkDataset = results.select(col("chunk.result"));
-
-        List<Row> textRowData = chunkDataset.collectAsList();
-        List<Row> entityRowData = nerDataset.collectAsList();
-
-        for(int dataIndex = 0; dataIndex < dataCount ; dataIndex++){
-            //System.out.println("getting response : " + dataIndex);
 
             ArrayList<String> listData =  new ArrayList<>();
 
-            Row textRow = textRowData.get(dataIndex);
-            Row entityRow = entityRowData.get(dataIndex);
-
-            WrappedArray wrappedArrayText = (WrappedArray) textRow.get(0);
-            WrappedArray wrappedArrayEntity = (WrappedArray) entityRow.get(0);
+            WrappedArray wrappedArrayEntity = (WrappedArray) outputRow.get(1);
+            WrappedArray wrappedArrayText = (WrappedArray) outputRow.get(2);
 
             List<String> innerTextRowData = JavaConversions.seqAsJavaList(wrappedArrayText);
             List<String> innerEntityRowData = JavaConversions.seqAsJavaList(wrappedArrayEntity);
@@ -619,7 +636,7 @@ public class TrainServiceImpl {
             ArrayList<ArrayList> nameEntities = new ArrayList<>();  //text, entity
             int entityIndex = 0;
 
-            for (int i = 0; i < innerTextRowData.size(); i++) {
+            for (int i = 0; i < innerEntityRowData.size(); i++) {
                 //System.out.println(innerEntityRowData.get(i));
 
                 String nameEntityText = "";
@@ -662,8 +679,8 @@ public class TrainServiceImpl {
 
             response.get(dataIndex).setNamedEntities(nameEntities);
             entityList.add(listData);
+            //dataIndex = dataIndex +1;
         }
-
 
 
 
@@ -735,7 +752,7 @@ public class TrainServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        sparkNlpProperties.stop();
+        //sparkNlpProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -749,7 +766,7 @@ public class TrainServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindTrendsResponse trainFindTrends(TrainFindTrendsRequest request)
-            throws InvalidRequestException, IOException {
+            throws InvalidRequestException, IOException, TrainingModelException {
 
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
@@ -758,19 +775,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -835,7 +839,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -850,7 +854,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -936,7 +940,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1033,124 +1037,130 @@ public class TrainServiceImpl {
             modelName = request.getModelName();
         }
 
-        //client
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        TrainedModel trainedModel = null;
+        try {
+            //client
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment(modelName + "_Experiment");
+            Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
+            String experimentID = "";
+            if (foundExperiment.isEmpty() == true) {
+                experimentID = client.createExperiment(modelName + "_Experiment");
+            } else {
+                experimentID = foundExperiment.get().getExperimentId();
+            }
+
+            org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+            MlflowContext mlflow = new MlflowContext(client);
+            ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
+
+            /***trainModel***/
+            TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
+            Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+            //predictions.show();
+            //System.out.println("*****************Predictions Of Test Data*****************");
+
+
+            double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+            BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+            RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+
+            //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+
+            /***logging***/
+            //param
+            client.logParam(run.getId(), "Max Iteration", String.valueOf(lr.getMaxIter()));
+            client.logParam(run.getId(), "Reg Param", String.valueOf(lr.getRegParam()));
+            client.logParam(run.getId(), "Elastic Net Param", String.valueOf(lr.getElasticNetParam()));
+            client.logParam(run.getId(), "Fitness intercept", String.valueOf(lr.getFitIntercept()));
+
+
+            //metrics
+            /*client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC());
+            client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError());
+            client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+            client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+            client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance());*/
+
+            for (int i = 0; i < 5; i++) {
+                client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC() + (i));
+                client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError() + (i));
+                client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError() + (i + 2));
+                client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError() + (i + 2));
+                client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance() + (i + 3));
+            }
+
+            //custom tags
+            client.setTag(run.getId(), "Accuracy", String.valueOf(accuracy));
+            client.setTag(run.getId(), "Run ID", String.valueOf(run.getId()));
+            //run.setTag("Accuracy", String.valueOf(accuracy));
+
+            //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
+
+
+            /***saveModel***/
+
+            //*"backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/"*/ "..models/" +modelName;
+            //String path =  Paths.get("../models/" +modelName).getRoot().toString();
+            //String path =  Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName).getRoot().toString();
+            String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
+            System.out.println("Testing new path !!!  " + path);
+            String script = Paths.get("../rri/LogModel.py").toString();
+
+
+            //lrModel.write().overwrite().save(path);
+            trainValidationSplit.write().overwrite().save(path);
+
+
+            File modelFile = new File(path);// "../models/" + modelName);
+
+            if (modelFile.exists() && modelFile.isDirectory()) {
+                System.out.println("nothing wrong with file ");
+            } else {
+                System.out.println("something wrong with the file");
+            }
+            client.logArtifact(run.getId(), modelFile);
+
+
+            path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+            trainSetDF.write().save(path);
+            File trainFile = new File(path);
+            client.logArtifact(run.getId(), trainFile);
+
+            String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            File infoFile = new File(filePath);
+            infoFile.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(infoFile, false);
+            fos.write(String.valueOf(accuracy).getBytes());
+            fos.close();
+            client.logArtifact(run.getId(), infoFile);
+
+
+            trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
+            FileUtils.deleteDirectory(modelFile);
+            FileUtils.deleteDirectory(trainFile);
+            infoFile.delete();
+
+
+            /*
+            String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
+            CommandLine commandLine = CommandLine.parse(commandPath);
+            //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setStreamHandler(new PumpStreamHandler(System.out));
+            executor.execute(commandLine);
+            */
+
+            run.endRun();
+        } catch (Exception e) {
+            throw new TrainingModelException("Failed finding model file");
         }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
-
-        /***trainModel***/
-        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
-        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
-        //predictions.show();
-        //System.out.println("*****************Predictions Of Test Data*****************");
-
-
-        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
-        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
-        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
-
-
-        /***logging***/
-        //param
-        client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
-        client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
-        client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
-        client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
-
-
-        //metrics
-        /*client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC());
-        client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError());
-        client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
-        client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance());*/
-
-        for(int i=0; i < 5; i++) {
-            client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC()+(i));
-            client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError()+(i));
-            client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError()+(i+2));
-            client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError()+(i+2));
-            client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance()+(i+3));
-        }
-
-        //custom tags
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
-        //run.setTag("Accuracy", String.valueOf(accuracy));
-
-        //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
-
-        /***saveModel***/
-
-        //*"backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/"*/ "..models/" +modelName;
-        //String path =  Paths.get("../models/" +modelName).getRoot().toString();
-        //String path =  Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName).getRoot().toString();
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
-        System.out.println("Testing new path !!!  " + path);
-        String script = Paths.get("../rri/LogModel.py").toString();
-
-
-        //lrModel.write().overwrite().save(path);
-        trainValidationSplit.write().overwrite().save(path);
-
-
-        File modelFile = new File(path);// "../models/" + modelName);
-
-        if(modelFile.exists() && modelFile.isDirectory()){
-            System.out.println("nothing wrong with file ");
-        }else{
-            System.out.println("something wrong with the file");
-        }
-        client.logArtifact(run.getId(), modelFile);
-
-
-        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
-        trainSetDF.write().save(path);
-        File trainFile = new File(path);
-        client.logArtifact(run.getId(), trainFile);
-
-        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-        File infoFile = new File(filePath);
-        infoFile.createNewFile();
-
-        FileOutputStream fos = new FileOutputStream(infoFile, false);
-        fos.write(String.valueOf(accuracy).getBytes());
-        fos.close();
-        client.logArtifact(run.getId(), infoFile);
-
-
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
-        FileUtils.deleteDirectory(modelFile);
-        FileUtils.deleteDirectory(trainFile);
-        infoFile.delete();
-
-        /*
-        String commandPath = "python " + script + " " + path + " LogisticRegressionModel " + run.getId();
-        CommandLine commandLine = CommandLine.parse(commandPath);
-        //commandLine.addArguments(new String[] {"../models/LogisticRegressionModel","LogisticRegressionModel", "1"});
-        DefaultExecutor executor = new DefaultExecutor();
-        executor.setStreamHandler(new PumpStreamHandler(System.out));
-        executor.execute(commandLine);
-        */
-
-        run.endRun();
 
         /***********************SETUP MLFLOW - SAVE ***********************/
         System.out.println("trends done");
-        sparkTrends.stop();
+        //sparkNlpProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results, trainedModel);
     }
@@ -1164,7 +1174,7 @@ public class TrainServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindTrendsDTResponse trainFindTrendsDecisionTree( TrainFindTrendsDTRequest request)
-            throws InvalidRequestException, IOException {
+            throws InvalidRequestException, IOException, TrainingModelException {
 
         if (request == null) {
             throw new InvalidRequestException("FindTrendsDTRequest Object is null");
@@ -1173,18 +1183,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -1250,7 +1248,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -1265,7 +1263,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkTrends.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -1340,7 +1338,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1414,112 +1412,116 @@ public class TrainServiceImpl {
             modelName = request.getModelName();
         }
 
-        //client
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        TrainedModel trainedModel = null;
+        try {
+            //client
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment(modelName + "_Experiment");
+            Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
+            String experimentID = "";
+            if (foundExperiment.isEmpty() == true) {
+                experimentID = client.createExperiment(modelName + "_Experiment");
+            } else {
+                experimentID = foundExperiment.get().getExperimentId();
+            }
+
+            org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+            MlflowContext mlflow = new MlflowContext(client);
+            ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
+
+            /***trainModel***/
+            TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
+            Dataset<Row> predictions = dtModel.transform(testSetDF);
+            //predictions.show();
+            //System.out.println("*****************Predictions Of Test Data*****************");
+
+            double accuracy = multiclassClassificationEvaluator.evaluate(predictions);
+            //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+            //System.out.println("Test Error = " + (1.0 - accuracy));
+
+            MulticlassMetrics multiclassMetrics = multiclassClassificationEvaluator.getMetrics(predictions);
+
+
+            /***logging***/
+            //param
+            client.logParam(run.getId(), "max depth", String.valueOf(dt.getMaxDepth()));
+            client.logParam(run.getId(), "max bin", String.valueOf(dt.getMaxBins()));
+
+
+            //metrics
+            client.logMetric(run.getId(), "Accuracy", multiclassMetrics.accuracy());
+            client.logMetric(run.getId(), "Precision", multiclassMetrics.weightedPrecision());
+            client.logMetric(run.getId(), "Recall", multiclassMetrics.weightedRecall());
+
+            client.logMetric(run.getId(), "F-measure", multiclassMetrics.weightedFMeasure());
+            client.logMetric(run.getId(), "True positive rate", multiclassMetrics.weightedTruePositiveRate());
+            client.logMetric(run.getId(), "False positive rate", multiclassMetrics.weightedFalsePositiveRate());
+            client.logMetric(run.getId(), "Hamming loss", multiclassMetrics.hammingLoss());
+
+            for (int i = 0; i < multiclassMetrics.labels().length - 1; i++) {
+                client.logMetric(run.getId(), "Precision by label", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+                client.logMetric(run.getId(), "Recall by label", multiclassMetrics.recall(multiclassMetrics.labels()[i]));
+                client.logMetric(run.getId(), "True positive rate by label", multiclassMetrics.truePositiveRate(multiclassMetrics.labels()[i]));
+                client.logMetric(run.getId(), "F-measure by label", multiclassMetrics.fMeasure(multiclassMetrics.labels()[i]));
+                //client.logMetric(run.getId(), "Subset Accuracy", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+                //client.logMetric(run.getId(),"Micro precision" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+                //client.logMetric(run.getId(),"Micro recall" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+                //client.logMetric(run.getId(),"Micro F1 Measure" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
+            }
+
+
+            //custom tags
+            client.setTag(run.getId(), "Accuracy", String.valueOf(accuracy));
+            client.setTag(run.getId(), "Run ID", String.valueOf(run.getId()));
+
+            //String path = Paths.get("../models/" + modelName).toString();
+            String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
+            String script = Paths.get("../rri/LogModel.py").toString();
+
+            //dtModel.write().overwrite().save(path);
+            trainValidationSplit.write().overwrite().save(path);
+            File modelFile = new File(path);
+
+            client.logArtifact(run.getId(), modelFile);
+
+            path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+            trainSetDF.write().save(path);
+            File trainFile = new File(path);
+            client.logArtifact(run.getId(), trainFile);
+
+            String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            File infoFile = new File(filePath);
+            infoFile.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(infoFile, false);
+            fos.write(String.valueOf(accuracy).getBytes());
+            fos.close();
+            client.logArtifact(run.getId(), infoFile);
+
+
+            trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
+            FileUtils.deleteDirectory(modelFile);
+            FileUtils.deleteDirectory(trainFile);
+            infoFile.delete();
+
+
+            /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
+            CommandLine commandLine = CommandLine.parse(commandPath);
+            //commandLine.addArguments(new String[] {"../models/DecisionTreeModel","DecisionTreeModel", "1"});
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setStreamHandler(new PumpStreamHandler(System.out));
+            executor.execute(commandLine);*/
+
+            run.endRun();
+        } catch (Exception e) {
+            throw new TrainingModelException("Failed finding model file");
         }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
-
-        /***trainModel***/
-        TrainValidationSplitModel dtModel = trainValidationSplit.fit(trainSetDF);
-        Dataset<Row> predictions = dtModel.transform(testSetDF);
-        //predictions.show();
-        //System.out.println("*****************Predictions Of Test Data*****************");
-
-        double accuracy = multiclassClassificationEvaluator.evaluate(predictions);
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
-        //System.out.println("Test Error = " + (1.0 - accuracy));
-
-        MulticlassMetrics multiclassMetrics = multiclassClassificationEvaluator.getMetrics(predictions);
-
-
-        /***logging***/
-        //param
-        client.logParam(run.getId(),"max depth", String.valueOf(dt.getMaxDepth()));
-        client.logParam(run.getId(),"max bin" ,String.valueOf(dt.getMaxBins()));
-
-
-        //metrics
-        client.logMetric(run.getId(),"Accuracy" ,multiclassMetrics.accuracy());
-        client.logMetric(run.getId(),"Precision" , multiclassMetrics.weightedPrecision());
-        client.logMetric(run.getId(),"Recall" , multiclassMetrics.weightedRecall());
-
-        client.logMetric(run.getId(),"F-measure" ,multiclassMetrics.weightedFMeasure());
-        client.logMetric(run.getId(),"True positive rate" ,multiclassMetrics.weightedTruePositiveRate());
-        client.logMetric(run.getId(),"False positive rate" ,multiclassMetrics.weightedFalsePositiveRate());
-        client.logMetric(run.getId(),"Hamming loss" , multiclassMetrics.hammingLoss());
-
-        for(int i =0; i < multiclassMetrics.labels().length - 1; i++) {
-            client.logMetric(run.getId(), "Precision by label", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            client.logMetric(run.getId(), "Recall by label", multiclassMetrics.recall(multiclassMetrics.labels()[i]));
-            client.logMetric(run.getId(), "True positive rate by label", multiclassMetrics.truePositiveRate(multiclassMetrics.labels()[i]));
-            client.logMetric(run.getId(), "F-measure by label", multiclassMetrics.fMeasure(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(), "Subset Accuracy", multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(),"Micro precision" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(),"Micro recall" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-            //client.logMetric(run.getId(),"Micro F1 Measure" , multiclassMetrics.precision(multiclassMetrics.labels()[i]));
-        }
-
-
-        //custom tags
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
-
-        //String path = Paths.get("../models/" + modelName).toString();
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
-        String script = Paths.get("../rri/LogModel.py").toString();
-
-        //dtModel.write().overwrite().save(path);
-        trainValidationSplit.write().overwrite().save(path);
-        File modelFile = new File(path);
-
-        client.logArtifact(run.getId(), modelFile);
-
-        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
-        trainSetDF.write().save(path);
-        File trainFile = new File(path);
-        client.logArtifact(run.getId(), trainFile);
-
-        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-        File infoFile = new File(filePath);
-        infoFile.createNewFile();
-
-        FileOutputStream fos = new FileOutputStream(infoFile, false);
-        fos.write(String.valueOf(accuracy).getBytes());
-        fos.close();
-        client.logArtifact(run.getId(), infoFile);
-
-
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
-        FileUtils.deleteDirectory(modelFile);
-        FileUtils.deleteDirectory(trainFile);
-        infoFile.delete();
-
-
-        /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
-        CommandLine commandLine = CommandLine.parse(commandPath);
-        //commandLine.addArguments(new String[] {"../models/DecisionTreeModel","DecisionTreeModel", "1"});
-        DefaultExecutor executor = new DefaultExecutor();
-        executor.setStreamHandler(new PumpStreamHandler(System.out));
-        executor.execute(commandLine);*/
-
-        run.endRun();
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-         sparkTrends.stop();
-         ArrayList<ArrayList> results = new ArrayList<>();
-         return new TrainFindTrendsDTResponse(results, trainedModel);
+        //sparkNlpProperties.stop();
+        ArrayList<ArrayList> results = new ArrayList<>();
+        return new TrainFindTrendsDTResponse(results, trainedModel);
     }
 
 
@@ -1531,7 +1533,7 @@ public class TrainServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindTrendsArticlesResponse trainFindTrendsArticlesLR(TrainFindTrendsArticlesRequest request)
-            throws InvalidRequestException, IOException {
+            throws InvalidRequestException, IOException, TrainingModelException {
         if (request == null) {
             throw new InvalidRequestException("FindTrendsRequest Object is null");
         }
@@ -1539,19 +1541,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-
-        //logger.setLevel(Level.ERROR);
-        //LogManager.getRootLogger().setLevel(Level.ERROR);
-
-        SparkSession sparkTrends = SparkSession
-                .builder()
-                .appName("Trends")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        sparkTrends.sparkContext().setLogLevel("ERROR");
 
         /*******************SETUP DATA*****************/
 
@@ -1619,7 +1608,7 @@ public class TrainServiceImpl {
                 });
 
 
-        Dataset<Row> itemsDF = sparkTrends.createDataFrame(trendsData, schema2);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2);
         itemsDF.show(itemsDF.collectAsList().size());
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1667,8 +1656,12 @@ public class TrainServiceImpl {
         for (int i = 0; i < minSize; i++) {
             List<Row> sen = itemsDF.select("Sentiment").filter(col("EntityName").equalTo(namedEntities.get(i).get(0).toString())).collectAsList();
             double sent = 0.0;
-            if (sen.get(0).get(0).toString().equals("Positive")) sent = 2.0;
-            else if (sen.get(0).get(0).toString().equals("Negative")) sent = 1.0;
+            if (sen.get(0).get(0).toString().equals("Positive")) {
+                sent = 2.0;
+            }
+            else if (sen.get(0).get(0).toString().equals("Negative")) {
+                sent = 1.0;
+            }
             double trending = 0.0;
             if (Integer.parseInt(namedEntities.get(i).get(3).toString()) >= 4) {
                 trending = 1.0;
@@ -1686,7 +1679,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkTrends.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1759,99 +1752,80 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        MlflowClient client = new MlflowClient("http://localhost:5000");
-
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("LogisticRegression_Experiment");
-        }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
-
-
-        TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
-        Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
-        //predictions.show();
-        //System.out.println("*****************Predictions Of Test Data*****************");
-
-
-        double accuracy = binaryClassificationEvaluator.evaluate(predictions);
-        BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
-        RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
-
-        //param
-        client.logParam(run.getId(),"Max Iteration", String.valueOf(lr.getMaxIter()));
-        client.logParam(run.getId(),"Reg Param" ,String.valueOf(lr.getRegParam()));
-        client.logParam(run.getId(),"Elastic Net Param" , String.valueOf(lr.getElasticNetParam()));
-        client.logParam(run.getId(),"Fitness intercept" , String.valueOf(lr.getFitIntercept()));
-
-
-        //metrics
-        client.logMetric(run.getId(),"areaUnderROC" , binaryClassificationMetrics.areaUnderROC());
-        client.logMetric(run.getId(),"meanSquaredError", regressionMetrics.meanSquaredError());
-        client.logMetric(run.getId(),"rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
-        client.logMetric(run.getId(),"meanAbsoluteError", regressionMetrics.meanAbsoluteError());
-        client.logMetric(run.getId(),"explainedVariance", regressionMetrics.explainedVariance());
-
-        //custom tags
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        //run.setTag("Accuracy", String.valueOf(accuracy));
-
-        //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
-
-        lrModel.write().overwrite().save("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
-
-        //client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
-        //client.logArtifact(run.getId(), new File(path));
         try {
-            //lrModel.save("Database");
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-            File modelFile = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("LogisticRegression_Experiment");
+            String experimentID = "";
+            if (foundExperiment.isEmpty() == true) {
+                experimentID = client.createExperiment("LogisticRegression_Experiment");
+            } else {
+                experimentID = foundExperiment.get().getExperimentId();
+            }
 
-            //TODO: flavor
-            //client.logArtifact(run.getId(), modelFile);
-
-            File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
-
-            /*ObjectMapper mapper = new ObjectMapper();//new ObjectMapper();
-            mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false); //root name of class, same root value of json
-            mapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, true); //increase chances of serializing
-            ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-            String jsonModel = ow.writeValueAsString(modelFile);
-            //String jsonModel = String.valueOf(modelFile);
-
-            LogModel logModel = LogModel.newBuilder()
-                    .setRunId(run.getId())
-                    .setModelJson(jsonModel)
-                    .build();
+            org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+            MlflowContext mlflow = new MlflowContext(client);
+            ActiveRun run = mlflow.startRun("LogisticRegression_Run", runInfo.getRunId());
 
 
+            TrainValidationSplitModel lrModel = trainValidationSplit.fit(trainSetDF);
+            Dataset<Row> predictions = lrModel.transform(testSetDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+            //predictions.show();
+            //System.out.println("*****************Predictions Of Test Data*****************");
 
-            System.out.println(logModel);
 
-            ModelRegistry.CreateModelVersion.newBuilder()
-                    .setName("LogisticRegressionModel")
-                    .setRunId(run.getId())
-                    .setSource("artifactstore")
-                    .build();*/
+            double accuracy = binaryClassificationEvaluator.evaluate(predictions);
+            BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+            RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
 
-        }catch (Exception e){
-            e.printStackTrace();
+            //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+            //param
+            client.logParam(run.getId(), "Max Iteration", String.valueOf(lr.getMaxIter()));
+            client.logParam(run.getId(), "Reg Param", String.valueOf(lr.getRegParam()));
+            client.logParam(run.getId(), "Elastic Net Param", String.valueOf(lr.getElasticNetParam()));
+            client.logParam(run.getId(), "Fitness intercept", String.valueOf(lr.getFitIntercept()));
+
+
+            //metrics
+            client.logMetric(run.getId(), "areaUnderROC", binaryClassificationMetrics.areaUnderROC());
+            client.logMetric(run.getId(), "meanSquaredError", regressionMetrics.meanSquaredError());
+            client.logMetric(run.getId(), "rootMeanSquaredError", regressionMetrics.rootMeanSquaredError());
+            client.logMetric(run.getId(), "meanAbsoluteError", regressionMetrics.meanAbsoluteError());
+            client.logMetric(run.getId(), "explainedVariance", regressionMetrics.explainedVariance());
+
+            //custom tags
+            client.setTag(run.getId(), "Accuracy", String.valueOf(accuracy));
+            //run.setTag("Accuracy", String.valueOf(accuracy));
+
+            //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
+
+            lrModel.write().overwrite().save("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+            //client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
+            //client.logArtifact(run.getId(), new File(path));
+            try {
+                //lrModel.save("Database");
+
+                File modelFile = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+
+                //TODO: flavor
+                //client.logArtifact(run.getId(), modelFile);
+
+                File artifact = client.downloadModelVersion("LogisticRegressionModel", "1");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            run.endRun();
+        } catch (Exception e) {
+            throw new TrainingModelException("Failed finding model file");
         }
-
-        run.endRun();
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        sparkTrends.stop();
+        //sparkNlpProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         return new TrainFindTrendsArticlesResponse(results);
@@ -1874,14 +1848,6 @@ public class TrainServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
-
-        SparkSession sparkPredictions = SparkSession
-                .builder()
-                .appName("Predictions")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
 
         /*******************SETUP DATA*****************/
 
@@ -1889,7 +1855,7 @@ public class TrainServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        sparkPredictions.stop();
+        //sparkNlpProperties.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -1902,24 +1868,14 @@ public class TrainServiceImpl {
      * @throws InvalidRequestException This is thrown if the request or if any of its attributes are invalid.
      */
     public TrainFindAnomaliesResponse trainFindAnomalies(TrainFindAnomaliesRequest request)
-            throws InvalidRequestException, IOException {
+            throws InvalidRequestException, IOException, TrainingModelException {
         if (request == null) {
             throw new InvalidRequestException("findAnomalies Object is null");
         }
         if (request.getDataList() == null){
             throw new InvalidRequestException("DataList is null");
         }
-        //must fix this
-        /*******************SETUP SPARK*****************/
 
-        SparkSession sparkAnomalies = SparkSession
-                .builder()
-                .appName("Anomalies")
-                .master("local")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .getOrCreate();
-
-        JavaSparkContext anomaliesSparkContext = new JavaSparkContext(sparkAnomalies.sparkContext());
 
         /*******************SETUP DATA*****************/
 
@@ -1998,7 +1954,7 @@ public class TrainServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkAnomalies.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema);
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -2021,13 +1977,15 @@ public class TrainServiceImpl {
         //group named entity
 
 
-        List<Row> textData = itemsDF.select("*").collectAsList();
+        Iterator<Row> textData = itemsDF.select("*").toLocalIterator();
 
         //training set
         List<Row> trainSet = new ArrayList<>();
-        for(int i=0; i < textData.size(); i++){
+        //for(int i=0; i < textData.size(); i++){
+        while(textData.hasNext()){
 
-            Object amountOfEntitiesObject = textData.get(i).get(2); //amount = func(EntityTypeNumbers)
+            Row dataRow = textData.next();
+            Object amountOfEntitiesObject = dataRow.get(2); //amount = func(EntityTypeNumbers)
 
             List<?> amountOfEntities = new ArrayList<>();
             if (amountOfEntitiesObject.getClass().isArray()) {
@@ -2039,29 +1997,29 @@ public class TrainServiceImpl {
             System.out.println("entity count");
             System.out.println(amountOfEntities);
 
-            String[] locationData = textData.get(i).get(5).toString().split(","); // location
+            String[] locationData = dataRow.get(5).toString().split(","); // location
 
             Row trainRow = RowFactory.create(
-                    textData.get(i).get(0).toString(), //text
-                    textData.get(i).get(1), //EntityTypes
-                    textData.get(i).get(2), //EntityTypeNumbers
+                    dataRow.get(0).toString(), //text
+                    dataRow.get(1), //EntityTypes
+                    dataRow.get(2), //EntityTypeNumbers
                     //amountOfEntities.size(),
                     //((ArrayList<?>) textData.get(i).get(2)).size(),//AmountOfEntities
                     //amountOfEntities.size(), //AmountOfEntities
-                    Integer.parseInt(textData.get(i).get(3).toString()), //AmountOfEntities
-                    textData.get(i).get(4).toString(), //Sentiment
-                    textData.get(i).get(5).toString(), //Location
+                    Integer.parseInt(dataRow.get(3).toString()), //AmountOfEntities
+                    dataRow.get(4).toString(), //Sentiment
+                    dataRow.get(5).toString(), //Location
                     Float.parseFloat(locationData[0]),//Latitude
                     Float.parseFloat(locationData[1]),//Longitude
-                    textData.get(i).get(6), //Date
-                    textData.get(i).get(7) //Like
+                    dataRow.get(6), //Date
+                    dataRow.get(7) //Like
             );
 
 
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkAnomalies.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
 
         /*******************SETUP PIPELINE MODEL*****************/
         //features
@@ -2120,94 +2078,98 @@ public class TrainServiceImpl {
             modelName = request.getModelName();
         }
 
-        //client
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        TrainedModel trainedModel = null;
+        try {
+            //client
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment(modelName + "_Experiment");
+            Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName(modelName + "_Experiment");
+            String experimentID = "";
+            if (foundExperiment.isEmpty() == true) {
+                experimentID = client.createExperiment(modelName + "_Experiment");
+            } else {
+                experimentID = foundExperiment.get().getExperimentId();
+            }
+
+            org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+            MlflowContext mlflow = new MlflowContext(client);
+            ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
+
+
+            /***trainModel***/
+            //KMeans model = pipeline.getStages()[1];
+            PipelineModel kmModel = pipeline.fit(trainingDF);
+
+            //CrossValidatorModel kmModel = crossValidator.fit(trainingDF);
+            Dataset<Row> predictions = kmModel.transform(trainingDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
+            //predictions.show();
+            //System.out.println("*****************Predictions Of Test Data*****************");
+
+
+            double accuracy = clusteringEvaluator.evaluate(predictions);
+            //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
+            //RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
+            //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
+
+            /***logging***/
+            //param
+            client.logParam(run.getId(), "k-value", String.valueOf(km.getK()));
+            client.logParam(run.getId(), "Initial step", String.valueOf(km.getInitSteps()));
+            client.logParam(run.getId(), "Max iterations", String.valueOf(km.maxIter()));
+
+
+            //metrics
+
+            //custom tags
+            client.setTag(run.getId(), "Accuracy", String.valueOf(accuracy));
+            client.setTag(run.getId(), "Run ID", String.valueOf(run.getId()));
+            //run.setTag("Accuracy", String.valueOf(accuracy));*/
+
+            //String path = Paths.get("../models/" + modelName).toString();
+            String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
+            String script = Paths.get("../rri/LogModel.py").toString();
+
+            //kmModel.write().overwrite().save(path);
+            pipeline.write().overwrite().save(path);
+            File modelFile = new File(path);
+
+            client.logArtifact(run.getId(), modelFile);
+
+            path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+            trainingDF.write().save(path);
+            File trainFile = new File(path);
+            client.logArtifact(run.getId(), trainFile);
+
+            String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            File infoFile = new File(filePath);
+            infoFile.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(infoFile, false);
+            fos.write(String.valueOf(accuracy).getBytes());
+            fos.close();
+            client.logArtifact(run.getId(), infoFile);
+
+
+            trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
+            FileUtils.deleteDirectory(modelFile);
+            FileUtils.deleteDirectory(trainFile);
+            infoFile.delete();
+
+            /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
+            CommandLine commandLine = CommandLine.parse(commandPath);
+            //commandLine.addArguments(new String[] {"../models/KMeansModel","KMeansModel", "1"});
+            DefaultExecutor executor = new DefaultExecutor();
+            executor.setStreamHandler(new PumpStreamHandler(System.out));
+            executor.execute(commandLine);*/
+
+            run.endRun();
+        } catch (Exception e) {
+            throw new TrainingModelException("Failed finding model file");
         }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun(modelName + "_Run", runInfo.getRunId());
-
-
-        /***trainModel***/
-        //KMeans model = pipeline.getStages()[1];
-        PipelineModel kmModel = pipeline.fit(trainingDF);
-
-        //CrossValidatorModel kmModel = crossValidator.fit(trainingDF);
-        Dataset<Row> predictions = kmModel.transform(trainingDF); //features does not exist. Available: IsTrending, EntityName, EntityType, EntityTypeNumber, Frequency, FrequencyRatePerHour, AverageLikes
-        //predictions.show();
-        //System.out.println("*****************Predictions Of Test Data*****************");
-
-
-        double accuracy = clusteringEvaluator.evaluate(predictions);
-        //BinaryClassificationMetrics binaryClassificationMetrics = binaryClassificationEvaluator.getMetrics(predictions);
-        //RegressionMetrics regressionMetrics = regressionEvaluator.getMetrics(predictions);
-        //System.out.println("********************** Found Model Accuracy : " + Double.toString(accuracy));
-
-        /***logging***/
-        //param
-        client.logParam(run.getId(),"k-value", String.valueOf(km.getK()));
-        client.logParam(run.getId(),"Initial step" ,String.valueOf(km.getInitSteps()));
-        client.logParam(run.getId(),"Max iterations" , String.valueOf(km.maxIter()));
-
-
-        //metrics
-
-        //custom tags
-        client.setTag(run.getId(),"Accuracy", String.valueOf(accuracy));
-        client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
-        //run.setTag("Accuracy", String.valueOf(accuracy));*/
-
-        //String path = Paths.get("../models/" + modelName).toString();
-        String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName;
-        String script = Paths.get("../rri/LogModel.py").toString();
-
-        //kmModel.write().overwrite().save(path);
-        pipeline.write().overwrite().save(path);
-        File modelFile = new File(path);
-
-        client.logArtifact(run.getId(), modelFile);
-
-        path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
-        trainingDF.write().save(path);
-        File trainFile = new File(path);
-        client.logArtifact(run.getId(), trainFile);
-
-        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
-        File infoFile = new File(filePath);
-        infoFile.createNewFile();
-
-        FileOutputStream fos = new FileOutputStream(infoFile, false);
-        fos.write(String.valueOf(accuracy).getBytes());
-        fos.close();
-        client.logArtifact(run.getId(), infoFile);
-
-
-        TrainedModel trainedModel = new TrainedModel(run.getId(), accuracy,run.getId(), modelName);
-        FileUtils.deleteDirectory(modelFile);
-        FileUtils.deleteDirectory(trainFile);
-        infoFile.delete();
-
-        /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
-        CommandLine commandLine = CommandLine.parse(commandPath);
-        //commandLine.addArguments(new String[] {"../models/KMeansModel","KMeansModel", "1"});
-        DefaultExecutor executor = new DefaultExecutor();
-        executor.setStreamHandler(new PumpStreamHandler(System.out));
-        executor.execute(commandLine);*/
-
-        run.endRun();
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        sparkAnomalies.stop();
+        //sparkNlpProperties.stop();
 
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results, trainedModel);
@@ -2331,28 +2293,28 @@ public class TrainServiceImpl {
         /***setup***/
 
         //client
-        MlflowClient client = new MlflowClient("http://localhost:5000");
+        try {
+            MlflowClient client = new MlflowClient("http://localhost:5000");
 
-        Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("Experiment");
-        String experimentID = "";
-        if (foundExperiment.isEmpty() == true){
-            experimentID = client.createExperiment("Experiment");
+            Optional<org.mlflow.api.proto.Service.Experiment> foundExperiment = client.getExperimentByName("Experiment");
+            String experimentID = "";
+            if (foundExperiment.isEmpty() == true) {
+                experimentID = client.createExperiment("Experiment");
+            } else {
+                experimentID = foundExperiment.get().getExperimentId();
+            }
+
+            org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
+            MlflowContext mlflow = new MlflowContext(client);
+            ActiveRun run = mlflow.startRun("Run", runInfo.getRunId());
+
+            List<org.mlflow.api.proto.Service.Experiment> experiment = client.listExperiments();
+
+
+            run.endRun();
+        } catch (Exception e){
+            throw new TrainingModelException("failed clean model's registry");
         }
-        else{
-            experimentID = foundExperiment.get().getExperimentId();
-        }
-
-        org.mlflow.api.proto.Service.RunInfo runInfo = client.createRun(experimentID);
-        MlflowContext mlflow = new MlflowContext(client);
-        ActiveRun run = mlflow.startRun("Run", runInfo.getRunId());
-
-        List<org.mlflow.api.proto.Service.Experiment> experiment = client.listExperiments();
-
-
-
-
-        run.endRun();
-
         /***********************SETUP MLFLOW - SAVE ***********************/
     }
 

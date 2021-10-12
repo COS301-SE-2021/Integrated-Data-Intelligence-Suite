@@ -2,13 +2,18 @@ package com.Gateway_Service.Gateway_Service.service;
 
 
 import com.Gateway_Service.Gateway_Service.dataclass.analyse.*;
+import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
+import com.Gateway_Service.Gateway_Service.exception.GatewayException;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
+import com.Gateway_Service.Gateway_Service.rri.ServiceErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -18,14 +23,15 @@ public class AnalyseService {
     @Autowired
     private RestTemplate restTemplate;
 
+
+
     /**
      * This method is used to communicate to the Analyse-Service.
      * @param analyseRequest This is a request object which contains data required to be analysed.
      * @return AnalyseDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public AnalyseDataResponse analyzeData(AnalyseDataRequest analyseRequest) throws AnalyserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -40,9 +46,25 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        AnalyseDataResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeData", request, AnalyseDataResponse.class);
 
-        return analyseResponse;
+
+        ResponseEntity<?> analyseResponse = null;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseDataResponse>() {});
+        return (AnalyseDataResponse) analyseResponse.getBody();
     }
 
 
@@ -52,8 +74,7 @@ public class AnalyseService {
      * @return AnalyseUserDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public AnalyseUserDataResponse analyzeUserData(AnalyseUserDataRequest analyseRequest) throws AnalyserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -68,9 +89,25 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        AnalyseUserDataResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/analyzeUserData", request, AnalyseUserDataResponse.class);
 
-        return analyseResponse;
+
+        ResponseEntity<?> analyseResponse = null;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeUserData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeUserData",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseUserDataResponse>() {});
+        return (AnalyseUserDataResponse) analyseResponse.getBody();
     }
 
 
@@ -80,8 +117,7 @@ public class AnalyseService {
      * @return AnalyseUserDataResponse This object contains analysed data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public GetModelByIdResponse getModelById(GetModelByIdRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public GetModelByIdResponse getModelById(GetModelByIdRequest analyseRequest) throws AnalyserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -96,9 +132,30 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        GetModelByIdResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/getModelById", request, GetModelByIdResponse.class);
 
-        return analyseResponse;
+
+        ResponseEntity<?> analyseResponse = null;
+        //try {
+            analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById", HttpMethod.POST, request, new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //} catch (Exception e){
+        //    throw new GatewayException("Failed to connect to analyse service");
+        //}
+
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<GetModelByIdResponse>() {});
+        return (GetModelByIdResponse) analyseResponse.getBody();
     }
 
 
@@ -110,8 +167,7 @@ public class AnalyseService {
      * @return TrainUserModelResponse This object contains trained data returned by Analyse-Service
      */
     //@HystrixCommand(fallbackMethod = "analyzeDataFallback")
-    public TrainUserModelResponse trainUserModel(TrainUserModelRequest analyseRequest) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public TrainUserModelResponse trainUserModel(TrainUserModelRequest analyseRequest) throws AnalyserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -126,9 +182,25 @@ public class AnalyseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        TrainUserModelResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/trainUserModel", request, TrainUserModelResponse.class);
+        //TrainUserModelResponse analyseResponse = restTemplate.postForObject("http://Analyse-Service/Analyse/trainUserModel", request, TrainUserModelResponse.class);
 
-        return analyseResponse;
+        ResponseEntity<?> analyseResponse = null;
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/trainUserModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new AnalyserException(errors);
+            }
+        }
+
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/trainUserModel",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseDataResponse>() {});
+        return (TrainUserModelResponse) analyseResponse.getBody();
     }
 
 

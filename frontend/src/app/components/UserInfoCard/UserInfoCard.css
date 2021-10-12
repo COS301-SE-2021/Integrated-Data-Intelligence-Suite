@@ -4,7 +4,7 @@
 
 /* The div that holds the entire user_avatar card*/
 #user_avatar_card {
-    float: right;
+    /*float: right;*/
     /*height: 100%;*/
     /*width: 20%;*/
     /* color: black; */
@@ -123,9 +123,9 @@
     box-shadow: none;
     font-size: 0;
     float: right;
-    transform: rotate(
-            180deg
-    );
+    /*transform: rotate(*/
+    /*        45deg*/
+    /*);*/
     /*margin-top: 24px;*/
     width: 31px;
     height: 23px;

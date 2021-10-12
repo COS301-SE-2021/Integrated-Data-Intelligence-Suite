@@ -1,90 +1,79 @@
 import React from 'react';
 import './OverviewGraphSection.css';
+import { useRecoilValue } from 'recoil';
 import SimpleCard from '../SimpleCard/SimpleCard';
 import VictoryBarGraph from '../BarGraph/VictoryBarGraph';
 import PieWithCustomLabels from '../PieWithCustomLabels/PieWithCustomLabels';
+import {
+    averageInteractionState,
+    engagementPerProvinceState,
+    sentimentDistributionState,
+} from '../../assets/AtomStore/AtomStore';
 
-let _average_interaction = null;
-let _pie_chart_data = null;
-let _engagement_data = null;
-export default class OverviewGraphSection extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { dataToBeDisplayed: [] };
-    }
+const OverviewGraphSection = () => {
+    const averageInteraction = useRecoilValue(averageInteractionState);
+    const sentimentDistribution = useRecoilValue(sentimentDistributionState);
+    const engagementData = useRecoilValue(engagementPerProvinceState);
 
-    componentDidMount() {
-        // //Adding nodes to the layout
-        if (typeof this.props.text[0] === 'undefined') {
-            // some error message
-            this.setState({ dataToBeDisplayed: [] });
-            console.log('array is undefined');
-        } else if (this.props.text[0].length === 0) {
-            // Some error
-            this.setState({ dataToBeDisplayed: [] });
-            console.log('array is empty');
-        } else if (this.props.text[0].length > 0) {
-            // this.theData = this.props.text[1];
-            this.setState({
-                dataToBeDisplayed: [
-                    this.props.text[4].words,
-                    this.props.text[5].words,
-                    this.props.text[6].words,
-                ]
-            });
-            _average_interaction = this.props.text[4];
-            _pie_chart_data = this.props.text[5];
-            _engagement_data = this.props.text[6];
-            console.log(this.props);
-            console.log(_engagement_data);
-        }
-    }
+    return (
+        <>
+            <div id="overview-graph-section">
+                <SimpleCard
+                  cardTitle="Average Interaction for each trend"
+                  cardID="overview-graph-metric-1"
+                  titleOnTop
+                >
+                    {
+                        averageInteraction &&
+                        (
+                            <VictoryBarGraph
+                              text={averageInteraction}
+                              key={averageInteraction}
+                              xAxisLabel=""
+                              yAxisLabel=""
+                              showYAxisLabel={false}
+                              showXAxisLabel
+                            />
+                        )
+                    }
+                </SimpleCard>
 
-    render() {
-        return (
-            <>
-                <div id={'overview-graph-section'}>
-                    <SimpleCard
-                        cardTitle="Average Interaction for each trend"
-                        cardID="overview-graph-metric-1"
-                        titleOnTop
-                    >
-                        <VictoryBarGraph
-                            text={_average_interaction}
-                            key={_average_interaction}
-                            xAxisLabel={''}
-                            yAxisLabel={''}
-                            showYAxisLabel={false}
-                            showXAxisLabel
-                        />
-                    </SimpleCard>
+                <SimpleCard
+                  cardTitle="Sentiment Distribution"
+                  cardID="overview-graph-metric-2"
+                  titleOnTop
+                >
+                    {
+                        sentimentDistribution &&
+                        (
+                            <PieWithCustomLabels
+                              text={sentimentDistribution}
+                              key={sentimentDistribution}
+                            />
+                        )
+                    }
+                </SimpleCard>
 
-                    <SimpleCard
-                        cardTitle="Sentiment Distribution"
-                        cardID="overview-graph-metric-2"
-                        titleOnTop
-                    >
-                        <PieWithCustomLabels
-                            text={_pie_chart_data}
-                            key={_pie_chart_data}
-                        />
-                    </SimpleCard>
+                <SimpleCard
+                  cardTitle="Engagement per Province"
+                  cardID="overview-graph-metric-3"
+                  titleOnTop
+                >
+                    {
+                        engagementData &&
+                        (
+                            <VictoryBarGraph
+                              text={engagementData}
+                              key={engagementData}
+                              xAxisLabel=""
+                              yAxisLabel=""
+                            />
+                        )
+                    }
+                </SimpleCard>
+            </div>
+        </>
+    );
+};
 
-                    <SimpleCard
-                        cardTitle="Engagement per Province"
-                        cardID="overview-graph-metric-3"
-                        titleOnTop
-                    >
-                        <VictoryBarGraph
-                            text={_engagement_data}
-                            key={_engagement_data}
-                            xAxisLabel={''}
-                            yAxisLabel={''}
-                        />
-                    </SimpleCard>
-                </div>
-            </>
-        );
-    }
-
-}
+export default OverviewGraphSection;
