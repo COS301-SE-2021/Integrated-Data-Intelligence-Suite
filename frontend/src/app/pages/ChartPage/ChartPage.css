@@ -123,7 +123,6 @@
     grid-row: span 3;
 }
 
-
 /*The div that contains the entire content section*/
 #content-section {
     display: grid;
@@ -140,7 +139,6 @@
     row-gap: 13%;
 }
 
-
 #content_section .simple-section-container {
     max-width: 1200px;
 }
@@ -148,7 +146,6 @@
 #overview-graph-metric-2 > .simple-card-body > .VictoryContainer > svg {
     background: var(--dark-black);
 }
-
 
 /*******************************************/
 /******************Row 3********************/
@@ -171,7 +168,6 @@
     grid-template-columns: 100%;
     grid-template-rows: repeat(2, auto);
 }
-
 
 #world-map > .simple-card-title {
     padding: 10px 10px 10px 0px;
@@ -292,7 +288,6 @@
 }
 
 
-
 #word-graph-2 > .simple-card-body {
     background: var(--dark-black);
 }
@@ -380,32 +375,52 @@
 }
 
 #row-5 > .simple-section-body .simple-card-container {
-    background: white;
+    background: var(--dark-black);
     padding: 10px;
     border-radius: 10px;
-    border: solid 2px var(--border-color);
+    border: solid 1px transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#row-5 > .simple-section-body .simple-card-container:hover {
+    border: 1px solid var(--pink)
 }
 
 #network-graph-entities {
     grid-column-start: 1;
     grid-column-end: 2;
+    background: var(--dark-black);
 }
 
 #network-graph-entities > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
+    background: var(--dark-black);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: var(--simple-card-title-color);
+    color: white;
+}
+
+#network-graph-entities > .simple-card-body {
+    background: var(--dark-black);
+    height: 100%;
+}
+
+#network_card {
+    background: var(--dark-black);
+}
+
+#network_card > .ant-card-body {
+    height: 100%;
 }
 
 #network-graph-patterns > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: var(--simple-card-title-color);
-
+    background: var(--dark-black);
+    color: white;
 }
 
 #network-graph-patterns {
@@ -433,10 +448,11 @@
 #row-6 > .simple-section-body {
     display: grid;
     grid-template-rows: repeat(1, 100%);
-    grid-template-columns: 50%;
+    grid-template-columns: 100%;
     column-gap: 30px;
     row-gap: 10px;
     justify-content: center;
+
 }
 
 #anomaly-timeline-card {
@@ -445,15 +461,26 @@
     grid-row-start: 1;
     grid-row-end: 2;
     overflow: auto;
-    border: 2px solid var(--border-color);
+    border: 1px solid transparent;
     border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 100%;
+}
+
+#anomaly-timeline-card:hover {
+    border: 1px solid var(--pink);
 }
 
 #anomaly-timeline-card > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
-    color: var(--simple-card-title-color);
+    background: var(--dark-black);
+    color: white;
+}
+
+#anomaly-timeline-card > .simple-card-body {
+    background: var(--dark-black);
 }
 
 #anomaly-scatter-plot {

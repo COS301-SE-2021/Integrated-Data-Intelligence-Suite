@@ -12,8 +12,6 @@ import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
 
 import '../../components/NetworkGraph/NetworkGraph.css';
-import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
-
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
 import 'rc-slider/assets/index.css';
@@ -318,7 +316,7 @@ const ChartPage = () => {
                                           cardID="row-6"
                                         >
                                             <SimpleCard
-                                              cardTitle="Timeline"
+                                              cardTitle="Anomaly Timeline"
                                               cardID="anomaly-timeline-card"
                                               titleOnTop
                                             >
