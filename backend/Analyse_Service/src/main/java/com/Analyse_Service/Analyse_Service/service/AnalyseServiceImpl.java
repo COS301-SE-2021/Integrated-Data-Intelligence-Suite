@@ -37,6 +37,7 @@ import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.ml.tuning.*;
 import org.apache.spark.sql.*;
+import org.apache.spark.sql.expressions.UserDefinedFunction;
 import org.apache.spark.sql.types.*;
 
 import org.mlflow.tracking.MlflowClient;
@@ -1773,14 +1774,16 @@ public class AnalyseServiceImpl {
 // Make predictions
         Dataset<Row> predictions = model.transform(features);
 
-        ArrayList<Double> distances = new ArrayList<>();
-        ArrayList<Vector> feats = new ArrayList<>();
-        ArrayList<Vector> centers = new ArrayList<>();
+       // ArrayList<Double> distances = new ArrayList<>();
+       // ArrayList<Vector> feats = new ArrayList<>();
+       // ArrayList<Vector> centers = new ArrayList<>();
 
 
-       Dataset<Row> willBeUsed = predictions.select("features","prediction");
-        Iterator<Row> finalOutputIterator = willBeUsed.toLocalIterator();
+       Dataset<Row> FeaturesAndPredictions = predictions.select("features","prediction");
+        /*Iterator<Row> finalOutputIterator = willBeUsed.toLocalIterator();
         Long dataCount = willBeUsed.count();
+
+
 
         for (int k = 0; k < dataCount; k++) {
             Row outputRow = finalOutputIterator.next();
@@ -1792,12 +1795,17 @@ public class AnalyseServiceImpl {
 
 
             distances.add(dist(Features,model.clusterCenters()[centerPrediction]));
-
         }
 
+        //willBeUsed.withColumn("DistanceFromCluster",dist(willBeUsed.select("features"),null,model.clusterCenters(),willBeUsed.select("prediction")));
+        */
 
+        UserDefinedFunction calculateDistance = udf(
+                (Vector feature, Integer x) -> Vectors.sqdist(feature,model.clusterCenters()[x]), DataTypes.DoubleType
+        );
+        sparkNlpProperties.udf().register("dist", calculateDistance);
 
-
+        Dataset<Row> kmeansWithClusterDistances = FeaturesAndPredictions.withColumn("distanceFromCluster",callUDF("dist",FeaturesAndPredictions.col("features"),FeaturesAndPredictions.col("prediction")));
         try {
             client = new MlflowClient("http://localhost:5000");
 
@@ -1878,9 +1886,8 @@ public class AnalyseServiceImpl {
         System.out.println(rawResults.toString());
         System.out.println("/*******************Outputs begin*****************");
         System.out.println("Distances: ");
-        for (int h = 0; h < distances.size(); h++) {
-            System.out.println(distances.get(h));
-        }
+        kmeansWithClusterDistances.show(100);
+
 
         ArrayList<String> results = new ArrayList<>();
         for (int i = 0; i < rawResults.size(); i++) {
