@@ -271,21 +271,21 @@ const ChartPage = () => {
                                                 <WordCloud />
                                             </SimpleCard>
 
-                                            <div id="word-cloud-graph-container">
-                                                <SimpleCard
-                                                  cardTitle="Dominant words"
-                                                  cardID="word-graph-2"
-                                                  titleOnTop
-                                                >
-                                                    <PieChart dominantWords={backendData[10]} />
-                                                </SimpleCard>
-                                                {/* <SimpleCard
+                                            {/* <div id="word-cloud-graph-container"> */}
+                                            <SimpleCard
+                                              cardTitle="Dominant words"
+                                              cardID="word-graph-2"
+                                              titleOnTop
+                                            >
+                                                <PieChart dominantWords={backendData[10]} />
+                                            </SimpleCard>
+                                            {/* <SimpleCard
                                                     cardTitle="Word Sunburst"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
                                                 </SimpleCard> */}
-                                            </div>
+                                            {/* </div> */}
                                         </SimpleSection>
 
                                         <SimpleSection
