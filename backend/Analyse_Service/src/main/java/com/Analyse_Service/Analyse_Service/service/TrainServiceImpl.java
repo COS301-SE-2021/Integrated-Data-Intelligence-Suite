@@ -57,6 +57,7 @@ import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.MlflowContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
@@ -268,6 +269,7 @@ public class TrainServiceImpl {
 
          /*******************Run A.I Models******************/
 
+        cleanModels();
 
 
         long duration = 0;// milliseconds
@@ -283,9 +285,11 @@ public class TrainServiceImpl {
 
             TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList, request.getModelName());
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+            cleanModels();
 
             TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList, request.getModelName());
             TrainFindTrendsDTResponse findTrendsDTResponse =   this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+            cleanModels();
 
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList, request.getModelName());
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
@@ -334,8 +338,8 @@ public class TrainServiceImpl {
         //.getResourceAsStream("TData.CSV");
         //InputStream is = classloader.getResource("TData.CSV").
 
-        InputStream is = this.getClass().getResourceAsStream("TData.CSV");
-        File tData = null;
+        //InputStream is = this.getClass().getResourceAsStream("TData.CSV");
+        //File tData = null;
 
         /*if(is == null){
             tData = new File(this.getClass().getResource("TData.CSV").getFile());
@@ -348,7 +352,10 @@ public class TrainServiceImpl {
 
         BufferedReader reader = null;
         String line = "";
-        String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+        //String fileUrl = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/TData.CSV";
+
+
+
 
         try{
             /*if(is != null){
@@ -357,8 +364,9 @@ public class TrainServiceImpl {
             else{
                 reader = new BufferedReader(new FileReader(tData));
             }*/
-
-            reader = new BufferedReader(new FileReader(fileUrl));
+            File trainResource = new ClassPathResource("TData.CSV").getFile();
+            //reader = new BufferedReader(new FileReader(fileUrl));
+            reader = new BufferedReader(new FileReader(trainResource));
             //System.out.println("*******************CHECK THIS HERE*****************");
 
             line = reader.readLine();
@@ -407,6 +415,7 @@ public class TrainServiceImpl {
             }
         }catch (Exception e){
             e.printStackTrace();
+            //new TrainingModelException("failed training application model")
         }
 
         /**************************************************************************************************************/
@@ -451,19 +460,25 @@ public class TrainServiceImpl {
 
         /**************************************************************************************************************/
 
+        cleanModels();
+
         try {
             TrainFindTrendsRequest findTrendsRequest = new TrainFindTrendsRequest(parsedDataList);
             TrainFindTrendsResponse findTrendsResponse = this.trainFindTrends(findTrendsRequest);
+            cleanModels();
 
             System.out.println("finished training 1");
 
+
             TrainFindTrendsDTRequest findTrendsDTRequest = new TrainFindTrendsDTRequest(parsedDataList);
             TrainFindTrendsDTResponse findTrendsDTResponse = this.trainFindTrendsDecisionTree(findTrendsDTRequest);
+            cleanModels();
 
             System.out.println("finished training 2");
 
             TrainFindAnomaliesRequest findAnomaliesRequest = new TrainFindAnomaliesRequest(parsedDataList);
             TrainFindAnomaliesResponse findAnomaliesResponse = this.trainFindAnomalies(findAnomaliesRequest);
+
 
             System.out.println("finished training all");
 
@@ -505,8 +520,8 @@ public class TrainServiceImpl {
                 .setMaster("local")
                 //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
                 //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "6g")
-                .set("spark.executor.memory", "6g")
+                .set("spark.driver.memory", "5g")
+                .set("spark.executor.memory", "5g")
                 .set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{TrainServiceImpl.class});
@@ -1104,7 +1119,7 @@ public class TrainServiceImpl {
             //*"backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/"*/ "..models/" +modelName;
             //String path =  Paths.get("../models/" +modelName).getRoot().toString();
             //String path =  Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" +modelName).getRoot().toString();
-            String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
+            String path = "models/" + modelName;
             System.out.println("Testing new path !!!  " + path);
             String script = Paths.get("../rri/LogModel.py").toString();
 
@@ -1123,12 +1138,12 @@ public class TrainServiceImpl {
             client.logArtifact(run.getId(), modelFile);
 
 
-            path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+            path = "models/TrainingData.parquet";
             trainSetDF.write().save(path);
             File trainFile = new File(path);
             client.logArtifact(run.getId(), trainFile);
 
-            String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            String filePath = Paths.get("models/ModelInformation.txt").toString();
             File infoFile = new File(filePath);
             infoFile.createNewFile();
 
@@ -1139,9 +1154,9 @@ public class TrainServiceImpl {
 
 
             trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
-            FileUtils.deleteDirectory(modelFile);
-            FileUtils.deleteDirectory(trainFile);
-            infoFile.delete();
+            //FileUtils.deleteDirectory(modelFile);
+            //FileUtils.deleteDirectory(trainFile);
+            //infoFile.delete();
 
 
             /*
@@ -1155,6 +1170,7 @@ public class TrainServiceImpl {
 
             run.endRun();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new TrainingModelException("Failed finding model file");
         }
 
@@ -1475,7 +1491,7 @@ public class TrainServiceImpl {
             client.setTag(run.getId(), "Run ID", String.valueOf(run.getId()));
 
             //String path = Paths.get("../models/" + modelName).toString();
-            String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
+            String path = "models/" + modelName;
             String script = Paths.get("../rri/LogModel.py").toString();
 
             //dtModel.write().overwrite().save(path);
@@ -1484,12 +1500,12 @@ public class TrainServiceImpl {
 
             client.logArtifact(run.getId(), modelFile);
 
-            path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+            path = "models/TrainingData.parquet";
             trainSetDF.write().save(path);
             File trainFile = new File(path);
             client.logArtifact(run.getId(), trainFile);
 
-            String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            String filePath = Paths.get("models/ModelInformation.txt").toString();
             File infoFile = new File(filePath);
             infoFile.createNewFile();
 
@@ -1500,9 +1516,9 @@ public class TrainServiceImpl {
 
 
             trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
-            FileUtils.deleteDirectory(modelFile);
-            FileUtils.deleteDirectory(trainFile);
-            infoFile.delete();
+            //FileUtils.deleteDirectory(modelFile);
+            //FileUtils.deleteDirectory(trainFile);
+            //infoFile.delete();
 
 
             /*String commandPath = "python " + script + " " + path + " DecisionTreeModel " + run.getId();
@@ -1514,6 +1530,7 @@ public class TrainServiceImpl {
 
             run.endRun();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new TrainingModelException("Failed finding model file");
         }
 
@@ -1800,14 +1817,14 @@ public class TrainServiceImpl {
 
             //lrModel.write().overwrite().save("../models/LogisticRegressionModel");
 
-            lrModel.write().overwrite().save("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+            lrModel.write().overwrite().save("models/LogisticRegressionModel");
 
             //client.setTag(run.getId(),"Run ID", String.valueOf(run.getId()));
             //client.logArtifact(run.getId(), new File(path));
             try {
                 //lrModel.save("Database");
 
-                File modelFile = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/LogisticRegressionModel");
+                File modelFile = new File("models/LogisticRegressionModel");
 
                 //TODO: flavor
                 //client.logArtifact(run.getId(), modelFile);
@@ -2126,7 +2143,7 @@ public class TrainServiceImpl {
             //run.setTag("Accuracy", String.valueOf(accuracy));*/
 
             //String path = Paths.get("../models/" + modelName).toString();
-            String path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/" + modelName;
+            String path = "models/" + modelName;
             String script = Paths.get("../rri/LogModel.py").toString();
 
             //kmModel.write().overwrite().save(path);
@@ -2135,12 +2152,12 @@ public class TrainServiceImpl {
 
             client.logArtifact(run.getId(), modelFile);
 
-            path = "backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/TrainingData.parquet";
+            path = "models/TrainingData.parquet";
             trainingDF.write().save(path);
             File trainFile = new File(path);
             client.logArtifact(run.getId(), trainFile);
 
-            String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
+            String filePath = Paths.get("models/ModelInformation.txt").toString();
             File infoFile = new File(filePath);
             infoFile.createNewFile();
 
@@ -2151,9 +2168,9 @@ public class TrainServiceImpl {
 
 
             trainedModel = new TrainedModel(run.getId(), accuracy, run.getId(), modelName);
-            FileUtils.deleteDirectory(modelFile);
-            FileUtils.deleteDirectory(trainFile);
-            infoFile.delete();
+            //FileUtils.deleteDirectory(modelFile);
+            //FileUtils.deleteDirectory(trainFile);
+            //infoFile.delete();
 
             /*String commandPath = "python " + script + " " + path + " KMeansModel " + run.getId();
             CommandLine commandLine = CommandLine.parse(commandPath);
@@ -2269,7 +2286,7 @@ public class TrainServiceImpl {
         bestModelId = bestModelId + ":" + trendModelThree.getRunId();
 
 
-        String filePath = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/rri/RegisteredApplicationModels.txt").toString();
+        String filePath = Paths.get("models/RegisteredApplicationModels.txt").toString();
         File file = new File(filePath);
         file.createNewFile();
 
@@ -2320,6 +2337,7 @@ public class TrainServiceImpl {
 
 
 
+
     /**
      * This method used to fetch the parsed data from the database to train models
      * @param request This is a request object which contains data required to be fetched.
@@ -2343,4 +2361,31 @@ public class TrainServiceImpl {
         ArrayList<ParsedData> list = (ArrayList<ParsedData>) parsedDataRepository.findAll();
         return new FetchParsedDataResponse(list );
     }
+
+    public void cleanModels() throws TrainingModelException {
+        File modelsDir = new File("models");
+        if(modelsDir.exists() == false) {
+            modelsDir.mkdir();
+        }
+
+        File[] directoryListing = modelsDir.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                if ((child.getName().equals("RegisteredApplicationModels.txt") == false) && (child.getName().equals("RegisteredApplicationModels") == false)) {
+                    child.delete();
+                    if(child.exists()){
+                        try {
+                            FileUtils.deleteDirectory(child);
+                        }
+                        catch (Exception e){
+                            throw new TrainingModelException("Model files failed to reload");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
 }

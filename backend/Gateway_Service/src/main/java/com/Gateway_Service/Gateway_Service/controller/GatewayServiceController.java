@@ -24,6 +24,8 @@ import com.Gateway_Service.Gateway_Service.service.*;
 
 //import com.netflix.discovery.DiscoveryClient;
 
+import com.Import_Service.Import_Service.request.AddAPISourceRequest;
+import com.Import_Service.Import_Service.response.AddAPISourceResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -315,8 +317,7 @@ public class GatewayServiceController {
                                                                          @RequestParam("c2") String col2,
                                                                          @RequestParam("c3") String col3,
                                                                          @RequestParam("c4") String col4,
-                                                                         @RequestParam("modelID") String modelID)
-    {
+                                                                         @RequestParam("modelID") String modelID) throws GatewayException, VisualizerException, ReporterException, AnalyserException {
         Map<String, String> response = new HashMap<>();
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -325,11 +326,17 @@ public class GatewayServiceController {
         assert extension != null;
         if(!extension.equals("csv")) {
             response.put("message", "Incorrect file type uploaded.");
-            return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
+
+            throw new GatewayException("Incorrect file type uploaded");
+
+            //return new ResponseEntity<>(outputData, HttpStatus.NOT_ACCEPTABLE);
         }
         ArrayList<ParsedData> socialMediaData = new ArrayList<>();
         try {
+
             String filename = storageService.store(file);
+            System.out.println("test location : " + filename);
+
             //response.put("message", "Successfully saved file");
             log.info("[Gateway API] Successfully saved file");
             log.info("[Gateway API] Running parser");
@@ -353,15 +360,15 @@ public class GatewayServiceController {
             }
 
             log.info("[Gateway API] Successfully parsed. Attempting to analyze data");
-
-            AnalyseUserDataRequest userDataRequest = new AnalyseUserDataRequest(socialMediaData, modelID);
-
-            return this.analyseUserData(userDataRequest);
         }
         catch (Exception e) {
             e.printStackTrace();
-            //response.put("message", e.getMessage());
+            throw new GatewayException("Failed reading uploaded file");
         }
+
+        AnalyseUserDataRequest userDataRequest = new AnalyseUserDataRequest(socialMediaData, modelID);
+
+        /*return this.analyseUserData(userDataRequest);
 
         ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
         serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
@@ -369,8 +376,9 @@ public class GatewayServiceController {
         serviceSuccesResponse.setStatus(HttpStatus.OK);
         serviceSuccesResponse.setData(outputData);
 
-        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());*/
         //return new ResponseEntity<>(outputData, HttpStatus.OK);
+        return this.analyseUserData(userDataRequest);
     }
 
     @PostMapping(value = "/trainUpload")
@@ -699,7 +707,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<?> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException, ParserException, ReporterException, VisualizerException {
+    public ResponseEntity<?> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException, ReporterException, VisualizerException {
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -1238,8 +1246,9 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<?> addApiSource(@RequestBody String jsonRequest) throws ImporterException {
-        String response = ""; //importClient.addApiSource(jsonRequest); //TODO
+    public ResponseEntity<?> addApiSource(@RequestBody String jsonRequest) throws ImporterException, ParserException {
+        AddAPISourceResponse response = importClient.addApiSource(jsonRequest);
+        AddSocialMediaPropertiesResponse pResponse = parseClient.addSocialMediaPropertiesRequest(jsonRequest);
 
         ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
         serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
@@ -1279,8 +1288,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/updateAPI", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<?> editAPISource(@RequestBody String jsonRequest) throws ImporterException {
-        String response = "" ; //importClient.editAPISource(jsonRequest); //TODO
-
+        EditAPISourceResponse response = importClient.editAPISource(jsonRequest);
         ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
         serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
         //serviceSuccesResponse.setPathUri(request.getDescription(true));

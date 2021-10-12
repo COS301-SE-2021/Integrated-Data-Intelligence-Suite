@@ -53,6 +53,8 @@ public class UserServiceImpl {
      * @param request This class contains the user information for login.
      *                It contains the email of the user and password set
      *                by the user when registering their account.
+     *                email - The email of the user that would like to log in.
+     *                password - The password of the user that would like to log in.
      * @return This returns a response containing information if the login attempt
      *         was successful or not.
      */
@@ -109,6 +111,11 @@ public class UserServiceImpl {
      * database using persistence. Advanced password security using PBKDF2WithHmacSHA1 algorithm.
      * It will also send an email notification to the user containing their verification code.
      * @param request This class contains the user information to store the user within the system.
+     *                username - The entered username of the new user.
+     *                firstName - The first name of the new user.
+     *                lastName - The last name of the new user.
+     *                password - The entered password of the new user.
+     *                email - The email address of the new user.
      * @return This returns a response contains if the registration of the user was successful.
      */
     @Transactional
@@ -142,6 +149,24 @@ public class UserServiceImpl {
         if(usersByEmail.isPresent()) {
             return new RegisterResponse(false, "This email has already been registered");
         }
+        //Password checks
+        if(request.getPassword().length() < 6) {
+            return new RegisterResponse(false, "The password is too short");
+        }
+
+        if(request.getPassword().matches("[0-9]+")) {
+            return new RegisterResponse(false, "Password cannot only contain numbers");
+        }
+
+        if(!request.getPassword().matches(".*\\d.*")) {
+            return new RegisterResponse(false, "Password should contain at least one digit");
+        }
+
+        if(!checkPasswordUpper(request.getPassword())) {
+            return new RegisterResponse(false, "Password should contains at least one upper case character");
+        }
+
+
 
         String password = request.getPassword();
         String hashedPass;
@@ -205,6 +230,7 @@ public class UserServiceImpl {
      * @param request This class contains the details of the user.
      * @return This class entails if the registration of the user was successful or not.
      * @throws InvalidRequestException This is thrown if the request is invalid.
+     * @deprecated To be removed/Not implemented/Does not need to be implemented.
      */
     @Transactional
     public RequestAdminResponse requestAdmin(RequestAdminRequest request) throws InvalidRequestException {
@@ -258,10 +284,16 @@ public class UserServiceImpl {
     }
 
     /**
-     * This method will update the details of a specific user
+     * This method will update the details of a specific user.
      * @param request This class contains the details of the user.
-     * @return
-     * @throws Exception
+     *                username - The new/old username of the user.
+     *                firstName - The new/old first name of the user.
+     *                lastName - The new/old last name of the user.
+     *                email - The new/old email address of the user.
+     *                id - The UUID of the user to ensure the user exists.
+     * @return This class will contain if updating the user's details was
+     *         successful or not.
+     * @throws Exception Thrown if an error was encountered during the request.
      */
     @Transactional
     public UpdateProfileResponse updateProfile(UpdateProfileRequest request) throws Exception{
@@ -330,6 +362,10 @@ public class UserServiceImpl {
     /**
      * This function verifies the user's authenticity.
      * @param request This class contains the information of the user.
+     *                email - The email address of the user that wants to verify
+     *                        their account.
+     *                verificationCode - The verification code sent to the user
+     *                                   via email.
      * @return The return class returns if the verification process was successful**
      */
     @Transactional
@@ -367,7 +403,9 @@ public class UserServiceImpl {
 
     /**
      * This function will resend the verification code to user.
-     * @param request This class contains the information of the user.
+     * @param request This class contains the email address of the user.
+     *                email - The email address that will be used to send the
+     *                        verification code to.
      * @return The return class returns if the verification process was successful**
      */
     @Transactional
@@ -411,6 +449,9 @@ public class UserServiceImpl {
      * This function will allow the user to reset their password and store the new password
      * in the database.
      * @param request This class will contain the new password of the user.
+     *                newPassword - The new password for that user.
+     *                email - The email of the user that requested password change.
+     *                otp - The one-time-password sent to the user via email.
      * @return This class will contain if the password reset process was successful.
      */
     @Transactional
@@ -441,6 +482,10 @@ public class UserServiceImpl {
 
             if(request.getOtp().isEmpty()) {
                 return new ResetPasswordResponse(false, "Incorrect OTP");
+            }
+
+            if(!request.getOtp().matches("[0-9]+") || request.getOtp().length() > 6) {
+                return new ResetPasswordResponse(false, "Invalid OTP");
             }
 
             if(!request.getOtp().equals(user.getPasswordOTP())) {
@@ -476,6 +521,7 @@ public class UserServiceImpl {
      * This function will allow the user to reset their password and store the new password
      * in the database.
      * @param request This class will contain the new password of the user.
+     *                email - The email which to send the OTP to.
      * @return This class will contain if the password reset process was successful.
      */
     @Transactional
@@ -899,10 +945,10 @@ public class UserServiceImpl {
     }
 
     /**
-     *
-     * @param hex
-     * @return
-     * @throws NoSuchAlgorithmException
+     *This is an internal functions that converts a hex string into a byte array.
+     * @param hex The hex string that will be converted.
+     * @return The converted byte array.
+     * @throws NoSuchAlgorithmException Thrown if the algorithm does not exist.
      */
     private static byte[] fromHex(String hex) throws NoSuchAlgorithmException
     {
@@ -912,5 +958,31 @@ public class UserServiceImpl {
             bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
         }
         return bytes;
+    }
+
+    /**
+     * Check if the password contains any uppercase.
+     * @param str This is the password that needs to be checked.
+     * @return Returns true if a Uppercase was detected. False if not.
+     */
+    private static boolean checkPasswordUpper(String str) {
+        char ch;
+        boolean capitalFlag = false;
+        boolean lowerCaseFlag = false;
+        boolean numberFlag = false;
+        for(int i=0;i < str.length();i++) {
+            ch = str.charAt(i);
+            if( Character.isDigit(ch)) {
+                numberFlag = true;
+            }
+            else if (Character.isUpperCase(ch)) {
+                capitalFlag = true;
+            } else if (Character.isLowerCase(ch)) {
+                lowerCaseFlag = true;
+            }
+            if(numberFlag && capitalFlag && lowerCaseFlag)
+                return true;
+        }
+        return false;
     }
 }

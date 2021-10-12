@@ -4,8 +4,15 @@
 #row-1 {
     grid-row-start: 1;
     grid-row-end: 2;
-    grid-template-rows: 0em auto;
+    grid-template-rows: 0 auto;
     margin-bottom: 0;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    border: 1px solid transparent;
+    border-radius: 10px;
+}
+
+#row-1:hover {
+    border: 1px solid var(--pink);
 }
 
 #indicator-card-container {
@@ -13,7 +20,7 @@
     grid-template-columns: 100%; /*2 columns, left column, right column */
     grid-template-rows: 50% 50%; /*1 single row*/
     /*border: 3px solid red;*/
-    background: var(--light-gray);
+    background: var(--dark-black);
     row-gap: 10px;
 }
 
@@ -26,12 +33,26 @@
     grid-template-rows: 100%;
     grid-template-columns: repeat(4, 1fr);
     column-gap: 2%;
-    background: white;
-    border: 2px solid #e8e8e9;
+    background: var(--dark-black);
+    /*border: 2px solid var(--black-border);*/
     border-radius: 10px;
     padding: 28px;
     height: max-content;
     /*height: 284px;*/
+}
+
+.chart-page-card > .simple-card-title {
+    background: var(--dark-black) !important;
+    color: white !important;
+}
+
+.chart-page-card > .simple-card-body {
+    background: var(--dark-black) !important;
+
+}
+
+.chart-page-card > .simple-card-body > .value-with-percent-container > .raw-value {
+    color: white;
 }
 
 #overview-metric-1 {
@@ -39,22 +60,17 @@
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
-
     height: fit-content;
     /*padding: 25px;*/
     /*padding-left: 11px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
-    background: white;
-    border-right: 1px solid lightgrey;
-
-
+    border-right: 1px solid var(--black-border);
 }
 
 #overview-metric-1 > .simple-card-title {
     padding: 10px;
     padding-left: 0px;
     text-align: left;
-    color: darkgrey;
 }
 
 #overview-metric-2 {
@@ -66,9 +82,8 @@
     /*padding: 25px;*/
     /*padding-left: 11px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
-    background: white;
     margin: 0;
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid var(--black-border);
 
 }
 
@@ -76,7 +91,6 @@
     padding: 10px;
     padding-left: 0px;
     text-align: left;
-    color: darkgrey;
 }
 
 
@@ -89,8 +103,7 @@
     height: fit-content;
     /*padding: 25px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
-    background: white;
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid var(--black-border);
 
 }
 
@@ -98,8 +111,6 @@
     padding: 10px;
     padding-left: 0px;
     text-align: left;
-    color: darkgrey;
-
 }
 
 
@@ -108,18 +119,17 @@
     grid-column-end: 5;
     grid-row-start: 1;
     grid-row-end: 2;
-
     height: fit-content;
     /*padding: 25px;*/
     /*box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);*/
-    background: white;
+    background: var(--dark-black);
 }
 
 #overview-metric-4 > .simple-card-title {
     padding: 10px;
     padding-left: 0px;
-    text-align: left;
-    color: darkgrey;
+    text-align: center;
+    color: var(--black-border);
 }
 
 
@@ -141,7 +151,6 @@
 
 
 #total-sentiment-pie-container {
-    /*border: 3px solid black;*/
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: 100%;

@@ -202,10 +202,53 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("If_Password_Length_Is_Less_Than_Six")
+    public void passwordLengthLess() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "pass", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("The password is too short", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_Password_Not_Contain_Digits")
+    public void passwordNotContainsDigits() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "password", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("Password should contain at least one digit", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_Password_Not_Contain_Uppercase_Characters")
+    public void passwordLowerCaseOnly() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "password", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("Password should contains at least one upper case character", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_Password_Only_Numbers")
+    public void passwordNumbersOnly() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "0000000", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("Password cannot only contain numbers", response.getMessage());
+    }
+
+    @Test
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
         User newTestUser = new User();
-
         newTestUser.setId(UUID.fromString("0b4b8936-bd7e-4373-b097-bb227b9f4072"));
         newTestUser.setFirstName("FirstNameTest");
         newTestUser.setLastName("LastNameTest");
@@ -268,7 +311,6 @@ public class UserServiceTest {
         Assertions.assertNull(foundUser);
 
         Assertions.assertEquals("The email does not exist", response.getMessage());
-
     }
 
     @Test
@@ -285,7 +327,22 @@ public class UserServiceTest {
         //Assertions.assertNotNull(foundUser);
 
         Assertions.assertEquals("Incorrect password", response.getMessage());
+    }
 
+    @Test
+    @DisplayName("Login_Not_Verified")
+    public void loginNotVerified() throws Exception {
+        User newTestUser = new User();
+        newTestUser.setId(UUID.fromString("0b4b8936-bd7e-4373-b097-bb227b9f4072"));
+        newTestUser.setFirstName("FirstNameTest");
+        newTestUser.setLastName("LastNameTest");
+        newTestUser.setUsername("newUsername");
+        newTestUser.setEmail("newemail@test.com");
+        newTestUser.setPassword("1000:3dd6e56301215db3aaf500526a14f9b8:dc79a5a53f48f100883ef1327c89248b1eb0eb231408c746a4080995db17eafd71042a5b9c5429e2e26ea58d1e6e357e027e289f5a836fefa3b8accf4a056485");
+        newTestUser.setVerified(false);
+        newTestUser.setVerificationCode("eroiwuerowiuerowiurow");
+        newTestUser.setDateCreated(new Date(2021, Calendar.JULY, 2));
+        newTestUser.setPermission(Permission.IMPORTING);
     }
 
     @Test
