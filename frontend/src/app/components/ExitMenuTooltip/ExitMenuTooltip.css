@@ -9,11 +9,21 @@
 /*The little arrow in the tooltip*/
 div.ant-dropdown.ant-dropdown-show-arrow.ant-dropdown-placement-bottomRight>div.ant-dropdown-arrow{
     top: 6px;
-    border-top-color: #000 !important;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: #040404 !important;
+    border-top-color: #000000 !important;
+    border-right-color: #000000 !important;
+    border-bottom-color: #000000 !important;
+    border-left-color: #000000 !important;
     /* box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06); */
+}
+
+.ant-dropdown-placement-topCenter >
+.ant-dropdown-arrow, .ant-dropdown-placement-topLeft >
+.ant-dropdown-arrow, .ant-dropdown-placement-topRight >
+.ant-dropdown-arrow {
+    border-right-color: black;
+    border-bottom-color: black;
+    border-left-color: black;
+    border-top-color: black;
 }
 
 /*The LINKs in the tooltip*/

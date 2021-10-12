@@ -7,7 +7,7 @@ export default function ExitMenuDropDown() {
   return (
       <Dropdown
         overlay={<ExitMenuTooltip />}
-        placement="bottomLeft"
+        placement="topCenter"
         arrow
         trigger="click"
         className="exit_menu_dropdown"
