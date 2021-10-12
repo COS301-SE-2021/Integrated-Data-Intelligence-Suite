@@ -14,8 +14,10 @@ import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
 import com.Gateway_Service.Gateway_Service.dataclass.user.*;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataRequest;
 import com.Gateway_Service.Gateway_Service.dataclass.visualize.VisualizeDataResponse;
+import com.Gateway_Service.Gateway_Service.exception.*;
 import com.Gateway_Service.Gateway_Service.rri.DataSource;
 import com.Gateway_Service.Gateway_Service.dataclass.gateway.Graph;
+import com.Gateway_Service.Gateway_Service.rri.ServiceSuccesResponse;
 import com.Gateway_Service.Gateway_Service.service.*;
 
 
@@ -32,6 +34,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -96,7 +99,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/main/{key}", produces = "application/json")
     @CrossOrigin
     //@HystrixCommand(fallbackMethod = "fallback")
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> init(@PathVariable String key, @RequestBody SearchRequest request) throws Exception {
+    public ResponseEntity<?> init(@PathVariable String key, @RequestBody SearchRequest request) throws Exception {
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
         System.out.println(request.getUsername());
@@ -124,7 +127,15 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+
+            ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+            serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+            //serviceSuccesResponse.setPathUri(request.getDescription(true));
+            serviceSuccesResponse.setStatus(HttpStatus.OK);
+            serviceSuccesResponse.setData(outputData);
+
+            return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+            //return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         System.out.println("***********************IMPORT HAS BEEN DONE*************************");
@@ -162,7 +173,14 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+            ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+            serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+            //serviceSuccesResponse.setPathUri(request.getDescription(true));
+            serviceSuccesResponse.setStatus(HttpStatus.OK);
+            serviceSuccesResponse.setData(outputData);
+
+            return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+            //return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         System.out.println("***********************PARSE HAS BEEN DONE*************************");
@@ -172,7 +190,12 @@ public class GatewayServiceController {
         /*********************ANALYSE*************************/
 
         AnalyseDataRequest analyseRequest = new AnalyseDataRequest(socialMediaData, newsData);//    DataSource.TWITTER,ImportResponse. getJsonData());
-        AnalyseDataResponse analyseResponse = analyseClient.analyzeData(analyseRequest);
+        AnalyseDataResponse analyseResponse = null;
+        //try {
+            analyseResponse = analyseClient.analyzeData(analyseRequest);
+        //}catch (Exception e){
+         //   e.printStackTrace();
+        //}
 
 
         if(analyseResponse.getFallback() == true) {
@@ -184,7 +207,14 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+            ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+            serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+            //serviceSuccesResponse.setPathUri(request.getDescription(true));
+            serviceSuccesResponse.setStatus(HttpStatus.OK);
+            serviceSuccesResponse.setData(outputData);
+
+            return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+            //return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         if (analyseResponse.getAnomalyList() == null) System.out.println("Oi its empty");
@@ -214,7 +244,14 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+            ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+            serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+            //serviceSuccesResponse.setPathUri(request.getDescription(true));
+            serviceSuccesResponse.setStatus(HttpStatus.OK);
+            serviceSuccesResponse.setData(outputData);
+
+            return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+            //return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
@@ -248,7 +285,14 @@ public class GatewayServiceController {
         reportData.add(reportGraph);
         outputData.add(reportData);
 
-        return new ResponseEntity<>(outputData,HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(outputData);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(outputData,HttpStatus.OK);
 
     }
 
@@ -266,7 +310,7 @@ public class GatewayServiceController {
      */
     @PostMapping("/analyzeUpload")
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> fileAnalyzeUpload(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> fileAnalyzeUpload(@RequestParam("file") MultipartFile file,
                                                                          @RequestParam("c1") String col1,
                                                                          @RequestParam("c2") String col2,
                                                                          @RequestParam("c3") String col3,
@@ -319,12 +363,19 @@ public class GatewayServiceController {
             //response.put("message", e.getMessage());
         }
 
-        return new ResponseEntity<>(outputData, HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(outputData);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
     @PostMapping(value = "/trainUpload")
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> fileTrainUpload(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> fileTrainUpload(@RequestParam("file") MultipartFile file,
                                                                        @RequestParam("c1") String col1,
                                                                        @RequestParam("c2") String col2,
                                                                        @RequestParam("c3") String col3,
@@ -373,7 +424,7 @@ public class GatewayServiceController {
 
 
             TrainUserModelRequest analyseRequest = new TrainUserModelRequest(modelname,trainingData);
-            ResponseEntity<ArrayList<ArrayList<Graph>>> analyseResponse =  this.trainUserModel(analyseRequest);
+            ResponseEntity<ArrayList<ArrayList<Graph>>> analyseResponse = (ResponseEntity<ArrayList<ArrayList<Graph>>>) this.trainUserModel(analyseRequest);
 
             GetModelsRequest analyseRequest2 = new GetModelsRequest(userId);
 
@@ -395,7 +446,14 @@ public class GatewayServiceController {
             //response.put("message", e.getMessage());
         }
 
-        return new ResponseEntity<>(outputData, HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(outputData);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(outputData, HttpStatus.OK);
     }
 
 
@@ -407,14 +465,21 @@ public class GatewayServiceController {
     @PostMapping(value = "/generateReport",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetReportDataByIdResponse> generateReport(@RequestBody ReportRequest request) {
+    public ResponseEntity<?> generateReport(@RequestBody ReportRequest request) throws ReporterException, UserException {
 
         GetReportDataByIdRequest repRequest = new GetReportDataByIdRequest(UUID.fromString(request.getReportID()));
         GetReportDataByIdResponse output = reportClient.getReportDataById(repRequest);
 
         ReportResponse userResponse = userClient.addReportForUser(request);
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(output);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
     /**
@@ -425,7 +490,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllReportsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetReportDataByIdResponse>> getAllReportsByUser(@RequestBody GetUserReportsRequest request) {
+    public ResponseEntity<?> getAllReportsByUser(@RequestBody GetUserReportsRequest request) throws ReporterException, UserException {
 
         /*********************USER******************/
 
@@ -449,7 +514,14 @@ public class GatewayServiceController {
             output.add(reportClient.getReportDataById(reportRequest));
         }
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(output);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
 
@@ -487,7 +559,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserReportById",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<DeleteReportDataByIdResponse> deleteUserReportById(@RequestBody ReportRequest request) {
+    public ResponseEntity<?> deleteUserReportById(@RequestBody ReportRequest request) throws ReporterException, UserException {
 
 
         /*********************REPORT******************/
@@ -504,7 +576,15 @@ public class GatewayServiceController {
             ReportResponse userResponse = userClient.removeReportForUser(request);
         }
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(output);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(output, HttpStatus.OK);
 
 
     }
@@ -513,10 +593,17 @@ public class GatewayServiceController {
 
     @PostMapping(value = "/shareReport" , produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ShareReportResponse> shareReport(@RequestBody ShareReportRequest request) {
+    public ResponseEntity<?> shareReport(@RequestBody ShareReportRequest request) throws ReporterException {
         ShareReportResponse response = reportClient.shareReport(request);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -529,7 +616,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/trainUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> trainUserModel(@RequestBody TrainUserModelRequest request) {
+    public ResponseEntity<?> trainUserModel(@RequestBody TrainUserModelRequest request) throws AnalyserException {
 
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
@@ -594,7 +681,14 @@ public class GatewayServiceController {
         System.out.println("***********************ANALYSE HAS BEEN DONE*************************");
 
 
-        return new ResponseEntity<>(outputData,HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(outputData);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
 
     /**
@@ -605,7 +699,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/analyseUserData",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> analyseUserData(@RequestBody AnalyseUserDataRequest request) {
+    public ResponseEntity<?> analyseUserData(@RequestBody AnalyseUserDataRequest request) throws AnalyserException, ParserException, ReporterException, VisualizerException {
 
         ArrayList<ArrayList<Graph>> outputData = new ArrayList<>();
 
@@ -652,7 +746,14 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+            ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+            serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+            //serviceSuccesResponse.setPathUri(request.getDescription(true));
+            serviceSuccesResponse.setStatus(HttpStatus.OK);
+            serviceSuccesResponse.setData(outputData);
+
+            return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+            //return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
 
@@ -681,7 +782,14 @@ public class GatewayServiceController {
 
             outputData.add( data);
 
-            return new ResponseEntity<>(outputData,HttpStatus.OK);
+            ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+            serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+            //serviceSuccesResponse.setPathUri(request.getDescription(true));
+            serviceSuccesResponse.setStatus(HttpStatus.OK);
+            serviceSuccesResponse.setData(outputData);
+
+            return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+            //return new ResponseEntity<>(outputData,HttpStatus.OK);
         }
 
         System.out.println("***********************VISUALIZE HAS BEEN DONE*************************");
@@ -720,7 +828,14 @@ public class GatewayServiceController {
         System.out.println("***********************REPORT HAS BEEN DONE*************************");
 
 
-        return new ResponseEntity<>(outputData,HttpStatus.OK);
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(outputData);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
 
 
@@ -732,13 +847,12 @@ public class GatewayServiceController {
     @PostMapping(value = "/getAllModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> getAllModelsByUser(@RequestBody GetModelsRequest request) {
+    public ResponseEntity<?> getAllModelsByUser(@RequestBody GetModelsRequest request) throws AnalyserException, UserException {
 
         /*********************USER******************/
 
         //GET ALL IDS
         int maxSizeId;
-
 
 
         GetModelsResponse userResponse = userClient.getUserModels(request);
@@ -769,7 +883,15 @@ public class GatewayServiceController {
         }
         output.get(0).setIsModelDefault(foundSelected);
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(output);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
 
@@ -781,7 +903,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/getSelectedModelId",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetModelByIdResponse> getModelInfoById(@RequestBody ModelRequest request) {
+    public ResponseEntity<?> getModelInfoById(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         //TODO: user returns selected model id
 
@@ -794,7 +916,15 @@ public class GatewayServiceController {
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse output = analyseClient.getModelById(analyseRequest);
 
-        return new ResponseEntity<>(output, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(output);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
     /**
@@ -805,7 +935,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/deleteUserModelsByUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> deleteUserModelById(@RequestBody ModelRequest request) {
+    public ResponseEntity<?> deleteUserModelById(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         //TODO: user removes from list
 
@@ -826,7 +956,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/selectModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> selectModel(@RequestBody ModelRequest request) {
+    public ResponseEntity<?> selectModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         GetModelsRequest getAllReq = new GetModelsRequest(request.getUserID());
 
@@ -856,7 +986,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/addUserModel",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ArrayList<GetModelByIdResponse>> addUserModel(@RequestBody ModelRequest request) {
+    public ResponseEntity<?> addUserModel(@RequestBody ModelRequest request) throws AnalyserException, UserException {
 
         GetModelByIdRequest analyseRequest = new GetModelByIdRequest(request.getModelID());
         GetModelByIdResponse analyseResponse = analyseClient.getModelById(analyseRequest);
@@ -864,13 +994,13 @@ public class GatewayServiceController {
         GetModelsRequest analyseRequest2 = new GetModelsRequest(request.getUserID());
 
         if(analyseResponse.getModelID() == null) { // doesn't find model
-            return this.getAllModelsByUser(analyseRequest2); //todo: out failure
+            //return this.getAllModelsByUser(analyseRequest2); //todo: out failure
+            throw new AnalyserException("Model id is not found");
         }
 
         /*********************USER******************/
 
         ModelResponse userResponse = userClient.addModelForUser(request);
-
 
         return this.getAllModelsByUser(analyseRequest2);
     }
@@ -890,18 +1020,35 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/register",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterForm form) {
+    public ResponseEntity<?> register(@RequestBody RegisterForm form) throws UserException {
         RegisterRequest registerRequest = new RegisterRequest(form.getUsername(), form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
         RegisterResponse registerResponse = userClient.register(registerRequest);
-        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
+
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(registerResponse);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 
     @GetMapping(value ="user/getUser/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable String id){
+    public ResponseEntity<?> getUser(@PathVariable String id) throws UserException {
         GetUserRequest getUserRequest = new GetUserRequest(UUID.fromString(id));
         GetUserResponse getUserResponse = userClient.getUser(getUserRequest);
-        return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(getUserResponse);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(getUserResponse, HttpStatus.OK);
     }
 
     /**
@@ -912,9 +1059,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/login",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) throws UserException {
         LoginResponse response = userClient.login(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -926,10 +1081,18 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/verify",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<VerifyAccountResponse> verify(@RequestBody VerifyAccountRequest request) {
+    public ResponseEntity<?> verify(@RequestBody VerifyAccountRequest request) throws UserException {
         System.out.println("Verifying User: " + request.getEmail());
         VerifyAccountResponse response = userClient.verifyAccount(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     /**
@@ -940,9 +1103,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/resend",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ResendCodeResponse> resendCode(@RequestBody ResendCodeRequest request) {
+    public ResponseEntity<?> resendCode(@RequestBody ResendCodeRequest request) throws UserException {
         ResendCodeResponse response = userClient.resendCode(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     /**
@@ -953,9 +1124,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/sendOTP",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ResendCodeResponse> sendOTP(@RequestBody ResendCodeRequest request) {
+    public ResponseEntity<?> sendOTP(@RequestBody ResendCodeRequest request) throws UserException {
         ResendCodeResponse response = userClient.sendOTP(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     /**
@@ -966,10 +1145,18 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/resetPassword",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) throws UserException {
         System.out.println(request.getNewPassword());
         ResetPasswordResponse response = userClient.resetPassword(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     /**
@@ -980,9 +1167,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/user/updateProfile",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<UpdateProfileResponse> updateProfile(@RequestBody UpdateProfileRequest request) {
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest request) throws UserException {
         UpdateProfileResponse response = userClient.updateProfile(request);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     /**
@@ -993,9 +1188,17 @@ public class GatewayServiceController {
     @PostMapping(value = "/changeUser",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<ChangeUserResponse> changeUser(@RequestBody ChangeUserRequest request) {
+    public ResponseEntity<?> changeUser(@RequestBody ChangeUserRequest request) throws UserException {
         ChangeUserResponse response = userClient.managePermissions(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -1004,15 +1207,23 @@ public class GatewayServiceController {
      */
     @GetMapping(value = "/user/getAll", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<GetAllUsersResponse> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() throws UserException {
         System.out.println("Getting all users from the database");
         GetAllUsersResponse response = userClient.getAllUsers();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/retrievePrevious", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<ArrayList<ArrayList<Graph>>> retrievePreviousData() {
+    public ResponseEntity<?> retrievePreviousData() {
         return null;
     }
 
@@ -1027,9 +1238,17 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> addApiSource(@RequestBody String jsonRequest) {
-        String response = importClient.addApiSource(jsonRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<?> addApiSource(@RequestBody String jsonRequest) throws ImporterException {
+        String response = ""; //importClient.addApiSource(jsonRequest); //TODO
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -1039,9 +1258,17 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/getSourceById", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<GetAPISourceByIdResponse> getSourceById(@RequestBody GetAPISourceByIdRequest request) {
+    public ResponseEntity<?> getSourceById(@RequestBody GetAPISourceByIdRequest request) throws ImporterException {
         GetAPISourceByIdResponse response = importClient.getSourceById(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -1051,9 +1278,17 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/updateAPI", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> editAPISource(@RequestBody String jsonRequest) {
-        String response = importClient.editAPISource(jsonRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<?> editAPISource(@RequestBody String jsonRequest) throws ImporterException {
+        String response = "" ; //importClient.editAPISource(jsonRequest); //TODO
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -1063,10 +1298,18 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/deleteSource", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<DeleteSourceResponse> deleteSource(@RequestBody DeleteSourceRequest request) {
+    public ResponseEntity<?> deleteSource(@RequestBody DeleteSourceRequest request) throws ImporterException {
         log.info("[API] Deleting api source");
         DeleteSourceResponse response = importClient.deleteSource(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -1075,15 +1318,23 @@ public class GatewayServiceController {
      */
     @GetMapping(value = "/getAllSources", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<GetAllAPISourcesResponse> editAPISource() {
+    public ResponseEntity<?> editAPISource() throws ImporterException {
         GetAllAPISourcesResponse response = importClient.getAllAPISources();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+        serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+        //serviceSuccesResponse.setPathUri(request.getDescription(true));
+        serviceSuccesResponse.setStatus(HttpStatus.OK);
+        serviceSuccesResponse.setData(response);
+
+        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        //return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/collect/{key}/{from}/{to}", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<String> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to){
+    public ResponseEntity<?> collectDatedData(@PathVariable String key, @PathVariable String from, @PathVariable String to) throws ParserException, ImporterException {
 
 
         ImportTwitterResponse res = importClient.importDatedData(new ImportTwitterRequest(key, from, to));
@@ -1097,7 +1348,15 @@ public class GatewayServiceController {
 
             if(!parseResponse.getFallback()) {
                 System.out.println("........................Parsed Data Successfully...........................\n\n\n");
-                return new ResponseEntity<>("{ \n \"success\" : true \n}",HttpStatus.OK);
+
+                ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
+                serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
+                //serviceSuccesResponse.setPathUri(request.getDescription(true));
+                serviceSuccesResponse.setStatus(HttpStatus.OK);
+                serviceSuccesResponse.setData("{ \n \"success\" : true \n}");
+
+                return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+                //return new ResponseEntity<>("{ \n \"success\" : true \n}",HttpStatus.OK);
             }
 
         }

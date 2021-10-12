@@ -1,12 +1,17 @@
 package com.Gateway_Service.Gateway_Service.service;
 
 
+import com.Gateway_Service.Gateway_Service.dataclass.analyse.AnalyseDataResponse;
 import com.Gateway_Service.Gateway_Service.dataclass.parse.*;
+import com.Gateway_Service.Gateway_Service.exception.AnalyserException;
+import com.Gateway_Service.Gateway_Service.exception.ParserException;
 import com.Gateway_Service.Gateway_Service.rri.RestTemplateErrorHandler;
+import com.Gateway_Service.Gateway_Service.rri.ServiceErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,9 +28,7 @@ public class ParseService {
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
-    public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public ParseImportedDataResponse parseImportedData(ParseImportedDataRequest parseRequest) throws ParserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -40,9 +43,25 @@ public class ParseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ParseImportedDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseImportedData", request, ParseImportedDataResponse.class);
+        //ParseImportedDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseImportedData", request, ParseImportedDataResponse.class);
 
-        return parseResponse;
+        ResponseEntity<?> parseResponse = null;
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ParserException(errors);
+            }
+        }
+
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseImportedDataResponse>() {});
+        return (ParseImportedDataResponse) parseResponse.getBody();
     }
 
     /**
@@ -51,9 +70,7 @@ public class ParseService {
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
-    public ParseUploadedSocialDataResponse parseUploadedSocialData(ParseUploadedSocialDataRequest parseRequest) {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public ParseUploadedSocialDataResponse parseUploadedSocialData(ParseUploadedSocialDataRequest parseRequest) throws ParserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -68,9 +85,25 @@ public class ParseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ParseUploadedSocialDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedSocialData", request, ParseUploadedSocialDataResponse.class);
+        //ParseUploadedSocialDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedSocialData", request, ParseUploadedSocialDataResponse.class);
 
-        return parseResponse;
+        ResponseEntity<?> parseResponse = null;
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedSocialData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ParserException(errors);
+            }
+        }
+
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedSocialData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedSocialDataResponse>() {});
+        return (ParseUploadedSocialDataResponse) parseResponse.getBody();
     }
 
     /**
@@ -79,9 +112,7 @@ public class ParseService {
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
-    public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest parseRequest) {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public ParseUploadedTrainingDataResponse parseUploadedTrainingData(ParseUploadedTrainingDataRequest parseRequest) throws ParserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -96,9 +127,25 @@ public class ParseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ParseUploadedTrainingDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseTrainingData", request, ParseUploadedTrainingDataResponse.class);
+        //ParseUploadedTrainingDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseTrainingData", request, ParseUploadedTrainingDataResponse.class);
 
-        return parseResponse;
+        ResponseEntity<?> parseResponse = null;
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseTrainingData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ParserException(errors);
+            }
+        }
+
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseTrainingData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedTrainingDataResponse>() {});
+        return (ParseUploadedTrainingDataResponse) parseResponse.getBody();
     }
 
     /**
@@ -107,9 +154,7 @@ public class ParseService {
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
     //@HystrixCommand(fallbackMethod = "parseImportedDataFallback")
-    public ParseUploadedNewsDataResponse parseUploadedNewsData(ParseUploadedNewsDataRequest parseRequest) {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public ParseUploadedNewsDataResponse parseUploadedNewsData(ParseUploadedNewsDataRequest parseRequest) throws ParserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -124,9 +169,25 @@ public class ParseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ParseUploadedNewsDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedNewsData", request, ParseUploadedNewsDataResponse.class);
+        //ParseUploadedNewsDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedNewsData", request, ParseUploadedNewsDataResponse.class);
 
-        return parseResponse;
+        ResponseEntity<?> parseResponse = null;
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedNewsData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ParserException(errors);
+            }
+        }
+
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedNewsData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedNewsDataResponse>() {});
+        return (ParseUploadedNewsDataResponse) parseResponse.getBody();
     }
 
     /**
@@ -134,9 +195,7 @@ public class ParseService {
      * @param parseRequest This is the request
      * @return ParseImportedDataResponse This object contains parsed data returned by Parse-Service
      */
-    public AddSocialMediaPropertiesResponse addSocialMediaPropertiesRequest(AddSocialMediaPropertiesRequest parseRequest) {
-
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    public AddSocialMediaPropertiesResponse addSocialMediaPropertiesRequest(AddSocialMediaPropertiesRequest parseRequest) throws ParserException {
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -151,9 +210,25 @@ public class ParseService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        AddSocialMediaPropertiesResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/addSocialMediaProperties", request, AddSocialMediaPropertiesResponse.class);
+        //AddSocialMediaPropertiesResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/addSocialMediaProperties", request, AddSocialMediaPropertiesResponse.class);
 
-        return parseResponse;
+        ResponseEntity<?> parseResponse = null;
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/addSocialMediaProperties",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
+        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+            ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
+            if(serviceErrorResponse.getErrors() != null) {
+                String errors = serviceErrorResponse.getErrors().get(0);
+                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                    errors = "; " + errors;
+                }
+
+                throw new ParserException(errors);
+            }
+        }
+
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/addSocialMediaProperties",HttpMethod.POST,request,new ParameterizedTypeReference<AddSocialMediaPropertiesResponse>() {});
+        return (AddSocialMediaPropertiesResponse) parseResponse.getBody();
     }
 
     /**
