@@ -8,7 +8,6 @@
     background: var(--light-black);
     color: white;
     height: 70px;
-    padding: 0;
     margin: 0 30px;
     border: 0;
     border-bottom: 1px solid var(--black-border);
@@ -16,33 +15,29 @@
     width: 100%;
 
     display: grid;
-    grid-template-rows: 100%;
-    grid-template-columns: repeat(4, auto);
     align-items: center;
     justify-self: center;
     align-content: center;
     align-self: center;
+    padding: 6%;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
 }
 
-/*
-*
-*/
-/*#content_section {*/
-/*    padding: 3%;*/
-/*    background: var(--light-black);*/
-/*    border: 0;*/
-/*    !*border:3px solid blue;*!*/
-
-/*    !*Scrolling Functionality*!*/
-/*    max-height: 100vh;*/
-/*    overflow-y: scroll;*/
-/*    !*overflow-x: ;*!*/
-/*    display: grid;*/
-/*    grid-template-columns: repeat(auto-fit, minmax(260px, 5fr));*/
-/*    grid-template-rows: repeat(6, 350px);*/
-/*    grid-gap: 1rem;*/
-/*    grid-auto-flow: dense;*/
-/*}*/
+#top-bar-container {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: auto max-content max-content;
+    justify-self: center;
+    width: 100%;
+    /*max-width: 1200px;*/
+    align-items: center;
+    column-gap: 25px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 #content_section > div {
     max-width: 350px;
