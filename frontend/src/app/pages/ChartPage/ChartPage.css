@@ -325,7 +325,7 @@
     border: 1px solid transparent;
 }
 
-#word-cloud-graph-container:hover {
+#word-graph-2:hover {
     border: 1px solid var(--pink);
 }
 
@@ -341,10 +341,13 @@
 }
 
 #word-graph-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
     grid-row-start: 1;
     grid-row-end: 2;
     padding: 10px;
-    border: 2px solid var(--border-color);
+    border: 1px solid transparent;
     background: var(--dark-black);
     border-radius: 10px;
 }
