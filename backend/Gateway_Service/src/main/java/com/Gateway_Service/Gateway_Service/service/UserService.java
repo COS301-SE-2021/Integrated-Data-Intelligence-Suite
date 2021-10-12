@@ -547,10 +547,12 @@ public class UserService {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        //GetModelsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getModels/" + userRequest.getUserID(), GetModelsResponse.class);
+        //GetModelsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getModels/{id}" + userRequest.getUserID(), GetModelsResponse.class);
+
+
 
         ResponseEntity<?> userResponse = null;
-        userResponse = restTemplate.exchange("http://User-Service/User/getModels",HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getModels/" + userRequest.getUserID(),HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(userResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
@@ -564,7 +566,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/getModels",HttpMethod.GET, null,new ParameterizedTypeReference<GetModelsResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getModels/" + userRequest.getUserID(),HttpMethod.GET, null,new ParameterizedTypeReference<GetModelsResponse>() {});
         return (GetModelsResponse) userResponse.getBody();
     }
 
