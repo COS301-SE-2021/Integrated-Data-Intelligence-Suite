@@ -37,6 +37,7 @@ import org.apache.spark.sql.types.*;
 import org.mlflow.tracking.MlflowClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
@@ -423,9 +424,16 @@ public class AnalyseServiceImpl {
         try {
             MlflowClient client = new MlflowClient("http://localhost:5000");
 
+
+            //String userDirectory = resource.getAbsolutePath();
+
             //1
             File infoFile = client.downloadArtifacts(modelID,"ModelInformation.txt");
-            File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            //File infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+
+            File infoFileLog = new ClassPathResource("ModelInformation.txt").getFile();
+            infoFileLog.createNewFile();
+
             FileUtils.copyFile(infoFile, infoFileLog);
 
             String modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
@@ -449,7 +457,10 @@ public class AnalyseServiceImpl {
 
             //2
             infoFile = client.downloadArtifacts(modelID2,"ModelInformation.txt");
-            infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            //infoFileLog = new File("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt");
+            //infoFileLog = new ClassPathResource("ModelInformation.txt").getFile();
+            //infoFileLog.createNewFile();
+
             FileUtils.copyFile(infoFile, infoFileLog);
 
             modelInformation = Paths.get("backend/Analyse_Service/src/main/java/com/Analyse_Service/Analyse_Service/models/ModelInformation.txt").toString();
@@ -466,7 +477,7 @@ public class AnalyseServiceImpl {
             //FileUtils.deleteDirectory(new File(infoFileLog.getPath()));
 
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             throw new AnalysingModelException("Failed finding model file");
             //return new GetModelByIdResponse(null, null, null);
         }
@@ -1460,7 +1471,7 @@ public class AnalyseServiceImpl {
             }
         } catch (Exception e){
             //e.printStackTrace();
-            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated, req");
+            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated");
         }
 
         /******************* READ MODEL*****************/
@@ -1791,7 +1802,7 @@ public class AnalyseServiceImpl {
             }
         } catch (Exception e){
             e.printStackTrace();
-            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated, req");
+            throw new InvalidRequestException("Failed to login models databases, please ensure it's activated");
         }
 
 
