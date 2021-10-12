@@ -202,6 +202,50 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("If_Password_Length_Is_Less_Than_Six")
+    public void passwordLengthLess() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "pass", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("The password is too short", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_Password_Not_Contain_Digits")
+    public void passwordNotContainsDigits() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "password", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("Password should contain at least one digit", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_Password_Not_Contain_Uppercase_Characters")
+    public void passwordLowerCaseOnly() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "password", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("Password should contains at least one upper case character", response.getMessage());
+    }
+
+    @Test
+    @DisplayName("If_Password_Only_Numbers")
+    public void passwordNumbersOnly() throws Exception {
+        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+
+        RegisterRequest request = new RegisterRequest("asudfhaisudfadasdh", "FirstNameTdsestDifferent", "LastNameTestDiasdfferent", "0000000", "emaildfifferenterere@teasdst.com");
+        RegisterResponse response = service.register(request);
+
+        Assertions.assertEquals("Password cannot only contain numbers", response.getMessage());
+    }
+
+    @Test
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
         User newTestUser = new User();

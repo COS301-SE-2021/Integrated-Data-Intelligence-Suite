@@ -149,6 +149,24 @@ public class UserServiceImpl {
         if(usersByEmail.isPresent()) {
             return new RegisterResponse(false, "This email has already been registered");
         }
+        //Password checks
+        if(request.getPassword().length() < 6) {
+            return new RegisterResponse(false, "The password is too short");
+        }
+
+        if(request.getPassword().matches("[0-9]+")) {
+            return new RegisterResponse(false, "Password cannot only contain numbers");
+        }
+
+        if(!request.getPassword().matches(".*\\d.*")) {
+            return new RegisterResponse(false, "Password should contain at least one digit");
+        }
+
+        if(!checkPasswordUpper(request.getPassword())) {
+            return new RegisterResponse(false, "Password should contains at least one upper case character");
+        }
+
+
 
         String password = request.getPassword();
         String hashedPass;
@@ -464,6 +482,10 @@ public class UserServiceImpl {
 
             if(request.getOtp().isEmpty()) {
                 return new ResetPasswordResponse(false, "Incorrect OTP");
+            }
+
+            if(!request.getOtp().matches("[0-9]+") || request.getOtp().length() > 6) {
+                return new ResetPasswordResponse(false, "Invalid OTP");
             }
 
             if(!request.getOtp().equals(user.getPasswordOTP())) {
@@ -936,5 +958,31 @@ public class UserServiceImpl {
             bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
         }
         return bytes;
+    }
+
+    /**
+     * Check if the password contains any uppercase.
+     * @param str This is the password that needs to be checked.
+     * @return Returns true if a Uppercase was detected. False if not.
+     */
+    private static boolean checkPasswordUpper(String str) {
+        char ch;
+        boolean capitalFlag = false;
+        boolean lowerCaseFlag = false;
+        boolean numberFlag = false;
+        for(int i=0;i < str.length();i++) {
+            ch = str.charAt(i);
+            if( Character.isDigit(ch)) {
+                numberFlag = true;
+            }
+            else if (Character.isUpperCase(ch)) {
+                capitalFlag = true;
+            } else if (Character.isLowerCase(ch)) {
+                lowerCaseFlag = true;
+            }
+            if(numberFlag && capitalFlag && lowerCaseFlag)
+                return true;
+        }
+        return false;
     }
 }
