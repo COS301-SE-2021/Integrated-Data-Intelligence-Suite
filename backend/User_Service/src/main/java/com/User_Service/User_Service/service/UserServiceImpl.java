@@ -154,13 +154,19 @@ public class UserServiceImpl {
             return new RegisterResponse(false, "The password is too short");
         }
 
-        if(request.getPassword().matches(".*\\d.*")) {
+        if(request.getPassword().matches("[0-9]+")) {
+            return new RegisterResponse(false, "Password cannot only contain numbers");
+        }
+
+        if(!request.getPassword().matches(".*\\d.*")) {
             return new RegisterResponse(false, "Password should contain at least one digit");
         }
 
         if(!checkPasswordUpper(request.getPassword())) {
-            return new RegisterResponse(false, "Password should contains at least one upper case character.");
+            return new RegisterResponse(false, "Password should contains at least one upper case character");
         }
+
+
 
         String password = request.getPassword();
         String hashedPass;
