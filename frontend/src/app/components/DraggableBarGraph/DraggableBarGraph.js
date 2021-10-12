@@ -1,24 +1,50 @@
 import React from 'react';
 import {
-    XYPlot, XAxis, YAxis, VerticalRectSeries, Highlight, DiscreteColorLegend,
+    XYPlot,
+    XAxis,
+    YAxis,
+    VerticalRectSeries,
+    Highlight,
+    DiscreteColorLegend,
 } from 'react-vis';
-
+import './DraggableBarGraph.css';
 import { DATA } from '../../Mocks/BarGraphMock';
 
 const index = 8;
 const colors = {
-    primary: '#5873f9',
-    secondary: '#12939A',
+    primary: '#E80057',
+    secondary: '#208AAE',
 };
 
 const ITEMS = [
-    { title: 'Options', color: '#ffffff' },
-    { title: 'Buttons', color: '#ffffff' },
-    { title: 'Select boxes', color: '#ffffff' },
-    { title: 'Date inputs', color: '#ffffff' },
-    { title: 'Password inputs', color: '#ffffff' },
-    { title: 'Forms', color: '#ffffff' },
-    { title: 'Other', color: '#ffffff' },
+    {
+        title: 'Options',
+        color: '#ffffff',
+    },
+    {
+        title: 'Buttons',
+        color: '#ffffff',
+    },
+    {
+        title: 'Select boxes',
+        color: '#ffffff',
+    },
+    {
+        title: 'Date inputs',
+        color: '#ffffff',
+    },
+    {
+        title: 'Password inputs',
+        color: '#ffffff',
+    },
+    {
+        title: 'Forms',
+        color: '#ffffff',
+    },
+    {
+        title: 'Other',
+        color: '#ffffff',
+    },
 ];
 
 function highlightMapPoints(highlightedPoints) {
@@ -45,20 +71,33 @@ export default class DraggableBarGraph extends React.Component {
             legendItems: null,
         };
     }
+
     static getDerivedStateFromProps(props) {
         if (props.text !== null && props.text !== '') {
             if (props.text[index] && props.text[index].length > 0) {
-                const dataPoints = Object.values(props.text[index]).map((item, i) => ({
-                    x0: i, x: i + 1, y: item.y, classname: item.x,
-                }));
-                const legendPoints = Object.values(props.text[index]).map((item, i) => ({
-                    title: `${i}-${item.x}`, color: '#ffffff',
-                }));
-                return { dataToBeDisplayed: dataPoints, legendItems: legendPoints };
+                const dataPoints = Object.values(props.text[index])
+                    .map((item, i) => ({
+                        x0: i,
+                        x: i + 1,
+                        y: item.y,
+                        classname: item.x,
+                    }));
+                const legendPoints = Object.values(props.text[index])
+                    .map((item, i) => ({
+                        title: `${i}-${item.x}`,
+                        color: '#ffffff',
+                    }));
+                return {
+                    dataToBeDisplayed: dataPoints,
+                    legendItems: legendPoints,
+                };
             }
         }
 
-        return { dataToBeDisplayed: DATA, legendItems: [] };
+        return {
+            dataToBeDisplayed: DATA,
+            legendItems: [],
+        };
     }
 
     getAverageY() {
@@ -92,8 +131,8 @@ export default class DraggableBarGraph extends React.Component {
             <div className="uber-bar-graph-container">
                 {/* {selectionStart && <p className="bar-graph-statistic">{this.state.average}</p>} */}
                 <div className="bar-graph-plot">
-                    { this.state.dataToBeDisplayed && (
-                        <XYPlot width={300} height={200}>
+                    {this.state.dataToBeDisplayed && (
+                        <XYPlot width={345} height={270}>
                             <XAxis />
                             <YAxis />
                             <VerticalRectSeries
@@ -113,7 +152,10 @@ export default class DraggableBarGraph extends React.Component {
                                 }}
                             />
 
-                            <DiscreteColorLegend orientation="horizontal" items={this.state.legendItems} />
+                            <DiscreteColorLegend
+                              orientation="horizontal"
+                              items={this.state.legendItems}
+                            />
 
                             <Highlight
                               color="#829AE3"

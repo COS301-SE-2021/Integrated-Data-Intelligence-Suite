@@ -167,15 +167,8 @@
     grid-template-rows: repeat(2, auto);
 }
 
-/*#row-3 #map-metric-container #map-metric-1{*/
-/*    border: 2px solid var(--border-color);*/
-/*    background: white;*/
-/*    padding: 10px;*/
-/*    border-radius: 10px;*/
-/*}*/
-
 #word-cloud-graph-container > .simple-card-container {
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     background: white;
     padding: 10px;
     border-radius: 10px;
@@ -192,10 +185,11 @@
 
     /*Internal display of the map-metric-container*/
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 66% 33%;
     grid-template-rows: 100%;
     column-gap: 30px;
-    height: 340px;
+    height: 460px;
+    border-radius: 10px;
 }
 
 #complex-graph {
@@ -204,21 +198,30 @@
 }
 
 #map-metric-1 {
-    border: 2px solid var(--border-color);
+    border: 1px solid transparent;
     border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    background: var(--dark-black);
 }
+
+#map-metric-1:hover {
+    border: 1px solid var(--pink);
+}
+
 
 #map-metric-1 > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: var(--simple-card-title-color);
+    background: var(--dark-black);
+
 }
 
 #map-metric-1 > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    background: var(--dark-black);
 }
 
 #map-metric-2 > .simple-card-title {
