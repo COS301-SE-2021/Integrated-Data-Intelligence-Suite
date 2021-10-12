@@ -23,9 +23,20 @@
     grid-row-start: 1;
     grid-row-end: 2;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-    /*border: 1px solid var(--black-border);*/
+    border: 1px solid transparent;
     border-radius: 10px;
+}
 
+#overview-graph-metric-1:hover {
+    border: 1px solid var(--pink);
+}
+
+#overview-graph-metric-2:hover {
+    border: 1px solid var(--pink);
+}
+
+#overview-graph-metric-3:hover {
+    border: 1px solid var(--pink);
 }
 
 #overview-graph-metric-1 > .simple-card-title {
@@ -56,7 +67,7 @@
     grid-row-start: 1;
     grid-row-end: 2;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-    /*border: 1px solid var(--black-border);*/
+    border: 1px solid transparent;
     border-radius: 10px;
 
 }
@@ -89,7 +100,7 @@
     grid-row-start: 1;
     grid-row-end: 2;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-    /*border: 1px solid var(--black-border);*/
+    border: 1px solid transparent;
     border-radius: 10px;
 
 }
