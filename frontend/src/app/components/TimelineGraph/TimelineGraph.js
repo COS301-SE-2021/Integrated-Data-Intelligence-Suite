@@ -15,6 +15,13 @@ export default function TimelineGraph() {
                       items={anomalies}
                       mode="HORIZONTAL"
                       scrollable
+                      theme={{
+                            primary: '#E80057',
+                            secondary: 'white',
+                            cardBgColor: 'black',
+                            cardForeColor: 'white',
+                            titleColor: '#E80057',
+                        }}
                     />
                 )
             }
