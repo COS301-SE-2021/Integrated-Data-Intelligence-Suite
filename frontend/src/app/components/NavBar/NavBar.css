@@ -1,22 +1,46 @@
+
+#landing-page-header {
+    margin: 0 auto 24px auto;
+    height: 50px;
+    width: 100%;
+    top: 0;
+    z-index: 2;
+    position: absolute;
+}
+
 #nav-bar {
-    /*border: 2px solid black;*/
     grid-row-start: 1;
     grid-row-end: 2;
 
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: 20% 60% 20%;
     grid-template-rows: 100%;
+    min-height: 9vh;
+    max-height: 9vh;
+    background: transparent;
+    width: 1080px;
+    justify-items: center;
+    margin: 0 auto 24px auto;
+    align-content: end;
 }
 
 #nav-bar-logo {
-    background: var(--cultured);
-    background-image: url("../../assets/logos/idis-logo-prussian-blue.png") !important;
-    background-size: cover;
+    background-size: 100px 110px;
+    background-repeat: no-repeat;
     background-position: center;
-    color: black;
-    height: inherit;
+    background-color: transparent;
+    height: 50px;
     width: 167px;
 }
+
+.nav-logo-color-black {
+    background-image: url("../../assets/IDIS_black_Cube.png") !important;
+}
+
+.nav-logo-color-white {
+    background-image: url("../../assets/IDIS_White_Cube.png") !important;
+}
+
 
 #nav-bar-right-col {
     display: grid;
@@ -25,28 +49,59 @@
     align-items: center;
     /*justify-items: right;*/
     margin-right: 10%;
-    justify-content: right;
     column-gap: 5%;
     font-weight: 450;
+    justify-self: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .nav-bar-item {
     width: max-content;
-    /*margin: 0 30% !important;*/
-    /*margin-left: 30% !important;*/
-    /*margin-right: 30% !important;*/
-    color: var(--prussian-blue);
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.black {
+    color: black;
+}
+
+.white {
+    color: white;
 }
 
 .nav-bar-item:hover {
     text-underline: var(--prussian-blue);
     text-decoration: underline;
-    color: var(--dodger-blue);
+    opacity: 0.5;
+    cursor: pointer;
 }
 
 #nav-bar-left-col {
     display: grid;
-    margin-left: 10%;
+    height: 110%;
+    align-content: center;
+}
+
+#nav-bar-sign-in {
+    color: white;
+    border-radius: 80px;
+    width: 100px;
+    height: 36px;
+    padding: 1px;
+    background: hsla(0, 100%, 100%, 0.4);
+    border: 0;
+    align-self: center;
+}
+
+#nav-bar-sign-in:hover {
+    background: hsla(0, 100%, 100%, 0.6);
+}
+
+#nav-bar-sign-in-text {
+    color: white;
+    font-weight: 450;
 }
 
 
