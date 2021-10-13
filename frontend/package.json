@@ -109,9 +109,9 @@
       "allowToChangeInstallationDirectory": true,
       "oneClick": false,
       "createDesktopShortcut": true,
-      "installerIcon": "build/idis-logo.ico",
-      "uninstallerIcon": "build/idis-logo.ico",
-      "installerHeaderIcon": "build/idis-logo.ico"
+      "installerIcon": "build/IDIS-CubeLogo.ico",
+      "uninstallerIcon": "build/IDIS-CubeLogo.ico",
+      "installerHeaderIcon": "build/IDIS-CubeLogo.ico"
     }
   },
   "eslintConfig": {
