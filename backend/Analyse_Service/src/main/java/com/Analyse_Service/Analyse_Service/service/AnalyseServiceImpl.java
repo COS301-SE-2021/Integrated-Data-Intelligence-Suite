@@ -1803,7 +1803,7 @@ public class AnalyseServiceImpl {
         UserDefinedFunction calculateDistance = udf(
                 (Vector feature, Integer x) -> Vectors.sqdist(feature,model.clusterCenters()[x]), DataTypes.DoubleType
         );
-        sparkNlpProperties.udf().register("dist", calculateDistance);
+        sparkProperties.udf().register("dist", calculateDistance);
 
         Dataset<Row> kmeansWithClusterDistances = FeaturesAndPredictions.withColumn("distanceFromCluster",callUDF("dist",FeaturesAndPredictions.col("features"),FeaturesAndPredictions.col("prediction")));
         try {
