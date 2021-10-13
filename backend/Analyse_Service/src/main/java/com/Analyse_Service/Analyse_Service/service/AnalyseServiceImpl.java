@@ -58,7 +58,7 @@ public class AnalyseServiceImpl {
     @Autowired
     private TrainingDataRepository parsedDataRepository;
 
-    private SparkSession sparkNlpProperties;
+    private SparkSession sparkProperties;
 
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
@@ -526,15 +526,15 @@ public class AnalyseServiceImpl {
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
                 .setMaster("local")
-                //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "5g")
-                .set("spark.executor.memory", "5g")
-                .set("spark.memory.fraction", "0.5")
+                //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
+                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .set("spark.driver.memory", "4g")
+                .set("spark.executor.memory", "4g")
+                //.set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{AnalyseServiceImpl.class});
 
-        sparkNlpProperties = SparkSession
+        sparkProperties = SparkSession
                 .builder()
                 //.appName("NlpProperties")
                 //.master("local")
@@ -547,7 +547,7 @@ public class AnalyseServiceImpl {
 
         //SparkContext
         //JavaSparkContext sc = new JavaSparkContext(conf);
-        //sparkNlpProperties. = conf.
+        //sparkProperties. = conf.
 
 
 
@@ -563,7 +563,7 @@ public class AnalyseServiceImpl {
             nlpPropertiesData.add(row);
         }
 
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
+        Dataset<Row> data =  sparkProperties.createDataFrame(nlpPropertiesData,schema).toDF();
         //createDataset(text, Encoders.STRING()).toDF("text");
 
         /*******************SETUP NLP PIPELINE MODEL*****************/
@@ -800,7 +800,7 @@ public class AnalyseServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
 
         return Arrays.asList(response, entityList);
 
@@ -1107,7 +1107,7 @@ public class AnalyseServiceImpl {
                 "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(relationshipData, schema);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(relationshipData, schema);
         itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
@@ -1349,7 +1349,7 @@ public class AnalyseServiceImpl {
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2).cache(); // .read().parquet("...");
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(trendsData, schema2).cache(); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1403,7 +1403,7 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
@@ -1419,7 +1419,7 @@ public class AnalyseServiceImpl {
                 File artifact = client.downloadArtifacts(modelID, modelName);
                 File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
 
-                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                Dataset<Row> trainData = sparkProperties.read().load(trainFile.getPath());
                 TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
                 lrModel = trainValidationSplit.fit(trainData);
@@ -1458,7 +1458,7 @@ public class AnalyseServiceImpl {
                 File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
 
 
-                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                Dataset<Row> trainData = sparkProperties.read().load(trainFile.getPath());
                 TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
                 lrModel = trainValidationSplit.fit(trainData);
@@ -1704,7 +1704,7 @@ public class AnalyseServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema).cache();
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(anomaliesData, schema).cache();
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -1751,7 +1751,7 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema2);
 
         /***********************MLFLOW - LOAD ***********************/
         PipelineModel kmModel;
@@ -1879,10 +1879,3 @@ public class AnalyseServiceImpl {
 
 
 }
-
-
-
-
-
-
-
