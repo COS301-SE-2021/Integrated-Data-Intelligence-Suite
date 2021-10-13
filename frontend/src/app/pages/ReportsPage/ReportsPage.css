@@ -6,7 +6,7 @@
 }
 
 .reports-content-section{
-    background: var(--light-gray);
+    background: var(--light-black);
     max-height: 100vh;
     overflow-y: auto;
     padding: 3%;
@@ -27,15 +27,24 @@
 }
 
 .reports-content-grid .report-card{
-    background: white;
+    background: var(--dark-black);
     margin: 0;
     padding: 10px;
-    box-shadow: rgba(99, 99, 99, 0.2) 4px 6px 8px 0;
-    /*border: solid 2px var(--border-color);*/
+    /*box-shadow: rgba(99, 99, 99, 0.2) 4px 6px 8px 0;*/
+    border: 1px solid transparent;
     border-radius: 10px;
     display: grid;
     grid-template-columns: auto 4fr auto;
 }
+
+.reports-content-grid .report-card:hover{
+    border: 1px solid var(--pink);
+}
+
+.pnk-icon{
+    color: var(--pink);
+}
+
 .report-card .text-container{
     padding: 8px;
 }
@@ -72,7 +81,7 @@
     border-radius: 5px;
     background: white;
     /*padding: 20px;*/
-    background: var(--light-gray);
+    background: var(--dark-black);
     grid-gap: 20px;
     max-height: inherit;
     width: auto;
@@ -91,10 +100,25 @@
     overflow-y: scroll;
 }
 
+.main-preview-container .popup-title{
+    color: var(--pink);
+}
+
 /*.loader{*/
 /*    background:url("../../assets/loader.gif") center center no-repeat;*/
 /*}*/
 
+.pink-icon{
+    color: var(--pink);
+}
+
+.white-icon{
+    color: white
+}
+
+.main-preview-container svg{
+    color: white;
+}
 
 .main-preview-container iframe{
     border: none;
@@ -117,7 +141,8 @@
     display: grid;
     grid-template-columns: 40px auto;
     width: 280px;
-    background: white;
+    background: var(--dark-black);
+    color: white;
     border-radius: 5px;
     margin-bottom: 30px;
     /*border: 1px solid white;*/
@@ -144,7 +169,8 @@
 .reports-content-section .content-page-title {
     font-weight: 600;
     font-size: 32px;
-    color: var(--dodger-blue);
+    color: var(--pink);
+    margin-bottom: 30px;
 
 }
 
