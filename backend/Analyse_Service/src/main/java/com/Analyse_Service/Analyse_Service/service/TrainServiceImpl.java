@@ -74,7 +74,7 @@ public class TrainServiceImpl {
     @Autowired
     private TrainingDataRepository parsedDataRepository;
 
-    private SparkSession sparkNlpProperties;
+    private SparkSession sparkProperties;
 
     //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
@@ -303,7 +303,7 @@ public class TrainServiceImpl {
 
             RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel, request.getModelName());
             RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
-            
+
             modelId = registerUserBestModelResponse.getBestModelId();
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
@@ -518,15 +518,15 @@ public class TrainServiceImpl {
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
                 .setMaster("local")
-                //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "5g")
-                .set("spark.executor.memory", "5g")
-                .set("spark.memory.fraction", "0.5")
+                //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
+                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .set("spark.driver.memory", "4g")
+                .set("spark.executor.memory", "4g")
+                //.set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{TrainServiceImpl.class});
 
-        sparkNlpProperties = SparkSession
+        sparkProperties = SparkSession
                 .builder()
                 //.appName("NlpProperties")
                 //.master("local")
@@ -548,7 +548,7 @@ public class TrainServiceImpl {
             nlpPropertiesData.add(row);
         }
 
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
+        Dataset<Row> data =  sparkProperties.createDataFrame(nlpPropertiesData,schema).toDF();
         //createDataset(text, Encoders.STRING()).toDF("text");
 
         /*******************SETUP NLP PIPELINE MODEL*****************/
@@ -767,7 +767,7 @@ public class TrainServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -854,7 +854,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -869,7 +869,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -889,17 +889,60 @@ public class TrainServiceImpl {
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        List<Row> namedEntities;
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
         if(request.getModelName() == null) {
-            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
         }else{
-            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count().collectAsList(); //frequency
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count(); //frequency
         }
-        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
+        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
+
+        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+
+        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
 
 
-        //training set
+        List<Row> trainSet = new ArrayList<>();
+        //for(int i=0; i < minSize; i++){
+        while (trendRowData.hasNext()){
+            if(request.getModelName() == null) {
+                Row trendData = trendRowData.next();
+
+                double trending = 0.0;
+                if (Integer.parseInt(trendData.get(3).toString()) >= 4) { //count
+                    trending = 1.0;
+                }
+
+                Row trainRow = RowFactory.create(
+                        trending,
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //type no
+                        Double.parseDouble(trendData.get(3).toString()), //freq
+                        trendData.get(4).toString(), //rate
+                        Double.parseDouble(trendData.get(5).toString()) //likes
+                );
+                trainSet.add(trainRow);
+            }
+            else{
+                Row trendData = trendRowData.next();
+
+                Row trainRow = RowFactory.create(
+                        Double.parseDouble(trendData.get(3).toString()), //trend
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //number
+                        Double.parseDouble(trendData.get(4).toString()), //freq
+                        trendData.get(5).toString(),
+                        Double.parseDouble(trendData.get(6).toString())
+                );
+                trainSet.add(trainRow);
+            }
+        }
+
+        /*training set
         int minSize = 0;
         if (namedEntities.size() > averageLikes.size()) {
             minSize = averageLikes.size();
@@ -920,7 +963,7 @@ public class TrainServiceImpl {
         System.out.println("AverageLikes : " + averageLikes.size());
         for (int i = 0; i < averageLikes.size(); i++) {
             System.out.println(averageLikes.get(i).toString());
-        }*/
+        }*
 
         List<Row> trainSet = new ArrayList<>();
         for (int i = 0; i < minSize; i++) {
@@ -952,10 +995,10 @@ public class TrainServiceImpl {
                 );
                 trainSet.add(trainRow);
             }
-        }
+        }*/
 
         //split data
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1176,7 +1219,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
         System.out.println("trends done");
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results, trainedModel);
     }
@@ -1264,7 +1307,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -1279,7 +1322,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -1297,7 +1340,63 @@ public class TrainServiceImpl {
 
         /*******************MANIPULATE DATAFRAME*****************/
 
+
         //group named entity
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
+        if(request.getModelName() == null) {
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
+        }else{
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count(); //frequency
+        }
+        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
+        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
+
+        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+
+        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+
+
+        List<Row> trainSet = new ArrayList<>();
+        //for(int i=0; i < minSize; i++){
+        while (trendRowData.hasNext()){
+            if(request.getModelName() == null) {
+                Row trendData = trendRowData.next();
+
+                double trending = 0.0;
+                if (Integer.parseInt(trendData.get(3).toString()) >= 4) { //count
+                    trending = 1.0;
+                }
+
+                Row trainRow = RowFactory.create(
+                        trending,
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //type no
+                        Double.parseDouble(trendData.get(3).toString()), //freq
+                        trendData.get(4).toString(), //rate
+                        Double.parseDouble(trendData.get(5).toString()) //likes
+                );
+                trainSet.add(trainRow);
+            }
+            else{
+                Row trendData = trendRowData.next();
+
+                Row trainRow = RowFactory.create(
+                        Double.parseDouble(trendData.get(3).toString()), //trend
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //number
+                        Double.parseDouble(trendData.get(4).toString()), //freq
+                        trendData.get(5).toString(),
+                        Double.parseDouble(trendData.get(6).toString())
+                );
+                trainSet.add(trainRow);
+            }
+        }
+
+
+        /*group named entity
         List<Row> namedEntities;
         if(request.getModelName() == null) {
             namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
@@ -1351,10 +1450,10 @@ public class TrainServiceImpl {
                 );
                 trainSet.add(trainRow);
             }
-        }
+        }*/
 
         //split data
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1536,7 +1635,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsDTResponse(results, trainedModel);
     }
@@ -1625,7 +1724,7 @@ public class TrainServiceImpl {
                 });
 
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(trendsData, schema2);
         itemsDF.show(itemsDF.collectAsList().size());
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1696,7 +1795,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1842,7 +1941,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         return new TrainFindTrendsArticlesResponse(results);
@@ -1872,7 +1971,7 @@ public class TrainServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -1971,7 +2070,7 @@ public class TrainServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(anomaliesData, schema);
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -2036,7 +2135,7 @@ public class TrainServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema2);
 
         /*******************SETUP PIPELINE MODEL*****************/
         //features
@@ -2186,7 +2285,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
 
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results, trainedModel);
@@ -2337,7 +2436,6 @@ public class TrainServiceImpl {
 
 
 
-
     /**
      * This method used to fetch the parsed data from the database to train models
      * @param request This is a request object which contains data required to be fetched.
@@ -2384,6 +2482,18 @@ public class TrainServiceImpl {
                 }
             }
         }
+    }
+
+    public List<Row> convertDataframeToList(Dataset<Row> filteredResult) {
+
+        ArrayList<Row> convertedList = new ArrayList<>();
+        Iterator<Row> listIterator = filteredResult.toLocalIterator();
+
+        while(listIterator.hasNext()){
+            convertedList.add(listIterator.next());
+        }
+
+        return convertedList;
     }
 
 

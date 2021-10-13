@@ -88,7 +88,7 @@
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: auto auto;
-    background-color: white;
+    /*background-color: white;*/
     padding: 18%;
 
 }
