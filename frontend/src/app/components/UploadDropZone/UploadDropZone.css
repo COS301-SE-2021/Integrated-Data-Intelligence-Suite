@@ -95,7 +95,7 @@
     align-items: center;
     color: var(--bright-blue);
     font-weight: 500;
-    max-width: 360px;
+    max-width: 100%;
 
 }
 
