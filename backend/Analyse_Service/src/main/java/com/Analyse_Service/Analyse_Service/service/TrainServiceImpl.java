@@ -63,6 +63,7 @@ import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -365,9 +366,16 @@ public class TrainServiceImpl {
                 reader = new BufferedReader(new FileReader(tData));
             }*/
             File trainResource = new ClassPathResource("TData.CSV").getFile();
-            //reader = new BufferedReader(new FileReader(fileUrl));
-            reader = new BufferedReader(new FileReader(trainResource));
-            //System.out.println("*******************CHECK THIS HERE*****************");
+            if(trainResource.exists() == false){
+                InputStream inputStream =  new ClassPathResource("TData.CSV").getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                reader = new BufferedReader(inputStreamReader);
+            }
+            else {
+                //reader = new BufferedReader(new FileReader(fileUrl));
+                reader = new BufferedReader(new FileReader(trainResource));
+                //System.out.println("*******************CHECK THIS HERE*****************");
+            }
 
             line = reader.readLine();
             String text = "";
@@ -416,6 +424,7 @@ public class TrainServiceImpl {
         }catch (Exception e){
             e.printStackTrace();
             //new TrainingModelException("failed training application model")
+            return;
         }
 
         /**************************************************************************************************************/
