@@ -24,6 +24,16 @@
     --pink: #E80057;
     --dark-pink: rgba(232, 0, 87, 0.31);
 
+    /*Landing Page*/
+    --lp-dark-theme-bg: #1E2022;
+    --lp-dark-theme-color: #E80057;
+    --lp-dark-theme-small-text-color: #e3e3e3 ;
+    --lp-white-theme-bg: #fff;
+    --lp-white-theme-color: #CA0586;
+    --lp-white-theme-small-text-color: var(--light-black);
+
+
+
     --amount-increasing: #00b074;
     --grey-border-color: #e3e3e3;
     --simple-card-title-color: darkgrey;
