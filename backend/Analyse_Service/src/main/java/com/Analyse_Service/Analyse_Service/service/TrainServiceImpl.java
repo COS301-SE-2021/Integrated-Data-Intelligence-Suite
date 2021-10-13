@@ -889,17 +889,60 @@ public class TrainServiceImpl {
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        List<Row> namedEntities;
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
         if(request.getModelName() == null) {
-            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
         }else{
-            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count().collectAsList(); //frequency
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count(); //frequency
         }
-        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
+        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
+        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
+
+        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+
+        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
 
 
-        //training set
+        List<Row> trainSet = new ArrayList<>();
+        //for(int i=0; i < minSize; i++){
+        while (trendRowData.hasNext()){
+            if(request.getModelName() == null) {
+                Row trendData = trendRowData.next();
+
+                double trending = 0.0;
+                if (Integer.parseInt(trendData.get(3).toString()) >= 4) { //count
+                    trending = 1.0;
+                }
+
+                Row trainRow = RowFactory.create(
+                        trending,
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //type no
+                        Double.parseDouble(trendData.get(3).toString()), //freq
+                        trendData.get(4).toString(), //rate
+                        Double.parseDouble(trendData.get(5).toString()) //likes
+                );
+                trainSet.add(trainRow);
+            }
+            else{
+                Row trendData = trendRowData.next();
+
+                Row trainRow = RowFactory.create(
+                        Double.parseDouble(trendData.get(3).toString()), //trend
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //number
+                        Double.parseDouble(trendData.get(4).toString()), //freq
+                        trendData.get(5).toString(),
+                        Double.parseDouble(trendData.get(6).toString())
+                );
+                trainSet.add(trainRow);
+            }
+        }
+
+        /*training set
         int minSize = 0;
         if (namedEntities.size() > averageLikes.size()) {
             minSize = averageLikes.size();
@@ -920,7 +963,7 @@ public class TrainServiceImpl {
         System.out.println("AverageLikes : " + averageLikes.size());
         for (int i = 0; i < averageLikes.size(); i++) {
             System.out.println(averageLikes.get(i).toString());
-        }*/
+        }*
 
         List<Row> trainSet = new ArrayList<>();
         for (int i = 0; i < minSize; i++) {
@@ -952,7 +995,7 @@ public class TrainServiceImpl {
                 );
                 trainSet.add(trainRow);
             }
-        }
+        }*/
 
         //split data
         Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
@@ -1297,7 +1340,63 @@ public class TrainServiceImpl {
 
         /*******************MANIPULATE DATAFRAME*****************/
 
+
         //group named entity
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
+        if(request.getModelName() == null) {
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
+        }else{
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count(); //frequency
+        }
+        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
+        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
+
+        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+
+        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+
+
+        List<Row> trainSet = new ArrayList<>();
+        //for(int i=0; i < minSize; i++){
+        while (trendRowData.hasNext()){
+            if(request.getModelName() == null) {
+                Row trendData = trendRowData.next();
+
+                double trending = 0.0;
+                if (Integer.parseInt(trendData.get(3).toString()) >= 4) { //count
+                    trending = 1.0;
+                }
+
+                Row trainRow = RowFactory.create(
+                        trending,
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //type no
+                        Double.parseDouble(trendData.get(3).toString()), //freq
+                        trendData.get(4).toString(), //rate
+                        Double.parseDouble(trendData.get(5).toString()) //likes
+                );
+                trainSet.add(trainRow);
+            }
+            else{
+                Row trendData = trendRowData.next();
+
+                Row trainRow = RowFactory.create(
+                        Double.parseDouble(trendData.get(3).toString()), //trend
+                        trendData.get(0).toString(), //name
+                        trendData.get(1).toString(), //type
+                        Double.parseDouble(trendData.get(2).toString()), //number
+                        Double.parseDouble(trendData.get(4).toString()), //freq
+                        trendData.get(5).toString(),
+                        Double.parseDouble(trendData.get(6).toString())
+                );
+                trainSet.add(trainRow);
+            }
+        }
+
+
+        /*group named entity
         List<Row> namedEntities;
         if(request.getModelName() == null) {
             namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count().collectAsList(); //frequency
@@ -1351,7 +1450,7 @@ public class TrainServiceImpl {
                 );
                 trainSet.add(trainRow);
             }
-        }
+        }*/
 
         //split data
         Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
@@ -2337,7 +2436,6 @@ public class TrainServiceImpl {
 
 
 
-
     /**
      * This method used to fetch the parsed data from the database to train models
      * @param request This is a request object which contains data required to be fetched.
@@ -2384,6 +2482,18 @@ public class TrainServiceImpl {
                 }
             }
         }
+    }
+
+    public List<Row> convertDataframeToList(Dataset<Row> filteredResult) {
+
+        ArrayList<Row> convertedList = new ArrayList<>();
+        Iterator<Row> listIterator = filteredResult.toLocalIterator();
+
+        while(listIterator.hasNext()){
+            convertedList.add(listIterator.next());
+        }
+
+        return convertedList;
     }
 
 
