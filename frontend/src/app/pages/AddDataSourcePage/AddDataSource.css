@@ -1,152 +1,70 @@
-
-.data-source{
-    border:none;
-    /* align-self: center; */
-
-    /*Aligning it Horizontally in the Center*/
-    width: 100%;
-    max-width: 800px;
-    min-height: 300px;
-    /*border: 1px solid red;*/
-    padding: 30px;
-
-    /* Aligning it Vertically in the center  */
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    background: white;
-}
-.data-source div.row{
-    display:grid;
-    grid-template-columns: repeat(21,1fr);
-    /*grid-gap: 10px;*/
-    padding-left: 20px;
-    padding-right: 20px;
-    line-height: normal;
-    padding-bottom: 0;
+.source-form .row{
+    display: grid;
+    grid-template-columns: 40% 60%;
+    background: none;
 }
 
-.data-source div.col.left{
-    grid-column: 1/6;
+.source-form{
+    display: grid;
+    grid-row-gap: 10px;
 }
 
-.data-source div.col.left input{
-    font-weight: 600;
-}
-.data-source div.col.right{
-    grid-column: 6/21;
-}
-.data-source div.col{
-    padding: 5px 10px;
-}
-
-.data-source div.col input{
-    width: 100%;
-    padding: 5px;
-    color: black;
-    background: #EFF0F0;
-    border: 1px solid #E8E8E9;
-    border-radius: 5px;
+.source-form .row.with-icon{
+    grid-template-columns: 40% 59% 1%;
 
 }
 
-.data-source .standard.button{
-    float: left;
-}
-
-.data-source div.col.disabled input{
-    width: 100%;
-    padding: 10px;
-    color: black;
+.source-form .row .col.left input[type=text]{
     background: none;
     border: none;
-    font-size: 14px;
+    cursor: default;
+    color: white;
     text-transform: capitalize;
-
 }
 
-.data-source div.col input:focus{
-    border: 1px solid #5773FA;
-}
-
-.data-source form{
-    display: flow-root;
-    line-height: normal;
-}
-
-.data-source .row .close-button{
-    background: none;
-    border: none;
-    line-height: normal;
-    margin: 10px;
-    color: #FF0800;
-    font-weight: 600;
-    font-size: 20px;
-    align-content: center;
-    text-align: center;
-}
-
-
-.data-source form .btn-primary{
-    line-height: normal;
-    margin-left: 30px;
-    padding: 10px;
-    font-weight: 600;
-    background: #5773FA;
-    border: #5773FA;
-    color: white;
+.source-form .row .col.right input[type=text]{
+    background: var(--dark-black);
     border-radius: 5px;
-    margin-top: 10px;
-}
-
-.data-source form .btn.submit{
-    float: right;
-    margin-right: 9%;
-}
-
-.data-source .row .back-button{
-    grid-column: 20/21;
-
-}
-.data-source .btn{
-    border-width: 1px;
+    border: 1px solid transparent;
     color: white;
 }
 
-.data-source form .select{
-    background: #5773FA;
-    color: white;
-    border: none;
+.source-form .row .col.right input[type=text]:focus-visible{
+    outline: none;
+    border-color: var(--pink);
+}
+
+.source-form .row .col select{
+    background: var(--dark-black);
+    border: 1px solid var(--pink);
     border-radius: 5px;
+    color: white;
     padding: 5px;
-    margin-left: 10px;
-    font-weight: 600;
-    width: 120px;
+    cursor: pointer;
 }
 
-.data-source .btn:hover{
-    transition: ease-in-out .5s;
-    color: black;
+
+.source-form .row .col input{
+    padding: 8px;
 }
 
-.data-source .btn.submit:hover{
-    background:#1C8EFA;
-    color: black;
-    border-color: #FF0800;
-    transition: ease-in-out .5s;
+.source-form .button-container{
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
 }
 
-.data-source .select:hover{
-    color: black;
+
+.source-form .button-container .submit:hover{
+    color: var(--pink);
 }
 
-.settings-component .permission-text{
-    padding-top: 10px;
-    float: left;
-    width: 80px;
-    font-size: 12px;
-    color: #FF0800;
+.source-form .button-container .btn-primary{
+    color: white;
+    background: var(--pink);
+    border: none;
+}
+
+.source-form .button-container .btn-primary:hover{
+    background: #E13475;
 }

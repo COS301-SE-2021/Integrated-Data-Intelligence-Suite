@@ -63,7 +63,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/changepermission",HttpMethod.POST,request,new ParameterizedTypeReference<ChangeUserResponse>() {});
+        userResponse = restTemplate.exchange("http://user-service/User/changeUser",HttpMethod.POST,request,new ParameterizedTypeReference<ChangeUserResponse>() {});
         return (ChangeUserResponse) userResponse.getBody();
     }
 

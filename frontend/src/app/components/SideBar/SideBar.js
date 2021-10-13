@@ -121,20 +121,17 @@ class SideBar extends React.Component {
                             <Link to="/manageUsers"/>
                         </Menu.Item>
 
-
-
-
-
                         <Menu.Item
-                            key="3"
-                            icon={<FiSettings
+                            key="9"
+                            icon={<ImProfile
                                 className={'sidebar-icon'}
                             />}
-                            onClick={() => this.setActive('3')}
+                            onClick={() => this.setActive('9')}
                         >
-                            Settings
-                            <Link to="/settings"/>
+                            Manage Sources
+                            <Link to="/manageSources"/>
                         </Menu.Item>
+
 
 
 

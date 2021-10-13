@@ -52,34 +52,30 @@ const getSource = (id, structure) => {
 
             return () => abortCont.abort();
         }
-            return { data, isPending, error};
+            return { data, isPending, error };
     }, [id]);
     return { data, isPending, error };
 };
 
-const AddDataSource = () => {
-    const { id } = useParams();
+const AddDataSource = ({ dataSource }) => {
+    // const { id } = useParams();
     const history = useHistory();
     const [form, setForm] = useState(null);
-    const [url, setUrl] = useState('');
-    const [name, setName] = useState('');
-    const [authType, setAuthType] = useState('none');
-    const [token, setToken] = useState('');
-    const [queryKey, setQueryKey] = useState('');
-    const [method, setmethod] = useState('GET');
+    const [url, setUrl] = useState(null);
+    const [name, setName] = useState(null);
+    const [authType, setAuthType] = useState(null);
+    const [token, setToken] = useState(null);
+    const [queryKey, setQueryKey] = useState(null);
+    const [method, setmethod] = useState(null);
+    const [date, setDate] = useState(null);
+    const [interactions, setInteractions] = useState(null);
+    const [collections, setCollections] = useState(null);
+    const [location, setLocation] = useState(null);
+
     const [submitLoading, setSubmitLoading] = useState(false);
 
-    const structure = {
-            id: null,
-            name: '',
-            method: 'GET',
-            url: '',
-            searchKey: '',
-            authType: 'none',
-            authorization: '',
-            parameters: [],
-        };
-    const { data: dataSource, isPending, error } = getSource(id, structure);
+
+    // const { data: dataSource, isPending, error } = getSource(id, structure);
 
     const prevIsValid = () => {
         if (form.length === 0) {
@@ -155,7 +151,7 @@ const AddDataSource = () => {
         setSubmitLoading(true);
 
         const newSource = {
-            id,
+            id: dataSource.id,
             name,
             method,
             url,
@@ -163,9 +159,13 @@ const AddDataSource = () => {
             authType,
             authorization: token,
             parameters: form,
+            date,
+            interactions,
+            collections,
+            location,
         };
 
-        console.log(newSource);
+        // console.log(newSource);
         let link = '';
         if (dataSource.id === null) {
             link = '/addNewApiSource';
@@ -173,7 +173,7 @@ const AddDataSource = () => {
             link = '/updateAPI';
         }
         const abortCont = new AbortController();
-        console.log(`${process.env.REACT_APP_BACKEND_HOST}${link}`);
+        // console.log(`${process.env.REACT_APP_BACKEND_HOST}${link}`);
         fetch(`${process.env.REACT_APP_BACKEND_HOST}${link}`,
             {
                 signal: abortCont.signal,
@@ -198,6 +198,8 @@ const AddDataSource = () => {
                 }
             })
             .catch((err) => {
+                setSubmitLoading(false);
+
                 if (err.name === 'AbortError') console.log('Fetch Aborted');
                 else {
                     message.error(err.message);
@@ -222,7 +224,7 @@ const AddDataSource = () => {
         setForm(params);
     };
     return (
-        <div className="data-source">
+        <>
             { dataSource && form === null && mapForm([dataSource.parameters])}
             { dataSource && method === null && setmethod(dataSource.method)}
             { dataSource && name === null && setName(dataSource.name)}
@@ -230,8 +232,7 @@ const AddDataSource = () => {
             { dataSource && queryKey === null && setQueryKey(dataSource.searchKey)}
             { dataSource && authType === null && setAuthType(dataSource.authType)}
             { dataSource && token === null && setToken(dataSource.authorization)}
-            <form>
-                <div className="row"><CloseCircleTwoTone className="back-button" onClick={() => history.go(-1)} /></div>
+            <form className="edit source-form">
                 { method && (
                     <div className="row">
                         <div className="col left">
@@ -357,9 +358,109 @@ const AddDataSource = () => {
                         </div>
                     </div>
                 )}
+                { name !== null && (
+                    <div className="row">
+                        <div className="col left disabled">
+                            <input
+                              type="text"
+                              name="Parameter"
+                              placeholder="Parameter"
+                              value="Date"
+                              disabled
+                            />
+                        </div>
+                        <div className="right col">
+                            <input
+                              type="text"
+                                // className={
+                                //     item.errors.value ? 'form-control invalid' : 'form-control'
+                                // }
+                              name="Date"
+                              placeholder="Date"
+                              value={date}
+                              onChange={(e)=>setDate(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                )}
+                { name !== null && (
+                    <div className="row">
+                        <div className="col left disabled">
+                            <input
+                              type="text"
+                              name="Parameter"
+                              placeholder="Parameter"
+                              value="interactions"
+                              disabled
+                            />
+                        </div>
+                        <div className="right col">
+                            <input
+                              type="text"
+                                // className={
+                                //     item.errors.value ? 'form-control invalid' : 'form-control'
+                                // }
+                              name="interactions"
+                              placeholder="interactions"
+                              value={interactions}
+                              onChange={(e)=>setInteractions(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                )}
+                { name !== null && (
+                    <div className="row">
+                        <div className="col left disabled">
+                            <input
+                              type="text"
+                              name="Parameter"
+                              placeholder="Parameter"
+                              value="collections"
+                              disabled
+                            />
+                        </div>
+                        <div className="right col">
+                            <input
+                              type="text"
+                                // className={
+                                //     item.errors.value ? 'form-control invalid' : 'form-control'
+                                // }
+                              name="Collections"
+                              placeholder="Collections"
+                              value={collections}
+                              onChange={(e)=>setCollections(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                )}
+                { name !== null && (
+                    <div className="row">
+                        <div className="col left disabled">
+                            <input
+                              type="text"
+                              name="Parameter"
+                              placeholder="Parameter"
+                              value="Location"
+                              disabled
+                            />
+                        </div>
+                        <div className="right col">
+                            <input
+                              type="text"
+                                // className={
+                                //     item.errors.value ? 'form-control invalid' : 'form-control'
+                                // }
+                              name="Location"
+                              placeholder="Location"
+                              value={location}
+                              onChange={(e)=>setLocation(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                )}
                 { form
                     && form.map((item, index)=>(
-                        <div className="row" key={`item-${index}`}>
+                        <div className="row with-icon" key={`item-${index}`}>
                             <div className="col left">
                                 <input
                                   type="text"
@@ -390,17 +491,19 @@ const AddDataSource = () => {
                             <CloseCircleTwoTone twoToneColor="#FF0800" className="close-button" onClick={(e)=>handleRemoveField(index, e)} />
                         </div>
                     ))}
-                <button className="btn btn-primary" onClick={(e)=>handleAddParameter(e, setForm)}>Add Parameter</button>
-                <Button
-                  className="btn submit btn-primary"
-                  type="primary"
-                  // loading={submitLoading}
-                  onClick={(e)=>handleSubmit(e)}
-                >
-                    Submit
-                </Button>
+                <div className="button-container">
+                    <Button className="btn btn-primary" onClick={(e)=>handleAddParameter(e, setForm)}>Add Parameter</Button>
+                    <Button
+                      className="btn submit"
+                      type="primary"
+                        loading={submitLoading}
+                      onClick={(e)=>handleSubmit(e)}
+                    >
+                        Submit
+                    </Button>
+                </div>
             </form>
-        </div>
+        </>
     );
 };
 

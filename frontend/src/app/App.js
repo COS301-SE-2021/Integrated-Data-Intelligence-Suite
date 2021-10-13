@@ -20,6 +20,7 @@ import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
 import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
 import { userState } from './assets/AtomStore/AtomStore';
 import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
+import ManageSourcesPage from './pages/ManageSourcesPage/ManageSourcesPage';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ManageUsersPage from './pages/ManageUsersPage/ManageUsersPage';
@@ -99,6 +100,10 @@ function App() {
 
                 <Route exact path="/manageModels">
                     <ManageModelsPage />
+                </Route>
+
+                <Route exact path="/manageSources">
+                    <ManageSourcesPage />
                 </Route>
 
                 <Route exact path="/sendOTP">
