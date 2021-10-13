@@ -299,7 +299,7 @@ const ReportsPage = () => {
                 <div className="reports-content-section">
                     <div className="content-page-title ">Reports</div>
                     <div className="search-bar-container">
-                        <BsSearch className=" float-middle clickable" onClick={() => handleSearch(searchKey)} />
+                        <BsSearch className=" float-middle clickable pink-icon" style={{ color: '#E80057FF' }} onClick={() => handleSearch(searchKey)} />
                         <input
                           className="search-bar input field"
                           type="text"
@@ -316,7 +316,7 @@ const ReportsPage = () => {
                             <div className="reports-content-grid">
                                 {reports.map((report) => (
                                     <div className="report-card" key={report.id}>
-                                        <VscFilePdf className="icon clickable" style={{ fontSize: iconSize }} onClick={()=>handlePreview(report.id, report.pdf, 'preview')} />
+                                        <VscFilePdf className="icon clickable pink-icon" style={{ fontSize: 36, color: '#E80057FF' }} onClick={()=>handlePreview(report.id, report.pdf, 'preview')} />
                                         <div className="text-container">
                                             <div className="report-title clickable" onClick={()=>handlePreview(report.id, report.pdf, 'preview')}>{report.name}</div>
                                             <div className="report-date clickable" onClick={()=>handlePreview(report.id, report.pdf, 'preview')}>{report.date}</div>
