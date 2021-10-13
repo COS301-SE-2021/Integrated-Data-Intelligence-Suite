@@ -13,7 +13,11 @@ const useGet = (url) => {
             .then((res) => {
                 if (!res.ok) {
                     // console.log(res);
-                    throw Error(res.error);
+                    if (res.status === 500) {
+                        throw Error('Internal Server Error');
+                    } else {
+                        throw Error(res.error);
+                    }
                 }
                 return res.json();
             })
@@ -38,7 +42,7 @@ const useGet = (url) => {
     return {
         data,
         isPending,
-        error
+        error,
     };
 };
 

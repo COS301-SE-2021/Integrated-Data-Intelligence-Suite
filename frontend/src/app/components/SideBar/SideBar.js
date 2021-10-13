@@ -10,7 +10,7 @@ import {BrowserRouter, Link, Router} from 'react-router-dom';
 import {
     AiOutlineHeart,
     AiOutlineHome, FiSettings, GoGraph, GrGraphQl, HiOutlineCube,
-    HiOutlineDocumentReport
+    HiOutlineDocumentReport, ImProfile
 } from 'react-icons/all';
 import UserInfoCard from "../UserInfoCard/UserInfoCard";
 
@@ -100,15 +100,40 @@ class SideBar extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item
-                            key="3"
-                            icon={<FiSettings
+                            key="7"
+                            icon={<ImProfile
                                 className={'sidebar-icon'}
                             />}
-                            onClick={() => this.setActive('3')}
+                            onClick={() => this.setActive('7')}
                         >
-                            Settings
-                            <Link to="/settings"/>
+                            Profile
+                            <Link to="/profile"/>
                         </Menu.Item>
+
+                        <Menu.Item
+                            key="8"
+                            icon={<ImProfile
+                                className={'sidebar-icon'}
+                            />}
+                            onClick={() => this.setActive('8')}
+                        >
+                            Manage Users
+                            <Link to="/manageUsers"/>
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="9"
+                            icon={<ImProfile
+                                className={'sidebar-icon'}
+                            />}
+                            onClick={() => this.setActive('9')}
+                        >
+                            Manage Sources
+                            <Link to="/manageSources"/>
+                        </Menu.Item>
+
+
+
 
                         {/*<Menu.Item*/}
                         {/*    key="4"*/}

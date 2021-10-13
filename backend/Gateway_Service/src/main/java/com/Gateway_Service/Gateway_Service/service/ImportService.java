@@ -317,7 +317,7 @@ public class ImportService {
             }
         }
 
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.GET,null,new ParameterizedTypeReference<GetAllAPISourcesResponse>() {});
+        importResponse = restTemplate.exchange("http://import-service/Import/getAllSources",HttpMethod.GET,null,new ParameterizedTypeReference<GetAllAPISourcesResponse>() {});
         return (GetAllAPISourcesResponse) importResponse.getBody();
     }
 

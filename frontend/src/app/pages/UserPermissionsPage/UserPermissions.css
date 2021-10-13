@@ -1,7 +1,47 @@
-.permissions{
-    padding: 10px 10px;
-    margin-bottom: 10px;
-    border: 1px solid #95dbb6;
-    border-radius: 5px;
-    line-height: normal;
+form.popup-form{
+    padding: 10px;
+    display:grid;
+    grid-template-columns: 100%;
+    grid-row-gap: 20px;
 }
+
+form.popup-form .switch_box{
+
+    background: var(--dark-black);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    margin: 0;
+}
+
+form.popup-form label{
+    color: white;
+    float: left;
+    text-transform: capitalize;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+form.popup-form input, form.popup-form select{
+    float: right;
+}
+
+form.popup-form select{
+    background: var(--light-black);
+    color: var(--pink);
+    border: 1px solid var(--black-border);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+
+form.popup-form button{
+    font-size: 16px;
+}
+
+form.popup-form button.enabled{
+    background: var(--pink);
+    color: white;
+    border:1px solid var(--pink);
+}
+

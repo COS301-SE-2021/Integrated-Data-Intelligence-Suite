@@ -20,9 +20,12 @@ import UploadDataPage from './pages/UploadDataPage/UploadDataPage';
 import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
 import { userState } from './assets/AtomStore/AtomStore';
 import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
+import ManageSourcesPage from './pages/ManageSourcesPage/ManageSourcesPage';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
 import NewDesign from './pages/NewDesign/NewDesign';
 import TeamPage from './pages/TeamPage/TeamPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import ManageUsersPage from './pages/ManageUsersPage/ManageUsersPage';
 
 function App() {
     const user = useRecoilValue(userState);
@@ -77,6 +80,14 @@ function App() {
                     <SettingsPage />
                 </Route>
 
+                <Route exact path="/profile">
+                    <ProfilePage />
+                </Route>
+
+                <Route exact path="/manageUsers">
+                    <ManageUsersPage />
+                </Route>
+
                 <Route path="/settings/source/:id">
                     <AddDataSource />
                 </Route>
@@ -99,6 +110,10 @@ function App() {
 
                 <Route exact path="/manageModels">
                     <ManageModelsPage />
+                </Route>
+
+                <Route exact path="/manageSources">
+                    <ManageSourcesPage />
                 </Route>
 
                 <Route exact path="/sendOTP">

@@ -105,40 +105,41 @@ const ChartPage = () => {
             })
             .catch((err) => {
                 setSearchLoading(false);
-                structureBackendData(templateJson);
+                structureBackendData({ status: 'OK', data: templateJson });
             });
     };
 
     const structureBackendData = (data) => {
-        if (data !== null && data.length > 0) {
-            setBackendData(data);
-            if (data[0].length > 0) {
-                // Row 1
-                setTotalLikes(data[0][0].words);
-                setOverallSentiment(data[1][0].words);
-                setNumberOfTrends(data[2][0].words);
-                setNumberOfAnomalies(data[3][0].words);
+        if (data !== null && data.status.toLowerCase() === 'ok') {
+            if (data.data && data.data[0]) {
+                setBackendData(data.data);
+                if (data.data[0].length > 0) {
+                    // Row 1
+                    setTotalLikes(data.data[0][0].words);
+                    setOverallSentiment(data.data[1][0].words);
+                    setNumberOfTrends(data.data[2][0].words);
+                    setNumberOfAnomalies(data.data[3][0].words);
 
-                // Row 2
-                setAverageInteraction(data[4]);
-                setSentimentDistribution(data[5]);
-                setEngagementPerProvince(data[6]);
+                    // Row 2
+                    setAverageInteraction(data.data[4]);
+                    setSentimentDistribution(data.data[5]);
+                    setEngagementPerProvince(data.data[6]);
 
-                // Row 3
-                setMapData(data[7]);
-                setDataFrequency(data[8]);
+                    // Row 3
+                    setMapData(data.data[7]);
+                    setDataFrequency(data.data[8]);
 
-                // Row 3
-                setWordCloud(data[9][0]);
+                    // Row 3
+                    setWordCloud(data.data[9][0]);
 
-                // Row 4
-                setEntitiesRelationship(data[11]);
-                setPatternsRelationship(data[12]);
+                    // Row 4
+                    setEntitiesRelationship(data.data[11]);
+                    setPatternsRelationship(data.data[12]);
 
-                setAnomalies(data[13]);
+                    setAnomalies(data.data[13]);
+                    setCurrentPdf(data.data[data.data.length - 1][0].report);
+                }
             }
-
-            setCurrentPdf(data[data.length - 1][0].report);
         }
     };
     //
