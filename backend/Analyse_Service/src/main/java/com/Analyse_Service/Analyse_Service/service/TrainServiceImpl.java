@@ -1,5 +1,6 @@
 package com.Analyse_Service.Analyse_Service.service;
 
+import com.Analyse_Service.Analyse_Service.dataclass.ApplicationModel;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedTrainingData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
@@ -7,6 +8,7 @@ import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
+import com.Analyse_Service.Analyse_Service.repository.ApplicationModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -74,6 +76,9 @@ public class TrainServiceImpl {
 
     @Autowired
     private TrainingDataRepository parsedDataRepository;
+
+    @Autowired
+    private ApplicationModelRepository applicationModelRepository;
 
     private SparkSession sparkProperties;
 
@@ -2392,7 +2397,17 @@ public class TrainServiceImpl {
         }
 
         bestModelId = bestModelId + ":" + trendModelThree.getRunId();
+        ApplicationModel applicationModel = new ApplicationModel();
+        applicationModel.setId(bestModelId);
 
+        List<ApplicationModel> foundModel = applicationModelRepository.findAll();
+        if(foundModel.isEmpty()){
+            applicationModelRepository.save(applicationModel);
+        }
+        else{
+            applicationModelRepository.deleteAll();
+            applicationModelRepository.save(applicationModel);
+        }
 
         String filePath = Paths.get("models/RegisteredApplicationModels.txt").toString();
         File file = new File(filePath);
