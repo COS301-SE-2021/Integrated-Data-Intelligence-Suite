@@ -24,8 +24,7 @@ import com.Gateway_Service.Gateway_Service.service.*;
 
 //import com.netflix.discovery.DiscoveryClient;
 
-import com.Import_Service.Import_Service.request.AddAPISourceRequest;
-import com.Import_Service.Import_Service.response.AddAPISourceResponse;
+
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

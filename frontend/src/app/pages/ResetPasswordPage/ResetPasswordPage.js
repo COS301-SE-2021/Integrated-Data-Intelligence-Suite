@@ -48,7 +48,7 @@ const ResetPasswordPage = () => {
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
-      email: localUser,
+      email: '',
       newPassword: '',
       otp: '',
     },
@@ -61,30 +61,55 @@ const ResetPasswordPage = () => {
         body: JSON.stringify(values),
       };
       fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/resetPassword`, requestOptions)
-        .then((response) => response.json()).then((json) => {
-          if (json.success) {
-            message.success(json.message);
-            history.push('/login');
-          } else {
-              message.error(json.message);
-          }
-        });
+          .then((res) =>{
+              if (!res.ok) {
+                  throw Error(res.error);
+              }
+              return res.json();
+          })
+          .then((data)=>{
+              console.log(data);
+              // setIsLoading(false);
+              if (data.status.toLowerCase() === 'ok') {
+                  if (data.data.success) {
+                      message.success(data.data.message)
+                          .then(()=>history.push('/login'));
+                  } else {
+                      message.error(data.data.message);
+                  }
+              } else if (data.errors) {
+                  for (let i = 0; i < data.errors.length; i = i + 1) {
+                      message.error(data.errors[i]);
+                  }
+              }
+          })
+          .catch((error) =>{
+              message.error(error.message);
+          });
     },
 
   });
 
   return (
       <>
-          <div id="login-custom-bg">
-              <div id="top-left-block" />
-              <div id="top-right-block" />
-              <div id="bottom-left-block" />
-              <div id="bottom-right-block" />
+          <div className="area">
+              <ul className="circles">
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+                  <li />
+              </ul>
           </div>
-          <div id="register-background">
-              <div id="register-form-container">
-                  <div id="register-card">
-                      <div id="register-card-title">Reset you password</div>
+          <div id="verify-background">
+              <div id="verify-form-container">
+                  <div id="verify-card">
+                      <div id="verify-card-title">Reset you password</div>
                       <form onSubmit={formik.handleSubmit}>
                           <Form.Item
                             className="input_item_div"
@@ -159,7 +184,7 @@ const ResetPasswordPage = () => {
                           {/* </Form.Item> */}
                       </form>
                   </div>
-                  <div id="register-card-svg-bg" />
+                  <div id="login-card-svg-bg" />
               </div>
           </div>
       </>

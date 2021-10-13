@@ -6,6 +6,9 @@
 
 #profile-page-container form{
     line-height: normal;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #profile-page-container form .heading{
@@ -13,12 +16,18 @@
     font-weight: 600;
     font-size: 17px;
     padding-top: 20px;
-    color: var(--neon-blue);
+    color: var(--pink);
+}
+
+.profile-pag .report-content-section .content-page-title{
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
 #profile-page-container form .ant-divider{
-    border-color: var(--black-border-color);
+    border-color: white;
     /*margin-top: 15px;*/
     /*margin-bottom: 15px;*/
 }
@@ -26,30 +35,31 @@
 #profile-page-container form label{
     text-transform: uppercase;
     font-weight: 600;
-    color: var(--neon-blue);
+    color: white;
     margin-left: 10px;
+    /*padding: 30px 0;*/
+    /*font-size: ;*/
 }
 
-#profile-page-container form input[type=text]{
-    width: calc(100% - 10px);
-    padding: 8px;
-    background: var(--light-gray);
-    color: black;
-    border: 1px solid var(--border-color);
-    margin-bottom: 15px;
-    margin-top: 5px;
-    margin-left: 10px;
-    /*border-radius: 10px;*/
-
+#profile-page-container form input[type=text] {
+    background: var(--dark-black);
+    /*padding: 5px;*/
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid transparent;
+    /*margin: 8px 0;*/
+    max-width: 800px;
+    display: block;
 }
 
-#profile-page-container form input[type="text"]:hover{
-    border-color: var(--neon-blue);
+
+
+#profile-page-container form input:focus-visible{
+    outline:none;
+    border-color: var(--pink);
 }
 
-#profile-page-container form input[type="text"]:focus{
-    color: var(--neon-blue);
-}
 
 #profile-page-container form .ant-checkbox-wrapper{
     margin: 10px;
@@ -78,7 +88,7 @@ input[type="checkbox"].switch_1{
 }
 
 input[type="checkbox"].switch_1:checked{
-    background: var(--neon-blue);
+    background: var(--pink);
 }
 
 input[type="checkbox"].switch_1:after{
@@ -101,7 +111,7 @@ input[type="checkbox"].switch_1:checked:after{
 div.switch_box.box_1>label.field-name#admin-label{
 
     text-transform: capitalize;
-    color: black;
+    color: white;
     font-size: 16px;
     font-weight: 400;
 }
@@ -112,7 +122,8 @@ div.switch_box{
 }
 
 #profile-page-container form>div>button{
-    background: var(--neon-blue);
+    background: var(--pink);
+    border-color: var(--pink);
     color: white;
     /*padding: 10px 15px;*/
     /*margin: 10px 20px;*/

@@ -4,6 +4,9 @@
     --dodger-blue: #339CFF;
     --azure: #007AF5;
     --prussian-blue: #0E2A42;
+    --blue-green: #208AAE;
+    --dark-blue-green: #013737;
+    --bright-blue: #00BEFF;
 
     /*blacks*/
     --black-coral: #535C6F;
@@ -19,6 +22,7 @@
     --dark-black: #181A1B;
     --black-border: #333739;
     --pink: #E80057;
+    --dark-pink: rgba(232, 0, 87, 0.31);
 
     --amount-increasing: #00b074;
     --grey-border-color: #e3e3e3;

@@ -10,7 +10,7 @@ import {BrowserRouter, Link, Router} from 'react-router-dom';
 import {
     AiOutlineHeart,
     AiOutlineHome, FiSettings, GoGraph, GrGraphQl, HiOutlineCube,
-    HiOutlineDocumentReport
+    HiOutlineDocumentReport, ImProfile
 } from 'react-icons/all';
 import UserInfoCard from "../UserInfoCard/UserInfoCard";
 
@@ -100,6 +100,19 @@ class SideBar extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item
+                            key="7"
+                            icon={<ImProfile
+                                className={'sidebar-icon'}
+                            />}
+                            onClick={() => this.setActive('7')}
+                        >
+                            Profile
+                            <Link to="/profile"/>
+                        </Menu.Item>
+
+
+
+                        <Menu.Item
                             key="3"
                             icon={<FiSettings
                                 className={'sidebar-icon'}
@@ -109,6 +122,8 @@ class SideBar extends React.Component {
                             Settings
                             <Link to="/settings"/>
                         </Menu.Item>
+
+
 
                         {/*<Menu.Item*/}
                         {/*    key="4"*/}

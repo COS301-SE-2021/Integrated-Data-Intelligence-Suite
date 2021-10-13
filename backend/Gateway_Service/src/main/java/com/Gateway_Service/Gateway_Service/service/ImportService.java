@@ -64,13 +64,13 @@ public class ImportService {
         //ImportTwitterResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/getTwitterDataJson", request, ImportTwitterResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if (importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
-            if(serviceErrorResponse.getErrors() != null) {
+            if (serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
-                for(int i=1; i < serviceErrorResponse.getErrors().size(); i++){
+                for (int i = 1; i < serviceErrorResponse.getErrors().size(); i++) {
                     errors = "; " + errors;
                 }
 
@@ -107,9 +107,9 @@ public class ImportService {
         //ImportDataResponse importResponse = restTemplate.postForObject("http://Import-Service/Import/importData", request, ImportDataResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/importData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/importData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -149,9 +149,9 @@ public class ImportService {
         //ImportTwitterResponse importTwitterResponse = responseEntity.getBody();
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/importDatedData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/importDatedData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -194,9 +194,9 @@ public class ImportService {
         //String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/addApiSource", request, String.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/addApiSource",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/addApiSource",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -241,9 +241,10 @@ public class ImportService {
         //GetAPISourceByIdResponse response = restTemplate.postForObject("http://Import-Service/Import/getSourceById", request, GetAPISourceByIdResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/getSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        assert importResponse != null;
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -276,9 +277,9 @@ public class ImportService {
         //DeleteSourceResponse response = restTemplate.postForObject("http://Import-Service/Import/deleteSourceById", request, DeleteSourceResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/deleteSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/deleteSourceById",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -302,9 +303,9 @@ public class ImportService {
         //GetAllAPISourcesResponse response = restTemplate.getForObject("http://Import-Service/Import/getAllSources", GetAllAPISourcesResponse.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.GET,null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/getTwitterDataJson",HttpMethod.GET,null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -344,9 +345,9 @@ public class ImportService {
         //String jsonResponse = restTemplate.postForObject("http://Import-Service/Import/updateAPI", request, String.class);
 
         ResponseEntity<?> importResponse = null;
-        importResponse = restTemplate.exchange("http://Import-Service/Import/updateAPI",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        //importResponse = restTemplate.exchange("http://Import-Service/Import/updateAPI",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
-        if(importResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(importResponse != null && importResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) importResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
