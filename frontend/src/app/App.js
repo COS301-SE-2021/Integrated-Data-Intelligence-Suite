@@ -21,19 +21,29 @@ import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
 import { userState } from './assets/AtomStore/AtomStore';
 import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
+import NewDesign from './pages/NewDesign/NewDesign';
+import TeamPage from './pages/TeamPage/TeamPage';
 
 function App() {
     const user = useRecoilValue(userState);
     return (
         <Router>
             <Switch>
+                {/* <Route exact path="/"> */}
+                {/*    { */}
+                {/*        !user && <Redirect to="/" /> */}
+                {/*    } */}
+                {/*    { */}
+                {/*        user && <Redirect to="/chart" /> */}
+                {/*    } */}
+                {/* </Route> */}
+
                 <Route exact path="/">
-                    {
-                        !user && <Redirect to="/login" />
-                    }
-                    {
-                        user && <Redirect to="/chart" />
-                    }
+                    <NewDesign />
+                </Route>
+
+                <Route exact path="/team">
+                    <TeamPage />
                 </Route>
 
                 <Route exact path="/login">
