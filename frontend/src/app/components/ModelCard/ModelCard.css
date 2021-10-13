@@ -7,10 +7,14 @@
 
     min-width: 300px;
     max-width: 300px;
-    border: 0.1em solid var(--white-border-color);
-    border-radius: 15px;
+    border: 1px solid var(--black-border);
+    border-radius: 10px;
     padding: 15px;
     row-gap: 20px;
+}
+
+.model-card-container:hover {
+    border: 1px solid var(--pink);
 }
 
 .model-card-title-bar {
@@ -27,8 +31,8 @@
     grid-column-end: 2;
     width: 75px;
     height: max-content;
-    background: var(--light-blue-white-bg);
-    color: var(--dodger-blue);
+    background: var(--dark-pink);
+    color: var(--pink);
     padding: 5px;
     border-radius: 10px;
     font-weight: 500;
@@ -55,15 +59,16 @@
     display: grid;
     align-content: center;
     justify-content: center;
-    background: white;
-    border: 0;
+    background: var(--light-black);
+    border: 1px solid transparent;
     padding: 2px;
     border-radius: 50%;
 }
 
 .model-card-btn:hover {
-    background: var(--light-blue-white-bg);
-    color: var(--dodger-blue);
+    background: transparent;
+    color: var(--pink);
+    /*border: 1px solid var(--pink);*/
 }
 
 .model-card-icon {
@@ -72,41 +77,43 @@
 }
 
 .model-details-card {
-    /*border: 2px solid black;*/
-    border-radius: 15px;
+    border: 1px solid transparent;
+    border-radius: 10px;
     grid-template-rows: auto 3.4em !important;
 }
 
 .model-details-card > .simple-card-title {
     font-size: 20px;
-    background: var(--dodger-blue);
+    background: var(--dark-black);
     color: white;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border: 2px solid var(--dodger-blue);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 1px solid var(--dark-black);
     display: grid;
     align-content: center;
     justify-content: center;
 }
 
 .model-details-card > .simple-card-body {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-top: 0.1em solid var(--white-border-color);
-    border-right: 0.1em solid var(--white-border-color);
-    border-left: 0.1em solid var(--white-border-color);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    /*border-top: 0.1em solid var(--black-border);*/
+    /*border-right: 0.1em solid var(--black-border);*/
+    /*border-left: 0.1em solid var(--black-border);*/
+    border: 1px solid transparent;
     display: grid;
     justify-items: center;
     align-items: center;
     transition: .3s cubic-bezier(.6, .4, 0, 1);
     overflow: hidden;
-
+    background: var(--dark-black);
 }
 
 .model-details-card > .simple-card-body:hover {
-    background: #ccf2ff;
-    background: var(--light-blue-white-bg);
-    border: 1px solid var(--dodger-blue);
+    /*background: #ccf2ff;*/
+    /*background: var(--light-blue-white-bg);*/
+    background: var(--dark-black);
+    border: 1px solid var(--dark-black);
 }
 
 .model-details-card > .simple-card-body:hover > .model-image {
@@ -115,13 +122,12 @@
 
 .model-image {
     transition: .3s cubic-bezier(.6, .4, 0, 1);
+    background: transparent;
 }
 
 .model-extra-details-div {
-    color: #0086b3;
-    /*border: 3px solid black;*/
-    /*background: #ccf2ff;*/
-    background: var(--light-blue-white-bg);
+    color: var(--pink);
+    background: var(--dark-black);
     position: relative;
     left: 50%;
     bottom: 0;
@@ -142,14 +148,14 @@
     /*bottom: 50%;*/
     transform: translate3d(-50%, 50%, 0);
     transition: all .2s ease-out;
-    bottom: 380% !important;
+    bottom: 270% !important;
     text-align: center;
     align-self: center;
     justify-self: left;
 }
 
 .heart-icon-filled {
-    color: red;
+    color: var(--pink);
     height: 20px;
     width: 20px;
 }
@@ -165,16 +171,17 @@
     display: grid;
     align-items: center;
     justify-items: center;
-    background: white;
+    background: var(--light-black);
     border: 0;
 }
 
 .select-default-btn:hover {
-    background: var(--heart-icon-bg-hover);
+    /*background: var(--heart-icon-bg-hover);*/
+    color: var(--pink);
 }
 
 .select-default-btn:hover > .heart-icon-not-filled {
-    color: red;
+    color: var(--pink);
 }
 
 .model-card-share-btn {
@@ -182,4 +189,15 @@
     padding: 2px;
 }
 
+.model-image-cube {
+    width: 48px;
+    height: 48px;
+}
 
+.model-image-cube:nth-of-type(odd) {
+    color: var(--pink);
+}
+
+.model-image-cube:nth-of-type(even) {
+    color: var(--blue-green);
+}
