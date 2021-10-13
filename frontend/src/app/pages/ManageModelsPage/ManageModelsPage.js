@@ -51,7 +51,7 @@ const mock_add_obj = [
     },
     {
         modelID: 'm5',
-        modelName: 'Naruto',
+        modelName: 'Newly Added Obj',
     },
 ];
 const mock_delete_obj = [

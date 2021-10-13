@@ -88,12 +88,12 @@
     grid-template-rows: 100%;
     grid-template-columns: repeat(3, auto);
     /*border: 3px solid red;*/
-    background: #C6F6D5;
+    background: var(--dark-blue-green);
     border-radius: 10px;
     padding: 10px;
     text-align: center;
     align-items: center;
-    color: green;
+    color: var(--bright-blue);
     font-weight: 500;
     max-width: 360px;
 
@@ -102,7 +102,7 @@
 .file-preview-csv-icon {
     height: 32px;
     width: 32px;
-    color: green;
+    color: var(--bright-blue);
 }
 
 .file-preview-name {
