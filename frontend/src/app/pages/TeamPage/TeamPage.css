@@ -1,0 +1,93 @@
+#team-page-container {
+    overflow: hidden;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 10vh auto;
+    background: white;
+
+}
+
+#team-page-content-container {
+    display: grid;
+    border-top: 1px solid var(--grey-border-color);
+    grid-template-rows: 80px auto;
+
+}
+
+.profile-card-container {
+    width: 75%;
+    height: 100%;
+    object-fit: cover;
+
+    -webkit-box-reflect: below 2px linear-gradient(transparent, transparent, #0004);
+
+    transform-origin: center;
+    /*transform: perspective(800px) rotateY(25deg);*/
+    transition: 0.5s;
+}
+
+.container {
+    width: 1280px;
+    max-height: 700px;
+    /*border: 3px solid black;*/
+
+
+    justify-self: center;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.container:hover div {
+    opacity: 0.3;
+}
+
+.container div:hover {
+    transform: perspective(800px) rotateY(0deg);
+    opacity: 1;
+}
+
+.typing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+#feature-text {
+    margin-left: 8px;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.input-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 42px;
+    background-color: black;
+    margin-left: 8px;
+    animation: blink .6s linear infinite alternate;
+}
+
+
+#sentence {
+    font-size: 40px;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    40% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
