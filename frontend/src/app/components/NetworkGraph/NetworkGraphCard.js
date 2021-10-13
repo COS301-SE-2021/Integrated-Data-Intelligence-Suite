@@ -4,7 +4,6 @@ import networkStyleSheet from '../../resources/graphStructures/networkGraphNodes
 import CytoscapeComponent from './utils/cytoscape';
 import './NetworkGraph.css';
 
-
 const NetworkGraphCard = ({ graphData }) => {
     const myLayout = { name: 'cose-bilkent' };
     return (
@@ -23,7 +22,7 @@ const NetworkGraphCard = ({ graphData }) => {
                           layout={myLayout}
                           style={{
                                 width: '100%',
-                                height: '400px',
+                                height: '500px',
                             }}
                           cy={(cy) => {
                                 cy.on('add', 'node', () => {

@@ -10,10 +10,11 @@
     /*border-top-left-radius: 10px;*/
     /*border-top-right-radius: 10px;*/
     /*padding: 25px;*/
+    background: var(--light-black);
 }
 
 #upload-card > .simple-card-body {
-    background: white;
+    background: var(--light-black);
     /*padding: 25px;*/
     /*border-radius: 10px;*/
     /*border-bottom-left-radius: 10px;*/
@@ -26,8 +27,8 @@
     border-style: dashed;
     border-width: 2px;
     /*border-color: #339CFF;*/
-    border-color: var(--dodger-blue);
-    background: #f2f6fc;
+    border-color: var(--pink);
+    background: rgba(232, 0, 87, 0.19);
     border-radius: 10px;
     display: grid;
     align-content: center;
@@ -48,7 +49,7 @@
 #file-icon {
     width: 50px;
     height: 50px;
-    color: var(--dodger-blue);
+    color: var(--pink);
 }
 
 #browse-files-btn {
@@ -60,20 +61,18 @@
     text-align: center;
     display: grid;
     align-content: center;
-    background: var(--dodger-blue);
-    border: var(--dodger-blue);
+    background: var(--pink);
+    border: var(--pink);
     color: white;
 }
 
 #browse-files-btn:hover {
-    background: var(--azure);
+    background: rgba(232, 0, 87, 0.31);
 }
 
 #upload-instr-p {
     font-weight: 500;
-    /*color: var(--prussian-blue);*/
-    /*color: #535C6F;*/
-    color: var(--black-coral);
+    color: white;
     width: 70%;
     text-align: center;
 }

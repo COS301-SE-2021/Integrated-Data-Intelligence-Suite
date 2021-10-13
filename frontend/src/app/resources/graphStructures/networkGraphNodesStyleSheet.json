@@ -2,7 +2,7 @@
   {
     "selector": "node",
     "style": {
-      "background-color": "#2B65EC",
+      "background-color": "#E80057",
       "label": "data(id)",
       "text-valign": "center"
     }
