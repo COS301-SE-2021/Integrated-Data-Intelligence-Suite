@@ -1360,15 +1360,46 @@ public class AnalyseServiceImpl {
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
+        //List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
+        //List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        //List<Row>  = itemsDF.groupBy("EntityName", "date").count().collectAsList();
 
-        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        averageLikes.get(1); //average likes
 
-        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
-        rate.get(1); //rate ???
 
-        //training set
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
+        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
+        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
+
+        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+
+        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+
+
+        List<Row> trainSet = new ArrayList<>();
+        //for(int i=0; i < minSize; i++){
+        while (trendRowData.hasNext()){
+            Row trendData = trendRowData.next();
+
+            double trending = 0.0;
+            if (Integer.parseInt(trendData.get(3).toString()) >= 4 ){ //count
+                trending = 1.0;
+            }
+
+            Row trainRow = RowFactory.create(
+                    trending,
+                    trendData.get(0).toString(), //name
+                    trendData.get(1).toString(), //type
+                    Double.parseDouble(trendData.get(2).toString()), //
+                    Double.parseDouble(trendData.get(3).toString()),
+                    trendData.get(4).toString(),
+                    Double.parseDouble(trendData.get(5).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+
+        /*training set
         int minSize = 0;
         if(namedEntities.size()>averageLikes.size())
             minSize = averageLikes.size();
@@ -1376,7 +1407,7 @@ public class AnalyseServiceImpl {
             minSize = namedEntities.size();
 
         if(minSize >rate.size() )
-            minSize =rate.size();
+            minSize =rate.size();*
 
 
         System.out.println("NameEntity : " +namedEntities.size() );
@@ -1406,7 +1437,7 @@ public class AnalyseServiceImpl {
                     Double.parseDouble(averageLikes.get(i).get(1).toString())
             );
             trainSet.add(trainRow);
-        }
+        }*/
 
         Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
 
@@ -1500,10 +1531,13 @@ public class AnalyseServiceImpl {
         //TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF).cache();
 
-        List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+        Dataset<Row> filteredResult = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0));
+        List<Row> rawResults = convertDataframeToList(filteredResult);
 
-        if( rawResults.isEmpty())
-            rawResults = result.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+        if( rawResults.isEmpty()) {
+            filteredResult = result.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0));
+            rawResults = convertDataframeToList(filteredResult);
+        }
 
         /*System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
@@ -1902,10 +1936,11 @@ public class AnalyseServiceImpl {
         return new FindAnomaliesResponse(results);
     }
 
+
+
     public double dist(Vector features, Vector center){
         return Vectors.sqdist(features,center);
     }
-
 
     public void cleanModels() throws TrainingModelException {
         File modelsDir = new File("models");
@@ -1929,6 +1964,18 @@ public class AnalyseServiceImpl {
                 }
             }
         }
+    }
+
+    public List<Row> convertDataframeToList(Dataset<Row> filteredResult) {
+
+        ArrayList<Row> convertedList = new ArrayList<>();
+        Iterator<Row> listIterator = filteredResult.toLocalIterator();
+
+        while(listIterator.hasNext()){
+            convertedList.add(listIterator.next());
+        }
+
+        return convertedList;
     }
 
 
