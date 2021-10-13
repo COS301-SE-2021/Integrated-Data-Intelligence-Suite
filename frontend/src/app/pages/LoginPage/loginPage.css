@@ -92,22 +92,22 @@
 }
 
 .fading-form-div.login.fadeIn{
-    animation: fadeIn 800ms linear;
+    animation: fadeIn 600ms linear;
     animation-fill-mode: forwards;
 }
 
 .fading-form-div.login.fadeOut{
-    animation: fadeOut 800ms linear;
+    animation: fadeOut 600ms linear;
     animation-fill-mode: forwards;
 }
 
 .fading-form-div.register.fadeIn{
-    animation: fadeIn-inverse 800ms linear;
+    animation: fadeIn-inverse 600ms linear;
     animation-fill-mode: forwards;
 }
 
 .fading-form-div.register.fadeOut{
-    animation: fadeOut-inverse 800ms linear;
+    animation: fadeOut-inverse 600ms linear;
     animation-fill-mode: forwards;
 }
 
@@ -147,12 +147,12 @@
 }
 
 #login-card-svg-bg.slideLeft{
-    animation: slideLeft 800ms ease-in;
+    animation: slideLeft 600ms ease-in;
     animation-fill-mode: forwards;
 }
 
 #login-card-svg-bg.slideRight{
-    animation: slideRight 800ms ease-in;
+    animation: slideRight 600ms ease-in;
     animation-fill-mode: forwards;
 }
 
