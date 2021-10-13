@@ -74,7 +74,7 @@ public class TrainServiceImpl {
     @Autowired
     private TrainingDataRepository parsedDataRepository;
 
-    private SparkSession sparkNlpProperties;
+    private SparkSession sparkProperties;
 
     //static final Logger logger = Logger.getLogger(TrainServiceImpl.class);
 
@@ -303,7 +303,7 @@ public class TrainServiceImpl {
 
             RegisterUserBestModelRequest registerUserBestModelRequest = new RegisterUserBestModelRequest(trainedModel, request.getModelName());
             RegisterUserBestModelResponse registerUserBestModelResponse = registerUserBestModel(registerUserBestModelRequest);
-            
+
             modelId = registerUserBestModelResponse.getBestModelId();
             long  endTime = System.currentTimeMillis();
             duration = endTime - startTime;
@@ -518,15 +518,15 @@ public class TrainServiceImpl {
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
                 .setMaster("local")
-                //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "5g")
-                .set("spark.executor.memory", "5g")
-                .set("spark.memory.fraction", "0.5")
+                //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
+                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .set("spark.driver.memory", "4g")
+                .set("spark.executor.memory", "4g")
+                //.set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{TrainServiceImpl.class});
 
-        sparkNlpProperties = SparkSession
+        sparkProperties = SparkSession
                 .builder()
                 //.appName("NlpProperties")
                 //.master("local")
@@ -548,7 +548,7 @@ public class TrainServiceImpl {
             nlpPropertiesData.add(row);
         }
 
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
+        Dataset<Row> data =  sparkProperties.createDataFrame(nlpPropertiesData,schema).toDF();
         //createDataset(text, Encoders.STRING()).toDF("text");
 
         /*******************SETUP NLP PIPELINE MODEL*****************/
@@ -767,7 +767,7 @@ public class TrainServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
 
         return Arrays.asList(response, entityList);
     }
@@ -854,7 +854,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -869,7 +869,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -955,7 +955,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1176,7 +1176,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
         System.out.println("trends done");
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsResponse(results, trainedModel);
     }
@@ -1264,7 +1264,7 @@ public class TrainServiceImpl {
                             new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }else {
 
             StructType inputSchema = new StructType(
@@ -1279,7 +1279,7 @@ public class TrainServiceImpl {
                             new StructField("IsTrending", DataTypes.IntegerType, false, Metadata.empty()),
                     });
 
-            itemsDF = sparkNlpProperties.createDataFrame(trendsData, inputSchema);
+            itemsDF = sparkProperties.createDataFrame(trendsData, inputSchema);
         }
 
 
@@ -1354,7 +1354,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1536,7 +1536,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
         return new TrainFindTrendsDTResponse(results, trainedModel);
     }
@@ -1625,7 +1625,7 @@ public class TrainServiceImpl {
                 });
 
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(trendsData, schema2);
         itemsDF.show(itemsDF.collectAsList().size());
 
         /*******************MANIPULATE DATAFRAME*****************/
@@ -1696,7 +1696,7 @@ public class TrainServiceImpl {
         }
 
         //split data
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
         Dataset<Row>[] split = trainingDF.randomSplit((new double[]{0.7, 0.3}), 5043);
 
         Dataset<Row> trainSetDF = split[0];
@@ -1842,7 +1842,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         ArrayList<ArrayList> results = new ArrayList<>();
 
         return new TrainFindTrendsArticlesResponse(results);
@@ -1872,7 +1872,7 @@ public class TrainServiceImpl {
 
         /*******************READ MODEL OUTPUT*****************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
         return new TrainGetPredictionResponse(null);
     }
 
@@ -1971,7 +1971,7 @@ public class TrainServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(anomaliesData, schema);
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -2036,7 +2036,7 @@ public class TrainServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema2);
 
         /*******************SETUP PIPELINE MODEL*****************/
         //features
@@ -2186,7 +2186,7 @@ public class TrainServiceImpl {
 
         /***********************SETUP MLFLOW - SAVE ***********************/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
 
         ArrayList<String> results = new ArrayList<>();
         return new TrainFindAnomaliesResponse(results, trainedModel);
