@@ -61,18 +61,38 @@ const LoginCard = () => {
                     body: JSON.stringify(values),
                 };
                 fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/login`, requestOptions)
-                    .then((response) => response.json())
-                    .then((json) => {
-                        setLoginLoading(false);
-                        if (json.success) {
-                            localStorage.setItem('user', json.id);
-                            setUser(JSON.parse(json.id));
-                            message.success(json.message);
-                            history.push('/chart');
-                        } else {
-                            message.error(json.message);
+                    .then((res) =>{
+                        if (!res.ok) {
+                            throw Error(res.error);
                         }
-                    });
+                        return res.json();
+                    })
+                    .then((data) => {
+                        setLoginLoading(false);
+                        console.log(data);
+                        if (data.status.toLowerCase() === 'ok') {
+                            // localStorage.setItem('user', json.id);
+                            if (data.data.success) {
+                                console.log("current user", JSON.parse(data.data.id));
+                                setUser(JSON.parse(data.data.id));
+                                message.success(data.data.message)
+                                    .then(()=>{
+                                        history.push('/chart');
+                                    });
+                            } else {
+                                message.error(data.data.message);
+                            }
+                        } else if (data.errors) {
+                            for (let i = 0; i < data.errors.length; i = i + 1) {
+                                message.error(data.errors[i]);
+                            }
+                        }
+                    })
+                    .catch((error)=>{
+                        setLoginLoading(false);
+                        console.log(error.message);
+                        // message.error(error);
+                    })
             }
         },
     });

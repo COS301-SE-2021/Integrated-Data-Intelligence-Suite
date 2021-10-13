@@ -36,76 +36,34 @@ const ResendPage = () => {
                 body: JSON.stringify(values),
             };
             fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/resend`, requestOptions)
-                .then((response) => response.json()).then((json) => {
-                if (json.success) {
-                    // localStorage.setItem("user", json.id)
-                    message.success(json.message);
-                    history.go(-1);
-                } else {
-                    message.error(json.message);
-                }
-            });
+                .then((res) =>{
+                    if (!res.ok) {
+                        throw Error(res.error);
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    if (data.status.toLowerCase() === 'ok') {
+                        if (data.data.success) {
+                            message.success(data.data.message);
+                            history.go(-1);
+                        } else {
+                            message.error(data.data.message);
+                        }
+                    } else if (data.errors) {
+                        for (let i = 0; i < data.errors.length; i = i + 1) {
+                            message.error(data.errors[i]);
+                        }
+                    }
+                })
+                .catch((error) =>{
+                    message.error(error.message);
+                });
         },
     });
 
     return (
-        // <Card
-        //   id="login_card"
-        //   className="loginCard"
-        //   title="Step 2: Verify your account"
-        // >
-        //
-        //     <form onSubmit={formikVerify.handleSubmit}>
-        //         <Form.Item
-        //           className="input_item_div"
-        //         >
-        //             <Input
-        //               id="email"
-        //               name="email"
-        //               type="email"
-        //               placeholder="Email"
-        //               onChange={formikVerify.handleChange}
-        //               onBlur={formikVerify.handleBlur}
-        //               value={formikVerify.values.email}
-        //               prefix={<UserOutlined className="site-form-item-icon" />}
-        //             />
-        //         </Form.Item>
-        //
-        //         <Form.Item
-        //           className="input_item_div"
-        //         >
-        //             <Input
-        //               id="verificationCode"
-        //               name="verificationCode"
-        //               type="text"
-        //               placeholder="Verification code"
-        //               value={formikVerify.values.verificationCode}
-        //               onChange={formikVerify.handleChange}
-        //               onBlur={formikVerify.handleBlur} // When the user leaves the form field
-        //               prefix={<LockOutlined className="site-form-item-icon" />}
-        //             />
-        //             {/* {formik.touched.password && formik.errors.password ? ( */}
-        //             {/*    <p>{formik.errors.password}</p>) : null} */}
-        //
-        //         </Form.Item>
-        //
-        //         <Form.Item>
-        //             <VerifyButton />
-        //         </Form.Item>
-        //
-        //         <Divider className="or_divider">
-        //             OR
-        //         </Divider>
-        //     </form>
-        //
-        //     <form onSubmit={formikResend.handleSubmit}>
-        //         <Form.Item>
-        //             <SendOTPButton />
-        //         </Form.Item>
-        //     </form>
-        //
-        // </Card>
-
         <>
             <div id="login-custom-bg">
                 <div id="top-left-block" />
