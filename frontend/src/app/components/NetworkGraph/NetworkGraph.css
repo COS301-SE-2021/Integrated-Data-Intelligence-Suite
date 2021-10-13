@@ -13,7 +13,7 @@
 
 #network_graph_card_content {
     /*border: 3px solid yellow;*/
-    background: white;
+    background: var(--dark-black);
 }
 
 

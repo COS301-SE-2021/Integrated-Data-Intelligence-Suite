@@ -123,7 +123,6 @@
     grid-row: span 3;
 }
 
-
 /*The div that contains the entire content section*/
 #content-section {
     display: grid;
@@ -140,9 +139,12 @@
     row-gap: 13%;
 }
 
-
 #content_section .simple-section-container {
     max-width: 1200px;
+}
+
+#overview-graph-metric-2 > .simple-card-body > .VictoryContainer > svg {
+    background: var(--dark-black);
 }
 
 /*******************************************/
@@ -167,20 +169,6 @@
     grid-template-rows: repeat(2, auto);
 }
 
-/*#row-3 #map-metric-container #map-metric-1{*/
-/*    border: 2px solid var(--border-color);*/
-/*    background: white;*/
-/*    padding: 10px;*/
-/*    border-radius: 10px;*/
-/*}*/
-
-#word-cloud-graph-container > .simple-card-container {
-    border: 2px solid var(--border-color);
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-}
-
 #world-map > .simple-card-title {
     padding: 10px 10px 10px 0px;
     text-align: left;
@@ -192,10 +180,11 @@
 
     /*Internal display of the map-metric-container*/
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 66% 33%;
     grid-template-rows: 100%;
     column-gap: 30px;
-    height: 340px;
+    height: 460px;
+    border-radius: 10px;
 }
 
 #complex-graph {
@@ -204,21 +193,30 @@
 }
 
 #map-metric-1 {
-    border: 2px solid var(--border-color);
+    border: 1px solid transparent;
     border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    background: var(--dark-black);
 }
+
+#map-metric-1:hover {
+    border: 1px solid var(--pink);
+}
+
 
 #map-metric-1 > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: var(--simple-card-title-color);
+    background: var(--dark-black);
+
 }
 
 #map-metric-1 > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    background: var(--dark-black);
 }
 
 #map-metric-2 > .simple-card-title {
@@ -245,7 +243,6 @@
 #row-4 {
     grid-row-start: 4;
     grid-row-end: 5;
-    /*border: 3px solid black;*/
 
     /*Display of the Body of the Word Cloud Section*/
     /**/
@@ -265,16 +262,40 @@
 #word-cloud-card {
     grid-column-start: 1;
     grid-column-end: 2;
-    background: white;
+    background: var(--dark-black);
     padding: 10px;
     border-radius: 10px;
-    border: solid 2px var(--border-color);
+    border: 1px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#word-cloud-card > .simple-card-title {
+    background: var(--dark-black);
+    text-align: center;
+    color: white;
+
+}
+
+#word-cloud-card:hover {
+    border: 1px solid var(--pink);
+}
+
+#word-cloud-graph-container > .simple-card-container {
+    border: 1px solid transparent;
+    background: var(--dark-black);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+#word-graph-2 > .simple-card-body {
+    background: var(--dark-black);
 }
 
 #word-cloud-outer-container {
     display: flex;
     align-content: center;
-
+    background: var(--dark-black);
 }
 
 #word-cloud-outer-container > div {
@@ -299,16 +320,19 @@
     /*Display of the body of the container*/
     display: grid;
     align-items: center;
-    /*grid-template-columns: 100%;*/
-    /*grid-template-rows: 1fr 1fr;*/
-    /*row-gap: 10px;*/
+    border-radius: 10px;
+    background: var(--dark-black);
+    border: 1px solid transparent;
+}
+
+#word-graph-2:hover {
+    border: 1px solid var(--pink);
 }
 
 #word-cloud-graph-container > div {
     display: flex;
     /*margin-right: auto;*/
     /*margin-left: auto;*/
-
 }
 
 #word-graph-1 {
@@ -317,12 +341,20 @@
 }
 
 #word-graph-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
     grid-row-start: 1;
     grid-row-end: 2;
     padding: 10px;
-    border: 2px solid var(--border-color);
-    background: white;
+    border: 1px solid transparent;
+    background: var(--dark-black);
     border-radius: 10px;
+}
+
+#word-graph-2 > .simple-card-title {
+    background: var(--dark-black);
+    text-align: center;
 }
 
 /*********************************************/
@@ -346,32 +378,52 @@
 }
 
 #row-5 > .simple-section-body .simple-card-container {
-    background: white;
+    background: var(--dark-black);
     padding: 10px;
     border-radius: 10px;
-    border: solid 2px var(--border-color);
+    border: solid 1px transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#row-5 > .simple-section-body .simple-card-container:hover {
+    border: 1px solid var(--pink)
 }
 
 #network-graph-entities {
     grid-column-start: 1;
     grid-column-end: 2;
+    background: var(--dark-black);
 }
 
 #network-graph-entities > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
+    background: var(--dark-black);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: var(--simple-card-title-color);
+    color: white;
+}
+
+#network-graph-entities > .simple-card-body {
+    background: var(--dark-black);
+    height: 100%;
+}
+
+#network_card {
+    background: var(--dark-black);
+}
+
+#network_card > .ant-card-body {
+    height: 100%;
 }
 
 #network-graph-patterns > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: var(--simple-card-title-color);
-
+    background: var(--dark-black);
+    color: white;
 }
 
 #network-graph-patterns {
@@ -399,10 +451,11 @@
 #row-6 > .simple-section-body {
     display: grid;
     grid-template-rows: repeat(1, 100%);
-    grid-template-columns: 50%;
+    grid-template-columns: 100%;
     column-gap: 30px;
     row-gap: 10px;
     justify-content: center;
+
 }
 
 #anomaly-timeline-card {
@@ -411,15 +464,26 @@
     grid-row-start: 1;
     grid-row-end: 2;
     overflow: auto;
-    border: 2px solid var(--border-color);
+    border: 1px solid transparent;
     border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 100%;
+}
+
+#anomaly-timeline-card:hover {
+    border: 1px solid var(--pink);
 }
 
 #anomaly-timeline-card > .simple-card-title {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top-left-radius: 10px;
-    color: var(--simple-card-title-color);
+    background: var(--dark-black);
+    color: white;
+}
+
+#anomaly-timeline-card > .simple-card-body {
+    background: var(--dark-black);
 }
 
 #anomaly-scatter-plot {

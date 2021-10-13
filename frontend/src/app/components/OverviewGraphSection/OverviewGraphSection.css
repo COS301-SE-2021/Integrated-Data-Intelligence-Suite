@@ -89,6 +89,7 @@
 #overview-graph-metric-2 > .simple-card-body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    padding: 2px;
     /*border-bottom: 2px solid var(--black-border);*/
     /*border-left: 2px solid var(--black-border);*/
     /*border-right: 2px solid var(--black-border);*/

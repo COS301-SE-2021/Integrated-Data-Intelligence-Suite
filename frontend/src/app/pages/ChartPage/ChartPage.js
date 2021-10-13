@@ -12,8 +12,6 @@ import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
 
 import '../../components/NetworkGraph/NetworkGraph.css';
-import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
-
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
 import 'rc-slider/assets/index.css';
@@ -154,7 +152,7 @@ const ChartPage = () => {
                             ? (
                                 <SimplePopup
                                   closePopup={() => setShowCSV(false)}
-                                  popupTitle="Upload File"
+                                  popupTitle="Upload CSV File"
                                 >
                                     <UploadDataPage
                                       handleTextChange={structureBackendData}
@@ -271,21 +269,21 @@ const ChartPage = () => {
                                                 <WordCloud />
                                             </SimpleCard>
 
-                                            <div id="word-cloud-graph-container">
-                                                <SimpleCard
-                                                  cardTitle="Dominant words"
-                                                  cardID="word-graph-2"
-                                                  titleOnTop
-                                                >
-                                                    <PieChart dominantWords={backendData[10]} />
-                                                </SimpleCard>
-                                                {/* <SimpleCard
+                                            {/* <div id="word-cloud-graph-container"> */}
+                                            <SimpleCard
+                                              cardTitle="Dominant words"
+                                              cardID="word-graph-2"
+                                              titleOnTop
+                                            >
+                                                <PieChart dominantWords={backendData[10]} />
+                                            </SimpleCard>
+                                            {/* <SimpleCard
                                                     cardTitle="Word Sunburst"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
                                                 </SimpleCard> */}
-                                            </div>
+                                            {/* </div> */}
                                         </SimpleSection>
 
                                         <SimpleSection
@@ -318,7 +316,7 @@ const ChartPage = () => {
                                           cardID="row-6"
                                         >
                                             <SimpleCard
-                                              cardTitle="Timeline"
+                                              cardTitle="Anomaly Timeline"
                                               cardID="anomaly-timeline-card"
                                               titleOnTop
                                             >

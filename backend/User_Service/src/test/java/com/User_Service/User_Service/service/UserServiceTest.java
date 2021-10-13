@@ -249,7 +249,6 @@ public class UserServiceTest {
     @DisplayName("User_Successfully_Registered")
     public void registerSuccessful() throws Exception {
         User newTestUser = new User();
-
         newTestUser.setId(UUID.fromString("0b4b8936-bd7e-4373-b097-bb227b9f4072"));
         newTestUser.setFirstName("FirstNameTest");
         newTestUser.setLastName("LastNameTest");
@@ -312,7 +311,6 @@ public class UserServiceTest {
         Assertions.assertNull(foundUser);
 
         Assertions.assertEquals("The email does not exist", response.getMessage());
-
     }
 
     @Test
@@ -329,7 +327,29 @@ public class UserServiceTest {
         //Assertions.assertNotNull(foundUser);
 
         Assertions.assertEquals("Incorrect password", response.getMessage());
+    }
 
+    @Test
+    @DisplayName("Login_Not_Verified")
+    public void loginNotVerified() throws Exception {
+        User newTestUser = new User();
+        newTestUser.setId(UUID.fromString("0b4b8936-bd7e-4373-b097-bb227b9f4072"));
+        newTestUser.setFirstName("FirstNameTest");
+        newTestUser.setLastName("LastNameTest");
+        newTestUser.setUsername("newUsername");
+        newTestUser.setEmail("newemail@test.com");
+        newTestUser.setPassword("1000:3dd6e56301215db3aaf500526a14f9b8:dc79a5a53f48f100883ef1327c89248b1eb0eb231408c746a4080995db17eafd71042a5b9c5429e2e26ea58d1e6e357e027e289f5a836fefa3b8accf4a056485");
+        newTestUser.setVerified(false);
+        newTestUser.setVerificationCode("eroiwuerowiuerowiurow");
+        newTestUser.setDateCreated(new Date(2021, Calendar.JULY, 2));
+        newTestUser.setPermission(Permission.IMPORTING);
+
+        when(userRepository.findUserByEmail(newTestUser.getEmail())).thenReturn(Optional.of(newTestUser));
+
+        LoginRequest request = new LoginRequest("newemail@test.com", "pass");
+        LoginResponse response = service.login(request);
+
+        Assertions.assertEquals("This account is not verified. Please verify to get access to the system", response.getMessage());
     }
 
     @Test

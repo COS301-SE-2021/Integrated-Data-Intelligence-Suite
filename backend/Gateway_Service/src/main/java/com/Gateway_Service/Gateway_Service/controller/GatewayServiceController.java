@@ -24,6 +24,8 @@ import com.Gateway_Service.Gateway_Service.service.*;
 
 //import com.netflix.discovery.DiscoveryClient;
 
+import com.Import_Service.Import_Service.request.AddAPISourceRequest;
+import com.Import_Service.Import_Service.response.AddAPISourceResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1244,8 +1246,9 @@ public class GatewayServiceController {
      */
     @PostMapping(value = "/addNewApiSource", produces = "application/json")
     @CrossOrigin
-    public ResponseEntity<?> addApiSource(@RequestBody String jsonRequest) throws ImporterException {
-        String response = ""; //importClient.addApiSource(jsonRequest); //TODO
+    public ResponseEntity<?> addApiSource(@RequestBody String jsonRequest) throws ImporterException, ParserException {
+        AddAPISourceResponse response = importClient.addApiSource(jsonRequest);
+        AddSocialMediaPropertiesResponse pResponse = parseClient.addSocialMediaPropertiesRequest(jsonRequest);
 
         ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
         serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
@@ -1285,8 +1288,7 @@ public class GatewayServiceController {
     @PostMapping(value = "/updateAPI", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<?> editAPISource(@RequestBody String jsonRequest) throws ImporterException {
-        String response = "" ; //importClient.editAPISource(jsonRequest); //TODO
-
+        EditAPISourceResponse response = importClient.editAPISource(jsonRequest);
         ServiceSuccesResponse serviceSuccesResponse = new ServiceSuccesResponse();
         serviceSuccesResponse.setTimeStamp(LocalDateTime.now());
         //serviceSuccesResponse.setPathUri(request.getDescription(true));
