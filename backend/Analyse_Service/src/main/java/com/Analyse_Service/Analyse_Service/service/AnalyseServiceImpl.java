@@ -1806,6 +1806,14 @@ public class AnalyseServiceImpl {
         sparkNlpProperties.udf().register("dist", calculateDistance);
 
         Dataset<Row> kmeansWithClusterDistances = FeaturesAndPredictions.withColumn("distanceFromCluster",callUDF("dist",FeaturesAndPredictions.col("features"),FeaturesAndPredictions.col("prediction")));
+        double[] Q = kmeansWithClusterDistances.select("distanceFromCluster").stat().approxQuantile("distanceFromCluster",new double[]{0.15,0.85},0.0);
+
+        double IQR = Q[0] - Q[1];
+        Double lower = Q[0] - 1.5*IQR;
+        Double upper = Q[1] - 1.5*IQR;
+
+        Dataset<Row> Anomalies = kmeansWithClusterDistances.filter(col("distanceFromCluster").lt(lower).or(col("distanceFromCluster").gt(upper)));
+
         try {
             client = new MlflowClient("http://localhost:5000");
 
@@ -1885,8 +1893,8 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
         System.out.println("/*******************Outputs begin*****************");
-        System.out.println("Distances: ");
-        kmeansWithClusterDistances.show(100);
+        System.out.println("Anomalies: ");
+        Anomalies.show(100);
 
 
         ArrayList<String> results = new ArrayList<>();
