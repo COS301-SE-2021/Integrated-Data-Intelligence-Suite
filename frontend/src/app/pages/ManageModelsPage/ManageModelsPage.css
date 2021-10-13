@@ -4,6 +4,7 @@
     display: grid;
     grid-template-columns: max-content auto;
     grid-template-rows: 100%;
+    background: var(--light-black);
 }
 
 #manage-models-page-content {
@@ -13,6 +14,7 @@
     overflow-y: hidden;
     max-height: 100vh;
     padding: 3%;
+    background: var(--light-black);
 }
 
 #manage-models-card {
@@ -24,7 +26,8 @@
     /*border: 3px solid yellow;*/
     font-weight: 600;
     font-size: 32px;
-    color: var(--dodger-blue);
+    background: var(--light-black);
+    color: var(--pink);
 }
 
 #manage-models-card > .simple-card-body {
@@ -32,6 +35,7 @@
     display: grid;
     grid-template-rows: max-content auto;
     grid-template-columns: 100%;
+    background: var(--light-black);
 }
 
 #manage-models-btn-row {
