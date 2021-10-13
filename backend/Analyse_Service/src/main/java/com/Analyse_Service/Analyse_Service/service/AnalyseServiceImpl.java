@@ -1364,8 +1364,6 @@ public class AnalyseServiceImpl {
         //List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
         //List<Row>  = itemsDF.groupBy("EntityName", "date").count().collectAsList();
 
-
-
         Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
         Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
         Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
@@ -1914,7 +1912,8 @@ public class AnalyseServiceImpl {
         //summary.filter(col("prediction").
         Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
         Dataset<Row> rawResults2 = Results.select("Text","prediction").cache();
-        List<Row> rawResults = rawResults2.select("Text").collectAsList();
+        Dataset<Row> filteredResult = rawResults2.select("Text");
+        List<Row> rawResults = convertDataframeToList(filteredResult);
 
         System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
