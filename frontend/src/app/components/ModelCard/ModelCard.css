@@ -84,11 +84,11 @@
 
 .model-details-card > .simple-card-title {
     font-size: 20px;
-    background: black;
+    background: var(--dark-black);
     color: white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    border: 1px solid black;
+    border: 1px solid var(--dark-black);
     display: grid;
     align-content: center;
     justify-content: center;
@@ -97,23 +97,23 @@
 .model-details-card > .simple-card-body {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-top: 0.1em solid var(--black-border);
-    border-right: 0.1em solid var(--black-border);
-    border-left: 0.1em solid var(--black-border);
+    /*border-top: 0.1em solid var(--black-border);*/
+    /*border-right: 0.1em solid var(--black-border);*/
+    /*border-left: 0.1em solid var(--black-border);*/
     display: grid;
     justify-items: center;
     align-items: center;
     transition: .3s cubic-bezier(.6, .4, 0, 1);
     overflow: hidden;
-    background: var(--light-black);
+    background: var(--dark-black);
 
 }
 
 .model-details-card > .simple-card-body:hover {
     /*background: #ccf2ff;*/
     /*background: var(--light-blue-white-bg);*/
-    background: black;
-    border: 1px solid black;
+    background: var(--dark-black);
+    border: 1px solid var(--dark-black);
 }
 
 .model-details-card > .simple-card-body:hover > .model-image {
@@ -127,7 +127,7 @@
 
 .model-extra-details-div {
     color: var(--pink);
-    background: black;
+    background: var(--dark-black);
     position: relative;
     left: 50%;
     bottom: 0;
