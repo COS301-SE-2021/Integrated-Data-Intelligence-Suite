@@ -354,7 +354,7 @@ public class ParseServiceControllerIntegrationTests {
         Assertions.assertNotNull(data);
     }
 
-    @Test
+    /*@Test
     @Order(6)
     @DisplayName("test_add_social_media_properties")
     public void testAddSocialMediaProps() {
@@ -369,7 +369,7 @@ public class ParseServiceControllerIntegrationTests {
         Optional<SocialMediaProperties> exists = socialRepo.findSocialMediaPropertiesByName("testName");
         Assertions.assertTrue(exists.isPresent());
         Assertions.assertEquals(testSocialProps.getName(), exists.get().getName());
-    }
+    }*/
 
     @Test
     @Order(7)

@@ -343,6 +343,13 @@ public class UserServiceTest {
         newTestUser.setVerificationCode("eroiwuerowiuerowiurow");
         newTestUser.setDateCreated(new Date(2021, Calendar.JULY, 2));
         newTestUser.setPermission(Permission.IMPORTING);
+
+        when(userRepository.findUserByEmail(newTestUser.getEmail())).thenReturn(Optional.of(newTestUser));
+
+        LoginRequest request = new LoginRequest("newemail@test.com", "pass");
+        LoginResponse response = service.login(request);
+
+        Assertions.assertEquals("This account is not verified. Please verify to get access to the system", response.getMessage());
     }
 
     @Test

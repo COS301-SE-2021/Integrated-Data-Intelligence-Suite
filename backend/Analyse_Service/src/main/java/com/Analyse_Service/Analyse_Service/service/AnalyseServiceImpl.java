@@ -63,7 +63,7 @@ public class AnalyseServiceImpl {
     @Autowired
     private TrainingDataRepository parsedDataRepository;
 
-    private SparkSession sparkNlpProperties;
+    private SparkSession sparkProperties;
 
 
     //private static final Logger logger = Logger.getLogger(AnalyseServiceImpl.class);
@@ -531,15 +531,15 @@ public class AnalyseServiceImpl {
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
                 .setMaster("local")
-                //.master("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                //.master("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "5g")
-                .set("spark.executor.memory", "5g")
-                .set("spark.memory.fraction", "0.5")
+                //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
+                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                .set("spark.driver.memory", "4g")
+                .set("spark.executor.memory", "4g")
+                //.set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{AnalyseServiceImpl.class});
 
-        sparkNlpProperties = SparkSession
+        sparkProperties = SparkSession
                 .builder()
                 //.appName("NlpProperties")
                 //.master("local")
@@ -552,7 +552,7 @@ public class AnalyseServiceImpl {
 
         //SparkContext
         //JavaSparkContext sc = new JavaSparkContext(conf);
-        //sparkNlpProperties. = conf.
+        //sparkProperties. = conf.
 
 
 
@@ -568,7 +568,7 @@ public class AnalyseServiceImpl {
             nlpPropertiesData.add(row);
         }
 
-        Dataset<Row> data =  sparkNlpProperties.createDataFrame(nlpPropertiesData,schema).toDF();
+        Dataset<Row> data =  sparkProperties.createDataFrame(nlpPropertiesData,schema).toDF();
         //createDataset(text, Encoders.STRING()).toDF("text");
 
         /*******************SETUP NLP PIPELINE MODEL*****************/
@@ -805,7 +805,7 @@ public class AnalyseServiceImpl {
             response.add(findNlpPropertiesResponse);
         }*/
 
-        //sparkNlpProperties.stop();
+        //sparkProperties.stop();
 
         return Arrays.asList(response, entityList);
 
@@ -1112,7 +1112,7 @@ public class AnalyseServiceImpl {
                 "Tweets",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(relationshipData, schema);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(relationshipData, schema);
         itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
@@ -1354,21 +1354,50 @@ public class AnalyseServiceImpl {
                         new StructField("Sentiment", DataTypes.StringType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(trendsData, schema2).cache(); // .read().parquet("...");
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(trendsData, schema2).cache(); // .read().parquet("...");
 
 
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
+        //List<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count().collectAsList(); //frequency
+        //List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
+        //List<Row>  = itemsDF.groupBy("EntityName", "date").count().collectAsList();
 
-        List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
-        averageLikes.get(1); //average likes
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
+        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
+        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
 
-        List<Row> rate = itemsDF.groupBy("EntityName", "date").count().collectAsList();
-        rate.get(1); //rate ???
+        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");
 
-        //training set
+        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+
+
+        List<Row> trainSet = new ArrayList<>();
+        //for(int i=0; i < minSize; i++){
+        while (trendRowData.hasNext()){
+            Row trendData = trendRowData.next();
+
+            double trending = 0.0;
+            if (Integer.parseInt(trendData.get(3).toString()) >= 4 ){ //count
+                trending = 1.0;
+            }
+
+            Row trainRow = RowFactory.create(
+                    trending,
+                    trendData.get(0).toString(), //name
+                    trendData.get(1).toString(), //type
+                    Double.parseDouble(trendData.get(2).toString()), //
+                    Double.parseDouble(trendData.get(3).toString()),
+                    trendData.get(4).toString(),
+                    Double.parseDouble(trendData.get(5).toString())
+            );
+            trainSet.add(trainRow);
+        }
+
+
+        /*training set
         int minSize = 0;
         if(namedEntities.size()>averageLikes.size())
             minSize = averageLikes.size();
@@ -1376,7 +1405,7 @@ public class AnalyseServiceImpl {
             minSize = namedEntities.size();
 
         if(minSize >rate.size() )
-            minSize =rate.size();
+            minSize =rate.size();*
 
 
         System.out.println("NameEntity : " +namedEntities.size() );
@@ -1406,9 +1435,9 @@ public class AnalyseServiceImpl {
                     Double.parseDouble(averageLikes.get(i).get(1).toString())
             );
             trainSet.add(trainRow);
-        }
+        }*/
 
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema); //.read().parquet("...");
 
         /***********************MLFLOW - LOAD ***********************/
         TrainValidationSplitModel lrModel;
@@ -1424,7 +1453,7 @@ public class AnalyseServiceImpl {
                 File artifact = client.downloadArtifacts(modelID, modelName);
                 File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
 
-                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                Dataset<Row> trainData = sparkProperties.read().load(trainFile.getPath());
                 TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
                 lrModel = trainValidationSplit.fit(trainData);
@@ -1463,7 +1492,7 @@ public class AnalyseServiceImpl {
                 File trainFile = client.downloadArtifacts(modelID, "TrainingData.parquet");
 
 
-                Dataset<Row> trainData = sparkNlpProperties.read().load(trainFile.getPath());
+                Dataset<Row> trainData = sparkProperties.read().load(trainFile.getPath());
                 TrainValidationSplit trainValidationSplit = TrainValidationSplit.load(artifact.getPath());
 
                 lrModel = trainValidationSplit.fit(trainData);
@@ -1500,10 +1529,13 @@ public class AnalyseServiceImpl {
         //TrainValidationSplitModel lrModel = TrainValidationSplitModel.load("models/LogisticRegressionModel");
         Dataset<Row> result = lrModel.transform(trainingDF).cache();
 
-        List<Row> rawResults = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0)).collectAsList();
+        Dataset<Row> filteredResult = result.select("EntityName","prediction","Frequency","EntityType","AverageLikes").filter(col("prediction").equalTo(1.0));
+        List<Row> rawResults = convertDataframeToList(filteredResult);
 
-        if( rawResults.isEmpty())
-            rawResults = result.select("EntityName","prediction", "Frequency","EntityType","AverageLikes").filter(col("Frequency").geq(2.0)).collectAsList();
+        if( rawResults.isEmpty()) {
+            filteredResult = result.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0));
+            rawResults = convertDataframeToList(filteredResult);
+        }
 
         /*System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
@@ -1709,7 +1741,7 @@ public class AnalyseServiceImpl {
                         new StructField("Like", DataTypes.IntegerType, false, Metadata.empty()),
                 });
 
-        Dataset<Row> itemsDF = sparkNlpProperties.createDataFrame(anomaliesData, schema).cache();
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(anomaliesData, schema).cache();
 
         StructType schema2 = new StructType(
                 new StructField[]{
@@ -1756,7 +1788,7 @@ public class AnalyseServiceImpl {
             trainSet.add(trainRow);
         }
 
-        Dataset<Row> trainingDF = sparkNlpProperties.createDataFrame(trainSet, schema2);
+        Dataset<Row> trainingDF = sparkProperties.createDataFrame(trainSet, schema2);
 
         /***********************MLFLOW - LOAD ***********************/
         PipelineModel kmModel;
@@ -1803,7 +1835,7 @@ public class AnalyseServiceImpl {
         UserDefinedFunction calculateDistance = udf(
                 (Vector feature, Integer x) -> Vectors.sqdist(feature,model.clusterCenters()[x]), DataTypes.DoubleType
         );
-        sparkNlpProperties.udf().register("dist", calculateDistance);
+        sparkProperties.udf().register("dist", calculateDistance);
 
         Dataset<Row> kmeansWithClusterDistances = FeaturesAndPredictions.withColumn("distanceFromCluster",callUDF("dist",FeaturesAndPredictions.col("features"),FeaturesAndPredictions.col("prediction")));
         try {
@@ -1880,7 +1912,8 @@ public class AnalyseServiceImpl {
         //summary.filter(col("prediction").
         Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
         Dataset<Row> rawResults2 = Results.select("Text","prediction").cache();
-        List<Row> rawResults = rawResults2.select("Text").collectAsList();
+        Dataset<Row> filteredResult = rawResults2.select("Text");
+        List<Row> rawResults = convertDataframeToList(filteredResult);
 
         System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
@@ -1902,10 +1935,11 @@ public class AnalyseServiceImpl {
         return new FindAnomaliesResponse(results);
     }
 
+
+
     public double dist(Vector features, Vector center){
         return Vectors.sqdist(features,center);
     }
-
 
     public void cleanModels() throws TrainingModelException {
         File modelsDir = new File("models");
@@ -1931,15 +1965,20 @@ public class AnalyseServiceImpl {
         }
     }
 
+    public List<Row> convertDataframeToList(Dataset<Row> filteredResult) {
+
+        ArrayList<Row> convertedList = new ArrayList<>();
+        Iterator<Row> listIterator = filteredResult.toLocalIterator();
+
+        while(listIterator.hasNext()){
+            convertedList.add(listIterator.next());
+        }
+
+        return convertedList;
+    }
+
 
 
 
 
 }
-
-
-
-
-
-
-
