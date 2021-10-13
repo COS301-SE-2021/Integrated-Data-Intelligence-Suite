@@ -1,5 +1,7 @@
-import React from 'react';
-import { Form, Input, message } from 'antd';
+import React, { useState } from 'react';
+import {
+ Button, Form, Input, message,
+} from 'antd';
 import { useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import RegisterButton from './RegisterButton/RegisterButton';
@@ -43,7 +45,8 @@ const validate = (values) => {
 };
 
 const RegisterCard = () => {
-      const history = useHistory();
+    const [registerLoading, setRegisterLoading] = useState(false);
+    const history = useHistory();
 
     const formik = useFormik({
         initialValues: {
@@ -56,22 +59,38 @@ const RegisterCard = () => {
         },
         validate,
         onSubmit: (values) => {
-            // alert(JSON.stringify(values, null, 2));
+            setRegisterLoading(true);
+
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values),
             };
             fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/register`, requestOptions)
-                .then((response) => response.json()).then((json) => {
-                if (json.success) {
-                    message.success(json.message);
-                    localStorage.setItem('email', values.email);
-                    history.push('/verify');
-                } else {
-                    message.error(json.message);
+            .then((res) =>{
+                if (!res.ok) {
+                    throw Error(res.error);
                 }
-            });
+                return res.json();
+            })
+            .then((data) => {
+                setRegisterLoading(false);
+
+                if (data.status.toLowerCase() === 'ok') {
+                    if (data.data.success) {
+                        history.push('/verify');
+                    } else {
+                        message.error(data.data.message);
+                    }
+                } else if (data.errors) {
+                    for (let i = 0; i < data.errors.length; i = i + 1) {
+                        message.error(data.errors[i]);
+                    }
+                }
+                })
+                .catch((error) =>{
+                    message.error(error.message);
+                });
 
             // use this to go to another page after successful validation server-side
         },
@@ -209,7 +228,14 @@ const RegisterCard = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <RegisterButton />
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          className="login_button"
+                          loading={registerLoading}
+                        >
+                            Register
+                        </Button>
                     </Form.Item>
 
                 </form>
