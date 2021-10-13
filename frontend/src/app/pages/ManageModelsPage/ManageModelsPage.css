@@ -77,25 +77,25 @@
     grid-row-end: 2;
     font-size: 15px;
     font-weight: 500;
-    color: var(--prussian-blue);
+    color: white;
 
 }
 
 #delete-model-popup-btn-yes {
     grid-column-start: 1;
     grid-column-end: 2;
-    color: red;
+    color: var(--pink);
     width: 100%;
-    background: white;
+    background: var(--light-black);
     font-weight: 500;
     font-size: 20px;
     border: 0;
     border-bottom-left-radius: 5px;
-    border-right: 0.01em solid var(--white-border-color);
+    border-right: 0.01em solid var(--black-border);
 }
 
 #delete-model-popup-btn-yes:hover {
-    background: red;
+    background: var(--pink);
     color: white;
 }
 
@@ -104,17 +104,17 @@
     border: 0;
     grid-column-start: 2;
     grid-column-end: 2;
-    color: var(--dodger-blue);
+    color: #208AAE;
     width: 100%;
-    background: white;
+    background: var(--light-black);
     font-weight: 500;
     border-bottom-right-radius: 5px;
-    border-right: 0.01em solid var(--white-border-color);
+    border-right: 0.01em solid var(--black-border);
     padding: 5px;
 }
 
 #delete-model-popup-btn-no:hover {
-    background: var(--dodger-blue);
+    background: #208AAE;
     color: white;
 }
 
@@ -123,7 +123,7 @@
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: 100%;
     width: 100%;
-    border: 1px solid var(--white-border-color);
+    border: 1px solid var(--black-border);
 }
 
 .add-model-container {
@@ -136,14 +136,14 @@
 }
 
 .input-container .label {
-    background: #bed4ff;
-    color: var(--dodger-blue);
+    background: var(--dark-pink);
+    color: var(--pink);
     font-weight: 500;
     font-size: 20px;
     padding: 3px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    border: 1px solid slategrey;
+    border: 1px solid var(--black-border);
     min-height: 32px;
     max-height: 32px;
     align-content: center;
@@ -153,12 +153,12 @@
 
 .input-container input {
     /*width: calc(100% - 30px);*/
-    /*border: none;*/
-    /*background: var(--light-gray);*/
+    background: var(--dark-black);
+    color: white;
     font-size: 20px;
     font-weight: 500;
     padding: 3px;
-    border: 1px solid slategrey;
+    border: 1px solid var(--black-border);
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-left: 0;
@@ -172,6 +172,14 @@
     display: grid;
 }
 
+#modelIdInput {
+    color: white;
+}
+
+.input-container input:focus-visible {
+    outline: transparent;
+}
+
 #upload-training-data-form {
     justify-self: left;
 }
@@ -179,7 +187,7 @@
 #upload-training-data-btn {
     justify-self: left;
     color: white;
-    background: var(--dodger-blue);
+    background: var(--pink);
     border-radius: 5px;
 }
 
@@ -189,14 +197,14 @@
 }
 
 #share-model-id-icon {
-    background: #bed4ff;
-    color: var(--dodger-blue);
+    background: var(--dark-pink);
+    color: var(--pink);
     font-weight: 500;
     font-size: 20px;
     padding: 3px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    border: 1px solid var(--white-border-color);
+    border: 1px solid var(--black-border);
     min-height: 40px;
     max-height: 40px;
     align-content: center;
@@ -207,7 +215,8 @@
 #share-model-id-value {
     font-weight: 500;
     padding: 5px;
-    border: 1px solid var(--white-border-color);
+    border: 1px solid var(--black-border);
+    color: white;
     border-left-width: 0;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -248,13 +257,13 @@
 #share-model-copy-icon {
     min-height: 32px;
     max-height: 32px;
-    background: #bed4ff;
-    color: #0086b3;
+    background: transparent;
+    color: var(--pink);
 }
 
 #share-model-copy-btn {
-    background: #bed4ff;
-    color: var(--dodger-blue);
+    background: var(--dark-pink);
+    color: var(--pink);
     align-content: center;
     align-items: center;
     display: flex;
@@ -265,7 +274,7 @@
     border-bottom-right-radius: 5px;
     min-height: 40px;
     max-height: 40px;
-    border: 1px solid var(--white-border-color);
+    border: 1px solid var(--black-border);
     border-left: 0;
     text-align: center;
     overflow: hidden;

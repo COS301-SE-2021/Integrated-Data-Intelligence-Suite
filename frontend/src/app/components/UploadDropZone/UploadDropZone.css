@@ -67,7 +67,7 @@
 }
 
 #browse-files-btn:hover {
-    background: rgba(232, 0, 87, 0.31);
+    background: var(--dark-pink);
 }
 
 #upload-instr-p {

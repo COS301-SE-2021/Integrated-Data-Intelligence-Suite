@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './ModelCard.css';
 import {
-    AiFillHeart, AiOutlineHeart, AiOutlineShareAlt, IoCube, MdDelete,
+    AiFillHeart, AiOutlineHeart, AiOutlineShareAlt, GiCubes, IoCube, MdDelete,
 } from 'react-icons/all';
 import Tooltip from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -149,7 +149,7 @@ export default function ModelCard(props) {
                       extraClassName="model-details-card"
                     >
                         <div className="model-image">
-                            <IoCube className="model-image-cube" />
+                            <GiCubes className="model-image-cube" />
                         </div>
                         <span
                           className="model-extra-details-div"
