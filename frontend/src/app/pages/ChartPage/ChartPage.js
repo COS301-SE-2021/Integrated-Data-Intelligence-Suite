@@ -152,7 +152,7 @@ const ChartPage = () => {
                             ? (
                                 <SimplePopup
                                   closePopup={() => setShowCSV(false)}
-                                  popupTitle="Upload File"
+                                  popupTitle="Upload CSV File"
                                 >
                                     <UploadDataPage
                                       handleTextChange={structureBackendData}
