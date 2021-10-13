@@ -1,0 +1,16 @@
+:root {
+    --section-gap: calc((100vw - 1080px + 24px * 2) / 2);
+    --gradient-padding: 247px;
+    --gradient-title-margin: 100px;
+    --section-skew-Y: -12deg;
+    --section-angle-sin: 0.212;
+    --transform-origin-x: calc(var(--section-gap) * 0.8);
+    --container-width: 1080px;
+
+    /* Landing page */
+    --landing-page-btn-height: 36px;
+    --btn-border-radius: 80px;
+    --semi-bold-weight: 450;
+}
+
+
