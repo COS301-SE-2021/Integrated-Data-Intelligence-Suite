@@ -21,7 +21,8 @@ import ManageModelsPage from './pages/ManageModelsPage/ManageModelsPage';
 import { userState } from './assets/AtomStore/AtomStore';
 import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import ManageUsersPage from './pages/ManageUsersPage/ManageUsersPage';
 
 function App() {
     const user = useRecoilValue(userState);
@@ -68,8 +69,12 @@ function App() {
                     <SettingsPage />
                 </Route>
 
-                <Route exact path={'/profile'}>
+                <Route exact path="/profile">
                     <ProfilePage />
+                </Route>
+
+                <Route exact path="/manageUsers">
+                    <ManageUsersPage />
                 </Route>
 
                 <Route path="/settings/source/:id">
