@@ -1338,7 +1338,7 @@ public class AnalyseServiceImpl {
                         new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
                 });
 
@@ -1364,14 +1364,18 @@ public class AnalyseServiceImpl {
         //List<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes").collectAsList(); //average likes of topic
         //List<Row>  = itemsDF.groupBy("EntityName", "date").count().collectAsList();
 
-        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
         Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
         Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
 
-        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
-        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+        System.out.println("_______________________namedEntities: " + namedEntities.count());
+        System.out.println("_______________________rate: " + rate.count());
+        System.out.println("_______________________averageLikes: " + averageLikes.count());
 
-        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+        Dataset<Row> resultDataframe = namedEntities.unionByName(rate.select("date"),true);
+        resultDataframe = resultDataframe.unionByName(averageLikes,true);
+
+        Iterator<Row> trendRowData = namedEntities.toLocalIterator();
 
 
         List<Row> trainSet = new ArrayList<>();
@@ -1390,8 +1394,8 @@ public class AnalyseServiceImpl {
                     trendData.get(1).toString(), //type
                     Double.parseDouble(trendData.get(2).toString()), //
                     Double.parseDouble(trendData.get(3).toString()),
-                    trendData.get(4).toString(),
-                    Double.parseDouble(trendData.get(5).toString())
+                    //trendData.get(4).toString(),
+                    Double.parseDouble(trendData.get(4).toString())
             );
             trainSet.add(trainRow);
         }
@@ -1533,6 +1537,7 @@ public class AnalyseServiceImpl {
         List<Row> rawResults = convertDataframeToList(filteredResult);
 
         if( rawResults.isEmpty()) {
+            System.out.println("Didnt Find any");
             filteredResult = result.select("EntityName", "prediction", "Frequency", "EntityType", "AverageLikes").filter(col("Frequency").geq(2.0));
             rawResults = convertDataframeToList(filteredResult);
         }
@@ -1837,12 +1842,12 @@ public class AnalyseServiceImpl {
         );
         sparkProperties.udf().register("dist", calculateDistance);
 
-        Dataset<Row> kmeansWithClusterDistances = FeaturesAndPredictions.withColumn("distanceFromCluster",callUDF("dist",FeaturesAndPredictions.col("features"),FeaturesAndPredictions.col("prediction")));
-        double[] Q = kmeansWithClusterDistances.select("distanceFromCluster").stat().approxQuantile("distanceFromCluster",new double[]{0.15,0.85},0.0);
+        Dataset<Row> kmeansWithClusterDistances = predictions.withColumn("distanceFromCluster",callUDF("dist",predictions.col("features"),predictions.col("prediction")));
+        double[] Q = kmeansWithClusterDistances.select("distanceFromCluster").stat().approxQuantile("distanceFromCluster",new double[]{0.25,0.75},0.0);
 
-        double IQR = Q[0] - Q[1];
+        double IQR = Q[1] - Q[0];
         Double lower = Q[0] - 1.5*IQR;
-        Double upper = Q[1] - 1.5*IQR;
+        Double upper = Q[1] + 1.5*IQR;
 
         Dataset<Row> Anomalies = kmeansWithClusterDistances.filter(col("distanceFromCluster").lt(lower).or(col("distanceFromCluster").gt(upper)));
 
@@ -1918,7 +1923,7 @@ public class AnalyseServiceImpl {
         Dataset<Row> summary=  kmModel.transform(trainingDF).summary();
 
         //summary.filter(col("prediction").
-        Dataset<Row> Results = summary.select("Text","prediction").filter(col("prediction").$greater(0));
+        Dataset<Row> Results = Anomalies.select("Text","prediction");
         Dataset<Row> rawResults2 = Results.select("Text","prediction").cache();
         Dataset<Row> filteredResult = rawResults2.select("Text");
         List<Row> rawResults = convertDataframeToList(filteredResult);
@@ -1926,6 +1931,8 @@ public class AnalyseServiceImpl {
         System.out.println("/*******************Outputs begin*****************");
         System.out.println(rawResults.toString());
         System.out.println("/*******************Outputs begin*****************");
+        System.out.println("upper limit: "+ upper);
+        System.out.println("Lower limit: " + lower);
         System.out.println("Anomalies: ");
         Anomalies.show(100);
 
