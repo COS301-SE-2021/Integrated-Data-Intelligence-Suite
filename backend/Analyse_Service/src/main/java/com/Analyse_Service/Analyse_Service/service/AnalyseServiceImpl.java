@@ -1,10 +1,12 @@
 package com.Analyse_Service.Analyse_Service.service;
 
+import com.Analyse_Service.Analyse_Service.dataclass.ApplicationModel;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
+import com.Analyse_Service.Analyse_Service.repository.ApplicationModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -62,6 +64,9 @@ public class AnalyseServiceImpl {
 
     @Autowired
     private TrainingDataRepository parsedDataRepository;
+
+    @Autowired
+    private ApplicationModelRepository applicationModelRepository;
 
     private SparkSession sparkProperties;
 
@@ -1481,10 +1486,18 @@ public class AnalyseServiceImpl {
                 //FileUtils.deleteDirectory(new File(artifact.getPath()));
                 //FileUtils.deleteDirectory(new File(trainFile.getPath()));
             } else {
-                String applicationRegistered = Paths.get("models/RegisteredApplicationModels.txt").toString();
-                BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+                List<ApplicationModel> foundModel = applicationModelRepository.findAll();
+                String findTrendModelId = "";
 
-                String findTrendModelId = reader.readLine();
+                if (foundModel.isEmpty()){
+                    String applicationRegistered = Paths.get("models/RegisteredApplicationModels.txt").toString();
+                    BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+
+                    findTrendModelId = reader.readLine();
+                }
+                else{
+                    findTrendModelId = foundModel.get(0).getId();
+                }
 
                 String[] splitModelId = findTrendModelId.split(":"); //name, id
                 String modelName = splitModelId[0];
@@ -1882,11 +1895,17 @@ public class AnalyseServiceImpl {
                 //client.logArtifact(modelID,new File(artifact.getPath()));
                 //FileUtils.deleteDirectory(new File(artifact.getPath()));
             } else {
-                String applicationRegistered = Paths.get("models/RegisteredApplicationModels.txt").toString();
-                BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+                List<ApplicationModel> foundModel = applicationModelRepository.findAll();
+                String findTrendModelId = "";
 
-                String findTrendModelId = reader.readLine();
-                //findTrendModelId = reader.readLine(); // 2nd line
+                if (foundModel.isEmpty()){
+                    String applicationRegistered = Paths.get("models/RegisteredApplicationModels.txt").toString();
+                    BufferedReader reader = new BufferedReader(new FileReader(applicationRegistered));
+                    findTrendModelId = reader.readLine();
+                }
+                else{
+                    findTrendModelId = foundModel.get(0).getId();
+                }
 
                 String[] splitModelId = findTrendModelId.split(":"); //name, id
                 String modelName = splitModelId[0];

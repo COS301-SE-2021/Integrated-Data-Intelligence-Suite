@@ -100,7 +100,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/getAll",HttpMethod.POST,null,new ParameterizedTypeReference<GetAllUsersResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getAll",HttpMethod.GET,null,new ParameterizedTypeReference<GetAllUsersResponse>() {});
         return (GetAllUsersResponse) userResponse.getBody();
 
     }

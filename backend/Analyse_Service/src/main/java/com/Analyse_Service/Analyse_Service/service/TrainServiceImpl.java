@@ -1,5 +1,6 @@
 package com.Analyse_Service.Analyse_Service.service;
 
+import com.Analyse_Service.Analyse_Service.dataclass.ApplicationModel;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedData;
 import com.Analyse_Service.Analyse_Service.dataclass.ParsedTrainingData;
 import com.Analyse_Service.Analyse_Service.dataclass.TrainedModel;
@@ -7,6 +8,7 @@ import com.Analyse_Service.Analyse_Service.exception.AnalyserException;
 import com.Analyse_Service.Analyse_Service.exception.AnalysingModelException;
 import com.Analyse_Service.Analyse_Service.exception.InvalidRequestException;
 import com.Analyse_Service.Analyse_Service.exception.TrainingModelException;
+import com.Analyse_Service.Analyse_Service.repository.ApplicationModelRepository;
 import com.Analyse_Service.Analyse_Service.repository.TrainingDataRepository;
 import com.Analyse_Service.Analyse_Service.request.*;
 import com.Analyse_Service.Analyse_Service.response.*;
@@ -63,6 +65,7 @@ import scala.collection.JavaConversions;
 import scala.collection.mutable.WrappedArray;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -73,6 +76,9 @@ public class TrainServiceImpl {
 
     @Autowired
     private TrainingDataRepository parsedDataRepository;
+
+    @Autowired
+    private ApplicationModelRepository applicationModelRepository;
 
     private SparkSession sparkProperties;
 
@@ -365,9 +371,16 @@ public class TrainServiceImpl {
                 reader = new BufferedReader(new FileReader(tData));
             }*/
             File trainResource = new ClassPathResource("TData.CSV").getFile();
-            //reader = new BufferedReader(new FileReader(fileUrl));
-            reader = new BufferedReader(new FileReader(trainResource));
-            //System.out.println("*******************CHECK THIS HERE*****************");
+            if(trainResource.exists() == false){
+                InputStream inputStream =  new ClassPathResource("TData.CSV").getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                reader = new BufferedReader(inputStreamReader);
+            }
+            else {
+                //reader = new BufferedReader(new FileReader(fileUrl));
+                reader = new BufferedReader(new FileReader(trainResource));
+                //System.out.println("*******************CHECK THIS HERE*****************");
+            }
 
             line = reader.readLine();
             String text = "";
@@ -416,6 +429,7 @@ public class TrainServiceImpl {
         }catch (Exception e){
             e.printStackTrace();
             //new TrainingModelException("failed training application model")
+            return;
         }
 
         /**************************************************************************************************************/
@@ -2383,7 +2397,17 @@ public class TrainServiceImpl {
         }
 
         bestModelId = bestModelId + ":" + trendModelThree.getRunId();
+        ApplicationModel applicationModel = new ApplicationModel();
+        applicationModel.setId(bestModelId);
 
+        List<ApplicationModel> foundModel = applicationModelRepository.findAll();
+        if(foundModel.isEmpty()){
+            applicationModelRepository.save(applicationModel);
+        }
+        else{
+            applicationModelRepository.deleteAll();
+            applicationModelRepository.save(applicationModel);
+        }
 
         String filePath = Paths.get("models/RegisteredApplicationModels.txt").toString();
         File file = new File(filePath);
