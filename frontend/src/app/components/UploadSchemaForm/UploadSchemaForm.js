@@ -15,7 +15,7 @@ export default class UploadSchemaForm extends React.Component {
     setSocialMediaChecked(param) {
         // this.isSocialMediaChecked = param;
         this.setState({ isSocialMediaChecked: param });
-        console.log(this.state.isSocialMediaChecked);
+        // console.log(this.state.isSocialMediaChecked);
     }
 
     render() {

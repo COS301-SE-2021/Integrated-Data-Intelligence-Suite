@@ -26,9 +26,9 @@ export default function UploadDropZone(props) {
         if (isShowingAddTrainingDataPopup) {
             setTrainingData(fileArrayObj);
             // console.log(`[Dropzone] Uploaded Training Set: ${JSON.stringify(uploadedTrainingSet)}`);
-            console.log('Training Data Popup is showing');
+            // console.log('Training Data Popup is showing');
         } else if (props.isAnalyzeCSVPopupShowing) {
-            console.log('Analyse CSV NOW Popup is showing');
+            // console.log('Analyse CSV NOW Popup is showing');
             setUploadedCSVFile(fileArrayObj);
         }
     };

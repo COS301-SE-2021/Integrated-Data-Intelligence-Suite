@@ -30,7 +30,7 @@ const setActive = (component) => {
 function getLocalUser() {
   const localUser = localStorage.getItem('user');
   if (localUser) {
-    console.log('user logged in is ', localUser);
+    // console.log('user logged in is ', localUser);
     return JSON.parse(localUser);
   }
   return null;

@@ -16,10 +16,10 @@ export function getDatapointsWithinBoundsOfLayer(e) {
     //     }
     // });
 
-    console.log('get-all-datapoints-within-bounds-of-layer()');
-    console.log(e);
-
-    console.log();
-    console.log('=======Layers within Map=======');
-    console.log(layers);
+    // console.log('get-all-datapoints-within-bounds-of-layer()');
+    // console.log(e);
+    //
+    // console.log();
+    // console.log('=======Layers within Map=======');
+    // console.log(layers);
 }

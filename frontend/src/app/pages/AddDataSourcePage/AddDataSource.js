@@ -29,8 +29,8 @@ const getSource = (id, structure) => {
                     return res.json();
                 })
                 .then((data) => {
-                    console.log('data is here', data);
-                    console.log('structure looks like ', data.source);
+                    // console.log('data is here', data);
+                    // console.log('structure looks like ', data.source);
                     if (data.success) {
                         setData(data.source);
                     } else {
@@ -220,7 +220,7 @@ const AddDataSource = ({ dataSource }) => {
             }
         });
 
-        console.log('should be correct structure now', params);
+        // console.log('should be correct structure now', params);
         setForm(params);
     };
     return (

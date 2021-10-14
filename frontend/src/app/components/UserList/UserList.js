@@ -13,7 +13,7 @@ const iconSize = '30px';
 
 const UserList = (props) => {
     const { users } = props;
-    console.log(users);
+    // console.log(users);
 
     const [currentUser, setCurrentUser] = useState(null);
     const [showUser, setShowUser] = useState(false);

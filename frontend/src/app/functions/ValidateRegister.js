@@ -10,9 +10,9 @@ class ValidateRegister extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
-    console.log(`UPPER userName :  ${this.props.userName}`);
-    console.log(`UPPER userPass :  ${this.props.userPassword}`);
+    // console.log(this.props);
+    // console.log(`UPPER userName :  ${this.props.userName}`);
+    // console.log(`UPPER userPass :  ${this.props.userPassword}`);
 
     if (this.props.userName.toUpperCase() == 'ADMIN' && this.props.userPassword.toUpperCase() == 'ADMIN') {
       this.state.url = '/dashboard';

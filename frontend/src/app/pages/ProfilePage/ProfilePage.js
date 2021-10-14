@@ -37,12 +37,12 @@ export default function ProfilePage() {
      const { data, isPending, error } = getUser(localUser);
 
     const setFields = function () {
-        console.log('changing');
+        // console.log('changing');
         // console.log(data);
         if (data) {
             if (data.status.toLowerCase() === 'ok' && data.data.success) {
                 const usr = data.data.user[0];
-                console.log(usr);
+                // console.log(usr);
                 if (usr.firstName) {
                     setFirstName(usr.firstName || '');
                 }

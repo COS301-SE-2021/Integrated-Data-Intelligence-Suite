@@ -49,11 +49,11 @@ function MapCard() {
     const mapRef = useRef();
 
     function _created(e) {
-        console.log('================_created() start==========');
-        console.log(e);
+        // console.log('================_created() start==========');
+        // console.log(e);
         const layers = L;
-        console.log(layers);
-        console.log('================_created() End==========');
+        // console.log(layers);
+        // console.log('================_created() End==========');
     }
 
     return (

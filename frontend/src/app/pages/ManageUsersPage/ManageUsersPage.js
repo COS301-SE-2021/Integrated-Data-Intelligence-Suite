@@ -33,7 +33,7 @@ const ManageUsersPage = () => {
     }, [currentUser]);
 
     function extractUsers(data) {
-        console.log(data);
+        // console.log(data);
         if (data && data.status.toLowerCase() === 'ok') {
             if (data.data.success) {
                 setUsers(data.data.users);

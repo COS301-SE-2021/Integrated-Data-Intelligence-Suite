@@ -69,11 +69,11 @@ const LoginCard = () => {
                     })
                     .then((data) => {
                         setLoginLoading(false);
-                        console.log(data);
+                        // console.log(data);
                         if (data.status.toLowerCase() === 'ok') {
                             // localStorage.setItem('user', json.id);
                             if (data.data.success) {
-                                console.log("current user", JSON.parse(data.data.id));
+                                // console.log("current user", JSON.parse(data.data.id));
                                 setUser(JSON.parse(data.data.id));
                                 message.success(data.data.message)
                                     .then(()=>{
@@ -90,7 +90,7 @@ const LoginCard = () => {
                     })
                     .catch((error)=>{
                         setLoginLoading(false);
-                        console.log(error.message);
+                        // console.log(error.message);
                         // message.error(error);
                     })
             }
