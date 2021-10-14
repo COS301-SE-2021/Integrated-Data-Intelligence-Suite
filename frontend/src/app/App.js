@@ -22,6 +22,8 @@ import { userState } from './assets/AtomStore/AtomStore';
 import SendOTPPage from './pages/SendOTPPage/SendOTPPage';
 import ManageSourcesPage from './pages/ManageSourcesPage/ManageSourcesPage';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage';
+import NewDesign from './pages/NewDesign/NewDesign';
+import TeamPage from './pages/TeamPage/TeamPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ManageUsersPage from './pages/ManageUsersPage/ManageUsersPage';
 
@@ -30,13 +32,21 @@ function App() {
     return (
         <Router>
             <Switch>
+                {/* <Route exact path="/"> */}
+                {/*    { */}
+                {/*        !user && <Redirect to="/" /> */}
+                {/*    } */}
+                {/*    { */}
+                {/*        user && <Redirect to="/chart" /> */}
+                {/*    } */}
+                {/* </Route> */}
+
                 <Route exact path="/">
-                    {
-                        !user && <Redirect to="/login" />
-                    }
-                    {
-                        user && <Redirect to="/chart" />
-                    }
+                    <NewDesign />
+                </Route>
+
+                <Route exact path="/team">
+                    <TeamPage />
                 </Route>
 
                 <Route exact path="/login">

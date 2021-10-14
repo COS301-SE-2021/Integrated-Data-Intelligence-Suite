@@ -8,9 +8,10 @@ import {
 import {BrowserRouter, Link, Router} from 'react-router-dom';
 
 import {
+    AiOutlineApi,
     AiOutlineHeart,
-    AiOutlineHome, FiSettings, GoGraph, GrGraphQl, HiOutlineCube,
-    HiOutlineDocumentReport, ImProfile
+    AiOutlineHome, FaUser, FiSettings, FiUser, GoGraph, GrGraphQl, HiOutlineCube,
+    HiOutlineDocumentReport, ImProfile, IoLockClosedOutline
 } from 'react-icons/all';
 import UserInfoCard from "../UserInfoCard/UserInfoCard";
 
@@ -101,7 +102,7 @@ class SideBar extends React.Component {
 
                         <Menu.Item
                             key="7"
-                            icon={<ImProfile
+                            icon={<FiUser
                                 className={'sidebar-icon'}
                             />}
                             onClick={() => this.setActive('7')}
@@ -112,23 +113,23 @@ class SideBar extends React.Component {
 
                         <Menu.Item
                             key="8"
-                            icon={<ImProfile
+                            icon={<IoLockClosedOutline
                                 className={'sidebar-icon'}
                             />}
                             onClick={() => this.setActive('8')}
                         >
-                            Manage Users
+                            Permissions
                             <Link to="/manageUsers"/>
                         </Menu.Item>
 
                         <Menu.Item
                             key="9"
-                            icon={<ImProfile
+                            icon={<AiOutlineApi
                                 className={'sidebar-icon'}
                             />}
                             onClick={() => this.setActive('9')}
                         >
-                            Manage Sources
+                            Data Sources
                             <Link to="/manageSources"/>
                         </Menu.Item>
 
