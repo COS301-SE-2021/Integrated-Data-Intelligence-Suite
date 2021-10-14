@@ -535,11 +535,11 @@ public class AnalyseServiceImpl {
 
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
-                .setMaster("local")
+                //.setMaster("local")
                 //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "4g")
-                .set("spark.executor.memory", "4g")
+                .setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                //.set("spark.driver.memory", "4g")
+                //.set("spark.executor.memory", "4g")
                 //.set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{AnalyseServiceImpl.class});
@@ -833,7 +833,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
          SparkSession sparkPatterns = SparkSession
          .builder()
@@ -979,7 +979,7 @@ public class AnalyseServiceImpl {
                 "Entities",DataTypes.createArrayType(DataTypes.StringType), false, Metadata.empty())
         });
 
-        Dataset<Row> itemsDF = sparkPatterns.createDataFrame(patternData, schema);
+        Dataset<Row> itemsDF = sparkProperties.createDataFrame(patternData, schema);
         itemsDF.show(1000,1000);
 
         /*******************SETUP MODEL*****************/
@@ -1629,7 +1629,7 @@ public class AnalyseServiceImpl {
             throw new InvalidRequestException("DataList is null");
         }
 
-        /*******************SETUP SPARK*****************/
+        /*******************SETUP SPARK*****************
 
          SparkSession sparkPredictions = SparkSession
          .builder()

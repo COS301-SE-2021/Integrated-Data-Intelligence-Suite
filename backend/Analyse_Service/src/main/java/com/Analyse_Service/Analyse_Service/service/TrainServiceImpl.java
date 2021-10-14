@@ -370,14 +370,15 @@ public class TrainServiceImpl {
             else{
                 reader = new BufferedReader(new FileReader(tData));
             }*/
-            File trainResource = new ClassPathResource("TData.CSV").getFile();
-            if(trainResource.exists() == false){
-                InputStream inputStream =  new ClassPathResource("TData.CSV").getInputStream();
+
+            InputStream inputStream =  new ClassPathResource("TData.CSV").getInputStream();
+            if(inputStream != null){
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                 reader = new BufferedReader(inputStreamReader);
             }
             else {
                 //reader = new BufferedReader(new FileReader(fileUrl));
+                File trainResource = new ClassPathResource("TData.CSV").getFile();
                 reader = new BufferedReader(new FileReader(trainResource));
                 //System.out.println("*******************CHECK THIS HERE*****************");
             }
@@ -429,7 +430,7 @@ public class TrainServiceImpl {
         }catch (Exception e){
             e.printStackTrace();
             //new TrainingModelException("failed training application model")
-            return;
+            throw new TrainingModelException("application training failed");
         }
 
         /**************************************************************************************************************/
@@ -531,11 +532,12 @@ public class TrainServiceImpl {
 
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
-                .setMaster("local")
+                //.setMaster("local")
                 //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
-                .set("spark.driver.memory", "4g")
-                .set("spark.executor.memory", "4g")
+                .setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+
+                //.set("spark.driver.memory", "4g")
+                //.set("spark.executor.memory", "4g")
                 //.set("spark.memory.fraction", "0.5")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{TrainServiceImpl.class});
