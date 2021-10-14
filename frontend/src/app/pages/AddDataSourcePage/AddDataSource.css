@@ -68,3 +68,7 @@
 .source-form .button-container .btn-primary:hover{
     background: #E13475;
 }
+
+.reports-content-section .simple-btn{
+    margin-bottom: 40px;
+}

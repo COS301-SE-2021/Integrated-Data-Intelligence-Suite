@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { VscFilePdf } from 'react-icons/all';
+import {FiUser, VscFilePdf} from 'react-icons/all';
 import SideBar from '../../components/SideBar/SideBar';
 import UserList from '../../components/UserList/UserList';
 import useGet from '../../functions/useGet';
@@ -74,7 +74,7 @@ const ManageUsersPage = () => {
                             <div className="reports-content-grid">
                                 { users.map((user) => (
                                     <div className="report-card" key={user.id}>
-                                        <VscFilePdf className="icon clickable pink-icon" style={{ fontSize: 36, color: '#E80057FF' }} onClick={()=>handlePreview(user.id)} />
+                                        <FiUser className="icon clickable pink-icon" style={{ fontSize: 36, color: '#E80057FF' }} onClick={()=>handlePreview(user.id)} />
                                         <div className="text-container">
                                             <div className="report-title clickable" onClick={()=>handlePreview(user.id)}>{user.username}</div>
                                             <div className="report-date clickable" onClick={()=>handlePreview(user.id)}>{user.permission}</div>

@@ -232,6 +232,10 @@ const AddDataSource = ({ dataSource }) => {
             { dataSource && queryKey === null && setQueryKey(dataSource.searchKey)}
             { dataSource && authType === null && setAuthType(dataSource.authType)}
             { dataSource && token === null && setToken(dataSource.authorization)}
+            { dataSource && date === null && setDate(dataSource.date)}
+            { dataSource && interactions === null && setInteractions(dataSource.interactions)}
+            { dataSource && collections === null && setCollections(dataSource.collections)}
+            { dataSource && location === null && setLocation(dataSource.location)}
             <form className="edit source-form">
                 { method && (
                     <div className="row">
@@ -358,7 +362,7 @@ const AddDataSource = ({ dataSource }) => {
                         </div>
                     </div>
                 )}
-                { name !== null && (
+                { date !== null && (
                     <div className="row">
                         <div className="col left disabled">
                             <input
@@ -383,7 +387,7 @@ const AddDataSource = ({ dataSource }) => {
                         </div>
                     </div>
                 )}
-                { name !== null && (
+                { interactions !== null && (
                     <div className="row">
                         <div className="col left disabled">
                             <input
@@ -408,7 +412,7 @@ const AddDataSource = ({ dataSource }) => {
                         </div>
                     </div>
                 )}
-                { name !== null && (
+                { collections !== null && (
                     <div className="row">
                         <div className="col left disabled">
                             <input
@@ -433,7 +437,7 @@ const AddDataSource = ({ dataSource }) => {
                         </div>
                     </div>
                 )}
-                { name !== null && (
+                { location !== null && (
                     <div className="row">
                         <div className="col left disabled">
                             <input
