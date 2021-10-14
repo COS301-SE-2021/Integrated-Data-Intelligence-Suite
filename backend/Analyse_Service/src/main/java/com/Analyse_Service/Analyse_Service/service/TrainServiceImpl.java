@@ -532,9 +532,9 @@ public class TrainServiceImpl {
 
         SparkConf conf = new SparkConf().
                 setAppName("NlpProperties")
-                //.setMaster("local")
+                .setMaster("local")
                 //.setMaster("spark://http://2beb4b53d3634645b476.uksouth.aksapp.io/spark:80")
-                .setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
+                //.setMaster("spark://idis-app-spark-master-0.idis-app-spark-headless.default.svc.cluster.local:7077")
 
                 //.set("spark.driver.memory", "4g")
                 //.set("spark.executor.memory", "4g")
