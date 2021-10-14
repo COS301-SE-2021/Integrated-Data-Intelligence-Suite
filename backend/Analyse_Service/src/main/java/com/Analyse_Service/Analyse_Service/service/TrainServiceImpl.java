@@ -896,7 +896,7 @@ public class TrainServiceImpl {
                         new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
                 });
 
@@ -931,8 +931,8 @@ public class TrainServiceImpl {
                         trendData.get(1).toString(), //type
                         Double.parseDouble(trendData.get(2).toString()), //type no
                         Double.parseDouble(trendData.get(3).toString()), //freq
-                        trendData.get(4).toString(), //rate
-                        Double.parseDouble(trendData.get(5).toString()) //likes
+                        //trendData.get(4).toString(), //rate
+                        Double.parseDouble(trendData.get(4).toString()) //likes
                 );
                 trainSet.add(trainRow);
             }
