@@ -61,7 +61,7 @@ const getBackendData = (localUser) =>{
             .then((data)=>{
                 console.log(data);
                 if (data.status.toLowerCase() === 'ok') {
-                    if (data.data.success) {
+                    if (data.data) {
                         setData(data.data);
                         setIsPending(false);
                         setError(null);
