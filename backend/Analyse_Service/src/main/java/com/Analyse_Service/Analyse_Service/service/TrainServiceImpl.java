@@ -69,7 +69,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.*;
 
 @Service
 public class TrainServiceImpl {
@@ -905,19 +905,13 @@ public class TrainServiceImpl {
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
-        if(request.getModelName() == null) {
-            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
-        }else{
-            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count(); //frequency
-        }
-        Dataset<Row> rate = itemsDF.groupBy("EntityName", "date").count(); //??
-        Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
 
-        Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
-        resultDataframe = resultDataframe.join(averageLikes,"Likes");
 
-        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+        //Dataset<Row> resultDataframe = namedEntities;
+       // resultDataframe = resultDataframe.join(averageLikes,"Likes");
+
+        Iterator<Row> trendRowData = namedEntities.toLocalIterator();
 
 
         List<Row> trainSet = new ArrayList<>();
