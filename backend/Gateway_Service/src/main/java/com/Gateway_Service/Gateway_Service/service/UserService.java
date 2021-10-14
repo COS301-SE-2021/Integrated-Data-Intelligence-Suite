@@ -434,7 +434,7 @@ public class UserService {
         //GetUserReportsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getReports/" + userRequest.getId(), GetUserReportsResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        userResponse = restTemplate.exchange("http://User-Service/User/updateProfile",HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getReports/" + userRequest.getId(),HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
@@ -448,7 +448,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/updateProfile",HttpMethod.GET, null,new ParameterizedTypeReference<GetUserReportsResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getReports/" + userRequest.getId(),HttpMethod.GET, null,new ParameterizedTypeReference<GetUserReportsResponse>() {});
         return (GetUserReportsResponse) userResponse.getBody();
     }
 
