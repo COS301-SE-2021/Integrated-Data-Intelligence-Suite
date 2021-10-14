@@ -188,8 +188,8 @@ const AddDataSource = ({ dataSource }) => {
         })
             .then((data) => {
                 setSubmitLoading(false);
-                console.log('data is here', data);
-                console.log('structure looks like ', data.source);
+                // console.log('data is here', data);
+                // console.log('structure looks like ', data.source);
                 if (data.success) {
                     // history.goBack();
                     message.success(data.message);

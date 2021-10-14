@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Layout,
+    Layout, message,
 } from 'antd';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AiOutlineUpload, CgFileDocument } from 'react-icons/all';
@@ -109,6 +109,14 @@ const ChartPage = () => {
             });
     };
 
+    function enablePreview() {
+        if (currentPdf !== null) {
+            setShowPdf(true);
+        } else {
+            message.error('please analyse data to be able to generate a report');
+        }
+    }
+
     const structureBackendData = (data) => {
         if (data !== null && data.status.toLowerCase() === 'ok') {
             if (data.data && data.data[0]) {
@@ -164,7 +172,7 @@ const ChartPage = () => {
                             null
                     }
                     {
-                        showPdf
+                        (showPdf && currentPdf !== null)
                             ? (
                                 <ReportPreview
                                   closePopup={() => setShowPdf(false)}
@@ -207,7 +215,7 @@ const ChartPage = () => {
                                       type="button"
                                       id="upload-btn"
                                       className="simple-btn"
-                                      onClick={() => setShowPdf(true)}
+                                      onClick={() => enablePreview()}
                                     >
                                         <CgFileDocument id="upload-btn-logo" />
                                         Generate Report

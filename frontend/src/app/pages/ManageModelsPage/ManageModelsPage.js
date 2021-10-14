@@ -130,16 +130,16 @@ export default function ManageModelsPage() {
         }
     }, [listOfDataModels]);
 
-    function getLocalUser() {
-        const localUser = localStorage.getItem('user');
-        if (localUser) {
-            // console.log('user logged in is ', localUser);
-            return JSON.parse(localUser);
-        }
-        return null;
-    }
+    // function getLocalUser() {
+    //     const localUser = localStorage.getItem('user');
+    //     if (localUser) {
+    //         // console.log('user logged in is ', localUser);
+    //         return JSON.parse(localUser);
+    //     }
+    //     return null;
+    // }
 
-    const localUser = getLocalUser();
+    const localUser = useRecoilValue(userState);
 
     /*
     * DELETE MODEL
@@ -562,6 +562,8 @@ export default function ManageModelsPage() {
         const [isPending, setIsPending] = useState(true);
         const [error, setError] = useState(null);
 
+        console.log(body);
+
         useEffect(() => {
             const abortCont = new AbortController();
             updateListOfDataModels(null);
@@ -581,9 +583,12 @@ export default function ManageModelsPage() {
                     return res.json();
                 })
                 .then((data) => {
-                    // console.log('manage models');
-                    // console.log(data);
-                    setData(data);
+                    console.log(data);
+                    if (data.status.toLowerCase() === 'ok') {
+                       if (data.data) {
+                           setData(data.data);
+                       }
+                    }
                     setIsPending(false);
                     setError(null);
                     setIsShowingModelCardLoader(false);

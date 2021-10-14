@@ -84,7 +84,7 @@ export default function ProfilePage() {
                 const abortCond = new AbortController();
 
                 const usr = {
-                    id: data.user[0].id,
+                    id: data.data.user[0].id,
                     username: values.username,
                     firstName: values.firstName,
                     lastName: values.lastName,
@@ -105,11 +105,13 @@ export default function ProfilePage() {
                         return res.json();
                     })
                     .then((data) => {
-                        if (data.success) {
-                            message.success(data.message);
-                        } else {
-                            message.error(data.message);
-                        }
+                       if (data.status.toLowerCase() === 'ok') {
+                           if (data.data.success) {
+                               message.success(data.data.message);
+                           } else {
+                               message.error(data.data.message);
+                           }
+                       }
                     })
                     .catch((err) => {
                         if (err.name === 'AbortError') console.log('Fetch Aborted');
