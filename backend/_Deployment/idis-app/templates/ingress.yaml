@@ -59,7 +59,7 @@ spec:
   #      hosts:
   #     - idis.com
   rules:
-    - host: 2beb4b53d3634645b476.uksouth.aksapp.io
+    - host: ce9e0b448dbe401a9a40.uksouth.aksapp.io
       http:
         paths:
           - path: /
@@ -69,7 +69,7 @@ spec:
                 name: gateway-service-svc
                 port:
                   number: 80
-    - host: 2beb4b53d3634645b476.uksouth.aksapp.io
+    - host: ce9e0b448dbe401a9a40.uksouth.aksapp.io
       http:
         paths:
           - path: /spark
