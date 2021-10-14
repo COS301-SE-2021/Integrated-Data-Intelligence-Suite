@@ -128,7 +128,7 @@
 #overview-metric-4 > .simple-card-title {
     padding: 10px;
     padding-left: 0px;
-    text-align: center;
+    text-align: left;
     color: var(--black-border);
 }
 

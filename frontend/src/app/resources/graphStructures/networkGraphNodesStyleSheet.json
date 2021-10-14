@@ -4,7 +4,9 @@
     "style": {
       "background-color": "#E80057",
       "label": "data(id)",
-      "text-valign": "center"
+      "color": "#D2D2DA",
+      "text-halign": "center",
+      "text-valign": "top"
     }
   },
   {
