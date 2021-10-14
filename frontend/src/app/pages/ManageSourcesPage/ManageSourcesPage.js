@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RiAddLine, VscFilePdf } from 'react-icons/all';
+import {FiServer, RiAddLine, VscFilePdf} from 'react-icons/all';
 import { useRecoilValue } from 'recoil';
 import { message } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -7,7 +7,6 @@ import SideBar from '../../components/SideBar/SideBar';
 import { userState } from '../../assets/AtomStore/AtomStore';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import useGet from '../../functions/useGet';
-import UserPermissions from '../UserPermissionsPage/UserPermissions';
 import AddDataSource from '../AddDataSourcePage/AddDataSource';
 
 const iconSize = '20px';
@@ -173,7 +172,7 @@ const ManageSourcesPage = () => {
                             <div className="reports-content-grid">
                                 { dataSources.map((dataSource) => (
                                     <div className="report-card" key={dataSource.id}>
-                                        <VscFilePdf className="icon clickable pink-icon" style={{ fontSize: 36, color: '#E80057FF' }} onClick={()=>handlePreview(dataSource)} />
+                                        <FiServer className="icon clickable pink-icon" style={{ fontSize: 36, color: '#E80057FF' }} onClick={()=>handlePreview(dataSource)} />
                                         <div className="text-container">
                                             <div className="report-title clickable" onClick={()=>handlePreview(dataSource)}>{dataSource.name}</div>
                                             {/* <div className="report-date clickable" onClick={()=>handlePreview(dataSource.id)}>{dataSource.type}</div> */}
