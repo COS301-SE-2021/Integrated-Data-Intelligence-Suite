@@ -1343,7 +1343,7 @@ public class TrainServiceImpl {
                         new StructField("EntityType", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("EntityTypeNumber", DataTypes.DoubleType, false, Metadata.empty()),
                         new StructField("Frequency", DataTypes.DoubleType, false, Metadata.empty()),
-                        new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
+                        //new StructField("FrequencyRatePerHour", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("AverageLikes", DataTypes.DoubleType, false, Metadata.empty()),
                 });
 
@@ -1352,8 +1352,8 @@ public class TrainServiceImpl {
 
 
         //group named entity
-        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").count();
-        if(request.getModelName() == null) {
+        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
+        /*if(request.getModelName() == null) {
             namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
         }else{
             namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "IsTrending").count(); //frequency
@@ -1362,9 +1362,9 @@ public class TrainServiceImpl {
         Dataset<Row> averageLikes = itemsDF.groupBy("EntityName").avg("Likes");
 
         Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
-        resultDataframe = resultDataframe.join(averageLikes,"Likes");
+        resultDataframe = resultDataframe.join(averageLikes,"Likes");*/
 
-        Iterator<Row> trendRowData = resultDataframe.toLocalIterator();
+        Iterator<Row> trendRowData = namedEntities.toLocalIterator();
 
 
         List<Row> trainSet = new ArrayList<>();
@@ -1384,8 +1384,8 @@ public class TrainServiceImpl {
                         trendData.get(1).toString(), //type
                         Double.parseDouble(trendData.get(2).toString()), //type no
                         Double.parseDouble(trendData.get(3).toString()), //freq
-                        trendData.get(4).toString(), //rate
-                        Double.parseDouble(trendData.get(5).toString()) //likes
+                        //trendData.get(4).toString(), //rate
+                        Double.parseDouble(trendData.get(4).toString()) //likes
                 );
                 trainSet.add(trainRow);
             }
