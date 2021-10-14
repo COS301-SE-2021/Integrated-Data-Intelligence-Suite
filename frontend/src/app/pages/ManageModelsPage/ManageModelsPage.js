@@ -74,12 +74,12 @@ const mock_delete_obj = [
 const mock_set_default_response_obj = [
     {
         modelID: 'm1',
-        modelName: 'Itachi',
+        modelName: 'Clients',
         isModelDefault: true,
     },
     {
         modelID: 'm2',
-        modelName: 'Sasuke',
+        modelName: 'Tweets',
         isModelDefault: false,
     },
     {
@@ -176,9 +176,9 @@ export default function ManageModelsPage() {
             .catch((err) => {
                 handleCloseDeletePopup();
                 setIsShowingModelCardLoader(false);
-                updateListOfDataModels(mock_delete_obj);
-                console.log('error while retrieving data from backend');
-                console.log(err.message);
+                // updateListOfDataModels(mock_delete_obj);
+                // console.log('error while retrieving data from backend');
+                // console.log(err.message);
             });
     };
     const handleCloseDeletePopup = () => {
@@ -244,10 +244,10 @@ export default function ManageModelsPage() {
             })
             .catch((err) => {
                 // setIsShowingModelCardLoader(false);
-                updateListOfDataModels(mock_add_obj);
+                // updateListOfDataModels(mock_add_obj);
                 setIsShowingModelCardLoader(false);
-                console.log('error while retrieving data from backend');
-                console.log(err.message);
+                // console.log('error while retrieving data from backend');
+                // console.log(err.message);
             });
     };
     const addModelPopupComponent = (
@@ -311,7 +311,7 @@ export default function ManageModelsPage() {
             modelName: model_name,
             userID: localUser.id,
         };
-        console.log(API_REQUEST_BODY_TRAIN);
+        // console.log(API_REQUEST_BODY_TRAIN);
 
         const formData = new FormData();
         formData.append('file', new Blob(API_REQUEST_BODY_TRAIN.file), API_REQUEST_BODY_TRAIN.file[0].name);
@@ -339,8 +339,8 @@ export default function ManageModelsPage() {
                 setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
-                console.log('error while retrieving data from backend');
-                console.log(err.message);
+                // console.log('error while retrieving data from backend');
+                // console.log(err.message);
                 setIsShowingModelCardLoader(false);
             });
     };
@@ -427,9 +427,9 @@ export default function ManageModelsPage() {
                 setIsShowingModelCardLoader(false);
             })
             .catch((err) => {
-                console.log('error while retrieving data from backend');
-                console.log(err.message);
-                updateListOfDataModels(mock_set_default_response_obj);
+                // console.log('error while retrieving data from backend');
+                // console.log(err.message);
+                // updateListOfDataModels(mock_set_default_response_obj);
                 handleCloseSetDefaultPopup();
                 setIsShowingModelCardLoader(false);
             });
@@ -581,15 +581,15 @@ export default function ManageModelsPage() {
                     return res.json();
                 })
                 .then((data) => {
-                    console.log('manage models');
-                    console.log(data);
+                    // console.log('manage models');
+                    // console.log(data);
                     setData(data);
                     setIsPending(false);
                     setError(null);
                     setIsShowingModelCardLoader(false);
                 })
                 .catch((error) => {
-                    setData(mock_add_obj);
+                    // setData(mock_add_obj);
                     if (error.name !== 'AbortError') {
                         setError(error.message);
                         setIsPending(false);
