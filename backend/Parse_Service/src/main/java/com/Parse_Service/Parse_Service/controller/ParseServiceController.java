@@ -6,8 +6,12 @@ import com.Parse_Service.Parse_Service.request.*;
 import com.Parse_Service.Parse_Service.response.*;
 
 import com.Parse_Service.Parse_Service.service.ParseServiceImpl;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,24 +29,35 @@ public class ParseServiceController {
      * @throws Exception This is thrown if exception caught in Parse-Service.
      */
     @PostMapping("/parseImportedData")
-    public @ResponseBody ParseImportedDataResponse parseImportedData(@RequestBody ParseImportedDataRequest request) throws Exception {
+    public @ResponseBody ResponseEntity<?> parseImportedData(@RequestBody ParseImportedDataRequest request) throws Exception {
         //ParseImportedDataRequest request = requestEntity.getBody();
         if (request == null) {
             throw new InvalidRequestException("Request object is null");
         }
 
-        return service.parseImportedData(request);
+        ParseImportedDataResponse parseImportedDataResponse = service.parseImportedData(request);
+        return new ResponseEntity<>(parseImportedDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
      * This method is used to facilitate communication to the Parse-Service.
-     * @param request This is a request entity which contains a AddSocialMediaPropertiesRequest object.
+     * @param jsonString This is a request entity which contains a AddSocialMediaPropertiesRequest object.
      * @return AddSocialMediaPropertiesResponse This object contains the success and message after performing task.
      * @throws Exception This is thrown if an error was encountered.
      */
     @PostMapping("/addSocialMediaProperties")
-    public @ResponseBody AddSocialMediaPropertiesResponse addSocialMediaProperties(@RequestBody AddSocialMediaPropertiesRequest request) throws Exception {
-        return service.addSocialMediaProperties(request);
+    public @ResponseBody ResponseEntity<?> addSocialMediaProperties(@RequestBody String jsonString) throws Exception {
+        JSONObject obj = new JSONObject(jsonString);
+        String name = obj.getString("name");
+        String interProp = obj.getString("interactions");
+        String locProp = obj.getString("location");
+        String dateProp = obj.getString("date");
+        String textProp = obj.getString("text");
+        String collectionsProp = obj.getString("collections");
+        AddSocialMediaPropertiesRequest request = new AddSocialMediaPropertiesRequest(name, interProp, locProp, dateProp, textProp, collectionsProp);
+        AddSocialMediaPropertiesResponse addSocialMediaPropertiesResponse = service.addSocialMediaProperties(request);
+
+        return new ResponseEntity<>(addSocialMediaPropertiesResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -52,8 +67,9 @@ public class ParseServiceController {
      * @throws Exception This is thrown if an error was encountered.
      */
     @PostMapping("/addNewsProperties")
-    public @ResponseBody AddNewsPropertiesResponse addNewsProperties(@RequestBody AddNewsPropertiesRequest request) throws Exception {
-        return service.addNewsProperties(request);
+    public @ResponseBody ResponseEntity<?> addNewsProperties(@RequestBody AddNewsPropertiesRequest request) throws Exception {
+        AddNewsPropertiesResponse addNewsPropertiesResponse = service.addNewsProperties(request);
+        return new ResponseEntity<>(addNewsPropertiesResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -64,13 +80,16 @@ public class ParseServiceController {
      * @throws ParserException This is thrown if an error was encountered.
      */
     @PostMapping("/parseUploadedSocialData")
-    public @ResponseBody ParseUploadedSocialDataResponse parseUploadedSocialData(@RequestBody ParseUploadedSocialDataRequest request) throws ParserException {
-        return service.parseUploadedSocialData(request);
+    public @ResponseBody ResponseEntity<?> parseUploadedSocialData(@RequestBody ParseUploadedSocialDataRequest request) throws ParserException {
+
+        ParseUploadedSocialDataResponse parseUploadedSocialDataResponse = service.parseUploadedSocialData(request);
+        return new ResponseEntity<>(parseUploadedSocialDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping("/parseTrainingData")
-    public @ResponseBody ParseUploadedTrainingDataResponse parseUploadedTrainingData(@RequestBody ParseUploadedTrainingDataRequest request) throws ParserException {
-        return service.parseUploadedTrainingData(request);
+    public @ResponseBody ResponseEntity<?> parseUploadedTrainingData(@RequestBody ParseUploadedTrainingDataRequest request) throws ParserException {
+        ParseUploadedTrainingDataResponse parseUploadedTrainingDataResponse = service.parseUploadedTrainingData(request);
+        return new ResponseEntity<>(parseUploadedTrainingDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -81,8 +100,9 @@ public class ParseServiceController {
      * @throws ParserException This is thrown if an error was encountered.
      */
     @PostMapping("/parseUploadedNewsData")
-    public @ResponseBody ParseUploadedNewsDataResponse parseUploadedNewsData(@RequestBody ParseUploadedNewsDataRequest request) throws ParserException {
-        return service.parseUploadedNewsData(request);
+    public @ResponseBody ResponseEntity<?> parseUploadedNewsData(@RequestBody ParseUploadedNewsDataRequest request) throws ParserException {
+        ParseUploadedNewsDataResponse parseUploadedNewsDataResponse = service.parseUploadedNewsData(request);
+        return new ResponseEntity<>(parseUploadedNewsDataResponse, new HttpHeaders(), HttpStatus.OK);
     }
 
 }

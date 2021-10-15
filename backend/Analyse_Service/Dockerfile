@@ -16,11 +16,10 @@ CMD ["mvn", "clean", "package"]
 FROM python:3.7.0
 RUN pip install mlflow==1.20.1
 RUN pip install azure-storage-blob
-RUN pip install pyspark==3.1.2
+#RUN pip install pyspark==3.1.2
 #CMD ["pip" , "install" , "psycopg2"]
 #CMD ["mlfow", "db" , "upgrade" , "postgresql://emerge:emerge0000@analysedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyseDatabase"]
-ENTRYPOINT ["mlflow", "server"]
-# ,"--host" , "0.0.0.0", "--backend-store-uri", "postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase", "--default-artifact-root", "DefaultEndpointsProtocol=https;AccountName=emergeblobstorage;AccountKey=rJuDwXL155pPGGFGowv0ly1KvSC3ZFKToT+RAy1oi1GExovfcU+r60IpVksPBwwHrGf4Nmjf8LJlHUPChA7KFw==;EndpointSuffix=core.windows.net"]
+ENTRYPOINT ["mlflow", "server" ,"--host" , "0.0.0.0", "--backend-store-uri", "postgresql://emerge:emerge0000@analyzedatabase.clzpxhj7ijqm.eu-west-2.rds.amazonaws.com:5432/analyzeDatabase", "--default-artifact-root", "DefaultEndpointsProtocol=https;AccountName=emergemodelstorage;AccountKey=up2eEIXa/ho4rASz1Wd5fuMSHqO1jUXKvI6KhpMorzOjVqDb0fP7l4gVj45HUfwnx929yHb/JfJha8XQImOHuA==;EndpointSuffix=core.windows.net"]
 #CMD ["mlflow", "ui"]
 
 
