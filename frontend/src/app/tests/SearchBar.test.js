@@ -1,12 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { unmountComponentAtNode } from 'react-dom';
 import SearchBar from '../components/SearchBar/SearchBar';
-import {unmountComponentAtNode} from "react-dom";
 
 let container = null;
 beforeEach(() => {
   // setup a DOM element as a render target
-  container = document.createElement("div");
+  container = document.createElement('div');
   document.body.appendChild(container);
 });
 
@@ -17,10 +17,9 @@ afterEach(() => {
   container = null;
 });
 
-
 it('SearchBar renders correctly', () => {
-    const tree = renderer
-        .create(<SearchBar/>)
-        .toJSON();
-    expect(tree).toMatchSnapshot();
+  const tree = renderer
+    .create(<SearchBar />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
 });

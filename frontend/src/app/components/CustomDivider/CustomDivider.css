@@ -12,13 +12,13 @@
     font-weight: 600;
     font-size: 18px;
     text-transform: uppercase;
-    color: var(--dodger-blue);
+    color: var(--pink);
 }
 
 .custom-divider-line {
     grid-column-start: 2;
     grid-column-end: 3;
     width: 100%;
-    background: var(--dodger-blue);
+    background: var(--pink);
     justify-self: start;
 }

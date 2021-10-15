@@ -1,7 +1,6 @@
 #map_card_content_layout_div {
-    /*border: 3px solid black;*/
-    border: 0;
-    background: #e8e8e9;
+    border-radius: 10px;
+    background: var(--light-black);
     /*margin-bottom: 2%;*/
 }
 
@@ -11,17 +10,10 @@
     padding: 0;
     float: left;
     /*padding: 0.4%;*/
-    /*border-top-left-radius: 2%;*/
-    /*border-bottom-left-radius: 2%;*/
-    /*border-top: 0.1em solid #e8e8e9;*/
-    /*border-bottom: 0.1em solid #e8e8e9;*/
-    /*border-left: 0.1em solid #e8e8e9;*/
-    /*border-right: 0.1em solid #e8e8e9;*/
-    /*border-right: 0;*/
-
-    height: 350px;
-    /*background: black;*/
-    grid-column-start: 1;
+    border-radius: 10px;
+    height: 460px;
+    background: var(--light-black);
+    /*grid-column-start: 1;*/
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
@@ -40,16 +32,12 @@
 #map-card > div.ant-card-head {
     border: 0;
     background: white;
-    /*padding: 0;*/
 }
 
 #map-card > div.ant-card-body {
     padding: 0;
     margin: 0;
-    border: 0;
-    /*border-radius: 2%;*/
-    /*border:2px solid orange;*/
-    background: white;
+    background: var(--light-black);
 }
 
 
@@ -59,27 +47,33 @@
 #map_card {
     /*border: 3px solid #ff7707;*/
     /*border: 0;*/
-    height: 300px;
+    height: 460px;
     /*width: 700px;*/
     /*width: 100%;*/
     padding: 0;
     margin-bottom: 0;
+    border-radius: 10px;
+
 }
 
 /* The div contains the Actual Map component */
 #map_container_div {
-    height: 340px;
+    height: 460px;
     width: 100%;
-    /*border: 3px solid yellow;*/
     /*border: 0;*/
-    padding: 0;
+    padding: 1px;
     /*float: left;*/
     position: relative;
     /*margin-right: 1%;*/
     /*border-top-left-radius: 3%;*/
     /*border-bottom-left-radius: 3%;*/
     border-radius: 10px;
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--light-black);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+
+#map_container_div:hover {
+    border: 1px solid var(--pink);
 }
 
 /*
@@ -118,7 +112,7 @@
 }
 
 #map-card-container {
-    /*border: 3px solid black;*/
+    border: 3px solid red;
     max-height: 30em;
     grid-column: 1/span 2;
     grid-row: 1/span 2;

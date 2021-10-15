@@ -47,6 +47,7 @@
     "hosted-git-info": "^2.8.9",
     "is-svg": "^4.2.2",
     "jest": "26.6.0",
+    "jquery": "^3.6.0",
     "leaflet": "1.7.1",
     "leaflet-draw": "1.0.4",
     "leaflet-snap": "^0.0.4",
@@ -109,9 +110,9 @@
       "allowToChangeInstallationDirectory": true,
       "oneClick": false,
       "createDesktopShortcut": true,
-      "installerIcon": "build/idis-logo.ico",
-      "uninstallerIcon": "build/idis-logo.ico",
-      "installerHeaderIcon": "build/idis-logo.ico"
+      "installerIcon": "build/IDIS-CubeLogo.ico",
+      "uninstallerIcon": "build/IDIS-CubeLogo.ico",
+      "installerHeaderIcon": "build/IDIS-CubeLogo.ico"
     }
   },
   "eslintConfig": {

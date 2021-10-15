@@ -145,7 +145,7 @@ export default class UberLineGraph extends React.Component {
             stroke: Number(i === index) ? 0 : 1
         }));
 
-        console.log(data_with_color);
+        // console.log(data_with_color);
         return (
             <div className="example-with-click-me">
                 <div className="chart">

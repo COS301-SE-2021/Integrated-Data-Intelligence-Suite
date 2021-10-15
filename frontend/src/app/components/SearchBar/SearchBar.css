@@ -39,11 +39,12 @@
 /*}*/
 
 
-#top_bar > .ant-input-search {
+#top-bar-container > .ant-input-search {
     /*border: 2px solid black;*/
     border: 0;
 
-    width: 200px;
+    height: 50px;
+    width: 160px;
     /*float: left;*/
     position: relative;
     /*margin-left: 7%;*/
@@ -60,18 +61,21 @@ span.ant-input-wrapper.ant-input-group {
     /*border: 2px solid black;*/
     border-radius: 10px;
     padding: 2%;
-    background-color: white;
+    background-color: var(--dark-black);
+    height: inherit;
 }
 
 /*The actual inside of the search
 * Color = color of the text when it is being searched
 */
-#top_bar > .ant-input-search > .ant-input-group > input.ant-input {
+#top-bar-container > .ant-input-search > .ant-input-group > input.ant-input {
     /*border: 2px solid lightgrey;*/
     border: 0;
     padding: 5px;
     /*border-radius: 15%;*/
-    background-color: white;
+    background-color: var(--dark-black);
+    height: inherit;
+    color: white;
     border-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -79,26 +83,27 @@ span.ant-input-wrapper.ant-input-group {
     width: 80%;
 }
 
-#top_bar > .ant-input-search > .ant-input-group > input.ant-input:focus {
+#top-bar-container > .ant-input-search > .ant-input-group > input.ant-input:focus {
     border: 0;
     box-shadow: none;
 }
 
 
-/*#top_bar > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {*/
+/*#top-bar-container > .ant-input-search > .ant-input-group > .ant-input-affix-wrapper {*/
 /*    border: 3px solid blue;*/
 /*    padding-right: 4px;*/
 /*    padding-left: 4px;*/
 /*}*/
 
 /*The div that contains the search Button i.e its parent*/
-#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon {
+#top-bar-container > .ant-input-search > .ant-input-group > .ant-input-group-addon {
     /*BORDER: 2PX SOLID YELLOW;*/
+    height: inherit;
     border: 0;
     /*left: 0;*/
     float: left;
     box-shadow: none;
-    background: #E8E8E9;
+    background: var(--dark-black);
 
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
@@ -108,28 +113,24 @@ span.ant-input-wrapper.ant-input-group {
 
 
 /*!* The button that contains the search icon*!*/
-#top_bar > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {
+#top-bar-container > .ant-input-search > .ant-input-group > .ant-input-group-addon > .ant-input-search-button {
     /*border-bottom: 1px solid red;*/
     border: 0;
-    /*border-radius: 12%;*/
-    /*--antd-wave-shadow-color: none;*/
-    /*color: #5C5C5C;*/
-    /*
-    color: #898D8F;
-     */
-    color: black;
-    background: white !important;
+    color: var(--pink);
+    background: var(--dark-black) !important;
     box-shadow: none;
+    height: inherit;
 }
 
 
-#top_bar > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button {
+#top-bar-container > span.ant-input-wrapper.ant-input-group > button.ant-btn.ant-btn-icon-only.ant-btn-loading.ant-input-search-button {
     border: 0;
     box-shadow: none;
     background-color: red;
+    height: inherit;
 }
 
-#top_bar
+#top-bar-container
 > .ant-input-search
 > .ant-input-group
 > .ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary).ant-btn-loading::before {
@@ -137,5 +138,6 @@ span.ant-input-wrapper.ant-input-group {
     right: 0;
     bottom: 0;
     left: 0;
-    background: #E8E8E9 !important;
+    background: var(--dark-black) !important;
+    height: inherit;
 }

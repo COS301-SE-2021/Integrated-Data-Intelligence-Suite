@@ -8,6 +8,8 @@ import DataSourceList from '../../components/DataSourceList/DataSourceList';
 import Users from '../PermissionsPage/Permissions';
 import ProfilePage from '../ProfilePage/ProfilePage';
 import ReportsPage from '../ReportsPage/ReportsPage';
+import {useRecoilValue} from "recoil";
+import {userState} from "../../assets/AtomStore/AtomStore";
 
 const { Content } = Layout;
 
@@ -28,7 +30,7 @@ const setActive = (component) => {
 function getLocalUser() {
   const localUser = localStorage.getItem('user');
   if (localUser) {
-    console.log('user logged in is ', localUser);
+    // console.log('user logged in is ', localUser);
     return JSON.parse(localUser);
   }
   return null;
@@ -36,7 +38,7 @@ function getLocalUser() {
 
 const SettingsPage = () => {
   const [component, setComponent] = useState('Profile');
-  const [user, setUser] = useState(getLocalUser());
+  const user = useRecoilValue(userState);
   const history = useHistory();
   const colors = ['#E8E8E9', '#F1F2F8'];
 

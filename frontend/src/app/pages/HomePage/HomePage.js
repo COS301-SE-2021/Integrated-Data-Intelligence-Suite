@@ -49,7 +49,7 @@ class HomePage extends Component {
         return (
             <>
                 <Switch>
-                    <Route exact path="/">
+                    <Route exact path="/oldPage">
                         {/* <Layout */}
                         {/*    id="outer_layout" */}
                         {/*    className="chart-page" */}

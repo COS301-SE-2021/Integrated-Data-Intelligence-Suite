@@ -10,6 +10,8 @@ import ReportPreview from '../../components/ReportPreview/ReportPreview';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import pdfTemplate from '../../Mocks/pdf';
 import InputBoxWithLabel from '../../components/InputBoxWithLabel/InputBoxWithLabel';
+import {useRecoilValue} from "recoil";
+import {userState} from "../../assets/AtomStore/AtomStore";
 
 const colors = {
     red: '#FF120A',
@@ -27,8 +29,8 @@ function getLocalUser() {
 }
 
 const body = pdfTemplate();
-const getBackendData = () =>{
-    const localUser = getLocalUser();
+const getBackendData = (localUser) =>{
+    // const localUser =
     // if (localUser && localUser.id === 'b5aa283d-35d1-421d-a8c6-42dd3e115463') {
     //     return [{ data: localUser, isPending: false, error: false }];
     // }
@@ -56,10 +58,15 @@ const getBackendData = () =>{
                 }
                 return res.json();
             })
-            .then((dataObj)=>{
-                setData(dataObj);
-                setIsPending(false);
-                setError(null);
+            .then((data)=>{
+                console.log(data);
+                if (data.status.toLowerCase() === 'ok') {
+                    if (data.data) {
+                        setData(data.data);
+                        setIsPending(false);
+                        setError(null);
+                    }
+                }
             })
             .catch((err) => {
                 if (err.name === 'AbortError') console.log('Fetch Aborted');
@@ -90,8 +97,8 @@ const ReportsPage = () => {
 
     const [emailLoading, setEmailLoading] = useState(false);
 
-    const user = getLocalUser();
-    const { data, isPending, error } = getBackendData();
+    const user = useRecoilValue(userState);
+    const { data, isPending, error } = getBackendData(user);
 
     const handleDelete = () => {
         const abortCont = new AbortController();
@@ -131,11 +138,11 @@ const ReportsPage = () => {
     const handleSearch = (value) => {
         setSearchKey(value);
         if (value.trim() !== '') {
-            setReports(data.reports.filter((item) =>{
+            setReports(data.data.reports.filter((item) =>{
                 return item.title.toLowerCase().includes(value.toLowerCase());
             }));
         } else {
-            setReports(data.reports);
+            setReports(data.data.reports);
         }
     };
 
@@ -299,7 +306,7 @@ const ReportsPage = () => {
                 <div className="reports-content-section">
                     <div className="content-page-title ">Reports</div>
                     <div className="search-bar-container">
-                        <BsSearch className=" float-middle clickable" onClick={() => handleSearch(searchKey)} />
+                        <BsSearch className=" float-middle clickable pink-icon" style={{ color: '#E80057FF' }} onClick={() => handleSearch(searchKey)} />
                         <input
                           className="search-bar input field"
                           type="text"
@@ -316,7 +323,7 @@ const ReportsPage = () => {
                             <div className="reports-content-grid">
                                 {reports.map((report) => (
                                     <div className="report-card" key={report.id}>
-                                        <VscFilePdf className="icon clickable" style={{ fontSize: iconSize }} onClick={()=>handlePreview(report.id, report.pdf, 'preview')} />
+                                        <VscFilePdf className="icon clickable pink-icon" style={{ fontSize: 36, color: '#E80057FF' }} onClick={()=>handlePreview(report.id, report.pdf, 'preview')} />
                                         <div className="text-container">
                                             <div className="report-title clickable" onClick={()=>handlePreview(report.id, report.pdf, 'preview')}>{report.name}</div>
                                             <div className="report-date clickable" onClick={()=>handlePreview(report.id, report.pdf, 'preview')}>{report.date}</div>

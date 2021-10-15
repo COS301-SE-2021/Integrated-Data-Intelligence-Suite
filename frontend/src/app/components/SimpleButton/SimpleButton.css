@@ -7,9 +7,9 @@
     font-weight: 500;
     column-gap: 10px;
     color: white;
-    background: var(--dodger-blue);
+    background: var(--pink);
     border-radius: 5px;
-    border: var(--dodger-blue);
+    border: var(--pink);
 }
 
 .simple-btn-icon {
@@ -20,7 +20,7 @@
 
 .simple-btn-hover:hover {
     color: white !important;
-    background: var(--prussian-blue);
+    background: var(--dark-pink);
 }
 
 

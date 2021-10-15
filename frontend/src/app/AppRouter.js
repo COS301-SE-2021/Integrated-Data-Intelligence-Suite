@@ -43,8 +43,8 @@ function VLogin (){
     let userName = location.state.userName;
     let userPassword = location.state.userPassword;
 
-    console.log("Checking U-N : " + userName);
-    console.log("Checking U-P : " + userPassword);
+    // console.log("Checking U-N : " + userName);
+    // console.log("Checking U-P : " + userPassword);
 
     /*React.useEffect(() => {
 
@@ -80,8 +80,8 @@ function VRegister (){
     let userPassword = location.state.userPassword;
     let userPasswordRepeat = location.state.userPasswordRepeat;
 
-    console.log("Checking U-N : " + userName);
-    console.log("Checking U-P : " + userPassword);
+    // console.log("Checking U-N : " + userName);
+    // console.log("Checking U-P : " + userPassword);
 
 
     return (

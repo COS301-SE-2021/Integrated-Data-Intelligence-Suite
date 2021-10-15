@@ -1,38 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
-import ScriptTag from 'react-script-tag';
-import L, { map } from 'leaflet';
+import L from 'leaflet';
 import {
-    Marker,
     Map,
     FeatureGroup,
-    Circle,
     TileLayer,
-    Popup,
     CircleMarker,
-    LayersControl,
 } from 'react-leaflet';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import './leaflet/leaflet.css';
 import 'leaflet-snap/leaflet.snap.js';
 import { EditControl } from 'react-leaflet-draw';
-import { Card } from 'antd';
-import { geosearch } from 'esri-leaflet-geocoder';
 import 'esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css';
-
-import datapoints from '../../resources/graphStructures/mapDatapoints.json';
-import { showCircleData } from '../../functions/showCircleData';
-import { getDatapointsWithinBoundsOfLayer } from '../../functions/getDatapointsWithinBoundsOfLayer';
 
 // Do not Change the order of these lines
 // The Css MUST be loaded before the js
 import 'leaflet-geometryutil/src/leaflet.geometryutil.js';
 import 'leaflet-draw/dist/leaflet.draw.js';
+import { useRecoilValue } from 'recoil';
+import { mapDataState } from '../../assets/AtomStore/AtomStore';
 
-const Demo = (props) => (
-    <ScriptTag type="text/javascript" src="../../components/leaflet/leaflet.js" />
-);
-const pretoria_position = [-25.731340, 28.218370];
+const defaultPosition = [-25.731340, 28.218370];
 
 /*
 * updating the default map marker icons in the leaflet library
@@ -56,73 +44,36 @@ const markerIcon = new L.Icon({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
 });
 
-function MapCard(props) {
-    let data_from_backend;
-    const index = 7;
-    if (typeof props.text === 'undefined' || typeof props.text[index] === 'undefined' || props.text[index].length === 0) {
-        data_from_backend = [];
-    } else if (props.text[index].length > 0) {
-        data_from_backend = props.text[index];
-    }
-    const [mapLayers, setMapLayers] = useState([]);
-
+function MapCard() {
+    const mapData = useRecoilValue(mapDataState);
     const mapRef = useRef();
 
-    useEffect(() => {
-        const { current = {} } = mapRef;
-        const { leafletElement: map } = current;
-
-        // if (!map) return;
-
-        // const control = geosearch();
-        //
-        // control.addTo(map);
-    }, []);
-
     function _created(e) {
-        console.log('================_created() start==========');
-        console.log(e);
+        // console.log('================_created() start==========');
+        // console.log(e);
         const layers = L;
-        console.log(layers);
-        console.log('================_created() End==========');
+        // console.log(layers);
+        // console.log('================_created() End==========');
     }
 
-    const animateRef = useRef(true);
-    let poly;
     return (
         <>
             <Map
               id="map_container_div"
-              center={pretoria_position}
-              zoom={2}
+              center={defaultPosition}
+              zoom={5}
               scrollWheelZoom
               ref={mapRef}
               animate
             >
-                {/* <LayersControl */}
-                {/*  position="topright" */}
-                {/*  collapsed */}
-                {/* > */}
-                {/* <LayersControl.BaseLayer name="osm b&w"> */}
-                {/*    <TileLayer */}
-                {/*      attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors' */}
-                {/*      url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png" */}
-                {/*    /> */}
-                {/* </LayersControl.BaseLayer> */}
-                {/* <LayersControl.BaseLayer name="osm colour" checked> */}
+                {/* <TileLayer */}
+                {/*  attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors' */}
+                {/*  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" */}
+                {/* /> */}
                 <TileLayer
-                  attribution='<a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+                  url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
                 />
-                {/* </LayersControl.BaseLayer> */}
-                {/* <LayersControl.BaseLayer name="google"> */}
-                {/*    <TileLayer */}
-                {/*      attribution="google" */}
-                {/*      url="http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}  " */}
-                {/*    /> */}
-                {/* </LayersControl.BaseLayer> */}
-
-                {/* <LayersControl.Overlay name="drawn items" checked> */}
                 <FeatureGroup>
                     <EditControl
                       position="topleft"
@@ -132,19 +83,12 @@ function MapCard(props) {
                         }}
                     />
                 </FeatureGroup>
-                {/* </LayersControl.Overlay> */}
-                {/* </LayersControl> */}
-
-                {/* Display the City markers onto the map */}
-                {data_from_backend.map((city, idx) => (
+                {mapData.map((city, idx) => (
                     <CircleMarker
                       center={[city.lat, city.lng]}
                       icon={markerIcon}
                       key={idx}
                       className={city.statistic_1}
-                      // onClick={() => {
-                      //       showCircleData(city.stastic_1, data_from_backend);
-                      //   }}
                     />
                 ))}
             </Map>

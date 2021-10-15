@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import './ModelCard.css';
-import SimpleCard from '../SimpleCard/SimpleCard';
-import { AiFillHeart, AiOutlineHeart, AiOutlineShareAlt, MdDelete } from 'react-icons/all';
+import {
+    AiFillHeart, AiOutlineHeart, AiOutlineShareAlt, GiCubes, IoCube, MdDelete,
+} from 'react-icons/all';
 import Tooltip from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import SimpleCard from '../SimpleCard/SimpleCard';
 import {
     isShowingDeletePopupState,
     isShowingSetDefaultModelPopupState,
     isShowingShareModelPopupState,
     userSelectedDefaultModelState,
     userSelectedDeleteModelState,
-    userSelectedShareModelState
+    userSelectedShareModelState,
 } from '../../assets/AtomStore/AtomStore';
 
 export default function ModelCard(props) {
@@ -65,72 +67,72 @@ export default function ModelCard(props) {
 
     return (
         <>
-            <div className={'model-card-container'}>
-                <div className={'model-card-title-bar'}>
+            <div className="model-card-container">
+                <div className="model-card-title-bar">
                     {props.isModelDefault
-                        ? <div id={'model-card-default-tag'}>Default</div>
+                        ? <div id="model-card-default-tag">Default</div>
                         : null
                     }
-                    <div id={'model-card-btn-container'}>
+                    <div id="model-card-btn-container">
                         <Tooltip
-                            title="Delete Model"
-                            arrow
-                            className={'simple-tooltip'}
-                            placement="top"
+                          title="Delete Model"
+                          arrow
+                          className="simple-tooltip"
+                          placement="top"
                         >
                             <button
-                                className={'model-card-delete-btn model-card-btn'}
-                                onClick={() => clickedDeleteButton(props.modelID)}
-                                id={props.modelID}
+                              className="model-card-delete-btn model-card-btn"
+                              onClick={() => clickedDeleteButton(props.modelID)}
+                              id={props.modelID}
                             >
-                                <MdDelete className={'model-card-delete-icon model-card-icon'}/>
+                                <MdDelete className="model-card-delete-icon model-card-icon" />
                             </button>
                         </Tooltip>
 
                         <Tooltip
-                            title="Share Model"
-                            arrow
-                            className={'simple-tooltip'}
-                            placement="top"
+                          title="Share Model"
+                          arrow
+                          className="simple-tooltip"
+                          placement="top"
                         >
                             <button
-                                className={'model-card-share-btn model-card-btn'}
-                                id={props.modelID}
-                                onClick={() => clickedShareModelButton(props.modelID)}
+                              className="model-card-share-btn model-card-btn"
+                              id={props.modelID}
+                              onClick={() => clickedShareModelButton(props.modelID)}
                             >
                                 <AiOutlineShareAlt
-                                    className={'model-card-share-icon model-card-icon'}
-                                    id={props.modelID}
+                                  className="model-card-share-icon model-card-icon"
+                                  id={props.modelID}
                                 />
                             </button>
                         </Tooltip>
 
                         <Tooltip
-                            title={'Make Default Data Model'}
-                            arrow
-                            className={'simple-tooltip'}
-                            placement={'top'}
+                          title="Make Default Data Model"
+                          arrow
+                          className="simple-tooltip"
+                          placement="top"
                         >
                             <button
-                                type={'radio'}
-                                name="default"
-                                id={props.modelID}
+                              type="radio"
+                              name="default"
+                              id={props.modelID}
                                 // checked={props.isModelDefault}
-                                onClick={() => clickedRadioButton(props.modelID)}
-                                className={'select-default-btn'}
+                              onClick={() => clickedRadioButton(props.modelID)}
+                              className="select-default-btn"
                             >
                                 {
                                     props.isModelDefault
                                         ? (
                                             <AiFillHeart
-                                                id={props.modelID}
-                                                className={'heart-icon-filled'}
+                                              id={props.modelID}
+                                              className="heart-icon-filled"
                                             />
                                         )
                                         : (
                                             <AiOutlineHeart
-                                                id={props.modelID}
-                                                className={'heart-icon-not-filled'}
+                                              id={props.modelID}
+                                              className="heart-icon-not-filled"
                                             />
                                         )
                                 }
@@ -139,15 +141,21 @@ export default function ModelCard(props) {
                         </Tooltip>
                     </div>
                 </div>
-                <div className={'model-card-content-section'}>
+                <div className="model-card-content-section">
                     <SimpleCard
-                        titleOnTop={false}
-                        cardID={props.modelID}
-                        cardTitle={props.modelName}
-                        extraClassName={'model-details-card'}
+                      titleOnTop={false}
+                      cardID={props.modelID}
+                      cardTitle={props.modelName}
+                      extraClassName="model-details-card"
                     >
-                        <div className={'model-image'}>Image</div>
-                        <span className={'model-extra-details-div'}>{`Accuracy: ${props.modelAccuracy}`}</span>
+                        <div className="model-image">
+                            <GiCubes className="model-image-cube" />
+                        </div>
+                        <span
+                          className="model-extra-details-div"
+                        >
+                            {`Accuracy: ${props.modelAccuracy}`}
+                        </span>
                     </SimpleCard>
                 </div>
             </div>

@@ -1,24 +1,17 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import {
-    Layout,
+    Layout, message,
 } from 'antd';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { AiOutlineUpload, CgFileDocument } from 'react-icons/all';
 import { Header } from 'antd/es/layout/layout';
-import {
- useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState,
-} from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import Search from 'antd/es/input/Search';
-import { reset } from 'enzyme/build/configuration';
 import { cloneDeep } from 'lodash';
 import SideBar from '../../components/SideBar/SideBar';
 import MapCard from '../../components/MapCard/MapCard';
-import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
+
 import '../../components/NetworkGraph/NetworkGraph.css';
-import UserInfoCard from '../../components/UserInfoCard/UserInfoCard';
-import SearchBar from '../../components/SearchBar/SearchBar';
-import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
-import PieChart from '../../components/PieChart/PieChart';
 import '../../components/WordCloud/WordCloud.css';
 import WordCloud from '../../components/WordCloud/WordCloud';
 import 'rc-slider/assets/index.css';
@@ -29,7 +22,6 @@ import OverviewSection from '../../components/OverviewSection/OverviewSection';
 import OverviewGraphSection from '../../components/OverviewGraphSection/OverviewGraphSection';
 import SimplePopup from '../../components/SimplePopup/SimplePopup';
 import '../../components/UploadButton/UploadButton.css';
-import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import UploadDataPage from '../UploadDataPage/UploadDataPage';
 import ReportPreview from '../../components/ReportPreview/ReportPreview';
 import templateJson from '../../Mocks/messageMock.json';
@@ -50,8 +42,14 @@ import {
     dominantWordsState,
     entitiesRelationshipsState,
     patternsRelationshipsState,
-    anomaliesState, displayAnalyticsPdfState, isShowingUploadCSVPopupState,
+    anomaliesState,
+    displayAnalyticsPdfState,
+    isShowingUploadCSVPopupState,
+    sentimentDistributionState,
 } from '../../assets/AtomStore/AtomStore';
+import PieChart from '../../components/PieChart/PieChart';
+import NetworkGraphCard from '../../components/NetworkGraph/NetworkGraphCard';
+import TimelineGraph from '../../components/TimelineGraph/TimelineGraph';
 
 const ChartPage = () => {
     const [searchLoading, setSearchLoading] = useState(false);
@@ -61,6 +59,7 @@ const ChartPage = () => {
     const [mostProminentWords, setMostProminentWords] = useRecoilState(mostProminentSentimentState);
     const [numberOfTrends, setNumberOfTrends] = useRecoilState(numberOfTrendsState);
     const [numberOfAnomalies, setNumberOfAnomalies] = useRecoilState(numberOfAnomaliesState);
+    const [sentimentDistribution, setSentimentDistribution] = useRecoilState(sentimentDistributionState);
     const [averageInteraction, setAverageInteraction] = useRecoilState(averageInteractionState);
     const [overallSentiment, setOverallSentiment] = useRecoilState(overallSentimentState);
     const [engagementPerProvince, setEngagementPerProvince] = useRecoilState(engagementPerProvinceState);
@@ -78,7 +77,7 @@ const ChartPage = () => {
 
     const user = useRecoilValue(userState);
 
-    const handleSearch = (value) =>{
+    const handleSearch = (value) => {
         setSearchLoading(true);
         const jsonObj = {
             permission: user.permission,
@@ -94,34 +93,61 @@ const ChartPage = () => {
         };
         const url = `http://localhost:9000/main/${value}`;
         fetch(url, requestObj)
-            .then((res) =>{
+            .then((res) => {
                 if (!res.ok) {
                     throw (res.error());
                 }
                 return res.json();
             })
-            .then((data)=>{
+            .then((data) => {
                 setSearchLoading(false);
                 structureBackendData(data);
             })
             .catch((err) => {
                 setSearchLoading(false);
-                structureBackendData(templateJson);
-                console.log(err.message);
+                structureBackendData({ status: 'OK', data: templateJson });
             });
     };
 
-    const structureBackendData = (data) => {
-        if (data !== null && data.length > 0) {
-            setBackendData(data);
-            if (data[0].length > 0) {
-                setTotalLikes(data[0][0].words);
-                setOverallSentiment(data[1][0].words);
-                setNumberOfAnomalies(data[3][0].words);
-                setNumberOfTrends(data[2][0].words);
-            }
+    function enablePreview() {
+        if (currentPdf !== null) {
+            setShowPdf(true);
+        } else {
+            message.error('please analyse data to be able to generate a report');
+        }
+    }
 
-            setCurrentPdf(data[data.length - 1][0].report);
+    const structureBackendData = (data) => {
+        if (data !== null && data.status.toLowerCase() === 'ok') {
+            if (data.data && data.data[0]) {
+                setBackendData(data.data);
+                if (data.data[0].length > 0) {
+                    // Row 1
+                    setTotalLikes(data.data[0][0].words);
+                    setOverallSentiment(data.data[1][0].words);
+                    setNumberOfTrends(data.data[2][0].words);
+                    setNumberOfAnomalies(data.data[3][0].words);
+
+                    // Row 2
+                    setAverageInteraction(data.data[4]);
+                    setSentimentDistribution(data.data[5]);
+                    setEngagementPerProvince(data.data[6]);
+
+                    // Row 3
+                    setMapData(data.data[7]);
+                    setDataFrequency(data.data[8]);
+
+                    // Row 3
+                    setWordCloud(data.data[9][0]);
+
+                    // Row 4
+                    setEntitiesRelationship(data.data[11]);
+                    setPatternsRelationship(data.data[12]);
+
+                    setAnomalies(data.data[13]);
+                    setCurrentPdf(data.data[data.data.length - 1][0].report);
+                }
+            }
         }
     };
     //
@@ -134,8 +160,8 @@ const ChartPage = () => {
                         showCSV
                             ? (
                                 <SimplePopup
-                                  closePopup={()=> setShowCSV(false)}
-                                  popupTitle="Upload File"
+                                  closePopup={() => setShowCSV(false)}
+                                  popupTitle="Upload CSV File"
                                 >
                                     <UploadDataPage
                                       handleTextChange={structureBackendData}
@@ -146,7 +172,7 @@ const ChartPage = () => {
                             null
                     }
                     {
-                        showPdf
+                        (showPdf && currentPdf !== null)
                             ? (
                                 <ReportPreview
                                   closePopup={() => setShowPdf(false)}
@@ -165,33 +191,37 @@ const ChartPage = () => {
                         <SideBar currentPage="2" />
                         <Layout id="inner_layout_div">
                             <Header id="top_bar">
-                                <Search
-                                  placeholder="search..."
-                                  onSearch={handleSearch}
-                                  loading={searchLoading}
-                                />
+                                <div id="top-bar-container">
+                                    <Search
+                                      placeholder="search..."
+                                      onSearch={handleSearch}
+                                      loading={searchLoading}
+                                    />
 
-                                <button
-                                  type="button"
-                                  id="upload-btn"
-                                  className="clickable"
-                                  onClick={() => setShowCSV(true)}
-                                >
-                                    <AiOutlineUpload id="upload-btn-logo" />
-                                    Upload
-                                </button>
+                                    <button
+                                      type="button"
+                                      id="upload-btn"
+                                      className="simple-btn"
+                                      onClick={() => setShowCSV(true)}
+                                    >
+                                        <AiOutlineUpload
+                                            // id="upload-btn-logo"
+                                          className="simple-btn-icon"
+                                        />
+                                        Upload CSV
+                                    </button>
 
-                                <button
-                                  type="button"
-                                  id="upload-btn"
-                                  className="clickable"
-                                  onClick={() => setShowPdf(true)}
-                                >
-                                    <CgFileDocument id="upload-btn-logo" />
-                                    Generate Report
-                                </button>
+                                    <button
+                                      type="button"
+                                      id="upload-btn"
+                                      className="simple-btn"
+                                      onClick={() => enablePreview()}
+                                    >
+                                        <CgFileDocument id="upload-btn-logo" />
+                                        Generate Report
+                                    </button>
+                                </div>
 
-                                <UserInfoCard />
                             </Header>
                             {
                                 backendData !== null &&
@@ -208,10 +238,7 @@ const ChartPage = () => {
                                           cardTitle=""
                                           cardID="row-2"
                                         >
-                                            <OverviewGraphSection
-                                              text={backendData}
-                                              key={backendData}
-                                            />
+                                            <OverviewGraphSection />
                                         </SimpleSection>
 
                                         <SimpleSection
@@ -225,7 +252,7 @@ const ChartPage = () => {
                                                       cardID="world-map"
                                                       titleOnTop
                                                     >
-                                                        <MapCard text={backendData} />
+                                                        <MapCard />
                                                     </SimpleCard>
 
                                                     <SimpleCard
@@ -248,27 +275,24 @@ const ChartPage = () => {
                                               cardID="word-cloud-card"
                                               titleOnTop
                                             >
-                                                <WordCloud
-                                                  text={backendData}
-                                                  key={backendData}
-                                                />
+                                                <WordCloud />
                                             </SimpleCard>
 
-                                            <div id="word-cloud-graph-container">
-                                                <SimpleCard
-                                                  cardTitle="Dominant words"
-                                                  cardID="word-graph-2"
-                                                  titleOnTop
-                                                >
-                                                    <PieChart text={backendData} />
-                                                </SimpleCard>
-                                                {/* <SimpleCard
+                                            {/* <div id="word-cloud-graph-container"> */}
+                                            <SimpleCard
+                                              cardTitle="Dominant words"
+                                              cardID="word-graph-2"
+                                              titleOnTop
+                                            >
+                                                <PieChart dominantWords={backendData[10]} />
+                                            </SimpleCard>
+                                            {/* <SimpleCard
                                                     cardTitle="Word Sunburst"
                                                     cardID="word-graph-1"
                                                 >
                                                     Word Graph1
                                                 </SimpleCard> */}
-                                            </div>
+                                            {/* </div> */}
                                         </SimpleSection>
 
                                         <SimpleSection
@@ -281,9 +305,7 @@ const ChartPage = () => {
                                               titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={cloneDeep(backendData)}
-                                                  key={cloneDeep(backendData)}
-                                                  indexOfData={11}
+                                                  graphData={cloneDeep(entitiesRelationship)}
                                                 />
                                             </SimpleCard>
 
@@ -293,9 +315,7 @@ const ChartPage = () => {
                                               titleOnTop
                                             >
                                                 <NetworkGraphCard
-                                                  text={cloneDeep(backendData)}
-                                                  key={cloneDeep(backendData)}
-                                                  indexOfData={12}
+                                                  graphData={cloneDeep(patternsRelationship)}
                                                 />
                                             </SimpleCard>
                                         </SimpleSection>
@@ -305,14 +325,11 @@ const ChartPage = () => {
                                           cardID="row-6"
                                         >
                                             <SimpleCard
-                                              cardTitle="Timeline"
+                                              cardTitle="Anomaly Timeline"
                                               cardID="anomaly-timeline-card"
                                               titleOnTop
                                             >
-                                                <TimelineGraph
-                                                  text={backendData}
-                                                  key={backendData}
-                                                />
+                                                <TimelineGraph />
                                             </SimpleCard>
 
                                             {/* <SimpleCard */}

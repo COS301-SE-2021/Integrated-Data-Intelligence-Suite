@@ -1,39 +1,35 @@
 import React, { Component } from 'react';
-import {Link} from "react-router-dom";
+import { Link } from 'react-router-dom';
 
+class ValidateRegister extends Component {
+  constructor() {
+    super();
+    this.state = {
+      url: '',
+    };
+  }
 
-class ValidateRegister extends Component{
+  componentDidMount() {
+    // console.log(this.props);
+    // console.log(`UPPER userName :  ${this.props.userName}`);
+    // console.log(`UPPER userPass :  ${this.props.userPassword}`);
 
-    constructor() {
-        super();
-        this.state = {
-            url: ""
-        }
+    if (this.props.userName.toUpperCase() == 'ADMIN' && this.props.userPassword.toUpperCase() == 'ADMIN') {
+      this.state.url = '/dashboard';
+    } else {
+      this.state.url = '/pages/Register';
     }
+  }
 
-    componentDidMount (){
-        console.log(this.props)
-        console.log("UPPER userName :  " + this.props.userName)
-        console.log("UPPER userPass :  " + this.props.userPassword)
-
-        if(this.props.userName.toUpperCase() == "ADMIN" && this.props.userPassword.toUpperCase() == "ADMIN" ){
-            this.state.url = "/dashboard";
-        }else{
-            this.state.url = "/pages/Register"
-        }
-    }
-
-    render() {
-        return(
-            <div className="ValidateLogin">
-                <Link to={this.state.url}>
-                    <button type="submit">CHECK</button>
-                </Link>
-            </div>
-        )
-    }
+  render() {
+    return (
+        <div className="ValidateLogin">
+            <Link to={this.state.url}>
+                <button type="submit">CHECK</button>
+            </Link>
+        </div>
+    );
+  }
 }
 
-
-
-export default ValidateRegister
+export default ValidateRegister;

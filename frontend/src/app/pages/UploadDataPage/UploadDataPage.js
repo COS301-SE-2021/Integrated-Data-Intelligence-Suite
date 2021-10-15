@@ -1,42 +1,37 @@
 import React, { Component } from 'react';
 import './UploadDataPage.css';
+import { useRecoilValue } from 'recoil';
 import UploadDropZone from '../../components/UploadDropZone/UploadDropZone';
 import UploadSchemaForm from '../../components/UploadSchemaForm/UploadSchemaForm';
 import CustomDivider from '../../components/CustomDivider/CustomDivider';
-import { useRecoilValue } from 'recoil';
 import { uploadedCSVFileState } from '../../assets/AtomStore/AtomStore';
 
 export default function UploadDataPage(props) {
     const uploadedAnalysingCSVFile = useRecoilValue(uploadedCSVFileState);
     const handleOnClick = () => {
-        //getting content inside the 4 edit boxes
-        let text_message = document.getElementById('upload-input-text-msg').value;
-        let location = document.getElementById('upload-input-location').value;
-        let likes = document.getElementById('upload-input-likes').value;
-        let date = document.getElementById('upload-input-date').value;
-
-        // getting file array
-        console.log(`file array obj double check: ${uploadedAnalysingCSVFile}`);
+        // getting content inside the 4 edit boxes
+        const text_message = document.getElementById('upload-input-text-msg').value;
+        const location = document.getElementById('upload-input-location').value;
+        const likes = document.getElementById('upload-input-likes').value;
+        const date = document.getElementById('upload-input-date').value;
 
         // Make Post request to backend
         /*
            -  API_REQUEST_OBJ: input box values, file array
            -  API_RESPONSE_OBJ: same as search
         */
-        let url = '/analyzeUpload';
-        let API_REQUEST_BODY = {
+        const url = '/analyzeUpload';
+        const API_REQUEST_BODY = {
             file: uploadedAnalysingCSVFile,
             c1: text_message,
             c2: location,
             c3: likes,
             c4: date,
-            modelID: 'Default'
+            modelID: 'Default',
         };
-        console.log(API_REQUEST_BODY);
 
         const formData = new FormData();
         // formData.append('file', API_REQUEST_BODY.file);
-        console.log(`[anal upload] file name: ${uploadedAnalysingCSVFile.name}`);
         formData.append('file', new Blob(API_REQUEST_BODY.file), API_REQUEST_BODY.file[0].name);
         formData.append('c1', API_REQUEST_BODY.c1);
         formData.append('c2', API_REQUEST_BODY.c2);
@@ -44,7 +39,7 @@ export default function UploadDataPage(props) {
         formData.append('c4', API_REQUEST_BODY.c4);
         formData.append('modelID', API_REQUEST_BODY.modelID);
 
-        let API_REQUEST_OBJ = {
+        const API_REQUEST_OBJ = {
             method: 'POST',
             body: formData,
         };
@@ -64,16 +59,16 @@ export default function UploadDataPage(props) {
 
     return (
         <>
-            <div id={'upload-content-div'}>
-                <CustomDivider DividerTitle={'Upload your file'}/>
+            <div id="upload-content-div">
+                <CustomDivider DividerTitle="Upload your file" />
                 <UploadDropZone
-                    isAnalyzeCSVPopupShowing={props.isAnalyzeCSVPopupShowing}
+                  isAnalyzeCSVPopupShowing={props.isAnalyzeCSVPopupShowing}
                 />
-                <CustomDivider DividerTitle={'Match Columns'}/>
-                <UploadSchemaForm/>
+                <CustomDivider DividerTitle="Match Columns" />
+                <UploadSchemaForm />
                 <button
-                    id={'analyse-upload-btn'}
-                    onClick={() => handleOnClick()}
+                  id="analyse-upload-btn"
+                  onClick={() => handleOnClick()}
                 >
                     Analyze
                 </button>
@@ -81,5 +76,3 @@ export default function UploadDataPage(props) {
         </>
     );
 }
-
-

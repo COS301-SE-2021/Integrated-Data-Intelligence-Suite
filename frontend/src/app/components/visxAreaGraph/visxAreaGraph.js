@@ -51,7 +51,7 @@ export default function VisxAreaGraph(props) {
     };
 
     let data_from_backend;
-    console.log(props.text);
+    // console.log(props.text);
 
     if (typeof props.text === 'undefined') {
         data_from_backend = [];
@@ -60,9 +60,8 @@ export default function VisxAreaGraph(props) {
     } else if (props.text[3].length === 0) {
         data_from_backend = [];
     } else if (props.text[3].length > 0) {
-        console.log('Reached-here-PPPPPPPP');
+        // console.log('Reached-here-PPPPPPPP');
         // console.log(props.text[7][0].words);
-        console.log();
         data_from_backend = props.text[3];
     }
 

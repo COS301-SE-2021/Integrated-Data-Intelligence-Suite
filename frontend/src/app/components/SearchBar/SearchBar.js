@@ -53,8 +53,8 @@ class SearchBar extends React.Component {
             })
             .catch((err) => {
                 this.setState((prevState) => ({ showLoadingIcon: false }));
-                console.log('error while retrieving data from backend');
-                console.log(err.message);
+                // console.log('error while retrieving data from backend');
+                // console.log(err.message);
             });
     }
 

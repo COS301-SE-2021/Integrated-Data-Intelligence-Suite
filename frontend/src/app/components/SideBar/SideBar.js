@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
-import { Menu, Layout } from 'antd';
+/* eslint-disable */
+import React, {Component} from 'react';
+import {Menu, Layout} from 'antd';
 import {
     BarChartOutlined,
     SettingOutlined
 } from '@ant-design/icons';
-import { BrowserRouter, Link, Router } from 'react-router-dom';
+import {BrowserRouter, Link, Router} from 'react-router-dom';
 
 import {
+    AiOutlineApi,
     AiOutlineHeart,
-    AiOutlineHome, GrGraphQl,
-    HiOutlineDocumentReport
+    AiOutlineHome, FaUser, FiSettings, FiUser, GoGraph, GrGraphQl, HiOutlineCube,
+    HiOutlineDocumentReport, ImProfile, IoLockClosedOutline
 } from 'react-icons/all';
+import UserInfoCard from "../UserInfoCard/UserInfoCard";
 
 const {
     Header,
@@ -18,7 +21,7 @@ const {
     Sider,
     Content,
 } = Layout;
-const { SubMenu } = Menu;
+const {SubMenu} = Menu;
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -30,18 +33,18 @@ class SideBar extends React.Component {
         };
 
         this.setActive = (value) => {
-            this.setState({ active: value });
+            this.setState({active: value});
         };
 
         this.onCollapse = (collapsed) => {
             console.log(`IsCOllapsed: ${collapsed}`);
-            this.setState({ collapsed });
+            this.setState({collapsed});
         };
     }
 
     componentDidMount() {
         // this.setActive(this.props.currentPage);
-        this.setState({ active: this.props.currentPage });
+        this.setState({active: this.props.currentPage});
     }
 
     render() {
@@ -64,18 +67,11 @@ class SideBar extends React.Component {
                         defaultSelectedKeys={this.props.currentPage}
                         mode="inline"
                     >
-                        {/* <Menu.Item */}
-                        {/*    key="1" */}
-                        {/*    icon={<AiOutlineHome/>} */}
-                        {/*    onClick={() => this.setActive('1')} */}
-                        {/* > */}
-                        {/*    Home */}
-                        {/*    <Link to="/"/> */}
-                        {/* </Menu.Item> */}
-
                         <Menu.Item
                             key="2"
-                            icon={<BarChartOutlined/>}
+                            icon={<GoGraph
+                                className={'sidebar-icon'}
+                            />}
                             onClick={() => this.setActive('2')}
                         >
                             Analytics
@@ -84,7 +80,9 @@ class SideBar extends React.Component {
 
                         <Menu.Item
                             key="5"
-                            icon={<HiOutlineDocumentReport/>}
+                            icon={<HiOutlineDocumentReport
+                                className={'sidebar-icon'}
+                            />}
                             onClick={() => this.setActive('5')}
                         >
                             Reports
@@ -93,7 +91,9 @@ class SideBar extends React.Component {
 
                         <Menu.Item
                             key="6"
-                            icon={<GrGraphQl/>}
+                            icon={<HiOutlineCube
+                                className={'sidebar-icon'}
+                            />}
                             onClick={() => this.setActive('6')}
                         >
                             Models
@@ -101,23 +101,54 @@ class SideBar extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item
-                            key="3"
-                            icon={<SettingOutlined/>}
-                            onClick={() => this.setActive('3')}
+                            key="7"
+                            icon={<FiUser
+                                className={'sidebar-icon'}
+                            />}
+                            onClick={() => this.setActive('7')}
                         >
-                            Settings
-                            <Link to="/settings"/>
+                            Profile
+                            <Link to="/profile"/>
                         </Menu.Item>
 
                         <Menu.Item
-                            key="4"
-                            icon={<AiOutlineHeart/>}
-                            onClick={() => this.setActive('4')}
+                            key="8"
+                            icon={<IoLockClosedOutline
+                                className={'sidebar-icon'}
+                            />}
+                            onClick={() => this.setActive('8')}
                         >
-                            Credits
-                            <Link to="/credits"/>
+                            Permissions
+                            <Link to="/manageUsers"/>
                         </Menu.Item>
+
+                        <Menu.Item
+                            key="9"
+                            icon={<AiOutlineApi
+                                className={'sidebar-icon'}
+                            />}
+                            onClick={() => this.setActive('9')}
+                        >
+                            Data Sources
+                            <Link to="/manageSources"/>
+                        </Menu.Item>
+
+
+
+
+                        {/*<Menu.Item*/}
+                        {/*    key="4"*/}
+                        {/*    icon={<AiOutlineHeart*/}
+                        {/*        className={'sidebar-icon'}*/}
+                        {/*    />}*/}
+                        {/*    onClick={() => this.setActive('4')}*/}
+                        {/*>*/}
+                        {/*    Credits*/}
+                        {/*    <Link to="/credits"/>*/}
+                        {/*</Menu.Item>*/}
                     </Menu>
+                    <UserInfoCard/>
+
                 </Sider>
             </>
         );

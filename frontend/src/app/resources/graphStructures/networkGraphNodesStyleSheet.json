@@ -1,0 +1,32 @@
+[
+  {
+    "selector": "node",
+    "style": {
+      "background-color": "#E80057",
+      "label": "data(id)",
+      "color": "#D2D2DA",
+      "text-halign": "center",
+      "text-valign": "top"
+    }
+  },
+  {
+    "selector": "edge",
+    "style": {
+      "width": 3,
+      "line-color": "#2B65EC"
+    }
+  },
+  {
+    "selector": "node:selected",
+    "style": {
+      "background-color": "#F08080",
+      "border-color": "red"
+    }
+  },
+  {
+    "selector": "edge:selected",
+    "style": {
+      "line-color": "#F08080"
+    }
+  }
+]

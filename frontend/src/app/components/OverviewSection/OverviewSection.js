@@ -5,7 +5,8 @@ import SimpleCard from '../SimpleCard/SimpleCard';
 import ValueWithPercentChange from '../ValueWithPercentChange/ValueWithPercentChange';
 import {
     numberOfAnomaliesState,
-    numberOfTrendsState, overallSentimentState,
+    numberOfTrendsState,
+    overallSentimentState,
     totalLikedState,
 } from '../../assets/AtomStore/AtomStore';
 
@@ -22,14 +23,13 @@ export default function OverviewSection() {
                   cardTitle="Total Interaction"
                   cardID="overview-metric-1"
                   titleOnTop
+                  extraClassName="chart-page-card"
                 >
                     {
                         totalLikes &&
                         (
                             <ValueWithPercentChange
-                              isIncreasing
                               rawValue={totalLikes}
-                              key={totalLikes}
                             />
                         )
                     }
@@ -39,6 +39,7 @@ export default function OverviewSection() {
                   cardTitle="Trends"
                   cardID="overview-metric-3"
                   titleOnTop
+                  extraClassName="chart-page-card"
                 >
                     {
                         trends &&
@@ -56,6 +57,7 @@ export default function OverviewSection() {
                   cardTitle="Overall Sentiment"
                   cardID="overview-metric-2"
                   titleOnTop
+                  extraClassName="chart-page-card"
                 >
                     {
                         overallSentiment &&
@@ -73,6 +75,7 @@ export default function OverviewSection() {
                   cardTitle="Anomalies"
                   cardID="overview-metric-4"
                   titleOnTop
+                  extraClassName="chart-page-card"
                 >
                     {
                         anomalies &&

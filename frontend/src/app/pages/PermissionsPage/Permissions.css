@@ -1,0 +1,210 @@
+.user-preview{
+    padding: 20px;
+    margin-bottom: 10px;
+    /*border-radius: 5px;*/
+    line-height: normal;
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid #eff0f0;
+}
+
+.user-preview:hover{
+    /*background-color: #5873f9;*/
+    /*color: white;*/
+    border-color: #5773FA;
+}
+
+.user-preview h3{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.user-list a{
+    color: black;
+    font-weight: 500;
+}
+
+
+.user-preview .admin-tag{
+    color: #5773FA;
+}
+
+.user-preview a{
+    /*padding: 0;*/
+    display: flex;
+    align-items: center;
+    /*margin: 0 10px;*/
+    min-height: 50px;
+    text-decoration: none;
+}
+.user-preview p{
+    margin-right: 0;
+    margin-left: auto;
+    display: flex;
+}
+.user-preview p select{
+    margin: 10px;
+    background: #5773FA;
+    border: none;
+    border-radius: 5px;
+}
+
+.permissions-content-section{
+    line-height: normal;
+
+}
+.user-info {
+    /*display: flex;*/
+    /*background:rgba(0,0,0,0);*/
+    /*width: 50%;*/
+    /*margin: auto;*/
+    /*border-radius: 10px;*/
+    /*padding: 50px;*/
+    /*min-width: 350px;*/
+
+    position: absolute;
+    width: 24%;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    padding: 20px;
+}
+
+.user-info h2{
+    font-size: 25px;
+    padding-bottom: 20px;
+}
+
+.user-info  p{
+    padding-bottom: 10px;
+}
+
+.user-info form{
+    border: none;
+}
+.bodyDiv .ant-layout{
+    background-color: rgba(0,0,0,0);
+}
+
+
+.bodyDiv .ant-layout-content{
+    /*background-color: lightgrey;*/
+}
+
+.bodyDiv .right-column .ant-layout-content{
+    background-color: rgba(0,0,0,0);
+}
+
+.ant-divider#lightgrey{
+    border-color: lightgray;
+}
+
+
+.clear-background h1#permissions-title{
+    font-size: 28px;
+    margin: 0;
+    padding-left: 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+
+
+}
+
+
+
+
+
+.form-container{
+
+    border: 3px solid #5773FA;
+    padding: 20px;
+    background: white;
+    border-radius: 2%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+
+
+.user-info .form-button-container{
+    display: inline-block;
+    width: 100%;
+    align-items: center;
+}
+
+.user-info form button{
+    width: 200px;
+}
+
+.user-info form label{
+    font-size: 14px;
+    color: black;
+
+}
+
+.user-info form input[type="text"]{
+    background: none;
+    font-size: 14px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    width: 100%;
+    padding: 5px;
+    margin: 5px;
+}
+
+.user-info form select{
+    background: none;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 35px;
+    width: 100%;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    padding-left: 10px;
+
+}
+
+button.enabled{
+    background: #5773FA;
+    border: none;
+    border-radius: 5px;
+}
+
+.form-header{
+    display: flex;
+}
+
+.form-header span{
+    margin-left: auto;
+    margin-right: 0;
+    font-size: 20px;
+}
+
+.profile.user{
+    margin: 20px;
+}
+
+.profile.user h2{
+
+    padding: 0 40px 40px 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid #5773FA;
+    line-height: normal;
+
+}
+
+.profile.user>div{
+    line-height: normal;
+    /*background: white;*/
+
+}
+
+.profile.user .about-user div{
+    color: black;
+}
+
+
+

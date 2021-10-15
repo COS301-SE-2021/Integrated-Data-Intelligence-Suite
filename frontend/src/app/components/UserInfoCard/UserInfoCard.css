@@ -4,23 +4,23 @@
 
 /* The div that holds the entire user_avatar card*/
 #user_avatar_card {
-    float: right;
+    /*float: right;*/
     /*height: 100%;*/
-    /*width: 20%;*/
-    /* color: black; */
-    /*background: #15B761;*/
-    background: transparent;
-    border: 0;
-    /*border: 2px solid yellow;*/
+    width: 90%;
+    border: 1px solid transparent;
+    padding: 10px;
+    background: var(--light-black);
     /*margin-left: 8px;*/
-    margin-right: 2%;
-    /*border-radius: 6px;*/
-
-    /* Vertically Center the div*/
-    /*top: 50%;*/
-    /*-ms-transform: translateY(-50%);*/
-    /*transform: translateY(-50%);*/
-
+    color: white;
+    display: grid;
+    justify-items: center;
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    border-radius: 6px;
+    margin: auto;
 }
 
 #user_avatar_card > .ant-card-body {
@@ -90,18 +90,18 @@
     /*margin-top: 19px;*/
     background: transparent;
     border: 0;
-
 }
 
 /*The users' Name
 * AKA the title in the JS code
 */
 #meta_id > .ant-card-meta-detail > .ant-card-meta-title {
-    color: black;
+    color: white;
     border: 0;
     font-size: 13px;
     font-weight: 500;
     margin-bottom: 0;
+    text-overflow: ellipsis;
     /*margin-top: 25px;*/
     /*background: black;*/
 
@@ -123,9 +123,9 @@
     box-shadow: none;
     font-size: 0;
     float: right;
-    transform: rotate(
-            180deg
-    );
+    /*transform: rotate(*/
+    /*        45deg*/
+    /*);*/
     /*margin-top: 24px;*/
     width: 31px;
     height: 23px;
@@ -147,14 +147,14 @@
 
 /*When you hover over the Downward arrow icon change color*/
 #exit_menu_button > .exit_menu_ellipsis_icon > svg:hover {
-    color: #5773FA;
+    color: var(--pink);
     background: transparent;
 }
 
 /*When you Click on the Downward arrow icon change color*/
 button#exit_menu_button.ant-btn.ant-btn-icon-only.ant-dropdown-trigger.ant-dropdown-open >
-span.anticon.anticon-caret-up.exit_menu_ellipsis_icon > svg{
-    color: #5773FA;
+span.anticon.anticon-caret-up.exit_menu_ellipsis_icon > svg {
+    color: #000000;
     background: transparent;
 }
 

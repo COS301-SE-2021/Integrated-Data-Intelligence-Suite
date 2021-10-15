@@ -36,26 +36,46 @@ const SendOTPPage = () => {
                 body: JSON.stringify(values),
             };
             fetch(`${process.env.REACT_APP_BACKEND_HOST}/user/sendOTP`, requestOptions)
-                .then((response) => response.json()).then((json) => {
-                if (json.success) {
-                    // localStorage.setItem("user", json.id)
-                    message.success(json.message);
-                    localStorage.setItem('email', values.email);
-                    history.push('/resetPassword');
-                } else {
-                    message.error(json.message);
+                .then((res) => {
+                    if (!res.ok) {
+                        throw Error(res.error);
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                if (data.status.toLowerCase() === 'ok') {
+                    if (data.data.success) {
+                        history.push('/resetPassword');
+                    } else {
+                        message.error(data.data.message);
+                    }
+                } else if (data.errors) {
+                    for (let i = 0; i < data.errors.length; i = i + 1) {
+                        message.error(data.errors[i]);
+                    }
                 }
-            });
+                })
+                .catch((error) =>{
+                    message.error(error.message);
+                });
         },
     });
 
     return (
         <>
-            <div id="login-custom-bg">
-                <div id="top-left-block" />
-                <div id="top-right-block" />
-                <div id="bottom-left-block" />
-                <div id="bottom-right-block" />
+            <div className="area">
+                <ul className="circles">
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                    <li />
+                </ul>
             </div>
             <div id="verify-background">
                 <div id="verify-form-container">
@@ -86,7 +106,7 @@ const SendOTPPage = () => {
                             </Divider>
 
                             <Form.Item>
-                                <Link to="/" className="register_link">
+                                <Link to="/login" className="register_link">
                                     Go back
                                 </Link>
                             </Form.Item>

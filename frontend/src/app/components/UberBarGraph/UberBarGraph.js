@@ -70,7 +70,7 @@ const data = [...Array(5)
     x,
     y: Math.random() * 10
 }));
-console.log(data);
+// console.log(data);
 
 //0 = color when hovered, 1 = color when not hovered
 const colour_pallete = ['#FF991F', '#DAF9FB'];

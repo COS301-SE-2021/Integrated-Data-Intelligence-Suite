@@ -1,0 +1,532 @@
+/*
+* Chart Page.css
+* File contains all css for the chart page and its components?
+* NOTE: If a component is too large or requires in-depth styling or can be re-used in other pages
+    best to give that component its own file.
+*/
+#top_bar {
+    background: var(--light-black);
+    color: white;
+    height: 70px;
+    margin: 0 30px;
+    border: 0;
+    border-bottom: 1px solid var(--black-border);
+    /*overflow: hidden;*/
+    width: 100%;
+
+    display: grid;
+    align-items: center;
+    justify-self: center;
+    align-content: center;
+    align-self: center;
+    padding: 6%;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+}
+
+#top-bar-container {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: auto max-content max-content;
+    justify-self: center;
+    width: 100%;
+    /*max-width: 1200px;*/
+    align-items: center;
+    column-gap: 25px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#content_section > div {
+    max-width: 350px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+/* The div Div that Stores/contains everything on the right of the sidebar
+* Includes the Header, Content Section and Footer (if present)
+
+*/
+
+#inner_layout_div {
+    /*border: 3px solid green;*/
+    background: var(--light-black);
+    border: 0;
+}
+
+
+/*The div that Stores/Contains EVERYTHING inside it*/
+#outer_layout {
+    /*border:3px solid purple;*/
+    min-height: 100vh;
+    max-height: 100vh;
+
+    /*
+    * We dont want the Entire Outer div to overflow.*
+    * We want The sidebar to have its 'own' overflow
+    * and the content section to have its 'own' overflow
+    */
+    /*overflow:hidden*/
+
+    overflow-x: hidden;
+    background: #e8e8e9;
+}
+
+
+/*
+*Customizing The Scrollbar
+*
+ */
+#inner_layout_div ::-webkit-scrollbar {
+    width: 7px;
+    background: transparent;
+}
+
+#inner_layout_div ::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+#inner_layout_div ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #c5bfbf;
+}
+
+#inner_layout_div ::-webkit-scrollbar-thumb:active {
+    background: var(--dodger-blue);
+}
+
+#map-details-container {
+    /*border: 3px solid blue;*/
+    float: left;
+    width: 34%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /*display: grid;*/
+    min-height: 26.5em;
+    max-height: 27.3em;
+    border-bottom-right-radius: 2%;
+    border-top-right-radius: 2%;
+    border: 0.1em solid #E8E8E9;
+    background: #e8e8e9;
+}
+
+/*Hiding the scrollbar in the map-details-container*/
+#map-details-container::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+#word-cloud-layout {
+    grid-column: span 3;
+    grid-row: span 3;
+}
+
+/*The div that contains the entire content section*/
+#content-section {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(6, auto);
+    /*border: 3px solid black;*/
+    max-height: 100vh;
+    max-width: 100vw;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 6%;
+    padding-top: 2%;
+    background: var(--light-black);
+    row-gap: 13%;
+}
+
+#content_section .simple-section-container {
+    max-width: 1200px;
+}
+
+#overview-graph-metric-2 > .simple-card-body > .VictoryContainer > svg {
+    background: var(--dark-black);
+}
+
+/*******************************************/
+/******************Row 3********************/
+/***************Location Row****************/
+/********************************************/
+#location-section {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    row-gap: 10px;
+    height: min-content;
+}
+
+#row-3 {
+    grid-row-start: 3;
+    grid-row-end: 4;
+
+    /*Internal Display of the row 2*/
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, auto);
+}
+
+#world-map > .simple-card-title {
+    padding: 10px 10px 10px 0px;
+    text-align: left;
+}
+
+#map-metric-container {
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    /*Internal display of the map-metric-container*/
+    display: grid;
+    grid-template-columns: 66% 33%;
+    grid-template-rows: 100%;
+    column-gap: 30px;
+    height: 460px;
+    border-radius: 10px;
+}
+
+#complex-graph {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#map-metric-1 {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    background: var(--dark-black);
+}
+
+#map-metric-1:hover {
+    border: 1px solid var(--pink);
+}
+
+
+#map-metric-1 > .simple-card-title {
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: var(--dark-black);
+
+}
+
+#map-metric-1 > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background: var(--dark-black);
+}
+
+#map-metric-2 > .simple-card-title {
+    padding: 10px;
+    /*padding-left: 0px;*/
+    text-align: left;
+}
+
+#world-map {
+    display: grid !important;
+    grid-template-columns: 100% !important;
+    grid-template-rows: 0 auto !important;
+    border-radius: 10px !important;
+}
+
+#world-map > .simple-card-body {
+    background: var(--dark-black);
+}
+
+/*********************************************/
+/******************Row 4********************/
+/******************Word Cloud*****************/
+/********************************************/
+#row-4 {
+    grid-row-start: 4;
+    grid-row-end: 5;
+
+    /*Display of the Body of the Word Cloud Section*/
+    /**/
+    display: grid;
+    grid-template-columns: 100%;
+    /*grid-template-rows: repeat(2, auto);*/
+    grid-template-rows: 0 auto;
+}
+
+#row-4 > .simple-section-body {
+    display: grid;
+    grid-template-columns:60% 40%;
+    grid-template-rows: 100%;
+    column-gap: 30px;
+}
+
+#word-cloud-card {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    background: var(--dark-black);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#word-cloud-card > .simple-card-title {
+    background: var(--dark-black);
+    text-align: center;
+    color: white;
+
+}
+
+#word-cloud-card:hover {
+    border: 1px solid var(--pink);
+}
+
+#word-cloud-graph-container > .simple-card-container {
+    border: 1px solid transparent;
+    background: var(--dark-black);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+#word-graph-2 > .simple-card-body {
+    background: var(--dark-black);
+}
+
+#word-cloud-outer-container {
+    display: flex;
+    align-content: center;
+    background: var(--dark-black);
+}
+
+#word-cloud-outer-container > div {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#word-cloud-card svg {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.simple-section-body svg {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#word-cloud-graph-container {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
+    /*Display of the body of the container*/
+    display: grid;
+    align-items: center;
+    border-radius: 10px;
+    background: var(--dark-black);
+    border: 1px solid transparent;
+}
+
+#word-graph-2:hover {
+    border: 1px solid var(--pink);
+}
+
+#word-cloud-graph-container > div {
+    display: flex;
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
+}
+
+#word-graph-1 {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#word-graph-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 10px;
+    border: 1px solid transparent;
+    background: var(--dark-black);
+    border-radius: 10px;
+}
+
+#word-graph-2 > .simple-card-title {
+    background: var(--dark-black);
+    text-align: center;
+}
+
+/*********************************************/
+/******************Row 5********************/
+/******************Network*****************/
+/*******************************************/
+#row-5 {
+    grid-row-start: 5;
+    grid-row-end: 6;
+    display: grid;
+    grid-template-rows: 0 auto;
+    grid-template-columns: 100%;
+    padding-bottom: 30px;
+}
+
+#row-5 > .simple-section-body {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: 100%;
+    column-gap: 30px;
+}
+
+#row-5 > .simple-section-body .simple-card-container {
+    background: var(--dark-black);
+    padding: 10px;
+    border-radius: 10px;
+    border: solid 1px transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#row-5 > .simple-section-body .simple-card-container:hover {
+    border: 1px solid var(--pink)
+}
+
+#network-graph-entities {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    background: var(--dark-black);
+}
+
+#network-graph-entities > .simple-card-title {
+    padding: 10px;
+    text-align: center;
+    background: var(--dark-black);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: white;
+}
+
+#network-graph-entities > .simple-card-body {
+    background: var(--dark-black);
+    height: 100%;
+}
+
+#network_card {
+    background: var(--dark-black);
+}
+
+#network_card > .ant-card-body {
+    height: 100%;
+}
+
+#network-graph-patterns > .simple-card-title {
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: var(--dark-black);
+    color: white;
+}
+
+#network-graph-patterns {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+/***********************************************/
+/*******************Row 6**********************/
+/*****************Anomalies*******************/
+/********************************************/
+#row-6 {
+    grid-row-start: 6;
+    grid-row-end: 7;
+
+    /*Internal Display of Row 6 items*/
+    display: grid;
+
+    /*0 = no heading*/
+    grid-template-rows: 0 auto;
+    grid-template-columns: 100%;
+    padding-bottom: 30px;
+}
+
+#row-6 > .simple-section-body {
+    display: grid;
+    grid-template-rows: repeat(1, 100%);
+    grid-template-columns: 100%;
+    column-gap: 30px;
+    row-gap: 10px;
+    justify-content: center;
+
+}
+
+#anomaly-timeline-card {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    overflow: auto;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 100%;
+}
+
+#anomaly-timeline-card:hover {
+    border: 1px solid var(--pink);
+}
+
+#anomaly-timeline-card > .simple-card-title {
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    background: var(--dark-black);
+    color: white;
+}
+
+#anomaly-timeline-card > .simple-card-body {
+    background: var(--dark-black);
+}
+
+#anomaly-scatter-plot {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+}
+
+#anomaly-scatter-plot > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+#anomaly-scatter-plot > .simple-card-body {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#anomaly-line-graph {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#anomaly-line-graph > .simple-card-title {
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: var(--simple-card-title-color);
+}
+
+
+
+
+
+
+
+

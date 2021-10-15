@@ -4,6 +4,9 @@
     --dodger-blue: #339CFF;
     --azure: #007AF5;
     --prussian-blue: #0E2A42;
+    --blue-green: #208AAE;
+    --dark-blue-green: #013737;
+    --bright-blue: #00BEFF;
 
     /*blacks*/
     --black-coral: #535C6F;
@@ -14,9 +17,23 @@
     --dark-blue-white-bg: #bed4ff;
     --white-border-color: #D6D6D6;
 
+    /*Dark mode*/
+    --light-black: #1E2022;
+    --dark-black: #181A1B;
+    --black-border: #333739;
+    --pink: #E80057;
+    --dark-pink: rgba(232, 0, 87, 0.31);
 
-    /*--light-gray: #f4f7fc;*/
-    --light-gray: #F1F2F8;
+    /*Landing Page*/
+    --lp-dark-theme-bg: #1E2022;
+    --lp-dark-theme-color: #E80057;
+    --lp-dark-theme-small-text-color: #e3e3e3 ;
+    --lp-white-theme-bg: #fff;
+    --lp-white-theme-color: #CA0586;
+    --lp-white-theme-small-text-color: var(--light-black);
+
+
+
     --amount-increasing: #00b074;
     --grey-border-color: #e3e3e3;
     --simple-card-title-color: darkgrey;

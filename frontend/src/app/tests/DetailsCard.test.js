@@ -1,12 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import DetailsCard from '../pages/ChartPage/components/DetailsCard/DetailsCard' ;
-import {unmountComponentAtNode} from "react-dom";
+import { unmountComponentAtNode } from 'react-dom';
+import DetailsCard from '../components/DetailsCard/DetailsCard';
 
 let container = null;
 beforeEach(() => {
   // setup a DOM element as a render target
-  container = document.createElement("div");
+  container = document.createElement('div');
   document.body.appendChild(container);
 });
 
@@ -17,11 +17,9 @@ afterEach(() => {
   container = null;
 });
 
-
-
 it('DetailsCard renders correctly', () => {
-    const tree = renderer
-        .create(<DetailsCard/>)
-        .toJSON();
-    expect(tree).toMatchSnapshot();
+  const tree = renderer
+    .create(<DetailsCard />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
 });
