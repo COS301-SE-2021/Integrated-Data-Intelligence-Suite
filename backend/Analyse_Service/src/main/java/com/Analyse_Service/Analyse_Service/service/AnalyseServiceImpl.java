@@ -509,6 +509,7 @@ public class AnalyseServiceImpl {
             //return new GetModelByIdResponse(null, null, null);
         }
 
+        modelAccuracy = modelAccuracy.substring(0,5);
         return new GetModelByIdResponse(modelName, request.getModelId(), modelAccuracy);
     }
 
