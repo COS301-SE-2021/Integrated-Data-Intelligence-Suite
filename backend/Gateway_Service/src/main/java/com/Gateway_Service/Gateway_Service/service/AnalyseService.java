@@ -49,7 +49,7 @@ public class AnalyseService {
 
 
         ResponseEntity<?> analyseResponse = null;
-        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        /*analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
 
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) analyseResponse.getBody();
@@ -61,7 +61,7 @@ public class AnalyseService {
 
                 throw new AnalyserException(errors);
             }
-        }
+        }*/
 
         analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/analyzeData",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseDataResponse>() {});
         return (AnalyseDataResponse) analyseResponse.getBody();
@@ -136,10 +136,10 @@ public class AnalyseService {
 
         ResponseEntity<?> analyseResponse = null;
         //try {
-            analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById", HttpMethod.POST, request, new ParameterizedTypeReference<ServiceErrorResponse>() {});
+            //analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById", HttpMethod.POST, request, new ParameterizedTypeReference<ServiceErrorResponse>() {});
         //} catch (Exception e){
         //    throw new GatewayException("Failed to connect to analyse service");
-        //}
+        /*}
 
 
         if(analyseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
@@ -152,7 +152,7 @@ public class AnalyseService {
 
                 throw new AnalyserException(errors);
             }
-        }
+        }*/
 
         analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/getModelById",HttpMethod.POST,request,new ParameterizedTypeReference<GetModelByIdResponse>() {});
         return (GetModelByIdResponse) analyseResponse.getBody();
@@ -199,7 +199,7 @@ public class AnalyseService {
             }
         }
 
-        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/trainUserModel",HttpMethod.POST,request,new ParameterizedTypeReference<AnalyseDataResponse>() {});
+        analyseResponse = restTemplate.exchange("http://Analyse-Service/Analyse/trainUserModel",HttpMethod.POST,request,new ParameterizedTypeReference<TrainUserModelResponse>() {});
         return (TrainUserModelResponse) analyseResponse.getBody();
     }
 
