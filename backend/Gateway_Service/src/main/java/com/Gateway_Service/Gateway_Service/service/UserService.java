@@ -49,9 +49,12 @@ public class UserService {
         //ChangeUserResponse userResponse = restTemplate.postForObject("http://User-Service/User/changepermission", request, ChangeUserResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/changepermission",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://user-service/User/changepermission",HttpMethod.POST,request,new ParameterizedTypeReference<ChangeUserResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != ChangeUserResponse.class) {
+            userResponse = restTemplate.exchange("http://User-Service/User/changepermission",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -63,7 +66,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://user-service/User/changeUser",HttpMethod.POST,request,new ParameterizedTypeReference<ChangeUserResponse>() {});
+
         return (ChangeUserResponse) userResponse.getBody();
     }
 
@@ -86,9 +89,12 @@ public class UserService {
 
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/getAll",HttpMethod.GET,null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getAll",HttpMethod.GET,null,new ParameterizedTypeReference<GetAllUsersResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != GetAllUsersResponse.class) {
+            userResponse = restTemplate.exchange("http://User-Service/User/getAll",HttpMethod.GET,null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -100,7 +106,6 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/getAll",HttpMethod.GET,null,new ParameterizedTypeReference<GetAllUsersResponse>() {});
         return (GetAllUsersResponse) userResponse.getBody();
 
     }
@@ -131,9 +136,12 @@ public class UserService {
         //RegisterResponse userResponse = restTemplate.postForObject("http://User-Service/User/register", request, RegisterResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/register",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/register",HttpMethod.POST,request,new ParameterizedTypeReference<RegisterResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != RegisterResponse.class) {
+            userResponse = restTemplate.exchange("http://User-Service/User/register",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -145,7 +153,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/register",HttpMethod.POST,request,new ParameterizedTypeReference<RegisterResponse>() {});
+
         return (RegisterResponse) userResponse.getBody();
     }
 
@@ -167,9 +175,13 @@ public class UserService {
         //VerifyAccountResponse userResponse = restTemplate.postForObject("http://User-Service/User/verifyAccount", request, VerifyAccountResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/verifyAccount",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/verifyAccount",HttpMethod.POST,request,new ParameterizedTypeReference<VerifyAccountResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != VerifyAccountResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/verifyAccount",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -181,7 +193,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/verifyAccount",HttpMethod.POST,request,new ParameterizedTypeReference<VerifyAccountResponse>() {});
+
         return (VerifyAccountResponse) userResponse.getBody();
     }
 
@@ -203,9 +215,13 @@ public class UserService {
         //ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/resendCode", request, ResendCodeResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/resendCode",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/resendCode",HttpMethod.POST,request,new ParameterizedTypeReference<ResendCodeResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != ResendCodeResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/resendCode",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -217,7 +233,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/resendCode",HttpMethod.POST,request,new ParameterizedTypeReference<ResendCodeResponse>() {});
+
         return (ResendCodeResponse) userResponse.getBody();
     }
 
@@ -239,9 +255,13 @@ public class UserService {
         //ResendCodeResponse userResponse = restTemplate.postForObject("http://User-Service/User/sendOTP", request, ResendCodeResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/sendOTP",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/sendOTP",HttpMethod.POST,request,new ParameterizedTypeReference<ResendCodeResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+
+        if(userResponse != null && userResponse.getBody().getClass() != ResendCodeResponse.class) {
+            userResponse = restTemplate.exchange("http://User-Service/User/sendOTP",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -253,7 +273,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/sendOTP",HttpMethod.POST,request,new ParameterizedTypeReference<ResendCodeResponse>() {});
+
         return (ResendCodeResponse) userResponse.getBody();
     }
 
@@ -278,9 +298,13 @@ public class UserService {
         //ResetPasswordResponse userResponse = restTemplate.postForObject("http://User-Service/User/resetPassword", request, ResetPasswordResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/resetPassword",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/resetPassword",HttpMethod.POST,request,new ParameterizedTypeReference<ResetPasswordResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != ResetPasswordResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/resetPassword",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -292,7 +316,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/resetPassword",HttpMethod.POST,request,new ParameterizedTypeReference<ResetPasswordResponse>() {});
+
         return (ResetPasswordResponse) userResponse.getBody();
     }
 
@@ -314,9 +338,13 @@ public class UserService {
         //GetUserResponse userResponse = restTemplate.postForObject("http://User-Service/User/getUser", request, GetUserResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/getUser",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getUser",HttpMethod.POST,request,new ParameterizedTypeReference<GetUserResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != GetUserResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/getUser",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -328,7 +356,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/getUser",HttpMethod.POST,request,new ParameterizedTypeReference<GetUserResponse>() {});
+
         return (GetUserResponse) userResponse.getBody();
     }
     /**
@@ -356,9 +384,13 @@ public class UserService {
         //LoginResponse userResponse = restTemplate.postForObject("http://User-Service/User/login", request, LoginResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/login",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/login",HttpMethod.POST,request,new ParameterizedTypeReference<LoginResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != LoginResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/login",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -370,7 +402,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/login",HttpMethod.POST,request,new ParameterizedTypeReference<LoginResponse>() {});
+
         return (LoginResponse) userResponse.getBody();
     }
 
@@ -400,9 +432,13 @@ public class UserService {
         //UpdateProfileResponse userResponse = restTemplate.postForObject("http://User-Service/User/updateProfile", request, UpdateProfileResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/updateProfile",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/updateProfile",HttpMethod.POST,request,new ParameterizedTypeReference<UpdateProfileResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != UpdateProfileResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/updateProfile",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -414,7 +450,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/updateProfile",HttpMethod.POST,request,new ParameterizedTypeReference<UpdateProfileResponse>() {});
+
         return (UpdateProfileResponse) userResponse.getBody();
     }
 
@@ -434,9 +470,13 @@ public class UserService {
         //GetUserReportsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getReports/" + userRequest.getId(), GetUserReportsResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        userResponse = restTemplate.exchange("http://User-Service/User/getReports/" + userRequest.getId(),HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getReports/" + userRequest.getId(),HttpMethod.GET, null,new ParameterizedTypeReference<GetUserReportsResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != GetUserReportsResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/getReports/" + userRequest.getId(),HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -448,7 +488,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/getReports/" + userRequest.getId(),HttpMethod.GET, null,new ParameterizedTypeReference<GetUserReportsResponse>() {});
+
         return (GetUserReportsResponse) userResponse.getBody();
     }
 
@@ -475,9 +515,12 @@ public class UserService {
         //ReportResponse userResponse = restTemplate.postForObject("http://User-Service/User/addReport", request, ReportResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/addReport",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/addReport",HttpMethod.POST,request,new ParameterizedTypeReference<ReportResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+        if(userResponse != null && userResponse.getBody().getClass() != ReportResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/addReport",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -489,7 +532,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/addReport",HttpMethod.POST,request,new ParameterizedTypeReference<ReportResponse>() {});
+
         return (ReportResponse) userResponse.getBody();
     }
 
@@ -516,9 +559,12 @@ public class UserService {
         //ReportResponse userResponse = restTemplate.postForObject("http://User-Service/User/removeReport", request, ReportResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/removeReport",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/removeReport",HttpMethod.POST,request,new ParameterizedTypeReference<ReportResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != ReportResponse.class) {
+            userResponse = restTemplate.exchange("http://User-Service/User/removeReport",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -530,7 +576,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/removeReport",HttpMethod.POST,request,new ParameterizedTypeReference<ReportResponse>() {});
+
         return (ReportResponse) userResponse.getBody();
     }
 
@@ -550,11 +596,14 @@ public class UserService {
         //GetModelsResponse userResponse = restTemplate.getForObject("http://User-Service/User/getModels/{id}" + userRequest.getUserID(), GetModelsResponse.class);
 
 
-
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/getModels/" + userRequest.getUserID(),HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/getModels/" + userRequest.getUserID(),HttpMethod.GET, null,new ParameterizedTypeReference<GetModelsResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != GetModelsResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/getModels/" + userRequest.getUserID(),HttpMethod.GET, null,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -566,7 +615,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/getModels/" + userRequest.getUserID(),HttpMethod.GET, null,new ParameterizedTypeReference<GetModelsResponse>() {});
+
         return (GetModelsResponse) userResponse.getBody();
     }
 
@@ -593,9 +642,13 @@ public class UserService {
         //ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/addModel", request, ModelResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/addModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/addModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != ModelResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/addModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -607,7 +660,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/addModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
+
         return (ModelResponse) userResponse.getBody();
     }
 
@@ -634,9 +687,12 @@ public class UserService {
         //ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/removeModel", request, ModelResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/removeModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/removeModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+        if(userResponse != null && userResponse.getBody().getClass() != ModelResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/removeModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -648,7 +704,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/removeModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
+
         return (ModelResponse) userResponse.getBody();
     }
 
@@ -675,9 +731,12 @@ public class UserService {
         //ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/selectModel", request, ModelResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/selectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/selectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+        if(userResponse != null && userResponse.getBody().getClass() != ModelResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/selectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -689,7 +748,6 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/selectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
         return (ModelResponse) userResponse.getBody();
     }
 
@@ -716,9 +774,13 @@ public class UserService {
         //ModelResponse userResponse = restTemplate.postForObject("http://User-Service/User/deselectModel", request, ModelResponse.class);
 
         ResponseEntity<?> userResponse = null;
-        //userResponse = restTemplate.exchange("http://User-Service/User/deselectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        userResponse = restTemplate.exchange("http://User-Service/User/deselectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
 
-        if(userResponse != null && userResponse.getBody().getClass() == ServiceErrorResponse.class) {
+
+        if(userResponse != null && userResponse.getBody().getClass() != ModelResponse.class) {
+
+            userResponse = restTemplate.exchange("http://User-Service/User/deselectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) userResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -730,7 +792,7 @@ public class UserService {
             }
         }
 
-        userResponse = restTemplate.exchange("http://User-Service/User/deselectModel",HttpMethod.POST,request,new ParameterizedTypeReference<ModelResponse>() {});
+
         return (ModelResponse) userResponse.getBody();
     }
 }
