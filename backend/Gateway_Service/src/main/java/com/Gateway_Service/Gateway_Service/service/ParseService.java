@@ -46,9 +46,12 @@ public class ParseService {
         //ParseImportedDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseImportedData", request, ParseImportedDataResponse.class);
 
         ResponseEntity<?> parseResponse = null;
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseImportedDataResponse>() {});
 
-        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+        if(parseResponse.getBody().getClass() != ParseImportedDataResponse.class ) {
+            parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -60,7 +63,7 @@ public class ParseService {
             }
         }
 
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseImportedData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseImportedDataResponse>() {});
+
         return (ParseImportedDataResponse) parseResponse.getBody();
     }
 
@@ -88,9 +91,14 @@ public class ParseService {
         //ParseUploadedSocialDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedSocialData", request, ParseUploadedSocialDataResponse.class);
 
         ResponseEntity<?> parseResponse = null;
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedSocialData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedSocialData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedSocialDataResponse>() {});
 
-        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+
+        if(parseResponse.getBody().getClass() != ParseUploadedSocialDataResponse.class ) {
+
+            parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedSocialData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -102,7 +110,7 @@ public class ParseService {
             }
         }
 
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedSocialData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedSocialDataResponse>() {});
+
         return (ParseUploadedSocialDataResponse) parseResponse.getBody();
     }
 
@@ -130,9 +138,13 @@ public class ParseService {
         //ParseUploadedTrainingDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseTrainingData", request, ParseUploadedTrainingDataResponse.class);
 
         ResponseEntity<?> parseResponse = null;
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseTrainingData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseTrainingData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedTrainingDataResponse>() {});
 
-        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+        if(parseResponse.getBody().getClass() != ParseUploadedTrainingDataResponse.class ) {
+
+            parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseTrainingData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -144,7 +156,6 @@ public class ParseService {
             }
         }
 
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseTrainingData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedTrainingDataResponse>() {});
         return (ParseUploadedTrainingDataResponse) parseResponse.getBody();
     }
 
@@ -172,9 +183,13 @@ public class ParseService {
         //ParseUploadedNewsDataResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/parseUploadedNewsData", request, ParseUploadedNewsDataResponse.class);
 
         ResponseEntity<?> parseResponse = null;
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedNewsData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedNewsData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedNewsDataResponse>() {});
 
-        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+
+        if(parseResponse.getBody().getClass() != ParseUploadedNewsDataResponse.class ) {
+            parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedNewsData",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -186,7 +201,7 @@ public class ParseService {
             }
         }
 
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/parseUploadedNewsData",HttpMethod.POST,request,new ParameterizedTypeReference<ParseUploadedNewsDataResponse>() {});
+
         return (ParseUploadedNewsDataResponse) parseResponse.getBody();
     }
 
@@ -209,9 +224,12 @@ public class ParseService {
         //AddSocialMediaPropertiesResponse parseResponse = restTemplate.postForObject("http://Parse-Service/Parse/addSocialMediaProperties", request, AddSocialMediaPropertiesResponse.class);
 
         ResponseEntity<?> parseResponse = null;
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/addSocialMediaProperties",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/addSocialMediaProperties",HttpMethod.POST,request,new ParameterizedTypeReference<AddSocialMediaPropertiesResponse>() {});
 
-        if(parseResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+        if(parseResponse.getBody().getClass() != AddSocialMediaPropertiesResponse.class ) {
+            parseResponse = restTemplate.exchange("http://Parse-Service/Parse/addSocialMediaProperties",HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) parseResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -223,7 +241,6 @@ public class ParseService {
             }
         }
 
-        parseResponse = restTemplate.exchange("http://Parse-Service/Parse/addSocialMediaProperties",HttpMethod.POST,request,new ParameterizedTypeReference<AddSocialMediaPropertiesResponse>() {});
         return (AddSocialMediaPropertiesResponse) parseResponse.getBody();
     }
 
