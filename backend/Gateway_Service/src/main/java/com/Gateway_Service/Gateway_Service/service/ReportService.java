@@ -48,9 +48,12 @@ public class ReportService {
         //ReportDataResponse reportResponse = restTemplate.postForObject("http://Report-Service/Report/reportData", request, ReportDataResponse.class);
 
         ResponseEntity<?> reportResponse = null;
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/reportData", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        reportResponse = restTemplate.exchange("http://Report-Service/Report/reportData",HttpMethod.POST,request,new ParameterizedTypeReference<ReportDataResponse>() {});
 
-        if(reportResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+        if(reportResponse.getBody().getClass() != ReportDataResponse.class ) {
+
+            reportResponse = restTemplate.exchange("http://Report-Service/Report/reportData", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) reportResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -62,7 +65,6 @@ public class ReportService {
             }
         }
 
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/reportData",HttpMethod.POST,request,new ParameterizedTypeReference<ReportDataResponse>() {});
         return (ReportDataResponse) reportResponse.getBody();
     }
 
@@ -91,9 +93,14 @@ public class ReportService {
         //GetReportDataByIdResponse reportResponse = restTemplate.postForObject("http://Report-Service/Report/getReportDataById", request, GetReportDataByIdResponse.class);
 
         ResponseEntity<?> reportResponse = null;
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/getReportDataById", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        reportResponse = restTemplate.exchange("http://Report-Service/Report/getReportDataById",HttpMethod.POST,request,new ParameterizedTypeReference<GetReportDataByIdResponse>() {});
 
-        if(reportResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+
+        if(reportResponse.getBody().getClass() != GetReportDataByIdResponse.class ) {
+
+            reportResponse = restTemplate.exchange("http://Report-Service/Report/getReportDataById", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) reportResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -105,7 +112,7 @@ public class ReportService {
             }
         }
 
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/getReportDataById",HttpMethod.POST,request,new ParameterizedTypeReference<GetReportDataByIdResponse>() {});
+
         return (GetReportDataByIdResponse) reportResponse.getBody();
     }
 
@@ -134,9 +141,12 @@ public class ReportService {
         //DeleteReportDataByIdResponse reportResponse = restTemplate.postForObject("http://Report-Service/Report/deleteReportDataById", request, DeleteReportDataByIdResponse.class);
 
         ResponseEntity<?> reportResponse = null;
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/deleteReportDataById", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        reportResponse = restTemplate.exchange("http://Report-Service/Report/deleteReportDataById",HttpMethod.POST,request,new ParameterizedTypeReference<DeleteReportDataByIdResponse>() {});
 
-        if(reportResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+        if(reportResponse.getBody().getClass() != DeleteReportDataByIdResponse.class ) {
+            reportResponse = restTemplate.exchange("http://Report-Service/Report/deleteReportDataById", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) reportResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -148,7 +158,7 @@ public class ReportService {
             }
         }
 
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/deleteReportDataById",HttpMethod.POST,request,new ParameterizedTypeReference<DeleteReportDataByIdResponse>() {});
+
         return (DeleteReportDataByIdResponse) reportResponse.getBody();
     }
 
@@ -176,9 +186,12 @@ public class ReportService {
         //ShareReportResponse reportResponse = restTemplate.postForObject("http://Report-Service/Report/shareReport", request, ShareReportResponse.class);
 
         ResponseEntity<?> reportResponse = null;
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/shareReport", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        reportResponse = restTemplate.exchange("http://Report-Service/Report/shareReport",HttpMethod.POST,request,new ParameterizedTypeReference<ShareReportResponse>() {});
 
-        if(reportResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+        if(reportResponse.getBody().getClass() == ShareReportResponse.class ) {
+            reportResponse = restTemplate.exchange("http://Report-Service/Report/shareReport", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) reportResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -190,7 +203,7 @@ public class ReportService {
             }
         }
 
-        reportResponse = restTemplate.exchange("http://Report-Service/Report/shareReport",HttpMethod.POST,request,new ParameterizedTypeReference<ShareReportResponse>() {});
+
         return (ShareReportResponse) reportResponse.getBody();
     }
 
