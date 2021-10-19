@@ -46,9 +46,13 @@ public class VisualizeService {
         //VisualizeDataResponse visualizeResponse = restTemplate.postForObject("http://Visualize-Service/Visualize/visualizeData", request, VisualizeDataResponse.class);
 
         ResponseEntity<?> visualizeResponse = null;
-        visualizeResponse = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData", HttpMethod.POST,request,new ParameterizedTypeReference<ServiceErrorResponse>() {});
+        visualizeResponse = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData",HttpMethod.POST,request,new ParameterizedTypeReference<VisualizeDataResponse>() {});
 
-        if(visualizeResponse.getBody().getClass() == ServiceErrorResponse.class ) {
+
+
+        if(visualizeResponse.getBody().getClass() != VisualizeDataResponse.class ) {
+            visualizeResponse = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData", HttpMethod.POST,request,new ParameterizedTypeReference<VisualizeDataResponse>() {});
+
             ServiceErrorResponse serviceErrorResponse = (ServiceErrorResponse) visualizeResponse.getBody();
             if(serviceErrorResponse.getErrors() != null) {
                 String errors = serviceErrorResponse.getErrors().get(0);
@@ -60,7 +64,7 @@ public class VisualizeService {
             }
         }
 
-        visualizeResponse = restTemplate.exchange("http://Visualize-Service/Visualize/visualizeData",HttpMethod.POST,request,new ParameterizedTypeReference<VisualizeDataResponse>() {});
+
         return (VisualizeDataResponse) visualizeResponse.getBody();
     }
 
