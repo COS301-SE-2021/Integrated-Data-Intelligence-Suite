@@ -442,6 +442,7 @@ public class GatewayServiceController {
 
             /****************User****************/
 
+
             ModelRequest modelRequest = new ModelRequest(userId, trainResponse.getModelId());
             ModelResponse userResponse = userClient.addModelForUser(modelRequest);
 
@@ -694,8 +695,8 @@ public class GatewayServiceController {
         serviceSuccesResponse.setStatus(HttpStatus.OK);
         serviceSuccesResponse.setData(outputData);
 
-        return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
-        //return new ResponseEntity<>(outputData,HttpStatus.OK);
+        //return new ResponseEntity<>(serviceSuccesResponse, new HttpHeaders(), serviceSuccesResponse.getStatus());
+        return new ResponseEntity<>(outputData,HttpStatus.OK);
     }
 
     /**
@@ -868,7 +869,8 @@ public class GatewayServiceController {
 
         maxSizeId = 0;//reportsList.size();
 
-        /*********************REPORT******************/
+        /*********************ANALYSE******************/
+
 
         ArrayList<GetModelByIdResponse> output = new ArrayList<>();
 
@@ -879,10 +881,13 @@ public class GatewayServiceController {
         boolean foundSelected = true;
         output.add(defaultModel);
 
+
+
         for (Map.Entry<String,Boolean> entry : models.entrySet()) {
             analyseRequest.setModelId(entry.getKey());
 
             GetModelByIdResponse AnalyseResponse = analyseClient.getModelById(analyseRequest);
+
             if(entry.getValue().equals(true))
                 foundSelected= false;
             AnalyseResponse.setIsModelDefault(entry.getValue());
