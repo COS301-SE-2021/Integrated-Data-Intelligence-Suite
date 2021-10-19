@@ -905,8 +905,13 @@ public class TrainServiceImpl {
         /*******************MANIPULATE DATAFRAME*****************/
 
         //group named entity
-        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
-
+        Dataset<Row> namedEntities = null;
+        if(request.getModelName() == null) {
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").agg(count("EntityName"), avg("Likes"));
+        }
+        else{
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber", "isTrending").agg(count("EntityName"), avg("Likes"));
+        }
 
         //Dataset<Row> resultDataframe = namedEntities;
        // resultDataframe = resultDataframe.join(averageLikes,"Likes");
@@ -945,8 +950,8 @@ public class TrainServiceImpl {
                         trendData.get(1).toString(), //type
                         Double.parseDouble(trendData.get(2).toString()), //number
                         Double.parseDouble(trendData.get(4).toString()), //freq
-                        trendData.get(5).toString(),
-                        Double.parseDouble(trendData.get(6).toString())
+                        //trendData.get(5).toString(),
+                        Double.parseDouble(trendData.get(5).toString())
                 );
                 trainSet.add(trainRow);
             }
@@ -1352,7 +1357,7 @@ public class TrainServiceImpl {
 
 
         //group named entity
-        Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
+        //Dataset<Row> namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
         /*if(request.getModelName() == null) {
             namedEntities = itemsDF.groupBy("EntityName", "EntityType", "EntityTypeNumber").count(); //frequency
         }else{
@@ -1363,6 +1368,14 @@ public class TrainServiceImpl {
 
         Dataset<Row> resultDataframe = namedEntities.join(rate,"date");
         resultDataframe = resultDataframe.join(averageLikes,"Likes");*/
+
+        Dataset<Row> namedEntities = null;
+        if(request.getModelName() == null) {
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber").agg(count("EntityName"),avg("Likes"));
+        }
+        else{
+            namedEntities = itemsDF.groupBy("EntityName", "EntityType" ,"EntityTypeNumber", "isTrending").agg(count("EntityName"),avg("Likes"));
+        }
 
         Iterator<Row> trendRowData = namedEntities.toLocalIterator();
 
@@ -1398,8 +1411,8 @@ public class TrainServiceImpl {
                         trendData.get(1).toString(), //type
                         Double.parseDouble(trendData.get(2).toString()), //number
                         Double.parseDouble(trendData.get(4).toString()), //freq
-                        trendData.get(5).toString(),
-                        Double.parseDouble(trendData.get(6).toString())
+                        //trendData.get(5).toString(),
+                        Double.parseDouble(trendData.get(5).toString())
                 );
                 trainSet.add(trainRow);
             }
