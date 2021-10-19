@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @ControllerAdvice
 public class ServiceExceptionHandler {
-    @ExceptionHandler(value = ParserException.class)
+    @ExceptionHandler({ParserException.class, IOException.class})
     ResponseEntity<?> ParserExceptionFound(Exception exc, ServletWebRequest request) {
         //ServiceErrorResponse AnalyserExceptionFound(HttpServletRequest request, Exception exc) {
 
