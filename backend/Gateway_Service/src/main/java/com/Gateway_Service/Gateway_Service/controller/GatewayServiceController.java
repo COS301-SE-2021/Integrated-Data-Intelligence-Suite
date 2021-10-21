@@ -1236,7 +1236,7 @@ public class GatewayServiceController {
     @GetMapping(value = "/retrievePrevious", produces = "application/json")
     @CrossOrigin
     public ResponseEntity<?> retrievePreviousData() {
-        return null;
+        return new ResponseEntity<>("hello team", HttpStatus.OK);
     }
 
     /*******************************************************************************************************************
