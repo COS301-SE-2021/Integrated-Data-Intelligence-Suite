@@ -22,11 +22,11 @@ spec:
             - containerPort: 9003
           resources:
             requests:
-              memory: "1500Mi"
-              cpu: "750m"
+              memory: "1800Mi"
+              cpu: "500m"
             limits:
-              memory: "2500Mi"
-              cpu: "1500m"
+              memory: "3600Mi"
+              cpu: "1000m"
 
 
 

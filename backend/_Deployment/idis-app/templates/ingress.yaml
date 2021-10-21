@@ -76,6 +76,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: idis-app-spark-master-svc
+                name: spark-master
                 port:
-                  number: 80
+                  number: 8080
