@@ -145,9 +145,9 @@ In my spare time I like to gym, be outdoors, food and gamming <br>
 
 <h1 align="right">Wandile Makhubele</h1>
 
-<p align="right"> <em>Data Importing & User Permissions</em></p>
+<p align="right"> <em>Data Importing, UI and Integration</em></p>
 
-</p>
+
  <p align="right">
       <a href="https://www.linkedin.com/in/wandile-makhubele-4a2579131">
         <img  alt="Linkedin" width="20px" height="20px" src="https://raw.githubusercontent.com/dev-akshat/archive/main/images/svgs/social_media/linkedin.svg"/>
@@ -164,7 +164,7 @@ In my spare time I like to gym, be outdoors, food and gamming <br>
  <br>
 A computer science student and Linux enthusiast who is into learning random facts<br>
 about science and technology.<br>
-I prefer coding in Java, Python or javascript.<br>
+I consider myself a full-stack developer, or at least trying to be.<br>
 We can change the world by changing the people around us, with memes!<br>
 </p>
 </td>
