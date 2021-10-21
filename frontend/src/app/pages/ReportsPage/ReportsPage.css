@@ -125,9 +125,6 @@
 
 }
 
-.main-preview-container>div{
-    background: var(--light-gray);
-}
 
 .clickable{
     cursor: pointer;
@@ -200,10 +197,6 @@
     justify-self: center;
 }
 
-.primary-btn:hover{
-    background: var(--neon-blue);
-    color: var(--light-gray);
-}
 
 #email-input-box:focus-visible{
     outline: none;
@@ -218,6 +211,27 @@
 }
 
 #email-input-box{
-    border: 2px solid var(--dodger-blue);
+    border: 1px solid var(--black-border);
     padding: 6px;
+}
+
+#delete-model-popup div.popup-title{
+    color: var(--pink);
+}
+
+#share-model-popup div.popup-title{
+    color: var(--pink);
+}
+
+#share-model-popup .simple-input-label{
+    color: var(--pink);
+}
+
+#share-model-popup button.primary-btn{
+    background: var(--pink);
+    /*padding: unset;*/
+}
+
+#share-model-popup button.primary-btn:hover{
+    color: var(--black-border);
 }

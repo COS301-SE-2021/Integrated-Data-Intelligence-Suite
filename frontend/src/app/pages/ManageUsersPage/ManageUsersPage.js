@@ -67,7 +67,7 @@ const ManageUsersPage = () => {
             <div className="default-page-container">
                 <SideBar currentPage="8" />
                 <div className="reports-content-section">
-                    <div className="content-page-title ">Manage Users</div>
+                    <div className="content-page-title ">Users</div>
                     {
                         users &&
                         (

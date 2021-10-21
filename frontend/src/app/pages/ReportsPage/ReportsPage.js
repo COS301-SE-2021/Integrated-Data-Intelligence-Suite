@@ -41,8 +41,13 @@ const getBackendData = (localUser) =>{
 
     useEffect(() =>{
         const abortCont = new AbortController();
+        if (!localUser) {
+            localUser = {
+                id: null,
+            }
+        }
         const requestObj = {
-            id: localUser.id,
+            id: localUser.id || null,
         };
 
         fetch(`${process.env.REACT_APP_BACKEND_HOST}/getAllReportsByUser`,
@@ -101,6 +106,7 @@ const ReportsPage = () => {
     const { data, isPending, error } = getBackendData(user);
 
     const handleDelete = () => {
+        closeDeletePopup();
         const abortCont = new AbortController();
 
         const requestObj = {
@@ -122,13 +128,12 @@ const ReportsPage = () => {
                 return res.json();
             })
             .then((dataObj) =>{
-                closeDeletePopup();
                 if (!dataObj.delete) {
                     message.success('successfully deleted');
                 } else {
                     message.error('could not delete report');
                 }
-            }).catch((err) =>closeSharePopup());
+            }).catch((err) =>closeDeletePopup());
         // setReports((prev)=>prev.filter((item)=> item.id !== currentPdf));
         // message.success('Report Deleted');
         // closeDeletePopup();
@@ -248,6 +253,7 @@ const ReportsPage = () => {
                         <SimplePopup
                           closePopup={() => closeSharePopup()}
                           popupTitle="Share Model"
+                          popupID="share-model-popup"
                         >
                             <div id="share-model-container">
                                 <InputBoxWithLabel
@@ -274,8 +280,9 @@ const ReportsPage = () => {
                     ? (
                         <SimplePopup
                           closePopup={() => closeDeletePopup()}
-                          popuptitle="Delete Report"
+                          popupTitle="Delete Report"
                           popupID="delete-model-popup"
+                          popupExtraClassNames="confirmationPopup"
                         >
                             <div id="delete-model-popup-msg">Are you sure you want to delete this report?</div>
                             <div id="delete-model-popup-btn-container">

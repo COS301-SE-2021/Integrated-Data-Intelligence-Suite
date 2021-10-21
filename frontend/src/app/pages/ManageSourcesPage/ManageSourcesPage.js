@@ -157,7 +157,7 @@ const ManageSourcesPage = () => {
             <div className="default-page-container">
                 <SideBar currentPage="9" />
                 <div className="reports-content-section">
-                    <div className="content-page-title ">Manage Data Sources</div>
+                    <div className="content-page-title ">Data Sources</div>
                     <button
                       className="simple-btn simple-btn-hover"
                       onClick={() => handlePreview(skeleton)}
