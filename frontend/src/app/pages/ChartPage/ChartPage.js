@@ -91,7 +91,7 @@ const ChartPage = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(jsonObj),
         };
-        const url = `http://localhost:9000/main/${value}`;
+        const url = `${process.env.REACT_APP_BACKEND_HOST}/main/${value}`;
         fetch(url, requestObj)
             .then((res) => {
                 if (!res.ok) {
