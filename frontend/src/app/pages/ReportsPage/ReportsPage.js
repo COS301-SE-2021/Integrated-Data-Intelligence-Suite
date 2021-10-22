@@ -128,7 +128,8 @@ const ReportsPage = () => {
                 return res.json();
             })
             .then((dataObj) =>{
-                if (!dataObj.delete) {
+                if (dataObj.status.toLowerCase() === 'ok') {
+                    console.log(dataObj)
                     message.success('successfully deleted');
                 } else {
                     message.error('could not delete report');
@@ -179,7 +180,7 @@ const ReportsPage = () => {
             .then((dataObj) =>{
                 // closeDeletePopup();
                 setEmailLoading(false);
-                if (dataObj.success) {
+                if (dataObj.success || dataObj.status === 'OK') {
                     message.success('sent')
                         .then(()=>{
                             closeSharePopup();

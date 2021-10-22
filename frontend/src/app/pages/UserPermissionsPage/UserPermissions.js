@@ -100,7 +100,7 @@ import './UserPermissions.css';
 //   );
 // };
 
-function UserPermissions({ userID }) {
+function UserPermissions({ userID, closePopup }) {
   const history = useHistory();
   const [permission, setPermission] = useState(null);
   const [submit, setSubmit] = useState(false);
@@ -137,8 +137,10 @@ function UserPermissions({ userID }) {
     })
         .then(() => {
           // console.log('uploaded');
+          closePopup();
           history.push('/manageUsers');
-        });
+        })
+        .catch((error) => closePopup())
   };
 
   function setFields(data) {

@@ -57,7 +57,7 @@ const getSource = (id, structure) => {
     return { data, isPending, error };
 };
 
-const AddDataSource = ({ dataSource }) => {
+const AddDataSource = ({ dataSource, closePopup }) => {
     // const { id } = useParams();
     const history = useHistory();
     const [form, setForm] = useState(null);
@@ -188,9 +188,10 @@ const AddDataSource = ({ dataSource }) => {
         })
             .then((data) => {
                 setSubmitLoading(false);
+                closePopup();
                 // console.log('data is here', data);
                 // console.log('structure looks like ', data.source);
-                if (data.success) {
+                if (data.success || data.status === 'OK') {
                     // history.goBack();
                     message.success(data.message);
                 } else {
@@ -199,6 +200,8 @@ const AddDataSource = ({ dataSource }) => {
             })
             .catch((err) => {
                 setSubmitLoading(false);
+                closePopup();
+
 
                 if (err.name === 'AbortError') console.log('Fetch Aborted');
                 else {

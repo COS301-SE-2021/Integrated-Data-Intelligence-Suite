@@ -147,9 +147,10 @@ const ManageSourcesPage = () => {
                     ? (
                         <SimplePopup
                           closePopup={closePopup}
-                          popupTitle="Manage User"
+                          popupTitle="Manage Source"
+                          popupID="share-model-popup"
                         >
-                            <AddDataSource dataSource={currentSource} />
+                            <AddDataSource dataSource={currentSource} closePopup={closePopup} />
                         </SimplePopup>
                     ) :
                     null

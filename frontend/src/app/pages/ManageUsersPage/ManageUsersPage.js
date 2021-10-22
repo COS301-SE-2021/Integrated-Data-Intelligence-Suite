@@ -58,8 +58,9 @@ const ManageUsersPage = () => {
                         <SimplePopup
                           closePopup={closePopup}
                           popupTitle="Manage User"
+                          popupID="share-model-popup"
                         >
-                            <UserPermissions userID={currentUser} />
+                            <UserPermissions userID={currentUser} closePopup={closePopup} />
                         </SimplePopup>
                     ) :
                     null
